@@ -12,7 +12,7 @@
  <properties>
     <pkgVersion>1.9.8</pkgVersion>
     <pkgArtifactId>jackson</pkgArtifactId>
-    <solmix.osgi.export>!org.codehaus.jackson.map.ext,org.codehaus.jackson*;version="1.7.5"</solmix.osgi.export>
+    <solmix.osgi.export>!org.codehaus.jackson.map.ext,org.codehaus.jackson*;version="1.9.8"</solmix.osgi.export>
     <pkgGroupId>jackson</pkgGroupId>
     <solmix.osgi.import.pkg>!org.codehaus.jackson*,!org.joda.time*,*</solmix.osgi.import.pkg>
     <solmix.osgi.private.pkg>org.codehaus.jackson.map.ext</solmix.osgi.private.pkg>
