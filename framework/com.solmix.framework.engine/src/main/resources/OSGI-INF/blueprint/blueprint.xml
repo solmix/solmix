@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * ========THE SOLMIX PROJECT===================================== * 
+	* This is free software; you can redistribute it and/or modify it under the 
+	terms of the GNU Lesser General Public License as published by the Free Software 
+	Foundation; either version 2.1 of the License, or (at your option) any later 
+	version. This software is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
+	for more details. you may not use this file except in compliance with the 
+	License. You may obtain a copy of the License at http://www.gnu.org/licenses/ 
+	or see the FSF site: http://www.fsf.org. -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
+	
+	<!--______________________________________________________ -->
+	<!--        Main servlet                                                     -->
+	<!--______________________________________________________ -->
+	<bean id="main" class="com.solmix.fmk.engine.MainServlet"	init-method="activate" destroy-method="deactivate">
+		<property name="managedContext"  ref="blueprintBundleContext" />
+		<property name="httpService">
+			<reference interface="org.osgi.service.http.HttpService"
+				availability="mandatory" timeout="3000" />
+		</property>
+	 	<property name="servletManager">
+			<reference interface="com.solmix.api.servlets.ServletManager" timeout="3000" availability="optional"/>
+		</property> 
+		<property name="filterManager">
+			<reference interface="com.solmix.api.servlets.FilterManager" timeout="3000" availability="optional"/>
+		</property> 
+		<property name="paramaterEncoding" value="${default.parameter.encoding}"></property>
+	</bean>
+	<!--______________________________________________________ -->
+	<!--        Properties holder                                             -->
+	<!--______________________________________________________ -->
+	<cm:property-placeholder persistent-id="com.solmix.framework.engine">
+		<cm:default-properties>
+			<cm:property name="default.parameter.encoding" value="UTF-8"></cm:property>
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+</blueprint>

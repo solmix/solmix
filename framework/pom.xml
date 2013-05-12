@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>solmix</artifactId>
+    <groupId>com.solmix</groupId>
+    <version>0.1.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>framework</artifactId>
+  <packaging>pom</packaging>
+  <name>Solmix :: FrameWork :: Parent Pom</name>
+  <modules>
+	  <module>com.solmix.framework.util</module>
+	  <module>com.solmix.framework.api</module>
+	  <module>com.solmix.framework.dsrepo</module>
+   	  <module>com.solmix.framework.pool</module>
+  	  <module>com.solmix.framework.datasource</module>
+  	  <module>com.solmix.framework.engine</module>
+  	  <module>com.solmix.framework.servlets</module>
+  	  <module>com.solmix.framework.jaas</module>
+  </modules>
+</project>

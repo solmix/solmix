@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>framework</artifactId>
+		<groupId>com.solmix</groupId>
+		<version>0.1.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<groupId>com.solmix.framework</groupId>
+	<artifactId>com.solmix.framework.util</artifactId>
+	<name>Solmix :: FrameWork :: Common Utiles</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}</Import-Package><!--<Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle> --><!--<Private-Package>${solmix.osgi.export.pkg}.impl</Private-Package> --><!--<_failok>${solmix.osgi.failok}</_failok> --><!--<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
+						<Bundle-Activator>com.solmix.commons.osgi.Activator</Bundle-Activator>
+						<DynamicImport-Package>*</DynamicImport-Package>
+					</instructions><!--<unpackBundle>false</unpackBundle> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+	<!-- provied by karaf -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		 <dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!--=== end ================
+		provied by osgi services-->
+		<dependency> 
+			<groupId>org.slf4j</groupId>
+		 	<artifactId>slf4j-api</artifactId>  
+		</dependency>
+	 	<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+			<!--===========end ===========-->
+			<!--provied osgi bundles=-->
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.oro</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		 <dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.commons-vfs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_2.5_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<!-- ===========end ============-->
+		 <dependency>
+			<groupId>org.apache.aries.jndi</groupId>
+			<artifactId>org.apache.aries.jndi</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	<!-- 	<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<scope>provided</scope>
+		</dependency> -->
+
+	 <!-- 	<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
+			<scope>provided</scope>
+		</dependency> -->
+		  	<dependency>
+  		<groupId>org.apache.felix</groupId>
+  		<artifactId>org.apache.felix.framework</artifactId>
+  	</dependency>
+	</dependencies>
+	<properties>
+		<solmix.osgi.export.pkg>com.solmix.commons*;-noimport:=true</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>!com.solmix,
+			javax.servlet;resolution:=optional;version="(2,4)",
+			javax.servlet.http;resolution:=optional;version="(2,4)",
+			org.apache.commons.vfs;resolution:=optional,
+			javax.resource.spi.work;resolution:=optional,
+			com.solmix.osgi.proxy;resolution:=optional,
+			*;resolution:=optional</solmix.osgi.import.pkg>
+	</properties>
+	<packaging>bundle</packaging>
+</project>
