@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="com.solmix.eventadmin" id="com.solmix.eventadmin">
+		<AD name="Cache Size"  id="com.solmix.eventadmin.CacheSize" type="Integer" default="30"	>
+		</AD>
+		<AD name="Thread Pool Size"   id="com.solmix.eventadmin.ThreadPoolSize" type="Integer"	default="20">
+		</AD>
+		<AD name="Time Out"   id="com.solmix.eventadmin.Timeout" type="Integer" default="50000"></AD>
+		<AD name="Require Topic"   id="com.solmix.eventadmin.RequireTopic" type="Boolean" default="true"></AD>
+		<AD name="Ignore Time out"   id="com.solmix.eventadmin.IgnoreTimeout" type="String"></AD>
+		<AD name="Log Level"   id="com.solmix.eventadmin.LogLevel" type="Integer" default="2"></AD>
+		<AD name="Dis white List"  id="com.solmix.eventadmin.dis.WhiteList" type="String"></AD>
+		<AD name="Dis target Type"   id="com.solmix.eventadmin.dis.TargetType" type="String"></AD>
+		<AD name="Dis tartget ID"   id="com.solmix.eventadmin.dis.TargetID" type="String"></AD>
+	</OCD>
+	<Designate pid="com.solmix.eventadmin" bundle="com.solmix.services.event">
+		<Object ocdref="com.solmix.eventadmin"></Object>
+	</Designate>
+</metatype:MetaData>

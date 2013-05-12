@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>services</artifactId>
+    <groupId>com.solmix</groupId>
+    <version>0.1.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.solmix.services</groupId>
+  <artifactId>com.solmix.services.event</artifactId>
+  <description>Solmix :: Service :: Event-Service</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.felix</groupId>
+  		<artifactId>org.apache.felix.framework</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.osgi</groupId>
+  		<artifactId>org.osgi.compendium</artifactId>
+  	</dependency>
+  <!-- 	 	<dependency>
+  		<groupId>org.eclipse.ecf</groupId>
+  		<artifactId>sharedobject</artifactId>
+  		<version>2.2.100.v20110829</version>
+  	</dependency> -->
+
+  <dependency>
+  	<groupId>org.eclipse</groupId>
+  	<artifactId>osgi</artifactId>
+  </dependency>
+  </dependencies>
+    <properties>
+		<solmix.osgi.export.pkg>com.solmix.eventservice,org.osgi.service.event</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>
+		    !com.solmix.eventservice,
+		    org.eclipse.ecf.core.sharedobject;resolution:=optional,
+			*</solmix.osgi.import.pkg>
+		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+	</properties>
+  <packaging>bundle</packaging>
+  <name>Solmix :: Service :: Event-Service</name>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
+						<!-- <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy> -->
+						<!--<Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle>-->
+						<!-- <Private-Package></Private-Package> -->
+						<!--<_failok>${solmix.osgi.failok}</_failok>-->
+						<!--<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>-->
+						<Bundle-Activator>com.solmix.eventservice.Activator</Bundle-Activator>
+					</instructions>
+					<!--<unpackBundle>false</unpackBundle>-->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
