@@ -3,7 +3,7 @@
   <parent>
     <artifactId>bundles</artifactId>
     <groupId>com.solmix</groupId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>com.solmix.bundles.jxpath</groupId>
