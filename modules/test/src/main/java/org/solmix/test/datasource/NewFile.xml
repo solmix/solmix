@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="http://www.solmix.com/xmlns/datasource/v1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.solmix.com/xmlns/datasource/v1.0.1 http://www.solmix.com/xmlns/datasource/v1.0.1 ">
+  <DataSource ID="WaitingItem" serverType="sql" dbName="EIM">
+  	<fields>
+  		<field name="IR_TASK_ID" type="integer" title="任务编号" primaryKey="true"/>
+  		<field name="TASK_TYPE" type="text" title="任务分类"/>
+  		<field name="APP_NO" type="integer" title="营销申请编号"/>
+  		<field name="CHG_MODE" type="text" title="任务内容"/>
+  		<field name="CP_NO" type="integer" title="采集点编号"/>
+  		<field name="SEND_TIME" type="text" title="接收时间"/>
+  		<field name="ORG_NAME" type="text" title="供电单位"/>
+  		<field name="OPER_URL" type="text" title="调试"	canExport="false"/>
+  	</fields>
+  	<operationBindings><operationBinding operationType="fetch"	dataProtocol="postMessage">
+  			<queryClauses>
+  			<customSQL><![CDATA[
+	 select rti.ir_task_id,
+	     '终端调试任务' task_type,
+	     rti.app_no,
+	     '终端调试任务['||rti.chg_mode||rtr.name||']'  chg_mode,
+	     rtr.cp_no,
+	     rtr.terminal_type_code,
+       rtr.protocol_code,
+       rtr.terminal_id,
+        to_char(rti.send_time,'yyyy-MM-dd HH24:MI:SS') send_time,
+         oo.org_name,'终端调试' OPER_URL
+		  from   r_tmnl_ir_task rti, r_tmnl_run rtr, o_org oo
+		  where  rti.cp_no = rtr.cp_no
+		         and rtr.org_no=oo.org_no
+		  #* #if($sessionAttributes.get("unitID")!="1")
+                and oo.org_no like '$sessionAttributes.get("unitID")%'
+		   #end *#
+		   order by rti.ir_task_id
+					]]></customSQL>
+  				</queryClauses>
+  		</operationBinding>	</operationBindings>	</DataSource>
+</module>

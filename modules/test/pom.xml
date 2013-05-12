@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.solmix</groupId>
+    <artifactId>modules</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.solmix.modules</groupId>
+  <artifactId>com.solmix.modules.test</artifactId>
+  <name>Solmix :: Module :: Testing</name>
+  <dependencies>
+  <dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.2.2</version>
+</dependency>
+  <dependency>
+  	<groupId>com.solmix.framework</groupId>
+  	<artifactId>com.solmix.framework.util</artifactId>
+  </dependency>
+  <dependency>
+  	<groupId>org.atmosphere</groupId>
+  	<artifactId>atmosphere-weblogic</artifactId>
+  	<version>1.0.9</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.atmosphere</groupId>
+  	<artifactId>atmosphere-gwt-jackson</artifactId>
+  	<version>1.0.9</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.atmosphere</groupId>
+  	<artifactId>atmosphere-gwt-client</artifactId>
+  	<version>1.0.9</version>
+  </dependency>
+  <dependency>
+  <groupId>org.apache.jena</groupId>
+  <artifactId>apache-jena</artifactId>
+  <type>pom</type>
+  <version>2.10.0</version>
+</dependency>
+  </dependencies>
+</project>
