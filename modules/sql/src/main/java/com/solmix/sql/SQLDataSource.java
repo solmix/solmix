@@ -1177,6 +1177,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     }
                     if (fieldName == null)
                         fieldName = field.getName();
+                    if(field.getTableName()!=null)
+                    	selfTableName=field.getTableName();
                     relateCriterias.add(new StringBuilder().append(selfTableName).append(".").append(fieldName).append(" = ").append(foreign).toString());
                 }
             }
