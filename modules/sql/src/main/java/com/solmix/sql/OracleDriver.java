@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
+import com.solmix.api.jaxb.Efield;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
@@ -247,16 +248,24 @@ public class OracleDriver extends SQLDriver
 
     @Override
     public String sqlInTransform(Object value, Tfield field) {
-        if ((value instanceof Date) && (field == null || field.getSqlStorageStrategy() == null)) {
-
-            long timeStamp = ((Date) value).getTime();
-            String dateTime = (new Timestamp(timeStamp)).toString();
-            int periodIndex;
-            if ((periodIndex = dateTime.lastIndexOf(".")) != -1)
-                dateTime = dateTime.substring(0, periodIndex);
-            String format = SQLConfigManager.defaultDateTimeFormat;
-            return (new StringBuilder()).append("TO_DATE(").append(escapeValue(dateTime)).append(",'").append(format).append("')").toString();
-        } else if (value instanceof Boolean || DataTools.typeIsBoolean(value.toString())) {
+    	if(field!=null&&(field.getType()==Efield.DATE||field.getType()==Efield.DATETIME)){
+    		String dateTime=null;
+    		String format=null;
+    		if(field.getType()==Efield.DATE)
+    			format=SQLConfigManager.defaultDateFormat;
+    		else
+    			format = SQLConfigManager.defaultDateTimeFormat;
+    		if(value instanceof Date){
+    			 long timeStamp = ((Date) value).getTime();
+    	             dateTime = (new Timestamp(timeStamp)).toString();
+    	            int periodIndex;
+    	            if ((periodIndex = dateTime.lastIndexOf(".")) != -1)
+    	                dateTime = dateTime.substring(0, periodIndex);
+    		}else{
+    			dateTime=value.toString();
+    		}
+    		return (new StringBuilder()).append("TO_DATE(").append(escapeValue(dateTime)).append(",'").append(format).append("')").toString();
+    	}else if (value instanceof Boolean || DataTools.typeIsBoolean(value.toString())) {
             return value.equals(Boolean.TRUE) || value.equals("true") ? "'1'" : "'0'";
         } else {
             return super.sqlInTransform(value, field);
