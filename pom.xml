@@ -16,8 +16,8 @@
 		<name></name>
 		<url></url>
 	</organization>
-	<distributionManagement>
-		<!-- Site omitted - each project must provide their own -->
+	<!-- <distributionManagement>
+		Site omitted - each project must provide their own
 		<repository>
 			<id>releases</id>
 			<url>http://localhost/nexus/content/repositories/releases</url>
@@ -26,7 +26,7 @@
 			<id>snapshots</id>
 			<url>http://localhost/nexus/content/repositories/snapshot</url>
 		</snapshotRepository>
-	</distributionManagement>
+	</distributionManagement> -->
 	<modules>
 		<!--<module>dsrepo</module> <module>datasource</module> <module>features</module> -->
 		<!-- <module>web</module> -->
@@ -42,7 +42,6 @@
 		<module>commons</module> -->
 		<!-- <module>cms</module> -->
 		<module>modules</module>
-		<module>sola</module>
 	</modules>
 	<properties><!-- Apache ServiceMix Bundles -->
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
