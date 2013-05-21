@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * ========THE SOLMIX PROJECT===================================== * 
+	* This is free software; you can redistribute it and/or modify it under the 
+	terms of the GNU Lesser General Public License as published by the Free Software 
+	Foundation; either version 2.1 of the License, or (at your option) any later 
+	version. This software is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
+	for more details. you may not use this file except in compliance with the 
+	License. You may obtain a copy of the License at http://www.gnu.org/licenses/ 
+	or see the FSF site: http://www.fsf.org. -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
+	<!--______________________________________________________ -->
+	<!--______Configuration Manager  Holder ____________ -->
+	<!--______________________________________________________ -->
+	<cm:property-placeholder persistent-id="com.solmix.cms.server">
+		<cm:default-properties>
+			<cm:property name="default.workspace" value="" />
+			<cm:property name="anonymous.user" value="anonymous" />
+			<cm:property name="anonymous.password" value="anonymous" />
+			<cm:property name="admin.user" value="admin" />
+			<cm:property name="admin.password" value="admin" />
+			<cm:property name="jndi" value="" />
+			<cm:property name="rmi" value="" />
+			<cm:property name="repository.home" value="$[solmix.data]/repository" />
+			<cm:property name="repository.config" value="$[solmix.data]/repository/repository.xml" />
+		</cm:default-properties>
+	</cm:property-placeholder>
+	<!-- Allow usage of System properties, especially the karaf.base property -->
+	<ext:property-placeholder placeholder-prefix="$["
+		placeholder-suffix="]" />
+	<bean id="solmix_repo" class="com.solmix.cms.server.SolmixJcrRepository"
+		init-method="start" destroy-method="stop">
+		<property name="adminUser"  value="${admin.user}" />
+		<property name="adminPassword" value="${admin.password}" />
+		<property name="anonymousUser"  value="${anonymous.user}" />
+		<property name="anonymousPassword" value="${anonymous.password}" />
+		<property name="defaultWorkspace" value="${default.workspace}" />
+		<property name="builder" ref="repo_builder" />
+	</bean>
+	<bean id="repo_builder" class="com.solmix.cms.server.RepositoryBuilder">
+		<property name="jndi"  value="${jndi}" />
+		<property name="rmi" value="${rmi}" />
+		<property name="repository_home" value="${repository.home}" />
+		<property name="repository_config" value="${repository.config}" />
+		<property name="context" ref="blueprintBundleContext" />
+	</bean>
+	<!-- register Service intenel.
+	<service id="repository" 	interface="javax.jcr.Repository" ref="solmix_repo">
+	</service> -->
+
+
+</blueprint>
