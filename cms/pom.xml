@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>solmix</artifactId>
+    <groupId>com.solmix</groupId>
+    <version>0.1.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <groupId>com.solmix.cms</groupId>
+  <artifactId>cms</artifactId>
+  <packaging>pom</packaging>
+  <name>Solmix :: Application :: CMS pom</name>
+  <modules>
+  	<!-- <module>client</module>
+  	<module>com.solmix.cms.api</module> -->
+  	<!-- <module>com.solmix.cms.jcr</module> -->
+  	<!-- <module>com.solmix.cms.core</module> -->
+  	<!-- <module>com.solmix.cms.servlets</module> -->
+  </modules>
+</project>
