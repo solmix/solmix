@@ -1,1 +1,8 @@
-/.settings
+/target
+*.settings
+*.classpath
+*.project
+*.class
+*.jar
+*.zip
+*.rar
