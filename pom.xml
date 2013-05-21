@@ -42,6 +42,7 @@
 		<module>commons</module> -->
 		<!-- <module>cms</module> -->
 		<module>modules</module>
+		<module>sola</module>
 	</modules>
 	<properties><!-- Apache ServiceMix Bundles -->
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
@@ -52,7 +53,7 @@
 		<junit.bundle.version>4.7_2</junit.bundle.version>
 		<geronimo.servlet.version>1.1.2</geronimo.servlet.version>
 		<depends-maven-plugin.version>1.0</depends-maven-plugin.version>
-		<easymock.version>2.5.2</easymock.version>
+		<easymock.version>3.1</easymock.version>
 		<equinox.version>3.7.1.R37x_v20110808-1106</equinox.version>
 		<felix.bundlerepository.version>1.6.4</felix.bundlerepository.version>
 		<felix.configadmin.version>1.2.8</felix.configadmin.version>
@@ -94,7 +95,7 @@
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
 		<!-- <karaf.debug.location>E:\o\solmix3\resource\resource</karaf.debug.location> -->
 		<!-- <karaf.debug.location>E:\workspace\solmix\spring_solmix\WebRoot\WEB-INF\lib</karaf.debug.location> -->
-		<karaf.debug.location>E:\sdk\solmix-lib</karaf.debug.location>
+		<karaf.debug.location>/home/solmix/karaf</karaf.debug.location>
 		<!-- <karaf.debug.location>E:\karaf</karaf.debug.location> -->
 		<!-- <karaf.debug.location>/home/solmix/workspace/svn/trunk/resource/resource</karaf.debug.location> -->
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
@@ -119,6 +120,7 @@
 		<osgi.service.version>3.3.0.v20110513</osgi.service.version>
 		<org.apache.felix.http.version>2.2.0</org.apache.felix.http.version>
 		<slf4j.version>1.6.4</slf4j.version>
+		<mockito-core.version>1.9.0</mockito-core.version>
 	</properties>
 	<repositories>
 
@@ -746,11 +748,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>servlet</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.solmix.framework</groupId>
 				<artifactId>com.solmix.framework.util</artifactId>
 				<version>${project.version}</version>
@@ -774,23 +771,6 @@
 				<groupId>com.solmix.framework</groupId>
 				<artifactId>com.solmix.framework.api</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>itest</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>sandbox</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix.solmix-sandbox</groupId>
-				<artifactId>test</artifactId>
-				<version>${project.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.solmix</groupId>
@@ -960,6 +940,11 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.http.proxy</artifactId>
 				<version>${org.apache.felix.http.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito-core.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -1245,7 +1230,7 @@
 							<dependency>
 								<groupId>org.apache.apache.resources</groupId>
 								<artifactId>apache-source-release-assembly-descriptor</artifactId>
-								<version>1.0.2</version>
+								<version>1.0.4</version>
 							</dependency>
 						</dependencies>
 						<executions>
@@ -1322,8 +1307,8 @@
 		<!-- END SNIPPET: release-profile -->
 	</profiles>
 	<scm>
-		<url>http://solmix.googlecode.com/svn/trunk/</url>
-		<connection>scm:svn:http://solmix2.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://solmix2.googlecode.com/svn/trunk/</developerConnection>
+		<url>https://github.com/solmix/solmix</url>
+		<connection>scm:git://github.com/solmix/solmix.git</connection>
+		<developerConnection>scm:git@github.com:solmix/solmix.git</developerConnection>
 	</scm>
 </project>
