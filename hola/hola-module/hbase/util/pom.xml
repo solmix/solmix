@@ -7,4 +7,16 @@
   </parent>
   <artifactId>com.solmix.hbase.util</artifactId>
   <name>Solmix :: Hola :: module :: hbase util</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.apache.zookeeper</groupId>
+  		<artifactId>zookeeper</artifactId>
+  		<version>3.4.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.solmix.hola</groupId>
+  		<artifactId>com.solmix.hbase.client</artifactId>
+  		<version>0.1.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
