@@ -39,7 +39,7 @@ import com.solmix.api.rpc.RPCManager;
 <p>&nbsp;</p>
 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-3-25
+ * @version 0.1.1  2013-3-25
  */
 public interface Transaction_doc
 {
