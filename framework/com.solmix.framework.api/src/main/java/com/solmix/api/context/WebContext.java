@@ -116,7 +116,7 @@ public interface WebContext extends Context
      */
     public Writer getOut() throws SlxException;
 
-    // public void setOut(Writer out);
+     public void setOut(Writer out);
 
     /**
      * @return the requestPath

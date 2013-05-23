@@ -68,7 +68,7 @@ public class WebContextImpl extends UserContextImpl implements WebContext
 
     private JSParser jsParser;
 
-    // protected Writer out;
+    protected Writer out;
 
     private static DataTypeMap globalConfig;
 
@@ -93,6 +93,7 @@ public class WebContextImpl extends UserContextImpl implements WebContext
     {
     }
 
+    @Override
     public void init(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws SlxException {
         this.setAttributeProvider(new WebAttributeProvider(this));
         JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
@@ -166,6 +167,7 @@ public class WebContextImpl extends UserContextImpl implements WebContext
      * 
      * @see com.solmix.api.context.WebContext#getParameters()
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Map<String, String> getParameters() {
         Map<String, String> map = new HashMap<String, String>();
@@ -300,19 +302,29 @@ public class WebContextImpl extends UserContextImpl implements WebContext
      */
     @Override
     public Writer getOut() throws SlxException {
-        // if (out == null) {
-        if (log.isDebugEnabled())
-            log.debug("Getting output stream via servletResponse.getWriter()");
-        if (contentType == null)
-            setContentType(globalConfig.getString("defaultMimeType", "text/html"));
-        Writer out = null;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new SlxException(Tmodule.SERVLET, Texception.IO_EXCEPTION, "ioexception with response.getWriter()", e);
+        if (out == null) {
+            if (log.isDebugEnabled())
+                log.debug("Getting output stream via servletResponse.getWriter()");
+            if (contentType == null)
+                setContentType(globalConfig.getString("defaultMimeType", "text/html"));
+            try {
+                out = response.getWriter();
+            } catch (IOException e) {
+                throw new SlxException(Tmodule.SERVLET, Texception.IO_EXCEPTION, "ioexception with response.getWriter()", e);
+            }
         }
-        // }
         return out;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see com.solmix.api.context.WebContext#setOut(java.io.Writer)
+     */
+    @Override
+    public void setOut(Writer out) {
+        this.out = out;
+
     }
 
     /**
@@ -423,10 +435,12 @@ public class WebContextImpl extends UserContextImpl implements WebContext
         response.setContentType(mimeType);
 
     }
+
     @Override
     public void release() {
-    	this.wrappedRequest=null;
-    	this.response=null;
+        this.wrappedRequest = null;
+        this.response = null;
 
     }
+
 }
