@@ -34,6 +34,7 @@ import org.apache.hadoop.mapred.JobTracker;
 import org.apache.hadoop.mapred.TaskTracker;
 import org.apache.hadoop.net.DNSToSwitchMapping;
 import org.apache.hadoop.net.NetworkTopology;
+import org.apache.hadoop.net.StaticMapping;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public class MiniMRCluster
 
     private final String namenode;
 
-    private final UserGroupInformation ugi;
+    private  UserGroupInformation ugi;
 
     private final JobConf conf;
 
@@ -208,7 +209,7 @@ public class MiniMRCluster
     public class JobTrackerExecutor implements Runnable
     {
 
-        private final JobTracker tracker = null;
+        private  JobTracker tracker = null;
 
         private volatile boolean isActive = true;
 

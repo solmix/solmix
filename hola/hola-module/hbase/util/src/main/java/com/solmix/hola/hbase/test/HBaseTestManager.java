@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.zookeeper.MiniZooKeeperCluster;
+import org.apache.hadoop.hdfs.MiniDFSCluster;
 
 import com.solmix.hola.hbase.util.MiniMRCluster;
 
@@ -53,7 +54,7 @@ public class HBaseTestManager
     private final boolean passedZkCluster = false;
     private final MiniDFSCluster dfsCluster = null;
 
-    private final MiniHBaseCluster hbaseCluster = null;
+//    private final MiniHBaseCluster hbaseCluster = null;
     private final MiniMRCluster mrCluster = null;
 
     // Directory where we put the data for this instance of HBaseTestingUtility
