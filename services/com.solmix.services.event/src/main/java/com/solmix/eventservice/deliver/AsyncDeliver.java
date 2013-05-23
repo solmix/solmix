@@ -37,11 +37,11 @@ import com.solmix.eventservice.util.EventThreadPool;
 public class AsyncDeliver implements EventDeliver
 {
 
-    private EventThreadPool threadPool;
+    private final EventThreadPool threadPool;
 
-    private EventDeliver syn_deliver;
+    private final EventDeliver syn_deliver;
 
-    private final Map<Thread, EventExecuter> running_threads = new HashMap<Thread, EventExecuter>();
+    private final Map<Thread, EventExecutor> running_threads = new HashMap<Thread, EventExecutor>();
 
     public AsyncDeliver(final EventThreadPool pool, final EventDeliver synDeliver)
     {
@@ -58,13 +58,13 @@ public class AsyncDeliver implements EventDeliver
     @Override
     public void execute(List<EventTask> tasks) {
         final Thread currentThread = Thread.currentThread();
-        EventExecuter executer = null;
+        EventExecutor executer = null;
         synchronized (running_threads) {
-            EventExecuter runningExecutor = running_threads.get(currentThread);
+            EventExecutor runningExecutor = running_threads.get(currentThread);
             if (runningExecutor != null) {
                 runningExecutor.add(tasks);
             } else {
-                executer = new EventExecuter(tasks, currentThread);
+                executer = new EventExecutor(tasks, currentThread);
                 running_threads.put(currentThread, executer);
             }
         }
@@ -74,19 +74,20 @@ public class AsyncDeliver implements EventDeliver
 
     }
 
-    private final class EventExecuter implements Runnable
+    private final class EventExecutor implements Runnable
     {
 
         private final List<List<EventTask>> _tasks = new LinkedList<List<EventTask>>();
 
         private final Object _key;
 
-        public EventExecuter(final List<EventTask> tasks, final Object key)
+        public EventExecutor(final List<EventTask> tasks, final Object key)
         {
             _key = key;
             _tasks.add(tasks);
         }
 
+        @Override
         public void run() {
             boolean running;
             do {
