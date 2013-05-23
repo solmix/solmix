@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.security.PrivilegedExceptionAction;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.mapred.JobClient;
@@ -62,6 +64,8 @@ public class MiniMRCluster
     private final JobConf conf;
 
     private final int numTrackerToExclude;
+
+    private final List<TaskTrackerExecutor> taskTrackerList = new ArrayList<TaskTrackerExecutor>();
 
     public MiniMRCluster(int numTaskTrackers, String namenode, int numDir) throws IOException
     {
@@ -148,7 +152,14 @@ public class MiniMRCluster
         // start the jobtracker
         startJobTracker();
     }
-
+    /**
+     * Get the local directory for the Nth task tracker
+     * @param taskTracker the index of the task tracker to check
+     * @return the absolute pathname of the local dir
+     */
+    public String getTaskTrackerLocalDir(int taskTracker) {
+        return (taskTrackerList.get(taskTracker)).getLocalDir();
+    }
     /**
      * 
      */
