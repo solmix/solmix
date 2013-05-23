@@ -38,7 +38,7 @@ import com.solmix.cms.api.SolmixRepository;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-8-17
+ * @version 0.1.1 2012-8-17
  */
 
 public class SolmixJcrRepository extends AbstractSolmixRepository implements Runnable, Repository, RepositoryManager

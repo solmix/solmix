@@ -23,7 +23,7 @@ package com.solmix.cms.api.client;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-9-5
+ * @version 0.1.1 2012-9-5
  */
 
 public enum Eaction

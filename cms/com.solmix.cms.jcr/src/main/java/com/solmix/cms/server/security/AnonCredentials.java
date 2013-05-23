@@ -26,7 +26,7 @@ import org.apache.jackrabbit.core.security.AnonymousPrincipal;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-8-20
+ * @version 0.1.1 2012-8-20
  */
 
 public final class AnonCredentials extends TrustedCredentials

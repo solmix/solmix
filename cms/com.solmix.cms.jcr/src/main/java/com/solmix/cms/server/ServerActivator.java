@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-8-17
+ * @version 0.1.1 2012-8-17
  */
 
 public class ServerActivator implements BundleActivator

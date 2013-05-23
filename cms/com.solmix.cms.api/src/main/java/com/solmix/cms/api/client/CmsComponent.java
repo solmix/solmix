@@ -24,7 +24,7 @@ import com.vaadin.ui.Component;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-9-4
+ * @version 0.1.1 2012-9-4
  */
 
 public interface CmsComponent extends Adaptable

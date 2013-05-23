@@ -29,7 +29,7 @@ import org.apache.jackrabbit.core.security.authentication.Authentication;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-8-20
+ * @version 0.1.1 2012-8-20
  */
 
 public abstract class TrustedCredentials implements Credentials

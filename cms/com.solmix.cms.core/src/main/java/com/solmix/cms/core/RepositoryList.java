@@ -27,7 +27,7 @@ import javax.jcr.Session;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-9-26
+ * @version 0.1.1 2012-9-26
  */
 
 public class RepositoryList

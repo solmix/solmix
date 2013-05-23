@@ -40,7 +40,7 @@ package com.solmix.sql.docs;
 </ul>
  
  * @author solmix.f@gmail.com
- * @version $Id$  2013-3-7
+ * @version 0.1.1  2013-3-7
  */
 public interface SQLDataSourceConfig
 {

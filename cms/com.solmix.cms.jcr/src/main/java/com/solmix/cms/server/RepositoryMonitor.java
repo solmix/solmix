@@ -26,7 +26,7 @@ import javax.jcr.Repository;
 /**
  * 
  * @author Administrator
- * @version $Id$ 2012-8-19
+ * @version 0.1.1 2012-8-19
  */
 
 public class RepositoryMonitor implements Runnable
