@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayReader;
+import java.io.Closeable;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +36,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
+
+import org.slf4j.LoggerFactory;
 
 import com.solmix.commons.logs.Logger;
 
@@ -155,7 +158,7 @@ public class IOUtil
    public static void addOutput(OutputStream out, String input) throws Exception
    {
       Writer writer = new OutputStreamWriter(new NonFlushingOutputStream(out));
-      writer.write((String) input);
+      writer.write(input);
       writer.flush();
    }
 
@@ -202,7 +205,7 @@ public class IOUtil
    public static Reader makeReader(InputStream source)
    {
       ValidateUtil.assertNotNull("parse null source", source);
-      return new InputStreamReader((InputStream) source);
+      return new InputStreamReader(source);
    }
 
    public static Reader makeReader(String source)
@@ -220,13 +223,13 @@ public class IOUtil
    public static Reader makeReader(char[] source)
    {
       ValidateUtil.assertNotNull("parse null source", source);
-      return new CharArrayReader((char[]) source);
+      return new CharArrayReader(source);
    }
 
    public static Reader makeReader(byte[] source)
    {
       ValidateUtil.assertNotNull("parse null source", source);
-      return new InputStreamReader(new ByteArrayInputStream((byte[]) source));
+      return new InputStreamReader(new ByteArrayInputStream(source));
    }
 
    public static String inputStreamToString(InputStream stream) throws IOException
@@ -246,18 +249,28 @@ public class IOUtil
       try {
          is.close();
       } catch (Exception ignored) {
+          LoggerFactory.getLogger(IOUtil.class).error("Problem closing a source or destination.", ignored);
       }
    }
-
+   public static void closeQuitely(Closeable closeable)
+   {
+      try {
+          closeable.close();
+      } catch (Exception ignored) {
+          LoggerFactory.getLogger(IOUtil.class).error("Problem closing a source or destination.", ignored);
+      }
+   }
    public static void closeQuitely(OutputStream os)
    {
       try {
          os.flush();
       } catch (Exception ignored) {
+    	  LoggerFactory.getLogger(IOUtil.class).error("Problem flush a source or destination.", ignored);
       }
       try {
          os.close();
       } catch (Exception ignored) {
+          LoggerFactory.getLogger(IOUtil.class).error("Problem flush a source or destination.", ignored);
       }
    }
 
