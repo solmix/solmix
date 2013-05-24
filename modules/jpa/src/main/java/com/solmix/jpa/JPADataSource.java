@@ -19,6 +19,8 @@
 
 package com.solmix.jpa;
 
+import static com.solmix.commons.util.DataUtil.isNotNullAndEmpty;
+
 import java.beans.IntrospectionException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,7 +53,6 @@ import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.datasource.BasicDataSource;
 import com.solmix.fmk.datasource.DSResponseImpl;
 import com.solmix.fmk.util.ServiceUtil;
-
 /**
  * JPA datasource.
  * 
@@ -211,7 +212,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         if (entity == null || entityClass == null) {
             String entityName = __ds.getContext().getTdataSource() == null ? null
                 : __ds.getContext().getTdataSource().getSchemaClass();
-            if (Assert.isNotNullAndEmpty(entityName)) {
+            if (DataUtil.isNotNullAndEmpty(entityName)) {
                 try {
                     entityClass = Reflection.classForName(entityName);
                 } catch (Exception e) {
@@ -223,7 +224,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     /** ID */
                     Entity e = entityClass.getAnnotation(Entity.class);
                     entity = e == null ? null : e.name();
-                    if (Assert.isNullOrEmpty(entity))
+                    if (isNullOrEmpty(entity))
                         entity = entityClass.getName().substring(entityClass.getName().lastIndexOf(".") + 1);
                 }
             }
@@ -315,14 +316,14 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                         if (xpath != null)
                             fieldName.replace('/', '.');
                         if (value == null) {
-                            if (Assert.isNotNullAndEmpty(whereClause))
+                            if (isNotNullAndEmpty(whereClause))
                                 whereClause.append(" and ");
                             whereClause.append(entityName).append(".").append(fieldName).append(" is null");
 
                         } else if (value instanceof List) {
                             List valueList = (List) value;
                             if (valueList.size() > 0) {
-                                if (!DataUtil.isNotNullAndEmpty(whereClause))
+                                if (!isNotNullAndEmpty(whereClause))
                                     whereClause.append(" and ");
                                 whereClause.append("(");
 
@@ -344,7 +345,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                                 || _ft == Efield.LINK) {
                                 String matchStyle = null;
                                 try {
-                                    matchStyle = req.getContext().getToperation().getOperationConfig().getTextMatchStyle();
+                                    matchStyle = req.getContext().getRoperation().getTextMatchStyle();
                                 } catch (NullPointerException ignore) {
                                 }
 
@@ -387,10 +388,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                 if (_f == null) {
                     log.warn("field:[" + fieldName + "] specified in sortBy is not defined in datasource");
                 } else {
-                    if (Assert.isNotNullAndEmpty(orderClause))
+                    if (isNotNullAndEmpty(orderClause))
                         orderClause.append(" , ");
                     String xpath = _f.getValueXPath();
-                    if (Assert.isNotNullAndEmpty(xpath))
+                    if (isNotNullAndEmpty(xpath))
                         fieldName = xpath.replace('/', '.');
                     orderClause.append(entityName).append(".").append(fieldName);
                 }
@@ -425,7 +426,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         }
 
         // Control Page.
-        long totalRows = -1L;
+        int totalRows = -1;
         boolean __canPage = true;
         //
         ToperationBinding __bind = null;
@@ -444,23 +445,23 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             if (req.getContext().getEndRow() != -1L
                 && req.getContext().getEndRow() - req.getContext().getStartRow() > req.getContext().getBatchSize())
                 req.getContext().setBatchSize(req.getContext().getEndRow() - req.getContext().getStartRow());
-            Long rowCount = Long.valueOf(Long.parseLong(queryCount.getSingleResult().toString()));
-            totalRows = rowCount != null ? rowCount.longValue() : 0L;
+            Integer rowCount = Integer.valueOf(Integer.parseInt(queryCount.getSingleResult().toString()));
+            totalRows = rowCount != null ? rowCount.intValue() : 0;
             query.setFirstResult(req.getContext().getStartRow().intValue());
             query.setMaxResults(req.getContext().getBatchSize().intValue());
         }
         List results = null;
-        if (totalRows == 0L)
+        if (totalRows == 0)
             results = new ArrayList();
         else
             results = query.getResultList();
         if (totalRows == -1L)
             totalRows = results.size();
         __return.getContext().setTotalRows(totalRows);
-        Long startRow = 0L;
-        Long endRow = 0L;
+        Integer startRow = 0;
+        Integer endRow = 0;
         if (totalRows != 0L) {
-            startRow = req.getContext().getStartRow() == null ? 0L : req.getContext().getStartRow();
+            startRow = req.getContext().getStartRow() == null ? 0: req.getContext().getStartRow();
             endRow = startRow + results.size();
         }
         __return.getContext().setStartRow(startRow);
