@@ -38,20 +38,20 @@ import org.w3c.dom.NodeList;
  * @version 110035 2012-12-13
  */
 
-public class MapAdapter extends XmlAdapter<AdaptedMap, Map<String, String>>
+public class MapAdapter extends XmlAdapter<AdaptedMap, Map<String, Object>>
 {
 
     @Override
-    public AdaptedMap marshal(Map<String, String> map) throws Exception {
+    public AdaptedMap marshal(Map<String, Object> map) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document document = db.newDocument();
         Element rootElement = document.createElement("map");
         document.appendChild(rootElement);
 
-        for (Entry<String, String> entry : map.entrySet()) {
+        for (Entry<String, Object> entry : map.entrySet()) {
             Element mapElement = document.createElement(entry.getKey());
-            mapElement.setTextContent(entry.getValue());
+            mapElement.setTextContent(entry.getValue().toString());
             rootElement.appendChild(mapElement);
         }
 
@@ -61,8 +61,8 @@ public class MapAdapter extends XmlAdapter<AdaptedMap, Map<String, String>>
     }
 
     @Override
-    public Map<String, String> unmarshal(AdaptedMap adaptedMap) throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
+    public Map<String, Object> unmarshal(AdaptedMap adaptedMap) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
         Element rootElement = (Element) adaptedMap.getValue();
         NodeList childNodes = rootElement.getChildNodes();
         for (int x = 0, size = childNodes.getLength(); x < size; x++) {

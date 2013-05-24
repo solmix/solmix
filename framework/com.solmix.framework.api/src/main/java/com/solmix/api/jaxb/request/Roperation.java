@@ -69,11 +69,11 @@ public class Roperation
 
     protected List<String> sortBy;
 
-    protected Map<String, String> criteria;
+    protected Map<String, Object> criteria;
 
-    protected Map<String, String> values;
+    protected Map<String, Object> values;
 
-    protected Map<String, String> oldValues;
+    protected Map<String, Object> oldValues;
 
     protected String textMatchStyle;
 
@@ -268,7 +268,7 @@ public class Roperation
      * 
      */
     @XmlJavaTypeAdapter(MapAdapter.class)
-    public Map<String, String> getCriteria() {
+    public Map<String, Object> getCriteria() {
         return criteria;
     }
 
@@ -278,7 +278,7 @@ public class Roperation
      * @param value allowed object is {@link Map<String,String> }
      * 
      */
-    public void setCriteria(Map<String, String> value) {
+    public void setCriteria(Map<String, Object> value) {
         this.criteria = value;
     }
 
@@ -289,7 +289,7 @@ public class Roperation
      * 
      */
     @XmlJavaTypeAdapter(MapAdapter.class)
-    public Map<String, String> getValues() {
+    public Map<String, Object> getValues() {
         return values;
     }
 
@@ -299,7 +299,7 @@ public class Roperation
      * @param value allowed object is {@link Map<String,String> }
      * 
      */
-    public void setValues(Map<String, String> value) {
+    public void setValues(Map<String, Object> value) {
         this.values = value;
     }
 
@@ -310,7 +310,7 @@ public class Roperation
      * 
      */
     @XmlJavaTypeAdapter(MapAdapter.class)
-    public Map<String, String> getOldValues() {
+    public Map<String, Object> getOldValues() {
         return oldValues;
     }
 
@@ -320,7 +320,7 @@ public class Roperation
      * @param value allowed object is {@link Map<String,String> }
      * 
      */
-    public void setOldValues(Map<String, String> value) {
+    public void setOldValues(Map<String, Object> value) {
         this.oldValues = value;
     }
 
