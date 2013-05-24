@@ -1,0 +1,1 @@
+<jsp:forward page="solmix.html"></jsp:forward>
