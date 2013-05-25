@@ -6,7 +6,7 @@
     <version>0.1.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.bundles.vaadin</groupId>
+  <groupId>com.solmix.bundles</groupId>
   <artifactId>com.solmix.bundles.vaadin</artifactId>
   <name>Solmix :: Bunldes :: Vaadin Bundle</name>
   <properties>
