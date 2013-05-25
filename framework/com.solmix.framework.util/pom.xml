@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>framework</artifactId>
 		<groupId>com.solmix</groupId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.2.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>com.solmix.framework</groupId>

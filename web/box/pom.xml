@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>web</artifactId>
 		<groupId>com.solmix</groupId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.2.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>com.solmix.web</groupId>
@@ -158,7 +158,7 @@
 			<groupId>com.solmix.launch</groupId>
 			<artifactId>com.solmix.launch.base</artifactId>
 			<classifier>web</classifier>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.2.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>

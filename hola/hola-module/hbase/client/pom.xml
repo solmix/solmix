@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.solmix.hola</groupId>
     <artifactId>hbase</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.1-SNAPSHOT</version>
   </parent>
   <artifactId>com.solmix.hbase.client</artifactId>
   <name>Solmix :: Hola :: module :: hbase-client</name>
