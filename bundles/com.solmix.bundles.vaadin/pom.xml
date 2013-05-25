@@ -6,7 +6,7 @@
     <version>0.1.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.bundles</groupId>
+  <groupId>com.solmix.bundles.vaadin</groupId>
   <artifactId>com.solmix.bundles.vaadin</artifactId>
   <name>Solmix :: Bunldes :: Vaadin Bundle</name>
   <properties>
@@ -66,14 +66,7 @@
                         <_failok>${solmix.osgi.failok}</_failok>
                         <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
                         <_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
-                          <Embed-Dependency>
-                            jsoup,
-                            json,
-                            commons-jexl,
-                            commons-cli,
-                            sac,
-                            cssparser
-                        </Embed-Dependency>
+                          <Embed-Dependency>*;scope=!test;type=!pom;inline=true</Embed-Dependency>
                     </instructions>
                     <unpackBundle>true</unpackBundle>
                 </configuration>
