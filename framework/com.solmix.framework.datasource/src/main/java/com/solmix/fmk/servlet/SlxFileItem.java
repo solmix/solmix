@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 
 import com.solmix.commons.io.ByteCountingOutputStream;
 import com.solmix.commons.io.IByteCounter;
@@ -21,6 +22,7 @@ public class SlxFileItem implements FileItem
 {
 
     private static final long serialVersionUID = 5709803430443515506L;
+    private FileItemHeaders header;
 
     public SlxFileItem(String fieldName)
     {
@@ -37,33 +39,41 @@ public class SlxFileItem implements FileItem
         this.byteCounter = byteCounter;
     }
 
+    @Override
     public void delete() {
     }
 
+    @Override
     public byte[] get() {
         return data.toByteArray();
     }
 
+    @Override
     public String getContentType() {
         return contentType;
     }
 
+    @Override
     public String getFieldName() {
         return fieldName;
     }
 
+    @Override
     public void setFieldName(String name) {
         fieldName = name;
     }
 
+    @Override
     public String getName() {
         return fileName;
     }
 
+    @Override
     public InputStream getInputStream() {
         return new ByteArrayInputStream(get());
     }
 
+    @Override
     public OutputStream getOutputStream() throws IOException {
         if (os == null) {
             data = new ByteArrayOutputStream();
@@ -74,30 +84,37 @@ public class SlxFileItem implements FileItem
         return os;
     }
 
+    @Override
     public long getSize() {
-        return (long) data.size();
+        return data.size();
     }
 
+    @Override
     public String getString() {
         return new String(get());
     }
 
+    @Override
     public String getString(String encoding) throws UnsupportedEncodingException {
         return new String(get(), encoding);
     }
 
+    @Override
     public boolean isFormField() {
         return isFormField;
     }
 
+    @Override
     public void setFormField(boolean state) {
         isFormField = state;
     }
 
+    @Override
     public boolean isInMemory() {
         return true;
     }
 
+    @Override
     public void write(File file) throws Exception {
         IOUtil.copyStreams(getInputStream(), new FileOutputStream(file));
     }
@@ -153,4 +170,25 @@ public class SlxFileItem implements FileItem
     long expectedSize;
 
     String shortFileName;
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.apache.commons.fileupload.FileItemHeadersSupport#getHeaders()
+     */
+    @Override
+    public FileItemHeaders getHeaders() {
+        return header;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.apache.commons.fileupload.FileItemHeadersSupport#setHeaders(org.apache.commons.fileupload.FileItemHeaders)
+     */
+    @Override
+    public void setHeaders(FileItemHeaders arg0) {
+        this.header=arg0;
+        
+    }
 }

@@ -55,33 +55,32 @@
 		<easymock.version>3.1</easymock.version>
 		<equinox.version>3.8.0.v20120529-1548</equinox.version>
 		<felix.bundlerepository.version>1.6.4</felix.bundlerepository.version>
-		<felix.configadmin.version>1.2.8</felix.configadmin.version>
-		<felix.fileinstall.version>3.1.10</felix.fileinstall.version>
+		<felix.configadmin.version>1.6.0</felix.configadmin.version>
+		<felix.fileinstall.version>3.2.6</felix.fileinstall.version>
 		<felix.framework.version>4.0.3</felix.framework.version>
 		<felix.gogo.version>0.10.0</felix.gogo.version>
 		<felix.plugin.version>2.3.7</felix.plugin.version>
 		<felix.utils.version>1.1.0</felix.utils.version>
 		<felix.webconsole.version>3.1.8</felix.webconsole.version>
 		<felix.metatype.version>1.0.4</felix.metatype.version>
-		<aries.blueprint.version>0.3.1</aries.blueprint.version>
+		<aries.blueprint.version>1.1.0</aries.blueprint.version>
 		<aries.jmx.version>1.1.0</aries.jmx.version>
 		<aries.jndi.version>1.0.0</aries.jndi.version>
 		<aries.util.version>1.1.0</aries.util.version>
-		<geronimo.servlet.version>1.1.2</geronimo.servlet.version>
 		<jansi.version>1.4</jansi.version>
 		<jline.version>2.5</jline.version>
 		<jsw.version>3.2.3</jsw.version>
 		<log4j.version>1.2.16</log4j.version>
 		<maven.version>2.0.9</maven.version>
 		<mina.version>2.0.3</mina.version>
-		<osgi.version>4.2.0</osgi.version>
+		<osgi.version>4.3.0</osgi.version>
 		<osgi.core.version>4.3.0</osgi.core.version>
-		<pax.exam.version>1.2.4</pax.exam.version>
+		<pax.exam.version>3.0.3</pax.exam.version>
 		<pax.exam.version2>2.0.0-RC5</pax.exam.version2>
 		<pax.logging.version>1.6.5</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
-		<pax.url.version>1.3.1</pax.url.version>
-		<pax.web.version>1.0.2</pax.web.version>
+		<pax.url.version>1.5.2</pax.url.version>
+		<pax.web.version>3.0.1</pax.web.version>
 		<pax.tinybundles.version>1.3.0</pax.tinybundles.version>
 		<servlet.api.version>2.5</servlet.api.version>
 		<spring.osgi.version>1.2.0</spring.osgi.version>
@@ -99,22 +98,22 @@
 		<!-- <karaf.debug.location>/home/solmix/workspace/svn/trunk/resource/resource</karaf.debug.location> -->
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
-		<org.apache.servicemix.bundles.commons-codec>1.3_3</org.apache.servicemix.bundles.commons-codec>
+		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
 		<apache.karaf.version>3.0.0.RC1</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
-		<commons-fileupload.version>1.2.2</commons-fileupload.version>
-		<commons-pool.version>1.5.7</commons-pool.version>
+		<commons-fileupload.version>1.3</commons-fileupload.version>
+		<commons-pool.version>1.6</commons-pool.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
-		<commons-io.version>2.1</commons-io.version>
+		<commons-io.version>2.4</commons-io.version>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<commons-codec.version>1.6</commons-codec.version>
 		<commons-lang.version>2.5</commons-lang.version>
 		<jackson.version>1.9.8</jackson.version>
-		<poi.version>3.8-beta5</poi.version>
+		<poi.version>3.9</poi.version>
 		<velocity.version>1.7</velocity.version>
 		<osgi.service.version>3.3.0.v20110513</osgi.service.version>
 		<org.apache.felix.http.version>2.2.0</org.apache.felix.http.version>
