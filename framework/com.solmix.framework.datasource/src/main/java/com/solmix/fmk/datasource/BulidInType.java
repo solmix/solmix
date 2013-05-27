@@ -22,9 +22,11 @@ package com.solmix.fmk.datasource;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.IType;
 import com.solmix.api.exception.SlxException;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.DefaultValidators;
 import com.solmix.fmk.util.ErrorReport;
@@ -39,7 +41,7 @@ import com.solmix.fmk.util.ErrorReport;
 public class BulidInType implements IType
 {
 
-   private static Logger log = new Logger( BulidInType.class.getName() );
+   private static Logger log = LoggerFactory.getLogger( BulidInType.class.getName() );
 
    protected String name;
 

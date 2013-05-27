@@ -23,7 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -31,7 +32,7 @@ import com.solmix.commons.logs.Logger;
  */
 public class DateUtil
 {
-   private static final Logger log = new Logger(DataUtil.class);
+   private static final Logger log =  LoggerFactory.getLogger(DataUtil.class);
 
    private static final long DAY_MS_TIME = 24 * 60 * 60 * 1000;
 

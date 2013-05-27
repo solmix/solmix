@@ -30,7 +30,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper HttpSession attributes names to context map.
@@ -49,48 +50,57 @@ public class SessionAttributeMapFacade extends AbstractMap< String ,Object > imp
       this.session = session;
    }
 
-   public Object getAttribute( String attrName )
+   @Override
+public Object getAttribute( String attrName )
    {
       return get( attrName );
    }
 
-   public Enumeration< ? > getAttributeNames()
+   @Override
+public Enumeration< ? > getAttributeNames()
    {
       return session.getAttributeNames();
    }
 
-   public long getCreationTime()
+   @Override
+public long getCreationTime()
    {
       return session.getCreationTime();
    }
 
-   public String getId()
+   @Override
+public String getId()
    {
       return session.getId();
    }
 
-   public long getLastAccessedTime()
+   @Override
+public long getLastAccessedTime()
    {
       return session.getLastAccessedTime();
    }
 
-   public int getMaxInactiveInterval()
+   @Override
+public int getMaxInactiveInterval()
    {
       return session.getMaxInactiveInterval();
    }
 
-   public ServletContext getServletContext()
+   @Override
+public ServletContext getServletContext()
    {
       return session.getServletContext();
    }
 
-   @Deprecated
+   @Override
+@Deprecated
    public HttpSessionContext getSessionContext()
    {
       return session.getSessionContext();
    }
 
-   public Object getValue( String arg0 )
+   @Override
+public Object getValue( String arg0 )
    {
       return getAttribute( arg0 );
    }
@@ -98,18 +108,21 @@ public class SessionAttributeMapFacade extends AbstractMap< String ,Object > imp
    /**
     * this method is replaced by {@link #getAttributeNames()}
     */
-   @Deprecated
+   @Override
+@Deprecated
    public String[] getValueNames()
    {
       return session.getValueNames();
    }
 
-   public void invalidate()
+   @Override
+public void invalidate()
    {
       session.invalidate();
    }
 
-   public boolean isNew()
+   @Override
+public boolean isNew()
    {
       return session.isNew();
    }
@@ -117,28 +130,33 @@ public class SessionAttributeMapFacade extends AbstractMap< String ,Object > imp
    /**
     *this method is replaced by {@link #setAttribute(String, Object)}
     */
-   @Deprecated
+   @Override
+@Deprecated
    public void putValue( String arg0, Object arg1 )
    {
       session.putValue( arg0, arg1 );
    }
 
-   public void removeAttribute( String arg0 )
+   @Override
+public void removeAttribute( String arg0 )
    {
       session.removeAttribute( arg0 );
    }
 
-   public void removeValue( String arg0 )
+   @Override
+public void removeValue( String arg0 )
    {
       session.removeValue( arg0 );
    }
 
-   public void setAttribute( String arg0, Object arg1 )
+   @Override
+public void setAttribute( String arg0, Object arg1 )
    {
       session.setAttribute( arg0, arg1 );
    }
 
-   public void setMaxInactiveInterval( int arg0 )
+   @Override
+public void setMaxInactiveInterval( int arg0 )
    {
       session.setMaxInactiveInterval( arg0 );
    }
@@ -168,6 +186,6 @@ public class SessionAttributeMapFacade extends AbstractMap< String ,Object > imp
       return set;
    }
 
-   private static Logger log = new Logger( SessionAttributeMapFacade.class.getName() );
+   private static Logger log = LoggerFactory.getLogger( SessionAttributeMapFacade.class.getName() );
 
 }

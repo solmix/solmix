@@ -34,6 +34,8 @@ import java.util.Set;
 
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.jxpath.JXPathContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import com.solmix.api.VelocityExpression;
@@ -63,7 +65,7 @@ import com.solmix.api.types.ClientParameterType;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.api.types.TransactionPolicy;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.datasource.ValidationContext.Vtype;
 import com.solmix.fmk.event.EventUtils;
@@ -83,7 +85,7 @@ import com.solmix.fmk.util.DefaultValidators;
 public class BasicDataSource implements DataSource
 {
 
-    private static final Logger log = new Logger(BasicDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(BasicDataSource.class.getName());
 
     private JSParser jsParser;
 
@@ -256,6 +258,7 @@ public class BasicDataSource implements DataSource
         this.data = context;
     }
 
+    @Override
     public DSResponse execute(Eoperation operationBindingType, String operationBindingID) throws SlxException {
         DSRequest req = new DSRequestImpl();
         req.getContext().setOperation(operationBindingID);
@@ -398,7 +401,7 @@ public class BasicDataSource implements DataSource
         req.setBeenThroughValidation(true);
         List errors = validateDSRequst(this, req);
         if (errors != null) {
-            Logger.validation.info((new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).info((new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
             DSResponse dsResponse = new DSResponseImpl(this,req);
             dsResponse.getContext().setStatus(Status.STATUS_VALIDATION_ERROR);
             dsResponse.getContext().setErrors(errors);
@@ -639,7 +642,7 @@ public class BasicDataSource implements DataSource
                 _recordList.size() != 0 ? (new StringBuilder()).append(" (avg ").append((end - start) / _recordList.size()).append(")").toString()
                     : "").toString();
             EventUtils.createAndFireTimeEvent(end - start, __info);
-            Logger.timing.debug(__info);
+            LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
             return result;
         }
         long start = System.currentTimeMillis();
@@ -648,7 +651,7 @@ public class BasicDataSource implements DataSource
         String __info = (new StringBuilder()).append("Done validating a '").append(getName()).append("' at path '").append(vcontext.getPath()).append(
             "': ").append(end - start).append("ms").toString();
         EventUtils.createAndFireTimeEvent(end - start, __info);
-        Logger.timing.debug(__info);
+       LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
         return result;
     }
 
@@ -702,7 +705,7 @@ public class BasicDataSource implements DataSource
             return record;
         } else {
             if (!vcontext.isIdAllowed() || !(data instanceof String))
-                Logger.validation.warn((new StringBuilder()).append("Unexpected Java type '").append(data.getClass()).append(
+                LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).warn((new StringBuilder()).append("Unexpected Java type '").append(data.getClass()).append(
                     "' passed to DataSource '").append(getName()).append("'").append(" at path '").append(vcontext.getPath()).append("'").toString());
             return data;
         }
@@ -794,7 +797,7 @@ public class BasicDataSource implements DataSource
             vcontext.removePathSegment();
             return value;
         }
-        if (Logger.validation.isDebugEnabled()) {
+        if (LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).isDebugEnabled()) {
             String __vinfo = (new StringBuilder()).append("Validating field:").append(vcontext.getPath()).append(" as ").append(getName()).append(".").append(
                 _fieldName).append(" type: ").append(type.getName()).toString();
             EventUtils.createFieldValidationEvent(Level.DEBUG, __vinfo);
@@ -854,8 +857,8 @@ public class BasicDataSource implements DataSource
                     allValidators.add(0, DataUtil.buildMap("type", "isOneOf", "valueMapList", list));
                 }
             }
-        if (Logger.validation.isDebugEnabled())
-            Logger.validation.debug((new StringBuilder()).append("Creating field validator for field ").append(getName()).append(".").append(
+        if (LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).isDebugEnabled())
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Creating field validator for field ").append(getName()).append(".").append(
                 field.getName()).append(", of simple type: ").append(field.getType()).append(", with inline validators: ").append(fieldValidators).append(
                 ", and type validators: ").append(typeValidators).toString());
         type = new BulidInType(_typeId, allValidators);
@@ -882,7 +885,7 @@ public class BasicDataSource implements DataSource
      */
     private void handleExtraValue(Map<Object, Object> record, String fieldName, Object value, ValidationContext vcontext) {
         if (value != null) {
-            Logger.validation.debug((new StringBuilder()).append("Value provided for unknown field: ").append(getName()).append(".").append(fieldName).append(
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Value provided for unknown field: ").append(getName()).append(".").append(fieldName).append(
                 ": value is: ").append(value).toString());
         }
     }
@@ -1330,6 +1333,7 @@ public class BasicDataSource implements DataSource
 
     }
 
+    @Override
     public Map<String, ?> toClientValueMap() {
         long _s = System.currentTimeMillis();
 

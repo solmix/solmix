@@ -31,6 +31,8 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.context.Context;
 import com.solmix.api.context.WebContext;
@@ -42,7 +44,6 @@ import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 import com.solmix.fmk.internel.DSConfigManager;
 import com.solmix.fmk.util.DataTools;
 
@@ -266,7 +267,7 @@ public class Velocity
         if (_reqData.getTemplateContext() != null) {
             for (Object key : _reqData.getTemplateContext().keySet()) {
                 if (context.get(key.toString()) != null)
-                    log.warning((new StringBuilder()).append("DSRequest-specified a template context variable: ").append(key).append(
+                    log.warn((new StringBuilder()).append("DSRequest-specified a template context variable: ").append(key).append(
                         " collides with derived key of the same name").append(" - using the DSRequest-specified value.").toString());
                 context.put(key.toString(), _reqData.getTemplateContext().get(key));
             }
@@ -324,7 +325,7 @@ public class Velocity
         } 
     }
 
-    private static Logger log = new Logger(Velocity.class.getName());
+    private static Logger log = LoggerFactory.getLogger(Velocity.class.getName());
 
     private static VelocityEngine vEngine;
 

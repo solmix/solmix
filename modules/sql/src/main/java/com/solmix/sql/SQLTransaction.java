@@ -24,13 +24,15 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.sql.internal.SQLConfigManager;
 
 /**
@@ -46,7 +48,7 @@ public class SQLTransaction
 
     public static final String DBNAME_ATTR = "_slx_default_dbName";
 
-    private static Logger log = new Logger(SQLTransaction.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLTransaction.class.getName());
 
     private static boolean autoEndTransactions;
 

@@ -23,12 +23,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -78,11 +80,10 @@ public class FileSystemRepository extends AbstractDSRepository
         this.sysLocation = sysLocation;
     }
 
-    private final Logger log;
+    private final static Logger log=LoggerFactory.getLogger(FileSystemRepository.class.getName());
 
     public FileSystemRepository()
     {
-        log = new Logger(FileSystemRepository.class.getName());
     }
 
     /**
@@ -126,7 +127,7 @@ public class FileSystemRepository extends AbstractDSRepository
         for (String str : locations) {
             _tmp.add("file:" + str);
         }
-        return (String[]) DataUtil.listToStringArray(_tmp);
+        return DataUtil.listToStringArray(_tmp);
 
     }
 
@@ -151,7 +152,7 @@ public class FileSystemRepository extends AbstractDSRepository
                 return dsFile;
             }
         }
-        log.warning((new StringBuilder()).append("File ").append(name).append(" not found at explicitly specified location ").append(sysLocation).append(
+        log.warn((new StringBuilder()).append("File ").append(name).append(" not found at explicitly specified location ").append(sysLocation).append(
             ", checking system ds repo area").toString());
         return null;
     }
@@ -192,10 +193,10 @@ public class FileSystemRepository extends AbstractDSRepository
                 }
             }
             if (dsFile == null)
-                log.warning((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(
+                log.warn((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(
                     location).toString());
             // find in system repo
-            log.warning("try to found in system ds repo");
+            log.warn("try to found in system ds repo");
             return this.loadSystem(dsName);
         }
     }

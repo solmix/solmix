@@ -23,7 +23,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 
 
 /**
@@ -43,7 +43,7 @@ public class EMFProviderAM implements EMFProvider
       this.entityManagerFactory = entityManagerFactory;
    }
 
-   private static Logger log = new Logger(EMFProviderAM.class.getName());
+   private static Logger log = LoggerFactory.getLogger(EMFProviderAM.class.getName());
 
    /**
     * {@inheritDoc}

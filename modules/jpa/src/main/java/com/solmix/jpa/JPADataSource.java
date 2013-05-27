@@ -47,7 +47,7 @@ import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.rpc.RPCManagerCompletionCallback;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.datasource.BasicDataSource;
@@ -63,7 +63,7 @@ import com.solmix.fmk.util.ServiceUtil;
 public class JPADataSource extends BasicDataSource implements DataSource, RPCManagerCompletionCallback
 {
 
-    private final static Logger log = new Logger(JPADataSource.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(JPADataSource.class.getName());
 
     private boolean strictSQLFiltering;
 

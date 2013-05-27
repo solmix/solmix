@@ -22,7 +22,8 @@ package com.solmix.fmk.velocity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author solomon
@@ -62,6 +63,6 @@ public class HttpAttributeHandler
 
    private HttpSession session;
 
-   public static Logger log = new Logger( HttpAttributeHandler.class.getName() );
+   public static Logger log = LoggerFactory.getLogger( HttpAttributeHandler.class.getName() );
 
 }

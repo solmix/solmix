@@ -22,7 +22,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.fmk.servlet.RequestContext;
 
 /**
@@ -33,7 +33,7 @@ import com.solmix.fmk.servlet.RequestContext;
  */
 public class RequestTimer
 {
-   private static Logger log = new Logger(RequestTimer.class.getName());
+   private static Logger log = LoggerFactory.getLogger(RequestTimer.class.getName());
 
    private final HttpServletRequest request;
 

@@ -26,11 +26,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Eoperation;
 import com.solmix.api.jaxb.Tfield;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.velocity.Velocity;
 
@@ -43,7 +45,7 @@ import com.solmix.fmk.velocity.Velocity;
 public class SQLValuesClause
 {
 
-   private static Logger log = new Logger(SQLValuesClause.class.getName());
+   private static Logger log = LoggerFactory.getLogger(SQLValuesClause.class.getName());
 
    private final DSRequest dsRequest;
 
@@ -57,7 +59,7 @@ public class SQLValuesClause
 
    public SQLValuesClause(DSRequest request, SQLDataSource dataSource,boolean batchUpdate) throws SlxException
    {
-      this(request, request.getContext().getValues(), dataSource, (List) request.getContext().getCriteriaSets());
+      this(request, request.getContext().getValues(), dataSource, request.getContext().getCriteriaSets());
       this.batchUpdate =batchUpdate;
      
    }

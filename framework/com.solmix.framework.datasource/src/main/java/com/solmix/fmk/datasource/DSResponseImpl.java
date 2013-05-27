@@ -23,12 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DSResponseData;
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DSResponse;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
-import com.solmix.commons.logs.Logger;
 
 /**
  * @author solomon
@@ -39,7 +41,7 @@ import com.solmix.commons.logs.Logger;
 public class DSResponseImpl implements DSResponse
 {
 
-    private static final Logger log = new Logger(DSResponseImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(DSResponseImpl.class);
 
     private DataSource dataSource;
 
@@ -106,6 +108,7 @@ public class DSResponseImpl implements DSResponse
     /**
      * @return the dataSource
      */
+    @Override
     public DataSource getDataSource() {
         return dataSource;
     }
@@ -113,6 +116,7 @@ public class DSResponseImpl implements DSResponse
     /**
      * @param dataSource the dataSource to set
      */
+    @Override
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -120,6 +124,7 @@ public class DSResponseImpl implements DSResponse
     /**
      * @return the data
      */
+    @Override
     public DSResponseData getContext() {
         return data;
     }
@@ -127,6 +132,7 @@ public class DSResponseImpl implements DSResponse
     /**
      * @param data the data to set
      */
+    @Override
     public void setContext(DSResponseData data) {
         this.data = data;
     }

@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
@@ -39,19 +41,19 @@ import com.solmix.api.jaxb.Tfield;
 public class SQLOrderClause
 {
 
-   private static Logger log = new Logger(SQLOrderClause.class.getName());
+   private static Logger log = LoggerFactory.getLogger(SQLOrderClause.class.getName());
 
-   private List<SQLDataSource> dataSources;
+   private final List<SQLDataSource> dataSources;
 
-   private Map remapTable;
+   private final Map remapTable;
 
    private Map column2TableMap;
 
-   private Map valueMaps;
+   private final Map valueMaps;
 
-   private List<String> sortBy;
+   private final List<String> sortBy;
 
-   private boolean qualifyColumnNames;
+   private final boolean qualifyColumnNames;
 
    private List<String> customValueFields;
 
@@ -99,7 +101,7 @@ public class SQLOrderClause
       }
       StringBuffer __result = new StringBuffer();
       boolean __descending = false;
-      SQLDriver driver = ((SQLDataSource) dataSources.get(0)).getDriver();
+      SQLDriver driver = dataSources.get(0).getDriver();
       for (String fieldName : sortBy)
       {
          boolean customCheck = false;
@@ -140,7 +142,7 @@ public class SQLOrderClause
                   columnName = driver.escapeColumnName(columnName);
                   if (tableName == null && qualifyColumnNames)
                   {
-                     DataSource firstDS = (DataSource) dataSources.get(0);
+                     DataSource firstDS = dataSources.get(0);
                      if (firstDS instanceof SQLDataSource)
                         tableName = ((SQLDataSource) firstDS).getTable().getName();
                   }

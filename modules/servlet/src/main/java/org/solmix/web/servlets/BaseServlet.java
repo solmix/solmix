@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import com.solmix.SlxConstants;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.fmk.servlet.ServletTools;
 import com.solmix.fmk.util.OSGIHelper;
 

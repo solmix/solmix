@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.oro.text.perl.Perl5Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
@@ -48,7 +50,6 @@ import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.commons.util.DateUtil;
 import com.solmix.fmk.base.Reflection;
@@ -64,7 +65,7 @@ import com.solmix.sql.internal.SQLConfigManager;
 public abstract class SQLDriver
 {
 
-    private static Logger log = new Logger(SQLDriver.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLDriver.class.getName());
 
     protected static Perl5Util globalPerl = new Perl5Util();
 

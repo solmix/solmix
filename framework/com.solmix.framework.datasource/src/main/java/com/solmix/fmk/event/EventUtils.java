@@ -19,13 +19,15 @@
 
 package com.solmix.fmk.event;
 
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.event.IEvent;
 import com.solmix.api.event.IValidationEvent;
 import com.solmix.api.event.IValidationEvent.Level;
 import com.solmix.api.event.IValidationEvent.OutType;
 import com.solmix.api.event.MonitorEventFactory;
 import com.solmix.api.exception.SlxException;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.fmk.context.SlxContext;
 import com.solmix.fmk.datasource.ValidationEventFactory;
 
@@ -83,11 +85,11 @@ public class EventUtils
 
     public final static void createAndFireFldValidateEvent(Level level, String msg) throws SlxException {
         SlxContext.getEventManager().postEvent(createFieldValidationEvent(level, msg));
-        Logger.validation.debug(msg);
+        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
     }
 
     public final static void createAndFireDSValidateEvent(Level level, String msg, Throwable e) {
         SlxContext.getEventManager().postEvent(createDSValidationEvent(level, msg, e));
-        Logger.validation.debug(msg);
+        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
     }
 }

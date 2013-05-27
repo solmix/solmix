@@ -29,11 +29,13 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.export.IExport;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.MapperUtil;
 
@@ -45,7 +47,7 @@ import com.solmix.fmk.util.MapperUtil;
 public class XMLExport extends AbstractExport
 {
 
-private static Logger log = new Logger(XMLExport.class);
+private static Logger log = LoggerFactory.getLogger(XMLExport.class);
 
 /**
  * {@inheritDoc}

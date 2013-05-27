@@ -25,10 +25,11 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.datasource.DSResponse.Status;
 import com.solmix.api.datasource.annotation.ResponseData;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -41,13 +42,13 @@ import com.solmix.commons.util.DataUtil;
 public class DSResponseData
 {
 
-    private static final Logger log = new Logger(DSResponseData.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DSResponseData.class.getName());
 
     public enum Type
     {
         REUTRN(0);
 
-        private int value;
+        private final int value;
 
         Type(int value)
         {
@@ -256,7 +257,7 @@ public class DSResponseData
         if (type.isAssignableFrom(Map.class)) {
             if (data instanceof List<?>) {
                 if (((List<?>) data).size() == 0) {
-                    return (T) null;
+                    return null;
                 } else if (((List<?>) data).get(0) instanceof Map<?, ?>) {
                     return (T) ((List<?>) data).get(0);
                 }

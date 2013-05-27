@@ -19,8 +19,10 @@
 
 package com.solmix.fmk.repo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.repo.DSRepository;
-import com.solmix.commons.logs.Logger;
 
 /**
  * 
@@ -29,7 +31,7 @@ import com.solmix.commons.logs.Logger;
 public abstract class AbstractDSRepository implements DSRepository
 {
 
-    private static final Logger log = new Logger(AbstractDSRepository.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(AbstractDSRepository.class.getName());
 
     private String objectField;
 
@@ -52,6 +54,7 @@ public abstract class AbstractDSRepository implements DSRepository
     /**
      * @return the objectField
      */
+    @Override
     public String getObjectField() {
         return objectField;
     }
@@ -66,6 +69,7 @@ public abstract class AbstractDSRepository implements DSRepository
     /**
      * @return the objectFormat
      */
+    @Override
     public String getObjectFormat() {
         return objectFormat;
     }

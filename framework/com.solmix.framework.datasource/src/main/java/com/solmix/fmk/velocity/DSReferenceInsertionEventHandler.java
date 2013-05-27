@@ -25,9 +25,10 @@ import java.util.List;
 import org.apache.velocity.app.event.EventCartridge;
 import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
 import org.apache.velocity.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.datasource.DataSource;
-import com.solmix.commons.logs.Logger;
 
 /**
  * Reference 'Stream insertion' event handler. Called with object that will be inserted into stream via
@@ -44,7 +45,7 @@ public class DSReferenceInsertionEventHandler implements ReferenceInsertionEvent
         "$defaultValuesClause", "$criteria", "$values", "$defaultGroupClause", "$defaultGroupWhereClause", "$defaultOrderClause", "$rawValue",
         "$filter", "$equals", "$substringMatches", "$fields", "$qfields" };
 
-    private static Logger log = new Logger(DSReferenceInsertionEventHandler.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DSReferenceInsertionEventHandler.class.getName());
 
     private final boolean escapeValues;
 
@@ -84,6 +85,7 @@ public class DSReferenceInsertionEventHandler implements ReferenceInsertionEvent
      * @param data Value about to be inserted (after its toString() method is called).
      * @return Object on which toString() should be called for output
      */
+    @Override
     public Object referenceInsert(String reference, Object data) {
         foundObject = data;
         if (escapeValues && ds == null) {

@@ -45,7 +45,9 @@ import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.VFS;
 import org.apache.oro.text.GlobCompiler;
 import org.apache.oro.text.perl.Perl5Util;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.commons.util.IOUtil;
 
 
@@ -57,7 +59,7 @@ import com.solmix.commons.util.IOUtil;
  */
 public class SlxFile
 {
-   private static final Logger log = new Logger(SlxFile.class.getName());
+   private static final Logger log = LoggerFactory.getLogger(SlxFile.class.getName());
 
    public static ServletContext servletContext = null;
 

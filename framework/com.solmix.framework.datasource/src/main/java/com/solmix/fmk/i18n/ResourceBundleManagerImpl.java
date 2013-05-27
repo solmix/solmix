@@ -27,10 +27,11 @@ import java.util.ResourceBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.i18n.ResourceBundleManager;
-import com.solmix.commons.logs.Logger;
 
 /**
  * <b>if in osgi environment:</b>
@@ -49,7 +50,7 @@ import com.solmix.commons.logs.Logger;
 public class ResourceBundleManagerImpl implements ResourceBundleManager
 {
 
-    private static final Logger log = new Logger(ResourceBundleManagerImpl.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ResourceBundleManagerImpl.class.getName());
 
     private final BundleContext bundleContext;
 
@@ -110,7 +111,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
         if (bundleContext != null)
             bundleContext.removeBundleListener(this);
         else
-            log.warning("cannot use diapose() method with no osgi environment.");
+            log.warn("cannot use diapose() method with no osgi environment.");
 
     }
 

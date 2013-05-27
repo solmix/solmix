@@ -28,10 +28,12 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.MapperUtil;
 
@@ -43,7 +45,7 @@ import com.solmix.fmk.util.MapperUtil;
 public class JSONExport extends AbstractExport
 {
 
-private static final Logger log = new Logger(JSONExport.class);
+private static final Logger log = LoggerFactory.getLogger(JSONExport.class);
 
 /**
  * {@inheritDoc}

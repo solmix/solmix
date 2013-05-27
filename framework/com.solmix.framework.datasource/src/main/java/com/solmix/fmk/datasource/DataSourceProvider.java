@@ -23,6 +23,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DataSourceData;
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
@@ -31,7 +34,6 @@ import com.solmix.api.event.IEvent;
 import com.solmix.api.event.MonitorEventFactory;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.EserverType;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.cache.StructCache;
 import com.solmix.fmk.context.SlxContext;
@@ -49,7 +51,7 @@ public class DataSourceProvider
 
     private static ParserHandler parser;
 
-    private static Logger log = new Logger(DataSourceProvider.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DataSourceProvider.class.getName());
 
     public static AtomicLong totalInitialDS = new AtomicLong();
 

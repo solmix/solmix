@@ -61,11 +61,12 @@ import java.util.StringTokenizer;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oro.text.perl.Perl5Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.commons.collections.CaseInsensitiveHashMap;
 import com.solmix.commons.collections.DataTypeMap;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 
 /**
  * @version 110043
@@ -78,7 +79,7 @@ public class DataUtil
 
     public static final Object EMPTY_ARRAY[] = new Object[0];
 
-    private static final Logger log = new Logger(DataUtil.class.getName());
+    private static final Logger log =  LoggerFactory.getLogger(DataUtil.class.getName());
 
     private static Perl5Util globalPerl = new Perl5Util();
 

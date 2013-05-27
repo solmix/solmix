@@ -30,7 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.sql.internal.SQLConfigManager;
 
 /**
@@ -75,6 +77,7 @@ public class SQLMetaData
         return conn;
     }
 
+    @Override
     protected void finalize() throws Throwable {
         conn.close();
     }
@@ -222,7 +225,7 @@ public class SQLMetaData
             return (Map) results.get(0);
     }
 
-    private static Logger log = new Logger(SQLMetaData.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLMetaData.class.getName());
 
     // static String defaultDatabase;
 

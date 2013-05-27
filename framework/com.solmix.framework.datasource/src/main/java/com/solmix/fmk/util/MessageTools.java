@@ -29,10 +29,12 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.context.Context;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.i18n.ResourceBundleManager;
-import com.solmix.commons.logs.Logger;
 import com.solmix.fmk.i18n.ResourceBundleManagerImpl;
 
 /**
@@ -52,7 +54,7 @@ public class MessageTools
 
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 
-    private static final Logger log = new Logger(MessageTools.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MessageTools.class.getName());
 
     private final Map<Long, Properties> propsCache = new HashMap<Long, Properties>();
 

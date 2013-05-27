@@ -23,9 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.MDC;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.application.Application;
 import com.solmix.api.application.ApplicationManager;
@@ -43,7 +46,7 @@ import com.solmix.api.jaxb.request.Roperation;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.auth.Authentication;
 import com.solmix.fmk.datasource.DSResponseImpl;
@@ -63,7 +66,7 @@ public class AppBase implements Application
 
     protected static final boolean authenticationEnabled = false;
 
-    private static Logger log = new Logger(AppBase.class.getName());
+    private final  static Logger log = LoggerFactory.getLogger(AppBase.class.getName());
 
     protected static Perl5Util staticRegex = new Perl5Util();
 
@@ -149,6 +152,7 @@ public class AppBase implements Application
         return appConfig;
     }
 
+    @Override
     public DataSource getDataSource(String dsName) throws SlxException {
         DataSource ds = leasedDataSources.get(dsName);
         if (ds == null) {
@@ -163,6 +167,7 @@ public class AppBase implements Application
      * 
      * @see com.solmix.api.application.Application#execute(com.solmix.api.datasource.DSRequest, java.lang.Object)
      */
+    @Override
     public DSResponse execute(DSRequest request, Context context) throws SlxException {
         this.request = request;
         this.context = context;
@@ -176,9 +181,9 @@ public class AppBase implements Application
             canPerformAutoOperation(opType);
             operation = DataTools.autoCreateOperationID(dataSourceName, opType);
             log.debug("can not found the operationID ,auto created ID:[" + operation + "]");
-            Logger.pushContext((new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
+            MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
         }else{
-            Logger.pushContext((new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
+            MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
         }
 
         DSResponse dsresponse = null;
@@ -222,7 +227,7 @@ public class AppBase implements Application
             // if ( !result.getContext().statusIsError() )
             dsresponse = result;
         } finally {
-            Logger.popContext();
+          MDC.remove(SlxLog.LOG_CONTEXT);
             freeDataSources();
         }
         return dsresponse;
@@ -268,6 +273,7 @@ public class AppBase implements Application
      * 
      * @see com.solmix.api.application.Application#havePermission(com.solmix.api.datasource.DSRequest, java.lang.Object)
      */
+    @Override
     public boolean havePermission(DSRequest request, Object context) throws SlxException {
         /* check need authenticated or not */
         if (!authenticationEnabled)
@@ -336,7 +342,7 @@ public class AppBase implements Application
     }
 
     public boolean userQualifiesForType(String userType) {
-        Logger.auth.info("AppBase::boolean userQualifiesForType(String userType): override this method to provide custom userType qualification logic (base implementation returns true)");
+        LoggerFactory.getLogger(SlxLog.AUTH_LOGNAME).info("AppBase::boolean userQualifiesForType(String userType): override this method to provide custom userType qualification logic (base implementation returns true)");
         return true;
     }
 

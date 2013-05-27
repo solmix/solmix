@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.jxpath.JXPathContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.context.Context;
 import com.solmix.api.exception.SlxException;
@@ -32,7 +34,6 @@ import com.solmix.api.jaxb.EserviceStyle;
 import com.solmix.api.jaxb.Tservice;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.base.ReflectionArgument;
@@ -47,7 +48,7 @@ import com.solmix.fmk.util.ServiceUtil;
 public class ServiceObject
 {
 
-    private static Logger log = new Logger(ServiceObject.class.getName());
+    private static Logger log = LoggerFactory.getLogger(ServiceObject.class.getName());
 
     Tservice serverObjectConfig;
 
@@ -175,7 +176,7 @@ public class ServiceObject
             throw new Exception((new StringBuilder()).append("Class ").append(serverObjectClass.getName()).append(" defines multiple").append(
                 " methods named: ").append(methodName).append(" - overloading is not supported - please disambiguate.").toString());
         else
-            return (Method) candidateMethods.get(0);
+            return candidateMethods.get(0);
     }
 
     public String getServiceAsString() {

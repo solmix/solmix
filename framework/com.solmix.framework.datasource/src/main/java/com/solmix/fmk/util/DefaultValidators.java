@@ -41,6 +41,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.context.Context;
 import com.solmix.api.context.WebContext;
@@ -54,7 +56,6 @@ import com.solmix.api.jaxb.Tvalue;
 import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.base.ReflectionArgument;
@@ -157,6 +158,7 @@ public class DefaultValidators
     static class isInteger implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals("") || (value instanceof Integer))
@@ -179,6 +181,7 @@ public class DefaultValidators
     static class isTime implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || (value instanceof Date))
@@ -205,6 +208,7 @@ public class DefaultValidators
     static class isDate implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || (value instanceof Date))
@@ -241,6 +245,7 @@ public class DefaultValidators
     static class isFloat implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -262,6 +267,7 @@ public class DefaultValidators
     static class isIdentifier implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -280,6 +286,7 @@ public class DefaultValidators
     static class isURL implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -300,6 +307,7 @@ public class DefaultValidators
     static class isString implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals("")) {
@@ -318,6 +326,7 @@ public class DefaultValidators
     static class isRegexp implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -338,6 +347,7 @@ public class DefaultValidators
     static class isUnique implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             Map params = context.getTemplateContext();
@@ -371,6 +381,7 @@ public class DefaultValidators
     static class integerRange implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -413,6 +424,7 @@ public class DefaultValidators
     static class regexp implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -436,6 +448,7 @@ public class DefaultValidators
     static class lengthRange implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -460,6 +473,7 @@ public class DefaultValidators
     static class matchesField implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             Object otherField = validatorParams.getOtherField();
@@ -481,6 +495,7 @@ public class DefaultValidators
     static class contains implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -503,6 +518,7 @@ public class DefaultValidators
     static class doesntContain implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -525,6 +541,7 @@ public class DefaultValidators
     static class substringCount implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -590,6 +607,7 @@ public class DefaultValidators
     static class mask implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -613,6 +631,7 @@ public class DefaultValidators
     static class floatLimit implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -653,6 +672,7 @@ public class DefaultValidators
     static class floatPrecision implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -687,6 +707,7 @@ public class DefaultValidators
     static class floatRange implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -715,6 +736,7 @@ public class DefaultValidators
     static class integerOrAuto implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             if (value == null || value.equals(""))
@@ -734,6 +756,7 @@ public class DefaultValidators
     static class hasRelatedRecord implements ValidatorFunc
     {
 
+        @Override
         public ErrorMessage validate(Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             Map params = context.getTemplateContext();
@@ -900,7 +923,7 @@ public class DefaultValidators
         }
     }
 
-    private static Logger log = new Logger(DefaultValidators.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DefaultValidators.class.getName());
 
     private static final Map<String, ValidatorFunc> validatorFunctions = Collections.synchronizedMap(new HashMap<String, ValidatorFunc>());
 

@@ -23,13 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.context.Context;
 import com.solmix.api.data.DSRequestData;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.event.IValidationEvent;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.rpc.RPCManager;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.ErrorReport;
 import com.solmix.fmk.velocity.DataSourcesHandler;
@@ -257,7 +259,7 @@ public class ValidationContext extends HashMap
             return;
         if (errors == null)
             errors = new HashMap<String, Object>();
-        Logger.validation.debug((new StringBuilder()).append("Adding validation errors at path '").append(path).append("': ").append(newErrors).append(
+        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Adding validation errors at path '").append(path).append("': ").append(newErrors).append(
             " ").append((suggest != null ? " suggest: " + suggest : "")).toString());
         String recordPath = getCurrentRecordPath(fieldName);
         ErrorReport report = (ErrorReport) errors.get(recordPath);
@@ -270,7 +272,7 @@ public class ValidationContext extends HashMap
         if (vfactory != null) {
             vevent = vfactory.create(fieldName, newErrors, suggest);
         } else {
-            Logger.validation.warn("there is no validation event factory set,check you configuration");
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).warn("there is no validation event factory set,check you configuration");
         }
         if (vevent != null) {
             Object event = errors.get(fieldName);
@@ -292,7 +294,7 @@ public class ValidationContext extends HashMap
             return;
         if (errors == null)
             errors = new HashMap<String, Object>();
-        Logger.validation.debug((new StringBuilder()).append("Adding validation errors at path '").append(path).append("': ").append(newErrors).toString());
+        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Adding validation errors at path '").append(path).append("': ").append(newErrors).toString());
         String recordPath = getCurrentRecordPath(fieldName);
         ErrorReport report = (ErrorReport) errors.get(recordPath);
         if (report == null) {

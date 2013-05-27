@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.solmix.api.interfaces.CompressionService;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.fmk.servlet.RequestContext;
 import com.solmix.fmk.servlet.ServletTools;
 
@@ -66,7 +66,7 @@ public class CompressionFilter extends BaseFilter
         this.compressableMimeTypes = compressableMimeTypes;
     }
 
-    private static final Logger log = new Logger(CompressionFilter.class.getName(), "[[compress]]");
+    private static final Logger log = LoggerFactory.getLogger(CompressionFilter.class.getName(), "[[compress]]");
 
     CompressionFilter()
     {

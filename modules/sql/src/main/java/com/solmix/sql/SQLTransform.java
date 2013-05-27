@@ -33,6 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Efield;
@@ -40,7 +43,6 @@ import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.ToperationBinding;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.commons.util.IOUtil;
 import com.solmix.fmk.base.Reflection;
@@ -56,7 +58,7 @@ import com.solmix.fmk.util.SLXDate;
 public class SQLTransform
 {
 
-    private static Logger log = new Logger(SQLTransform.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLTransform.class.getName());
 
     /**
      * @param dbName
@@ -147,7 +149,7 @@ public class SQLTransform
         }
         _rsmd = resultSet.getMetaData();
         if (dataSources != null) {
-            DataSource firstDS = (DataSource) dataSources.get(0);
+            DataSource firstDS = dataSources.get(0);
             if (firstDS instanceof SQLDataSource) {
                 SQLDriver driver = ((SQLDataSource) firstDS).getDriver();
                 _useColumnLabel = driver.useColumnLabelInMetadata();

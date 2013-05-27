@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.solmix.api.interfaces.Compression;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.commons.util.IOUtil;
 
 /**
@@ -40,7 +40,7 @@ public class CompressionImpl implements Compression
 
    static ByteArrayOutputStream whiteSpace = null;
 
-   private final static Logger log = new Logger(CompressionImpl.class.getName());
+   private final static Logger log = LoggerFactory.getLogger(CompressionImpl.class.getName());
 
    CompressionImpl()
    {

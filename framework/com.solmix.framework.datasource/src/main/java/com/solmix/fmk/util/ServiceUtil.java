@@ -30,9 +30,10 @@ import javax.naming.NamingException;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.SlxConstants;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -44,7 +45,7 @@ import com.solmix.commons.util.DataUtil;
 public class ServiceUtil
 {
 
-    private static final Logger log = new Logger(ServiceUtil.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ServiceUtil.class.getName());
 
     private static BundleContext context;
 

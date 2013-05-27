@@ -31,10 +31,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 
 /**
  * @author solomon
@@ -44,7 +46,7 @@ import com.solmix.commons.logs.Logger;
 public class CSVExport extends AbstractExport
 {
 
-private static Logger log = new Logger(CSVExport.class);
+private static Logger log = LoggerFactory.getLogger(CSVExport.class);
 
 /**
  * {@inheritDoc}

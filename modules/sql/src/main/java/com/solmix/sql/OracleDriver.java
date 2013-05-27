@@ -26,13 +26,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Efield;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.DataTools;
 import com.solmix.sql.internal.SQLConfigManager;
@@ -46,7 +48,7 @@ import com.solmix.sql.internal.SQLConfigManager;
 public class OracleDriver extends SQLDriver
 {
 
-    private static Logger log = new Logger(SQLDriver.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLDriver.class.getName());
 
     boolean driverSupportsSQLLimit;
 

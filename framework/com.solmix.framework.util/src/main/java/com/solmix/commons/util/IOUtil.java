@@ -37,9 +37,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.solmix.commons.logs.Logger;
 
 /**
  * simply IO operation
@@ -52,7 +51,7 @@ import com.solmix.commons.logs.Logger;
  */
 public class IOUtil
 {
-   public static final Logger log = new Logger(IOUtil.class);
+   public static final Logger log =  LoggerFactory.getLogger(IOUtil.class);
 
    public static final int DEFAULT_BUFFER_SIZE = 4096;
 

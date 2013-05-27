@@ -22,6 +22,9 @@ package com.solmix.fmk.pool;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.pool.IPoolableObjectFactory;
@@ -31,7 +34,6 @@ import com.solmix.api.pool.SlxPoolableObjectFactory;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -44,7 +46,7 @@ import com.solmix.commons.util.DataUtil;
 public class PoolManager implements PoolService
 {
 
-    private final Logger log = new Logger(PoolManager.class.getName());
+    private final Logger log =  LoggerFactory.getLogger(PoolManager.class.getName());
 
     protected IPoolableObjectFactory factory;
 
@@ -54,7 +56,7 @@ public class PoolManager implements PoolService
 
     protected Map sources;
 
-    private Map config;
+    private final Map config;
 
     protected String name;
 
@@ -74,6 +76,7 @@ public class PoolManager implements PoolService
         symbolicName = getClass().getName();
     }
 
+    @Override
     public Object borrowObject(Object key) throws SlxException {
         return borrowObject(key, null);
     }
@@ -86,6 +89,7 @@ public class PoolManager implements PoolService
      * @return
      * @throws SlxException
      */
+    @Override
     public Object borrowObject(Object key, DSRequest request) throws SlxException {
         Object objectSource = getObjectSource(key);
         if (objectSource instanceof SlxKeyedObjectPool)
@@ -120,6 +124,7 @@ public class PoolManager implements PoolService
                 + objectSource.getClass().getName(), new IllegalArgumentException());
     }
 
+    @Override
     public Object borrowUnpooledObject(Object key) throws SlxException {
         Object objectSource = getObjectSource(key);
         if (objectSource instanceof SlxKeyedObjectPool)
@@ -151,6 +156,7 @@ public class PoolManager implements PoolService
                 + objectSource.getClass().getName(), new IllegalArgumentException());
     }
 
+    @Override
     public Object borrowNewObject(Object key) throws Exception {
         Object objectSource = getObjectSource(key);
         if (objectSource instanceof SlxKeyedObjectPool)
@@ -165,6 +171,7 @@ public class PoolManager implements PoolService
             throw new Exception((new StringBuilder()).append("Invalid objectSource type: ").append(objectSource.getClass().getName()).toString());
     }
 
+    @Override
     public void returnObject(Object key, Object obj) {
         try {
             Object objectSource = getObjectSource(key);
@@ -220,6 +227,7 @@ public class PoolManager implements PoolService
             return source;
     }
 
+    @Override
     public void destroy() {
         if (source == null)
             return;
@@ -236,10 +244,12 @@ public class PoolManager implements PoolService
         }
     }
 
+    @Override
     public boolean isEnablePool() {
         return enablePool;
     }
 
+    @Override
     public Object getPool() {
         if (isEnablePool()) {
             return source;

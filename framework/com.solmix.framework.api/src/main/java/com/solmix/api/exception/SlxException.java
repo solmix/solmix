@@ -27,9 +27,11 @@ import java.text.MessageFormat;
 import javax.servlet.ServletException;
 
 import org.apache.velocity.exception.MethodInvocationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 
 /**
  * Wrapped solmix project Exception
@@ -46,7 +48,7 @@ public class SlxException extends Exception
     */
     private static final long serialVersionUID = 1252155663355037115L;
 
-    private static Logger log = new Logger(SlxException.class);
+    private static Logger log = LoggerFactory.getLogger(SlxException.class);
 
     private Tmodule module;
 

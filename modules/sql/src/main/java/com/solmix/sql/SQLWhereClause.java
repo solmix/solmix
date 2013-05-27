@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
@@ -40,7 +43,6 @@ import com.solmix.api.jaxb.Eoperation;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.util.DataTools;
 
@@ -79,7 +81,7 @@ public class SQLWhereClause
 
     private Map column2TableMap;
 
-    private static final Logger log = new Logger(SQLWhereClause.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(SQLWhereClause.class.getName());
 
     /**
      * @return the relatedCriterias
@@ -346,7 +348,7 @@ public class SQLWhereClause
         }
         String _columnName = getColumnNameForField(fieldName);
         if (_columnName == null && __f != null && __f.getCustomSelectExpression() == null) {
-            log.warning("no column name for field named: [" + fieldName + "] , field2ColumnMap: " + DataTools.prettyPrint(field2ColumnMap));
+            log.warn("no column name for field named: [" + fieldName + "] , field2ColumnMap: " + DataTools.prettyPrint(field2ColumnMap));
             return "'1'='1'";
         }
 
@@ -491,7 +493,7 @@ public class SQLWhereClause
         }
         String _columnName = getColumnNameForField(fieldName);
         if (_columnName == null && __f != null && __f.getCustomSelectExpression() == null) {
-            log.warning("no column name for field named: [" + fieldName + "] , field2ColumnMap: " + DataTools.prettyPrint(field2ColumnMap));
+            log.warn("no column name for field named: [" + fieldName + "] , field2ColumnMap: " + DataTools.prettyPrint(field2ColumnMap));
             return "'1'='1'";
         }
 
@@ -661,7 +663,7 @@ public class SQLWhereClause
                 return "('0'='1')";
         }
         Tfield field = null;
-        DataSource firstDS = (DataSource) dataSources.get(0);
+        DataSource firstDS = dataSources.get(0);
         if (firstDS != null)
             field = firstDS.getContext().getField(realFieldName);
         if (columnType.equals("number") || columnType.equals("integer") || columnType.equals("sequence") || columnType.equals("float")) {
@@ -822,7 +824,7 @@ public class SQLWhereClause
             return "('1'='1')";
         }
         Tfield field = null;
-        DataSource firstDS = (DataSource) dataSources.get(0);
+        DataSource firstDS = dataSources.get(0);
         if (firstDS != null)
             field = firstDS.getContext().getField(realFieldName);
         if (value == null)

@@ -33,6 +33,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.application.Application;
 import com.solmix.api.context.Context;
@@ -49,7 +51,6 @@ import com.solmix.api.jaxb.Tservice;
 import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.application.ApplicationManagerImpl;
 import com.solmix.fmk.base.Reflection;
@@ -66,7 +67,7 @@ import com.solmix.fmk.rpc.ServiceObject;
 public class DmiDataSource
 {
 
-    private final Logger log = new Logger(DmiDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DmiDataSource.class.getName());
 
     protected DSRequest request;
 

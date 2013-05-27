@@ -34,6 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.SlxConstants;
 import com.solmix.api.data.DSRequestData;
 import com.solmix.api.data.DataSourceData;
@@ -61,7 +64,7 @@ import com.solmix.api.serialize.JSParser;
 import com.solmix.api.serialize.JSParserFactory;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.context.SlxContext;
 import com.solmix.fmk.datasource.BasicDataSource;
@@ -85,7 +88,7 @@ import com.solmix.sql.internal.SQLConfigManager;
 public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, RPCManagerCompletionCallback
 {
 
-    private static final Logger log = new Logger(SQLDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(SQLDataSource.class.getName());
 
     protected static String DEFAULT_SEQUENCE_NAME = "__default";
 
@@ -436,7 +439,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     }
                 } else {
                     // __return.getContext().setData(new ArrayList());
-                    log.warning((new StringBuilder()).append(_opType).append(" operation affected no rows").toString());
+                    log.warn((new StringBuilder()).append(_opType).append(" operation affected no rows").toString());
                 }
             }
         }
@@ -577,7 +580,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                         if (_driver instanceof OracleDriver)
                             orderClause = "rownum";
                         else if (!pkList.isEmpty()) {
-                            orderClause = (String) pkList.get(0);
+                            orderClause = pkList.get(0);
                             log.debug((new StringBuilder()).append("Using PK as default sorter: ").append(orderClause).toString());
                         } else {
                             Iterator<String> i = remap.keySet().iterator();
@@ -641,7 +644,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
                 }
             }
-            Logger.timing.debug("");
+            LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug("");
             List<Object> rows = new ArrayList<Object>();
             try {
                 rows = SQLTransform.toListOfMapsOrBeans(rs, _driver, dataSources, __bind);
@@ -1091,7 +1094,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         Map<String, Object> column2TableMap = getColumn2TableMap(datasources);
         fields = remapTable;
         for (Iterator<String> i = firstDS.getContext().getFieldNames().iterator(); i.hasNext();) {
-            String key = (String) i.next();
+            String key = i.next();
             String columnName = (String) remapTable.get(key);
             String tableName = (String) column2TableMap.get(columnName);
             if (tableName == null)
@@ -1188,7 +1191,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         context.put("defaultTableClause", tableClause.getSQLString());
         ArrayList includeDataSources = new ArrayList(dataSources);
         for (int i = 0; i < dataSources.size(); i++) {
-            BasicDataSource ds = (BasicDataSource) dataSources.get(i);
+            BasicDataSource ds = dataSources.get(i);
             // if (ds.getContext()context.autoDeriveDS instanceof BasicDataSource)
             // includeDataSources.add(ds.autoDeriveDS);
         }
@@ -1202,7 +1205,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 context.put("defaultOrderClause", orderClause.getSQLString());
         }
         if (DataTools.isAdd(__op) || DataTools.isUpdate(__op) || DataTools.isReplace(__op)) {
-            SQLValuesClause valuesClause = new SQLValuesClause(req, (SQLDataSource) dataSources.get(0), batchUpdate);
+            SQLValuesClause valuesClause = new SQLValuesClause(req, dataSources.get(0), batchUpdate);
             if (valuesClause.size() > 0)
                 if (DataTools.isUpdate(__op)) {
                     context.put("defaultValuesClause", valuesClause.getSQLStringForUpdate());
@@ -1237,6 +1240,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         return driver;
     }
 
+    @Override
     public Connection getConnection() throws SlxException {
         Connection conn = null;
         if (driver != null) {
@@ -1308,7 +1312,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 if (datasource instanceof SQLDataSource) {
                     _return.add((SQLDataSource) datasource);
                 } else {
-                    log.warning("the datasource [" + ds.toString() + "] cannot processed by SQL DataSource.");
+                    log.warn("the datasource [" + ds.toString() + "] cannot processed by SQL DataSource.");
                 }
             }
         }
@@ -1332,6 +1336,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     }
 
+    @Override
     public void freeConnection(Connection conn) throws SlxException {
         ConnectionManager.freeConnection(conn);
     }
@@ -1575,6 +1580,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      * @return
      * @throws SlxException
      */
+    @Override
     public Connection getTransactionalConnection(DSRequest req) throws SlxException {
         Connection conn = null;
         if (shouldAutoJoinTransaction(req)) {
@@ -1682,7 +1688,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (em != null)
             em.postEvent(event);
         else
-            Logger.timing.debug((new StringBuilder()).append(event.getProperty(TimeMonitorEvent.MESSAGE)).append("used :[").append(
+            LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug((new StringBuilder()).append(event.getProperty(TimeMonitorEvent.MESSAGE)).append("used :[").append(
                 event.getProperty(TimeMonitorEvent.TOTAL_TIME)).append("]ms").toString());
     }
 

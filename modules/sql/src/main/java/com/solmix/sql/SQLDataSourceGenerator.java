@@ -30,6 +30,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DataSourceData;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.datasource.DataSourceGenerator;
@@ -44,7 +47,6 @@ import com.solmix.api.jaxb.ToperationBinding;
 import com.solmix.api.jaxb.ToperationBindings;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.fmk.datasource.AutoDeriver;
 import com.solmix.fmk.datasource.BasicDataSource;
 import com.solmix.fmk.velocity.Velocity;
@@ -58,7 +60,7 @@ import com.solmix.fmk.velocity.Velocity;
 public class SQLDataSourceGenerator implements DataSourceGenerator
 {
 
-    private static final Logger log = new Logger(SQLDataSourceGenerator.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(SQLDataSourceGenerator.class.getName());
 
     private String dbName;
 
@@ -289,7 +291,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             freeConnection = true;
             connection = ConnectionManager.getConnection(dbName);
         }
-        String query = (String) operation.getCommand();
+        String query = operation.getCommand();
         if (query == null)
             query = DataSourceData.getCustomSQL(operation);
         if (query == null) {

@@ -25,7 +25,7 @@ import java.util.Iterator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.commons.osgi.OSGIService;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.osgi.proxy.Proxy;
@@ -39,7 +39,7 @@ import com.solmix.osgi.proxy.Proxy;
 
 public class Services
 {
-    private final static Logger log = new Logger(OSGIService.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(OSGIService.class.getName());
     /**
      * @param interfaceName
      * @param filter

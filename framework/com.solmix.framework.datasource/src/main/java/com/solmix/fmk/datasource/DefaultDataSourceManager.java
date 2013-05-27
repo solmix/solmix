@@ -22,6 +22,9 @@ package com.solmix.fmk.datasource;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.SlxConstants;
 import com.solmix.api.context.Context;
 import com.solmix.api.datasource.DSRequest;
@@ -37,7 +40,6 @@ import com.solmix.api.repo.DSRepositoryManager;
 import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 
 /**
  * DataSourceManager service implements.
@@ -222,7 +224,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     public void init() {
-        log = new Logger(DataSourceManager.class.getName());
+        log = LoggerFactory.getLogger(DataSourceManager.class.getName());
         log.debug("Initial & create DataSource Pool");
         manager = poolServiceFactory.createPoolService(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory());
     }

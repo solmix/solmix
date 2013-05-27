@@ -31,6 +31,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Module;
 import com.solmix.api.jaxb.request.Request;
@@ -38,7 +41,6 @@ import com.solmix.api.serialize.XMLParser;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 
 /**
  * @author solomon
@@ -48,7 +50,7 @@ import com.solmix.commons.logs.Logger;
 public class JaxbXMLParserImpl implements XMLParser
 {
 
-    private static Logger log = new Logger(JaxbXMLParserImpl.class);
+    private static Logger log = LoggerFactory.getLogger(JaxbXMLParserImpl.class);
 
     private static JAXBContext dataSourceJC;
 

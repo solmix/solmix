@@ -24,11 +24,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.event.IValidationEvent;
 import com.solmix.api.jaxb.Eoperation;
 import com.solmix.api.jaxb.request.Roperation;
 import com.solmix.api.rpc.RPCManagerCompletionCallback;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -44,7 +46,7 @@ public class DSRequestData implements java.io.Serializable
 
     public static final String BUILTIN_APPLICATION = "builtinApplication";
 
-    private static final Logger log = new Logger(DSRequestData.class.getName());
+    private static final Logger log =LoggerFactory.getLogger(DSRequestData.class.getName());
 
     private boolean _allowMultiUpdate;
 
@@ -863,7 +865,7 @@ public class DSRequestData implements java.io.Serializable
             if (l.size() == 1) {
                 return (Map) l.get(0);
             } else {
-                log.warning("getOldValues() called on dsRequest containing multiple sets of values, returning first in list.");
+                log.warn("getOldValues() called on dsRequest containing multiple sets of values, returning first in list.");
                 return (Map) l.get(0);
             }
         } else {
@@ -907,7 +909,7 @@ public class DSRequestData implements java.io.Serializable
             if (l.size() == 1) {
                 return (Map<String, Object>) l.get(0);
             } else {
-                log.warning("getCriteria() called on dsRequest containing multiple where clauses, returning first in list.");
+                log.warn("getCriteria() called on dsRequest containing multiple where clauses, returning first in list.");
                 return (Map<String, Object>) l.get(0);
             }
         } else {
@@ -949,7 +951,7 @@ public class DSRequestData implements java.io.Serializable
                 if (l.size() == 1) {
                     return (Map) l.get(0);
                 } else {
-                    log.warning("getValues() called on dsRequest containing multiple sets of values, returning first in list.");
+                    log.warn("getValues() called on dsRequest containing multiple sets of values, returning first in list.");
                     return (Map) l.get(0);
                 }
             } else {
@@ -989,7 +991,7 @@ public class DSRequestData implements java.io.Serializable
             if (l.size() == 1) {
                 return (String) l.get(0);
             } else {
-                log.warning("getSortBy() called on dsRequest containing multiple sortBy fields, returning first in list.");
+                log.warn("getSortBy() called on dsRequest containing multiple sortBy fields, returning first in list.");
                 return (String) l.get(0);
             }
         } else {

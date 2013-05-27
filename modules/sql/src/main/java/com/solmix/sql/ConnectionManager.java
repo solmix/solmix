@@ -34,6 +34,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.PoolableConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.pool.PoolService;
@@ -41,7 +43,6 @@ import com.solmix.api.pool.PoolServiceFactory;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.util.ServiceUtil;
@@ -60,7 +61,7 @@ public class ConnectionManager
 
     private static ConnectionManager instance;
 
-    private static final Logger log = new Logger(ConnectionManager.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ConnectionManager.class.getName());
 
     public static Map referencedDatabases = new HashMap();
 
@@ -103,14 +104,14 @@ public class ConnectionManager
                         do {
                             if (!i.hasNext())
                                 break;
-                            Connection conn = (Connection) i.next();
+                            Connection conn = i.next();
                             Map<String, Object> info = localCopy.get(conn);
                             long ms = ((Long) info.get("time")).longValue();
                             if (now - ms > recycleMillis) {
                                 String error = (new StringBuilder()).append("Connection '").append(conn.hashCode()).append("', of type '").append(
                                     info.get("type")).append("', borrowed by the ").append("following call stack, has been open for ").append(
                                     "more than ").append(recycleMillis).append("ms; it will ").append("now be forcibly closed").toString();
-                                StackTraceElement elements[] = (StackTraceElement[]) (StackTraceElement[]) info.get("stacktrace");
+                                StackTraceElement elements[] = (StackTraceElement[]) info.get("stacktrace");
                                 boolean start = false;
                                 for (int j = 0; j < elements.length; j++) {
                                     if (!start && elements[j].toString().indexOf("writeOpenConnectionEntry") != -1) {
@@ -205,7 +206,7 @@ public class ConnectionManager
                     if (objs != null && objs.size() == 1)
                         obj = objs.get(0);
                     if (obj != null) {
-                        __return = ((DataSource) obj).getConnection();
+                        __return = obj.getConnection();
                     } else {
                         throw new SlxException(Tmodule.SQL, Texception.OBJECT_TYPE_NOT_ADAPTED, "can not find a adapter for datasource");
                     }

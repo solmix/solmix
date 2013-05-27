@@ -22,9 +22,11 @@ package com.solmix.fmk.pool;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.pool.ObjectCacheFactory;
-import com.solmix.commons.logs.Logger;
 
 /**
  * 
@@ -46,7 +48,7 @@ public class ObjectCacheManager
 
    private long stalenessCheckPeriod;
 
-   private static final Logger log = new Logger( ObjectCacheManager.class.getName() );
+   private static final Logger log =  LoggerFactory.getLogger( ObjectCacheManager.class.getName() );
 
    private ObjectCacheFactory factory;
 

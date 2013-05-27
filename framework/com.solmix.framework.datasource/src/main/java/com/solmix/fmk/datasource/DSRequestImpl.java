@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.application.Application;
 import com.solmix.api.context.Context;
 import com.solmix.api.context.WebContext;
@@ -47,7 +50,6 @@ import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.application.AppBase;
 import com.solmix.fmk.application.ApplicationManagerImpl;
@@ -67,7 +69,7 @@ import com.solmix.fmk.util.ErrorReport;
 public class DSRequestImpl implements DSRequest
 {
 
-    private static Logger log = new Logger(DSRequestImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DSRequestImpl.class.getName());
 
     private DSRequestData data;
 
@@ -224,6 +226,7 @@ public class DSRequestImpl implements DSRequest
      * @return the dataSource
      * @throws SlxException
      */
+    @Override
     public DataSource getDataSource() throws SlxException {
         if (dataSource == null && getDataSourceName() != null) {
             dataSource = DefaultDataSourceManager.getDataSource(getDataSourceName());
@@ -235,6 +238,7 @@ public class DSRequestImpl implements DSRequest
     /**
      * @param dataSource the dataSource to set
      */
+    @Override
     public void setDataSource(DataSource dataSource) {
         if (this.dataSource != null)
             DefaultDataSourceManager.freeDataSource(this.dataSource);
@@ -244,6 +248,7 @@ public class DSRequestImpl implements DSRequest
     /**
      * @return the rpc
      */
+    @Override
     public RPCManager getRpc() {
         return rpc;
     }
@@ -251,6 +256,7 @@ public class DSRequestImpl implements DSRequest
     /**
      * @param rpc the rpc to set
      */
+    @Override
     public void setRpc(RPCManager rpc) {
         this.rpc = rpc;
     }

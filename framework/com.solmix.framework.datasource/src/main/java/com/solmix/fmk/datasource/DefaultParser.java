@@ -22,6 +22,9 @@ package com.solmix.fmk.datasource;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DataSourceData;
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
@@ -38,7 +41,6 @@ import com.solmix.api.serialize.XMLParser;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.context.SlxContext;
 import com.solmix.fmk.event.EventUtils;
@@ -53,7 +55,7 @@ import com.solmix.fmk.serialize.JaxbXMLParserImpl;
 public class DefaultParser implements ParserHandler
 {
 
-    private static final Logger log = new Logger(DefaultParser.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DefaultParser.class.getName());
 
     public static final String INHERIT_KEY = "_inheritsForm";
 
@@ -243,7 +245,7 @@ public class DefaultParser implements ParserHandler
                 }
             } catch (Exception e) {
                 if (log.isWarnEnabled())
-                    log.warning(
+                    log.warn(
                         (new StringBuilder()).append("Exception loading current DataSource [").append(data.getName()).append("]'s super ds [").append(
                             _superDSName).append("]: ").toString(), e);
             } finally {

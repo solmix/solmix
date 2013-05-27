@@ -38,6 +38,8 @@ import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Module;
@@ -47,7 +49,7 @@ import com.solmix.api.jaxb.TvalueMap;
 import com.solmix.api.serialize.JSParser;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.IOUtil;
 import com.solmix.fmk.serialize.jackson.ContextualDateSerializer;
 import com.solmix.fmk.serialize.jackson.ModuleSerializer;
@@ -68,7 +70,7 @@ import com.solmix.fmk.util.SLXDate;
 public class JacksonJSParserImpl implements JSParser
 {
 
-    private static Logger log = new Logger(JacksonJSParserImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(JacksonJSParserImpl.class.getName());
 
     public static ObjectMapper iscMapper;
 
@@ -187,8 +189,8 @@ public class JacksonJSParserImpl implements JSParser
             iscMapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
             iscMapper = customConfig(iscMapper, true);
             long s_ = System.currentTimeMillis();
-            if (Logger.timing.isDebugEnabled()) {
-                Logger.timing.debug("time used to initial jackson objectMapper:[" + (s_ - _s) + "]ms");
+            if (LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).isDebugEnabled()) {
+                LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug("time used to initial jackson objectMapper:[" + (s_ - _s) + "]ms");
             }
         }
 

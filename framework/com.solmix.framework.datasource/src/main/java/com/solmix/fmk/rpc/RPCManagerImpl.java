@@ -39,6 +39,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.map.LinkedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.context.WebContext;
 import com.solmix.api.data.DSRequestData;
@@ -71,7 +73,6 @@ import com.solmix.api.serialize.XMLParserFactory;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.api.types.TransactionPolicy;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.commons.util.IOUtil;
 import com.solmix.fmk.auth.Authentication;
@@ -102,7 +103,7 @@ import com.solmix.fmk.velocity.Velocity;
 public class RPCManagerImpl implements RPCManager
 {
 
-    private static Logger log = new Logger(RPCManagerImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(RPCManagerImpl.class.getName());
 
     private static final String structuredRPCStart = "//isc_RPCResponseStart-->";
 
@@ -179,6 +180,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * @return the jsParser
      */
+    @Override
     public JSParser getJsParser() {
         return jsParser;
     }
@@ -188,6 +190,7 @@ public class RPCManagerImpl implements RPCManager
      * 
      * @param req
      */
+    @Override
     public void addRequest(DSRequest req) {
         if (requests == null)
             requests = new ArrayList<RequestType>();
@@ -199,6 +202,7 @@ public class RPCManagerImpl implements RPCManager
      * 
      * @param req
      */
+    @Override
     public void addRequest(RPCRequest req) {
         if (requests == null)
             requests = new ArrayList<RequestType>();
@@ -1218,10 +1222,12 @@ public class RPCManagerImpl implements RPCManager
         }
     }
 
+    @Override
     public WebContext getRequestContext() {
         return context;
     }
 
+    @Override
     public void setRequestContext(WebContext context) throws SlxException {
         this.context = context;
     }

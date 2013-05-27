@@ -22,9 +22,11 @@ package com.solmix.sql;
 import java.util.Iterator;
 import java.util.List;
 
-import com.solmix.commons.logs.Logger;
-import com.solmix.commons.util.DataUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
+import com.solmix.commons.util.DataUtil;
 
 /**
  * 
@@ -35,7 +37,7 @@ import com.solmix.api.exception.SlxException;
 public class SQLTableClause
 {
 
-    private static Logger log = new Logger(SQLTableClause.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLTableClause.class.getName());
 
     private List<String> relatedTables;
 

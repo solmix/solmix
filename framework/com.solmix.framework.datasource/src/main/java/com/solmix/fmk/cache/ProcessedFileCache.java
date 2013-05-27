@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 
 public abstract class ProcessedFileCache
 {
@@ -72,7 +74,7 @@ public abstract class ProcessedFileCache
          if ( currentTime - entry.lastStalenessCheck <= stalenessCheckInterval )
             return entry.cachedObject;
          if ( timeStamp == 0L )
-            log.warning( ( new StringBuilder() ).append( "Can't perform staleness checking for " ).append( name ).toString() );
+            log.warn( ( new StringBuilder() ).append( "Can't perform staleness checking for " ).append( name ).toString() );
          if ( entry.timeStamp == timeStamp )
          {
             entry.lastStalenessCheck = currentTime;
@@ -126,7 +128,7 @@ public abstract class ProcessedFileCache
       cache.put( name, entry );
    }
 
-   private static Logger log = new Logger( ProcessedFileCache.class.getName() );
+   private static Logger log = LoggerFactory.getLogger( ProcessedFileCache.class.getName() );
 
    private long stalenessCheckInterval;
 

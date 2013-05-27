@@ -25,13 +25,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Eoperation;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.ToperationBinding;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -43,7 +45,7 @@ import com.solmix.commons.util.DataUtil;
 public class SQLSelectClause
 {
 
-    private static Logger log = new Logger(SQLSelectClause.class.getName());
+    private static Logger log = LoggerFactory.getLogger(SQLSelectClause.class.getName());
 
     private final List<SQLDataSource> dataSources;
 

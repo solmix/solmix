@@ -31,7 +31,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper HttpServletRequtest attributes names to context map.
@@ -54,22 +55,26 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
       return get( attrName );
    }
 
-   public void clear()
+   @Override
+public void clear()
    {
    }
 
-   public boolean containsKey( Object key )
+   @Override
+public boolean containsKey( Object key )
    {
       Object obj = super.getAttribute( key.toString() );
       return obj != null;
    }
 
-   public boolean containsValue( Object value )
+   @Override
+public boolean containsValue( Object value )
    {
       return false;
    }
 
-   public Set< Map.Entry< String ,Object >> entrySet()
+   @Override
+public Set< Map.Entry< String ,Object >> entrySet()
    {
       Map< String ,Object > map = new HashMap< String ,Object >();
       String key;
@@ -84,7 +89,8 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
       return map.entrySet();
    }
 
-   public Object get( Object key )
+   @Override
+public Object get( Object key )
    {
       Set< Map.Entry< String ,Object >> entrySet = entrySet();
       for ( Map.Entry< String ,Object > entry : entrySet )
@@ -97,13 +103,15 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
       return null;
    }
 
-   public boolean isEmpty()
+   @Override
+public boolean isEmpty()
    {
       Enumeration< ? > attrs = super.getAttributeNames();
       return !attrs.hasMoreElements();
    }
 
-   public Set< String > keySet()
+   @Override
+public Set< String > keySet()
    {
       Set< String > set = new HashSet< String >();
       for ( Enumeration< ? > attrs = super.getAttributeNames(); attrs.hasMoreElements(); )
@@ -111,13 +119,15 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
       return set;
    }
 
-   public Object remove( Object key )
+   @Override
+public Object remove( Object key )
    {
       super.removeAttribute( key.toString() );
       return null;
    }
 
-   public int size()
+   @Override
+public int size()
    {
       int count = 0;
       for ( Enumeration attrs = super.getAttributeNames(); attrs.hasMoreElements(); )
@@ -134,7 +144,8 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
     * 
     * @see java.util.Map#values()
     */
-   public Collection< Object > values()
+   @Override
+public Collection< Object > values()
    {
       List< Object > values = new ArrayList< Object >();
       for ( Enumeration attrs = super.getAttributeNames(); attrs.hasMoreElements(); )
@@ -142,7 +153,7 @@ public class ServletRequestAttributeMapFacade extends HttpServletRequestWrapper 
       return values;
    }
 
-   private static Logger log = new Logger( ServletRequestAttributeMapFacade.class.getName() );
+   private static Logger log = LoggerFactory.getLogger( ServletRequestAttributeMapFacade.class.getName() );
 
    /**
     * {@inheritDoc}

@@ -22,8 +22,10 @@ package com.solmix.fmk.repo;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.repo.DSRepository;
-import com.solmix.commons.logs.Logger;
 
 /**
  * 
@@ -32,7 +34,7 @@ import com.solmix.commons.logs.Logger;
 public class DSRepositoryTracker
 {
 
-    private final Logger log = new Logger(DSRepositoryTracker.class.getName());
+    private final Logger log = LoggerFactory.getLogger(DSRepositoryTracker.class.getName());
 
     private final List<DSRepository> repos = new CopyOnWriteArrayList<DSRepository>();
 

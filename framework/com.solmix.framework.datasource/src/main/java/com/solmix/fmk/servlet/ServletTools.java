@@ -40,12 +40,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.fileupload.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.context.WebContext;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -56,7 +57,7 @@ import com.solmix.commons.util.DataUtil;
 public class ServletTools
 {
 
-    private static Logger log = new Logger(ServletTools.class);
+    private static Logger log = LoggerFactory.getLogger(ServletTools.class);
 
     /**
      * <code>&lt;HTML&gt;&lt;BODY&gt;</code>

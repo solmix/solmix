@@ -27,6 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.VelocityExpression;
 import com.solmix.api.criterion.IEvaluator;
 import com.solmix.api.criterion.Operator;
@@ -39,7 +41,7 @@ import com.solmix.api.jaxb.EserverType;
 import com.solmix.api.jaxb.TdataSource;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.ToperationBinding;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 
 /**
@@ -260,7 +262,7 @@ public class DataSourceData implements Serializable
      */
     public List<Tfield> getFields() {
         if (getMapFields() == null)
-            Logger.global.warn("try to CALL getFields() Method ,before datasource initialized");
+            LoggerFactory.getLogger(SlxLog.GLOBAL).warn("try to CALL getFields() Method ,before datasource initialized");
         List<Tfield> mapFields = new ArrayList<Tfield>();
         for (Tfield f : getMapFields().values())
             mapFields.add(f);

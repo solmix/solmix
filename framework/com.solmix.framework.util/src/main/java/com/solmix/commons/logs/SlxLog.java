@@ -34,9 +34,13 @@ import org.slf4j.LoggerFactory;
  * 
  * @version 1.0
  */
-public class Logger
+public class SlxLog
 {
-
+    public static final String GLOBAL="GLOBAL";
+    public static final String LOG_CONTEXT="logContext";
+    public static final String AUTH_LOGNAME="AUTH";
+    public static final String VALIDATION_LOGNAME = "VALIDATION";
+    public static final String TIME_LOGNAME = "TIME";
     public static final Logger auth;
 
     public static final Logger timing;
@@ -48,11 +52,11 @@ public class Logger
     public static final Logger global;
 
     static {
-        auth = new Logger("com.solmix.auth.Auth");
-        timing = new Logger("com.solmix.timing.Timing");
-        validation = new Logger("com.solmix.validation.Validation");
-        download = new Logger("com.solmix.download.Download");
-        global = new Logger("GLOBAL");
+        auth = LoggerFactory.getLogger("com.solmix.auth.Auth");
+        timing = LoggerFactory.getLogger("com.solmix.timing.Timing");
+        validation = LoggerFactory.getLogger("com.solmix.validation.Validation");
+        download = LoggerFactory.getLogger("com.solmix.download.Download");
+        global = LoggerFactory.getLogger("GLOBAL");
     }
 
     public static Throwable getRealTargetException(Throwable ite) {
@@ -332,6 +336,8 @@ public class Logger
     public static Set<Thread> ignoreThreads;
 
     private static final String DEFAULT_SUBSYSTEM = "Undefined Subsystem";
+ 
+
 
     private final org.slf4j.Logger nativeLog;
 

@@ -23,10 +23,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.collections.map.LinkedMap;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.criterion.ErrorMessage;
 import com.solmix.api.event.IValidationEvent;
 import com.solmix.api.exception.SlxException;
-import com.solmix.commons.logs.Logger;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.datasource.ValidationContext;
 
@@ -84,7 +86,7 @@ public class ErrorReport extends LinkedMap implements Serializable
          vevent = vcontext.getVfactory().create( fieldName, message, suggestedValue );
       } else
       {
-         Logger.validation.warn( "there is no validation event factory set,check you configuration" );
+          LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).warn( "there is no validation event factory set,check you configuration" );
       }
       if ( vevent != null )
       {

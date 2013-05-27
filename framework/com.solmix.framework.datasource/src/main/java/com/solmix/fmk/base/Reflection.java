@@ -39,13 +39,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.map.LinkedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.datasource.DataSource;
 import com.solmix.api.jaxb.Efield;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.Tvalue;
 import com.solmix.api.jaxb.TvalueMap;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.datasource.DataSourceProvider;
 
@@ -63,7 +64,7 @@ public class Reflection
 
         public Class<?> getClassByIndex(int index) {
             if (index < classes.size())
-                return (Class<?>) classes.get(index);
+                return classes.get(index);
             else
                 return null;
         }
@@ -98,7 +99,7 @@ public class Reflection
         }
     }
 
-    private static Logger log = new Logger(Reflection.class.getName());
+    private static Logger log = LoggerFactory.getLogger(Reflection.class.getName());
 
     private static Map reflectionCache = new ConcurrentHashMap();
 
@@ -366,7 +367,7 @@ public class Reflection
         List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
         List<GenericParameterNode> genericParamTypes = getGenericParameterTypes(method);
         for (int i = 0; i < parameterTypes.size(); i++) {
-            Class<?> paramType = (Class<?>) parameterTypes.get(i);
+            Class<?> paramType = parameterTypes.get(i);
             GenericParameterNode genericParamInfo = genericParamTypes.get(i);
             if (genericParamInfo != null && genericParamInfo.getClassByIndex(0) == paramType)
                 genericParamInfo = genericParamInfo.getChildNode();

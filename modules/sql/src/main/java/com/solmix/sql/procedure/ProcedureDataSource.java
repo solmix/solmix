@@ -31,6 +31,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DSResponseData;
 import com.solmix.api.data.DataSourceData;
 import com.solmix.api.datasource.DSRequest;
@@ -42,7 +45,6 @@ import com.solmix.api.jaxb.Eoperation;
 import com.solmix.api.jaxb.ToperationBinding;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.fmk.datasource.DSResponseImpl;
 import com.solmix.fmk.velocity.Velocity;
 import com.solmix.sql.ConnectionManager;
@@ -57,7 +59,7 @@ public final class ProcedureDataSource
 
     public static String OUTPUT = "out";
 
-    private static final Logger log = new Logger(ProcedureDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ProcedureDataSource.class.getName());
 
     @SuppressWarnings("unchecked")
     public DSResponse update(DSRequest req, DataSource ds) throws SlxException {

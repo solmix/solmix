@@ -21,6 +21,9 @@ package com.solmix.fmk.datasource;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.SlxConstants;
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DataSource;
@@ -29,7 +32,6 @@ import com.solmix.api.pool.IPoolableObjectFactory;
 import com.solmix.api.pool.SlxKeyedPoolableObjectFactory;
 import com.solmix.api.repo.DSRepository;
 import com.solmix.commons.io.SlxFile;
-import com.solmix.commons.logs.Logger;
 
 /**
  * 
@@ -38,7 +40,7 @@ import com.solmix.commons.logs.Logger;
 public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
 {
 
-    private static final Logger log = new Logger(PoolableDataSourceFactory.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(PoolableDataSourceFactory.class.getName());
 
     private static final String FILTER = SlxConstants.SERVICE_CM_NAME + "=" + SlxConstants.MODULE_DS_NAME;
 

@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.service.event.Event;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -44,7 +46,6 @@ import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.ToperationBinding;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.datasource.ValidationEventFactory;
 import com.solmix.fmk.event.EventUtils;
@@ -53,7 +54,7 @@ import com.solmix.fmk.js.ISCJavaScript;
 public class DataTools
 {
 
-    private static final Logger log = new Logger(DataTools.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DataTools.class.getName());
 
     public DataTools()
     {

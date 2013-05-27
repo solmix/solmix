@@ -16,17 +16,19 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.io.IByteCounter;
-import com.solmix.commons.logs.Logger;
 import com.solmix.commons.util.DataUtil;
 
 public class WrappedHttpServletRequest extends HttpServletRequestWrapper
 {
 
-   private static Logger log = new Logger( WrappedHttpServletRequest.class.getName() );
+   private static Logger log = LoggerFactory.getLogger( WrappedHttpServletRequest.class.getName() );
 
    HttpServletRequest request;
 
@@ -72,7 +74,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
 
    public String getQueryParameter( String paramName )
    {
-      return (String) getQueryParams().get( paramName );
+      return getQueryParams().get( paramName );
    }
 
    public Map getParams() throws SlxException
@@ -224,7 +226,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
          return (String) param;
       } else
       {
-         log.warning( ( new StringBuilder() ).append( "Parameter " ).append( name ).append( " is multivalued, but is being fetched as " ).append(
+         log.warn( ( new StringBuilder() ).append( "Parameter " ).append( name ).append( " is multivalued, but is being fetched as " ).append(
             "single-valued" ).toString() );
          return (String) ( (List) param ).get( 0 );
       }

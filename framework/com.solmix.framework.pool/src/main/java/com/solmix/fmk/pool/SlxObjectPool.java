@@ -22,9 +22,11 @@ package com.solmix.fmk.pool;
 import java.util.Map;
 
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.pool.SlxPoolableObjectFactory;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
 
 /**
  * 
@@ -33,7 +35,7 @@ import com.solmix.commons.logs.Logger;
 public class SlxObjectPool extends GenericObjectPool
 {
 
-   private static final Logger log = new Logger( SlxObjectPool.class );
+   private static final Logger log =  LoggerFactory.getLogger( SlxObjectPool.class );
 
    private final SlxPoolableObjectFactory objectFactory;
 
@@ -105,7 +107,7 @@ public class SlxObjectPool extends GenericObjectPool
          this.setConfig( config );
       } catch ( Exception e )
       {
-         log.warning( "Problem setting requested config parameters on pool.", e );
+         log.warn( "Problem setting requested config parameters on pool.", e );
       }
    }
 

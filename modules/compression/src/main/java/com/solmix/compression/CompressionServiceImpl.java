@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 
 import com.solmix.api.context.WebContext;
 import com.solmix.api.interfaces.CompressionService;
-import com.solmix.commons.logs.Logger;
+import org.slf4j.Logger;
 import com.solmix.fmk.servlet.ServletTools;
 
 
@@ -37,7 +37,7 @@ import com.solmix.fmk.servlet.ServletTools;
 
 public class CompressionServiceImpl implements CompressionService
 {
-   private static final Logger log = new Logger(CompressionServiceImpl.class.getName(),"[[compression]]");
+   private static final Logger log = LoggerFactory.getLogger(CompressionServiceImpl.class.getName(),"[[compression]]");
    public ByteArrayOutputStream wrapBuf;
    public OutputStream servletOutputStream;
    public boolean compressing;

@@ -27,12 +27,13 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.PoolableConnection;
 import org.apache.commons.pool.ObjectPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.pool.IPoolableObjectFactory;
 import com.solmix.api.pool.SlxPoolableObjectFactory;
 import com.solmix.commons.collections.DataTypeMap;
-import com.solmix.commons.logs.Logger;
 import com.solmix.sql.internal.SQLConfigManager;
 
 /**
@@ -46,7 +47,7 @@ import com.solmix.sql.internal.SQLConfigManager;
 public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
 {
 
-    private static Logger log = new Logger(PoolableSQLConnectionFactory.class.getName());
+    private static Logger log = LoggerFactory.getLogger(PoolableSQLConnectionFactory.class.getName());
 
     private final boolean autoDeriveConfig;
 
@@ -83,7 +84,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
         this.sqlConfig = sqlConfig;
         EInterfaceType _interfaceType = EInterfaceType.fromValue(sqlConfig.getString("interface.type"));
         if (_interfaceType == null)
-            log.warning((new StringBuilder()).append("sql.").append(serverName).append(".interface.type not set - assuming ").append(
+            log.warn((new StringBuilder()).append("sql.").append(serverName).append(".interface.type not set - assuming ").append(
                 this.interfaceType).toString());
         else
             this.interfaceType = _interfaceType;

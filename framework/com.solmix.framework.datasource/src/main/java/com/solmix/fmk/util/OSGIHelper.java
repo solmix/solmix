@@ -26,13 +26,14 @@ import javax.servlet.ServletContext;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.solmix.SlxConstants;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.repo.DSRepositoryManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import com.solmix.commons.logs.Logger;
 import com.solmix.fmk.datasource.DefaultDataSourceManager;
 import com.solmix.fmk.repo.DSRepositoryManagerImpl;
 import com.solmix.fmk.repo.FileSystemRepository;
@@ -44,7 +45,7 @@ import com.solmix.fmk.servlet.ServletTools;
 public class OSGIHelper
 {
 
-    private static Logger log = new Logger(OSGIHelper.class.getName());
+    private static Logger log = LoggerFactory.getLogger(OSGIHelper.class.getName());
 
     private static BundleContext context;
 
