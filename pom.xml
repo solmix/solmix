@@ -57,7 +57,7 @@
 		<felix.bundlerepository.version>1.6.4</felix.bundlerepository.version>
 		<felix.configadmin.version>1.2.8</felix.configadmin.version>
 		<felix.fileinstall.version>3.1.10</felix.fileinstall.version>
-		<felix.framework.version>4.0.2</felix.framework.version>
+		<felix.framework.version>4.0.3</felix.framework.version>
 		<felix.gogo.version>0.10.0</felix.gogo.version>
 		<felix.plugin.version>2.3.7</felix.plugin.version>
 		<felix.utils.version>1.1.0</felix.utils.version>
@@ -118,7 +118,7 @@
 		<velocity.version>1.7</velocity.version>
 		<osgi.service.version>3.3.0.v20110513</osgi.service.version>
 		<org.apache.felix.http.version>2.2.0</org.apache.felix.http.version>
-		<slf4j.version>1.6.4</slf4j.version>
+		<slf4j.version>1.6.6</slf4j.version>
 		<mockito-core.version>1.9.0</mockito-core.version>
 	</properties>
 	<repositories>
@@ -492,7 +492,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
+				<artifactId>slf4j-log4j12</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
