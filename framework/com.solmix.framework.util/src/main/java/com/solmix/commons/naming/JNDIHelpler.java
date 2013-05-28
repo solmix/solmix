@@ -49,7 +49,6 @@ public class JNDIHelpler
       try {
          JNDI a = (JNDI) findService(JNDI.class);
       } catch (IOException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
    }
