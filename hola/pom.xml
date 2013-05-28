@@ -12,6 +12,8 @@
   <module>hola-test</module>
   <module>hola-runtime</module>
   <module>hola-module</module>
+  <module>hola-ui</module>
+  <module>hola-app</module>
   </modules>
   <dependencyManagement>
   	<dependencies>
