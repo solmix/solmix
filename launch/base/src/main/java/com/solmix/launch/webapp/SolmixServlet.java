@@ -73,9 +73,9 @@ public class SolmixServlet extends GenericServlet implements Notifiable
 
     private Map<String, String> properties;
 
-    private String SOLMIX_HOME_PREFIX = "solmix.home.prefix";
+    private final String SOLMIX_HOME_PREFIX = "solmix.home.prefix";
 
-    private String SOLMIX_HOME_PREFIX_DEFAULT = "resource";
+    private final String SOLMIX_HOME_PREFIX_DEFAULT = "resource";
 
     public static final String DEFAULT_SOLMIX_HOME = "resource";
 
@@ -88,7 +88,7 @@ public class SolmixServlet extends GenericServlet implements Notifiable
      * The ending delimiter of variable names (value is "}").
      */
     private static final String DELIM_STOP = "}";
-
+    
     /**
      * {@inheritDoc}
      * 
@@ -282,7 +282,6 @@ public class SolmixServlet extends GenericServlet implements Notifiable
         home = substVars(home);
 
         log("Setting solmix.home=" + home + " (" + source + ")");
-        System.out.println("Setting solmix.home=" + home + " (" + source + ")");
         return home;
     }
 
@@ -389,9 +388,11 @@ public class SolmixServlet extends GenericServlet implements Notifiable
         if (prefix.endsWith("/")) {
             prefix = prefix.substring(0, prefix.length() - 1);
         }
-        prefix = "WEB-INF/" + prefix;
+        prefix = "/WEB-INF/" + prefix;
 
         String scAbsolutePath = getServletContext().getRealPath("/");
+        if(scAbsolutePath.endsWith("/"))
+            scAbsolutePath = scAbsolutePath.substring(0, prefix.length() - 1);
         return scAbsolutePath + prefix;
     }
 
@@ -454,6 +455,7 @@ public class SolmixServlet extends GenericServlet implements Notifiable
             home = getSolmixHome((HttpServletRequest) request);
             Thread starter = new Thread(new Runnable() {
 
+                @Override
                 public void run() {
                     startInternal();
                 }
