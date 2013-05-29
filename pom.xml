@@ -16,17 +16,10 @@
 		<name></name>
 		<url></url>
 	</organization>
-	<!-- <distributionManagement>
-		Site omitted - each project must provide their own
-		<repository>
-			<id>releases</id>
-			<url>http://localhost/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<url>http://localhost/nexus/content/repositories/snapshot</url>
-		</snapshotRepository>
-	</distributionManagement> -->
+	<!-- <distributionManagement> Site omitted - each project must provide their 
+		own <repository> <id>releases</id> <url>http://localhost/nexus/content/repositories/releases</url> 
+		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
+		</snapshotRepository> </distributionManagement> -->
 	<modules>
 		<!--<module>dsrepo</module> <module>datasource</module> <module>features</module> -->
 		<!-- <module>web</module> -->
@@ -34,16 +27,15 @@
 			<module>shell</module> <module>bundles</module> <module>com.solmix.launch.webapp</module> -->
 		<!-- <module>modules</module> -->
 		<module>services</module>
-		<!-- <module>assemblies</module>
-		<module>testing</module> -->
-		 <module>framework</module>
-		<!--<module>shell</module>
-		<module>resource</module>
-		<module>commons</module> -->
+		<!-- <module>assemblies</module> <module>testing</module> -->
+		<module>framework</module>
+		<!--<module>shell</module> <module>resource</module> <module>commons</module> -->
 		<!-- <module>cms</module> -->
 		<module>modules</module>
+		<module>tooling</module>
+		<module>assemblies</module>
 	</modules>
-	<properties><!-- Apache ServiceMix Bundles -->
+	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
 		<asm.bundle.version>3.1_2</asm.bundle.version>
 		<cglib.bundle.version>2.1_3_6</cglib.bundle.version>
@@ -61,23 +53,26 @@
 		<felix.gogo.version>0.10.0</felix.gogo.version>
 		<felix.plugin.version>2.3.7</felix.plugin.version>
 		<felix.utils.version>1.1.0</felix.utils.version>
+		<felix.scr.version>1.6.0</felix.scr.version>
 		<felix.webconsole.version>3.1.8</felix.webconsole.version>
 		<felix.metatype.version>1.0.4</felix.metatype.version>
 		<aries.blueprint.version>1.1.0</aries.blueprint.version>
 		<aries.jmx.version>1.1.0</aries.jmx.version>
+		<aries.jmx.core.version>1.1.1</aries.jmx.core.version>
 		<aries.jndi.version>1.0.0</aries.jndi.version>
 		<aries.util.version>1.1.0</aries.util.version>
+		<aries.proxy.version>1.0.0</aries.proxy.version>
 		<jansi.version>1.4</jansi.version>
 		<jline.version>2.5</jline.version>
 		<jsw.version>3.2.3</jsw.version>
 		<log4j.version>1.2.17</log4j.version>
-		<maven.version>2.0.9</maven.version>
+		<maven.version>3.0.3</maven.version>
 		<mina.version>2.0.3</mina.version>
 		<osgi.version>4.3.0</osgi.version>
 		<osgi.core.version>4.3.0</osgi.core.version>
 		<pax.exam.version>3.0.3</pax.exam.version>
 		<pax.exam.version2>2.0.0-RC5</pax.exam.version2>
-		<pax.logging.version>1.6.5</pax.logging.version>
+		<pax.logging.version>1.7.0</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
 		<pax.url.version>1.5.2</pax.url.version>
 		<pax.web.version>3.0.1</pax.web.version>
@@ -191,6 +186,26 @@
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
+		<dependency>
+			<groupId>org.apache.karaf.webconsole</groupId>
+			<artifactId>org.apache.karaf.webconsole.console</artifactId>
+			<version>${apache.karaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.karaf.webconsole</groupId>
+			<artifactId>org.apache.karaf.webconsole.branding</artifactId>
+			<version>${apache.karaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.karaf.webconsole</groupId>
+			<artifactId>org.apache.karaf.webconsole.gogo</artifactId>
+			<version>${apache.karaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.karaf.webconsole</groupId>
+			<artifactId>org.apache.karaf.webconsole.http</artifactId>
+			<version>${apache.karaf.version}</version>
+		</dependency>
 			<dependency>
 				<groupId>org.eclipse.osgi</groupId>
 				<artifactId>services</artifactId>
@@ -231,6 +246,11 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.configadmin</artifactId>
 				<version>${felix.configadmin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.scr</artifactId>
+				<version>${felix.scr.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
@@ -316,63 +336,6 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.osgi</groupId>
-				<artifactId>spring-osgi-core</artifactId>
-				<version>${spring.osgi.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>org.springframework.aop</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>org.springframework.beans</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>org.springframework.context</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>org.springframework.core</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.osgi</groupId>
-				<artifactId>spring-osgi-io</artifactId>
-				<version>${spring.osgi.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.osgi</groupId>
-				<artifactId>spring-osgi-extender</artifactId>
-				<version>${spring.osgi.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.osgi</groupId>
-				<artifactId>spring-osgi-annotation</artifactId>
-				<version>${spring.osgi.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.osgi</groupId>
-				<artifactId>spring-osgi-test</artifactId>
-				<version>${spring.osgi.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.osgi</groupId>
-						<artifactId>asm.osgi</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.junit</groupId>
-						<artifactId>com.springsource.junit</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.objectweb.asm</groupId>
-						<artifactId>com.springsource.org.objectweb.asm</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
@@ -623,6 +586,42 @@
 				<version>${aries.blueprint.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.aries</groupId>
+				<artifactId>org.apache.aries.util</artifactId>
+				<version>${aries.util.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.proxy</groupId>
+				<artifactId>org.apache.aries.proxy</artifactId>
+				<version>${aries.proxy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.jmx</groupId>
+				<artifactId>org.apache.aries.jmx.api</artifactId>
+				<version>${aries.jmx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.jmx</groupId>
+				<artifactId>org.apache.aries.jmx.core</artifactId>
+				<version>${aries.jmx.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.jmx</groupId>
+				<artifactId>org.apache.aries.jmx.blueprint.api</artifactId>
+				<version>${aries.jmx.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.jmx</groupId>
+				<artifactId>org.apache.aries.jmx.blueprint.core</artifactId>
+				<version>${aries.jmx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.jmx</groupId>
+				<artifactId>org.apache.aries.jmx.core.whiteboard</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.aries.jmx</groupId>
 				<artifactId>org.apache.aries.jmx</artifactId>
 				<version>${aries.jmx.version}</version>
@@ -703,14 +702,14 @@
 				<version>${commons-codec.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
 				<version>${commons-dbcp.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.servicemix.bundles</groupId>
-				<artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
-				<version>${commons-io.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
@@ -727,12 +726,13 @@
 				<artifactId>poi</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
-			<!-- ========================= -->
+			<!-- ===================================================================================== -->
 			<!-- solmix version dependency -->
-			<!-- ========================= -->
+			<!-- ===================================================================================== -->
+
 			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>osgi-proxy</artifactId>
+				<groupId>com.solmix.launch</groupId>
+				<artifactId>com.solmix.launch.base</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -742,7 +742,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.solmix.modules</groupId>
-  				<artifactId>com.solmix.modules.sql</artifactId>
+				<artifactId>com.solmix.modules.sql</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -756,45 +756,23 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>config</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>config-testbundle</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.solmix.framework</groupId>
 				<artifactId>com.solmix.framework.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>services</artifactId>
-				<version>${project.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>modules</artifactId>
-				<version>${project.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
 				<groupId>com.solmix.services</groupId>
-				<artifactId>event-service</artifactId>
+				<artifactId>com.solmix.services.event</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.solmix.modules</groupId>
-				<artifactId>sql</artifactId>
+				<artifactId>com.solmix.modules.sql</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.solmix.modules</groupId>
-				<artifactId>jpa</artifactId>
+				<artifactId>com.solmix.modules.jpa</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -826,11 +804,6 @@
 				<artifactId>org.apache.karaf.shell.bundles</artifactId>
 				<version>${apache.karaf.version}</version>
 				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.solmix</groupId>
-				<artifactId>web</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.aries.jndi</groupId>
@@ -936,6 +909,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.http.whiteboard</artifactId>
+				<version>${org.apache.felix.http.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.http.proxy</artifactId>
 				<version>${org.apache.felix.http.version}</version>
 			</dependency>
@@ -947,7 +925,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.0.1</version>
+				<version>${commons-io.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

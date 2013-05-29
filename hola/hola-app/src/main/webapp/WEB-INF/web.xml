@@ -12,7 +12,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>OSGI-Launch</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/.slx/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

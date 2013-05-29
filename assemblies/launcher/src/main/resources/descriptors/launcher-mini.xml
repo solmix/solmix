@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+	<!-- intentionally left blank -> http://jira.codehaus.org/browse/MASSEMBLY-301 -->
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+
+		<!-- Copy license and other files from root -->
+		<fileSet>
+			<directory>../..</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>README</include>
+				<include>RELEASE*</include>
+				<include>LICENSE</include>
+				<include>NOTICE</include>
+			</includes>
+			<lineEnding>unix</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>target/classes/etc</directory>
+			<outputDirectory>/etc/</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/classes/deploy</directory>
+			<outputDirectory>/deploy/</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/classes/data</directory>
+			<outputDirectory>/data/</outputDirectory>
+		</fileSet>
+		<!-- Copy over jar files -->
+		<fileSet>
+			<directory>target/dependencies</directory>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/features-repo</directory>
+			<outputDirectory>bundles</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/felix/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.felix:org.apache.felix.configadmin</include>
+				<include>org.apache.felix:org.apache.felix.framework</include>
+				<include>org.apache.felix:org.apache.felix.scr</include>
+				<include>org.apache.felix:org.apache.felix.http.bridge</include>
+				<include>org.apache.felix:org.apache.felix.http.whiteboard</include>
+				<include>org.apache.felix:org.apache.felix.metatype</include>
+			    <include>org.apache.felix:org.apache.felix.webconsole</include>
+				<include>org.apache.felix:org.apache.felix.fileinstall</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/ops4j/pax/logging/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.ops4j.pax.logging:pax-logging-api</include>
+				<include>org.ops4j.pax.logging:pax-logging-service</include>
+			</includes>
+		</dependencySet>
+		<!-- <dependencySet> <outputDirectory>/bundles</outputDirectory> <unpack>false</unpack> 
+			<useProjectArtifact>false</useProjectArtifact> <outputFileNameMapping> org/ops4j/pax/url/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension} 
+			</outputFileNameMapping> <includes> <include>org.ops4j.pax.url:pax-url-mvn</include> 
+			<include>org.ops4j.pax.url:pax-url-wrap</include> </includes> -->
+
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/aries/blueprint/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.aries.blueprint:org.apache.aries.blueprint
+				</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/aries/proxy/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.aries.proxy:org.apache.aries.proxy</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/aries/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.aries:org.apache.aries.util</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/aries/jmx/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.aries.jmx:org.apache.aries.jmx.api</include>
+				<include>org.apache.aries.jmx:org.apache.aries.jmx.core</include>
+				<include>org.apache.aries.jmx:org.apache.aries.jmx.blueprint.api</include>
+				<include>org.apache.aries.jmx:org.apache.aries.jmx.blueprint.core</include>
+				<include>org.apache.aries.jmx:org.apache.aries.jmx.core.whiteboard</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/aries/jndi/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.aries.jndi:org.apache.aries.jndi
+				</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/velocity/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.velocity:velocity</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/karaf/webconsole/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.karaf.webconsole:org.apache.karaf.webconsole.console</include>
+				<include>org.apache.karaf.webconsole:org.apache.karaf.webconsole.branding</include>
+				<include>org.apache.karaf.webconsole:org.apache.karaf.webconsole.gogo</include>
+				<include>org.apache.karaf.webconsole:org.apache.karaf.webconsole.http</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				${artifact.artifactId}/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>commons-io:commons-io</include>
+				<include>commons-fileupload:commons-fileupload</include>
+				<include>commons-pool:commons-pool</include>
+				<include>commons-lang:commons-lang</include>
+				<include>commons-beanutils:commons-beanutils</include>
+				<include>commons-codec:commons-codec</include>
+				<include>commons-collections:commons-collections</include>
+			</includes>
+		</dependencySet>
+		<!-- <dependencySet> <outputDirectory>/bundles</outputDirectory> <unpack>false</unpack> 
+			<useProjectArtifact>false</useProjectArtifact> <outputFileNameMapping> org/apache/servicemix/bundles/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension} 
+			</outputFileNameMapping> <includes> <include>org.apache.servicemix.bundles:org.apache.servicemix.bundles.asm</include> 
+			</includes> </dependencySet> -->
+	</dependencySets>
+
+</assembly>

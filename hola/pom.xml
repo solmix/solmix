@@ -14,6 +14,7 @@
   <module>hola-module</module>
   <module>hola-ui</module>
   <module>hola-app</module>
+  <module>assemblies</module>
   </modules>
   <dependencyManagement>
   	<dependencies>

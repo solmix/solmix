@@ -302,7 +302,7 @@ public class WebContextImpl extends UserContextImpl implements WebContext
      */
     @Override
     public Writer getOut() throws SlxException {
-        if (out == null) {
+        Writer out ;
             if (log.isDebugEnabled())
                 log.debug("Getting output stream via servletResponse.getWriter()");
             if (contentType == null)
@@ -312,7 +312,6 @@ public class WebContextImpl extends UserContextImpl implements WebContext
             } catch (IOException e) {
                 throw new SlxException(Tmodule.SERVLET, Texception.IO_EXCEPTION, "ioexception with response.getWriter()", e);
             }
-        }
         return out;
     }
 

@@ -103,7 +103,7 @@ public class Solmix
 
     private Properties configProps;
 
-    private int shutdownTimeout = 5 * 60 * 1000;
+    private final int shutdownTimeout = 5 * 60 * 1000;
 
     Logger LOG = Logger.getLogger(this.getClass().getName());
 
@@ -112,9 +112,9 @@ public class Solmix
      */
     private Framework framework;
 
-    private String PROP_OSGI_FRAMEWORK_FACTORY = "osgi.framework.factory";
+    private final String PROP_OSGI_FRAMEWORK_FACTORY = "osgi.framework.factory";
 
-    private String PROP_AUTO_INSTALL = "auto.install";
+    private final String PROP_AUTO_INSTALL = "auto.install";
 
     public Solmix(final Notifiable notifiable, final Map<String, String> propOverwrite)
     {
@@ -431,7 +431,7 @@ public class Solmix
         if (start) {
             for (Bundle b : bundles) {
                 try {
-                    String fragmentHostHeader = (String) b.getHeaders().get(Constants.FRAGMENT_HOST);
+                    String fragmentHostHeader = b.getHeaders().get(Constants.FRAGMENT_HOST);
                     if (fragmentHostHeader == null || fragmentHostHeader.trim().length() == 0) {
                         b.start();
                     }
@@ -460,7 +460,7 @@ public class Solmix
         File file = new File(etcFolder, FELIX_STARTUP_PROPERTIES_FILE);
         startupPropURL = file.toURI().toURL();
         Properties startupProps = loadPropertiesFile(startupPropURL, true);
-        String defaultRepo = System.getProperty(PROP_DEFAULT_REPOSITORY, "system");
+        String defaultRepo = System.getProperty(PROP_DEFAULT_REPOSITORY, "bundles");
         if (solmixBase.equals(solmixHome)) {
             File systemRepo = new File(solmixHome, defaultRepo);
             if (!systemRepo.exists()) {
@@ -804,6 +804,7 @@ public class Solmix
         if (myFramework.getState() == Bundle.ACTIVE || myFramework.getState() == Bundle.STARTING) {
             new Thread() {
 
+                @Override
                 public void run() {
                     try {
                         myFramework.stop();

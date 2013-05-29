@@ -368,7 +368,7 @@ public abstract class SQLDriver
         try {
             Boolean printSQL = thisConfig.getBoolean("printSQL", false);
             if (printSQL) {
-                log.info("Executing SQL query on [" + dbName + "]", query);
+                log.info("Executing SQL query on {} :\n {}",dbName, query);
             }
             if (driver != null) {
                 statement = driver.createFetchStatement(__currentConn);
