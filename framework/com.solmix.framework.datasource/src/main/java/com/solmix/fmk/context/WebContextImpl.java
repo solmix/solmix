@@ -118,7 +118,7 @@ public class WebContextImpl extends UserContextImpl implements WebContext
             boolean alreadyLoggedURL = request.getAttribute("isc_alreadyLoggedURL") != null;
             if ((!isCGET || log.isDebugEnabled()) && !alreadyLoggedURL) {
                 request.setAttribute("isc_alreadyLoggedURL", new Object());
-                log.info((new StringBuilder()).append(isCGET ? "CGET " : "").append("URL: '").append(requestPath).append("'").append(
+                log.debug((new StringBuilder()).append(Thread.currentThread().getId()).append('-').append(isCGET ? "CGET " : "").append("URL: '").append(requestPath).append("'").append(
                     ", User-Agent: '").append(request.getHeader("User-Agent")).append("'").append(": ").append(ServletTools.getBrowserSummary(this)).toString());
             }
         }

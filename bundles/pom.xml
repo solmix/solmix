@@ -44,7 +44,5 @@
 		<module>com.solmix.bundles.jackson</module>
 		<module>com.solmix.bundles.jxpath</module>
 		<module>com.solmix.bundles.poi</module>
-		<module>com.solmix.bundles.vaadin-server</module>
-		<module>com.solmix.bundles.vaadin</module>
 	</modules>
 </project>

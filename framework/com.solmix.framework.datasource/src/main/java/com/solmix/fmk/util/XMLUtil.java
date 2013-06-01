@@ -269,9 +269,11 @@ public class XMLUtil {
 						if (node.getNodeName().equals(tempName)) {
 
 							if (!sure) {
+								rem = new HashMap<String, Object>();
 								re = new ArrayList<Object>();
+								rem.put(tempName, re);
 								re.add(tempValue);
-								_return = re;
+								_return = rem;
 							}
 
 							re.add(getValue((Element) node));
@@ -341,7 +343,7 @@ public class XMLUtil {
 					if (mapAsAttribute)
 						child.setAttribute((String) _key, _value.toString());
 					else
-						child.setTextContent(value.toString());
+						child.setTextContent(_value.toString());
 					element.appendChild(child);
 				}
 				return null;

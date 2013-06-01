@@ -6,7 +6,7 @@
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.bundles.poi</groupId>
+  <groupId>com.solmix.bundles</groupId>
   <artifactId>com.solmix.bundles.poi</artifactId>
   <name>Solmix :: Bundles :: POI</name>
   <dependencies>
@@ -15,7 +15,7 @@
   		<artifactId>poi</artifactId>
   	</dependency>
   </dependencies>
-  <version>3.8-beta5</version>
+  <version>3.9</version>
   <packaging>bundle</packaging>
  <properties>
     <pkgVersion>3.8-beta5</pkgVersion>
