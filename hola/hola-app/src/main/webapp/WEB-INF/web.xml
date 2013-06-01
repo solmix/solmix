@@ -3,16 +3,19 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 	<servlet>
-		<servlet-name>OSGI-Launch</servlet-name>
+		<servlet-name>Launcher</servlet-name>
 		<servlet-class>com.solmix.launch.webapp.SolmixServlet</servlet-class>
-		<init-param>
+		<!-- <init-param>
 			<param-name>solmix.home</param-name>
 			<param-value>/home/solmix/o/git/solmix/resource/resource</param-value>
-		</init-param>
+		</init-param> -->
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>OSGI-Launch</servlet-name>
-		<url-pattern>/.slx/*</url-pattern>
+		<servlet-name>Launcher</servlet-name>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+	<listener>
+		<listener-class>com.solmix.launch.webapp.SolmixSessionListener</listener-class>
+	</listener>
 
 </web-app>
