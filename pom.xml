@@ -42,6 +42,7 @@
 		<jasypt.bundle.version>1.7_1</jasypt.bundle.version>
 		<jetty.version>8.1.9.v20130131</jetty.version>
 		<junit.bundle.version>4.7_2</junit.bundle.version>
+		<jta.version>1.1.1</jta.version>
 		<geronimo.servlet.version>1.2</geronimo.servlet.version>
 		<depends-maven-plugin.version>1.0</depends-maven-plugin.version>
 		<easymock.version>3.1</easymock.version>
@@ -186,26 +187,26 @@
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
-		<dependency>
-			<groupId>org.apache.karaf.webconsole</groupId>
-			<artifactId>org.apache.karaf.webconsole.console</artifactId>
-			<version>${apache.karaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.karaf.webconsole</groupId>
-			<artifactId>org.apache.karaf.webconsole.branding</artifactId>
-			<version>${apache.karaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.karaf.webconsole</groupId>
-			<artifactId>org.apache.karaf.webconsole.gogo</artifactId>
-			<version>${apache.karaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.karaf.webconsole</groupId>
-			<artifactId>org.apache.karaf.webconsole.http</artifactId>
-			<version>${apache.karaf.version}</version>
-		</dependency>
+			<dependency>
+				<groupId>org.apache.karaf.webconsole</groupId>
+				<artifactId>org.apache.karaf.webconsole.console</artifactId>
+				<version>${apache.karaf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.karaf.webconsole</groupId>
+				<artifactId>org.apache.karaf.webconsole.branding</artifactId>
+				<version>${apache.karaf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.karaf.webconsole</groupId>
+				<artifactId>org.apache.karaf.webconsole.gogo</artifactId>
+				<version>${apache.karaf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.karaf.webconsole</groupId>
+				<artifactId>org.apache.karaf.webconsole.http</artifactId>
+				<version>${apache.karaf.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.osgi</groupId>
 				<artifactId>services</artifactId>
@@ -729,10 +730,20 @@
 			<!-- ===================================================================================== -->
 			<!-- solmix version dependency -->
 			<!-- ===================================================================================== -->
-
+	<dependency>
+			<groupId>com.solmix.launch</groupId>
+			<artifactId>com.solmix.launch.base</artifactId>
+			<classifier>web</classifier>
+			<version>${project.version}</version>
+		</dependency>
 			<dependency>
 				<groupId>com.solmix.launch</groupId>
 				<artifactId>com.solmix.launch.base</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.solmix.framework</groupId>
+				<artifactId>com.solmix.framework.engine</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -768,6 +779,11 @@
 			<dependency>
 				<groupId>com.solmix.modules</groupId>
 				<artifactId>com.solmix.modules.sql</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.solmix.framework</groupId>
+				<artifactId>com.solmix.framework.servlets</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -824,6 +840,11 @@
 				<artifactId>commons-fileupload</artifactId>
 				<version>${commons-fileupload.version}</version>
 				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-jta_1.1_spec</artifactId>
+				<version>${jta.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.solmix.framework</groupId>
