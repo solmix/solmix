@@ -105,6 +105,7 @@ public class ServletManagerImpl implements ServletManager
         this.servletContext = servletContext;
     }
 
+    
     /**
      * @return the bundleContext
      */
@@ -112,6 +113,7 @@ public class ServletManagerImpl implements ServletManager
         return bundleContext;
     }
 
+    
     /**
      * @param bundleContext the bundleContext to set
      */

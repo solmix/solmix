@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package com.solmix.fmk.servlets.internel;
+package com.solmix.fmk.servlets;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.framework.BundleContext;
+
 import com.solmix.SlxConstants;
+import com.solmix.commons.util.IOUtil;
 
 /**
  * 
@@ -43,21 +46,34 @@ import com.solmix.SlxConstants;
 public class StaticResourceServlet extends HttpServlet
 {
 
-    private final String path;
+    private final String name;
+    private final String alies;
+    private final BundleContext context;
 
-    public StaticResourceServlet()
+    public StaticResourceServlet( String name,BundleContext context)
     {
-        path = "";
+        this.alies=null;
+        this.name=name;
+        this.context=context;
     }
-
-    public StaticResourceServlet(String path)
+    /**
+     * @param alies
+     * @param name
+     */
+    public StaticResourceServlet(String alies, String name,BundleContext context)
     {
-        this.path = path;
+        this.alies=alies;
+        this.name=name;
+        this.context=context;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+     
         String target = req.getPathInfo();
+        if(this.alies!=null){
+            target = target.replace(alies, name);
+        }
         if (target == null) {
             target = "";
         }
@@ -66,8 +82,8 @@ public class StaticResourceServlet extends HttpServlet
             target += "/" + target;
         }
 
-        String resName = this.path + target;
-        URL url = getServletContext().getResource(resName);
+       final String resName = target;
+        URL url = this.context.getBundle().getResource(resName);
         if (url == null) {
             String webRoot = System.getProperty(SlxConstants.SOLMIX_WEB_ROOT);
             assert webRoot != null;
@@ -139,21 +155,23 @@ public class StaticResourceServlet extends HttpServlet
     private void copyResource(URL url, HttpServletResponse res) throws IOException {
         OutputStream os = null;
         InputStream is = null;
-
+     // Write the resource to the client.
+        URLConnection connection = url.openConnection();
+        try {
+            int length = connection.getContentLength();
+            if (length >= 0) {
+                res.setContentLength(length);
+            }
+        } catch (Throwable e) {
+            // This can be ignored, content length header is not required.
+            // Need to close the input stream because of
+            // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4257700 to
+            // prevent it from hanging, but that is done below.
+        }
         try {
             os = res.getOutputStream();
             is = url.openStream();
-
-            int len = 0;
-            byte[] buf = new byte[1024];
-            int n;
-
-            while ((n = is.read(buf, 0, buf.length)) >= 0) {
-                os.write(buf, 0, n);
-                len += n;
-            }
-
-            res.setContentLength(len);
+            IOUtil.copyStreams(is, os);
         } finally {
             if (is != null) {
                 is.close();

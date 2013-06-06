@@ -50,7 +50,7 @@ public class FilterManagerTracker extends ServiceTracker<Filter, Filter>
     /** default log */
     private final Logger log = LoggerFactory.getLogger(FilterManagerTracker.class);
 
-    private static final String FILTER_SERVICE_NAME = Servlet.class.getName();
+    private static final String FILTER_SERVICE_NAME = Filter.class.getName();
 
     private final FilterChainHelper filterChain;
 

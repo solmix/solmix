@@ -34,7 +34,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.solmix.fmk.servlets.internel.handler.ServletHandler;
-import com.solmix.fmk.servlets.internel.helper.SlxServletConfig;
 
 /**
  * 
@@ -50,9 +49,9 @@ public class ServletManagerTracker extends ServiceTracker<Servlet, Servlet>
 
     private final List<ServletHandler> handlers = new ArrayList<ServletHandler>();
 
-    private BundleContext context;
+    private final BundleContext context;
 
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
     /**
      * @param context
@@ -73,13 +72,13 @@ public class ServletManagerTracker extends ServiceTracker<Servlet, Servlet>
     }
 
     public Servlet getDefaultServlet() {
-        Servlet servlet = new StaticResourceServlet("");
+      /*  Servlet servlet = new StaticResourceServlet("");
         try {
             servlet.init(new SlxServletConfig(this.servletContext, null, ""));
         } catch (ServletException e) {
             return null;
-        }
-        return servlet;
+        }*/
+        return null;
     }
 
     /**

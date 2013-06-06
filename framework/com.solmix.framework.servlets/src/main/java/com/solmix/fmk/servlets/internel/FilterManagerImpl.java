@@ -34,6 +34,22 @@ import com.solmix.api.servlets.FilterManager;
 public class FilterManagerImpl implements FilterManager
 {
 
+    
+    /**
+     * @return the bundleContext
+     */
+    public BundleContext getBundleContext() {
+        return bundleContext;
+    }
+
+    
+    /**
+     * @param bundleContext the bundleContext to set
+     */
+    public void setBundleContext(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+    }
+
     private BundleContext bundleContext;
 
     private FilterManagerTracker tracker;

@@ -103,11 +103,6 @@ public class ServletHandler
         }
         // 2.Match with directory
         for (ServletHandler handler : handlers) {
-            if (path.startsWith(handler.getPattern())) {
-                return handler;
-            }
-        }
-        for (ServletHandler handler : handlers) {
             String pattern = handler.getPattern();
             if (pattern.endsWith("*")) {
                 pattern = pattern.substring(0, pattern.length() - 1);

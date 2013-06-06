@@ -6,7 +6,7 @@
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.framework.servlets</groupId>
+  <groupId>com.solmix.framework</groupId>
   <artifactId>com.solmix.framework.servlets</artifactId>
   <name>Solmix :: FrameWork :: Servlets</name>
   <dependencies>
@@ -27,7 +27,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Category>solmix</Bundle-Category>
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
@@ -47,7 +47,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg></solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>com.solmix.fmk.servlets</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		javax.servlet;version="[2.5,4)",
 		javax.servlet.http;version="[2.5,4)",

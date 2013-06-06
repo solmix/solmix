@@ -39,12 +39,12 @@ import org.osgi.framework.ServiceReference;
 public class SlxServletConfig implements ServletConfig
 {
 
-    private ServletContext context;
+    private final ServletContext context;
 
     /** The <code>ServiceReference</code> providing the properties */
     private final ServiceReference<Servlet> reference;
 
-    private String name;
+    private final String name;
 
     public SlxServletConfig(ServletContext context, final ServiceReference<Servlet> reference, String name)
     {
@@ -94,7 +94,7 @@ public class SlxServletConfig implements ServletConfig
      * @see javax.servlet.ServletConfig#getInitParameterNames()
      */
     @Override
-    public Enumeration<?> getInitParameterNames() {
+    public Enumeration getInitParameterNames() {
         if (reference != null) {
             List<?> keys = Arrays.asList(reference.getPropertyKeys());
             return Collections.enumeration(keys);

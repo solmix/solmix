@@ -39,12 +39,12 @@ import org.osgi.framework.ServiceReference;
 public class SlxFilterConfig implements FilterConfig
 {
 
-    private ServletContext context;
+    private final ServletContext context;
 
     /** The <code>ServiceReference</code> providing the properties */
     private final ServiceReference<Filter> reference;
 
-    private String name;
+    private final String name;
 
     public SlxFilterConfig(ServletContext context, final ServiceReference<Filter> reference, String name)
     {
@@ -90,7 +90,7 @@ public class SlxFilterConfig implements FilterConfig
      * @see javax.servlet.FilterConfig#getInitParameterNames()
      */
     @Override
-    public Enumeration<?> getInitParameterNames() {
+    public Enumeration getInitParameterNames() {
         List<?> keys = Arrays.asList(reference.getPropertyKeys());
         return Collections.enumeration(keys);
     }

@@ -53,13 +53,13 @@
 			<entry key="servlet.pattern" value="/DataSourceLoader"/>
 			<entry key="servlet.name" value="dataSourceLoader"/>
 		</service-properties>
-	</service> -->
+	</service> 
 	<service interface="javax.servlet.Servlet" ref="datasourceCall">
 		<service-properties>
 			<entry key="servlet.pattern" value="/DataSourceCall"/>
 			<entry key="servlet.name" value="ida"/>
 		</service-properties>
-	</service>
+	</service> -->
 	
 	
 	<reference  id="dsManager"	interface="com.solmix.api.datasource.DataSourceManager"		availability="mandatory" >
@@ -67,7 +67,7 @@
 	<reference id="prcManager"	interface="com.solmix.api.rpc.RPCManagerFactory"		availability="mandatory" >
 	</reference>
 	<!--______________________________________________________ -->
-	<!--        Properties holder                                             -->
+	<!--        Properties holder                              -->
 	<!--______________________________________________________ -->
 	<cm:property-placeholder persistent-id="com.solmix.framework.servlets">
 		<cm:default-properties>
