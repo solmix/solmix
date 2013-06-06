@@ -56,8 +56,10 @@
 		<felix.utils.version>1.1.0</felix.utils.version>
 		<felix.scr.version>1.6.0</felix.scr.version>
 		<felix.webconsole.version>3.1.8</felix.webconsole.version>
-		<felix.metatype.version>1.0.4</felix.metatype.version>
-		<aries.blueprint.version>1.1.0</aries.blueprint.version>
+		<felix.metatype.version>1.0.6</felix.metatype.version>
+		<aries.blueprint.core.version>1.1.0</aries.blueprint.core.version>
+		<aries.blueprint.api.version>1.0.0</aries.blueprint.api.version>
+		<aries.cm.version>1.0.1</aries.cm.version>
 		<aries.jmx.version>1.1.0</aries.jmx.version>
 		<aries.jmx.core.version>1.1.1</aries.jmx.core.version>
 		<aries.jndi.version>1.0.0</aries.jndi.version>
@@ -89,9 +91,9 @@
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
 		<!-- <karaf.debug.location>E:\o\solmix3\resource\resource</karaf.debug.location> -->
 		<!-- <karaf.debug.location>E:\workspace\solmix\spring_solmix\WebRoot\WEB-INF\lib</karaf.debug.location> -->
-		<karaf.debug.location>/home/solmix/karaf</karaf.debug.location>
+		<!-- <karaf.debug.location>/home/solmix/karaf</karaf.debug.location> -->
 		<!-- <karaf.debug.location>E:\karaf</karaf.debug.location> -->
-		<!-- <karaf.debug.location>/home/solmix/workspace/svn/trunk/resource/resource</karaf.debug.location> -->
+		<karaf.debug.location>/home/solmix/o/git/solmix/hola/hola-app/src/main/webapp/WEB-INF/resource/</karaf.debug.location>
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
@@ -115,6 +117,7 @@
 		<org.apache.felix.http.version>2.2.0</org.apache.felix.http.version>
 		<slf4j.version>1.6.6</slf4j.version>
 		<mockito-core.version>1.9.0</mockito-core.version>
+		<solmix.bundle.category>solmix</solmix.bundle.category>
 	</properties>
 	<repositories>
 
@@ -500,6 +503,11 @@
 				<version>${geronimo.servlet.version}</version>
 			</dependency>
 			<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_3.0_spec</artifactId>
+			<version>1.0</version>
+		</dependency>
+			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
 				<version>${easymock.version}</version>
@@ -566,16 +574,20 @@
 				<version>${servlet.api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.aries.blueprint</groupId>
-				<artifactId>org.apache.aries.blueprint</artifactId>
-				<version>${aries.blueprint.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.felix</groupId>
-						<artifactId>javax.servlet</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.api</artifactId>
+			<version>${aries.blueprint.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.cm</artifactId>
+			<version>${aries.cm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
+			<version>${aries.blueprint.core.version}</version>
+		</dependency>
 			<dependency>
 				<groupId>org.apache.aries.blueprint</groupId>
 				<artifactId>org.apache.aries.blueprint.annotation.api</artifactId>
@@ -1017,7 +1029,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.1.1</version>
+					<version>1.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.xbean</groupId>
@@ -1047,7 +1059,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.3</version>
+					<version>2.5</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
