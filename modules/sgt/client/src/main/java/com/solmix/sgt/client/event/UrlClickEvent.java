@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package com.ieslab.eimpro.client.event;
+package com.solmix.sgt.client.event;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,17 +25,16 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-import com.ieslab.eimpro.client.Eimpro;
-import com.ieslab.eimpro.client.types.Emodule;
-import com.ieslab.eimpro.client.types.EviewType;
-import com.ieslab.eimpro.client.types.tokens.NameTokens;
+import com.solmix.sgt.client.Action;
+import com.solmix.sgt.client.EviewType;
 
 /**
  * 
  * @author Administrator
- * @version $Id$ 2013-1-14
+ * @version 110035 2013-1-14
  */
 
 public class UrlClickEvent extends GwtEvent<UrlClickHandler>
@@ -43,24 +42,21 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
 
     private static Type<UrlClickHandler> TYPE;
 
-    private static TokenFormatter tokenformatter;
+    @Inject
+    private  TokenFormatter tokenformatter;
 
-    private Map<String, String> parameters;
+    private final Map<String, String> parameters;
 
-    private String action;
+    private final String action;
 
     public UrlClickEvent(String urlParams)
     {
-        if (tokenformatter == null) {
-            tokenformatter = Eimpro.getEimproGinjector().getTokenFormatter();
-        }
-
         PlaceRequest place = tokenformatter.toPlaceRequest(urlParams);
         action = place.getNameToken();
         parameters = new HashMap<String, String>();
         Set<String> params = place.getParameterNames();
         for (String param : params) {
-            if (param.equals(EviewType.P_VIEW_TYPE) || param.equals(Emodule.P_MODULE) || param.equals(NameTokens.ACTION))
+            if (param.equals(EviewType.P_VIEW_TYPE) || param.equals(Action.P_MODULE) || param.equals(Action.ACTION))
                 continue;
             parameters.put(param, place.getParameter(param, null));
         }
