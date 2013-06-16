@@ -267,6 +267,7 @@ public class JacksonJSParserImpl implements JSParser
 
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void main(String args[]) throws JsonGenerationException, JsonMappingException, IOException, SlxException {
         JacksonJSParserImpl parser = new JacksonJSParserImpl();
         ObjectMapper mapper = parser.initISCMapper();

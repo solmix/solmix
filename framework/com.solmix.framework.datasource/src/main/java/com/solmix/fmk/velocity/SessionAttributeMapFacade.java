@@ -56,8 +56,8 @@ public Object getAttribute( String attrName )
       return get( attrName );
    }
 
-   @Override
-public Enumeration< ? > getAttributeNames()
+@Override
+public Enumeration getAttributeNames()
    {
       return session.getAttributeNames();
    }

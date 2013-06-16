@@ -59,7 +59,7 @@ public final class SlxContext
     /**
      * The thread local variable holding the current context.
      */
-    private  static ThreadLocal<Context> localContext = new ThreadLocal<Context>();
+    private  static InheritableThreadLocal<Context> localContext = new InheritableThreadLocal<Context>();
 
     private static SystemContext systemContext;
 
@@ -97,6 +97,9 @@ public final class SlxContext
             throw ise;
         }
         return context;
+    }
+    public static void removeContext(){
+        localContext.remove();
     }
 
     public static RPCManagerFactory getRPCManagerFactory() {

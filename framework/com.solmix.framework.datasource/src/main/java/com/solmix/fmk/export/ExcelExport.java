@@ -41,6 +41,7 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import com.solmix.api.exception.SlxException;
 
 /**
@@ -49,6 +50,7 @@ import com.solmix.api.exception.SlxException;
  * @version 110035 2011-6-7
  */
 
+@SuppressWarnings("rawtypes")
 public class ExcelExport extends AbstractExport
 {
 
@@ -208,7 +210,7 @@ public class ExcelExport extends AbstractExport
             if (!i.hasNext())
                 break;
             Integer excelColorIndex = (Integer) i.next();
-            HSSFColor excelColor = (HSSFColor) excelColors.get(excelColorIndex);
+            HSSFColor excelColor = excelColors.get(excelColorIndex);
             short triplet[] = excelColor.getTriplet();
             int redDelta = Math.abs(red - triplet[0]);
             int greenDelta = Math.abs(green - triplet[1]);
@@ -239,6 +241,7 @@ public class ExcelExport extends AbstractExport
 
     }
 
+    @Override
     public void exportResultSet(List<Map<Object, Object>> list, Map<String, String> columnMap, OutputStream out) throws SlxException {
         workbook = new HSSFWorkbook();
         Sheet worksheet = workbook.createSheet();
@@ -283,7 +286,7 @@ public class ExcelExport extends AbstractExport
             Iterator<String> c = columns.iterator();
             while (c.hasNext()) {
                 Cell cell = null;
-                String columnName = (String) c.next();
+                String columnName = c.next();
                 if (columnName.indexOf("$style") == -1) {
                     Object cellValue = record.get(columnName);
                     String finalValue = cellValue == null ? null : cellValue.toString();

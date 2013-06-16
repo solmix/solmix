@@ -115,7 +115,7 @@
 		</service-properties>
 		<bean class="com.solmix.fmk.filter.ContextFilter"/>
 	</service>
-	<service interface="javax.servlet.Filter">
+<!-- 	<service interface="javax.servlet.Filter">
 		<service-properties>
 				<entry key="filter.pattern" value="/*"/>
 				<entry key="filter.name" value="securityFilter"/>
@@ -123,6 +123,6 @@
 		<bean class="com.solmix.fmk.security.auth.login.SecurityFilter">
 			<property name="securityAdmin" ref="security_admin"></property>
 		</bean>
-	</service>
+	</service> -->
 
 </blueprint>

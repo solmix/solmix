@@ -541,9 +541,8 @@ public class Reflection
         targetTypeName = targetType.getName();
         if (argType == null && argValue == null)
             return null;
-        log.debug((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
+//        log.debug((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
         // If the target type is a collection class type.
-        // && !IDoNotAdapt.class.isAssignableFrom(targetType)
         if ((Collection.class.isAssignableFrom(targetType) || Map.class.isAssignableFrom(targetType))) {
             if (optionalArgs != null) {
                 for (int i = 0; i < optionalArgs.length; i++) {

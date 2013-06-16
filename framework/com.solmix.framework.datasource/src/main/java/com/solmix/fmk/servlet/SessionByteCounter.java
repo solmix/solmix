@@ -6,17 +6,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.solmix.commons.io.IByteCounter;
 
 public class SessionByteCounter implements IByteCounter
 {
 
+    @SuppressWarnings("rawtypes")
    public SessionByteCounter( HttpServletRequest request, long totalBytes, String formID, List errors )
    {
-      log = LoggerFactory.getLogger( SessionByteCounter.class.getName() );
+//      log = LoggerFactory.getLogger( SessionByteCounter.class.getName() );
       bytesSoFar = 0L;
       this.totalBytes = 0L;
       lastUpdateMod = 0L;
@@ -55,12 +53,16 @@ public void incrementBy( long numBytes )
    }
 
    @Override
+
+   @SuppressWarnings("rawtypes")
 public void setErrors( List errors )
    {
       session.setAttribute( "errors", errors );
    }
 
    @Override
+
+   @SuppressWarnings("rawtypes")
 public List getErrors()
    {
       return (List) session.getAttribute( "errors" );
@@ -73,7 +75,7 @@ public List getErrors()
       session.removeAttribute( "bytesSoFar" );
    }
 
-   private final Logger log;
+//   private final Logger log;
 
    HttpServletRequest request;
 

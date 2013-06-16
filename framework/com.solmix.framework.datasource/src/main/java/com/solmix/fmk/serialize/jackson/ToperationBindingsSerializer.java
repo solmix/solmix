@@ -25,8 +25,6 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.solmix.api.jaxb.ToperationBinding;
 import com.solmix.api.jaxb.ToperationBindings;
@@ -42,7 +40,7 @@ import com.solmix.commons.util.DataUtil;
 public class ToperationBindingsSerializer extends JsonSerializer<ToperationBindings>
 {
 
-   private static final Logger log = LoggerFactory.getLogger(ToperationBindingsSerializer.class.getName());
+//   private static final Logger log = LoggerFactory.getLogger(ToperationBindingsSerializer.class.getName());
    /**
     * {@inheritDoc}
     * 
@@ -72,7 +70,7 @@ public class ToperationBindingsSerializer extends JsonSerializer<ToperationBindi
       }
    }
 
-   private boolean filt(String key)
+   protected boolean filter(String key)
    {
       String[] keeped = { "callbackParam", "dataFormat", "dataProtocol", "", "dataTransport", "dataURL", "defaultParams", "operationId",
          "operationType", "recordName", "recordXPath", "useFlatFields", "spoofResponses", "responseDataSchema", "useHttpProxy", "wsOperation",

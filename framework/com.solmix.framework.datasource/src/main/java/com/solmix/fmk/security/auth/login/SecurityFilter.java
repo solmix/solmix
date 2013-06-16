@@ -117,7 +117,9 @@ public class SecurityFilter extends ContextFilter implements Filter
         for (LoginHandler handler : this.getLoginHandlers()) {
             LoginResult loginResult = handler.handle(request, response);
             setCurrentLoginResult(loginResult);
-            if (loginResult.getStatus() == LoginResult.STATUS_IN_PROCESS) {
+            if(loginResult==null){
+                continue;
+            } else  if (loginResult.getStatus() == LoginResult.STATUS_IN_PROCESS) {
                 // special handling to support multi step login mechanisms like ntlm
                 // do not continue with the filter chain
                 return;

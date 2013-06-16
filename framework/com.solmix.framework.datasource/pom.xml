@@ -79,9 +79,9 @@
 						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
 						<Private-Package>com.solmix.fmk.internel</Private-Package>
 						 <_failok>false</_failok> 
-						
+
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
-						
+
 						<!--
 							<Bundle-Activator>org.saio.solmix.daoservice.Activator</Bundle-Activator>
 						-->

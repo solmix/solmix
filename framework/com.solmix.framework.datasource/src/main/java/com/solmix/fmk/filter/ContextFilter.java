@@ -28,11 +28,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.solmix.api.context.Context;
 import com.solmix.api.context.ContextFactory;
@@ -78,7 +76,7 @@ public class ContextFilter extends AbstractFilter implements Filter
             final WebContext context = contextFactory.createWebContext(request, response, servletContext);
             SlxContext.setContext(context);
             initializedContext = true;
-            try {
+           /* try {
                 String uri = request.getRequestURI();
                 if (uri != null) {
                     MDC.put("requesturi", uri);
@@ -105,7 +103,7 @@ public class ContextFilter extends AbstractFilter implements Filter
             } catch (Throwable e) {
                 // if for any reason the MDC couldn't be set, just ignore it.
                 log.debug(e.getMessage(), e);
-            }
+            }*/
         } else {
             try {
                 WebContext context = SlxContext.getWebContext();
@@ -116,17 +114,16 @@ public class ContextFilter extends AbstractFilter implements Filter
             }
         }
         try {
-            //
             doProcess(request, response);
-            // chain.doFilter(request, response);
+            chain.doFilter(request, response);
         } finally {
             if (initializedContext) {
-                SlxContext.release();
+//                SlxContext.release();
                 if (originalContext != null)
                     SlxContext.setContext(originalContext);
 
                 // cleanup
-                MDC.clear();
+//                MDC.clear();
             }
         }
     }

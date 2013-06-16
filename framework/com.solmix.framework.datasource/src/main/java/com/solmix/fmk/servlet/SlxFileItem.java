@@ -145,10 +145,12 @@ public class SlxFileItem implements FileItem
         shortFileName = name;
     }
 
+    @SuppressWarnings("rawtypes")
     public void setErrors(List errors) {
         byteCounter.setErrors(errors);
     }
 
+    @SuppressWarnings("rawtypes")
     public List getErrors() {
         return byteCounter.getErrors();
     }
