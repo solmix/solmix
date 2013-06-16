@@ -1,0 +1,8 @@
+-------------------------------------------------
+add smartgwt.jar 3.1 to local maven repository
+-------------------------------------------------
+mvn install:install-file -Dfile=/home/solmix/sdk/smartgwt.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=3.1 -Dpackaging=jar
+-------------------------------------------------
+add smartgwt-skins.jar 3.1 to local maven repository
+-------------------------------------------------
+mvn install:install-file -Dfile=/home/solmix/sdk/smartgwt-skins.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=3.1 -Dpackaging=jar

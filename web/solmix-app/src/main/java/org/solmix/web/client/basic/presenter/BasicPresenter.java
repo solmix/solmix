@@ -55,6 +55,8 @@ import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
+import com.solmix.sgt.client.event.RevealViewHandler;
+import com.solmix.sgt.client.event.UrlClickHandler;
 
 /**
  * 
@@ -62,7 +64,7 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
  * @version $Id$ 2011-6-1
  */
 
-public class BasicPresenter extends Presenter<BasicPresenter.MyView, BasicPresenter.MyProxy> implements BasicUiHandlers
+public class BasicPresenter extends Presenter<BasicPresenter.MyView, BasicPresenter.MyProxy> implements BasicUiHandlers, RevealViewHandler, UrlClickHandler
 {
 
     private final PlaceManager placeManager;

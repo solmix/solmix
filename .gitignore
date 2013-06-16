@@ -1,4 +1,7 @@
 /target
+/ui
+/assemblies
+/hola
 *.settings
 *.classpath
 *.project
