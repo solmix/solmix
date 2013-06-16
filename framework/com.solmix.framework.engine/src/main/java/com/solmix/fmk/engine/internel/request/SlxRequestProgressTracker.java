@@ -27,6 +27,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.request.RequestProgressTracker;
 
 /**
@@ -44,6 +47,8 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
      * @see #dumpText(PrintWriter)
      */
     private static final String DUMP_FORMAT = "%1$7d (%2$tF %2$tT) %3$s%n";
+    
+    private static final Logger log = LoggerFactory.getLogger(SlxRequestProgressTracker.class);
 
     /**
      * The name of the timer tracking the processing time of the complete process.
@@ -102,15 +107,18 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
     /**
      * @see org.apache.sling.api.request.RequestProgressTracker#getMessages()
      */
+    @Override
     public Iterator<String> getMessages() {
         return new Iterator<String>() {
 
             private final Iterator<TrackingEntry> entryIter = entries.iterator();
 
+            @Override
             public boolean hasNext() {
                 return entryIter.hasNext();
             }
 
+            @Override
             public String next() {
                 // throws NoSuchElementException if no entries any more
                 TrackingEntry entry = entryIter.next();
@@ -119,6 +127,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
                 return String.format(DUMP_FORMAT, offset, entry.getTimeStamp(), entry.getMessage());
             }
 
+            @Override
             public void remove() {
                 throw new UnsupportedOperationException("remove");
             }
@@ -129,6 +138,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
      * Dumps the process timer entries to the given writer, one entry per line. See the class comments for the rough
      * format of each message line.
      */
+    @Override
     public void dump(final PrintWriter writer) {
         logTimer(REQUEST_PROCESSING_TIMER, "Dumping SlingRequestProgressTracker Entries");
 
@@ -141,11 +151,13 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
     }
 
     /** Creates an entry with the given message. */
+    @Override
     public void log(String message) {
         entries.add(new TrackingEntry(LOG_PREFIX + message));
     }
 
     /** Creates an entry with the given entry tag and message */
+    @Override
     public void log(String format, Object... args) {
         String message = MessageFormat.format(format, args);
         entries.add(new TrackingEntry(LOG_PREFIX + message));
@@ -154,6 +166,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
     /**
      * Starts a named timer. If a timer of the same name already exists, it is reset to the current time.
      */
+    @Override
     public void startTimer(String name) {
         startTimerInternal(name);
     }
@@ -175,6 +188,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
     /**
      * Log a timer entry, including start, end and elapsed time.
      */
+    @Override
     public void logTimer(String name) {
         if (namedTimerEntries.containsKey(name)) {
             logTimerInternal(name, null, namedTimerEntries.get(name));
@@ -184,6 +198,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
     /**
      * Log a timer entry, including start, end and elapsed time.
      */
+    @Override
     public void logTimer(String name, String format, Object... args) {
         if (namedTimerEntries.containsKey(name)) {
             logTimerInternal(name, MessageFormat.format(format, args), namedTimerEntries.get(name));
@@ -207,6 +222,7 @@ public class SlxRequestProgressTracker implements RequestProgressTracker
         entries.add(new TrackingEntry(sb.toString()));
     }
 
+    @Override
     public void done() {
         if (done)
             return;

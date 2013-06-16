@@ -18,7 +18,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Category>solmix</Bundle-Category>
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package><!--<Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle> --><!--<Private-Package>${solmix.osgi.export.pkg}.impl</Private-Package> --><!--<_failok>${solmix.osgi.failok}</_failok> --><!--<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
@@ -38,7 +38,12 @@
 		</dependency>
 		 <dependency>
 			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint</artifactId>
+			<artifactId>org.apache.aries.blueprint.api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<!--=== end ================

@@ -23,6 +23,10 @@
 			<outputDirectory>/etc/</outputDirectory>
 		</fileSet>
 		<fileSet>
+			<directory>target/classes/datasource</directory>
+			<outputDirectory>/datasource/</outputDirectory>
+		</fileSet>
+		<fileSet>
 			<directory>target/classes/deploy</directory>
 			<outputDirectory>/deploy/</outputDirectory>
 		</fileSet>
@@ -85,8 +89,9 @@
 				org/apache/aries/blueprint/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>org.apache.aries.blueprint:org.apache.aries.blueprint
-				</include>
+				<include>org.apache.aries.blueprint:org.apache.aries.blueprint.api</include>
+				<include>org.apache.aries.blueprint:org.apache.aries.blueprint.cm</include>
+				<include>org.apache.aries.blueprint:org.apache.aries.blueprint.core</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>

@@ -77,7 +77,7 @@ public class SlxRequestProcessor implements RequestProcessor
             }
             requestData.initServlet(servletManager);
             Filter[] filters = filterManager.getFilters();
-            if (filters == null) {
+            if (filters != null&&filters.length>0) {
                 FilterChain processor = new RequestFilterChain(this, filters);
                 slxRequest.getRequestProgressTracker().log("Applying filters");
                 processor.doFilter(slxRequest, slxResponse);

@@ -52,102 +52,127 @@ public class ExternalServletContextWrapper implements ServletContext
         this.delegate = sc;
     }
 
+    @Override
     public ServletContext getContext(String s) {
         return delegate.getContext(s);
     }
 
+    @Override
     public int getMajorVersion() {
         return delegate.getMajorVersion();
     }
 
+    @Override
     public int getMinorVersion() {
         return delegate.getMinorVersion();
     }
 
+    @Override
     public String getMimeType(String s) {
         return delegate.getMimeType(s);
     }
 
+    @Override
     public Set getResourcePaths(String s) {
         return delegate.getResourcePaths(s);
     }
 
+    @Override
     public URL getResource(String s) throws MalformedURLException {
         return delegate.getResource(s);
     }
 
+    @Override
     public InputStream getResourceAsStream(String s) {
         return delegate.getResourceAsStream(s);
     }
 
+    @Override
     public RequestDispatcher getRequestDispatcher(String s) {
         return new RequestDispatcherWrapper(delegate.getRequestDispatcher(s));
     }
 
+    @Override
     public RequestDispatcher getNamedDispatcher(String s) {
         return new RequestDispatcherWrapper(delegate.getNamedDispatcher(s));
     }
 
+    @Override
     public Servlet getServlet(String s) throws ServletException {
         return delegate.getServlet(s);
     }
 
+    @Override
     public Enumeration getServlets() {
         return delegate.getServlets();
     }
 
+    @Override
     public Enumeration getServletNames() {
         return delegate.getServletNames();
     }
 
+    @Override
     public void log(String s) {
         delegate.log(s);
     }
 
+    @Override
     public void log(Exception exception, String s) {
         delegate.log(exception, s);
     }
 
+    @Override
     public void log(String s, Throwable throwable) {
         delegate.log(s, throwable);
     }
 
+    @Override
     public String getRealPath(String s) {
         return delegate.getRealPath(s);
     }
 
+    @Override
     public String getServerInfo() {
         return delegate.getServerInfo();
     }
 
+    @Override
     public String getInitParameter(String s) {
         return delegate.getInitParameter(s);
     }
 
+    @Override
     public Enumeration getInitParameterNames() {
         return delegate.getInitParameterNames();
     }
 
+    @Override
     public Object getAttribute(String s) {
         return delegate.getAttribute(s);
     }
 
+    @Override
     public Enumeration getAttributeNames() {
         return delegate.getAttributeNames();
     }
 
+    @Override
     public void setAttribute(String s, Object obj) {
         delegate.setAttribute(s, obj);
     }
 
+    @Override
     public void removeAttribute(String s) {
         delegate.removeAttribute(s);
     }
 
+    @Override
     public String getServletContextName() {
         return delegate.getServletContextName();
     }
 
+    @Override
     public String getContextPath() {
         return delegate.getContextPath();
     }
@@ -162,10 +187,12 @@ public class ExternalServletContextWrapper implements ServletContext
             this.delegate = rd;
         }
 
+        @Override
         public void forward(final ServletRequest request, final ServletResponse response) throws ServletException, IOException {
             delegate.forward(unwrapServletRequest(request), unwrapServletResponse(response));
         }
 
+        @Override
         public void include(final ServletRequest request, final ServletResponse response) throws ServletException, IOException {
             delegate.include(unwrapServletRequest(request), unwrapServletResponse(response));
         }
@@ -205,5 +232,4 @@ public class ExternalServletContextWrapper implements ServletContext
         }
 
     }
-
 }

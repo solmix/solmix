@@ -34,6 +34,8 @@
 		<module>modules</module>
 		<module>tooling</module>
 		<module>assemblies</module>
+		<module>ui</module>
+		<module>samples</module>
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
@@ -742,10 +744,15 @@
 			<!-- ===================================================================================== -->
 			<!-- solmix version dependency -->
 			<!-- ===================================================================================== -->
-	<dependency>
+		<dependency>
 			<groupId>com.solmix.launch</groupId>
 			<artifactId>com.solmix.launch.base</artifactId>
 			<classifier>web</classifier>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.solmix.modules</groupId>
+			<artifactId>com.solmix.modules.spring</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 			<dependency>
@@ -1064,7 +1071,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>3.0</version>
 					<configuration>
 						<source>1.6</source>
 						<target>1.6</target>
@@ -1156,7 +1163,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.1.1</version>
+					<version>2.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

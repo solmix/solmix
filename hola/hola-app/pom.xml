@@ -30,7 +30,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${project.basedir}/src/main/webapp/WEB-INF/resource/data</directory>
+							<directory>${project.basedir}/src/main/webapp/WEB-INF/resource</directory>
 							<includes>
 								<include>*</include>
 							</includes>
@@ -55,7 +55,7 @@
 									<artifactId>com.solmix.assemblies.launcher</artifactId>
 									<version>${project.version}</version>
 									<type>tar.gz</type>
-									<overWrite>true</overWrite>
+									<overWrite>false</overWrite>
 									<outputDirectory>${basedir}/src/main/webapp/WEB-INF/</outputDirectory>
 								</artifactItem>
 							</artifactItems>

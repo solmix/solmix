@@ -12,5 +12,6 @@
   <modules>
   	<module>hola-hbase</module>
   	<module>hbase</module>
+  	<module>ui</module>
   </modules>
 </project>

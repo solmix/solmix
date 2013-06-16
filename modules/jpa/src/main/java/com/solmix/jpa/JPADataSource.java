@@ -32,6 +32,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.solmix.api.data.DataSourceData;
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.datasource.DSResponse;
@@ -47,7 +50,6 @@ import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.rpc.RPCManagerCompletionCallback;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
-import org.slf4j.Logger;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.datasource.BasicDataSource;
@@ -224,7 +226,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     /** ID */
                     Entity e = entityClass.getAnnotation(Entity.class);
                     entity = e == null ? null : e.name();
-                    if (isNullOrEmpty(entity))
+                    if (DataUtil.isNullOrEmpty(entity))
                         entity = entityClass.getName().substring(entityClass.getName().lastIndexOf(".") + 1);
                 }
             }
@@ -432,7 +434,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         ToperationBinding __bind = null;
         try {
             __bind = req.getDataSource().getContext().getOperationBinding(req.getContext().getOperationType(),
-                req.getContext().getOperation());
+                req.getContext().getOperation().toString());
         } catch (NullPointerException e) {
         }
         if (!req.getContext().isPaged()

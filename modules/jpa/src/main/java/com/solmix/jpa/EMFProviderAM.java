@@ -24,6 +24,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**

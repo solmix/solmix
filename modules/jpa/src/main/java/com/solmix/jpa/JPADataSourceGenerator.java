@@ -38,13 +38,13 @@ import com.solmix.api.jaxb.ObjectFactory;
 import com.solmix.api.jaxb.TdataSource;
 import com.solmix.api.jaxb.Tfield;
 import com.solmix.api.jaxb.Tfields;
+import com.solmix.api.jaxb.Tvalue;
 import com.solmix.api.jaxb.TvalueMap;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.base.Reflection;
 import com.solmix.fmk.datasource.BasicDataSource;
-import com.solmix.fmk.util.OSGIHelper;
 
 /**
  * 
@@ -87,7 +87,7 @@ public class JPADataSourceGenerator implements DataSourceGenerator
       data.setID(ID);
       /**ServerType*/
       data.setServerType(EserverType.BASIC);
-      String core_version = OSGIHelper.getCM().getString("", "Default core generation");
+      String core_version ="Default core generation";
       /** generatedBy */
       data.getOtherAttributes().put(new QName("generatedBy"), core_version);
       data.getOtherAttributes().put(new QName("beanClassName"), entityClass.getName());
@@ -130,9 +130,11 @@ private List<Tfield> getEntityFields(Class<?> clz) throws Exception{
         for (Object i : constants)
         {
            String proName = i.toString();
-//           String value = DataUtil.deriveTileFromName(proName);
-           
-           valueMap.getValue().add(proName);
+           String value = DataUtil.deriveTileFromName(proName);
+           Tvalue tv = new Tvalue();
+           tv.setId(value);
+           tv.setName(proName);
+           valueMap.getValue().add(tv);
         }
      }else if (String.class.isAssignableFrom(type) || Character.class.isAssignableFrom(type) || "char".equals(typeName))
         fieldType = Efield.TEXT;

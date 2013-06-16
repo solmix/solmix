@@ -47,12 +47,12 @@ public class RequestFilterChain implements FilterChain
 
     private final RequestProcessor processor;
 
-    private Filter[] filters;
+    private final Filter[] filters;
 
     /** default log */
     private final Logger log = LoggerFactory.getLogger(MainServlet.class);
 
-    private int current;
+    private int current=-1;
 
     public RequestFilterChain(RequestProcessor processor, Filter[] filters)
     {
@@ -107,7 +107,8 @@ public class RequestFilterChain implements FilterChain
      * @param filter
      */
     private void trackFilter(ServletRequest request, Filter filter) {
-        log.debug("Calling filter: {0}", this.filters[this.current].getClass().getName());
+        if(log.isDebugEnabled())
+        log.debug(new StringBuilder().append("Calling filter:").append(this.filters[this.current].getClass().getName()).toString());
 
     }
 
