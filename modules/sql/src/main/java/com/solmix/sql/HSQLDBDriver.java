@@ -22,9 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.types.Texception;
@@ -39,7 +36,6 @@ import com.solmix.api.types.Tmodule;
 public class HSQLDBDriver extends SQLDriver
 {
 
-   private static final Logger log = LoggerFactory.getLogger(HSQLDBDriver.class.getName());
    boolean supportsSQLLimit;
 
    public HSQLDBDriver(String dbName, SQLTable table) throws SlxException

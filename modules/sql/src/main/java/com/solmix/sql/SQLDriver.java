@@ -65,7 +65,7 @@ import com.solmix.sql.internal.SQLConfigManager;
 public abstract class SQLDriver
 {
 
-    private static Logger log = LoggerFactory.getLogger(SQLDriver.class.getName());
+    protected static Logger log = LoggerFactory.getLogger(SQLDriver.class.getName());
 
     protected static Perl5Util globalPerl = new Perl5Util();
 

@@ -26,9 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.solmix.api.datasource.DSRequest;
 import com.solmix.api.exception.SlxException;
 import com.solmix.api.jaxb.Efield;
@@ -44,11 +41,10 @@ import com.solmix.sql.internal.SQLConfigManager;
  * @author solomon
  * @version 110035 2011-3-26
  */
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class OracleDriver extends SQLDriver
 {
 
-    private static Logger log = LoggerFactory.getLogger(SQLDriver.class.getName());
 
     boolean driverSupportsSQLLimit;
 
@@ -143,6 +139,7 @@ public class OracleDriver extends SQLDriver
     public Map fetchLastPrimaryKeys(Map primaryKeysPresent, List list, SQLDataSource ds, DSRequest req) throws SlxException {
         if (dbConnection == null && req == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, "no existing db connection exists for last row fetch");
+       
         Map primaryKeys = primaryKeysPresent;
         for (Object key : primaryKeys.keySet()) {
             String sequenceName = (String) key;
@@ -169,7 +166,7 @@ public class OracleDriver extends SQLDriver
             return null;
         String schema = "";
         if (ds != null) {
-            // schema = (String)ds.getContext().getTdataSource().getSchema();
+//             schema = (String)ds.getContext().getTdataSource().getSchema();
             if (schema == null)
                 schema = "";
             else

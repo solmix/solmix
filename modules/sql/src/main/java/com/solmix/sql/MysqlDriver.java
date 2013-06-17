@@ -37,6 +37,15 @@ import com.solmix.api.types.Tmodule;
 public class MysqlDriver extends SQLDriver
 {
 
+    public static MysqlDriver instance(String dbName, SQLTable table) throws SlxException {
+        return new MysqlDriver(dbName, table);
+    }
+
+    public static MysqlDriver instance(String dbName) throws SlxException {
+        return new MysqlDriver(dbName);
+    }
+
+    private final boolean supportsSQLLimit;
     /**
      * @param dbName
      * @throws SlxException
@@ -44,6 +53,18 @@ public class MysqlDriver extends SQLDriver
     public MysqlDriver(String dbName) throws SlxException
     {
         super(dbName);
+        supportsSQLLimit = true;
+    }
+
+    /**
+     * @param dbName
+     * @param table
+     * @throws SlxException 
+     */
+    public MysqlDriver(String dbName, SQLTable table) throws SlxException
+    {
+        super(dbName, table);
+        supportsSQLLimit = true;
     }
 
     /**
@@ -177,8 +198,7 @@ public class MysqlDriver extends SQLDriver
      */
     @Override
     public String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns, String orderClause) throws SlxException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, "Not supported");
     }
 
     /**
@@ -188,8 +208,7 @@ public class MysqlDriver extends SQLDriver
      */
     @Override
     public String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns) throws SlxException {
-        // TODO Auto-generated method stub
-        return null;
+         return (new StringBuilder()).append(query).append("limit").append(" "  ).append(startRow).append(", ").append(totalRows).toString();
     }
 
     /**
