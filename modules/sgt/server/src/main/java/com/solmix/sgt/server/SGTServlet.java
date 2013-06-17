@@ -114,7 +114,7 @@ public class SGTServlet  extends HttpServlet
     
     private void preLoading(){
         try {
-                    DataSource ds =SlxContext.getDataSourceManager().get("common/Init");
+                    DataSource ds =SlxContext.getDataSourceManager().get("init");
                     SlxContext.getDataSourceManager().free(ds);
               } catch (SlxException e) {
                     log.error("PreLoading failed:", e);
