@@ -40,8 +40,8 @@ import com.smartgwt.client.rpc.RPCRequest;
 import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.extensions.advanceds.client.Roperation;
+import com.smartgwt.extensions.advanceds.client.SlxRPC;
 import com.smartgwt.extensions.advanceds.client.SlxRPCCallBack;
-import com.smartgwt.extensions.advanceds.client.SlxRPCManager;
 import com.solmix.showcase.client.data.ClientCache;
 import com.solmix.showcase.client.tokens.NameTokens;
 import com.solmix.showcase.client.view.handler.MainUiHandlers;
@@ -142,10 +142,8 @@ public class MainPresenter extends Presenter<MainPresenter.MyView, MainPresenter
      * 
      */
     private void initServerData() {
-        Roperation oper = new Roperation();
-        oper.setDataSource("menu");
-        oper.setOperationType(DSOperationType.FETCH);
-        SlxRPCManager.send(oper, new SlxRPCCallBack() {
+        Roperation oper = new Roperation().ds("SYSINIT").type(DSOperationType.FETCH).id("getMenu");
+        SlxRPC.send(oper, new SlxRPCCallBack() {
 
             @Override
             public void execute(RPCResponse response, JavaScriptObject rawData, RPCRequest request) {

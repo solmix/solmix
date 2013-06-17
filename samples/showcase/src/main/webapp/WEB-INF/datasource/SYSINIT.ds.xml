@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:module xmlns:p="http://www.solmix.com/xmlns/datasource/v1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.solmix.com/xmlns/datasource/v1.0.1 http://www.solmix.com/xmlns/datasource/v1.0.1 ">
+  <p:DataSource ID="SYSINIT" serverType="sql" dbName="solmix">
+  	<p:operationBindings>
+  		<p:operationBinding operationType="fetch"
+  			operationId="getMenu">
+  			<p:queryClauses>
+  				<p:customSQL>select * from menu</p:customSQL>
+  			</p:queryClauses>
+
+  		</p:operationBinding>
+  	</p:operationBindings>
+  </p:DataSource>
+</p:module>
