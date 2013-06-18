@@ -142,11 +142,11 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String moduleAdmin();
 
   /**
-   * Translated "Basic &nbsp;App".
+   * Translated "Basic ".
    * 
-   * @return translated "Basic &nbsp;App"
+   * @return translated "Basic "
    */
-  @DefaultMessage("Basic &nbsp;App")
+  @DefaultMessage("Basic ")
   @Key("moduleBasic")
   String moduleBasic();
 

@@ -151,6 +151,9 @@ public class MainView extends ViewWithUiHandlers<MainUiHandlers> implements MyVi
         final ModuleButton module3 =createModuleButton(NameTokens.SandBox,Showcase.getMessages().moduleSandbox(),"modulebutton/sandbox/sandbox.png");
         container.addModuleButton(module3);
         
+        final ModuleButton monitor =createModuleButton(NameTokens.Monitor,Showcase.getMessages().moduleSandbox(),"modulebutton/sandbox/sandbox.png");
+        container.addModuleButton(monitor);
+        
         Label marg = new Label();
         marg.setStyleName("slx-MoudleContainer");
         marg.setWidth(30);

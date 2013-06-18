@@ -33,6 +33,7 @@ public interface NameTokens
     String ERROR_PAGE = "error";
     String ACTION = "action";
     String SandBox = "sandbox";
+    String Monitor="monitor";
     String Admin = "admin";
     String Basic = "basic";
     String MAIN="main";
