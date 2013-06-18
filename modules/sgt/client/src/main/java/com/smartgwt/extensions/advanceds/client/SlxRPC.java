@@ -29,6 +29,7 @@ import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.util.JSOHelper;
 import com.smartgwt.client.util.JSON;
+import com.smartgwt.client.util.SC;
 
 /**
  * 
@@ -55,8 +56,7 @@ public class SlxRPC
         f.setData(JSON.encode(request.getJsObj()));
         f.submit();
     }
-
-    public static void send(Roperation oper, final SlxRPCCallBack callback) {
+    public static void send(Roperation oper, final JSCallBack callback) {
         RPCRequest f = new RPCRequest();
         f.setUseSimpleHttp(true);
         String action = SLX_BIN_PREFIX + oper.getOperationType().getValue() + "/" + oper.getDataSource() + SLX_DS_SUFF;
@@ -79,10 +79,29 @@ public class SlxRPC
             }
 
         });
-
     }
+    public static void send(Roperation oper, final XMLCallBack callback) {
+        RPCRequest f = new RPCRequest();
+        f.setUseSimpleHttp(true);
+        String action = SLX_BIN_PREFIX + oper.getOperationType().getValue() + "/" + oper.getDataSource() + SLX_DS_SUFF;
+        f.setActionURL(action);
+        Request request = new Request(true);
+        request.setRoperations(oper);
+        f.setData(JSON.encode(request.getJsObj()));
+        RPCManager.sendRequest(f, new RPCCallback() {
 
-    public static void send(Roperation oper[], final SlxRPCCallBack callback) {
+            @Override
+            public void execute(RPCResponse response, Object rawData, RPCRequest request) {
+                if(rawData==null){
+                    SC.warn("Server return null Value,Please checkout!");
+                    return;
+                }
+               callback.execute(response,rawData.toString(),request);
+            }
+
+        });
+    }
+    public static void send(Roperation oper[],final JSCallBack callback) {
         if (oper == null || oper.length < 0)
             return;
         RPCRequest f = new RPCRequest();
@@ -108,17 +127,33 @@ public class SlxRPC
             }
 
         });
+    }
+    /**
+     * Used {@link #send(Roperation, JSCallBack)}.
+     * @param oper
+     * @param callback
+     */
+    @Deprecated
+    public static void send(Roperation oper, final SlxRPCCallBack callback) {
+       send(oper,(JSCallBack)callback);
 
+    }
+
+    /**
+     * Used {@link #send(Roperation[], JSCallBack)}.
+     * @param oper
+     * @param callback
+     */
+    @Deprecated
+    public static void send(Roperation oper[], final SlxRPCCallBack callback) {
+       
+        send(oper,(JSCallBack)callback);
     }
 
     public static void send(DSRequest dsRequest, Criteria criteria) {
         Roperation op = new Roperation();
         transform(dsRequest, criteria, op);
         send(op);
-    }
-
-    public static void send(DSRequest dsRequest, Criteria criteria, SlxRPCCallBack callback) {
-
     }
 
     @SuppressWarnings("unchecked")

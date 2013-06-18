@@ -19,18 +19,14 @@
 
 package com.smartgwt.extensions.advanceds.client;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.smartgwt.client.rpc.RPCRequest;
-import com.smartgwt.client.rpc.RPCResponse;
 
 /**
- * 
+ * Used {@link com.smartgwt.extensions.advanceds.client.JSCallBack}
  * @author Administrator
  * @version 110035 2013-1-27
  */
-
-public interface SlxRPCCallBack
+@Deprecated
+public interface SlxRPCCallBack extends JSCallBack
 {
 
-    void execute(RPCResponse response, JavaScriptObject rawData, RPCRequest request);
 }
