@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.solmix.sgt.client.Action;
@@ -51,6 +52,9 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
 
     public UrlClickEvent(String urlParams)
     {
+        if(tokenformatter==null){
+            tokenformatter= new ParameterTokenFormatter();
+        }
         PlaceRequest place = tokenformatter.toPlaceRequest(urlParams);
         action = place.getNameToken();
         parameters = new HashMap<String, String>();
