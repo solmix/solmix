@@ -26,7 +26,7 @@ import com.smartgwt.client.widgets.plugins.Flashlet;
 
 /**
  * 
- * @author ffz
+ * @author solmix.f@gmail.com
  * @version 110035 2012-12-6
  */
 
@@ -52,7 +52,7 @@ public class FusionChart extends Flashlet
 
         swfId = "fusionChartId_" + count;
         ++count;
-        setID(swfId);
+        setID("w_"+swfId);
         setName(swfId);
         setSrc(GWT.getModuleName()+"/fchart/" + src);
         setSize(width, height);
@@ -76,21 +76,25 @@ public class FusionChart extends Flashlet
         // setCanSelectText(true);
     }
 
-    @Override
-    public String getID() {
+    public String getSwfID() {
         return this.swfId;
     }
 
-    public native void setDataUrl(String chartId, String url) /*-{
+    public native void updateChartXML(String chartId, String xmlData) /*-{
 		try {
-			var chart = $wnd.FusionCharts(chartId);
-			if (chart.setDataURL != null)
-				chart.setDataURL(url)
+		var cid=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getSwfID()();
+	      $wnd.updateChartXML(cid,xmlData);
 		} catch (e) {
-			// ignore
+		$wnd.alert(e);
 		}
     }-*/;
 
+    /**
+     * This method only with fusionchart XT
+     * @param chartId
+     * @param width
+     * @param height
+     */
     public native void resizeActiveChart(String chartId, int width, int height) /*-{
 		try {
 			var chart = $wnd.FusionCharts(chartId);
@@ -102,6 +106,10 @@ public class FusionChart extends Flashlet
 		}
     }-*/;
 
+    /**
+     * This method only with fusionchart XT
+     * @param chartId
+     */
     public native void removeChart(String chartId) /*-{
 		try {
 			var chart = $wnd.FusionCharts(chartId);

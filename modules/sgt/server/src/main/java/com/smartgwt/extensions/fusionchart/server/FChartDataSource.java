@@ -36,10 +36,10 @@ import com.solmix.fmk.velocity.Velocity;
 
 /**
  * 
- * @author ffz
+ * @author solmix.f@gmail.com
  * @version 110035 2013-1-9
  */
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class FChartDataSource
 {
 
@@ -48,6 +48,7 @@ public final class FChartDataSource
 
     private static final Logger log =  LoggerFactory.getLogger(FChartDataSource.class.getName());
 
+  
     public DSResponse fetch(DSRequest req, DataSource ds) throws SlxException {
         ToperationBinding bind = ds.getContext().getOperationBinding(req);
         Tobject object = bind.getConfiguration();
@@ -55,6 +56,7 @@ public final class FChartDataSource
         System.out.println(map.keySet());
         DSResponse response = ds.execute(req);
         Map context = Velocity.getStandardContextMap(req);
+        context.putAll(map);
         context.put(Velocity.RESPONSE_DATA, response.getContext().getData());
         if (map.get(TEMPLATE_FILE) != null) {
             Object template = map.get(TEMPLATE_FILE);
