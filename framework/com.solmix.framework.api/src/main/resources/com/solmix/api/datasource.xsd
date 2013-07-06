@@ -39,8 +39,9 @@ descriptor.DataSource Configuration files using this schema must indicate
 			<xsd:group ref="Gs_with_operation"></xsd:group>
 
 			<xsd:element name="sqlPara" type="TsqlPara" minOccurs="0"></xsd:element>
-            <xsd:group ref="Gs_extention"></xsd:group>
-        </xsd:sequence>
+			<xsd:group ref="Gs_extention"></xsd:group>
+			
+		</xsd:sequence>
 		<xsd:attributeGroup ref="Aidentity"></xsd:attributeGroup>
 		<xsd:attributeGroup ref="Aso_datasource"></xsd:attributeGroup>
 		<xsd:attributeGroup ref="Atitle"></xsd:attributeGroup>

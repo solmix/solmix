@@ -309,11 +309,11 @@ public class XMLUtil {
 		try {
 			doc = getTempDocument();
 			element = doc.createElement(key);
-			if (value instanceof Map || value instanceof List) {
-				Element ele = _build(element, value, mapAsAttribute);
-				if (ele != null)
-					element.appendChild(ele);
-			} else {
+			if (value instanceof Map ) {
+			    _buildMap(element, (Map)value, mapAsAttribute);
+			} else if(value instanceof List){
+			    _buildList(element,(List)value,mapAsAttribute);
+			}else {
 				element.setTextContent(value.toString());
 			}
 		} catch (ParserConfigurationException e) {
@@ -323,47 +323,59 @@ public class XMLUtil {
 		return element;
 	}
 
-	public static Element toElement(String key, Object value) throws SlxException {
+	/**
+     * @param element
+     * @param value
+     * @param mapAsAttribute
+	 * @throws ParserConfigurationException 
+     */
+    private static void _buildList(Element element, List value, boolean mapAsAttribute) throws ParserConfigurationException {
+        for (Object _v : value) {
+            
+            if (_v instanceof Map ) {
+                _buildMap(element,(Map) _v, mapAsAttribute);
+            } else if(_v instanceof List){
+                _buildList(element, (List)_v, mapAsAttribute);
+            }else {
+                  Document doc = getTempDocument();
+                  Element child = doc.createElement(autoBuildTags(element.getNodeName()));
+                  child.setTextContent(_v.toString());
+                  element.appendChild(child);
+            }
+
+      }
+        
+    }
+
+    public static Element toElement(String key, Object value) throws SlxException {
 		return toElement(key, value, false);
 	}
 
-	private static Element _build(Element element, Object value, boolean mapAsAttribute)
-			throws ParserConfigurationException {
-		if (value instanceof Map) {
-			Map mvalue = (Map) value;
-			for (Object _key : mvalue.keySet()) {
-				Document doc = getTempDocument();
-				Element child = doc.createElement(_key.toString());
-				Object _value = mvalue.get(_key);
-				if (_value instanceof Map || _value instanceof List) {
-					Element ele = _build(child, _value, mapAsAttribute);
-					if (ele != null)
-						element.appendChild(ele);
-				} else {
-					if (mapAsAttribute)
-						child.setAttribute((String) _key, _value.toString());
-					else
-						child.setTextContent(_value.toString());
-					element.appendChild(child);
-				}
-				return null;
-			}
-		} else if (value instanceof List) {
-			List lvalue = (List) value;
-			for (Object _v : lvalue) {
-				Document doc = getTempDocument();
-				Element child = doc.createElement(element.getNodeName());
-				if (_v instanceof Map || _v instanceof List) {
-					_build(child, _v, mapAsAttribute);
-				} else {
-					child.setTextContent(_v.toString());
-					element.appendChild(child);
-				}
-
-			}
-			return element;
-		}
-		return null;
+	
+	private static void _buildMap(Element element, Map mvalue, boolean mapAsAttribute) throws ParserConfigurationException{
+          for (Object _key : mvalue.keySet()) {
+                Document doc = getTempDocument();
+                Element child = doc.createElement(_key.toString());
+                Object _value = mvalue.get(_key);
+                if (_value instanceof Map ) {
+                      _buildMap(child, (Map)_value, mapAsAttribute);
+                }else if(_value instanceof List){ 
+                    _buildList(child, (List)_value, mapAsAttribute);
+                }else {
+                      if (mapAsAttribute)
+                            child.setAttribute((String) _key, _value.toString());
+                      else
+                            child.setTextContent(_value.toString());
+                      element.appendChild(child);
+                }
+          }
+	    
+	}
+	private static String autoBuildTags(String parent){
+	    if(parent.endsWith("s")||parent.endsWith("S")){
+	        parent.subSequence(0, parent.length()-1);
+	    }
+	    return parent;
 	}
 
 	private static Document getTempDocument() throws ParserConfigurationException {
