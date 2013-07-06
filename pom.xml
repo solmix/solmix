@@ -33,9 +33,8 @@
 		<!-- <module>cms</module> -->
 		<module>modules</module>
 		<module>tooling</module>
-		<module>assemblies</module>
-		<module>ui</module>
-		<module>samples</module>
+		<!-- <module>assemblies</module>
+		<module>samples</module> -->
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
