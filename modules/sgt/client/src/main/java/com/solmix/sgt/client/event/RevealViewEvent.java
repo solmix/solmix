@@ -110,4 +110,11 @@ public class RevealViewEvent extends GwtEvent<RevealViewHandler>
     	assert preq!=null;
     	return preq.getParameterNames();
     }
+
+    /**
+     * @return
+     */
+    public Object getNameToken() {
+        return preq.getNameToken();
+    }
 }
