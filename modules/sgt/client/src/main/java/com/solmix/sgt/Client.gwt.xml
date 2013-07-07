@@ -7,7 +7,6 @@
     <inherits name="org.atmosphere.gwt.Client"/>
     <inherits name="com.smartgwt.extensions.pagebar.PageBar" />
  	<inherits name="com.smartgwt.extensions.advanceds.AdvanceDS" />
- 	<inherits name="com.smartgwt.extensions.fusionchart.FusionChart" />
 	<inherits name="com.gwtplatform.mvp.Mvp" />
 	<inherits name="com.google.gwt.inject.Inject" />
 	<script src="sc/extensions/AdvanceDataSource.js"/>

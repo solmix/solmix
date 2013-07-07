@@ -80,7 +80,7 @@ public class FusionChart extends Flashlet
         return this.swfId;
     }
 
-    public native void updateChartXML(String chartId, String xmlData) /*-{
+    public native void updateChartXML(String xmlData) /*-{
 		try {
 		var chartid=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getSwfID()();
 	      $wnd.updateChartXML(chartid,xmlData);
@@ -89,35 +89,4 @@ public class FusionChart extends Flashlet
 		}
     }-*/;
 
-    /**
-     * This method only with fusionchart XT
-     * @param chartId
-     * @param width
-     * @param height
-     */
-    public native void resizeActiveChart(String chartId, int width, int height) /*-{
-		try {
-			var chart = $wnd.FusionCharts(chartId);
-			// resizeTo() does not exist in FusionCharts free version
-			if (chart.resizeTo != null)
-				chart.resizeTo(width, height);
-		} catch (e) {
-			// ignore
-		}
-    }-*/;
-
-    /**
-     * This method only with fusionchart XT
-     * @param chartId
-     */
-    public native void removeChart(String chartId) /*-{
-		try {
-			var chart = $wnd.FusionCharts(chartId);
-			// dispose() does not exist in FusionCharts free version
-			if (chart.dispose != null)
-				chart.dispose();
-		} catch (e) {
-			// ignore
-		}
-    }-*/;
 }
