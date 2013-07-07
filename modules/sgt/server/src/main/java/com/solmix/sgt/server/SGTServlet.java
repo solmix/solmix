@@ -99,6 +99,7 @@ public class SGTServlet  extends HttpServlet
                 cometServlet.init(getServletConfig());
             }
             try {
+                response.setCharacterEncoding("GBK");
                 cometServlet.service(request, response);
             } catch (Exception e) {
                 e.printStackTrace();

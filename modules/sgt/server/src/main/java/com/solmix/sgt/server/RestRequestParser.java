@@ -105,7 +105,6 @@ public class RestRequestParser implements HttpServletRequestParser
                 String queryStr = request.getParameter("_transaction");
                 if (queryStr == null) {
                     IOUtil.copyCharacterStreams(request.getReader(), out);
-                    System.out.println(out.toString() + request.getCharacterEncoding());
                     queryStr = out.toString();
                 }
                 if (queryStr == null || queryStr.length() == 0) {
@@ -121,6 +120,9 @@ public class RestRequestParser implements HttpServletRequestParser
                             for (Roperation operation : operations) {
                                 ConfigBean cf = getDataSourceFromURL(request);
                                 if (operation.getOperationId() == null) {
+                                    if(operation.getDataSource()!=null&&operation.getOperationType()!=null)
+                                        operation.setOperationId(operation.getDataSource()+"_"+operation.getOperationType());
+                                    else
                                     operation.setOperationId(cf.getDataSourceName() + "_" + cf.getOperationType());
                                 }
                                 if (operation.getDataSource() == null)

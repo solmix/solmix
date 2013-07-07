@@ -11,7 +11,8 @@
 		<dependency>
 			<groupId>com.solmix.framework</groupId>
 			<artifactId>com.solmix.framework.datasource</artifactId>
-  	</dependency>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
@@ -20,6 +21,7 @@
 		<dependency>
 			<groupId>com.solmix.modules</groupId>
 			<artifactId>com.solmix.modules.spring</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.solmix.modules.sgt</groupId>

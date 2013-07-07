@@ -62,6 +62,10 @@ public class RevealViewEvent extends GwtEvent<RevealViewHandler>
     public com.google.gwt.event.shared.GwtEvent.Type<RevealViewHandler> getAssociatedType() {
         return getType();
     }
+    public String getNameToken(){
+        assert preq != null;
+        return preq.getNameToken();
+    }
 
 	public String getAction() {
 		assert preq != null;
@@ -109,12 +113,5 @@ public class RevealViewEvent extends GwtEvent<RevealViewHandler>
     public Set<String> getParameterNames() {
     	assert preq!=null;
     	return preq.getParameterNames();
-    }
-
-    /**
-     * @return
-     */
-    public Object getNameToken() {
-        return preq.getNameToken();
     }
 }

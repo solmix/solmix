@@ -82,8 +82,8 @@ public class FusionChart extends Flashlet
 
     public native void updateChartXML(String chartId, String xmlData) /*-{
 		try {
-		var cid=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getSwfID()();
-	      $wnd.updateChartXML(cid,xmlData);
+		var chartid=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getSwfID()();
+	      $wnd.updateChartXML(chartid,xmlData);
 		} catch (e) {
 		$wnd.alert(e);
 		}
