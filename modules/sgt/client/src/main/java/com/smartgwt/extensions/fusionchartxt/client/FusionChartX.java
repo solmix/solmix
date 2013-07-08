@@ -19,10 +19,10 @@
 
 package com.smartgwt.extensions.fusionchartxt.client;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
-import com.smartgwt.client.widgets.plugins.Flashlet;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
+import com.smartgwt.client.widgets.Canvas;
 
 /**
  * 
@@ -30,94 +30,138 @@ import com.smartgwt.client.widgets.plugins.Flashlet;
  * @version 110035 2012-12-6
  */
 
-public class FusionChartX extends Flashlet
+public class FusionChartX extends Canvas
 {
+    
+   
 
     private static int count = 0;
 
-    private final String swfId;
+    private  String swfId="fcxId_0";
+    private String renderId="chartContainer_0";
+    private static String chartRoot;
 
-    public FusionChartX(String src, int width, int height, String dataUrl)
-    {
-        this(src, width + "", height + "", dataUrl);
-    }
-
-    public FusionChartX(String src, String width, String height, String dataUrl)
-    {
-        super();
-
-        setCodeBase("http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0");
-        setClassID("clsid:d27cdb6e-ae6d-11cf-96b8-444553540000");
-        setPluginsPage("http://www.macromedia.com/go/getflashplayer");
-
-        swfId = "fusionChartId_" + count;
+    public FusionChartX() {
+        swfId = "fcxId_" + count;
+        renderId="slx_chartC_"+count;
+        setID(renderId);
         ++count;
-        setID("w_"+swfId);
-        setName(swfId);
-        setSrc(GWT.getModuleName()+"/xchart/" + src);
-        setSize(width, height);
-
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-
-        hashMap.put("id", swfId);
-        hashMap.put("flashvars", "&id=" + swfId + "&chartWidth=" + width + "&chartHeight=" + height + "&registerWithJS=1" + "&debugMode=0"
-            + "&dataURL=data/bin/fetch/" + dataUrl);
-
-        hashMap.put("allowscriptaccess", "always");
-        hashMap.put("bgcolor", "#ffffff");
-        hashMap.put("quality", "high");
-
-        // If you embed the chart into your web page, and the page has layers such as drop-down menus or
-        // drop-down forms, and you want them appear above the chart, you need to add the following line
-        // to your code.
-        // hashMap.put("wmode", "opaque" );
-
-        setParams(hashMap);
-        // setCanSelectText(true);
+        setRedrawOnResize(false);
+        setWidth100();
+        setHeight100();
+    }
+    public String getChartId(){
+        return swfId;
     }
 
-    public String getSwfID() {
-        return this.swfId;
+    public String getRenderId(){
+        return renderId;
+    }
+    public String getChartRoot(){
+        if(chartRoot==null)
+            chartRoot=GWT.getModuleName()+"/xchart/";
+      return chartRoot ;
+    }
+    
+    
+    /**
+     * @return the canUpdate
+     */
+    public boolean isCanUpdate() {
+        
+        Element container=DOM.getElementById(renderId);
+        boolean disposed=container==null?false:true;
+        if(!disposed)
+            removeChart();
+        return disposed;
+    }
+    
+  
+   @Override
+    public String getInnerHTML() {
+       
+        return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
+        		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
     }
 
-    public native void updateChartXML(String xmlData) /*-{
-		try {
-		var chartid=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getSwfID()();
-	      $wnd.updateChartXML(chartid,xmlData);
-		} catch (e) {
-		$wnd.alert(e);
-		}
+    public native void getFusionChart(String data, String chartType, int width, int height) /*-{
+        var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+        var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
+        var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
+        var chartPath=chartRoot+chartType+".swf";
+        try {
+           var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
+           if (chart.setXMLData != null ) chart.setXMLData(data);
+           else chart.setDataXML(data);
+           chart.render(renderId);
+         } catch (e) {
+        }  
     }-*/;
+    public native void getFusionChart(String data, String chartType, String width, String height) /*-{
+        var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+        var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
+        var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
+        var chartPath=chartRoot+chartType+".swf";
+        try {
+            var chart = new $wnd.FusionCharts(chartPath, chartId, width, height,"0","1");
+            if (chart.setXMLData != null ) chart.setXMLData(data);
+            else chart.setDataXML(data);
+            chart.render(renderId);
+          } catch (e) {
+        }  
+    }-*/;
+    public void resizeContainerAndActiveChart(String chartId, int width, int height) {
+        setWidth(width);
+      setHeight(height);
+      resizeActiveChart( width, height);
+  }
+    public void resizeActiveChart(){
+        resizeActiveChart(this.getInnerWidth(),this.getInnerHeight());
+    }
 
+  public native void resizeActiveChart(int width, int height) /*-{
+        try {
+        var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+        var chart = $wnd.FusionCharts(chartId);
+        // resizeTo() does not exist in FusionCharts free version
+        if (chart.resizeTo != null) chart.resizeTo(width, height);
+  } catch (e) {
+              // ignore
+        }     
+  }-*/;
+    
     /**
-     * This method only with fusionchart XT
+     * Remove a chart instance from page and memory
      * @param chartId
-     * @param width
-     * @param height
      */
-    public native void resizeActiveChart(String chartId, int width, int height) /*-{
-		try {
-			var chart = $wnd.FusionCharts(chartId);
-			// resizeTo() does not exist in FusionCharts free version
-			if (chart.resizeTo != null)
-				chart.resizeTo(width, height);
-		} catch (e) {
-			// ignore
-		}
+    public native void removeChart() /*-{
+          try {
+          var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+          var chart = $wnd.FusionCharts(chartId);
+          // dispose() does not exist in FusionCharts free version
+          if (chart.dispose != null) chart.dispose();
+          } catch (e) {
+                // ignore
+          }
     }-*/;
+    public void getFusionChart(String data, String chartType) {
+        getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
+  }
+    public void getFusionMap(String data, String chartType) {
+        getFusionMap(data, chartType, getInnerWidth(), getInnerHeight());
+  }
 
-    /**
-     * This method only with fusionchart XT
-     * @param chartId
-     */
-    public native void removeChart(String chartId) /*-{
-		try {
-			var chart = $wnd.FusionCharts(chartId);
-			// dispose() does not exist in FusionCharts free version
-			if (chart.dispose != null)
-				chart.dispose();
-		} catch (e) {
-			// ignore
-		}
-    }-*/;
+public native void getFusionMap(String data, String chartType, int width, int height) /*-{
+  if ($wnd.FusionCharts.setCurrentRenderer != null) {
+        $wnd.FusionCharts.setCurrentRenderer('javascript');
+         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+        var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
+        var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
+        var chartPath=chartRoot+chartType+".swf";
+        var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
+              chart.setXMLData(data);
+              chart.render(renderId);
+  }
+  }-*/;
+
 }

@@ -40,7 +40,7 @@ infosoftglobal.FusionCharts = function(swf, id, w, h, debugMode, registerWithJS,
 	
 	//Set Quality	
 	this.addParam('quality', 'high');
-	
+	this.addParam('WMode', 'Opaque');
 	//Add scripting access parameter
 	this.addParam('allowScriptAccess', 'always');
 	

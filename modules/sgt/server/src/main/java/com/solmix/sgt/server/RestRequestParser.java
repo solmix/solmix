@@ -82,7 +82,6 @@ public class RestRequestParser implements HttpServletRequestParser
         HttpServletRequest request = webContext.getRequest();
         String viewType = request.getParameter("viewType");
 
-        String encode = request.getCharacterEncoding();
         if ("fchart".equals(viewType)) {
             ConfigBean cf = getDataSourceFromURL(request);
             DSRequest dsrequest = SlxContext.getDataSourceManager().createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
@@ -90,8 +89,11 @@ public class RestRequestParser implements HttpServletRequestParser
                 dsrequest.getContext().setOperation(cf.getDataSourceName() + "_" + cf.getOperationType());
             else
                 dsrequest.getContext().setOperation(cf.getOperationId());
-            if (cf.getCriteria() != null && cf.getCriteria().size() > 0)
-                dsrequest.getContext().setCriteria(cf.getCriteria());
+            Map<String,String> criteria=cf.getCriteria();
+            if(criteria==null)
+                criteria= new HashMap<String,String>();
+            criteria.put("characterEncoding", "GBK");
+            dsrequest.getContext().setCriteria(criteria);
             if (cf.getValues() != null && cf.getValues().size() > 0)
                 dsrequest.getContext().setValues(cf.getValues());
             dsrequest.getContext().setIsClientRequest(true);
@@ -195,6 +197,8 @@ public class RestRequestParser implements HttpServletRequestParser
                 bean.getCriteria().put(key.substring(ConfigBean.CRITERIA_PREFIX.length() - 1, key.length()), request.getParameter(key).toString());
             else if (key.startsWith(ConfigBean.VALUES_PREFIX))
                 bean.getValues().put(key.substring(ConfigBean.VALUES_PREFIX.length() - 1, key.length()), request.getParameter(key).toString());
+            else
+                bean.getCriteria().put(key, request.getParameter(key).toString());
         }
     }
 

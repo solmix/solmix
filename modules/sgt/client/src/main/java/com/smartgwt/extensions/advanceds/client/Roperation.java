@@ -20,6 +20,17 @@ public class Roperation extends DataClass
 
     }
 
+
+
+    public Roperation (String dataSource,DSOperationType operationType,Object operationId) {
+        setDataSource(dataSource);
+        setOperationType(operationType);
+        setOperationId(operationId);
+    }
+    public Roperation (String dataSource,DSOperationType operationType) {
+        setDataSource(dataSource);
+        setOperationType(operationType);
+    }
     public Roperation ds(String dataSource) {
         setDataSource(dataSource);
         return this;

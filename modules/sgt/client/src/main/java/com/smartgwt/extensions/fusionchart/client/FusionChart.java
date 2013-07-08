@@ -19,10 +19,10 @@
 
 package com.smartgwt.extensions.fusionchart.client;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
-import com.smartgwt.client.widgets.plugins.Flashlet;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
+import com.smartgwt.client.widgets.Canvas;
 
 /**
  * 
@@ -30,63 +30,89 @@ import com.smartgwt.client.widgets.plugins.Flashlet;
  * @version 110035 2012-12-6
  */
 
-public class FusionChart extends Flashlet
+public class FusionChart extends Canvas
 {
+    
+   
 
     private static int count = 0;
 
-    private final String swfId;
+    private  String swfId="fcId_0";
+    private String renderId="slx_fC_0";
+    private static String chartRoot;
 
-    public FusionChart(String src, int width, int height, String dataUrl)
-    {
-        this(src, width + "", height + "", dataUrl);
-    }
-
-    public FusionChart(String src, String width, String height, String dataUrl)
-    {
-        super();
-
-        setCodeBase("http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0");
-        setClassID("clsid:d27cdb6e-ae6d-11cf-96b8-444553540000");
-        setPluginsPage("http://www.macromedia.com/go/getflashplayer");
-
-        swfId = "fusionChartId_" + count;
+    public FusionChart() {
+        swfId = "fcId_" + count;
+        renderId="slx_fC_"+count;
+        setID(renderId);
         ++count;
-        setID("w_"+swfId);
-        setName(swfId);
-        setSrc(GWT.getModuleName()+"/fchart/" + src);
-        setSize(width, height);
-
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-
-        hashMap.put("id", swfId);
-        hashMap.put("flashvars", "&id=" + swfId + "&chartWidth=" + width + "&chartHeight=" + height + "&registerWithJS=1" + "&debugMode=0"
-            + "&dataURL=data/bin/fetch/" + dataUrl);
-
-        hashMap.put("allowscriptaccess", "always");
-        hashMap.put("bgcolor", "#ffffff");
-        hashMap.put("quality", "high");
-
-        // If you embed the chart into your web page, and the page has layers such as drop-down menus or
-        // drop-down forms, and you want them appear above the chart, you need to add the following line
-        // to your code.
-        // hashMap.put("wmode", "opaque" );
-
-        setParams(hashMap);
-        // setCanSelectText(true);
+        setRedrawOnResize(false);
+        setWidth100();
+        setHeight100();
+    }
+    public String getChartId(){
+        return swfId;
     }
 
-    public String getSwfID() {
-        return this.swfId;
+    public String getRenderId(){
+        return renderId;
     }
+    public String getChartRoot(){
+        if(chartRoot==null)
+            chartRoot=GWT.getModuleName()+"/fchart/";
+      return chartRoot ;
+    }
+    
+    
+    /**
+     * @return the canUpdate
+     */
+    public boolean isCanUpdate() {
+        
+        Element container=DOM.getElementById(renderId);
+        boolean disposed=container==null?false:true;
+        return disposed;
+    }
+    
+  
+   @Override
+    public String getInnerHTML() {
+       
+	   return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
+       		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
+	   }
 
-    public native void updateChartXML(String xmlData) /*-{
-		try {
-		var chartid=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getSwfID()();
-	      $wnd.updateChartXML(chartid,xmlData);
-		} catch (e) {
-		$wnd.alert(e);
-		}
+    public native void getFusionChart(String data, String chartType, int width, int height) /*-{
+        var chartId=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getChartId()();
+        var renderId=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getRenderId()();
+        var chartRoot=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getChartRoot()();
+        var chartPath=chartRoot+chartType+".swf";
+        try {
+           var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
+           if (chart.setXMLData != null )
+            chart.setXMLData(data);
+           else chart.setDataXML(data);
+           chart.render(renderId);
+         } catch (e) {
+        }  
     }-*/;
+    public native void getFusionChart(String data, String chartType, String width, String height) /*-{
+        var chartId=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getChartId()();
+        var renderId=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getRenderId()();
+        var chartRoot=this.@com.smartgwt.extensions.fusionchart.client.FusionChart::getChartRoot()();
+        var chartPath=chartRoot+chartType+".swf";
+        try {
+            var chart = new $wnd.FusionCharts(chartPath, chartId, width, height,"0","1");
+            if (chart.setXMLData != null ) chart.setXMLData(data);
+            else chart.setDataXML(data);
+            chart.render(renderId);
+          } catch (e) {
+        }  
+    }-*/;
+    
+    public void getFusionChart(String data, String chartType) {
+        getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
+  }
+  
 
 }

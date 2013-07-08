@@ -45,17 +45,19 @@ public class FChartResponse implements DSResponse, HasRPCHandler
 {
 
     private final DSResponse resp;
+    private final String characterEncoding;
 
-    public FChartResponse(DSResponse response)
+    public FChartResponse(DSResponse response,String characterEncoding)
     {
         this.resp = response;
+        this.characterEncoding=characterEncoding;
     }
 
     @Override
     public void handler(RPCManager rpc, DSRequest req, DSResponse resp) throws SlxException {
         WebContext ctx = rpc.getRequestContext();
         String orgEncode = ctx.getResponse().getCharacterEncoding();
-        ctx.getResponse().setCharacterEncoding("GBK");
+        ctx.getResponse().setCharacterEncoding(characterEncoding);
         Writer _out = ctx.getOut();
 
         try {

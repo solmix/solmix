@@ -51,9 +51,13 @@ public final class FChartDataSource
   
     public DSResponse fetch(DSRequest req, DataSource ds) throws SlxException {
         ToperationBinding bind = ds.getContext().getOperationBinding(req);
+        Map<String,Object> critera=req.getContext().getCriteria();
+        String characterEncoding="UTF-8";
+        if(critera!=null&&critera.get("characterEncoding")!=null){
+            characterEncoding=critera.get("characterEncoding").toString();
+        }
         Tobject object = bind.getConfiguration();
         Map<String, Object> map = XMLUtil.toMap(object);
-        System.out.println(map.keySet());
         DSResponse response = ds.execute(req);
         Map context = Velocity.getStandardContextMap(req);
         context.putAll(map);
@@ -76,7 +80,7 @@ public final class FChartDataSource
                 response.getContext().setData(returnValue);
         }
 
-        return new FChartResponse(response);
+        return new FChartResponse(response,characterEncoding);
 
     }
 
