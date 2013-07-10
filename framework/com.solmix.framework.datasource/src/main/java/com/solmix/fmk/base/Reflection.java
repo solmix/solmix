@@ -99,9 +99,9 @@ public class Reflection
         }
     }
 
-    private static Logger log = LoggerFactory.getLogger(Reflection.class.getName());
+    private static Logger log = LoggerFactory.getLogger(Reflection.class);
 
-    private static Map reflectionCache = new ConcurrentHashMap();
+    private static Map<String,Object> reflectionCache = new ConcurrentHashMap<String,Object>();
 
     public static Throwable getRealTargetException(Throwable ite) {
         if (ite instanceof InvocationTargetException)
@@ -209,10 +209,10 @@ public class Reflection
         return findMethod(instance.getClass().getName(), methodName, new Class[0]);
     }
 
-    public static Method findMethod(String className, String methodName, Class methodArgs[]) throws Exception {
-        Map classCache = getClassCache(className);
+    public static Method findMethod(String className, String methodName, Class<?> methodArgs[]) throws Exception {
+        Map<String,Object> classCache = getClassCache(className);
         Class<?> classObject = (Class<?>) classCache.get("ClassObject");
-        Map methodCache = (Map) classCache.get("methods");
+        Map<?,?> methodCache = (Map<?,?>) classCache.get("methods");
         Method directLookup = null;
         try {
             directLookup = classObject.getMethod(methodName, methodArgs);
@@ -228,7 +228,7 @@ public class Reflection
         if (value instanceof Method)
             return (Method) value;
         if (value instanceof Map) {
-            Object argValue = ((Map) value).get(new Integer(methodArgs.length));
+            Object argValue = ((Map<?,?>) value).get(new Integer(methodArgs.length));
             if (argValue == null) {
                 String message = (new StringBuilder()).append("Method ").append(methodName).append(" exists on ").append(className).append(
                     " but with a different number of parameters - you passed in ").append(methodArgs.length).toString();
@@ -252,51 +252,50 @@ public class Reflection
         }
     }
 
-    private static Map getClassCache(String className) throws Exception {
-        Map classCache = (Map) reflectionCache.get(className);
+    private static Map<String,Object> getClassCache(String className) throws Exception {
+        Map<String,Object> classCache = (Map<String,Object>) reflectionCache.get(className);
         if (classCache == null)
             classCache = populateClassCache(className);
         return classCache;
     }
 
-    private static Map populateClassCache(String className) throws Exception {
-        Map classCache = new HashMap();
-        reflectionCache.put(className, classCache);
+    private static Map<String,Object> populateClassCache(String className) throws Exception {
+        Map<String,Object> classCache = new HashMap<String,Object>();
         Class<?> classObject = classForName(className);
         classCache.put("ClassObject", classObject);
-        Map methodCache = new HashMap();
+        Map<String,Object> methodCache = new HashMap<String,Object>();
         classCache.put("methods", methodCache);
         Method classMethods[] = classObject.getMethods();
         for (int ii = 0; ii < classMethods.length; ii++) {
             Method method = classMethods[ii];
             addMethodToCache(method, methodCache);
         }
-
+        reflectionCache.put(className, classCache);
         return classCache;
     }
 
-    private static void addMethodToCache(Method method, Map methodCache) throws Exception {
+    private static void addMethodToCache(Method method, Map<String,Object> methodCache) throws Exception {
         String methodName = method.getName();
         Object value = methodCache.get(methodName);
         if (value == null)
             methodCache.put(methodName, method);
         else if (value instanceof Method) {
-            Map argCache = new HashMap();
+            Map<String,Object> argCache = new HashMap<String,Object>();
             methodCache.put(methodName, argCache);
             addMethodToCache((Method) value, methodCache);
             addMethodToCache(method, methodCache);
         } else if (value instanceof Map) {
-            Map argCache = (Map) value;
+            Map<Object,Object> argCache = (Map<Object,Object>) value;
             Integer numArgs = new Integer(method.getParameterTypes().length);
             Object argValue = argCache.get(numArgs);
             if (argValue == null)
                 argCache.put(numArgs, method);
             else if (argValue instanceof Method) {
-                List argList = new ArrayList();
+                List<Object> argList = new ArrayList<Object>();
                 argList.add(method);
                 argList.add(argValue);
             } else if (argValue instanceof List)
-                ((List) argValue).add(method);
+                ((List<Object>) argValue).add(method);
         }
     }
 
@@ -356,7 +355,7 @@ public class Reflection
         // ClassLoader localLoader =Reflection.class.getClassLoader();
         // ClassLoader threadLoader =Thread.currentThread().getContextClassLoader();
         // Thread.currentThread().setContextClassLoader(localLoader);
-        List methodArgs = new ArrayList();
+        List<Object> methodArgs = new ArrayList<Object>();
         if (optionalArgs == null)
             optionalArgs = new ReflectionArgument[0];
         if (requiredArgs == null)
@@ -529,6 +528,7 @@ public class Reflection
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("rawtypes")
     public static Object adaptValue(Class<?> targetType, GenericParameterNode targetGenericInfo, ReflectionArgument arg,
         ReflectionArgument optionalArgs[], DataSource dataSource, Class<?> javaClass, Class<?> javaCollectionClass, Class<?> javaKeyClass)
         throws Exception {
@@ -541,8 +541,9 @@ public class Reflection
         targetTypeName = targetType.getName();
         if (argType == null && argValue == null)
             return null;
-//        log.debug((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
+        log.debug((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
         // If the target type is a collection class type.
+        // && !IDoNotAdapt.class.isAssignableFrom(targetType)
         if ((Collection.class.isAssignableFrom(targetType) || Map.class.isAssignableFrom(targetType))) {
             if (optionalArgs != null) {
                 for (int i = 0; i < optionalArgs.length; i++) {
@@ -573,7 +574,7 @@ public class Reflection
             } else {
                 newArgValue = targetType.newInstance();
             }
-            Iterator i = null;
+            Iterator<Object> i = null;
             Object key = null;
             Class<?> keyClass = Object.class;
             Class<?> valueClass = null;
@@ -802,7 +803,7 @@ public class Reflection
             return null;
         String result = (new StringBuilder()).append(method.getReturnType().getName()).append(" ").append(method.getDeclaringClass().getName()).append(
             ".").append(method.getName()).append("(").toString();
-        Class paramTypes[] = method.getParameterTypes();
+        Class<?> paramTypes[] = method.getParameterTypes();
         for (int ii = 0; ii < paramTypes.length; ii++) {
             result = (new StringBuilder()).append(result).append(paramTypes[ii].getName()).toString();
             if (ii + 1 < paramTypes.length)
@@ -810,7 +811,7 @@ public class Reflection
         }
 
         result = (new StringBuilder()).append(result).append(")").toString();
-        Class exceptionTypes[] = method.getExceptionTypes();
+        Class<?> exceptionTypes[] = method.getExceptionTypes();
         if (exceptionTypes.length > 0) {
             result = (new StringBuilder()).append(result).append(" throws ").toString();
             for (int ii = 0; ii < exceptionTypes.length; ii++) {
