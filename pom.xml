@@ -94,7 +94,7 @@
 		<!-- <karaf.debug.location>E:\workspace\solmix\spring_solmix\WebRoot\WEB-INF\lib</karaf.debug.location> -->
 		<!-- <karaf.debug.location>/home/solmix/karaf</karaf.debug.location> -->
 		<!-- <karaf.debug.location>E:\karaf</karaf.debug.location> -->
-		<karaf.debug.location>/home/solmix/o/git/solmix/hola/hola-app/src/main/webapp/WEB-INF/resource/</karaf.debug.location>
+		<karaf.debug.location>/home/solmix/t/karaf-3.0</karaf.debug.location>
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
@@ -770,11 +770,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.modules</groupId>
-				<artifactId>com.solmix.modules.sql</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.solmix.framework</groupId>
 				<artifactId>com.solmix.framework.util</artifactId>
 				<version>${project.version}</version>
@@ -1216,7 +1211,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${karaf.debug.location}\deploy</directory>
+							<directory>${karaf.debug.location}/deploy</directory>
 							<includes>
 								<include>${project.artifactId}-${project.version}.jar</include>
 							</includes>
