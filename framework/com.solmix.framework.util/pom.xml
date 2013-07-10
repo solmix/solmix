@@ -36,16 +36,6 @@
 			<artifactId>org.osgi.compendium</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		 <dependency>
-			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint.api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint.core</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		<!--=== end ================
 		provied by osgi services-->
 		<dependency> 
@@ -82,10 +72,10 @@
 			<artifactId>commons-collections</artifactId>
 		</dependency>
 		<!-- ===========end ============-->
-		 <dependency>
-			<groupId>org.apache.aries.jndi</groupId>
-			<artifactId>org.apache.aries.jndi</artifactId>
-			<scope>provided</scope>
+		<dependency>
+		    <groupId>commons-net</groupId>
+		    <artifactId>commons-net</artifactId>
+		    <version>3.3</version>
 		</dependency>
 	<!-- 	<dependency>
 			<groupId>org.osgi</groupId>
@@ -98,13 +88,17 @@
 			<artifactId>osgi</artifactId>
 			<scope>provided</scope>
 		</dependency> -->
-		  	<dependency>
+		  	<!-- <dependency>
   		<groupId>org.apache.felix</groupId>
   		<artifactId>org.apache.felix.framework</artifactId>
-  	</dependency>
+  	</dependency> -->
 		  	<dependency>
 		  		<groupId>org.slf4j</groupId>
 		  		<artifactId>slf4j-log4j12</artifactId>
+		  	</dependency>
+		  	<dependency>
+		  		<groupId>org.osgi</groupId>
+		  		<artifactId>org.osgi.core</artifactId>
 		  	</dependency>
 	</dependencies>
 	<properties>
@@ -113,6 +107,7 @@
 			javax.servlet;resolution:=optional;version="(2,4)",
 			javax.servlet.http;resolution:=optional;version="(2,4)",
 			org.apache.commons.vfs;resolution:=optional,
+			org.apache.commons.net;resolution:=optional,
 			javax.resource.spi.work;resolution:=optional,
 			com.solmix.osgi.proxy;resolution:=optional,
 			*;resolution:=optional</solmix.osgi.import.pkg>
