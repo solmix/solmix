@@ -20,6 +20,8 @@
 package com.smartgwt.extensions.fusionchartxt.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.smartgwt.client.widgets.Canvas;
@@ -84,7 +86,7 @@ public class FusionChartX extends Canvas
         		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
     }
 
-    public native void getFusionChart(String data, String chartType, int width, int height) /*-{
+   protected native void _getFusionChart(String data, String chartType, int width, int height) /*-{
         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
         var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
@@ -97,7 +99,7 @@ public class FusionChartX extends Canvas
          } catch (e) {
         }  
     }-*/;
-    public native void getFusionChart(String data, String chartType, String width, String height) /*-{
+    protected native void _getFusionChart(String data, String chartType, String width, String height) /*-{
         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
         var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
@@ -144,14 +146,59 @@ public class FusionChartX extends Canvas
                 // ignore
           }
     }-*/;
-    public void getFusionChart(String data, String chartType) {
-        getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
+    public void getFusionChart(final String data,final String chartType, final int width,final int height) {
+        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
+
+            @Override
+            public boolean execute() {
+                if(isCanUpdate()){
+                    _getFusionChart(data,chartType,width,height);
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            
+        }, 100);
+    }
+    public void getFusionChart(final String data,final String chartType, final String width,final String height) {
+        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
+
+            @Override
+            public boolean execute() {
+                if(isCanUpdate()){
+                    _getFusionChart(data,chartType,width,height);
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            
+        }, 100);
+    }
+    public void getFusionChart(final String data,final String chartType) {
+        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
+
+            @Override
+            public boolean execute() {
+                if(isCanUpdate()){
+                    _getFusionChart(data,chartType);
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            
+        }, 100);
+    }
+    public void _getFusionChart(String data, String chartType) {
+        _getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
   }
     public void getFusionMap(String data, String chartType) {
         getFusionMap(data, chartType, getInnerWidth(), getInnerHeight());
   }
 
-public native void getFusionMap(String data, String chartType, int width, int height) /*-{
+    protected native void getFusionMap(String data, String chartType, int width, int height) /*-{
   if ($wnd.FusionCharts.setCurrentRenderer != null) {
         $wnd.FusionCharts.setCurrentRenderer('javascript');
          var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();

@@ -12,5 +12,6 @@
   	<module>sql</module>
   	<!-- <module>spring</module> -->
   	<!-- <module>test</module> -->
+  	<module>net</module>
   </modules>
 </project>

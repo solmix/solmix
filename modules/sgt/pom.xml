@@ -13,4 +13,5 @@
   	<module>share</module>
   	<module>server</module>
   </modules>
+  <name>SmartGwt extentions</name>
 </project>
