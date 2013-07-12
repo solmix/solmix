@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.RequestContext;
+import org.apache.log4j.MDC;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
@@ -51,6 +52,7 @@ import com.solmix.api.jaxb.Tservice;
 import com.solmix.api.rpc.RPCManager;
 import com.solmix.api.types.Texception;
 import com.solmix.api.types.Tmodule;
+import com.solmix.commons.logs.SlxLog;
 import com.solmix.commons.util.DataUtil;
 import com.solmix.fmk.application.ApplicationManagerImpl;
 import com.solmix.fmk.base.Reflection;
@@ -96,12 +98,25 @@ public class DmiDataSource
      * @throws SlxException
      */
     public static DSResponse execute(final DSRequest dsRequest, RPCManager rpc, Context requestContext, Application app) throws SlxException {
-        return (new DmiDataSource(dsRequest, rpc, requestContext, app)).execute();
+        String appID = app.getServerID();
+        String operation = dsRequest.getContext().getOperationId();
+        String dataSourceName = dsRequest.getDataSourceName();
+        DSResponse response;
+        if (log.isDebugEnabled())
+            MDC.put(SlxLog.LOG_CONTEXT,
+                (new StringBuilder()).append(appID).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
+        try {
+            response = (new DmiDataSource(dsRequest, rpc, requestContext, app)).execute();
+        } finally {
+            if (log.isDebugEnabled())
+                MDC.remove(SlxLog.LOG_CONTEXT);
+        }
+        return response;
     }
 
     public static DSResponse execute(final DSRequest dsRequest, RPCManager rpc, Context requestContext) throws SlxException {
         String appID = dsRequest.getContext().getAppID();
-        return (new DmiDataSource(dsRequest, rpc, requestContext, ApplicationManagerImpl.findAppByID(appID))).execute();
+        return execute(dsRequest, rpc, requestContext, ApplicationManagerImpl.findAppByID(appID));
     }
 
     public DSResponse execute() throws SlxException {
@@ -134,16 +149,16 @@ public class DmiDataSource
         if (haveExplicitBinding) {
             opSrvConfig = _opBinding.getService();
         }
-        boolean findSrvConfig=false;
-        if(opSrvConfig!=null)
-            findSrvConfig=true;
-        else{
-            if(dsSrvConfig!=null){
-                if(haveExplicitBinding&&_opBinding.getServerMethod()!=null)
-                    findSrvConfig=true;
+        boolean findSrvConfig = false;
+        if (opSrvConfig != null)
+            findSrvConfig = true;
+        else {
+            if (dsSrvConfig != null) {
+                if (haveExplicitBinding && _opBinding.getServerMethod() != null)
+                    findSrvConfig = true;
             }
         }
-        if(!findSrvConfig)
+        if (!findSrvConfig)
             return null;
 
         if (!app.havePermission(request, context)) {

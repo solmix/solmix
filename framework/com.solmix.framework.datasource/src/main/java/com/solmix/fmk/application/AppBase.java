@@ -66,7 +66,7 @@ public class AppBase implements Application
 
     protected static final boolean authenticationEnabled = false;
 
-    private final  static Logger log = LoggerFactory.getLogger(AppBase.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(AppBase.class.getName());
 
     protected static Perl5Util staticRegex = new Perl5Util();
 
@@ -172,18 +172,25 @@ public class AppBase implements Application
         this.request = request;
         this.context = context;
         reqData = request.getContext();
-        result = new DSResponseImpl(request != null ? request.getDataSource() : (DataSource) null,request);
-        
+        result = new DSResponseImpl(request != null ? request.getDataSource() : (DataSource) null, request);
+
         operation = reqData.getOperationId();
         String dataSourceName = request.getDataSourceName();
         if (operation == null) {
             Eoperation opType = reqData.getOperationType();
             canPerformAutoOperation(opType);
             operation = DataTools.autoCreateOperationID(dataSourceName, opType);
-            log.debug("can not found the operationID ,auto created ID:[" + operation + "]");
-            MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
-        }else{
-            MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
+            if (log.isDebugEnabled()) {
+                log.debug("can not found the operationID ,auto created ID:[" + operation + "]");
+                MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
+            }
+        } else {
+            if (log.isDebugEnabled()) {
+                MDC.put(
+                    SlxLog.LOG_CONTEXT,
+                    (new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(
+                        operation).toString());
+            }
         }
 
         DSResponse dsresponse = null;
@@ -227,7 +234,9 @@ public class AppBase implements Application
             // if ( !result.getContext().statusIsError() )
             dsresponse = result;
         } finally {
-          MDC.remove(SlxLog.LOG_CONTEXT);
+            if (log.isDebugEnabled()) {
+                MDC.remove(SlxLog.LOG_CONTEXT);
+            }
             freeDataSources();
         }
         return dsresponse;
@@ -342,7 +351,8 @@ public class AppBase implements Application
     }
 
     public boolean userQualifiesForType(String userType) {
-        LoggerFactory.getLogger(SlxLog.AUTH_LOGNAME).info("AppBase::boolean userQualifiesForType(String userType): override this method to provide custom userType qualification logic (base implementation returns true)");
+        LoggerFactory.getLogger(SlxLog.AUTH_LOGNAME).info(
+            "AppBase::boolean userQualifiesForType(String userType): override this method to provide custom userType qualification logic (base implementation returns true)");
         return true;
     }
 
@@ -460,7 +470,7 @@ public class AppBase implements Application
             ToperationBinding _opBinding = _ds.getContext().getOperationBinding(_operationType, request.getContext().getOperationId());
             if (_opBinding != null)
                 allowMultiUpdate = _opBinding.isAllowMultiUpdate();
-            if (DataUtil.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) &&DataUtil.asBoolean(allowMultiUpdate)) {
+            if (DataUtil.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) && DataUtil.asBoolean(allowMultiUpdate)) {
                 String __info = (new StringBuilder()).append(operationType).append(" operation received ").append("from client for DataSource '").append(
                     _ds.getName()).append("', ").append("operationId '").append(request.getContext().getOperation()).append("'. This ").append(
                     "is not allowed because the DataSource has no ").append("primaryKey.  Either declare a primaryKey or ").append(

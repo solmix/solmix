@@ -314,7 +314,7 @@ public class RPCManagerImpl implements RPCManager
                         dsRequest.setRpc(this);
                         // authentication
                         // String auth_global= OSGIHelper.getCM().getString("authorization.enabled", "false");
-                        Boolean auth = (Boolean) context.getRequest().getAttribute("_isc_authenticationEnabled");
+                        Boolean auth = (Boolean) context.getRequest().getAttribute("authenticationEnabled");
                         if (Boolean.TRUE.equals(auth)) {
                             String user = Authentication.getUsername(context);
                             if (user != null)
