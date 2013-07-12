@@ -368,7 +368,7 @@ public abstract class SQLDriver
         try {
             Boolean printSQL = thisConfig.getBoolean("printSQL", false);
             if (printSQL) {
-                log.info("Executing SQL query on {} :\n {}",dbName, query);
+                log.debug("Executing SQL query on {} :\n {}",dbName, query);
             }
             if (driver != null) {
                 statement = driver.createFetchStatement(__currentConn);
@@ -383,7 +383,7 @@ public abstract class SQLDriver
         } catch (SQLException e) {
             String __info = "Execute of select :\n" + query + " on db: [" + dbName + "] throw exception  ErrorCode:[" + e.getErrorCode()
                 + "] Message: " + e.toString();
-            log.info(__info);
+            log.debug(__info);
             if (__userOrAutoTransaction) {
                 log.info("  - assuming the connection is staled and retrying query.");
                 try {
@@ -492,9 +492,9 @@ public abstract class SQLDriver
         } else {
             __currentConn = __userOrAutoConn;
         }
-        String printSQL = thisConfig.getString("printSQL", "false");
-        if (DataUtil.booleanValue(printSQL)) {
-            log.info((new StringBuilder()).append("Executing SQL update on '").append(dbName).append("'").toString(), update);
+        Boolean printSQL = thisConfig.getBoolean("printSQL", false);
+        if (printSQL) {
+            log.debug((new StringBuilder()).append("Executing SQL update on '").append(dbName).append("'").toString(), update);
         }
         int __return = 0;
         try {

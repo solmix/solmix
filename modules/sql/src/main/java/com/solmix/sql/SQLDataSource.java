@@ -1023,7 +1023,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         Map primaryKeys = getLastPrimaryKeys(req);
         boolean printSQL = SQLConfigManager.getConfig().getBoolean("printSQL", false);
         if (printSQL) {
-            log.info((new StringBuilder()).append("primaryKeys: ").append(primaryKeys).toString());
+            log.debug((new StringBuilder()).append("primaryKeys: ").append(primaryKeys).toString());
         }
 
         String schema = data.getTdataSource().getSqlSchema();
