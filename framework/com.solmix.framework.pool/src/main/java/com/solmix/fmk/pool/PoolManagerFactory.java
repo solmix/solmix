@@ -46,13 +46,15 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
 {
 
     public static String SERVICE_PID = "com.solmix.framework.pool";
-    public static final String PROP_PNAME = "pname";
 
+    /**
+     * Note:Modify this properties needed to update the default configuration file
+     */
     private static final Map DEFAULT_CONFIG;
 
     private static Map<String, PoolConf> cache = Collections.synchronizedMap(new HashMap<String, PoolConf>());
 
-    private  Map<String, Object> propertiesCache = Collections.synchronizedMap(new HashMap<String, Object>());
+    private final  Map<String, Object> propertiesCache = Collections.synchronizedMap(new HashMap<String, Object>());
 
     static {
         DEFAULT_CONFIG = new HashMap();
@@ -100,6 +102,7 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
         return cached;
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
     public void updated(Dictionary properties) {
         if (properties == null)
@@ -143,6 +146,7 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
         public IPoolableObjectFactory factory;
     }
 
+    @Override
     public void destroy() {
         if (cache != null) {
             for (PoolConf pc : cache.values()) {
