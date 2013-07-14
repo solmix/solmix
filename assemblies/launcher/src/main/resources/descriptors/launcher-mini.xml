@@ -181,7 +181,7 @@
 			<unpack>false</unpack>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputFileNameMapping>
-				com/solmix/bundles/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+				org/solmix/bundles/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
 				<include>org.solmix.bundles:org.solmix.bundles.jackson</include>
@@ -227,7 +227,7 @@
 			<unpack>false</unpack>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputFileNameMapping>
-				com/solmix/framework/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+				org/solmix/framework/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
 				<include>org.solmix.framework:org.solmix.framework.api</include>
@@ -244,7 +244,7 @@
 			<unpack>false</unpack>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputFileNameMapping>
-				com/solmix/services/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+				org/solmix/services/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
 				<include>org.solmix.services:org.solmix.services.event</include>
@@ -255,7 +255,7 @@
 			<unpack>false</unpack>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputFileNameMapping>
-				com/solmix/modules/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+				org/solmix/modules/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
 				<include>org.solmix.modules:org.solmix.modules.sql</include>

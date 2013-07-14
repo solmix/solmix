@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>framework</artifactId>
+    <groupId>org.solmix</groupId>
+    <version>0.3-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <groupId>org.solmix.framework</groupId>
+  <artifactId>org.solmix.framework.pool</artifactId>
+  <name>Solmix :: FrameWork :: Pool&amp;Cache</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.api</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.util</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-pool</groupId>
+  		<artifactId>commons-pool</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.felix</groupId>
+  		<artifactId>org.apache.felix.framework</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.osgi</groupId>
+  		<artifactId>org.osgi.compendium</artifactId>
+  	</dependency>
+  </dependencies>
+  <packaging>bundle</packaging>
+  <properties>
+		<solmix.osgi.export.pkg>!org.solmix.fmk.pool.internel,org.solmix.fmk*</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>
+		javax.servlet;version="[2.5,4)",
+		javax.servlet.http;version="[2.5,4)",
+		org.solmix.commons*,*
+		</solmix.osgi.import.pkg>
+		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+	</properties>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}*</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}*</Import-Package>
+						<!-- <Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle> -->
+						<Private-Package>org.solmix.fmk.pool.internel</Private-Package>
+						<!--<_failok>${solmix.osgi.failok}</_failok> -->
+						<!-- <_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
+						<Bundle-Activator>org.solmix.fmk.pool.internel.PoolActivator</Bundle-Activator>
+						<DynamicImport-Package>*</DynamicImport-Package>
+					</instructions>
+					<!--<unpackBundle>false</unpackBundle> -->
+				</configuration>
+			</plugin>
+			</plugins>
+			</build>
+</project>

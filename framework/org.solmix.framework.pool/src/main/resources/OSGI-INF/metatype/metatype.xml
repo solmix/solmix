@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0"
+	localization="metatype">
+	<OCD name="org.solmix.framework.pool" id="org.solmix.framework.pool">
+		<AD name="Pool instance Name" id="pname" type="String" default="default" />
+		<AD name="Eanble" id="enabled" type="Boolean" default="true"></AD>
+		<AD name="maxActive" id="maxActive" type="Integer" default="-1" />
+		<AD name="maxIdle" id="maxIdle" type="Integer" default="-1" />
+		<AD name="maxWait" id="maxWait" type="Integer" default="-1" />
+		<AD name="timeBetweenEvictionRunsMillis" id="timeBetweenEvictionRunsMillis"
+			type="Integer" default="-1" />
+		<AD name="minEvictableIdleTimeMillis" id="minEvictableIdleTimeMillis"
+			type="Integer" default="-1" />
+		<AD name="numTestsPerEvictionRun" id="numTestsPerEvictionRun" type="Integer"
+			default="-1" />
+		<AD name="whenExhaustedAction" id="whenExhaustedAction" type="String"
+			default="grow" />
+		<AD name="testOnBorrow" id="testOnBorrow" type="Boolean" default="true"></AD>
+		<AD name="testWhileIdle" id="testWhileIdle" type="Boolean" default="true"></AD>
+	</OCD>
+	<Designate pid="org.solmix.framework.pool" bundle="org.solmix.framework.pool">
+		<Object ocdref="org.solmix.framework.pool"></Object>
+	</Designate>
+</metatype:MetaData>

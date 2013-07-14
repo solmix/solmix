@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.solmix.samples</groupId>
 		<artifactId>samples</artifactId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>showcase</artifactId>
 	<packaging>war</packaging>
@@ -12,13 +12,13 @@
 		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
 			<artifactId>sgt-extensions-client</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
 			<artifactId>sgt-extensions-shared</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.modules</groupId>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
 			<artifactId>sgt-extensions-server</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
+			<version>0.3-SNAPSHOT</version>
 			<exclusions>
 			<exclusion>
 			<groupId>org.slf4j</groupId>

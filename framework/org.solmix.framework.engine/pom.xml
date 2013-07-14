@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>framework</artifactId>
+    <groupId>org.solmix</groupId>
+    <version>0.3-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <groupId>org.solmix.framework</groupId>
+  <artifactId>org.solmix.framework.engine</artifactId>
+  <name>Solmix :: FrameWork :: Engine</name>
+  <dependencies>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_2.5_spec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.datasource</artifactId>
+		</dependency>
+  </dependencies>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
+						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
+						<Private-Package>org.solmix.fmk.engine.internel</Private-Package>
+						 <_failok>false</_failok> 
+						
+						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
+						
+						<!--
+							<Bundle-Activator>org.saio.solmix.daoservice.Activator</Bundle-Activator>
+						-->
+					</instructions>
+					<!--<unpackBundle>false</unpackBundle>-->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<solmix.osgi.export.pkg>!org.solmix.fmk.engine.internel,org.solmix.fmk.engine*</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>
+		javax.servlet;version="[2.5,4)",
+		javax.servlet.http;version="[2.5,4)",*
+		</solmix.osgi.import.pkg>
+		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+	</properties>
+	<packaging>bundle</packaging>
+</project>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OperBinding></OperBinding>
+<RPCManager>
+	<templateContext>
+		<currentDate></currentDate>
+		<transactionDate></transactionDate>
+	</templateContext>
+</RPCManager>
+<DataSource>
+	<OperationBinding>
+		<criteria>
+			<LIST>
+				<MAP>
+					<fieldName></fieldName>
+					<value></value>
+				</MAP>
+			</LIST>
+		</criteria>
+		<values>
+			<LIST>
+				<MAP>
+					<fieldName></fieldName>
+					<value></value>
+				</MAP>
+			</LIST>
+		</values>
+	</OperationBinding>
+</DataSource>

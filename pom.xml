@@ -1322,8 +1322,8 @@
 		<!-- END SNIPPET: release-profile -->
 	</profiles>
 	<scm>
-		<url>https://github.com/solmix/solmix</url>
-		<connection>scm:git://github.com/solmix/solmix.git</connection>
+		<url>https://github.org/solmix/solmix</url>
+		<connection>scm:git://github.org/solmix/solmix.git</connection>
 		<developerConnection>scm:git@github.com:solmix/solmix.git</developerConnection>
 	</scm>
 </project>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * ========THE SOLMIX PROJECT===================================== * 
+	* This is free software; you can redistribute it and/or modify it under the 
+	terms of the GNU Lesser General Public License as published by the Free Software 
+	Foundation; either version 2.1 of the License, or (at your option) any later 
+	version. This software is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
+	for more details. you may not use this file except in compliance with the 
+	License. You may obtain a copy of the License at http://www.gnu.org/licenses/ 
+	or see the FSF site: http://www.fsf.org. -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
+
+
+	<bean id="helper" class="org.solmix.fmk.util.OSGIHelper">
+		<property name="context" ref="blueprintBundleContext" />
+	</bean>
+	<bean id="dsManager" class="org.solmix.fmk.datasource.DataSourceManager"
+		destroy-method="destroy" />
+	<bean id="rpcManagerFactory" class="org.solmix.fmk.rpc.RPCManagerFactoryImpl"></bean>
+	<bean id="util" class="org.solmix.fmk.util.ServiceUtil">
+		<property name="context" ref="blueprintBundleContext" />
+	</bean>
+
+	<service ref="rpcManagerFactory" interface="org.solmix.api.rpc.RPCManagerFactory"></service>
+	<service ref="dsManager"
+		interface="org.solmix.api.datasource.DataSourceManagerService">
+	</service>
+	<reference id="ds-manager"
+		interface="org.solmix.api.datasource.DataSourceManagerService"
+		availability="optional">
+		<reference-listener ref="helper" bind-method="register_dsm"
+			unbind-method="unregister_dsm" />
+	</reference>
+	<reference id="ds-repo" interface="org.solmix.api.repo.DSRepoService">
+		<reference-listener ref="helper" bind-method="register_dsr"
+			unbind-method="unregister_dsr" />
+	</reference>
+	<reference-list id="dsProvider" interface="org.solmix.api.datasource.DataSource"
+		availability="optional">
+		<reference-listener ref="dsManager" bind-method="register"
+			unbind-method="unregister" />
+	</reference-list>
+	<reference-list id="ds-cm" interface="org.solmix.fmk.config.ConfigRealm"
+		availability="optional">
+		<reference-listener ref="helper" bind-method="register_cm"
+			unbind-method="unregister_cm" />
+	</reference-list>
+	<reference id="event-admin" interface="org.osgi.service.event.EventAdmin">
+		<reference-listener ref="helper" bind-method="register_eventAdmin"
+			unbind-method="unregister_eventAdmin" />
+	</reference>
+	<bean class="org.solmix.fmk.application.ApplicationManagerImpl" id="appManager"></bean>
+	<reference-list id="application"
+		interface="org.solmix.api.application.Application"
+		availability="optional">
+	</reference-list>
+</blueprint>

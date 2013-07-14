@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.solmix.com/xmlns/datasource/v1.0.0"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.com/xmlns/datasource/v1.0.0"
+	elementFormDefault="qualified" attributeFormDefault="qualified"
+	version="1.0.0">
+    <xsd:complexType name="TdataSource">
+    	<xsd:annotation>
+    		<xsd:documentation>
+    			<![CDATA[
+	    		This is the XML Schema for the Solmix DataSource service 1.0.0 development
+	    		 descriptor.DataSource Configuration files using this schema must indicate 
+	    		 the schema using the version 1.0.0 namespace.for example,
+	  			 <DataSource xmlns="http://www.solmix.com/xmlns/datasource/v1.0.0">
+	             if used as a qualified namespace,"slx" is the recommended namespace prefix.
+	             ]]>
+    		</xsd:documentation>
+    	</xsd:annotation>
+    	<xsd:sequence>
+    		<xsd:group ref="GdataSource"></xsd:group>
+    	</xsd:sequence>
+    	<xsd:attributeGroup ref="AdataSource"></xsd:attributeGroup>
+    	<xsd:attributeGroup ref="Asecurity"></xsd:attributeGroup>
+    	<xsd:attributeGroup ref="AbindingMerg"></xsd:attributeGroup>
+    	<xsd:anyAttribute></xsd:anyAttribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tdescription">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+    		A generic <description> element type to allow documentation to added to the DataSource 
+			xml configuration file.
+	             ]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="content" type="xsd:string"></xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+
+
+
+    <xsd:attributeGroup name="AdataSource">
+    	<xsd:attribute name="addGlobalId" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="autoCacheAllData" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="autoConvertRelativeDates"
+    		type="xsd:boolean" form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="autoDeriveSchema" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="autoDeriveTitles" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="autoJoinTransactions" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="cacheAllData" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="cacheMaxAge" type="xsd:int"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="canMultiSort" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="clientOnly" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="criteriaPolicy" type="EcriteriaPolicy"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dataProtocol" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dataFormat" type="EdataFormat"
+    		form="unqualified">
+    		<xsd:annotation>
+    			<xsd:documentation>
+    				special attribute used by VisualBuilder to suppress
+    				autoFetch
+    			</xsd:documentation>
+    		</xsd:annotation>
+    	</xsd:attribute>
+    	<xsd:attribute name="dataTransport" type="EdataTransport"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dataURL" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dbName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dropExtraFields" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="iconField" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="jsonPrefix" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="jsonSuffix" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="persistenceUnit" type="xsd:string" form="unqualified"></xsd:attribute>
+    	<xsd:attribute name="pluralTitle" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="preventHTTPCaching" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="recordXPath" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="sendExtraFields" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="showLocalFieldsOnly" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="serverType" type="EserverType"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="showPrompt" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="strictSQLFiltering" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="ID" type="xsd:string" use="required"
+    		form="unqualified">
+    		<xsd:annotation>
+    			<xsd:documentation>
+    				this ID must unique,and the same with this XML
+    				file's name for example: ID:XXX ,the file's name
+    				should be XXX.ds.xml
+    			</xsd:documentation>
+    		</xsd:annotation>
+    	</xsd:attribute>
+    	<xsd:attribute name="tableName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="tagName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="title" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="titleField" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="useFlatFields" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="useLocalValidators" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="useParentFieldOrder" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="noAutoFetch" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="recordName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="sqlSchema" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="testFileName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="dbImportFileName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="validateRecords" type="xsd:boolean"
+    		form="unqualified" default="true">
+    	</xsd:attribute>
+    </xsd:attributeGroup>
+
+    <xsd:complexType name="Tfield">
+        <xsd:sequence>
+			<xsd:group ref="Gfield"></xsd:group>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="Afield"></xsd:attributeGroup>
+	</xsd:complexType>
+
+	<xsd:complexType name="ToperationBinding">
+
+        <xsd:sequence>
+        	<xsd:group ref="GoperationBinding"></xsd:group>
+        	<xsd:group ref="Gexport"></xsd:group>
+        	<xsd:group ref="Gsql"></xsd:group>
+        	<xsd:element name="customConfig" type="TcustomConfig" minOccurs="0" maxOccurs="1"></xsd:element>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="AoperationBinding"></xsd:attributeGroup>
+		<xsd:attributeGroup ref="Asecurity"></xsd:attributeGroup>
+        <xsd:attributeGroup ref="AbindingMerg"></xsd:attributeGroup>
+    </xsd:complexType>
+
+	<xsd:attributeGroup name="Afield">
+		<xsd:attribute name="canEdit" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="canExport" type="xsd:boolean"
+			form="unqualified" default="true">
+		</xsd:attribute>
+		<xsd:attribute name="canFilter" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="canSave" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="canSortClientOnly" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="childrenProperty" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="customInsertExpression" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="customSelectExpression" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="customSQL" type="xsd:boolean"
+			default="false" form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="customUpdateExpression" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="childTagName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="detail" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="editorType" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="foreignKey" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="hidden" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="ignore" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="imageHeight" type="xsd:int"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="imageSize" type="xsd:int"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="imageWidth" type="xsd:int"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="derived" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="length" type="xsd:long"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="maxFileSize" type="xsd:int"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="multiple" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="name" type="xsd:string" use="required"
+			form="unqualified">
+			<xsd:annotation>
+				<xsd:documentation>
+					the name attribute must unique
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="nativeName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="primaryKey" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="required" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="rootValue" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="sequenceName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="showFileInline" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="sqlStorageStrategy" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="sqlType" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="sqlLength" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="dateFormat" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="type" type="Efield" form="unqualified"></xsd:attribute>
+		<xsd:attribute name="valueXPath" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="title" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="tableName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="fieldName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="uploadFieldName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+
+		<xsd:attribute name="idAllowed" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="super" type="xsd:string"
+			form="unqualified">
+			<xsd:annotation>
+				<xsd:documentation>parent datasource</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="storeWithHash" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+	</xsd:attributeGroup>
+
+	<xsd:complexType name="Tfields">
+		<xsd:choice>
+			<xsd:element name="field" type="Tfield" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="ToperationBindings">
+		<xsd:sequence>
+			<xsd:element name="operationBinding" type="ToperationBinding"
+				minOccurs="1" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Tvalidators">
+		<xsd:sequence>
+			<xsd:element name="validator" type="Tvalidator" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Tvalidator">
+		<xsd:choice>
+			<xsd:element name="list" type="xsd:string" minOccurs="0"
+				maxOccurs="unbounded">
+			</xsd:element>
+
+			<xsd:element name="dependentFields" type="xsd:string">
+			</xsd:element>
+			<xsd:element name="valueMap" type="TvalueMap"></xsd:element>
+			<xsd:element name="serverCondition" type="xsd:string"></xsd:element>
+			<xsd:element name="service" type="Tservice"></xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="clientOnly" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="type" type="Evalidator" form="unqualified"
+			use="required">
+		</xsd:attribute>
+		<xsd:attribute name="stopIfFalse" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="errorMessage" type="xsd:string"
+			form="unqualified">
+			<xsd:annotation>
+				<xsd:documentation>
+					used by all validators
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="serverOnly" type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="validateOnChange " type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="max" type="xsd:double"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="min" type="xsd:double"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="exclusive" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="mask" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="transformTo" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="precision" type="xsd:double"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="expression" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="otherField" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="substring" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="operator" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="count" type="xsd:long"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="TvalueMap">
+    	<xsd:choice>
+    		<xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+    	</xsd:choice>
+    </xsd:complexType>
+
+
+
+	<xsd:simpleType name="Eoperation">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="fetch"></xsd:enumeration>
+			<xsd:enumeration value="add"></xsd:enumeration>
+			<xsd:enumeration value="update"></xsd:enumeration>
+			<xsd:enumeration value="remove"></xsd:enumeration>
+			<xsd:enumeration value="validate"></xsd:enumeration>
+			<xsd:enumeration value="custom"></xsd:enumeration>
+			<xsd:enumeration value="replace"></xsd:enumeration>
+			<xsd:enumeration value="downloadFile"></xsd:enumeration>
+			<xsd:enumeration value="viewFile"></xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+
+	<xsd:attributeGroup name="AoperationBinding">
+		<xsd:attribute name="allowMultiUpdate" type="xsd:boolean"
+			form="unqualified" default="false">
+		</xsd:attribute>
+		<xsd:attribute name="autoJoinTransactions" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="cacheSyncOperation" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="canSyncCache" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="dataFormat" type="EdataFormat"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="dataProtocol" type="EdataProtocol"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="dataTransport" type="EdataTransport"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="dataURL" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="defaultParams" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="invalidateCache" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="operationType" type="Eoperation"
+			form="unqualified" use="required">
+		</xsd:attribute>
+		<xsd:attribute name="operationId" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="preventHTTPCaching" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="recordName" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="recordXPath" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="sqlType" type="EsqlType"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="serverMethod" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="useFlatFields" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="useForCacheSync" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="useHttpProxy" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="useSQLLimit" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+	</xsd:attributeGroup>
+
+	<xsd:simpleType name="EexportAs">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="csv"></xsd:enumeration>
+    		<xsd:enumeration value="json"></xsd:enumeration>
+    		<xsd:enumeration value="xml"></xsd:enumeration>
+    		<xsd:enumeration value="xls"></xsd:enumeration>
+    		<xsd:enumeration value="ooxml"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+
+    <xsd:simpleType name="EdataFormat">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="iscServer"></xsd:enumeration>
+    		<xsd:enumeration value="xml"></xsd:enumeration>
+    		<xsd:enumeration value="json"></xsd:enumeration>
+    		<xsd:enumeration value="custom"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EserverType">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="basic"></xsd:enumeration>
+    		<xsd:enumeration value="sql"></xsd:enumeration>
+    		<xsd:enumeration value="custom"></xsd:enumeration>
+    		<xsd:enumeration value="jpa"></xsd:enumeration>
+    		<xsd:enumeration value="filesystem"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:group name="GdataSource">
+        <xsd:sequence>
+        	<xsd:element name="inheritsFrom" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+            <xsd:element name="service" type="Tservice" minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+            <xsd:element name="childrenField" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="dataField" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="globalNamespaces" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="schemaNamespace" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="serviceNamespace" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="description" type="Tdescription"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="requestProperties" type="Tobject"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="fields" type="Tfields" minOccurs="0"
+        		maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="operationBindings"
+        		type="ToperationBindings" minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="soapAction" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="messageTemplate" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="defaultCriteria" type="Tobject"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="testData" type="Tobject" minOccurs="0"
+        		maxOccurs="1">
+        	</xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="Tobject">
+    	<xsd:sequence>
+    		<xsd:any></xsd:any>
+    	</xsd:sequence></xsd:complexType>
+
+    <xsd:group name="Gfield">
+        <xsd:sequence>
+    		<xsd:element name="valueMap" type="TvalueMap" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="validators" type="Tvalidators" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="pickListFields" type="Tobject" minOccurs="0" maxOccurs="1"></xsd:element>
+    	</xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="Tservice">
+    	<xsd:attribute name="lookupStyle" type="EserviceStyle"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="interface" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="filter" type="xsd:string" form="unqualified"></xsd:attribute>
+    	<xsd:attribute name="class" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="method" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="curdName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="targetXPath" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:anyAttribute namespace="##any"></xsd:anyAttribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="TrecordXPath"></xsd:complexType>
+
+    <xsd:simpleType name="Evalidator">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="isBoolean"></xsd:enumeration>
+    		<xsd:enumeration value="isString"></xsd:enumeration>
+    		<xsd:enumeration value="isInteger"></xsd:enumeration>
+    		<xsd:enumeration value="isFloat"></xsd:enumeration>
+    		<xsd:enumeration value="isFunction"></xsd:enumeration>
+    		<xsd:enumeration value="requiredIf"></xsd:enumeration>
+    		<xsd:enumeration value="matchesField"></xsd:enumeration>
+    		<xsd:enumeration value="isOneOf"></xsd:enumeration>
+    		<xsd:enumeration value="integerRange"></xsd:enumeration>
+    		<xsd:enumeration value="lengthRange"></xsd:enumeration>
+    		<xsd:enumeration value="contains"></xsd:enumeration>
+    		<xsd:enumeration value="doesntContain"></xsd:enumeration>
+    		<xsd:enumeration value="substringCount"></xsd:enumeration>
+    		<xsd:enumeration value="regexp"></xsd:enumeration>
+    		<xsd:enumeration value="mask"></xsd:enumeration>
+    		<xsd:enumeration value="dateRange"></xsd:enumeration>
+    		<xsd:enumeration value="floatLimit"></xsd:enumeration>
+    		<xsd:enumeration value="floatRange"></xsd:enumeration>
+    		<xsd:enumeration value="floatPrecision"></xsd:enumeration>
+    		<xsd:enumeration value="required"></xsd:enumeration>
+    		<xsd:enumeration value="readOnly"></xsd:enumeration>
+    		<xsd:enumeration value="isUnique"></xsd:enumeration>
+    		<xsd:enumeration value="hasRelatedRecord"></xsd:enumeration>
+    		<xsd:enumeration value="serverCustom"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:attributeGroup name="Asecurity">
+    	<xsd:attribute name="requires" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="requiresRoles" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    </xsd:attributeGroup>
+
+    <xsd:simpleType name="Efield">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="text"></xsd:enumeration>
+    		<xsd:enumeration value="boolean"></xsd:enumeration>
+    		<xsd:enumeration value="integer"></xsd:enumeration>
+    		<xsd:enumeration value="float"></xsd:enumeration>
+    		<xsd:enumeration value="date"></xsd:enumeration>
+    		<xsd:enumeration value="time"></xsd:enumeration>
+    		<xsd:enumeration value="datetime"></xsd:enumeration>
+    		<xsd:enumeration value="enum"></xsd:enumeration>
+    		<xsd:enumeration value="intEnum"></xsd:enumeration>
+    		<xsd:enumeration value="sequence"></xsd:enumeration>
+    		<xsd:enumeration value="link"></xsd:enumeration>
+    		<xsd:enumeration value="image"></xsd:enumeration>
+    		<xsd:enumeration value="binary"></xsd:enumeration>
+    		<xsd:enumeration value="imageFile"></xsd:enumeration>
+    		<xsd:enumeration value="modifier"></xsd:enumeration>
+    		<xsd:enumeration value="modifierTimestamp"></xsd:enumeration>
+    		<xsd:enumeration value="creator"></xsd:enumeration>
+    		<xsd:enumeration value="CREATORTIMESTAMP"></xsd:enumeration>
+    		<xsd:enumeration value="password"></xsd:enumeration>
+    		<xsd:enumeration value="blob"></xsd:enumeration>
+   			<xsd:enumeration value="number"></xsd:enumeration>
+    		<xsd:enumeration value="unknown"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:group name="GoperationBinding">
+        <xsd:sequence>
+        	<xsd:element name="service" type="Tservice" minOccurs="0"
+        		maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="callbackParam" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="command" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="criteria" type="TfieldNameValue"
+        		minOccurs="0" maxOccurs="unbounded">
+        	</xsd:element>
+        	<xsd:element name="customCriteriaFields" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="customFields" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="customSQL" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="customValueFields" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="excludeCriteriaFields" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="mail" type="xsd:string" minOccurs="0"
+        		maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="methodArguments" type="xsd:string"
+        		minOccurs="0" maxOccurs="1">
+        	</xsd:element>
+        	<xsd:element name="outputs" type="xsd:string" minOccurs="0"
+        		maxOccurs="1">
+        		<xsd:annotation>
+        			<xsd:documentation>
+        				','split format.used for sql datasource to
+        				filter output column.if this outputs contains
+        				all dsrequest's outputs use request's outputs.
+        			</xsd:documentation>
+        		</xsd:annotation>
+        	</xsd:element>
+        	<xsd:element name="values" type="TfieldNameValue"
+        		minOccurs="0" maxOccurs="unbounded">
+        	</xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:simpleType name="EdataProtocol">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="getParams"></xsd:enumeration>
+    		<xsd:enumeration value="postParams"></xsd:enumeration>
+    		<xsd:enumeration value="postXML"></xsd:enumeration>
+    		<xsd:enumeration value="value"></xsd:enumeration>
+    		<xsd:enumeration value="soap"></xsd:enumeration>
+    		<xsd:enumeration value="postMessage"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EsqlType">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="update"></xsd:enumeration>
+    		<xsd:enumeration value="insert"></xsd:enumeration>
+    		<xsd:enumeration value="delete"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:group name="Gexport">
+        <xsd:sequence>
+    		<xsd:element name="exportResults" type="xsd:boolean" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportAs" type="EexportAs" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportFilename" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="lineBreakStyle" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportDelimiter" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportTitleSeparatorChar" type="xsd:string" minOccurs="0" maxOccurs="1">
+    		</xsd:element>
+    		<xsd:element name="exportDisplay" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportHeader" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportFooter" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="exportFields" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+    	</xsd:sequence>
+    </xsd:group>
+
+
+    <xsd:complexType name="TfieldNameValue">
+    	<xsd:attribute name="fieldName" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="value" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="textMatchStyle" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="module">
+    	<xsd:sequence>
+    		<xsd:element name="DataSource" type="TdataSource"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="module" type="module"></xsd:element>
+
+
+    <xsd:simpleType name="EserviceStyle">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="new"></xsd:enumeration>
+    		<xsd:enumeration value="osgi"></xsd:enumeration>
+    		<xsd:enumeration value="jndi"></xsd:enumeration>
+    		<xsd:enumeration value="osgi_jndi"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:group name="Gsql">
+        <xsd:sequence>
+        	<xsd:element name="selectClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="valuesClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="tableClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="whereClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="groupClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="orderCaluse" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        	<xsd:element name="groupWhereClause" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
+        </xsd:sequence>
+
+    </xsd:group>
+
+
+
+
+
+
+
+    <xsd:simpleType name="EcriteriaPolicy">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="dropOnChange"></xsd:enumeration>
+    		<xsd:enumeration value="dropOnShortening"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EdataTransport">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:enumeration value="xmlHttpRequest"></xsd:enumeration>
+    		<xsd:enumeration value="scriptInclude"></xsd:enumeration>
+    		<xsd:enumeration value="hiddenFrame"></xsd:enumeration>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:attributeGroup name="AbindingMerg">
+    	<xsd:attribute name="qualifyColumnNames" type="xsd:boolean"
+    		form="unqualified">
+    	</xsd:attribute>
+    	    	<xsd:attribute name="schemaClass" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    </xsd:attributeGroup>
+
+    <xsd:complexType name="TcustomConfig">
+    	<xsd:sequence>
+    		<xsd:any minOccurs="0" maxOccurs="unbounded"></xsd:any>
+    	</xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

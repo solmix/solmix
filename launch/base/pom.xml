@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>solmix</artifactId>
 		<groupId>org.solmix</groupId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<groupId>org.solmix.launch</groupId>
@@ -66,8 +66,8 @@
 						<configuration>
 							<classifier>web</classifier>
 							<includes>
-								<include>com/solmix/launch/webapp/**</include>
-								<include>com/solmix/launch/base/shared/**</include>
+								<include>org/solmix/launch/webapp/**</include>
+								<include>org/solmix/launch/base/shared/**</include>
 								<include>org/osgi/framework/Version*</include>
 								<include>org/osgi/framework/Constants*</include>
 								<include>META-INF/**</include>

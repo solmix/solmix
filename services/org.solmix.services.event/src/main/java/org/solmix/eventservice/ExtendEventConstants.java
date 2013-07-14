@@ -29,6 +29,6 @@ import org.osgi.service.event.EventConstants;
 
 public interface ExtendEventConstants extends EventConstants
 {
-    public static final String DISTRUBTED_EVENT_TOPIC_PREFIX="com/solmix/DistrubtedEvent/";
+    public static final String DISTRUBTED_EVENT_TOPIC_PREFIX="org/solmix/DistrubtedEvent/";
 
 }
