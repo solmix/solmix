@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.solmix</groupId>
 		<artifactId>assemblies</artifactId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<groupId>org.solmix.assemblies</groupId>
 	<artifactId>org.solmix.assemblies.launcher</artifactId>
