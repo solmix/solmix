@@ -38,7 +38,6 @@ import java.util.Map;
 import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -100,7 +99,8 @@ public abstract class SQLDriver
         buildInDriverImpl.put("db2", "org.solmix.sql.DB2Driver");
         buildInDriverImpl.put("db2iSeries", "org.solmix.sql.DB2iSeriesDriver");
         buildInDriverImpl.put("hsqldb", "org.solmix.sql.HSQLDBDriver");
-        buildInDriverImpl.put("generic", "org.solmix.sql.GenericDriver");
+        buildInDriverImpl.put("h2db", "org.solmix.sql.H2DBDriver");
+        buildInDriverImpl.put("generic", "orgorg.solmix.sql.H2DBDriver.solmix.sql.GenericDriver");
         buildInDriverImpl.put("cache", "org.solmix.sql.CacheDriver");
         buildInDriverImpl.put("::hibernate::", "org.solmix.sql.HibernateDriver");
     }
