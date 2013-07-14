@@ -21,20 +21,15 @@
 		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
 		</snapshotRepository> </distributionManagement> -->
 	<modules>
-		<!--<module>dsrepo</module> <module>datasource</module> <module>features</module> -->
-		<!-- <module>web</module> -->
-		<!-- <module>modules</module> <module>services</module> <module>servlet</module> 
-			<module>shell</module> <module>bundles</module> <module>org.solmix.launch.webapp</module> -->
-		<!-- <module>modules</module> -->
-		<!-- <module>services</module> -->
-		<!-- <module>assemblies</module> <module>testing</module> -->
-		<!-- <module>framework</module> -->
-		<!--<module>shell</module> <module>resource</module> <module>commons</module> -->
-		 <!-- <module>cms</module> -->
-		<!--<module>modules</module>
-		<module>tooling</module> -->
-		<!-- <module>assemblies</module>
-		<module>samples</module> -->
+		<module>services</module>
+		<module>framework</module>
+		<module>modules</module> 
+		<module>launch/base</module>
+		<module>bundles</module>
+		<module>assemblies</module>
+		<!-- <module>samples</module> -->
+		<!-- <module>cms</module> -->
+		<!-- <module>hola</module> -->
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
