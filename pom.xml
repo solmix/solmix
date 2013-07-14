@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.solmix</groupId>
+	<groupId>org.solmix</groupId>
 	<artifactId>solmix</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solmix  Project Pom</name>
 	<licenses>
@@ -24,15 +24,15 @@
 		<!--<module>dsrepo</module> <module>datasource</module> <module>features</module> -->
 		<!-- <module>web</module> -->
 		<!-- <module>modules</module> <module>services</module> <module>servlet</module> 
-			<module>shell</module> <module>bundles</module> <module>com.solmix.launch.webapp</module> -->
+			<module>shell</module> <module>bundles</module> <module>org.solmix.launch.webapp</module> -->
 		<!-- <module>modules</module> -->
-		<module>services</module>
+		<!-- <module>services</module> -->
 		<!-- <module>assemblies</module> <module>testing</module> -->
-		<module>framework</module>
+		<!-- <module>framework</module> -->
 		<!--<module>shell</module> <module>resource</module> <module>commons</module> -->
-		<!-- <module>cms</module> -->
-		<module>modules</module>
-		<module>tooling</module>
+		 <!-- <module>cms</module> -->
+		<!--<module>modules</module>
+		<module>tooling</module> -->
 		<!-- <module>assemblies</module>
 		<module>samples</module> -->
 	</modules>
@@ -87,7 +87,7 @@
 		<spring.version>3.1.3.RELEASE</spring.version>
 		<sshd.version>0.5.0</sshd.version>
 		<xbean.version>3.7</xbean.version>
-		<apache.shiro.version>1.2.0</apache.shiro.version>
+		<apache.shiro.version>1.2.2</apache.shiro.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
 		<!-- <karaf.debug.location>E:\o\solmix3\resource\resource</karaf.debug.location> -->
@@ -744,64 +744,64 @@
 			<!-- solmix version dependency -->
 			<!-- ===================================================================================== -->
 		<dependency>
-			<groupId>com.solmix.launch</groupId>
-			<artifactId>com.solmix.launch.base</artifactId>
+			<groupId>org.solmix.launch</groupId>
+			<artifactId>org.solmix.launch.base</artifactId>
 			<classifier>web</classifier>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.modules</groupId>
-			<artifactId>com.solmix.modules.spring</artifactId>
+			<groupId>org.solmix.modules</groupId>
+			<artifactId>org.solmix.modules.spring</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 			<dependency>
-				<groupId>com.solmix.launch</groupId>
-				<artifactId>com.solmix.launch.base</artifactId>
+				<groupId>org.solmix.launch</groupId>
+				<artifactId>org.solmix.launch.base</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.engine</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.engine</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.datasource</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.datasource</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.util</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.pool</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.pool</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.api</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.services</groupId>
-				<artifactId>com.solmix.services.event</artifactId>
+				<groupId>org.solmix.services</groupId>
+				<artifactId>org.solmix.services.event</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.modules</groupId>
-				<artifactId>com.solmix.modules.sql</artifactId>
+				<groupId>org.solmix.modules</groupId>
+				<artifactId>org.solmix.modules.sql</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.servlets</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.servlets</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.modules</groupId>
-				<artifactId>com.solmix.modules.jpa</artifactId>
+				<groupId>org.solmix.modules</groupId>
+				<artifactId>org.solmix.modules.jpa</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -860,25 +860,25 @@
 				<version>${jta.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.framework</groupId>
-				<artifactId>com.solmix.framework.dsrepo</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.dsrepo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.shell</groupId>
+				<groupId>org.solmix.shell</groupId>
 				<artifactId>shell</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.shell</groupId>
+				<groupId>org.solmix.shell</groupId>
 				<artifactId>dsrepo</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.solmix.shell</groupId>
+				<groupId>org.solmix.shell</groupId>
 				<artifactId>datasource</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>

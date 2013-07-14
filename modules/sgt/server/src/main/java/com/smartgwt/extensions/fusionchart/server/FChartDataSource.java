@@ -24,15 +24,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.solmix.api.datasource.DSRequest;
-import com.solmix.api.datasource.DSResponse;
-import com.solmix.api.datasource.DSResponse.Status;
-import com.solmix.api.datasource.DataSource;
-import com.solmix.api.exception.SlxException;
-import com.solmix.api.jaxb.Tobject;
-import com.solmix.api.jaxb.ToperationBinding;
-import com.solmix.fmk.util.XMLUtil;
-import com.solmix.fmk.velocity.Velocity;
+import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.datasource.DSResponse.Status;
+import org.solmix.api.datasource.DataSource;
+import org.solmix.api.exception.SlxException;
+import org.solmix.api.jaxb.Tobject;
+import org.solmix.api.jaxb.ToperationBinding;
+import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.util.XMLUtil;
+import org.solmix.fmk.velocity.Velocity;
 
 /**
  * 
@@ -58,7 +59,10 @@ public final class FChartDataSource
         }
         Tobject object = bind.getConfiguration();
         Map<String, Object> map = XMLUtil.toMap(object);
-        DSResponse response = ds.execute(req);
+        DSResponse response ;
+        Object data=getData(req, ds);
+    	response = SlxContext.getDataSourceManager().createDSResponse();
+    	response.getContext().setData(data);
         Map context = Velocity.getStandardContextMap(req);
         context.putAll(map);
         context.put(Velocity.RESPONSE_DATA, response.getContext().getData());
@@ -82,6 +86,9 @@ public final class FChartDataSource
 
         return new FChartResponse(response,characterEncoding);
 
+    }
+    protected Object getData(DSRequest req, DataSource ds) throws SlxException{
+    	return ds.execute(req).getContext().getData();
     }
 
 }

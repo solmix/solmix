@@ -1,4 +1,4 @@
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 /*
  * ========THE SOLMIX PROJECT=====================================
  *
@@ -26,19 +26,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.solmix.fmk.datasource.DSResponseImpl;
-import com.solmix.fmk.rpc.RPCResponseImpl;
-import com.solmix.fmk.servlet.RequestContext;
-import com.solmix.api.datasource.DSRequest;
-import com.solmix.api.datasource.DSResponse;
-import com.solmix.api.datasource.DSResponse.Status;
-import com.solmix.api.datasource.DataSource;
-import com.solmix.api.exception.SlxException;
-import com.solmix.api.rpc.RPCManager;
-import com.solmix.api.rpc.RPCManagerFactory;
-import com.solmix.api.rpc.RPCRequest;
-import com.solmix.api.rpc.RPCResponse;
-import com.solmix.api.rpc.RequestType;
+import org.solmix.fmk.datasource.DSResponseImpl;
+import org.solmix.fmk.rpc.RPCResponseImpl;
+import org.solmix.fmk.servlet.RequestContext;
+import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.datasource.DSResponse.Status;
+import org.solmix.api.datasource.DataSource;
+import org.solmix.api.exception.SlxException;
+import org.solmix.api.rpc.RPCManager;
+import org.solmix.api.rpc.RPCManagerFactory;
+import org.solmix.api.rpc.RPCRequest;
+import org.solmix.api.rpc.RPCResponse;
+import org.solmix.api.rpc.RequestType;
 
 /**
  * @author solomon

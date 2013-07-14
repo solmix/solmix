@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.solmix</groupId>
+		<groupId>org.solmix</groupId>
 		<artifactId>assemblies</artifactId>
 		<version>0.2.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.solmix.assemblies</groupId>
-	<artifactId>com.solmix.assemblies.launcher</artifactId>
+	<groupId>org.solmix.assemblies</groupId>
+	<artifactId>org.solmix.assemblies.launcher</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -141,8 +141,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.launch</groupId>
-			<artifactId>com.solmix.launch.base</artifactId>
+			<groupId>org.solmix.launch</groupId>
+			<artifactId>org.solmix.launch.base</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -191,18 +191,18 @@
 			<artifactId>org.apache.servicemix.bundles.oro</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.bundles</groupId>
-			<artifactId>com.solmix.bundles.jackson</artifactId>
+			<groupId>org.solmix.bundles</groupId>
+			<artifactId>org.solmix.bundles.jackson</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.bundles</groupId>
-			<artifactId>com.solmix.bundles.poi</artifactId>
+			<groupId>org.solmix.bundles</groupId>
+			<artifactId>org.solmix.bundles.poi</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.bundles</groupId>
-			<artifactId>com.solmix.bundles.jxpath</artifactId>
+			<groupId>org.solmix.bundles</groupId>
+			<artifactId>org.solmix.bundles.jxpath</artifactId>
 			<version>${commons-jxpath.version}</version>
 		</dependency>
 		<dependency>
@@ -210,47 +210,47 @@
 			<artifactId>geronimo-jta_1.1_spec</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.services</groupId>
-			<artifactId>com.solmix.services.event</artifactId>
+			<groupId>org.solmix.services</groupId>
+			<artifactId>org.solmix.services.event</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.api</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.util</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.util</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.pool</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.pool</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.dsrepo</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.dsrepo</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.datasource</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.datasource</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.engine</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.engine</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.modules</groupId>
-			<artifactId>com.solmix.modules.sql</artifactId>
+			<groupId>org.solmix.modules</groupId>
+			<artifactId>org.solmix.modules.sql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.servlets</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.servlets</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -304,10 +304,10 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>com.solmix.launch</groupId>
-									<artifactId>com.solmix.launch.base</artifactId>
+									<groupId>org.solmix.launch</groupId>
+									<artifactId>org.solmix.launch.base</artifactId>
 									<outputDirectory>target/dependencies/lib</outputDirectory>
-									<destFileName>com.solmix.launch.base.jar</destFileName>
+									<destFileName>org.solmix.launch.base.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>solmix</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
@@ -41,8 +41,8 @@
             </plugins>
 	</build>
 	<modules>
-		<module>com.solmix.bundles.jackson</module>
-		<module>com.solmix.bundles.jxpath</module>
-		<module>com.solmix.bundles.poi</module>
+		<module>org.solmix.bundles.jackson</module>
+		<module>org.solmix.bundles.jxpath</module>
+		<module>org.solmix.bundles.poi</module>
 	</modules>
 </project>

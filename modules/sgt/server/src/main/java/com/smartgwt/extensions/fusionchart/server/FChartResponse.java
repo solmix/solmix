@@ -24,16 +24,16 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-import com.solmix.api.context.WebContext;
-import com.solmix.api.data.DSResponseData;
-import com.solmix.api.datasource.DSRequest;
-import com.solmix.api.datasource.DSResponse;
-import com.solmix.api.datasource.DataSource;
-import com.solmix.api.exception.SlxException;
-import com.solmix.api.rpc.HasRPCHandler;
-import com.solmix.api.rpc.RPCManager;
-import com.solmix.api.types.Texception;
-import com.solmix.api.types.Tmodule;
+import org.solmix.api.context.WebContext;
+import org.solmix.api.data.DSResponseData;
+import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.datasource.DataSource;
+import org.solmix.api.exception.SlxException;
+import org.solmix.api.rpc.HasRPCHandler;
+import org.solmix.api.rpc.RPCManager;
+import org.solmix.api.types.Texception;
+import org.solmix.api.types.Tmodule;
 
 /**
  * 
@@ -73,7 +73,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getContext()
+     * @see org.solmix.api.datasource.DSResponse#getContext()
      */
     @Override
     public DSResponseData getContext() {
@@ -83,7 +83,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#setContext(com.solmix.api.data.DSResponseData)
+     * @see org.solmix.api.datasource.DSResponse#setContext(org.solmix.api.data.DSResponseData)
      */
     @Override
     public void setContext(DSResponseData dat) {
@@ -94,7 +94,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getDataSource()
+     * @see org.solmix.api.datasource.DSResponse#getDataSource()
      */
     @Override
     public DataSource getDataSource() {
@@ -104,7 +104,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#setDataSource(com.solmix.api.datasource.DataSource)
+     * @see org.solmix.api.datasource.DSResponse#setDataSource(org.solmix.api.datasource.DataSource)
      */
     @Override
     public void setDataSource(DataSource dataSource) {
@@ -114,7 +114,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getJSResponse()
+     * @see org.solmix.api.datasource.DSResponse#getJSResponse()
      */
     @Override
     public Object getJSResponse() throws SlxException {
@@ -124,7 +124,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getRecord()
+     * @see org.solmix.api.datasource.DSResponse#getRecord()
      */
     @Override
     public Map<Object, Object> getRecord() {
@@ -134,7 +134,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getRecords()
+     * @see org.solmix.api.datasource.DSResponse#getRecords()
      */
     @Override
     public List<Map<Object, Object>> getRecords() {
@@ -144,7 +144,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#getStatus()
+     * @see org.solmix.api.datasource.DSResponse#getStatus()
      */
     @Override
     public Status getStatus() {
@@ -154,7 +154,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#setStatus(com.solmix.api.datasource.DSResponse.Status)
+     * @see org.solmix.api.datasource.DSResponse#setStatus(org.solmix.api.datasource.DSResponse.Status)
      */
     @Override
     public void setStatus(Status status) {
@@ -165,7 +165,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     /**
      * {@inheritDoc}
      * 
-     * @see com.solmix.api.datasource.DSResponse#isSuccess()
+     * @see org.solmix.api.datasource.DSResponse#isSuccess()
      */
     @Override
     public boolean isSuccess() {

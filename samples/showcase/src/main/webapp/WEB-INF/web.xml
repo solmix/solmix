@@ -9,11 +9,11 @@
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
 	<listener>
-		<listener-class>com.solmix.fmk.spring.SpringContextLoader</listener-class>
+		<listener-class>org.solmix.fmk.spring.SpringContextLoader</listener-class>
 	</listener>
 	<filter>
 		<filter-name>contextFilter</filter-name>
-		<filter-class>com.solmix.fmk.spring.ManagedContextFilter</filter-class>
+		<filter-class>org.solmix.fmk.spring.ManagedContextFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>contextFilter</filter-name>
@@ -21,7 +21,7 @@
 	</filter-mapping>
 	<servlet>
 		<servlet-name>solmix</servlet-name>
-		<servlet-class>com.solmix.sgt.server.SGTServlet</servlet-class>
+		<servlet-class>org.solmix.sgt.server.SGTServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>solmix</servlet-name>

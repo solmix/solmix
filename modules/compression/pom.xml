@@ -2,12 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modules</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.modules</groupId>
-  <artifactId>com.solmix.modules.compression</artifactId>
+  <groupId>org.solmix.modules</groupId>
+  <artifactId>org.solmix.modules.compression</artifactId>
   <packaging>bundle</packaging>
   <name>Solmix :: Modules :: Servlet  Compression</name>
   <build>
@@ -34,12 +34,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.api</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.datasource</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.datasource</artifactId>
 		</dependency>
 	</dependencies>
 </project>

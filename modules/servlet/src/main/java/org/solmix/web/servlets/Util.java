@@ -16,11 +16,11 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
-import com.solmix.api.datasource.DataSourceManagerService;
-import com.solmix.api.interfaces.CompressionService;
-import com.solmix.api.rpc.RPCManagerFactory;
+import org.solmix.api.datasource.DataSourceManagerService;
+import org.solmix.api.interfaces.CompressionService;
+import org.solmix.api.rpc.RPCManagerFactory;
 
 
 /**

@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <artifactId>modules</artifactId>
     <version>0.2.1-SNAPSHOT</version>
   </parent>
-  <artifactId>com.solmix.modules.spring</artifactId>
+  <artifactId>org.solmix.modules.spring</artifactId>
   <name>Solmix :: Spring intergation</name>
   <dependencies>
   	<dependency>
@@ -21,20 +21,20 @@
   		<artifactId>spring-beans</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.dsrepo</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.dsrepo</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.datasource</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.datasource</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.pool</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.pool</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.modules</groupId>
-  		<artifactId>com.solmix.modules.sql</artifactId>
+  		<groupId>org.solmix.modules</groupId>
+  		<artifactId>org.solmix.modules.sql</artifactId>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
@@ -46,7 +46,7 @@
     <artifactId>slf4j-log4j12</artifactId>
 </dependency>
   </dependencies>
-  <groupId>com.solmix.modules</groupId>
+  <groupId>org.solmix.modules</groupId>
   <!-- <build>
 		<plugins>
 			<plugin>
@@ -55,12 +55,12 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Category>solmix</Bundle-Category>
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
 						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
-						<Private-Package>com.solmix.fmk.internel</Private-Package>
+						<Private-Package>org.solmix.fmk.internel</Private-Package>
 						 <_failok>false</_failok> 
 						
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
@@ -73,14 +73,14 @@
 	</build> -->
 	<!-- <packaging>bundle</packaging> -->
 	<properties>
-		<solmix.osgi.export.pkg>com.solmix*,org.osgi*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix*,org.osgi*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		javax.servlet;version="[2.5,4)",
 		javax.servlet.http;version="[2.5,4)",
 		org.apache.poi*;resolution:=optional,
 		org.apache.commons.fileupload;resolution:=optional,
 		org.apache.shiro*;resolution:=optional,
-		com.solmix.commons*,*
+		org.solmix.commons*,*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

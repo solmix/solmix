@@ -4,7 +4,7 @@
 	version="2.4">
 	<servlet>
 		<servlet-name>Launcher</servlet-name>
-		<servlet-class>com.solmix.launch.webapp.SolmixServlet</servlet-class>
+		<servlet-class>org.solmix.launch.webapp.SolmixServlet</servlet-class>
 		<!-- <init-param>
 			<param-name>solmix.home</param-name>
 			<param-value>/home/solmix/o/git/solmix/resource/resource</param-value>
@@ -15,7 +15,7 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 	<listener>
-		<listener-class>com.solmix.launch.webapp.SolmixSessionListener</listener-class>
+		<listener-class>org.solmix.launch.webapp.SolmixSessionListener</listener-class>
 	</listener>
 
 </web-app>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>solmix</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>

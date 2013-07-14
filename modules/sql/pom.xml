@@ -2,16 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modules</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.solmix.modules</groupId>
-  <artifactId>com.solmix.modules.sql</artifactId>
+  <groupId>org.solmix.modules</groupId>
+  <artifactId>org.solmix.modules.sql</artifactId>
   <name>Solmix :: Module :: SQL DataSource</name>
   <dependencies>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.datasource</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.datasource</artifactId>
   	</dependency>
   	 <dependency>
       <groupId>org.apache.geronimo.modules</groupId>
@@ -44,8 +44,8 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>!com.solmix.sql.internel,com.solmix.sql*</solmix.osgi.export.pkg>
-		<solmix.osgi.import.pkg>com.solmix.commons*,*</solmix.osgi.import.pkg>
+		<solmix.osgi.export.pkg>!org.solmix.sql.internel,org.solmix.sql*</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>org.solmix.commons*,*</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
 	<packaging>bundle</packaging>

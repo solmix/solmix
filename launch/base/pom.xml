@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>solmix</artifactId>
-		<groupId>com.solmix</groupId>
+		<groupId>org.solmix</groupId>
 		<version>0.2.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
-	<groupId>com.solmix.launch</groupId>
-	<artifactId>com.solmix.launch.base</artifactId>
+	<groupId>org.solmix.launch</groupId>
+	<artifactId>org.solmix.launch.base</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -103,8 +103,8 @@
 						<Bundle-Description>Solmix with OSGi R4 framework.</Bundle-Description>
 						<Bundle-Category>solmix</Bundle-Category>
 						<Private-Package>
-							!com.solmix.launch.base.shared*,
-							com.solmix.launch.base*
+							!org.solmix.launch.base.shared*,
+							org.solmix.launch.base*
 						</Private-Package>
 						<Embed-Dependency>
 							org.apache.felix.framework;inline=org/**|META-INF/**,

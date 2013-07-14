@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +26,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
-import com.solmix.commons.osgi.OSGIService;
-import com.solmix.commons.util.DataUtil;
-import com.solmix.osgi.proxy.Proxy;
+import org.solmix.commons.osgi.OSGIService;
+import org.solmix.commons.util.DataUtil;
+import org.solmix.osgi.proxy.Proxy;
 
 
 /**

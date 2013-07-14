@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <artifactId>modules</artifactId>
     <version>0.2.1-SNAPSHOT</version>
   </parent>
-  <artifactId>com.solmix.modules.vaadin</artifactId>
+  <artifactId>org.solmix.modules.vaadin</artifactId>
   <name>Solmix :: Modules :: Vaadin </name>
   <dependencies>
 		<dependency>
@@ -14,8 +14,8 @@
 			<version>7.1.0.beta1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.solmix.framework</groupId>
-			<artifactId>com.solmix.framework.datasource</artifactId>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.datasource</artifactId>
 		</dependency>
   </dependencies>
 </project>

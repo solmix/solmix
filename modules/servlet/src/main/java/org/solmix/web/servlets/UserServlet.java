@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import java.io.IOException;
 

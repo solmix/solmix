@@ -2,12 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modules</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.modules</groupId>
-  <artifactId>com.solmix.modules.jpa</artifactId>
+  <groupId>org.solmix.modules</groupId>
+  <artifactId>org.solmix.modules.jpa</artifactId>
   <packaging>bundle</packaging>
   <name>Solmix :: Module :: DataSource :: JPA</name>
   <dependencies>
@@ -18,8 +18,8 @@
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.datasource</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.datasource</artifactId>
   	</dependency>
   </dependencies>
   <build>

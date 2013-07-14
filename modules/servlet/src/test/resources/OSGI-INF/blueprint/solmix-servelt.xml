@@ -19,41 +19,41 @@
 	xmlns:slx="http://www.solmix.com/xmlns/config/v1.0.0">
 	
 	
-	<bean id="manager" class="com.solmix.web.servlets.SLXServices">
+	<bean id="manager" class="org.solmix.web.servlets.SLXServices">
 		<property name="shiroConfigIniManager" ref="shiroIni"></property></bean>
 	
-	<reference id="ds-cm" interface="com.solmix.fmk.config.ConfigRealm"
-		filter="(com.solmix.service.cm=solmix-ds)" >
+	<reference id="ds-cm" interface="org.solmix.fmk.config.ConfigRealm"
+		filter="(org.solmix.service.cm=solmix-ds)" >
 		<reference-listener ref="manager" bind-method="register_cm"	unbind-method="unregister_cm" />
 	</reference>
 	<reference id="ds-manager"
-		interface="com.solmix.services.datasource.DataSourceManagerService" >
+		interface="org.solmix.services.datasource.DataSourceManagerService" >
 		<reference-listener ref="manager" bind-method="register_dsm"	unbind-method="unregister_dsm" />
 	</reference>
 	<reference id="prc-manager"
-		interface="com.solmix.services.rpc.RPCManagerFactory">
+		interface="org.solmix.services.rpc.RPCManagerFactory">
 		<reference-listener ref="manager" bind-method="register_rpcm"	unbind-method="unregister_rpcm" />
 	</reference>
 	 <reference id="compression"
-		interface="com.solmix.services.interfaces.CompressionService"
+		interface="org.solmix.services.interfaces.CompressionService"
 		availability="optional">
 		<reference-listener ref="manager"
 			bind-method="register_compressionService"
 			unbind-method="unregister_compressionService" />
 	</reference> 
-	<bean id="shiroIni" class="com.solmix.web.security.ShiroConfigIniManager">
+	<bean id="shiroIni" class="org.solmix.web.security.ShiroConfigIniManager">
 		<property name="loginUrl" value="${loginUrl}"></property>
 		<property name="successUrl" value="${successUrl}"></property>
 		<property name="unauthorizedUrl" value="${unauthorizedUrl}"></property>
 		<property name="securityManager" ref="securityManager"></property>
 		<property name="filterChainDefinitions" value="${filterChainDefinitions}"></property>
 	</bean>
-	<bean id="jdbcRealm" class="com.solmix.web.security.realm.JdbcRealm">
+	<bean id="jdbcRealm" class="org.solmix.web.security.realm.JdbcRealm">
 		<property name="dataSourceFilter" value="${jdbcRealm.datasource.jndiosgi}"></property></bean>
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="jdbcRealm"></property>
 	</bean>
-	    <cm:property-placeholder persistent-id="com.solmix.service.cm.security" >
+	    <cm:property-placeholder persistent-id="org.solmix.service.cm.security" >
         <cm:default-properties>
         	<cm:property name="loginUrl" value="login.jsp"></cm:property>
         	<cm:property name="successUrl" value="Solmix.html"></cm:property>
@@ -68,7 +68,7 @@
         
          <slx:config-bundle name="solmix-security" >
         <slx:module name="security" flags="required">
-        <slx:cm class="com.solmix.web.security.ShiroConfigModule" >
+        <slx:cm class="org.solmix.web.security.ShiroConfigModule" >
          loginUrl=${loginUrl}
          successUrl=${successUrl}
          unauthorizedUrl =${unauthorizedUrl}

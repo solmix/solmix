@@ -16,14 +16,14 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
-import com.solmix.fmk.servlet.RequestContext;
+import org.solmix.fmk.servlet.RequestContext;
 
 /**
  * Servlet Request Timer

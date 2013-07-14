@@ -184,9 +184,9 @@
 				com/solmix/bundles/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>com.solmix.bundles:com.solmix.bundles.jackson</include>
-				<include>com.solmix.bundles:com.solmix.bundles.jxpath</include>
-				<include>com.solmix.bundles:com.solmix.bundles.poi</include>
+				<include>org.solmix.bundles:org.solmix.bundles.jackson</include>
+				<include>org.solmix.bundles:org.solmix.bundles.jxpath</include>
+				<include>org.solmix.bundles:org.solmix.bundles.poi</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -230,13 +230,13 @@
 				com/solmix/framework/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>com.solmix.framework:com.solmix.framework.api</include>
-				<include>com.solmix.framework:com.solmix.framework.util</include>
-				<include>com.solmix.framework:com.solmix.framework.pool</include>
-				<include>com.solmix.framework:com.solmix.framework.dsrepo</include>
-				<include>com.solmix.framework:com.solmix.framework.datasource</include>
-				<include>com.solmix.framework:com.solmix.framework.engine</include>
-				<include>com.solmix.framework:com.solmix.framework.servlets</include>
+				<include>org.solmix.framework:org.solmix.framework.api</include>
+				<include>org.solmix.framework:org.solmix.framework.util</include>
+				<include>org.solmix.framework:org.solmix.framework.pool</include>
+				<include>org.solmix.framework:org.solmix.framework.dsrepo</include>
+				<include>org.solmix.framework:org.solmix.framework.datasource</include>
+				<include>org.solmix.framework:org.solmix.framework.engine</include>
+				<include>org.solmix.framework:org.solmix.framework.servlets</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -247,7 +247,7 @@
 				com/solmix/services/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>com.solmix.services:com.solmix.services.event</include>
+				<include>org.solmix.services:org.solmix.services.event</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -258,7 +258,7 @@
 				com/solmix/modules/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>com.solmix.modules:com.solmix.modules.sql</include>
+				<include>org.solmix.modules:org.solmix.modules.sql</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>

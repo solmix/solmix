@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.solmix.hola</groupId>
+    <groupId>org.solmix.hola</groupId>
     <artifactId>hbase</artifactId>
     <version>0.2.1-SNAPSHOT</version>
   </parent>
-  <artifactId>com.solmix.hbase.util</artifactId>
+  <artifactId>org.solmix.hbase.util</artifactId>
   <name>Solmix :: Hola :: module :: hbase util</name>
   <dependencies>
   	<dependency>
@@ -14,8 +14,8 @@
   		<version>3.4.5</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.hola</groupId>
-  		<artifactId>com.solmix.hbase.client</artifactId>
+  		<groupId>org.solmix.hola</groupId>
+  		<artifactId>org.solmix.hbase.client</artifactId>
   		<version>0.2.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
@@ -23,8 +23,8 @@
   		<artifactId>commons-io</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>com.solmix.framework</groupId>
-  		<artifactId>com.solmix.framework.util</artifactId>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>org.solmix.framework.util</artifactId>
   	</dependency>
   </dependencies>
 </project>

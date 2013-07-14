@@ -2,19 +2,19 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>solmix</artifactId>
-    <groupId>com.solmix</groupId>
+    <groupId>org.solmix</groupId>
     <version>0.2.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.solmix.cms</groupId>
+  <groupId>org.solmix.cms</groupId>
   <artifactId>cms</artifactId>
   <packaging>pom</packaging>
   <name>Solmix :: Application :: CMS pom</name>
   <modules>
   	<!-- <module>client</module>
-  	<module>com.solmix.cms.api</module> -->
-  	<!-- <module>com.solmix.cms.jcr</module> -->
-  	<!-- <module>com.solmix.cms.core</module> -->
-  	<!-- <module>com.solmix.cms.servlets</module> -->
+  	<module>org.solmix.cms.api</module> -->
+  	<!-- <module>org.solmix.cms.jcr</module> -->
+  	<!-- <module>org.solmix.cms.core</module> -->
+  	<!-- <module>org.solmix.cms.servlets</module> -->
   </modules>
 </project>

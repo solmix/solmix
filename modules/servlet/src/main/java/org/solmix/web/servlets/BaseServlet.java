@@ -16,17 +16,17 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
-import com.solmix.SlxConstants;
+import org.solmix.SlxConstants;
 import org.slf4j.Logger;
-import com.solmix.fmk.servlet.ServletTools;
-import com.solmix.fmk.util.OSGIHelper;
+import org.solmix.fmk.servlet.ServletTools;
+import org.solmix.fmk.util.OSGIHelper;
 
 
 /**

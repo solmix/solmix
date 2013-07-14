@@ -7,5 +7,5 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 	 <import resource="classpath:spring-ds.xml" />
-<!-- <bean id="listener" class="com.solmix.fmk.spring.event.SpringEventListener"/> -->
+<!-- <bean id="listener" class="org.solmix.fmk.spring.event.SpringEventListener"/> -->
 </beans>

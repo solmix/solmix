@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,10 +32,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.solmix.api.interfaces.CompressionService;
+import org.solmix.api.interfaces.CompressionService;
 import org.slf4j.Logger;
-import com.solmix.fmk.servlet.RequestContext;
-import com.solmix.fmk.servlet.ServletTools;
+import org.solmix.fmk.servlet.RequestContext;
+import org.solmix.fmk.servlet.ServletTools;
 
 /**
  * 

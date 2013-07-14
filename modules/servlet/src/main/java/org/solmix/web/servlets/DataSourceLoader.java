@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package com.solmix.web.servlets;
+package org.solmix.web.servlets;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -29,12 +29,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.solmix.commons.util.DataUtil;
-import com.solmix.fmk.js.ISCJavaScript;
-import com.solmix.api.datasource.DataSource;
-import com.solmix.api.exception.SlxException;
-import com.solmix.api.types.Texception;
-import com.solmix.api.types.Tmodule;
+import org.solmix.commons.util.DataUtil;
+import org.solmix.fmk.js.ISCJavaScript;
+import org.solmix.api.datasource.DataSource;
+import org.solmix.api.exception.SlxException;
+import org.solmix.api.types.Texception;
+import org.solmix.api.types.Tmodule;
 
 /**
  * @author solomon

@@ -15,15 +15,15 @@
 	<service interface="org.osgi.service.cm.ManagedService">
 		<service-properties>
 			<entry key="service.pid"
-				value="com.solmix.modules.sql">
+				value="org.solmix.modules.sql">
 			</entry>
 		</service-properties>
-		<bean class="com.solmix.sql.internal.SQLConfigManager" />
+		<bean class="org.solmix.sql.internal.SQLConfigManager" />
 	</service>
 
-	<bean id="sqlDataSource" class="com.solmix.sql.SQLDataSource" />
-	<!-- <bean id="batchSqlDataSource" class="com.solmix.sql.batch.BatchSQLDataSource" /> -->
-	<service ref="sqlDataSource" interface="com.solmix.api.datasource.DataSource">
+	<bean id="sqlDataSource" class="org.solmix.sql.SQLDataSource" />
+	<!-- <bean id="batchSqlDataSource" class="org.solmix.sql.batch.BatchSQLDataSource" /> -->
+	<service ref="sqlDataSource" interface="org.solmix.api.datasource.DataSource">
 		<service-properties>
 			<entry key="type" value="sql"></entry>
 		</service-properties>
@@ -33,16 +33,16 @@
 		<reference-listener ref="sqlDataSource" bind-method="register_eventAdmin"
 			unbind-method="unregister_eventAdmin" />
 	</reference> -->
-	<!-- <service ref="batchSqlDataSource" interface="com.solmix.services.datasource.DataSource">
+	<!-- <service ref="batchSqlDataSource" interface="org.solmix.services.datasource.DataSource">
 		<service-properties>
 			<entry key="type" value="batchSql"></entry>
 		</service-properties>
 	</service> -->
-	<bean class="com.solmix.sql.ConnectionManager"
+	<bean class="org.solmix.sql.ConnectionManager"
 		init-method="init">
 		<property name="poolServiceFactory">
 			<reference
-				interface="com.solmix.api.pool.PoolServiceFactory" />
+				interface="org.solmix.api.pool.PoolServiceFactory" />
 		</property>
 	</bean>
 </blueprint>

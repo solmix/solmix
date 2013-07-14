@@ -28,6 +28,7 @@ import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.ExportDisplay;
 import com.smartgwt.client.types.ExportFormat;
 import com.smartgwt.client.types.ListGridComponent;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
@@ -187,7 +188,8 @@ public class PagedListGrid extends ListGrid
         gridPageControls = new ToolStrip();
 
         gridPageControls.setWidth100();
-        gridPageControls.setHeight(22);
+        gridPageControls.setHeight(24);
+        gridPageControls.setDefaultLayoutAlign(VerticalAlignment.CENTER);
 
         pageText = new TextItem();
         pageText.setWidth(50);
@@ -336,6 +338,7 @@ public class PagedListGrid extends ListGrid
         });
         gridPageControls.addSeparator();
         gridPageControls.addMember(print);
+        gridPageControls.addSeparator();
         Menu menu = new Menu();
         MenuItem csv = new MenuItem("Excel导出(CSV)");
         // excel.setIcon("silk/check.png");

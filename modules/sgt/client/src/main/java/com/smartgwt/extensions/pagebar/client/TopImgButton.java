@@ -20,6 +20,7 @@
 package com.smartgwt.extensions.pagebar.client;
 
 import com.smartgwt.client.types.Cursor;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -43,6 +44,7 @@ public class TopImgButton extends HLayout
     {
         setWidth(buttonWidth);
         setHeight(buttonHeight);
+        setAlign(VerticalAlignment.CENTER);
         enable.setSrc(enableImgSrc);
         enable.setWidth(buttonWidth);
         enable.setHeight(buttonHeight);

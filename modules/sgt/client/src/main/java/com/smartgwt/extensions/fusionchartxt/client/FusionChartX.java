@@ -39,15 +39,14 @@ public class FusionChartX extends Canvas
 
     private static int count = 0;
 
-    private  String swfId="fcxId_0";
-    private String renderId="chartContainer_0";
+    private  String swfId;
+    private String renderId;
     private static String chartRoot;
 
     public FusionChartX() {
-        swfId = "fcxId_" + count;
-        renderId="slx_chartC_"+count;
+        swfId = "fcxId_" + getID();
+        renderId="slx_chartC_"+getID();
         setID(renderId);
-        ++count;
         setRedrawOnResize(false);
         setWidth100();
         setHeight100();
@@ -85,8 +84,21 @@ public class FusionChartX extends Canvas
         return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
         		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
     }
+   public void getFusionChart(final String data, final String chartType,final int width,final int height){
+	    Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 
-   protected native void _getFusionChart(String data, String chartType, int width, int height) /*-{
+			@Override
+			public boolean execute() {
+				if(isCanUpdate()){
+					_getFusionChart(data,chartType,width,height);
+					return false;
+				}
+				return true;
+			}
+       }, 100);
+   }
+
+    public native void _getFusionChart(String data, String chartType, int width, int height) /*-{
         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
         var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
@@ -97,9 +109,23 @@ public class FusionChartX extends Canvas
            else chart.setDataXML(data);
            chart.render(renderId);
          } catch (e) {
+         alert(e);
         }  
     }-*/;
-    protected native void _getFusionChart(String data, String chartType, String width, String height) /*-{
+    public void getFusionChart(final String data, final String chartType,final String width,final String height){
+    	 Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
+
+ 			@Override
+ 			public boolean execute() {
+ 				if(isCanUpdate()){
+ 					_getFusionChart(data,chartType,width,height);
+ 					return false;
+ 				}
+ 				return true;
+ 			}
+        }, 100);
+    }
+    public native void _getFusionChart(String data, String chartType, String width, String height) /*-{
         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
         var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
@@ -110,6 +136,7 @@ public class FusionChartX extends Canvas
             else chart.setDataXML(data);
             chart.render(renderId);
           } catch (e) {
+           alert(e);
         }  
     }-*/;
     public void resizeContainerAndActiveChart(String chartId, int width, int height) {
@@ -146,59 +173,28 @@ public class FusionChartX extends Canvas
                 // ignore
           }
     }-*/;
-    public void getFusionChart(final String data,final String chartType, final int width,final int height) {
-        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
+  public void getFusionChart(final String data,final String chartType) {
+	  Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 
-            @Override
-            public boolean execute() {
-                if(isCanUpdate()){
-                    _getFusionChart(data,chartType,width,height);
-                    return false;
-                }else{
-                    return true;
-                }
-            }
-            
-        }, 100);
-    }
-    public void getFusionChart(final String data,final String chartType, final String width,final String height) {
-        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
-
-            @Override
-            public boolean execute() {
-                if(isCanUpdate()){
-                    _getFusionChart(data,chartType,width,height);
-                    return false;
-                }else{
-                    return true;
-                }
-            }
-            
-        }, 100);
-    }
-    public void getFusionChart(final String data,final String chartType) {
-        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand(){
-
-            @Override
-            public boolean execute() {
-                if(isCanUpdate()){
-                    _getFusionChart(data,chartType);
-                    return false;
-                }else{
-                    return true;
-                }
-            }
-            
-        }, 100);
-    }
+			@Override
+			public boolean execute() {
+				if(isCanUpdate()){
+					_getFusionChart(data,chartType);
+					return false;
+				}
+				return true;
+			}
+      }, 100);
+  }
     public void _getFusionChart(String data, String chartType) {
-        _getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
+    	
+        getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
   }
     public void getFusionMap(String data, String chartType) {
         getFusionMap(data, chartType, getInnerWidth(), getInnerHeight());
   }
 
-    protected native void getFusionMap(String data, String chartType, int width, int height) /*-{
+public native void getFusionMap(String data, String chartType, int width, int height) /*-{
   if ($wnd.FusionCharts.setCurrentRenderer != null) {
         $wnd.FusionCharts.setCurrentRenderer('javascript');
          var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
