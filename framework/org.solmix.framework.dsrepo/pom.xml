@@ -11,11 +11,6 @@
   <name>Solmix :: FrameWork :: DataSource Repository</name>
    <dependencies>
   	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-simple</artifactId>
-  		<scope>provided</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>org.solmix.framework</groupId>
   		<artifactId>org.solmix.framework.util</artifactId>
   	</dependency>
