@@ -174,6 +174,7 @@
 			</outputFileNameMapping>
 			<includes>
 				<include>org.apache.geronimo.specs:geronimo-jta_1.1_spec</include>
+				<include>org.apache.geronimo.specs:geronimo-servlet_2.5_spec</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -259,6 +260,17 @@
 			</outputFileNameMapping>
 			<includes>
 				<include>org.solmix.modules:org.solmix.modules.sql</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>/bundles</outputDirectory>
+			<unpack>false</unpack>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputFileNameMapping>
+				org/apache/shiro/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<includes>
+				<include>org.apache.shiro:shiro-core</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>

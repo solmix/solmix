@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
@@ -99,7 +98,7 @@ public class SGTServlet  extends HttpServlet
                 cometServlet.init(getServletConfig());
             }
             try {
-                response.setCharacterEncoding("GBK");
+//                response.setCharacterEncoding("GBK");
                 cometServlet.service(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
