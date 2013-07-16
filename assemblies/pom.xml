@@ -10,6 +10,5 @@
   <packaging>pom</packaging>
   <modules>
   	<module>launcher</module>
-    <module>features</module>
   </modules>
 </project>

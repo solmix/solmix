@@ -16,8 +16,9 @@
 	-->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-	<bean id="bar" class="org.solmix.SlxConstants">
-	<property name="context" ref="blueprintBundleContext" />
+	<bean id="bar" class="org.solmix.SlxConstants"
+		init-method="init">
+		<property name="context" ref="blueprintBundleContext" />
 	</bean>
-	
+
 </blueprint>

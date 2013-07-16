@@ -29,6 +29,11 @@ public class SlxConstants
 {
 
     private static BundleContext context;
+    public void init(){
+        String karaf_base=System.getProperty("karaf.base");
+        if(karaf_base!=null)
+            System.setProperty("solmix.base", karaf_base);
+    }
 
     /**
      * @return the context
