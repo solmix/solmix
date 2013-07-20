@@ -188,6 +188,7 @@
 				<include>org.solmix.bundles:org.solmix.bundles.jackson</include>
 				<include>org.solmix.bundles:org.solmix.bundles.jxpath</include>
 				<include>org.solmix.bundles:org.solmix.bundles.poi</include>
+				<include>org.solmix.bundles:org.solmix.bundles.dbcp</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
