@@ -44,5 +44,6 @@
 		<module>org.solmix.bundles.jackson</module>
 		<module>org.solmix.bundles.jxpath</module>
 		<module>org.solmix.bundles.poi</module>
+		<module>org.solmix.bundles.dbcp</module>
 	</modules>
 </project>
