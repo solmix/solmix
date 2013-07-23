@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module xmlns="http://www.solmix.com/xmlns/datasource/v1.0.1">
+<module xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1">
 	<DataSource ID="supplyItem" serverType="sql" tableName="supplyItem"
 		titleField="itemName" testFileName="/datasource/test_data/supplyItem.data.xml"
 		>

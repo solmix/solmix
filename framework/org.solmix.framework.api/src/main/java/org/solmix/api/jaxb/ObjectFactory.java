@@ -31,7 +31,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _Module_QNAME = new QName("http://www.solmix.com/xmlns/datasource/v1.0.1", "module");
+    private final static QName _Module_QNAME = new QName("http://www.solmix.org/xmlns/datasource/v1.0.1", "module");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.solmix.api.jaxb
@@ -188,7 +188,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Module }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1", name = "module")
+    @XmlElementDecl(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1", name = "module")
     public JAXBElement<Module> createModule(Module value) {
         return new JAXBElement<Module>(_Module_QNAME, Module.class, null, value);
     }

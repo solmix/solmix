@@ -41,7 +41,7 @@ public class TfieldNameValue {
     protected String fieldName;
     @XmlAttribute
     protected String value;
-    @XmlAttribute(namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1")
+    @XmlAttribute(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1")
     protected String textMatchStyle;
 
     /**

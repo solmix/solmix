@@ -5,5 +5,5 @@
 // Generated on: 2013.05.28 at 04:57:48 下午 CST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.solmix.api.jaxb;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://www.solmix.com/xmlns/datasource/v1.0.1"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.com/xmlns/datasource/v1.0.1"
+<xsd:schema xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/datasource/v1.0.1"
 	elementFormDefault="qualified" attributeFormDefault="qualified"
 	version="1.0.1">
 

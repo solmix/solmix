@@ -9,7 +9,7 @@
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
 	<listener>
-		<listener-class>org.solmix.fmk.spring.SpringContextLoader</listener-class>
+		<listener-class>org.solmix.fmk.spring.SpringShiroContextLoader</listener-class>
 	</listener>
 	<filter>
 		<filter-name>contextFilter</filter-name>
@@ -18,6 +18,18 @@
 	<filter-mapping>
 		<filter-name>contextFilter</filter-name>
 		<url-pattern>/data/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>securityFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>securityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher> 
+	    <dispatcher>FORWARD</dispatcher> 
+	    <dispatcher>INCLUDE</dispatcher> 
+	    <dispatcher>ERROR</dispatcher>
 	</filter-mapping>
 	<servlet>
 		<servlet-name>solmix</servlet-name>

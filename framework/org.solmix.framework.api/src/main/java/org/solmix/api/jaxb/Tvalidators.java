@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="validator" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tvalidator" maxOccurs="unbounded"/>
+ *         &lt;element name="validator" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tvalidator" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

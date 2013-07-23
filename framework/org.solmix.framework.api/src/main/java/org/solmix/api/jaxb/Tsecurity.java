@@ -24,10 +24,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_security"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_security"/>
  *       &lt;/sequence>
  *       &lt;attribute name="requireAuth" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" />
- *       &lt;attribute name="operator" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Eoperator" />
+ *       &lt;attribute name="operator" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Eoperator" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

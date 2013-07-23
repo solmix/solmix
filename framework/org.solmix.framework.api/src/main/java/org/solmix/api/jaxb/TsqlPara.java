@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="TsqlPara">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Aso_datasource"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Aso_datasource"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

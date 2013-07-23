@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="exportFields" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="exportResults" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" />
- *       &lt;attribute name="exportAs" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}EexportAs" />
+ *       &lt;attribute name="exportAs" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}EexportAs" />
  *       &lt;attribute name="exportFilename" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="lineBreakStyle" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="exportDelimiter" type="{http://www.w3.org/2001/XMLSchema}string" />

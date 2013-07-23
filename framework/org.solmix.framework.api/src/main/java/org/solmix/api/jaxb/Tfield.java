@@ -24,14 +24,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="valueMap" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}TvalueMap" minOccurs="0"/>
- *         &lt;element name="validators" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tvalidators" minOccurs="0"/>
+ *         &lt;element name="valueMap" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}TvalueMap" minOccurs="0"/>
+ *         &lt;element name="validators" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tvalidators" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Arela_field"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_control_filed"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_size_field"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_main_field"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Aso_field"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Arela_field"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_control_filed"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_size_field"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_main_field"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Aso_field"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

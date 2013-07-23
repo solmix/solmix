@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;choice>
  *         &lt;element name="list" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="dependentFields" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="valueMap" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}TvalueMap"/>
+ *         &lt;element name="valueMap" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}TvalueMap"/>
  *         &lt;element name="serverCondition" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="service" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tservice"/>
+ *         &lt;element name="service" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tservice"/>
  *       &lt;/choice>
  *       &lt;attribute name="clientOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
- *       &lt;attribute name="type" use="required" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Evalidator" />
+ *       &lt;attribute name="type" use="required" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Evalidator" />
  *       &lt;attribute name="stopIfFalse" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
  *       &lt;attribute name="errorMessage" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="serverOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -79,9 +79,9 @@ public class Tvalidator {
     protected Boolean stopIfFalse;
     @XmlAttribute
     protected String errorMessage;
-    @XmlAttribute(namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1")
+    @XmlAttribute(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1")
     protected Boolean serverOnly;
-    @XmlAttribute(name = "validateOnChange ", namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1")
+    @XmlAttribute(name = "validateOnChange ", namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1")
     protected Boolean validateOnChange0020;
     @XmlAttribute
     protected Double max;
@@ -103,7 +103,7 @@ public class Tvalidator {
     protected String substring;
     @XmlAttribute
     protected String operator;
-    @XmlAttribute(namespace = "http://www.solmix.com/xmlns/datasource/v1.0.1")
+    @XmlAttribute(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1")
     protected Long count;
 
     /**

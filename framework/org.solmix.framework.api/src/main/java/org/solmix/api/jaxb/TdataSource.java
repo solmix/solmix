@@ -36,25 +36,25 @@ import javax.xml.namespace.QName;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="description" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tdescription" minOccurs="0"/>
- *         &lt;element name="fields" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tfields" minOccurs="0"/>
- *         &lt;element name="operationBindings" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}ToperationBindings" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gc_client_i"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_with_operation"/>
- *         &lt;element name="sqlPara" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}TsqlPara" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_extention"/>
+ *         &lt;element name="description" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tdescription" minOccurs="0"/>
+ *         &lt;element name="fields" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tfields" minOccurs="0"/>
+ *         &lt;element name="operationBindings" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}ToperationBindings" minOccurs="0"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gc_client_i"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_with_operation"/>
+ *         &lt;element name="sqlPara" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}TsqlPara" minOccurs="0"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_extention"/>
  *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Acommon_datasource"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_client_i"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_client"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Aco_datasource"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Atitle"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_desc"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Atransaction"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Afield_ds"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Aidentity"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Avalidate"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Aso_datasource"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Acommon_datasource"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_client_i"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_client"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Aco_datasource"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Atitle"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_desc"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Atransaction"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Afield_ds"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Aidentity"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Avalidate"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Aso_datasource"/>
  *       &lt;anyAttribute processContents='lax'/>
  *     &lt;/restriction>
  *   &lt;/complexContent>

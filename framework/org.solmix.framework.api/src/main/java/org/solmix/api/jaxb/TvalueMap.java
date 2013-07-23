@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;choice>
- *         &lt;element name="value" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tvalue" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="service" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Tservice" minOccurs="0"/>
+ *         &lt;element name="value" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tvalue" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="service" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Tservice" minOccurs="0"/>
  *       &lt;/choice>
  *     &lt;/restriction>
  *   &lt;/complexContent>

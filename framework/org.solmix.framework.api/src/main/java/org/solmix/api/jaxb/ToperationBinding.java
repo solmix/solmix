@@ -26,19 +26,19 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gc_client_i"/>
- *         &lt;element name="export" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}Texport" minOccurs="0"/>
- *         &lt;element name="queryClauses" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}TqueryClauses" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_with_operation"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gc_client_i"/>
+ *         &lt;element name="export" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}Texport" minOccurs="0"/>
+ *         &lt;element name="queryClauses" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}TqueryClauses" minOccurs="0"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_with_operation"/>
  *         &lt;element name="outputs" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_operation"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_extention"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_operation"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_extention"/>
  *         &lt;element name="command" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Gs_customFields"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Gs_customFields"/>
  *       &lt;/sequence>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Atransaction"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_action"/>
- *       &lt;attGroup ref="{http://www.solmix.com/xmlns/datasource/v1.0.1}Ac_client_i"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Atransaction"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_action"/>
+ *       &lt;attGroup ref="{http://www.solmix.org/xmlns/datasource/v1.0.1}Ac_client_i"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

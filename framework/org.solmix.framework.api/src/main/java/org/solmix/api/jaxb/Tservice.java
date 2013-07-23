@@ -30,7 +30,7 @@ import javax.xml.namespace.QName;
  *       &lt;sequence>
  *         &lt;element name="methodArguments" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="lookupStyle" type="{http://www.solmix.com/xmlns/datasource/v1.0.1}EserviceStyle" />
+ *       &lt;attribute name="lookupStyle" type="{http://www.solmix.org/xmlns/datasource/v1.0.1}EserviceStyle" />
  *       &lt;attribute name="interface" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="filter" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="class" type="{http://www.w3.org/2001/XMLSchema}string" />
