@@ -39,8 +39,8 @@ public class FusionChartX extends Canvas
 
     private static int count = 0;
 
-    private  String swfId;
-    private String renderId;
+    private final  String swfId;
+    private final String renderId;
     private static String chartRoot;
 
     public FusionChartX() {
@@ -197,7 +197,7 @@ public class FusionChartX extends Canvas
 public native void getFusionMap(String data, String chartType, int width, int height) /*-{
   if ($wnd.FusionCharts.setCurrentRenderer != null) {
         $wnd.FusionCharts.setCurrentRenderer('javascript');
-         var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
+        var chartId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartId()();
         var renderId=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getRenderId()();
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
         var chartPath=chartRoot+chartType+".swf";
@@ -206,5 +206,19 @@ public native void getFusionMap(String data, String chartType, int width, int he
               chart.render(renderId);
   }
   }-*/;
-
+    @Override
+    protected native void onInit()/*-{
+        this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::onInitialize()();
+        
+        // Handle redraw case
+        var self = this.@com.smartgwt.client.widgets.BaseWidget::getOrCreateJsObj()();
+        self.redraw = function() {
+        }
+        
+        }-*/;
+    
+    protected void onInitialize()
+    {
+    super.onInit();
+    }
 }
