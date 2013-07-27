@@ -19,8 +19,9 @@
 
 package org.solmix.api.pool;
 
-import org.apache.commons.pool.KeyedPoolableObjectFactory;
+import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.solmix.api.datasource.DSRequest;
 
 /**
@@ -33,25 +34,25 @@ import org.solmix.api.datasource.DSRequest;
 public abstract class SlxKeyedPoolableObjectFactory implements KeyedPoolableObjectFactory, IPoolableObjectFactory
 {
 
-    public int numActivateObjectCalls;
+    public AtomicLong numActivateObjectCalls;
 
-    public int numDestroyObjectCalls;
+    public AtomicLong numDestroyObjectCalls;
 
-    public int numMakeObjectCalls;
+    public AtomicLong numMakeObjectCalls;
 
-    public int numPassivateObjectCalls;
+    public AtomicLong numPassivateObjectCalls;
 
-    public int numValidateObjectCalls;
+    public AtomicLong numValidateObjectCalls;
 
     protected Object pool;
 
     public SlxKeyedPoolableObjectFactory()
     {
-        numActivateObjectCalls = 0;
-        numDestroyObjectCalls = 0;
-        numMakeObjectCalls = 0;
-        numPassivateObjectCalls = 0;
-        numValidateObjectCalls = 0;
+        numActivateObjectCalls = new AtomicLong();
+        numDestroyObjectCalls = new AtomicLong();
+        numMakeObjectCalls= new AtomicLong();
+        numPassivateObjectCalls = new AtomicLong();
+        numValidateObjectCalls = new AtomicLong();
         pool = null;
     }
 

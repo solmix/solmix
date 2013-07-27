@@ -23,7 +23,6 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
@@ -93,7 +92,14 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public void activateObject(Object key, Object obj) throws Exception {
-        numActivateObjectCalls++;
+        numActivateObjectCalls.getAndIncrement();
+        if (obj instanceof DataSource) {
+            DataSource ds = (DataSource) obj;
+            if(!ds.getName().equals(key.toString())){
+                throw new java.lang.IllegalStateException(new StringBuilder().append("Miss match datasource,the key is ")
+                    .append(key.toString()).append(" but the datasource is ").append(ds.getName()).toString());
+            }
+        }
 
     }
 
@@ -104,8 +110,9 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public void destroyObject(Object key, Object obj) throws Exception {
-        numDestroyObjectCalls++;
+        numDestroyObjectCalls.getAndIncrement();
         ((DataSource) obj).clearState();
+        obj=null;
 
     }
 
@@ -116,7 +123,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public DataSource makeObject(Object key) throws Exception {
-        numMakeObjectCalls++;
+        numMakeObjectCalls.getAndIncrement();
         return makeUnpooledObject(key);
     }
 
@@ -127,7 +134,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public void passivateObject(Object key, Object obj) throws Exception {
-        numPassivateObjectCalls++;
+        numPassivateObjectCalls.getAndIncrement();
         ((DataSource) obj).clearState();
 
     }
@@ -139,7 +146,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public boolean validateObject(Object key, Object obj) {
-        numValidateObjectCalls++;
+        numValidateObjectCalls.getAndIncrement();
         if (obj instanceof DataSource) {
             DataSource ds = (DataSource) obj;
             long timestamp = ds.getContext().getConfigTimestamp();
@@ -157,9 +164,11 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
             } catch (IOException e) {
                 log.warn("Get da config file failed,IO Exception", e);
             }
+           
             if (lastTimeStamp != timestamp)
                 return false;
         }
+        
         return true;
     }
 
