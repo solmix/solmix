@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.IPoolableObjectFactory;
@@ -96,7 +95,12 @@ public class PoolManager implements PoolService
             try {
                 return ((SlxKeyedObjectPool) objectSource).borrowObject(key);
             } catch (Exception e) {
-                throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow Object faild", e);
+                log.warn("Borrow object from pool failed,used unpooled object");
+                try{
+                    return borrowUnpooledObject(key);
+                }catch (Exception trye) {
+                    throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild", e);
+                }
             }
         if (objectSource instanceof SlxObjectPool)
             try {
