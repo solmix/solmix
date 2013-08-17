@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
@@ -87,16 +88,14 @@ public class LoadSchemaServlet extends HttpServlet
                     response.setContentType("text/javascript");
 //                    SlxContext.getWebContext().setNoCacheHeaders();
                     //TODO
-                    Writer out=null;
-                    if(log.isDebugEnabled()){
-                        out = new StringWriter();
-                    }else{
-                        out=response.getWriter();
-                    }
+                    Writer writer = response.getWriter();
+
+                    // OutputStream os = response.getOutputStream();
+                    Writer out = new StringWriter();
+                    // (new JacksonJSParserImpl()).toJavaScript(writer, ds.getContext().getTdataSource());
+                    ISCJavaScript.get().toDataSource(writer, ds, "AdvanceDataSource");
                     ISCJavaScript.get().toDataSource(out, ds, "AdvanceDataSource");
-                    if(log.isDebugEnabled()){
-                        log.debug(out.toString());
-                    }
+                    System.out.println(out.toString());
                 } finally {
                     if (ds != null)
                         dsmService.free(ds);

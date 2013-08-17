@@ -24,7 +24,13 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
+import com.smartgwt.client.rpc.RPCRequest;
+import com.smartgwt.client.rpc.RPCResponse;
+import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.extensions.advanceds.client.Roperation;
+import com.smartgwt.extensions.advanceds.client.SlxRPC;
+import com.smartgwt.extensions.advanceds.client.XMLCallBack;
 
 /**
  * 
@@ -39,17 +45,28 @@ public class FusionChartX extends Canvas
 
     private static int count = 0;
 
-    private final  String swfId;
-    private final String renderId;
+    private  String swfId;
+    private String renderId;
     private static String chartRoot;
 
+    public FusionChartX(final String data, final String chartType,Canvas parentElement){
+    	final FusionChartX _this = new FusionChartX();
+    	parentElement.addChild(_this);
+    	 SlxRPC.send( new Roperation(data,DSOperationType.FETCH), new XMLCallBack(){
+
+             @Override
+             public void execute(RPCResponse response, String xmlString, RPCRequest request) {
+            	 _this.getFusionChart(xmlString, chartType);
+                 
+             }
+             
+         });
+    	
+    }
     public FusionChartX() {
         swfId = "fcxId_" + getID();
         renderId="slx_chartC_"+getID();
-        setID(renderId);
         setRedrawOnResize(false);
-        setWidth100();
-        setHeight100();
     }
     public String getChartId(){
         return swfId;
@@ -63,8 +80,7 @@ public class FusionChartX extends Canvas
             chartRoot=GWT.getModuleName()+"/xchart/";
       return chartRoot ;
     }
-    
-    
+  
     /**
      * @return the canUpdate
      */
@@ -80,8 +96,8 @@ public class FusionChartX extends Canvas
   
    @Override
     public String getInnerHTML() {
-       
-        return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
+//	   return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
+        return "<div id='"+renderId+"'   style='margin-right:30px;float:left;vertical-align:center;' >" +
         		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
     }
    public void getFusionChart(final String data, final String chartType,final int width,final int height){
@@ -202,23 +218,23 @@ public native void getFusionMap(String data, String chartType, int width, int he
         var chartRoot=this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::getChartRoot()();
         var chartPath=chartRoot+chartType+".swf";
         var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
-              chart.setXMLData(data);
-              chart.render(renderId);
+            chart.setXMLData(data);
+            chart.render(renderId);
   }
   }-*/;
-    @Override
-    protected native void onInit()/*-{
-        this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::onInitialize()();
-        
-        // Handle redraw case
-        var self = this.@com.smartgwt.client.widgets.BaseWidget::getOrCreateJsObj()();
-        self.redraw = function() {
-        }
-        
-        }-*/;
-    
-    protected void onInitialize()
-    {
-    super.onInit();
-    }
+	@Override
+	protected native void onInit()/*-{
+	    this.@com.smartgwt.extensions.fusionchartxt.client.FusionChartX::onInitialize()();
+	    
+	    // Handle redraw case
+	    var self = this.@com.smartgwt.client.widgets.BaseWidget::getOrCreateJsObj()();
+	    self.redraw = function() {
+	    }
+	    
+	    }-*/;
+	
+	protected void onInitialize()
+	{
+		super.onInit();
+	}
 }
