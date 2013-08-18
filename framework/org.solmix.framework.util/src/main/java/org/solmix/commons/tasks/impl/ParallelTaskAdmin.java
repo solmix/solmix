@@ -87,11 +87,13 @@ public class ParallelTaskAdmin implements TaskAdmin
         }
     }
 
-    /*
-     * (non-Javadoc)
+   
+    /**
+     * Once the garbage collector frees memory space occupied by the object,
+     *  the first call this method.
      * 
-     * @see java.lang.Object#finalize()
      */
+    @Override
     protected void finalize() {
         if (asy_pool != null)
             asy_pool.shutdown();

@@ -32,12 +32,11 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.sql.internal.SQLConfigManager;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-9-9
  */
 
@@ -76,9 +75,15 @@ public class SQLMetaData
             }
         return conn;
     }
-
+    
+    /**
+     * Once the garbage collector frees memory space occupied by the object,
+     *  the first call this method.
+     * 
+     */
     @Override
     protected void finalize() throws Throwable {
+        if(conn!=null)
         conn.close();
     }
 

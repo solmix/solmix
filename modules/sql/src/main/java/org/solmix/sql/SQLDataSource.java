@@ -36,7 +36,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -947,6 +946,11 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     }
 
+    /**
+     * Once the garbage collector frees memory space occupied by the object,
+     *  the first call this method.
+     * 
+     */
     @Override
     public void finalize() throws Throwable {
         if (driver != null)
