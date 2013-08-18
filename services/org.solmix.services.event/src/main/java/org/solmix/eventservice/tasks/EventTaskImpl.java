@@ -23,13 +23,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.LogService;
-
 import org.solmix.eventservice.Activator;
 import org.solmix.eventservice.EventTask;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-10-1
  */
 
@@ -37,20 +36,21 @@ public class EventTaskImpl implements EventTask
 {
 
     // The service reference of the handler
-    private final ServiceReference/* <EventHandler> */eventHandlerRef;
+    private final ServiceReference<EventHandler> eventHandlerRef;
 
     // The event to deliver to the handler
     private final Event event;
 
     private final EventTaskManagerImpl taskManager;
 
-    EventTaskImpl(EventTaskManagerImpl manager, Event event, ServiceReference/* <EventHandler> */ref)
+    EventTaskImpl(EventTaskManagerImpl manager, Event event, ServiceReference <EventHandler> ref)
     {
         eventHandlerRef = ref;
         this.event = event;
         taskManager = manager;
     }
 
+    @Override
     public void execute() {
         // Get the service object
         final EventHandler handler = taskManager.getEventHandler(eventHandlerRef);

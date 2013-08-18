@@ -31,14 +31,14 @@ import org.solmix.eventservice.util.SyncEventThread;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-10-1
  */
 
 public class SyncDeliver implements EventDeliver
 {
 
-    private EventThreadPool threadPool;
+    private final EventThreadPool threadPool;
 
     private int timeout;
 
@@ -107,6 +107,7 @@ public class SyncDeliver implements EventDeliver
                 final Rendezvous timerBarrier = new Rendezvous();
                 threadPool.executeTask(new Runnable() {
 
+                    @Override
                     public void run() {
                         try {
                             // notify the outer thread to start the timer
@@ -138,10 +139,7 @@ public class SyncDeliver implements EventDeliver
 
     }
 
-    /**
-     * @param task
-     * @return
-     */
+  
     private boolean useTimeout(EventTask task) {
         // we only check the classname if a timeout is configured
         if (timeout > 0) {
@@ -182,6 +180,7 @@ public class SyncDeliver implements EventDeliver
             packageName = name;
         }
 
+        @Override
         public boolean match(String className) {
             final int pos = className.lastIndexOf('.');
             return pos > -1 && className.substring(0, pos).equals(packageName);
@@ -199,6 +198,7 @@ public class SyncDeliver implements EventDeliver
             packageName = name + '.';
         }
 
+        @Override
         public boolean match(String className) {
             final int pos = className.lastIndexOf('.');
             return pos > -1 && className.substring(0, pos + 1).startsWith(packageName);
@@ -216,6 +216,7 @@ public class SyncDeliver implements EventDeliver
             className = name;
         }
 
+        @Override
         public boolean match(String className) {
             return className.equals(this.className);
         }

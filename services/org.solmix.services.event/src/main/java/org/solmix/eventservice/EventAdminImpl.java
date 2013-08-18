@@ -30,14 +30,14 @@ import org.solmix.eventservice.util.EventThreadPool;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-9-27
  */
 
 public class EventAdminImpl implements EventAdmin
 {
-    private SyncDeliver syn_deliver;
-    private EventDeliver asy_deliver;
+    private final SyncDeliver syn_deliver;
+    private final EventDeliver asy_deliver;
     private EventTaskManager taskManager;
 
     public EventAdminImpl(
@@ -120,6 +120,7 @@ public class EventAdminImpl implements EventAdmin
              * @throws IllegalStateException - This is a null object and this method
              *          will always throw an IllegalStateException
              */
+            @Override
             public List<EventTask> createEventTasks(final Event event)
             {
                 throw new IllegalStateException("The EventAdmin is stopped");
