@@ -26,12 +26,14 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.commons.util.DataUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 /**
  * Context for DataSource request.
@@ -455,7 +457,13 @@ public class DSRequestData implements java.io.Serializable
             else if (operation instanceof Map<?, ?>) {
                 Map<String, String> tmp = (Map<String, String>) operation;
                 return tmp.get("dataSource") + "_" + tmp.get("type");
-            } else {
+            } else if(  operation instanceof Element){
+                Element e =(Element)operation;
+               Node textV= e.getFirstChild();
+               if(textV instanceof Text)
+                   return ((Text)textV).getData();
+                
+            }else {
                 if (log.isWarnEnabled())
                     log.warn("operation is validte object:" + operation.toString());
             }
