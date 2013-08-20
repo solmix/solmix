@@ -20,7 +20,7 @@
 package org.solmix.sgt.server;
 
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.StringReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +31,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
@@ -43,9 +40,14 @@ import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.rpc.HttpServletRequestParser;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.serialize.JSParser;
+import org.solmix.api.serialize.XMLParser;
+import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
 import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.serialize.XMLParserFactoryImpl;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * 
@@ -81,7 +83,6 @@ public class RestRequestParser implements HttpServletRequestParser
 
         HttpServletRequest request = webContext.getRequest();
         String viewType = request.getParameter("viewType");
-
         if ("fchart".equals(viewType)) {
             ConfigBean cf = getDataSourceFromURL(request);
             DSRequest dsrequest = SlxContext.getDataSourceManager().createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
@@ -103,17 +104,23 @@ public class RestRequestParser implements HttpServletRequestParser
 
         } else {
             try {
-                StringWriter out = new StringWriter();
                 String queryStr = request.getParameter("_transaction");
                 if (queryStr == null) {
-                    IOUtil.copyCharacterStreams(request.getReader(), out);
-                    queryStr = out.toString();
+                    queryStr =IOUtil.inputStreamToString(request.getInputStream());
                 }
                 if (queryStr == null || queryStr.length() == 0) {
                     throw new java.lang.IllegalStateException("This may be not a Solmix Internal Framework request.");
                 }
-                JSParser parser = rpc.getJsParser();
-                Request dsRequest = parser.toJavaObject(queryStr, Request.class);
+                queryStr=queryStr.trim();
+                Request dsRequest=null;
+                if(queryStr.startsWith("{")){
+                    JSParser parser = rpc.getJsParser();
+                    dsRequest = parser.toJavaObject(queryStr, Request.class);
+                }else if(queryStr.startsWith("<")){
+                    XMLParserFactory xmlFactory = XMLParserFactoryImpl.getInstance();
+                    XMLParser xmlParser = xmlFactory.get();
+                    dsRequest = xmlParser.unmarshalReq(new StringReader(queryStr));
+                }
                 if (dsRequest != null) {
                     List<Roperation> operations = dsRequest.getOperations().getElem();
                     {
