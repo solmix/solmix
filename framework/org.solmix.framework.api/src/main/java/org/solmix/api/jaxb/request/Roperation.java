@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="appID" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="componentId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="operation" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="operationConfig" type="{http://www.solmix.com/xmlns/requestdata/v1.0.1}RoperationConfig"/>
+ *         &lt;element name="operationConfig" type="{http://www.solmix.org/xmlns/requestdata/v1.0.1}RoperationConfig"/>
  *         &lt;element name="outputs" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/requestdata/v1.0.1}G_grid"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/requestdata/v1.0.1}G_grid"/>
  *         &lt;element name="requestId" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;group ref="{http://www.solmix.com/xmlns/requestdata/v1.0.1}Gexport"/>
+ *         &lt;group ref="{http://www.solmix.org/xmlns/requestdata/v1.0.1}Gexport"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,9 +46,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Roperation", propOrder = { "appID", "componentId", "dataSource", "operationType", "operationId", "repo", "operationConfig",
+@XmlType(name = "Roperation", propOrder = { "appID", "componentId", "dataSource", "operationType", "operationId", "repo", 
     "outputs", "startRow", "endRow", "sortBy", "criteria", "values", "oldValues", "textMatchStyle", "requestId", "exportResults", "exportAs",
-    "exportFilename", "lineBreakStyle", "exportDelimiter", "exportTitleSeparatorChar", "exportDisplay", "exportHeader", "exportFooter",
+    "exportFilename", "lineBreakStyle", "exportDelimiter", "exportTitleSeparatorChar","exportDatesAsFormattedString", "exportDisplay", "exportHeader", "exportFooter",
     "exportFields" })
 public class Roperation
 {
@@ -69,47 +69,39 @@ public class Roperation
 
     protected List<String> sortBy;
 
+    @XmlJavaTypeAdapter(MapAdapter.class)
     protected Map<String, Object> criteria;
 
+    @XmlJavaTypeAdapter(MapAdapter.class)
     protected Map<String, Object> values;
 
+    @XmlJavaTypeAdapter(MapAdapter.class)
     protected Map<String, Object> oldValues;
 
     protected String textMatchStyle;
 
-    @XmlElement(required = true)
     protected String requestId;
 
     protected boolean exportResults;
 
-    @XmlElement(required = true)
     protected String exportAs;
 
-    @XmlElement(required = true)
     protected String exportFilename;
 
-    @XmlElement(required = true)
     protected String lineBreakStyle;
 
-    @XmlElement(required = true)
     protected String exportDelimiter;
 
-    @XmlElement(required = true)
     protected String exportTitleSeparatorChar;
 
-    @XmlElement(required = true)
     protected Boolean exportDatesAsFormattedString;
 
-    @XmlElement(required = true)
     protected String exportDisplay;
 
-    @XmlElement(required = true)
     protected String exportHeader;
 
-    @XmlElement(required = true)
     protected String exportFooter;
 
-    @XmlElement(required = true)
     protected String exportFields;
 
     @XmlElement(required = true)
@@ -267,7 +259,6 @@ public class Roperation
      * @return possible object is {@link Map<String,String> }
      * 
      */
-    @XmlJavaTypeAdapter(MapAdapter.class)
     public Map<String, Object> getCriteria() {
         return criteria;
     }
@@ -288,7 +279,6 @@ public class Roperation
      * @return possible object is {@link Map<String,String> }
      * 
      */
-    @XmlJavaTypeAdapter(MapAdapter.class)
     public Map<String, Object> getValues() {
         return values;
     }
@@ -309,7 +299,6 @@ public class Roperation
      * @return possible object is {@link Map<String,String> }
      * 
      */
-    @XmlJavaTypeAdapter(MapAdapter.class)
     public Map<String, Object> getOldValues() {
         return oldValues;
     }
