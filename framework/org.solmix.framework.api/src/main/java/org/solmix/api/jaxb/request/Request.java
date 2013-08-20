@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="transactionNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="operations" type="{http://www.solmix.com/xmlns/requestdata/v1.0.1}Roperations" minOccurs="0"/>
+ *         &lt;element name="operations" type="{http://www.solmix.org/xmlns/requestdata/v1.0.1}Roperations" minOccurs="0"/>
  *         &lt;element name="jscallback" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="omitNullMapValuesInResponse" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>

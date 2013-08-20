@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
 public class ObjectFactory
 {
 
-    private final static QName _Transaction_QNAME = new QName("http://www.solmix.com/xmlns/requestdata/v1.0.1", "transaction");
+    private final static QName _Transaction_QNAME = new QName("http://www.solmix.org/xmlns/requestdata/v1.0.1", "transaction");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package:
@@ -81,7 +81,7 @@ public class ObjectFactory
      * Create an instance of {@link JAXBElement }{@code <}{@link Request }{@code >}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.solmix.com/xmlns/requestdata/v1.0.1", name = "transaction")
+    @XmlElementDecl(namespace = "http://www.solmix.org/xmlns/requestdata/v1.0.1", name = "transaction")
     public JAXBElement<Request> createTransaction(Request value) {
         return new JAXBElement<Request>(_Transaction_QNAME, Request.class, null, value);
     }

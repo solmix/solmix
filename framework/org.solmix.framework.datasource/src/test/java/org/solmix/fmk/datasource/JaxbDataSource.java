@@ -44,12 +44,12 @@ public class JaxbDataSource
 {
 
     /**
-     * Figure out between xmlns:ns1="http://www.solmix.com/xmlns/datasource/v1.0.0" and
-     * xmlns="http://www.solmix.com/xmlns/datasource/v1.0.0" For usually people would write XML configuration like this
+     * Figure out between xmlns:ns1="http://www.solmix.org/xmlns/datasource/v1.0.0" and
+     * xmlns="http://www.solmix.org/xmlns/datasource/v1.0.0" For usually people would write XML configuration like this
      * "<module type="text"></module>" not "<ns1:module ns1:type="text"></ns1:module>" but jaxb not having default
      * NameSpace set,and JAXB generated code always has Namespace defined like <code>
      * 
-     * @XmlAttribute(name = "ID", namespace = "http://www.solmix.com/xmlns/datasource/v1.0.0", required = true)
+     * @XmlAttribute(name = "ID", namespace = "http://www.solmix.org/xmlns/datasource/v1.0.0", required = true)
      *                    protected String id; </code> for our expectation would like this <code>
      * @XmlAttribute(name = "ID", required = true) protected String id; </code>
      * @param args

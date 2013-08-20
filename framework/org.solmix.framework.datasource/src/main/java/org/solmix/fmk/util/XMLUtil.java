@@ -65,7 +65,7 @@ public class XMLUtil {
 	public static Set<String> ignoreNamespaceAttributes = new HashSet<String>();
 	static {
 		ignoreNamespaceAttributes.add("http://www.w3.org/2000/10/XMLSchema-instance");
-		ignoreNamespaceAttributes.add("http://www.solmix.com/xmlns/requestdata/v");
+		ignoreNamespaceAttributes.add("http://www.solmix.org/xmlns/requestdata/v");
 	}
 
 	/**

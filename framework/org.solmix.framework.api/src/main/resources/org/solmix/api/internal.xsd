@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.solmix.com/xmlns/internal/v1.0.0" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.solmix.com/xmlns/internal/v1.0.0">
+<xsd:schema targetNamespace="http://www.solmix.org/xmlns/internal/v1.0.0" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.solmix.org/xmlns/internal/v1.0.0">
 
 
 

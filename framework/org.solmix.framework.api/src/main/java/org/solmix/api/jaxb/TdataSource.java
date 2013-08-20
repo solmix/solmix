@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
  * This is the XML Schema for the Solmix DataSource service 1.0.0 development
  * descriptor.DataSource Configuration files using this schema must indicate 
  *  the schema using the version 1.0.0 namespace.for example,
- * <DataSource xmlns="http://www.solmix.com/xmlns/datasource/v1.0.0">
+ * <DataSource xmlns="http://www.solmix.org/xmlns/datasource/v1.0.0">
  *   if used as a qualified namespace,"slx" is the recommended namespace prefix.
  *   
  * 

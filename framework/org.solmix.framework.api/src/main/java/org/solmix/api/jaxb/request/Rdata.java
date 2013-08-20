@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="request" type="{http://www.solmix.com/xmlns/requestdata/v1.0.1}Request"/>
+ *         &lt;element name="request" type="{http://www.solmix.org/xmlns/requestdata/v1.0.1}Request"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

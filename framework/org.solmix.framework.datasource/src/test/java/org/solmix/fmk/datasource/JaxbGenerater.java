@@ -140,7 +140,7 @@ public class JaxbGenerater
             + "<oldValues xsi:type=\"xsd:Object\"></oldValues>" + "</elem>" + "</operations>" + "</transaction>");
 
         String is3 = is2.toString().replace("xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"",
-            "xmlns=\"http://www.solmix.com/xmlns/requestdata/v1.0.1\" xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"");
+            "xmlns=\"http://www.solmix.org/xmlns/requestdata/v1.0.1\" xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"");
 
         XMLParserFactory xmlFactory1 = XMLParserFactoryImpl.getInstance();
         XMLParser xmlParser1 = xmlFactory1.get();

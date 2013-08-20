@@ -151,8 +151,8 @@ public class JaxbXMLParserImpl implements XMLParser
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(formatted));
             // XMLStreamWriter xmlStreamWriter = XMLOutputFactory.newInstance() .createXMLStreamWriter(out);
-            // xmlStreamWriter.setDefaultNamespace("http://www.solmix.com/xmlns/datasource/v1.0.0");
-            // xmlStreamWriter.setPrefix("slx", "http://www.solmix.com/xmlns/datasource/v1.0.0");
+            // xmlStreamWriter.setDefaultNamespace("http://www.solmix.org/xmlns/datasource/v1.0.0");
+            // xmlStreamWriter.setPrefix("slx", "http://www.solmix.org/xmlns/datasource/v1.0.0");
             // marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "");
             marshaller.marshal(jaxbObject, out);
         } catch (Exception e) {

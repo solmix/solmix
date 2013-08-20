@@ -281,7 +281,7 @@ public class RPCManagerImpl implements RPCManager
         } else {
             // Request data is XML(XML-OVER-HTTP) format
             rawTransactionData = rawTransactionData.replace("xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"",
-                "xmlns=\"http://www.solmix.com/xmlns/requestdata/v1.0.1\" xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"");
+                "xmlns=\"http://www.solmix.org/xmlns/requestdata/v1.0.1\" xmlns:xsi=\"http://www.w3.org/2000/10/XMLSchema-instance\"");
             Request transactionData = null;
             XMLParserFactory xmlFactory = XMLParserFactoryImpl.getInstance();
             XMLParser xmlParser = xmlFactory.get();

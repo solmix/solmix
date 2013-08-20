@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.com/xmlns/datasource"
-	xmlns:tns="http://www.solmix.com/xmlns/datasource" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/datasource"
+	xmlns:tns="http://www.solmix.org/xmlns/datasource" elementFormDefault="qualified">
 
     <element name="DataSource" type="tns:datasource"></element>
 
