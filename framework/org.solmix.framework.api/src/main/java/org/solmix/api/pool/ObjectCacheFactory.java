@@ -22,7 +22,7 @@ package org.solmix.api.pool;
 import org.solmix.api.exception.SlxException;
 
 /**
- * 
+ * BuidIn object cache factory,Only used in framework.
  * @author solmix.f@gmail.com
  * @version 110035 2011-4-1
  */
@@ -30,9 +30,20 @@ import org.solmix.api.exception.SlxException;
 public interface ObjectCacheFactory
 {
 
+    /**
+     * Create a new object.
+     * @param key the key indicate the object.
+     * @return
+     * @throws SlxException
+     */
     Object create(Object key) throws SlxException;
 
-    boolean destory() throws SlxException;
+    /**
+     * Destroy this cache factory.
+     * @return
+     * @throws SlxException
+     */
+    boolean destroy() throws SlxException;
 
     long getStalenessCheckPeriod();
 }

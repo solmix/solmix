@@ -49,10 +49,10 @@ public class SimpleDSCacheFactory implements ObjectCacheFactory
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.pool.ObjectCacheFactory#destory()
+    * @see org.solmix.api.pool.ObjectCacheFactory#destroy()
     */
    @Override
-   public boolean destory() throws SlxException
+   public boolean destroy() throws SlxException
    {
       throw new SlxException( Tmodule.DATASOURCE, Texception.NO_SUPPORT, "[" + SimpleDSCacheFactory.class.getName()
          + "] no support destory() method at this version." );
