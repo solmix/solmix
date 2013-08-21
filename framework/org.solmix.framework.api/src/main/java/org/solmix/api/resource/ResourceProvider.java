@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Used for resource register.
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 0.0.4 2012-4-12
  * @since 0.0.4
  */

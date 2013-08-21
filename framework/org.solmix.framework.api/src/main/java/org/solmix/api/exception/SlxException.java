@@ -29,14 +29,13 @@ import javax.servlet.ServletException;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 
 /**
- * Wrapped solmix project Exception
+ * Wrapped solmix project Exception.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 0.0.4
  */

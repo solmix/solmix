@@ -51,13 +51,28 @@ public interface IExport
 
     void exportResultSet(List<Map<Object, Object>> list, OutputStream outStream) throws SlxException;
 
+    /**
+     * Used the printWriter to print text to a new line.
+     * @param out
+     * @param printText text to print.
+     * @throws SlxException
+     */
     void printLine(PrintWriter out, String printText) throws SlxException;
 
+    /**
+     * Get export context.
+     * @return
+     */
     Map<String, Object> getContext();
 
+    /**
+     * Set export context.
+     * @param ctx
+     */
     void setContext(Map<String, Object> ctx);
 
     /**
+     * Export record .
      * @param rows
      * @param columnMap
      * @param outStream

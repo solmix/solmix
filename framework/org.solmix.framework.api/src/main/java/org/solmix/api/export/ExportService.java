@@ -34,7 +34,6 @@ public interface ExportService
 
    IExport getExport( String formatName ) throws Exception;
 
-   // IExport getExport(int formatID) throws Exception;
 
    IExport getExport( EexportAs type ) throws Exception;
 

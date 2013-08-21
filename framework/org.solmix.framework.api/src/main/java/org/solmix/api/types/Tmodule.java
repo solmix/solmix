@@ -28,29 +28,60 @@ package org.solmix.api.types;
  */
 public enum Tmodule implements ValueEnum
 {
-    // 0
+    /**
+     * Basic module.
+     * Error code :0~1000
+     */
     BASIC("basic") ,
-    // 1000-1499
+    /**
+     * DataSource module.the code module.
+     * Error code :1000~1499
+     */
     DATASOURCE("datasource") ,
-    // 1500-1999
+    /**
+     * Engine module,include OSGI HTTP bridge and HTTP proxy.
+     * Error code :1500~1999
+     */
     ENGINE("engine") ,
     // 2000 -2499 OSGI
-    // 2500-2599
+    /**
+     * Pool module,based on commons-pool.
+     * Error code :2500~2599
+     */
     POOL("pool") ,
     // 2600-2999
+    /**
+     * Velocity template language module,based on Apache velocity project.
+     * Error code :2600~2999
+     */
     VM("vm"),
-    // 3
+    /**
+     * XML module.
+     * Error code :start with 3...
+     */
     XML("xml") ,
-    // 4
+    /**
+     * RPC module.
+     * Error code :start with 4...
+     */
     RPC("rpc") ,
-    // 5
+    /**
+     * CONFIG module.
+     * Error code :start with 5...
+     */
     CONFIG("configuration") ,
-    // 5500
+    /**
+     * SQL module.
+     * Error code :5500~5999
+     */
     SQL("sql") ,
-    // 5500-5999
+    /**
+     * JPA module.
+     * Error code :6000-6500
+     */
     JPA("jpa") ,
     // 6
-    REPO("datasouce_repository") ,
+    REPO("datasouce-repository") ,
     // 7
     JS("JavaScript/JSON") ,
     // 8

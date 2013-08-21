@@ -23,7 +23,7 @@ import java.util.Iterator;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-4-12
  */
 
@@ -41,10 +41,23 @@ public interface Resource
      */
     String getName();
 
+    /**
+     * Get parent resource.
+     * @return
+     */
     Resource getParent();
 
+    /**
+     * List children resource.
+     * @return
+     */
     Iterator<Resource> listChildren();
 
+    /**
+     * Get child resource by the path.
+     * @param relPath
+     * @return
+     */
     Resource getChild(String relPath);
 
     ResourceResolver getResourceResolver();
