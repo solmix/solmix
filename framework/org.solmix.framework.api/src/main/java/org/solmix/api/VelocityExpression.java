@@ -20,7 +20,7 @@
 package org.solmix.api;
 
 /**
- * 
+ * Velocity script expression.
  * @author solmix.f@gmail.com
  * @version 110035 2012-1-20
  */
@@ -28,6 +28,9 @@ package org.solmix.api;
 public class VelocityExpression
 {
 
+    /**
+     * @param value Velocity script expression.
+     */
     public VelocityExpression(String value)
     {
         this.value = value;
@@ -36,6 +39,7 @@ public class VelocityExpression
     private String value;
 
     /**
+     * return Velocity script expression.
      * @return the value
      */
     public String getValue() {

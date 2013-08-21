@@ -21,7 +21,7 @@ package org.solmix.api.types;
 
 /**
  * 
- * @author ffz
+ * @author solmix.f@gmail.com
  * @version 110035 2012-3-31
  * @version 0.0.1
  * @since 0.0.4

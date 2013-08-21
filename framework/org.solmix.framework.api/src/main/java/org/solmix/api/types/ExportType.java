@@ -20,42 +20,43 @@
 package org.solmix.api.types;
 
 /**
- * @author solomon
+ * BuildIn export type.
+ * 
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-22 solmix-ds
  */
 public enum ExportType implements StringValueEnum
 {
-   DEFAULT( 1 ) , JSON( 2 ) , XML( 3 ) , XLS( 4 ) , OOXML( 5 ) , OTHER( 255 );
+    DEFAULT(1) , JSON(2) , XML(3) , XLS(4) , OOXML(5) , OTHER(255);
 
-   private int value;
+    private int value;
 
-   ExportType( int value )
-   {
-      this.value = value;
-   }
+    ExportType(int value)
+    {
+        this.value = value;
+    }
 
-   public int getValue()
-   {
-      return value;
-   }
+    @Override
+    public int getValue() {
+        return value;
+    }
 
-   public String getStringValue()
-   {
-      switch (value)
-      {
-         case 1:
-            return "default";
-         case 2:
-            return "json";
-         case 3:
-            return "xml";
-         case 4:
-            return "xls";
-         case 5:
-            return "ooxml";
-         default:
-            return "other";
-      }
-   }
+    @Override
+    public String getStringValue() {
+        switch (value) {
+            case 1:
+                return "default";
+            case 2:
+                return "json";
+            case 3:
+                return "xml";
+            case 4:
+                return "xls";
+            case 5:
+                return "ooxml";
+            default:
+                return "other";
+        }
+    }
 }

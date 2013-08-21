@@ -19,11 +19,14 @@
 
 package org.solmix.api.types;
 
+
 /**
+ *  Used {@link org.solmix.api.jaxb.Eoperation}
  * @author solomon
  * @since 0.0.1
  * @version 110035 2010-12-18 solmix-api
  */
+@Deprecated
 public enum DSOperationType implements ValueEnum
 {
    /**
@@ -60,7 +63,8 @@ public enum DSOperationType implements ValueEnum
       this.value = value;
    }
 
-   public String value()
+   @Override
+public String value()
    {
       return this.value;
    }

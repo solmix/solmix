@@ -63,7 +63,7 @@ public class SlxConstants
 
     public static final String SERVICE_CM_NAME = "org.solmix.service.cm";
     
-    public static final String FRAMEWORK_VERSION = "framework-0.2.1";
+    public static final String FRAMEWORK_VERSION = "framework-0.3";
 
     /**
      * Solmix datasource configuration file (*.ds) group separate string.
@@ -78,10 +78,13 @@ public class SlxConstants
     public static String OSGI_SERVICE_PREFIX = "osgi:service/";
 
     /**
-     * Buildin monitor event topic s
+     * BuildIn monitor event topic prefix.
      */
     public static final String MONITOR_TOPIC_PREFIX = "org/solmix/monitor/";
 
+    /**
+     * BuildIn validation event topic prefix.
+     */
     public static final String VALIDATION_TOPIC_PREFIX = "org/solmix/validation/";
 
     public static final String CURRENT_SERVLET_NAME = "solmix.current.servlet.name";
