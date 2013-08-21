@@ -30,7 +30,7 @@ import org.solmix.SlxConstants;
 
 public interface ITimeMonitorEvent extends IMonitorEvent
 {
-    public static final String TIME_MONITOER_TOPIC=SlxConstants.MONITOR_TOPIC_SUFFIX+"time";
+    public static final String TIME_MONITOER_TOPIC=SlxConstants.MONITOR_TOPIC_PREFIX+"time";
 
     public static final String BUNDLE_ID = EventConstants.BUNDLE_ID;
     public static final String BUNDLE_SYMBOLICNAME =EventConstants.BUNDLE_SYMBOLICNAME;

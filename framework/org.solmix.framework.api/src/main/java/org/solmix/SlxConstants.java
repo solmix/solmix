@@ -29,6 +29,9 @@ public class SlxConstants
 {
 
     private static BundleContext context;
+    /**
+     * Compatible karaf framework.
+     */
     public void init(){
         String karaf_base=System.getProperty("karaf.base");
         if(karaf_base!=null)
@@ -36,6 +39,7 @@ public class SlxConstants
     }
 
     /**
+     * Return OSGI Bundle Context.
      * @return the context
      */
     public BundleContext getContext() {
@@ -61,15 +65,24 @@ public class SlxConstants
     
     public static final String FRAMEWORK_VERSION = "framework-0.2.1";
 
+    /**
+     * Solmix datasource configuration file (*.ds) group separate string.
+     */
     public static final String GROUP_SEP = "/";
 
     public static final String SERVICE_DS_PROVIDER = "org.solmix.service.ds.provider";
 
+    /**
+     * OSGI JNDI service prefix.
+     */
     public static String OSGI_SERVICE_PREFIX = "osgi:service/";
 
-    public static final String MONITOR_TOPIC_SUFFIX = "org/solmix/monitor/";
+    /**
+     * Buildin monitor event topic s
+     */
+    public static final String MONITOR_TOPIC_PREFIX = "org/solmix/monitor/";
 
-    public static final String VALIDATION_TOPIC_SUFFIX = "org/solmix/validation/";
+    public static final String VALIDATION_TOPIC_PREFIX = "org/solmix/validation/";
 
     public static final String CURRENT_SERVLET_NAME = "solmix.current.servlet.name";
 

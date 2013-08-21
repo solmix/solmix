@@ -198,7 +198,7 @@ public abstract class AbstractValidationEvent implements IValidationEvent, java.
     @Override
     public Map<String, Object> getProperties() {
         Map<String, Object> properties = new Hashtable<String, Object>();
-        String topic = SlxConstants.VALIDATION_TOPIC_SUFFIX;
+        String topic = SlxConstants.VALIDATION_TOPIC_PREFIX;
         Level level = this.getLevel();
         switch (level) {
             case DEBUG:

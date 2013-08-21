@@ -43,7 +43,7 @@ public class ValidationEventWrapper
     public static final String LEVEL ="level";
     public static Event wrapper(IValidationEvent vevent){
         Dictionary <String,Object> properties = new Hashtable<String,Object>();
-       String topic= SlxConstants.VALIDATION_TOPIC_SUFFIX;
+       String topic= SlxConstants.VALIDATION_TOPIC_PREFIX;
        Level level =vevent.getLevel();
         switch(level){
             case DEBUG:
