@@ -20,13 +20,13 @@
 package org.solmix.api.types;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-18 solmix-api
  */
 public enum DSDataFormat implements ValueEnum
 {
-   ISCSERVER( "iscServer" ) , XML( "xml" ) , JSON( "json" ) , CUSTOM( "custom" );
+    XML( "xml" ) , JSON( "json" ) , CUSTOM( "custom" );
 
    private String value;
 
@@ -35,6 +35,7 @@ public enum DSDataFormat implements ValueEnum
       this.value = value;
    }
 
+   @Override
    public String value()
    {
       return this.value;
