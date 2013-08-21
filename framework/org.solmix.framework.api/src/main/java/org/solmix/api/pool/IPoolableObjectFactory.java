@@ -22,6 +22,8 @@ package org.solmix.api.pool;
 import org.solmix.api.exception.SlxException;
 
 /**
+ * Pool Factory.
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035
  */
@@ -29,15 +31,16 @@ public interface IPoolableObjectFactory
 {
 
     /**
-     * New Instance pool
+     * Create a new   pool instance.
      * 
-     * @param obj
+     * @param key used to instance a keyed pool.
      * @return
      * @throws Exception
      */
-    IPoolableObjectFactory newInstance(Object obj) throws SlxException;
+    IPoolableObjectFactory newInstance(Object key) throws SlxException;
 
     /**
+     * Set the pool of this factory.
      * @param obj
      */
     void setPool(Object obj);

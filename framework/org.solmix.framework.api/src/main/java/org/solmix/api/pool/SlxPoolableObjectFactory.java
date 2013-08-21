@@ -22,6 +22,7 @@ package org.solmix.api.pool;
 import org.apache.commons.pool.PoolableObjectFactory;
 
 /**
+ * Add function {@link #makeUnpooledObject(Object)}
  * @author solmix.f@gmail.com
  * @version 110035
  */
@@ -39,6 +40,7 @@ public abstract class SlxPoolableObjectFactory implements PoolableObjectFactory,
         pool = null;
     }
 
+    @Override
     public void setPool(Object pool) {
         this.pool = pool;
     }
