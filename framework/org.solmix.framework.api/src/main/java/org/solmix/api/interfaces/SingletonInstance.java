@@ -21,7 +21,7 @@ package org.solmix.api.interfaces;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-6-7
  */
 

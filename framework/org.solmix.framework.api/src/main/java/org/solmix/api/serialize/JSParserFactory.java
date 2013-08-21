@@ -20,14 +20,23 @@
 package org.solmix.api.serialize;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-7 solmix-api
  */
 public interface JSParserFactory
 {
 
-   public JSParser get();
+    /**
+     * Get the JsParser instance.
+     * @return
+     */
+    public JSParser get();
 
-   public JSParser get( String implName );
+    /**
+     * Get the JsParser instance by implname.
+     * @param implName
+     * @return
+     */
+    public JSParser get(String implName);
 }

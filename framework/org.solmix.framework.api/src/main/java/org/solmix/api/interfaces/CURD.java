@@ -1,6 +1,11 @@
 package org.solmix.api.interfaces;
 
 
+/**
+ * 
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-8-21
+ */
 public interface CURD
 {
    Object add(Object create) throws Exception;

@@ -24,7 +24,7 @@ import java.io.Writer;
 import org.solmix.api.exception.SlxException;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-7 solmix-api
  */
@@ -97,11 +97,19 @@ public interface JSParser
     String toJavaScript(Object obj) throws SlxException;
 
     /**
+     * Serialize java object to JSON text.
      * @param out
      * @param value
      */
     void toJSON(Writer out, Object value) throws SlxException;
 
+    /**
+     * Convert input  JavaScript string to java object. 
+     * @param inputString
+     * @param Type
+     * @return
+     * @throws SlxException
+     */
     <T> T toJavaObject(String inputString, Class<T> Type) throws SlxException;
 
 }

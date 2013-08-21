@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-6-7
  */
 
