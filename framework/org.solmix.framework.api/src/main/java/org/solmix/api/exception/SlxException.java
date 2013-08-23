@@ -48,6 +48,8 @@ public class SlxException extends Exception
     private static final long serialVersionUID = 1252155663355037115L;
 
     private static Logger log = LoggerFactory.getLogger(SlxException.class);
+    public static final String ERROR_CODE_PREFIX="ERROR CODE: [";
+    public static final String ERROR_CODE_SUFFIX="]";
 
     private Tmodule module;
 
@@ -75,7 +77,15 @@ public class SlxException extends Exception
 
     private Object[] args;
 
-    public SlxException(Tmodule module, Texception code, String message, Throwable e, Object[] args)
+    /**
+     * SlxException construction.
+     * @param module Defined the framework module.
+     * @param errorNumber Exception number.
+     * @param message Error message.
+     * @param e  The cause exception.
+     * @param args exception arguments.
+     */
+    public SlxException(Tmodule module, Texception errorNumber, String errorMsg, Throwable e, Object[] args)
     {
         setModule(module);
         setCode(code);
@@ -85,19 +95,38 @@ public class SlxException extends Exception
         log.trace(getMessage(), e);
     }
 
-    public SlxException(Tmodule module, Texception code, String message, Throwable e)
+    /**
+     *  SlxException construction.
+     * @param module Defined the framework module.
+     * @param errorNumber Exception number.
+     * @param message Error message.
+     * @param e The cause exception.
+     */
+    public SlxException(Tmodule module, Texception errorNumber, String errorMsg, Throwable e)
     {
-        this(module, code, message, e, null);
+        this(module, errorNumber, errorMsg, e, null);
     }
 
-    public SlxException(Tmodule module, Texception code, String message)
+    /**
+     *  SlxException construction.
+     * @param module Defined the framework module.
+     * @param errorNumber Exception number.
+     * @param message Error message.
+     */
+    public SlxException(Tmodule module, Texception errorNumber, String errorMsg)
     {
-        this(module, code, message, null, null);
+        this(module, errorNumber, errorMsg, null, null);
     }
 
-    public SlxException(Tmodule module, Texception code, Throwable e)
+    /**
+     *  SlxException construction.
+     * @param module Defined the framework module.
+     * @param errorNumber Exception number.
+     * @param e The cause exception.
+     */
+    public SlxException(Tmodule module, Texception errorNumber, Throwable e)
     {
-        this(module, code, "", e, null);
+        this(module, errorNumber, "", e, null);
     }
 
     public SlxException()
@@ -122,7 +151,15 @@ public class SlxException extends Exception
 
     }
 
-    public SlxException(String moduleName, Texception code, String message, Throwable e, Object[] args)
+    /**
+     *  SlxException construction.
+     * @param module Defined the framework module.
+     * @param errorNumber Exception number.
+     * @param message Error message.
+     * @param e The cause exception.
+     * @param args exception arguments.
+     */
+    public SlxException(String moduleName, Texception errorNumber, String message, Throwable e, Object[] args)
     {
         setModuleName(moduleName);
         setCode(code);
@@ -148,6 +185,7 @@ public class SlxException extends Exception
     }
 
     /**
+     * Return predefined module name.
      * @return the module
      */
     public Tmodule getModule() {
@@ -162,6 +200,7 @@ public class SlxException extends Exception
     }
 
     /**
+     * Get Exception error code.
      * @return the code
      */
     public Texception getCode() {
@@ -194,9 +233,10 @@ public class SlxException extends Exception
      */
     @Override
     public String getMessage() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Error number ");
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(ERROR_CODE_PREFIX);
         buffer.append(getCode().value());
+        buffer.append(ERROR_CODE_SUFFIX);
         buffer.append(" in ");
         if (getModule() != null)
             buffer.append(getModule().value());
@@ -223,9 +263,23 @@ public class SlxException extends Exception
 
         if (exception != null) {
             buffer.append("\nWrapped Exception: ");
-            buffer.append(exception.getMessage());
+            Throwable tmp= getRootThrowable(exception);
+            buffer.append(tmp.getMessage());
         }
         return buffer.toString();
+    }
+    /**
+     * Return Root exception.
+     * @param exception
+     * @return
+     */
+    private Throwable getRootThrowable(Throwable exception){
+        if(exception instanceof SlxException){
+            return getRootThrowable(((SlxException)exception).getException());
+        }else
+            return exception;
+        
+        
     }
 
     public String getFullMessage() {
