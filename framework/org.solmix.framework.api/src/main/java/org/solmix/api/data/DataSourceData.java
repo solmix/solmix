@@ -27,8 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.VelocityExpression;
 import org.solmix.api.criterion.IEvaluator;
 import org.solmix.api.criterion.Operator;
@@ -79,6 +79,7 @@ import org.solmix.commons.util.DataUtil;
 @SuppressWarnings("unchecked")
 public class DataSourceData implements Serializable
 {
+    private static final Logger log =  LoggerFactory.getLogger(DataSourceData.class.getName());
 
     private Map<String, Tfield> mapFields;
 
@@ -489,6 +490,19 @@ public class DataSourceData implements Serializable
 
     }
 
+    protected List<ToperationBinding> getOperationBindings(Eoperation opType) {
+        List<ToperationBinding> _return = new ArrayList<ToperationBinding>();
+        if (tdataSource.getOperationBindings() != null) {
+            for (ToperationBinding action : tdataSource.getOperationBindings().getOperationBinding()) {
+                if (action.getOperationType() == opType) {
+                    _return.add(action);
+                }
+            }
+        }
+        return _return;
+
+    }
+
     public ToperationBinding getOperationBinding(DSRequest request) {
         return getOperationBinding(request.getContext().getOperationType(), request.getContext().getOperationId());
 
@@ -515,13 +529,30 @@ public class DataSourceData implements Serializable
         if (tdataSource == null)
             return null;
         ToperationBinding autoOperationBinding = null;
+        // is auto generate operation id.
         boolean operationIdIsAuto = opId != null && opType != null && opId.equals(getAutoOperationId(opType));
         if (tdataSource.getOperationBindings() != null) {
             for (ToperationBinding action : tdataSource.getOperationBindings().getOperationBinding()) {
                 if (action.getOperationId() != null && action.getOperationId().equals(opId) && action.getOperationType() == opType)
                     return action;
-                if (action.getOperationType() == opType && (operationIdIsAuto || opId == null))
+                if (action.getOperationType() == opType && action.getOperationId() == null && (operationIdIsAuto || opId == null))
                     autoOperationBinding = action;
+            }
+            // if not found operation bindings ,used default type of bindings.
+            if (autoOperationBinding == null && (operationIdIsAuto || opId == null)) {
+                List<ToperationBinding> binds = getOperationBindings(opType);
+                if (binds == null || binds.isEmpty()) {
+                    return null;
+                } else if (binds.size() == 1) {
+                    autoOperationBinding= binds.get(0);
+                    if(log.isWarnEnabled())
+                    log.warn(new StringBuilder().append("Checkout operation type:").append(opType).append(" But not found ,used :")
+                        .append(autoOperationBinding.getOperationId()).append(" instead of .").toString());
+                    return autoOperationBinding;
+                } else {
+                    throw new java.lang.IllegalStateException(new StringBuilder().append("Get opation type:").append(opType.value()).append(
+                        "find multi opation :").append(binds.size()).append(" Please check the datasource configuation .").toString());
+                }
             }
         }
         if (autoOperationBinding != null)
@@ -653,6 +684,7 @@ public class DataSourceData implements Serializable
             return false;
     }
 
+    @SuppressWarnings("rawtypes")
     public Map<String, Object> getExpandedDs2NativeFieldMap() {
         Map fieldMap = new LinkedHashMap();
         if (this.getSuperDS() != null) {
@@ -662,7 +694,7 @@ public class DataSourceData implements Serializable
         return fieldMap;
     }
 
-    public Map getValueMaps() {
+    public Map<String, Object> getValueMaps() {
         return getValueMaps(getFieldNames());
     }
 
