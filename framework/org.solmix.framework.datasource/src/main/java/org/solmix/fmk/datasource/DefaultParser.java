@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.SlxConstants;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
@@ -62,6 +62,7 @@ public class DefaultParser implements ParserHandler
     public static final String DEFAULT_REPO = "default";
 
     public static final String DEFAULT_REPO_SUFFIX = "ds";
+    public static final String GROUP_SEP = SlxConstants.GROUP_SEP;
 
     protected DataSourceData data;
 
@@ -122,7 +123,7 @@ public class DefaultParser implements ParserHandler
     @Override
     public Object parser(String repoName, /* String group, */String dsName, String suffix, DSRequest request) throws SlxException {
         long _$ = System.currentTimeMillis();
-        String __info = ">>Parser datasource [" + dsName + "]";
+        String __info = new StringBuilder().append(">>Parser datasource [").append( dsName).append("]").toString();
         log.debug(__info);
         this.dsRequest = request;
         DSRepository repo = DefaultDataSourceManager.getRepoService().loadDSRepo(repoName);
@@ -152,10 +153,18 @@ public class DefaultParser implements ParserHandler
              ************************************/
             data = new DataSourceData(td);
             if (ID != null && !ID.equals(dsName)) {
-                td.setID(dsName);
-                String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(", but got: ").append(
-                    ID).toString();
-                EventUtils.createAndFireDSValidateEvent(Level.ERROR, info, new IllegalArgumentException());
+                /************************************
+                 * find real name.
+                 ************************************/ 
+                String realName =dsName.substring(dsName.lastIndexOf(GROUP_SEP)+1);
+                if(realName.equals(ID)){
+                    td.setID(dsName);
+                }else{
+                    String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(", but got: ").append(
+                        ID).toString();
+                    EventUtils.createAndFireDSValidateEvent(Level.ERROR, info, new IllegalArgumentException());
+                }
+                
             }
             try {
                 data.setDsConfigFile(slx.getCanonicalPath());
@@ -172,7 +181,7 @@ public class DefaultParser implements ParserHandler
         SlxContext.getEventManager().postEvent(EventUtils.createTimeMonitorEvent(System.currentTimeMillis() - _$, __info));
         return data;
     }
-
+  
     protected DataSourceData preBuild(DataSourceData data) throws SlxException {
         /************************************************************
          * customer configuration.DataSource.${serverType}.QName=xxxN.
@@ -203,7 +212,6 @@ public class DefaultParser implements ParserHandler
             data.getTdataSource().setTableName(dsID);
             String __info = "SQL DataSource with no set TableName try to use ID as tableName";
             EventUtils.createAndFireDSValidateEvent(Level.DEBUG, __info, null);
-            // data.addValidationEvent(new DSValidation(Level.DEBUG, __info));
             // if (log.isDebugEnabled())
             // log.debug(__info);
         }
