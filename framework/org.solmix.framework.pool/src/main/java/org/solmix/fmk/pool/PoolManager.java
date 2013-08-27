@@ -41,7 +41,7 @@ import org.solmix.commons.util.DataUtil;
  * @version 0.0.4
  * @since 0.0.1
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class PoolManager implements PoolService
 {
 
@@ -97,6 +97,7 @@ public class PoolManager implements PoolService
             } catch (Exception e) {
                 log.warn("Borrow object from pool failed,used unpooled object");
                 try{
+                    //Re try.
                     return borrowUnpooledObject(key);
                 }catch (Exception trye) {
                     throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild", e);

@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.osgi.service.cm.ManagedService;
-
 import org.solmix.api.cm.ConfigManager;
 import org.solmix.api.pool.IPoolableObjectFactory;
 import org.solmix.api.pool.PoolService;
@@ -103,7 +102,6 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public void updated(Dictionary properties) {
         if (properties == null)
             return;
