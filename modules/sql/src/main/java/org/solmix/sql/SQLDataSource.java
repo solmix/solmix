@@ -904,7 +904,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     }
 
     /**
-     * @param op
+     * @param op request operation
      * @param bind
      * @param opType
      * @param object
