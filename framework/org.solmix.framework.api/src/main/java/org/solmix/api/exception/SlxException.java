@@ -88,10 +88,10 @@ public class SlxException extends Exception
     public SlxException(Tmodule module, Texception errorNumber, String errorMsg, Throwable e, Object[] args)
     {
         setModule(module);
-        setCode(code);
+        setCode(errorNumber);
         setException(e);
         setArgs(args);
-        setMessage(message);
+        setMessage(errorMsg);
         log.trace(getMessage(), e);
     }
 
@@ -162,7 +162,7 @@ public class SlxException extends Exception
     public SlxException(String moduleName, Texception errorNumber, String message, Throwable e, Object[] args)
     {
         setModuleName(moduleName);
-        setCode(code);
+        setCode(errorNumber);
         setException(e);
         setArgs(args);
         setMessage(message);
@@ -273,13 +273,16 @@ public class SlxException extends Exception
      * @param exception
      * @return
      */
-    private Throwable getRootThrowable(Throwable exception){
-        if(exception instanceof SlxException){
-            return getRootThrowable(((SlxException)exception).getException());
-        }else
+    private Throwable getRootThrowable(Throwable exception) {
+        if (exception instanceof SlxException) {
+            Throwable root = ((SlxException) exception).getException();
+            if (root == null)
+                return exception;
+            else
+                return getRootThrowable(root);
+        } else
             return exception;
-        
-        
+
     }
 
     public String getFullMessage() {
