@@ -25,7 +25,7 @@ import org.solmix.fmk.util.DataTools;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-9-18
  */
 

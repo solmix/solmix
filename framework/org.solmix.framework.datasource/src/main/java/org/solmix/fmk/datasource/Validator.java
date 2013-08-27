@@ -32,12 +32,11 @@ import org.solmix.fmk.velocity.Velocity;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2011-3-13
  * @param <V>
  * @param <K>
  */
-@SuppressWarnings( "unchecked" )
 public class Validator< K, V > extends HashMap< K ,V >
 {
 

@@ -27,8 +27,8 @@ import org.solmix.fmk.datasource.Validator;
 
 
 /**
- * 
- * @author Administrator
+ * validator function interface.
+ * @author solmix.f@gmail.com
  * @version 110035  2011-4-8
  */
 

@@ -27,7 +27,7 @@ import org.solmix.api.jaxb.Eoperation;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-12-25
  * @param <D>
  */
@@ -39,7 +39,6 @@ public abstract class AddOp<D> extends DsOp<D>
 
     /**
      * @param dataSourceName
-     * @param type
      */
     public AddOp(String dataSourceName)
     {

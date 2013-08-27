@@ -3,7 +3,6 @@ package org.solmix.fmk.rpc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -14,6 +13,11 @@ import org.solmix.api.rpc.RPCManager;
 import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.DsOp;
 
+/**
+ * Used with transaction operations.
+ * @author solmix.f@gmail.com
+ * @version 110082  2013-8-27
+ */
 public abstract class XAOp
 {
 
@@ -21,7 +25,7 @@ public abstract class XAOp
 
     private String dataSourceName;
 
-    private Eoperation type;
+    private final Eoperation type;
 
     private Object criteria;
 

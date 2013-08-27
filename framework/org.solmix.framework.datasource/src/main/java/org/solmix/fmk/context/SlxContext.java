@@ -30,7 +30,6 @@ import org.apache.shiro.subject.Subject;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.Context.Scope;
@@ -45,9 +44,17 @@ import org.solmix.api.rpc.RPCManagerFactory;
 import org.solmix.fmk.rpc.Transaction;
 
 /**
+ * This class allows obtaining of the current Request without passing the request around the world.
+ * <p>
+ * A ThreadLocal variable is used to manage the request and to make sure it doesn't escape to another processing.
+ * <p>
+ * This class is not depend on servlets. the framework should used the context to get and set attributes instead of
+ * using the request or session object directly. Solmix can run with POJO,OSGI,Spring-servlets ,the must has a neutral
+ * and configurable context.
  * 
  * @author solmix.f@gmail.com
- * @version 110041  2013-3-26
+ * @version 110081 2013-3-26
+ * @since 0.0.2
  */
 public final class SlxContext
 {
@@ -57,12 +64,17 @@ public final class SlxContext
     /**
      * The thread local variable holding the current context.
      */
-    private  static InheritableThreadLocal<Context> localContext = new InheritableThreadLocal<Context>();
+    private static InheritableThreadLocal<Context> localContext = new InheritableThreadLocal<Context>();
 
     private static SystemContext systemContext;
-
-   
     
+    /**
+     * Do not instantiate this class. The constructor must be public to use discovery
+     */
+    public SlxContext(){
+        
+    }
+
     public static Subject getSubject() {
         return SecurityUtils.getSubject();
     }
@@ -93,7 +105,8 @@ public final class SlxContext
         }
         return context;
     }
-    public static void removeContext(){
+
+    public static void removeContext() {
         localContext.remove();
     }
 
@@ -112,8 +125,8 @@ public final class SlxContext
     }
 
     public static SecurityManager getSecurityManager() {
-        SecurityManager sm=  SecurityUtils.getSecurityManager();
-        if(sm==null)
+        SecurityManager sm = SecurityUtils.getSecurityManager();
+        if (sm == null)
             throw new java.lang.IllegalStateException("Shiro SecurityManager is null ,checkout shiro configuration,and try agin.");
         return sm;
     }
@@ -127,7 +140,7 @@ public final class SlxContext
         AbstractSystemContext abc = getAbstractSystemContext();
         if (abc != null) {
             BundleContext ctx = abc.getBundleContext();
-            if (ctx == null&&SlxConstants.isOSGI()) {
+            if (ctx == null && SlxConstants.isOSGI()) {
                 log.warn("The envirement is not  osgi,the bundlecontext is not set");
             }
             return ctx;
@@ -138,6 +151,7 @@ public final class SlxContext
 
     /**
      * Get EventManager of this framework .
+     * 
      * @return
      */
     public static EventManager getEventManager() {
@@ -166,6 +180,9 @@ public final class SlxContext
         return localContext.get() != null;
     }
 
+    /**
+     * Set the locale for the current context.
+     */
     public static void setLocale(Locale locale) {
         getContext().setLocale(locale);
     }
@@ -181,6 +198,7 @@ public final class SlxContext
 
     /**
      * Get parameter in web context.
+     * 
      * @return
      */
     public static Map<String, String> getParameters() {
@@ -192,20 +210,22 @@ public final class SlxContext
 
     }
 
-    public static void login(Subject subject,AuthenticationToken authenticationToken) {
-        SecurityManager sm=SecurityUtils.getSecurityManager();
-        if(sm==null)
+    public static void login(Subject subject, AuthenticationToken authenticationToken) {
+        SecurityManager sm = SecurityUtils.getSecurityManager();
+        if (sm == null)
             throw new java.lang.IllegalStateException("Shiro SecurityManager is null ,checkout shiro configuration,and try agin.");
         sm.login(subject, authenticationToken);
     }
 
     /**
      * Get access manager for a resource.this is part of JAAS framework.
-     * @throws SlxException 
+     * 
+     * @throws SlxException
      */
-   /* public static AccessManager getAccessManager(String name) throws SlxException {
-        return getContext().getAccessManager(name);
-    }*/
+    /*
+     * public static AccessManager getAccessManager(String name) throws SlxException { return
+     * getContext().getAccessManager(name); }
+     */
 
     /**
      * Get parameter value as string.
@@ -254,8 +274,10 @@ public final class SlxContext
     public static boolean isSystemContext() {
         return hasContext() ? getContext() instanceof SystemContext : false;
     }
+
+   
     public static boolean isWebContext() {
-        return hasContext() ? getContext() instanceof WebContext: false;
+        return hasContext() ? getContext() instanceof WebContext : false;
     }
 
     public static ResourceBundle getResourceBundle(Locale locale) throws SlxException {
@@ -301,7 +323,7 @@ public final class SlxContext
      * Get the ResourceBundle for this thread,if not exits,use system resourceBundle.
      * 
      * @return
-     * @throws SlxException 
+     * @throws SlxException
      */
     public static ResourceBundle getResourceBundle() throws SlxException {
         return getResourceBundle(getLocale());
@@ -311,7 +333,7 @@ public final class SlxContext
      * Get this DataSourceManager in systemContext.
      * <p>
      * <b>Note:</b> This is a convenience method,If In OSGI-ENV should use dynamic service discovery to found this
-     * service or use IOC to inject in.
+     * service or use IOC to inject in,for example spring or juice.
      * 
      * @return the dataSourceManager
      */
@@ -354,51 +376,55 @@ public final class SlxContext
     public static Object getAttribute(String name) {
         return getContext().getAttribute(name);
     }
+
     /**
-     * Executes the given operation in the system context and sets it back to the original once done
-     * (also if an exception is thrown). Also works if there was no context upon calling. (sets it back
-     * to null in this case)
+     * Executes the given operation in the system context and sets it back to the original once done (also if an
+     * exception is thrown). Also works if there was no context upon calling. (sets it back to null in this case)
      */
     public static <T, E extends Throwable> T doInSystemContext(final Op<T, E> op) throws E {
         return doInSystemContext(op, false);
     }
+
     /**
-     * Executes the given operation in the system context and sets it back to the original once done
-     * (also if an exception is thrown). Also works if there was no context upon calling (sets it back
-     * to null in this case)
-     * @param releaseAfterExecution set to true if the context should be released once the execution is done (e.g. in workflow operations or scheduled jobs).
+     * Executes the given operation in the system context and sets it back to the original once done (also if an
+     * exception is thrown). Also works if there was no context upon calling (sets it back to null in this case)
+     * 
+     * @param releaseAfterExecution set to true if the context should be released once the execution is done (e.g. in
+     *        workflow operations or scheduled jobs).
      */
     public static <T, E extends Throwable> T doInSystemContext(final Op<T, E> op, boolean releaseAfterExecution) throws E {
-        final Context originalCtx = SlxContext.hasContext()? SlxContext.getContext(): null;
+        final Context originalCtx = SlxContext.hasContext() ? SlxContext.getContext() : null;
         T result;
         try {
-        	SlxContext.setContext(SlxContext.getSystemContext());
-        	System.out.println( Thread.currentThread().getId());
+            SlxContext.setContext(SlxContext.getSystemContext());
+            System.out.println(Thread.currentThread().getId());
             result = op.exe();
             if (releaseAfterExecution) {
-            	SlxContext.release();
+                SlxContext.release();
             }
         } finally {
-        	SlxContext.setContext(originalCtx);
+            SlxContext.setContext(originalCtx);
         }
         return result;
     }
+
     /**
-     * Executes the given operation in the web context ,if this thread is not has a {@link org.solmix.api.context.WebContext} in it,
-     * return null.
+     * Executes the given operation in the web context ,if this thread is not has a
+     * {@link org.solmix.api.context.WebContext} in it, return null.
+     * 
      * @param op
      * @param releaseAfterExecution
      * @return
      * @throws E
      */
     public static <T, E extends Throwable> T doInWebContext(final Op<T, E> op) throws E {
-    	if(SlxContext.hasContext()&&SlxContext.isWebContext()){
-    		return op.exe();
-		}else{
-			log.warn("This is not a WebContext");
-			return null;
-		}
-    	
+        if (SlxContext.hasContext() && SlxContext.isWebContext()) {
+            return op.exe();
+        } else {
+            log.warn("This is not a WebContext");
+            return null;
+        }
+
     }
 
     public static Transaction getTransaction() throws SlxException {
@@ -416,27 +442,31 @@ public final class SlxContext
     }
 
     /**
-     * A simple execution interface to be used with the doInSystemContext and doInWebContext method.
-     * If no return value is necessary, return null (for semantic's sake, declare T as <Void>)
-     * If no checked exception need to be thrown, declare E as <RuntimeException>)
+     * A simple execution interface to be used with the doInSystemContext and doInWebContext method. If no return value
+     * is necessary, return null (for semantic's sake, declare T as <Void>) If no checked exception need to be thrown,
+     * declare E as <RuntimeException>)
      * 
      * @see SlxContext#doInSystemContext(Op)
      * @see SlxContext#doInSystemContext(Op, boolean)
      * @see SlxContext#doInWebContext(Op)
      * 
      * @author solmix
-     *
+     * 
      * @param <T>
      * @param <E>
      */
-    public static interface Op<T, E extends Throwable> {
+    public static interface Op<T, E extends Throwable>
+    {
+
         T exe() throws E;
     }
-    
+
     /**
      * An Op that does not return values and can only throw RuntimeExceptions.
      */
-    public abstract static class VoidOp implements Op<Void, RuntimeException> {
+    public abstract static class VoidOp implements Op<Void, RuntimeException>
+    {
+
         @Override
         public Void exe() {
             doExe();
