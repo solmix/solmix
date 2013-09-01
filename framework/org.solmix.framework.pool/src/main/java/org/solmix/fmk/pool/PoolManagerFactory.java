@@ -53,17 +53,18 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
 
     private static Map<String, PoolConf> cache = Collections.synchronizedMap(new HashMap<String, PoolConf>());
 
-    private final  Map<String, Object> propertiesCache = Collections.synchronizedMap(new HashMap<String, Object>());
+    private static final  Map<String, Object> propertiesCache = Collections.synchronizedMap(new HashMap<String, Object>());
 
     static {
         DEFAULT_CONFIG = new HashMap();
         DEFAULT_CONFIG.put("maxActive", -1);
         DEFAULT_CONFIG.put("maxIdle", -1);
-        DEFAULT_CONFIG.put("maxWait", -1);
+        DEFAULT_CONFIG.put("maxWait", 120000);
         DEFAULT_CONFIG.put("whenExhaustedAction", "grow");
         DEFAULT_CONFIG.put("testOnBorrow", "true");
         DEFAULT_CONFIG.put("testWhileIdle", "true");
-        DEFAULT_CONFIG.put("timeBetweenEvictionRunsMillis", -1);
+        DEFAULT_CONFIG.put("testOnReturn", "false");
+        DEFAULT_CONFIG.put("timeBetweenEvictionRunsMillis", 120000);
         DEFAULT_CONFIG.put("minEvictableIdleTimeMillis", -1);
         DEFAULT_CONFIG.put("numTestsPerEvictionRun", -1);
         DEFAULT_CONFIG.put("enabled", "true");

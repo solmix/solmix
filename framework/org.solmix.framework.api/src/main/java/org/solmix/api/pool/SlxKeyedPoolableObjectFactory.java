@@ -44,7 +44,7 @@ public abstract class SlxKeyedPoolableObjectFactory implements KeyedPoolableObje
 
     public AtomicLong numValidateObjectCalls;
 
-    protected Object pool;
+    protected volatile Object pool;
 
     public SlxKeyedPoolableObjectFactory()
     {

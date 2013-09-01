@@ -95,13 +95,7 @@ public class PoolManager implements PoolService
             try {
                 return ((SlxKeyedObjectPool) objectSource).borrowObject(key);
             } catch (Exception e) {
-                log.warn("Borrow object from pool failed,used unpooled object");
-                try{
-                    //Re try.
-                    return borrowUnpooledObject(key);
-                }catch (Exception trye) {
-                    throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild", e);
-                }
+                    throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow  Object faild", e);
             }
         if (objectSource instanceof SlxObjectPool)
             try {

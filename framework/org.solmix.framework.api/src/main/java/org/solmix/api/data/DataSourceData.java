@@ -72,14 +72,15 @@ import org.solmix.commons.util.DataUtil;
  * <p>
  * For <code>From bottom to top<code>:use {@link org.solmix.api.jaxb.TdataSource TdataSource}
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-19 solmix-api
  */
 @SuppressWarnings("unchecked")
 public class DataSourceData implements Serializable
 {
-    private static final Logger log =  LoggerFactory.getLogger(DataSourceData.class.getName());
+
+    private static final Logger log = LoggerFactory.getLogger(DataSourceData.class.getName());
 
     private Map<String, Tfield> mapFields;
 
@@ -119,6 +120,8 @@ public class DataSourceData implements Serializable
      * <B><li>ANNOTATE:</B> This is DS runtime variable
      */
     private long configTimestamp = -1;
+    
+    private final long configLastModified=-1;
 
     /**
      * <B><li>ANNOTATE:</B> This is DS dynamical config.
@@ -293,10 +296,6 @@ public class DataSourceData implements Serializable
      * @return the superDSName
      */
     public String getSuperDSName() {
-        // if(superDSName==null){
-        // TdataSource ds =tdataSource.getInheritsFrom();
-        // superDSName=ds.getID();
-        // }
         return superDSName;
     }
 
@@ -360,8 +359,6 @@ public class DataSourceData implements Serializable
      */
     public void setSuperDS(DataSource superDS) {
         this.superDS = superDS;
-        // if (superDS != null && superDSName == null)
-        // this.superDSName = superDS.getName();
     }
 
     /**
@@ -447,11 +444,8 @@ public class DataSourceData implements Serializable
     public boolean isModificationAction(Eoperation opType, String opId) {
         if (isModificationAction(opType))
             return true;
-        // if (tdataSource != null) {
-        // Taction action= getAction(opType, opId);
-        // return (action != null && action.getSqlType() == EsqlType.UPDATE);
-        // }
-        return false;
+        else
+            return false;
     }
 
     public String getAutoOperationId(Eoperation operationType) {
@@ -544,10 +538,10 @@ public class DataSourceData implements Serializable
                 if (binds == null || binds.isEmpty()) {
                     return null;
                 } else if (binds.size() == 1) {
-                    autoOperationBinding= binds.get(0);
-                    if(log.isWarnEnabled())
-                    log.warn(new StringBuilder().append("Checkout operation type:").append(opType).append(" But not found ,used :")
-                        .append(autoOperationBinding.getOperationId()).append(" instead of .").toString());
+                    autoOperationBinding = binds.get(0);
+                    if (log.isWarnEnabled())
+                        log.warn(new StringBuilder().append("Checkout operation type:").append(opType).append(" But not found ,used :").append(
+                            autoOperationBinding.getOperationId()).append(" instead of .").toString());
                     return autoOperationBinding;
                 } else {
                     throw new java.lang.IllegalStateException(new StringBuilder().append("Get opation type:").append(opType.value()).append(
@@ -636,7 +630,18 @@ public class DataSourceData implements Serializable
         this.configTimestamp = configTimestamp;
     }
 
+    
     /**
+     * <B><li>ANNOTATE:</B> This is DS runtime variable<p>
+     * Used to dynamical load modified configure datasource file. 
+     * @return the configLastModified
+     */
+    public long getConfigLastModified() {
+        return configLastModified;
+    }
+
+    /**
+     * <B><li>ANNOTATE:</B> This is DS runtime variable
      * @return the dsConfigFile
      */
     public String getDsConfigFile() {

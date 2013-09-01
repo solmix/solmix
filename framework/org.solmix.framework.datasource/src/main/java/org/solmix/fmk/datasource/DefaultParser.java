@@ -38,6 +38,7 @@ import org.solmix.api.repo.DSRepository;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.api.serialize.XMLParser;
+import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
@@ -46,6 +47,7 @@ import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.event.EventUtils;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.JaxbXMLParserImpl;
+import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 
 /**
  * @author solomon
@@ -64,21 +66,26 @@ public class DefaultParser implements ParserHandler
     public static final String DEFAULT_REPO_SUFFIX = "ds";
     public static final String GROUP_SEP = SlxConstants.GROUP_SEP;
 
-    protected DataSourceData data;
 
     protected static XMLParser xmlParser;
 
     private static AtomicLong numParsered;
 
-    protected DSRequest dsRequest;
-
-    protected final JSParser jsParser;
 
     public DefaultParser()
     {
         numParsered = new AtomicLong();
-        JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
-        jsParser = jsFactory.get();
+       
+    }
+    
+    protected  synchronized JSParser getJSParser(){
+        JSParserFactory factory = JSParserFactoryImpl.getInstance();
+        return factory.get();
+    }
+    
+    protected  synchronized XMLParser getXMLParser(){
+        XMLParserFactory factory = XMLParserFactoryImpl.getInstance();
+        return factory.get();
     }
 
     /**
@@ -125,7 +132,6 @@ public class DefaultParser implements ParserHandler
         long _$ = System.currentTimeMillis();
         String __info = new StringBuilder().append(">>Parser datasource [").append( dsName).append("]").toString();
         log.debug(__info);
-        this.dsRequest = request;
         DSRepository repo = DefaultDataSourceManager.getRepoService().loadDSRepo(repoName);
         //
         String explicitName = DataUtil.isNullOrEmpty(suffix) ? dsName : dsName + "." + suffix.toLowerCase().trim();
@@ -134,7 +140,7 @@ public class DefaultParser implements ParserHandler
          * Loading datasource from configuration file.*
          *********************************************/
         Object obj = repo.load(explicitName);
-
+        DataSourceData  data=null;
         // begin
         if (obj == null)
             return null;
@@ -151,22 +157,22 @@ public class DefaultParser implements ParserHandler
             /************************************
              * construct explicable ID with group name.
              ************************************/
-            data = new DataSourceData(td);
             if (ID != null && !ID.equals(dsName)) {
+                td.setID(dsName);
                 /************************************
                  * find real name.
                  ************************************/ 
                 String realName =dsName.substring(dsName.lastIndexOf(GROUP_SEP)+1);
-                if(realName.equals(ID)){
-                    td.setID(dsName);
-                }else{
+                if(!realName.equals(ID)){
                     String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(", but got: ").append(
                         ID).toString();
-                    EventUtils.createAndFireDSValidateEvent(Level.ERROR, info, new IllegalArgumentException());
+                    EventUtils.createAndFireDSValidateEvent(Level.WARNING, info, new IllegalArgumentException());
                 }
                 
             }
             try {
+                //new datasource data.
+                data = new DataSourceData(td);
                 data.setDsConfigFile(slx.getCanonicalPath());
                 data.setConfigTimestamp(slx.lastModified());
             } catch (IOException e) {
@@ -177,12 +183,12 @@ public class DefaultParser implements ParserHandler
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_OBJECT_TYPE_ERROR,
                 "ds-config java object error,the return ds-config object should be SlxFile.");
         }
-        preBuild(data);
+        preBuild(data,request);
         SlxContext.getEventManager().postEvent(EventUtils.createTimeMonitorEvent(System.currentTimeMillis() - _$, __info));
         return data;
     }
   
-    protected DataSourceData preBuild(DataSourceData data) throws SlxException {
+    protected DataSourceData preBuild(DataSourceData data,DSRequest request) throws SlxException {
         /************************************************************
          * customer configuration.DataSource.${serverType}.QName=xxxN.
          ************************************************************/
@@ -197,11 +203,11 @@ public class DefaultParser implements ParserHandler
         /*
          * if (DataUtil.booleanValue(data.getTdataSource().isAutoDeriveSchema())) autoGenerateSchema();
          */
-        customerValidation();
+        customerValidation(data,request);
         return data;
     }
 
-    protected void customerValidation() throws SlxException {
+    protected void customerValidation(DataSourceData data,DSRequest request) throws SlxException {
         TdataSource td = data.getTdataSource();
         String dsID = data.getTdataSource().getID();
         if (data.getName() == null) {
@@ -231,7 +237,7 @@ public class DefaultParser implements ParserHandler
     /**
      * Only get the super datasource.
      */
-    protected void parserSuper() {
+    protected void parserSuper(DataSourceData data,DSRequest dsRequest) {
         String _superDSName = data.getSuperDSName();
         DataSource _superDS = data.getSuperDS();
         String __vinfo;

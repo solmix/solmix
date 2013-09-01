@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
@@ -82,11 +81,14 @@ public class DataSourceProvider
     }
 
     public static DataSource forName(String dsName) throws SlxException {
-        // String group = null;
-        // if (dsName.lastIndexOf(SlxConstants.GROUP_SEP) > 0) {
-        // group = dsName.substring(0, dsName.lastIndexOf(SlxConstants.GROUP_SEP));
-        // dsName = dsName.substring(dsName.lastIndexOf(SlxConstants.GROUP_SEP) + 1);
-        // }
+        /*
+         *Group setting,this feature may be in next version. 
+         */
+        /* String group = null;
+         if (dsName.lastIndexOf(SlxConstants.GROUP_SEP) > 0) {
+         group = dsName.substring(0, dsName.lastIndexOf(SlxConstants.GROUP_SEP));
+         dsName = dsName.substring(dsName.lastIndexOf(SlxConstants.GROUP_SEP) + 1);
+         }*/
         return forName(dsName, "default", null);
     }
 
@@ -116,8 +118,8 @@ public class DataSourceProvider
         long __start = new Date().getTime();
         DataSourceData data = (DataSourceData) _parser.parser(repoName, /* group, */dsName, ParserHandler.DS_SUFFIX, request);
         if (data == null) {
-            if (log.isDebugEnabled())
-                log.debug("can't parser datasource:" + dsName + " from datasource repository:" + repoName + ". the request will breakup");
+            if (log.isErrorEnabled())
+                log.error("can't parser datasource:" + dsName + " from datasource repository:" + repoName + ". the request will breakup");
             return null;
         }
         EserverType _dsType = data.getServerType();
@@ -128,8 +130,8 @@ public class DataSourceProvider
         }
         // no set, default is basic
         if (_dsType == null) {
-            if (log.isDebugEnabled())
-                log.debug("NO set server-type used the default build in basic  server-type");
+            if (log.isWarnEnabled())
+                log.warn("NO set server-type used the default build in basic  server-type");
             _dsType = EserverType.BASIC;
         }
 
@@ -161,7 +163,11 @@ public class DataSourceProvider
             return null;
     }
 
-    public static ParserHandler getParserHander() {
+    /**
+     * Get the Single datasource ParserHandler instance.
+     * @return Single instance.
+     */
+    public synchronized static ParserHandler getParserHander() {
         if (parser == null) {
             String defaultParser = DSConfigManager.defaultParser;
             if (defaultParser.equals("default")) {
@@ -175,7 +181,7 @@ public class DataSourceProvider
     /**
      * @param parser the parser to set
      */
-    public static void setParser(ParserHandler parser) {
+    public synchronized static void setParser(ParserHandler parser) {
         DataSourceProvider.parser = parser;
     }
 

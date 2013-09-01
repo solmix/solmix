@@ -108,6 +108,8 @@ public class DefaultDataSourceManager implements DataSourceManager
         } else if (ds.getContext().isWaitForFree()) {
             manager.returnObject(ds.getName(), ds);
             ds.getContext().setWaitForFree(false);
+        }else{
+            ds=null;
         }
 
     }
@@ -130,11 +132,7 @@ public class DefaultDataSourceManager implements DataSourceManager
      * @see org.solmix.api.datasource.DataSourceManagerService#getDataSource(java.lang.String)
      */
     public static DataSource getDataSource(String name) throws SlxException {
-        DataSource _return = (DataSource) manager.borrowObject(name);
-        // avoid one borrow more than one return.
-        if (_return != null)
-            _return.getContext().setWaitForFree(true);
-        return _return;
+        return getDataSource(name,null);
     }
 
     /**
@@ -205,8 +203,21 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     public static DataSource getDataSource(String name, DSRequest request) throws SlxException {
-        DataSource _return = (DataSource) manager.borrowObject(name, request);
-        _return.getContext().setWaitForFree(true);
+        DataSource _return = null;
+        try {
+            _return = (DataSource) manager.borrowObject(name, request);
+            if(_return!=null)
+                _return.getContext().setWaitForFree(true);
+        } catch (Exception e1) {
+            log.warn("Borrow object from pool failed, try to used unpooled object",e1);
+        }
+        try{
+            //Re try.
+            if(_return==null)
+            return (DataSource) manager.borrowUnpooledObject(name);
+        }catch (Exception trye) {
+            throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild ", trye);
+        }
         return _return;
     }
 
