@@ -332,62 +332,50 @@ public class SlxException extends Exception
 
     @Override
     public void printStackTrace(PrintWriter s) {
-        super.printStackTrace(s);
         Throwable tmp = exception;
-        do {
-            if (!(tmp instanceof SlxException))
-                break;
-            if (((SlxException) tmp).getException() == null)
-                break;
-            tmp = ((SlxException) tmp).getException();
-
-        } while (true);
-
         if (tmp != null) {
-
             if (tmp instanceof MethodInvocationException) {
                 (((MethodInvocationException) tmp).getWrappedThrowable()).printStackTrace(s);
             } else if (tmp instanceof ServletException) {
                 (((ServletException) tmp).getRootCause()).printStackTrace(s);
             } else {
                 if (tmp.getCause() != null) {
-                    s.print("Root cause:  ");
+                    s.print("Root cause: \n");
                     tmp.getCause().printStackTrace(s);
                 } else {
+                    s.print("Root cause: \n");
                     tmp.printStackTrace(s);
                 }
             }
+        }else{
+            if(getMessage()!=null)
+                s.println(new StringBuilder().append("Messages:").append(getMessage()).toString());
+            super.printStackTrace(s); 
         }
     }
 
     @Override
     public void printStackTrace(PrintStream s) {
-        super.printStackTrace(s);
         Throwable tmp = exception;
-        do {
-            if (!(tmp instanceof SlxException))
-                break;
-            if (((SlxException) tmp).getException() == null)
-                break;
-            tmp = ((SlxException) tmp).getException();
-
-        } while (true);
-
         if (tmp != null) {
-
             if (tmp instanceof MethodInvocationException) {
                 (((MethodInvocationException) tmp).getWrappedThrowable()).printStackTrace(s);
             } else if (tmp instanceof ServletException) {
                 (((ServletException) tmp).getRootCause()).printStackTrace(s);
             } else {
                 if (tmp.getCause() != null) {
-                    s.print("Root cause:  ");
+                    s.print("Root cause: \n");
                     tmp.getCause().printStackTrace(s);
                 } else {
+                    s.print("Root cause: \n");
                     tmp.printStackTrace(s);
                 }
             }
 
+        }else{
+            if(getMessage()!=null)
+                s.println(new StringBuilder().append("Messages:").append(getMessage()).toString());
+            super.printStackTrace(s);
         }
     }
 }
