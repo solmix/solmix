@@ -40,14 +40,12 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-14 solmix-ds
  */
 public class JaxbXMLParserImpl implements XMLParser
 {
-
-//    private static Logger log = LoggerFactory.getLogger(JaxbXMLParserImpl.class);
 
     private static JAXBContext dataSourceJC;
 
@@ -101,8 +99,10 @@ public class JaxbXMLParserImpl implements XMLParser
     @Override
     public Module unmarshalDS(Reader is) throws SlxException {
         try {
-            if (dataSourceJC == null)
-                dataSourceJC = JAXBContext.newInstance(Module.class);
+            synchronized(dataSourceJC){
+                if (dataSourceJC == null)
+                    dataSourceJC = JAXBContext.newInstance(Module.class);
+            }
         } catch (JAXBException e) {
             throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
         }
@@ -131,8 +131,10 @@ public class JaxbXMLParserImpl implements XMLParser
     @Override
     public void marshalDS(Writer out, Object jaxbObject) throws SlxException {
         try {
-            if (dataSourceJC == null)
-                dataSourceJC = JAXBContext.newInstance(Module.class);
+            synchronized(dataSourceJC){
+                if (dataSourceJC == null)
+                    dataSourceJC = JAXBContext.newInstance(Module.class);
+            }
         } catch (JAXBException e) {
             throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
         }
@@ -192,7 +194,7 @@ public class JaxbXMLParserImpl implements XMLParser
         }
     }
 
-    protected void initReqJaxbContext() throws SlxException {
+    protected synchronized void initReqJaxbContext() throws SlxException {
         try {
             if (requestJC == null)
                 requestJC = JAXBContext.newInstance(Request.class);

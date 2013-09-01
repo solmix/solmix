@@ -46,7 +46,10 @@ public class XMLParserFactoryImpl implements XMLParserFactory
         return instance;
     }
 
-    private XMLParserFactoryImpl()
+    /**
+     * Do not instantiate this class. The constructor must be public to use discovery.
+     */
+    public  XMLParserFactoryImpl()
     {
 
     }
@@ -83,7 +86,7 @@ public class XMLParserFactoryImpl implements XMLParserFactory
         return null;
     }
 
-    public XMLParser getDefaultParser() {
+    public synchronized XMLParser getDefaultParser() {
         if (defaultParser == null)
             return new JaxbXMLParserImpl();
         else
