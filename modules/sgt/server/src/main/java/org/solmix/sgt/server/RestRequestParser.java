@@ -21,6 +21,7 @@ package org.solmix.sgt.server;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -105,8 +106,10 @@ public class RestRequestParser implements HttpServletRequestParser
         } else {
             try {
                 String queryStr = request.getParameter("_transaction");
+               StringWriter out = new StringWriter();
                 if (queryStr == null) {
-                    queryStr =IOUtil.inputStreamToString(request.getInputStream());
+                    IOUtil.copyCharacterStreams(request.getReader(), out);
+                    queryStr =out.toString();
                 }
                 if (queryStr == null || queryStr.length() == 0) {
                     throw new java.lang.IllegalStateException("This may be not a Solmix Internal Framework request.");
