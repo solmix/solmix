@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -79,12 +78,13 @@ public class DSCallServlet extends HttpServlet
             RPCManagerFactory factory = SlxContext.getRPCManagerFactory();
             rpc = factory.getRPCManager(wc, new RestRequestParser());
             log.info("Performing " + rpc.requestCount() + " operation(s) ");
+            Exception exceptionHolder=null;
             if (rpc.getRequests() != null)
                 for (RequestType req : rpc.getRequests()) {
                     if (req instanceof RPCRequest) {
                         RPCRequest rpcRequest = (RPCRequest) req;
                         try {
-                            rpc.send(rpcRequest, handleRPCRequest(rpcRequest, rpc, context));
+                            rpc.send(rpcRequest, handleRPCRequest(rpcRequest, rpc, context,exceptionHolder));
                         } catch (Exception e) {
                             try {
                                 rpc.sendFailure(rpcRequest, e);
@@ -96,7 +96,7 @@ public class DSCallServlet extends HttpServlet
                         DSRequest dsRequest = (DSRequest) req;
                         try {
                             rpc.getContext().setRest(Boolean.TRUE);
-                            rpc.send(dsRequest, handleDSRequest(dsRequest, rpc, context));
+                            rpc.send(dsRequest, handleDSRequest(dsRequest, rpc, context,exceptionHolder));
                         } catch (SlxException e) {
                             try {
                                 rpc.sendFailure(dsRequest, e);
@@ -106,6 +106,9 @@ public class DSCallServlet extends HttpServlet
                             } catch (SlxException ingnored) {
                             }
                         }
+                    }
+                    if(exceptionHolder!=null){
+                        log.error("Error executing operation: ",exceptionHolder);
                     }
                 }
         } catch (SlxException e) {
@@ -125,11 +128,11 @@ public class DSCallServlet extends HttpServlet
      * @param context
      * @return
      */
-    private RPCResponse handleRPCRequest(RPCRequest rpcRequest, RPCManager rpc, WebContext context) {
+    private RPCResponse handleRPCRequest(RPCRequest rpcRequest, RPCManager rpc, WebContext context,Exception exception) {
         try {
             return rpcRequest.execute();
         } catch (Exception e) {
-            WebContext _tmp = context;
+            exception=e;
             RPCResponse rpcResponse = new RPCResponseImpl();
             rpcResponse.setStatus(RPCResponse.STATUS_FAILURE);
             rpcResponse.setData(e.getMessage());
@@ -144,10 +147,11 @@ public class DSCallServlet extends HttpServlet
      * @return
      * @throws SlxException
      */
-    private DSResponse handleDSRequest(DSRequest dsRequest, RPCManager rpc, WebContext context) throws SlxException {
+    private DSResponse handleDSRequest(DSRequest dsRequest, RPCManager rpc, WebContext context,Exception exception) throws SlxException {
         try {
             return dsRequest.execute();
         } catch (Exception e) {
+            exception=e;
             DSResponse dsResponse = new DSResponseImpl(dsRequest != null ? dsRequest.getDataSource() : (DataSource) null);
             dsResponse.getContext().setStatus(Status.STATUS_FAILURE);
             dsResponse.getContext().setData(e.getMessage());
