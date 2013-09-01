@@ -36,7 +36,6 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.PoolableConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.PoolService;
 import org.solmix.api.pool.PoolServiceFactory;
@@ -277,7 +276,7 @@ public class ConnectionManager
                 }
             }
         } catch (SQLException e) {
-            throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e.getMessage());
+            throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e.getMessage(),e);
         }
         return __return;
 

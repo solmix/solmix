@@ -118,7 +118,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     private DSRequest downloadDsRequest;
 
-    private static JSParser getJsParser() {
+    private static synchronized JSParser getJsParser() {
         if (jsParser == null) {
             JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
             jsParser = jsFactory.get();
