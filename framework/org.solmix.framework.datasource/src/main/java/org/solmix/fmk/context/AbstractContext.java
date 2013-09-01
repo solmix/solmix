@@ -48,7 +48,7 @@ public abstract class AbstractContext implements Context
 
     protected Locale locale;
 
-    private ResourceBundleManager resourceBundleManager;
+    private  ResourceBundleManager resourceBundleManager;
 
     /**
      * @return the attributeProvider

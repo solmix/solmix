@@ -26,7 +26,7 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 
 /**
- * 
+ * the instance of this interface may not thread safety.
  * @author administrator
  * @version 0.0.3 2011-11-11
  * @since 0.0.3

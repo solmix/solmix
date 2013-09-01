@@ -43,11 +43,11 @@ import org.solmix.fmk.context.SlxContext;
 public class SGTServlet  extends HttpServlet
 {
 
-    LoadSchemaServlet loadSchemaService;
+   private volatile LoadSchemaServlet loadSchemaService;
 
-    DSCallServlet dsCallService;
+   private volatile DSCallServlet dsCallService;
 
-    Servlet cometServlet;
+   private volatile Servlet cometServlet;
     
     private static final Logger log = LoggerFactory.getLogger(SGTServlet.class);
 

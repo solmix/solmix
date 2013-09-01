@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.application.Application;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.WebContext;
@@ -51,7 +50,6 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.application.AppBase;
 import org.solmix.fmk.application.ApplicationManagerImpl;
 import org.solmix.fmk.internel.DSConfigManager;
 import org.solmix.fmk.servlet.SlxFileItem;
@@ -129,7 +127,7 @@ public class DSRequestImpl implements DSRequest
      * @return the app
      * @throws SlxException
      */
-    public Application getApp() throws SlxException {
+    public synchronized Application getApp() throws SlxException {
         if (app == null)
             app = ApplicationManagerImpl.findAppByID(data.getAppID());
         return app;
@@ -138,7 +136,7 @@ public class DSRequestImpl implements DSRequest
     /**
      * @param app the app to set
      */
-    public void setApp(AppBase app) {
+    public void setApp(Application app) {
         this.app = app;
     }
 

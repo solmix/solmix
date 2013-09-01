@@ -77,7 +77,7 @@ public class DSCallServlet extends HttpServlet
         try {
             RPCManagerFactory factory = SlxContext.getRPCManagerFactory();
             rpc = factory.getRPCManager(wc, new RestRequestParser());
-            log.info("Performing " + rpc.requestCount() + " operation(s) ");
+            log.debug("Performing " + rpc.requestCount() + " operation(s) ");
             Exception exceptionHolder=null;
             if (rpc.getRequests() != null)
                 for (RequestType req : rpc.getRequests()) {

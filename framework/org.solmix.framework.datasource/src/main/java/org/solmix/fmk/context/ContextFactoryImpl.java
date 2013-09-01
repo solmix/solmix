@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.ContextFactory;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
@@ -56,6 +55,7 @@ public class ContextFactoryImpl implements ContextFactory
 
     }
 
+    @Override
     public WebContext createWebContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
         WebContextImpl context = new WebContextImpl();
         try {
@@ -68,7 +68,7 @@ public class ContextFactoryImpl implements ContextFactory
             context.setSystemContext(systemContext);
             context.setResourceBundleManager(systemContext.getResourceBundleManager());
         } catch (SlxException e) {
-            log.error("create webContext failed,message :{}", e.getMessage());
+            log.error("Create webContext failed,message :{}", e.getMessage());
         }
         return context;
 

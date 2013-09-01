@@ -24,7 +24,6 @@ import java.util.Locale;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.event.EventManager;
@@ -86,6 +85,7 @@ public abstract class AbstractSystemContext extends AbstractContext implements S
     /**
      * Return the default locale ,used resourceManager's default locale.
      */
+    @Override
     public Locale getLocale() {
         return this.getResourceBundleManager().getDefaultLocale();
     }
@@ -93,6 +93,7 @@ public abstract class AbstractSystemContext extends AbstractContext implements S
     /**
      * @return the systemContext
      */
+    @Override
     protected SystemContext getSystemContext() {
         return this;
     }
@@ -105,6 +106,7 @@ public abstract class AbstractSystemContext extends AbstractContext implements S
     }
 
     /**
+     * Return this bundle context.
      * @return the bundleContext
      */
     public BundleContext getBundleContext() {

@@ -65,7 +65,7 @@ public class RestRequestParser implements HttpServletRequestParser
 
     public static String COMET_PATH = '/' + RequestType.EVENT.value() + '/';
 
-    protected DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+    protected synchronized DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
         if (domBuilder == null) {
             DocumentBuilderFactory domfac = DocumentBuilderFactory.newInstance();
             domBuilder = domfac.newDocumentBuilder();

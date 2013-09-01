@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.commons.io.SlxFile;
 
 public abstract class ProcessedFileCache
@@ -30,7 +29,7 @@ public abstract class ProcessedFileCache
    public ProcessedFileCache()
    {
       stalenessCheckInterval = 500L;
-      cache = Collections.synchronizedMap( new HashMap() );
+      cache = Collections.synchronizedMap( new HashMap<String,CacheEntry>() );
    }
 
    public void setStalenessCheckInterval( long millis )
@@ -66,7 +65,7 @@ public abstract class ProcessedFileCache
    public Object getObjectFromFile( SlxFile file, Map flags ) throws Exception
    {
       String name = file.getCanonicalPath();
-      CacheEntry entry = (CacheEntry) cache.get( name );
+      CacheEntry entry = cache.get( name );
       long timeStamp = file.lastModified();
       if ( entry != null )
       {
@@ -113,11 +112,10 @@ public abstract class ProcessedFileCache
    public abstract Object loadObjectFromFile( SlxFile slxFile ) throws Exception;
 
    /**
-    * 把对象放入缓存中，并加上时间戳
     * 
     * @param name
     * @param object
-    * @param timeStamp 时间戳
+    * @param timeStamp 
     */
    public void cacheObject( String name, Object object, long timeStamp )
    {
@@ -132,6 +130,6 @@ public abstract class ProcessedFileCache
 
    private long stalenessCheckInterval;
 
-   Map cache;
+   Map<String,CacheEntry> cache;
 
 }

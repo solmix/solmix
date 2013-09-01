@@ -19,21 +19,18 @@
 
 package org.solmix.fmk.event;
 
-import org.slf4j.LoggerFactory;
-
 import org.solmix.api.event.IEvent;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.event.IValidationEvent.Level;
 import org.solmix.api.event.IValidationEvent.OutType;
 import org.solmix.api.event.MonitorEventFactory;
 import org.solmix.api.exception.SlxException;
-import org.solmix.commons.logs.SlxLog;
 import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.ValidationEventFactory;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-11-30
  */
 
@@ -85,11 +82,15 @@ public class EventUtils
 
     public final static void createAndFireFldValidateEvent(Level level, String msg) throws SlxException {
         SlxContext.getEventManager().postEvent(createFieldValidationEvent(level, msg));
-        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
+        // handle the event out of box,With osgi handle by add osgi-event handler ,With spring used spring context event
+        // handler.
+        // LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
     }
 
     public final static void createAndFireDSValidateEvent(Level level, String msg, Throwable e) {
         SlxContext.getEventManager().postEvent(createDSValidationEvent(level, msg, e));
-        LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
+        // handle the event out of box,With osgi handle by add osgi-event handler ,With spring used spring context event
+        // handler.
+        // LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(msg);
     }
 }

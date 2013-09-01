@@ -29,7 +29,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.context.Context;
@@ -122,10 +121,7 @@ public class AppBase implements Application
 
     protected String adminUser;
 
-    static {
-        // authorizationEnabled = DataUtil.asBoolean(OSGIHelper.CM.getString("authorization.enabled", "false"));
-        // authenticationEnabled = DataUtil.asBoolean(OSGIHelper.CM.getString("authorization.enabled", "false"));
-    }
+  
 
     public AppBase()
     {
@@ -141,8 +137,6 @@ public class AppBase implements Application
     }
 
     protected DataTypeMap loadCustomConfig() {
-        // appConfig = OSGIHelper.getCM().getSubtree("application.default");
-        // TODO
         appConfig = new DataTypeMap();
         // fmkDefinedOperations
         String operations = appConfig.getString("definedOperations", "*");
@@ -380,7 +374,7 @@ public class AppBase implements Application
      */
     protected void canPerformAutoOperation(Eoperation opType) throws SlxException {
         if (appID.equals(BUILT_IN_APPLICATION) || appID.equals(DEFAULT_APPLICATION))
-            if (authorizationEnabled && definedUserTypes == UserType.ANONY_USER) {
+            if (definedUserTypes == UserType.ANONY_USER) {
                 throw new SlxException(Tmodule.APP, Texception.SECURITY_DENIED,
                     (new StringBuilder()).append("DENIED attempt to execute auto operation '").append(operation).append(
                         "' bound to the auto-generated default application ").append("because authorization is currently enabled").toString());

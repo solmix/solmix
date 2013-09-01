@@ -58,7 +58,7 @@ public class ApplicationManagerImpl implements ApplicationManager
      * @param appID
      * @return
      */
-    public static Application findAppByID(String appID) {
+    public synchronized static Application findAppByID(String appID) {
         if (appID == null)
             appID=BUILT_IN_APPLICATION;
         Application theApp = null;
@@ -68,12 +68,13 @@ public class ApplicationManagerImpl implements ApplicationManager
                 return theApp;
             
         } else {
-
+            //XXX extension point
         }
         return theApp;
 
     }
 
+    @Override
     public void register(Application app) {
         String serverType = app.getServerID();
         if (serverType == null)
@@ -81,6 +82,7 @@ public class ApplicationManagerImpl implements ApplicationManager
         providers.put(serverType, app);
     }
 
+    @Override
     public void unregister(Application app) {
             providers.remove(app.getServerID());
     }
