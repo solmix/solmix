@@ -209,24 +209,50 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         DSRequestData _dsContext = req.getContext();
         if (log.isDebugEnabled()) {
             List values = req.getContext().getValueSets();
-            String _valueString = "";
             StringBuilder __info = new StringBuilder();
-            if (values != null) {
-                if (values.size() == 1) {
-                    _valueString = "\t values: " + getJsParser().toJavaScript(values.get(0));
-                } else {
-                    _valueString = "\t values: " + values.size() + " valuesSets";
+            switch(_opType){
+                case ADD:{
+                    if (values != null) {
+                        if (values.size() == 1) {
+                            __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
+                        } else {
+                            __info.append("\t values: ").append( values.size()).append(" valuesSets");
+                        }
+                    }
                 }
+                    break;
+                case FETCH:
+                case REMOVE:case REPLACE:
+                {
+                    if (req.getContext().getRawCriteria() != null)
+                        __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
+                }
+                    break;
+                case UPDATE:{
+                    if (req.getContext().getRawCriteria() != null)
+                        __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
+                    if (values != null) {
+                        if (values.size() == 1) {
+                            __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
+                        } else {
+                            __info.append("\t values: ").append( values.size()).append(" valuesSets");
+                        }
+                    }
+                }
+                    break;
+                default:
+                    break;
+                
             }
-            __info.append("Performing ").append(_opType).append(" operation with \n");
             if (req.getContext().getConstraints() != null)
                 __info.append("\t constraints: ").append(req.getContext().getConstraints().toString());
             if (req.getContext().getOutputs() != null)
                 __info.append("\t outputs: ").append(req.getContext().getOutputs().toString());
             if (req.getContext().getRawCriteria() != null)
-                __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
-            __info.append(_valueString);
-            log.debug(__info.toString());
+            if(__info.toString().length()>2){
+                log.debug(new StringBuilder().append("Performing ").append(_opType).append(" operation with \n").append(__info.toString()).toString());
+            }
+           
         }
         // dsObject
         if (dsObject == null) {

@@ -95,9 +95,7 @@ public class ConnectionManager
                 public void run() {
                     Map<Connection, Map<String, Object>> localCopy = null;
                     do {
-                        lock.lock();
                         localCopy = new ConcurrentHashMap<Connection, Map<String, Object>>(openConnections);
-                        lock.unlock();
                         long now = System.currentTimeMillis();
                         Iterator<Connection> i = localCopy.keySet().iterator();
                         do {

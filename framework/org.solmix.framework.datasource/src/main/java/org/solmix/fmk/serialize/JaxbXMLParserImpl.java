@@ -53,12 +53,7 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public Module unmarshalDS(InputStream is) throws SlxException {
-        try {
-            if (dataSourceJC == null)
-                dataSourceJC = JAXBContext.newInstance(Module.class);
-        } catch (JAXBException e) {
-            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
-        }
+        initDataSourceJaxbContext();
         Object obj = unmarshal(is, dataSourceJC);
         if (obj instanceof JAXBElement<?>)
             return (Module) ((JAXBElement<?>) obj).getValue();
@@ -98,14 +93,7 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public Module unmarshalDS(Reader is) throws SlxException {
-        try {
-            synchronized(dataSourceJC){
-                if (dataSourceJC == null)
-                    dataSourceJC = JAXBContext.newInstance(Module.class);
-            }
-        } catch (JAXBException e) {
-            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
-        }
+        initDataSourceJaxbContext();
         return (Module) unmarshal(is, dataSourceJC);
     }
 
@@ -130,14 +118,7 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public void marshalDS(Writer out, Object jaxbObject) throws SlxException {
-        try {
-            synchronized(dataSourceJC){
-                if (dataSourceJC == null)
-                    dataSourceJC = JAXBContext.newInstance(Module.class);
-            }
-        } catch (JAXBException e) {
-            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
-        }
+        initDataSourceJaxbContext();
         marshal(out, jaxbObject, true, dataSourceJC);
     }
 
@@ -199,7 +180,15 @@ public class JaxbXMLParserImpl implements XMLParser
             if (requestJC == null)
                 requestJC = JAXBContext.newInstance(Request.class);
         } catch (JAXBException e) {
-            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance JAXBContext.\n exception:", e);
+            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance request JAXBContext.\n exception:", e);
+        }
+    }
+    protected synchronized void initDataSourceJaxbContext() throws SlxException {
+        try {
+            if (dataSourceJC == null)
+                dataSourceJC = JAXBContext.newInstance(Module.class);
+        } catch (JAXBException e) {
+            throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance Datasource JAXBContext.\n exception:", e);
         }
     }
 
