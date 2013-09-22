@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.internel;
+package org.solmix.fmk.internal;
 
 import static org.solmix.commons.util.DataUtil.getBoolean;
 import static org.solmix.commons.util.DataUtil.getInteger;
@@ -31,7 +31,6 @@ import java.util.Properties;
 
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.cm.ConfigManager;
 import org.solmix.commons.collections.DataTypeMap;
@@ -140,7 +139,6 @@ public class DSConfigManager implements ManagedService, ConfigManager
      */
     @Override
     public String getPid() {
-        // TODO Auto-generated method stub
         return "org.solmix.framework.datasource";
     }
 }
