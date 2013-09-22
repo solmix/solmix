@@ -44,7 +44,7 @@ import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.servlet.ServletTools;
 import org.solmix.fmk.servlet.WrappedHttpServletRequest;

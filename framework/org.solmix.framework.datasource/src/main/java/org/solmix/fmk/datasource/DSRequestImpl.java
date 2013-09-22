@@ -51,7 +51,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.application.ApplicationManagerImpl;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 import org.solmix.fmk.servlet.SlxFileItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.ErrorReport;

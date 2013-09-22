@@ -44,7 +44,7 @@ import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 import org.solmix.fmk.util.DataTools;
 
 /**

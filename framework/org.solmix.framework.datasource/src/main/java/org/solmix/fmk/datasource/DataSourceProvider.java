@@ -36,7 +36,7 @@ import org.solmix.api.jaxb.EserverType;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.cache.StructCache;
 import org.solmix.fmk.context.SlxContext;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 
 /**
  * Initialize Datasource.all datasource initialized thought {@link #forName(String)}

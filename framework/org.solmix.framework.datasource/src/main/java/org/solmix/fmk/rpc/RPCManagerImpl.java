@@ -82,7 +82,7 @@ import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.export.ExportManager;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 import org.solmix.fmk.js.ISCJavaScript;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;

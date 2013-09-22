@@ -69,7 +69,7 @@ import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.ValidationContext.Vtype;
 import org.solmix.fmk.event.EventUtils;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 import org.solmix.fmk.js.JSExpression;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.util.DataTools;

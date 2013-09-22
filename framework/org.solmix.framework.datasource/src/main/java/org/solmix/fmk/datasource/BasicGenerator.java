@@ -34,7 +34,7 @@ import org.solmix.api.jaxb.Tfields;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.base.Reflection;
-import org.solmix.fmk.internel.DSConfigManager;
+import org.solmix.fmk.internal.DSConfigManager;
 
 /**
  * 
