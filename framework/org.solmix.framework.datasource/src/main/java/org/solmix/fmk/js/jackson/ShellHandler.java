@@ -23,7 +23,7 @@ import java.util.LinkedList;
 /**
  * outside control the jackson json format.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.2
  * @version 110035 2011-2-16 solmix-ds
  */

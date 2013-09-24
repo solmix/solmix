@@ -37,7 +37,7 @@ import org.solmix.fmk.velocity.DataSourcesHandler;
 import org.solmix.fmk.velocity.Util;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-27 solmix-ds
  */

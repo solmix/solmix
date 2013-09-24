@@ -34,7 +34,7 @@ import org.solmix.api.datasource.DataSource;
  * Reference 'Stream insertion' event handler. Called with object that will be inserted into stream via
  * value.toString(). Please return an Object that will toString() nicely :)
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110046 
  */

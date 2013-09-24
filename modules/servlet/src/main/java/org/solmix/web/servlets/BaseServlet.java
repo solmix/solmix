@@ -31,7 +31,7 @@ import org.solmix.fmk.util.OSGIHelper;
 
 /**
  * The parent of Servlets.used this servlet to initial services.
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035  2011-2-11 gwt 
  */

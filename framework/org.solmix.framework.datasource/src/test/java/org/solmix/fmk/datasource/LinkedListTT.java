@@ -21,7 +21,7 @@ package org.solmix.fmk.datasource;
 import java.util.LinkedList;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035  2011-2-17 solmix-ds 
  */

@@ -21,7 +21,7 @@ package org.solmix.api.types;
 
 /**
  * framework transaction policy.
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110041  
  * 

@@ -36,7 +36,7 @@ public interface DSResponse extends ResponseType
     /**
      * Define the return Status of Datasource.
      * 
-     * @author solomon
+     * @author solmix.f@gmail.com
      * @version 110035 2011-3-20
      */
     public enum Status

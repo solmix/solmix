@@ -28,7 +28,7 @@ import org.solmix.api.rpc.RPCManagerFactory;
 /**
  * Implements {@link org.solmix.api.rpc.RPCManagerFactory}.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-31 solmix-ds
  */

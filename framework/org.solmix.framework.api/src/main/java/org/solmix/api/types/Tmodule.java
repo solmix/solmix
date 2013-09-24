@@ -22,7 +22,7 @@ package org.solmix.api.types;
 /**
  * framework module enum.this uesed to decleare components yet.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-25 solmix-api
  */

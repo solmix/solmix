@@ -24,7 +24,7 @@ import org.solmix.api.exception.SlxException;
 /**
  * Parser used as Before-parser for ds.we can user this interface to parser configuration file before initialize ds.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-26 solmix-api
  */

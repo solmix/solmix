@@ -19,12 +19,11 @@
 
 package org.solmix.fmk.spring.event;
 
+import org.solmix.api.event.EventManager;
+import org.solmix.api.event.IEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import org.solmix.api.event.EventManager;
-import org.solmix.api.event.IEvent;
 
 /**
  * 

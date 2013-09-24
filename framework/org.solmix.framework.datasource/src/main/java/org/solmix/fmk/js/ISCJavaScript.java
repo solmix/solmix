@@ -35,7 +35,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-15 solmix-ds
  */

@@ -38,7 +38,7 @@ import org.solmix.fmk.velocity.Velocity;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-3-23
  */
 @SuppressWarnings("unchecked")

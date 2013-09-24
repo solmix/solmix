@@ -50,7 +50,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-21 solmix-utils
  */

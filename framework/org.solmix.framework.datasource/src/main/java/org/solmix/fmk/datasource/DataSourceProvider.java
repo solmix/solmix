@@ -41,7 +41,7 @@ import org.solmix.fmk.internal.DSConfigManager;
 /**
  * Initialize Datasource.all datasource initialized thought {@link #forName(String)}
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-26 solmix-ds
  */

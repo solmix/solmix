@@ -27,6 +27,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.cm.ConfigManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -36,8 +37,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.util.DefaultPropertiesPersister;
 import org.springframework.util.PropertiesPersister;
-
-import org.solmix.api.cm.ConfigManager;
 
 /**
  * 
@@ -49,7 +48,7 @@ public class SpringManagedService implements BeanNameAware, BeanFactoryAware, Be
 
     public static final String XML_FILE_EXTENSION = ".xml";
 
-    private PropertiesPersister propertiesPersister = new DefaultPropertiesPersister();
+    private final PropertiesPersister propertiesPersister = new DefaultPropertiesPersister();
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -59,11 +58,14 @@ public class SpringManagedService implements BeanNameAware, BeanFactoryAware, Be
 
     private String fileEncoding;
 
-    private boolean ignoreResourceNotFound = false;
+    private final boolean ignoreResourceNotFound = false;
 
     private BeanFactory beanFactory;
 
     private String beanName;
+    
+    public SpringManagedService(){
+    }
 
     public void setLocation(Resource location) {
         this.locations = new Resource[] { location };

@@ -31,7 +31,7 @@ import org.apache.shiro.subject.Subject;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-6-6
  */
 

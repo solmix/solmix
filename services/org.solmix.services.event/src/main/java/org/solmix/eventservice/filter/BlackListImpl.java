@@ -30,7 +30,7 @@ import org.solmix.eventservice.BlackList;
 /**
  * This class implements a <tt>BlackList</tt> that removes references to unregistered services automatically.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-10-1
  */
 

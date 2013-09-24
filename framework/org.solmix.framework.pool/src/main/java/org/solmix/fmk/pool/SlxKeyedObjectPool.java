@@ -31,7 +31,7 @@ import org.solmix.commons.collections.DataTypeMap;
 /**
  * Extends {@link org.apache.commons.pool.impl.GenericKeyedObjectPool GenericKeyedObjectPool}
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035
  */

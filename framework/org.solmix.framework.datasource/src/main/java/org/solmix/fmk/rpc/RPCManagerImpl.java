@@ -96,7 +96,7 @@ import org.solmix.fmk.velocity.Velocity;
  * complex relationship at this class,ant simple configuration at data class {@link org.solmix.api.data.RPCManagerData
  * RPCManagerData}.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110040 2011-1-1 solmix-ds
  */

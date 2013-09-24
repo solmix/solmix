@@ -57,7 +57,7 @@ import org.solmix.sql.internal.SQLConfigManager;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-3-20
  */
 @SuppressWarnings("unchecked")

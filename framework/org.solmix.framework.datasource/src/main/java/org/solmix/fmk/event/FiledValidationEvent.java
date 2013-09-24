@@ -23,7 +23,7 @@ import org.solmix.api.event.AbstractValidationEvent;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-10-5
  */
 

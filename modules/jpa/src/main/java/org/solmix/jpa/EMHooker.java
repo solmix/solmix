@@ -23,7 +23,7 @@ import javax.persistence.EntityManager;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version $Id$ 2011-6-6
  */
 

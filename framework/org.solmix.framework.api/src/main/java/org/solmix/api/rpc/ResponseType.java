@@ -20,7 +20,7 @@
 package org.solmix.api.rpc;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-1-2 solmix-api
  */

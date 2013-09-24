@@ -24,7 +24,7 @@ import java.util.Date;
 /**
  * Just marketed as a new type.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-4-11
  */
 

@@ -27,7 +27,7 @@ import org.solmix.api.application.ApplicationManager;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-11-12
  */
 

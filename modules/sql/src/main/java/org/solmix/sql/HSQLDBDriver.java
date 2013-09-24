@@ -29,7 +29,7 @@ import org.solmix.api.types.Tmodule;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-3-31
  */
 

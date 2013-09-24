@@ -39,7 +39,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-22 solmix-ds
  */

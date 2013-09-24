@@ -28,7 +28,7 @@ import org.solmix.api.jaxb.EexportAs;
 import org.solmix.commons.util.DataUtil;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-22 solmix-ds
  */

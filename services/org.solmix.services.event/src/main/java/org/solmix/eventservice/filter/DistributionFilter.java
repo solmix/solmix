@@ -23,7 +23,7 @@ import org.osgi.service.event.Event;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-10-1
  */
 

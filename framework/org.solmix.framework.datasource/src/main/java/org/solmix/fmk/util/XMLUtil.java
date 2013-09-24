@@ -56,7 +56,7 @@ import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-4-18
  */
 @SuppressWarnings("unchecked")

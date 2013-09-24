@@ -79,7 +79,7 @@ import org.solmix.sql.internal.Activator;
 import org.solmix.sql.internal.SQLConfigManager;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 0.1.1 2012-12-16 solmix-sql
  */

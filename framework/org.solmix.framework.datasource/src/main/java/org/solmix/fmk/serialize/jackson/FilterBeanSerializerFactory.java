@@ -34,7 +34,7 @@ import org.codehaus.jackson.map.util.ArrayBuilders;
 import org.solmix.commons.util.DataUtil;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-22 solmix-ds
  */

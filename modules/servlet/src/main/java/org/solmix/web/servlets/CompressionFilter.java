@@ -39,7 +39,7 @@ import org.solmix.fmk.servlet.ServletTools;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-6-7
  */
 

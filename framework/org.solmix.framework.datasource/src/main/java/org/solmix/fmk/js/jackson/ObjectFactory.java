@@ -46,7 +46,7 @@ import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-28 solmix-api
  */

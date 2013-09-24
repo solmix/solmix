@@ -23,14 +23,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import org.solmix.api.i18n.ResourceBundleManager;
 import org.solmix.api.repo.DSRepositoryManager;
 import org.solmix.api.security.SecurityAdmin;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.sql.ConnectionManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * 

@@ -20,7 +20,7 @@
 package org.solmix.api.types;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-25 solmix-api
  */

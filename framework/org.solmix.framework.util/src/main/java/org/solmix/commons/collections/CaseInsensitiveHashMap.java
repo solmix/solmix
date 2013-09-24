@@ -35,7 +35,7 @@ import java.util.Map;
  * <pre>
  * key.toString().toLowerCase()
  * </pre>
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-8-28
  * @param <V>
  * @param <K>

@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-3-26
  */
 @Target(ElementType.FIELD)

@@ -28,7 +28,7 @@ import org.codehaus.jackson.annotate.JacksonAnnotation;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035  2011-4-11
  */
 @Target( { ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })

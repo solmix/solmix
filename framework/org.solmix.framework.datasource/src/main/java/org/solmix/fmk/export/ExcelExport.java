@@ -46,7 +46,7 @@ import org.solmix.api.exception.SlxException;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-6-7
  */
 

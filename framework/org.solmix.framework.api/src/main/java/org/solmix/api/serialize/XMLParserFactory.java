@@ -20,7 +20,7 @@
 package org.solmix.api.serialize;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.2
  * @version 110035 2011-2-7 solmix-api
  */

@@ -23,7 +23,7 @@ import org.solmix.api.data.DataSourceData;
 
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-5 solmix-ds
  */

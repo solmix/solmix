@@ -21,7 +21,7 @@ package org.solmix.fmk.mock;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035  2011-2-6 solmix-ds 
  */

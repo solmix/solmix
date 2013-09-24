@@ -57,7 +57,7 @@ import org.solmix.fmk.util.ServiceUtil;
 /**
  * JPA datasource.
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version $Id$ 2011-6-6
  */
 

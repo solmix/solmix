@@ -30,7 +30,7 @@ import org.solmix.api.serialize.JSParser;
 import org.solmix.api.types.TransactionPolicy;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 0.1.1 2011-1-1 solmix-api
  */

@@ -19,7 +19,7 @@
 	<property name="managers">
 		<list>
 			<bean id="sql_manager" class="org.solmix.sql.internal.SQLConfigManager"></bean>
-			<bean id="ds_manager" class="org.solmix.fmk.internel.DSConfigManager"></bean>
+			<bean id="ds_manager" class="org.solmix.fmk.internal.DSConfigManager"></bean>
 			<bean id="pool_manager" class="org.solmix.fmk.pool.PoolManagerFactory"></bean>
 		</list>
 	</property>

@@ -25,7 +25,7 @@ import org.solmix.api.jaxb.TdataSource;
 /**
  * <code> @XmlRootElement(name = "DataSource")<code>
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-29 solmix-ds
  */

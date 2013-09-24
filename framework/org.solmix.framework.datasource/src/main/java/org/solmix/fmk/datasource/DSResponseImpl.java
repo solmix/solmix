@@ -33,7 +33,7 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-1-3 solmix-ds
  */

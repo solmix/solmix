@@ -23,7 +23,7 @@ import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.exception.SlxException;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-26 solmix-api
  */
@@ -33,7 +33,7 @@ public interface ValidationEventHandler
    /**
     * For extention
     * 
-    * @author solomon
+    * @author solmix.f@gmail.com
     * @since 0.0.1
     * @version 110035 2010-12-27 solmix-api
     */

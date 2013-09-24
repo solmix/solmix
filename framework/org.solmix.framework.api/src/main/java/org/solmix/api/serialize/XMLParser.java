@@ -31,7 +31,7 @@ import org.solmix.api.jaxb.request.Request;
 import org.solmix.commons.io.SlxFile;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-2-7 solmix-api
  */

@@ -34,7 +34,7 @@ import org.solmix.fmk.datasource.ValidationContext;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 0.0.2 2010-12-18 solmix-ds
  * 

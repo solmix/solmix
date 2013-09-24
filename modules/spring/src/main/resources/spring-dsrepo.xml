@@ -6,8 +6,7 @@
            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
-	
-	<import resource="classpath:spring-config.xml" />
+	 <import resource="classpath:spring-config.xml" />
 	<bean id="fileRepo" class="org.solmix.fmk.repo.FileSystemRepository"
 		init-method="init" destroy-method="close">
 		<property name="location"  value="${repo.location}" />

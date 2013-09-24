@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 
- * @author Solomon
+ * @author solmix.f@gmail.com
  * 
  */
 public class SumJavaCode

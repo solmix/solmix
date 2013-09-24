@@ -59,7 +59,7 @@ import org.solmix.fmk.util.ErrorReport;
 /**
  * Implements of {@link org.solmix.api.datasource.DSRequest DSRequest}
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2011-1-3 solmix-ds
  */

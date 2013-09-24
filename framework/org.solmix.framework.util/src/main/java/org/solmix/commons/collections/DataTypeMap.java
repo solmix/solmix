@@ -42,7 +42,7 @@ import org.apache.commons.collections.map.AbstractMapDecorator;
  * It simply returns the Set/Collection from the wrapped map.
  * 
  * @version 110035
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  */
 public class DataTypeMap extends AbstractMapDecorator

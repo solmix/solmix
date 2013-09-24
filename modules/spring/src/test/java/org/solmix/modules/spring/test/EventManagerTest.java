@@ -16,26 +16,28 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
 package org.solmix.modules.spring.test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.solmix.api.event.TimeMonitorEvent;
+import org.solmix.fmk.spring.event.DefaultEventManager;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import org.solmix.api.event.EventManager;
-import org.solmix.fmk.event.EventUtils;
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-12-2
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-9-23
  */
 
 public class EventManagerTest
 {
-
     ApplicationContext ctx;
 
     /**
@@ -45,14 +47,30 @@ public class EventManagerTest
     public void setUp() throws Exception {
 //        Mocks.initContext();
         System.setProperty("solmix.base", "web-root");
-        ctx = new ClassPathXmlApplicationContext("spring-ds.xml");
+        ctx = new ClassPathXmlApplicationContext("spring-test.xml");
     }
 
     @Test
     public void test() {
-        EventManager em = ctx.getBean("eventManager", EventManager.class);
-        em.postEvent(EventUtils.createTimeMonitorEvent(1232, "test test"));
-
+        try {
+            DefaultEventManager eventManager= ctx.getBean("eventManager", DefaultEventManager.class);
+            Map values = new HashMap();
+            long id=Thread.currentThread().getId();
+            for(int i=0;i<100;i++){
+            values.put("TheadID",id );
+            values.put("time",System.currentTimeMillis() );
+            System.out.println("product-id-"+id);
+            TimeMonitorEvent te = new TimeMonitorEvent(values);
+            eventManager.postEvent(te);
+            }
+            //protected Thread shutdown and asy handler is not be called.
+            try {
+                Thread.currentThread().sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (BeansException e) {
+            e.printStackTrace();
+        }
     }
-
 }

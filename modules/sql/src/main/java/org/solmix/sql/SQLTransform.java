@@ -51,7 +51,7 @@ import org.solmix.fmk.util.SLXDate;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-3-30
  */
 @SuppressWarnings("unchecked")

@@ -24,7 +24,7 @@ import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
 
 /**
- * @author solomon
+ * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035  2011-2-14 solmix-ds 
  */

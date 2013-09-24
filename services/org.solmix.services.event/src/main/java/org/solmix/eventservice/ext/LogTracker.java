@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-9-27
  */
 
