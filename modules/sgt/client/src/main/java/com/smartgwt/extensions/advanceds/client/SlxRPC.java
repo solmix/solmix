@@ -20,8 +20,10 @@
 package com.smartgwt.extensions.advanceds.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.smartgwt.client.core.Function;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.rpc.RPCCallback;
 import com.smartgwt.client.rpc.RPCManager;
 import com.smartgwt.client.rpc.RPCRequest;
@@ -30,6 +32,7 @@ import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.util.JSOHelper;
 import com.smartgwt.client.util.JSON;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.DataBoundComponent;
 
 /**
  * 
@@ -154,6 +157,25 @@ public class SlxRPC
         Roperation op = new Roperation();
         transform(dsRequest, criteria, op);
         send(op);
+    }
+    public static void bind(final String datasourceName, final DataBoundComponent component, final Function callback) {
+        DataSource ds = DataSource.get(datasourceName);
+        if (ds == null) {
+            DataSource.load(datasourceName, new Function() {
+
+                @Override
+                public void execute() {
+                    DataSource _ds = DataSource.get(datasourceName);
+                    component.setDataSource(_ds);
+                    if (callback != null)
+                        callback.execute();
+                }
+            }, true);
+        } else {
+            component.setDataSource(ds);
+            if (callback != null)
+                callback.execute();
+        }
     }
 
     @SuppressWarnings("unchecked")
