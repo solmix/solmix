@@ -23,11 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.solmix.sgt.client.Action;
+import org.solmix.sgt.client.EviewType;
+
 import com.google.gwt.event.shared.GwtEvent;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-import org.solmix.sgt.client.Action;
-import org.solmix.sgt.client.EviewType;
 
 /**
  * 
@@ -42,7 +43,7 @@ public class RevealViewEvent extends GwtEvent<RevealViewHandler>
 
 
 
-    private Map<String, String> params;
+    private Map<String, Object> params;
     private String placeToken;
     private  PlaceRequest preq;
     
@@ -92,9 +93,9 @@ public class RevealViewEvent extends GwtEvent<RevealViewHandler>
 
     }
 
-    public Map<String, String> getParameters() {
+    public Map<String, Object> getParameters() {
     	assert preq != null;
-    	Map<String,String> params = new HashMap<String,String>();
+    	Map<String,Object> params = new HashMap<String,Object>();
     	if(getParameterNames()!=null)
     	for(String str:getParameterNames()){
     		if(str.equals(Action.ACTION)||str.equals(Action.P_MODULE)||str.equals(EviewType.P_VIEW_TYPE))

@@ -29,7 +29,7 @@ import org.solmix.sgt.client.widgets.WidgetFactory;
 
 /**
  * 
- * @author solmix.f@gmail.com
+ * @author solomon
  * @version 110035 2011-5-31
  */
 

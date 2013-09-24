@@ -24,7 +24,7 @@ import org.solmix.sgt.client.widgets.WidgetFactory;
 
 /**
  * Data constructor for widget.the scope order is module>unit>name.
- * @author solmix.f@gmail.com
+ * @author solomon
  * @version 110035  2011-5-30
  */
 

@@ -38,7 +38,7 @@ public abstract class AbstractPanel extends HandlerContainerImpl implements Pane
 
     protected String desc = "";
 
-    protected Map<String, String> parameters;
+    protected Map<String,Object> parameters;
 
     protected Canvas container;
 
@@ -59,20 +59,20 @@ public abstract class AbstractPanel extends HandlerContainerImpl implements Pane
     }
 
     @Override
-    public void setParameters(Map<String, String> paramaters) {
+    public void setParameters(Map<String,Object> paramaters) {
         this.parameters = paramaters;
         onParameterSet(parameters);
 
     }
 
-    protected void onParameterSet(Map<String, String> param) {
+    protected void onParameterSet(Map<String,Object> param) {
 
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see com.ieslab.eimpro.client.panel.PanelFactory#setContainer(com.smartgwt.client.widgets.Canvas)
+     * @see org.solmix.sgt.client.panel.PanelFactory#setContainer(com.smartgwt.client.widgets.Canvas)
      */
     @Override
     public void setContainer(Canvas containerTarget) {

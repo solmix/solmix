@@ -38,7 +38,7 @@ public abstract class PanelManagerImpl implements PanelManager
     }
 
     @Override
-    public PanelFactory getPanel(String action, Map<String, String> params) {
+    public PanelFactory getPanel(String action, Map<String,Object> params) {
         PanelFactory _return = getPanelByAction(action);
         if (_return != null &&params != null)
             _return.setParameters(params);

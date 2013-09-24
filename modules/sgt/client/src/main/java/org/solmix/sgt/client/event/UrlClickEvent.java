@@ -24,17 +24,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.solmix.sgt.client.Action;
+import org.solmix.sgt.client.EviewType;
+
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
-import org.solmix.sgt.client.Action;
-import org.solmix.sgt.client.EviewType;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2013-1-14
  */
 
@@ -46,7 +47,7 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
     @Inject
     private  TokenFormatter tokenformatter;
 
-    private final Map<String, String> parameters;
+    private final Map<String,Object> parameters;
 
     private final String action;
 
@@ -57,7 +58,7 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
         }
         PlaceRequest place = tokenformatter.toPlaceRequest(urlParams);
         action = place.getNameToken();
-        parameters = new HashMap<String, String>();
+        parameters = new HashMap<String,Object>();
         Set<String> params = place.getParameterNames();
         for (String param : params) {
             if (param.equals(EviewType.P_VIEW_TYPE) || param.equals(Action.P_MODULE) || param.equals(Action.ACTION))
@@ -67,7 +68,7 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
 
     }
 
-    public Map<String, String> getParameters() {
+    public Map<String,Object> getParameters() {
         if (this.parameters == null) {
             return Collections.emptyMap();
         } else {
@@ -79,8 +80,8 @@ public class UrlClickEvent extends GwtEvent<UrlClickHandler>
         return this.action;
     }
 
-    public String getParameter(String key, String defaultValue) {
-        String value = null;
+    public Object getParameter(String key, String defaultValue) {
+        Object value = null;
 
         if (parameters != null) {
             value = parameters.get(key);

@@ -46,8 +46,9 @@ public interface PanelFactory
 
     String getID();
 
-    void setParameters(Map<String, String> params);
+    void setParameters(Map<String,Object> params);
 
     void setContainer(Canvas containerTarget);
+
 
 }

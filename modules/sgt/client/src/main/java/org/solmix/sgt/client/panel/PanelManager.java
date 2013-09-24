@@ -34,6 +34,6 @@ public interface PanelManager
 
     void returnPanel(PanelFactory panel);
 
-    PanelFactory getPanel(String action, Map<String, String> params);
+    PanelFactory getPanel(String action, Map<String,Object> params);
 
 }
