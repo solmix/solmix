@@ -26,10 +26,11 @@
 	<!--______________________________________________________ -->
 	<!--                       eventAdmin Service Holder             -->
 	<!--______________________________________________________ -->
-	<bean class="org.solmix.fmk.event.OsgiEventManager" id="eventManager" >
+	<bean class="org.solmix.fmk.event.OsgiEventManager"
+		id="eventManager">
 		<property name="context" ref="blueprintBundleContext" />
 	</bean>
-		<bean class="org.solmix.fmk.util.ServiceUtil" id="serviceUtil" >
+	<bean class="org.solmix.fmk.util.ServiceUtil" id="serviceUtil" >
 		<property name="context" ref="blueprintBundleContext" />
 	</bean>
 	<reference id="eventAdmin" interface="org.osgi.service.event.EventAdmin">
