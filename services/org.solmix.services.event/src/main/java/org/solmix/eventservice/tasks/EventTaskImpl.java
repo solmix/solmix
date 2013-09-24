@@ -22,8 +22,8 @@ package org.solmix.eventservice.tasks;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.log.LogService;
-import org.solmix.eventservice.Activator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.eventservice.EventTask;
 
 /**
@@ -34,6 +34,7 @@ import org.solmix.eventservice.EventTask;
 
 public class EventTaskImpl implements EventTask
 {
+    private static final Logger logger = LoggerFactory.getLogger(EventTaskImpl.class);
 
     // The service reference of the handler
     private final ServiceReference<EventHandler> eventHandlerRef;
@@ -59,8 +60,7 @@ public class EventTaskImpl implements EventTask
             handler.handleEvent(event);
         } catch (final Throwable e) {
             // The spec says that we must catch exceptions and log them:
-            Activator.getLogService().log(eventHandlerRef, LogService.LOG_WARNING,
-                "Exception during event dispatch [" + event + " | " + eventHandlerRef + " | Bundle(" + eventHandlerRef.getBundle() + ")]", e);
+            logger.error("Exception during event dispatch [" + event + " | " + eventHandlerRef + " | Bundle(" + eventHandlerRef.getBundle() + ")]", e);
         } finally {
             taskManager.ungetEventHandler(handler, eventHandlerRef);
         }

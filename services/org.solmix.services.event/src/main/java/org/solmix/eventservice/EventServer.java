@@ -32,7 +32,7 @@ import org.osgi.service.cm.ManagedService;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
 import org.solmix.eventservice.filter.BlackListImpl;
-import org.solmix.eventservice.filter.CacheEventFilter;
+import org.solmix.eventservice.filter.CachedEventFilter;
 import org.solmix.eventservice.filter.CachedTopicFilter;
 import org.solmix.eventservice.security.SecureEventAdminFactory;
 import org.solmix.eventservice.tasks.EventTaskManagerImpl;
@@ -169,6 +169,7 @@ public class EventServer
     void updateServer(final Dictionary properties) {
         new Thread() {
 
+            @Override
             public void run() {
                 synchronized (EventServer.this) {
                     EventServer.this.configureServer(properties);
@@ -193,7 +194,7 @@ public class EventServer
          * Initial Event filter.
          */
         Cache<String, Filter> event_filter_cache = new LeastRecentlyUsedCacheMap<String, Filter>(cacheSize);
-        final EventFilter filter = new CacheEventFilter(event_filter_cache, bundleContext);
+        final EventFilter filter = new CachedEventFilter(event_filter_cache);
 
         if (syn_pool == null) {
             syn_pool = new EventThreadPool(threadPoolSize, true);
@@ -209,11 +210,11 @@ public class EventServer
 
         final EventTaskManager taskManager = new EventTaskManagerImpl(bundleContext, new BlackListImpl(), topicFilter, filter);
         if (eventAdmin == null) {
-            eventAdmin = new EventAdminImpl(taskManager, syn_pool, asy_pool, timeout, ignoreTimeout);
+//            eventAdmin = new EventAdminImpl(taskManager, syn_pool, asy_pool, timeout, ignoreTimeout);
             // Registered the eventAdmin service.
             eaRegistration = bundleContext.registerService(EventAdmin.class.getName(), new SecureEventAdminFactory(eventAdmin), null);
         } else {
-            eventAdmin.update(taskManager, timeout, ignoreTimeout);
+//            eventAdmin.update(taskManager, timeout, ignoreTimeout);
         }
     }
 

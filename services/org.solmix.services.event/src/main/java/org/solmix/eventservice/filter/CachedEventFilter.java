@@ -18,8 +18,8 @@
  */
 package org.solmix.eventservice.filter;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.solmix.eventservice.Cache;
 import org.solmix.eventservice.EventFilter;
@@ -31,25 +31,17 @@ import org.solmix.eventservice.EventFilter;
  * @version 110035  2011-10-1
  */
 
-public class CacheEventFilter implements EventFilter
+public class CachedEventFilter implements EventFilter
 {
-    private Cache<String,Filter> cache;
-    private BundleContext context;
-    public CacheEventFilter(final Cache<String,Filter> cache, final BundleContext context)
+    private final Cache<String,Filter> cache;
+    public CachedEventFilter(final Cache<String,Filter> cache)
     {
         if(null == cache)
         {
             throw new NullPointerException("Cache may not be null");
         }
 
-        if(null == context)
-        {
-            throw new NullPointerException("Context may not be null");
-        }
-
         this.cache = cache;
-
-        this.context = context;
     }
 
     /**
@@ -68,12 +60,12 @@ public class CacheEventFilter implements EventFilter
     public Filter createFilter(String filter)
         throws InvalidSyntaxException
     {
-        Filter result = (Filter) ((null != filter) ? cache.get(filter)
-            : TRUE_FILTER);
+        Filter result = (null != filter) ? cache.get(filter)
+            : TRUE_FILTER;
 
         if (null == result)
         {
-            result = context.createFilter(filter);
+            result = FrameworkUtil.createFilter(filter);
 
             cache.add(filter, result);
         }

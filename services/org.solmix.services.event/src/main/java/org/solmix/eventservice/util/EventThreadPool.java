@@ -24,9 +24,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.osgi.service.log.LogService;
-
-import org.solmix.eventservice.Activator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -36,7 +35,7 @@ import org.solmix.eventservice.Activator;
 
 public class EventThreadPool extends ThreadPoolExecutor
 {
-
+    private static final Logger logger = LoggerFactory.getLogger(EventThreadPool.class);
     /**
      * @param corePoolSize
      * @param maximumPoolSize
@@ -100,7 +99,7 @@ public class EventThreadPool extends ThreadPoolExecutor
         try {
             super.execute(runnable);
         } catch (Throwable t) {
-            Activator.getLogService().log(LogService.LOG_WARNING, "Exception: " + t, t);
+            logger.warn("Exception: " + t, t);
         }
     }
 }

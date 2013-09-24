@@ -25,14 +25,14 @@ import org.solmix.eventservice.TopicFilter;
 
 /**
  * 
- * @author solomon
+ * @author solmix.f@gmail.com
  * @version 110035 2011-10-1
  */
 
 public class CachedTopicFilter implements TopicFilter
 {
 
-    private Cache<String, String> cache;
+    private final Cache<String, String> cache;
 
     private final char[] keyChars = EventConstants.EVENT_TOPIC.toCharArray();
 
@@ -57,7 +57,7 @@ public class CachedTopicFilter implements TopicFilter
      */
     @Override
     public String createFilter(String topic) {
-        String result = (String) cache.get(topic);
+        String result = cache.get(topic);
 
         if (null == result) {
             char[] topicChars = topic.toCharArray();

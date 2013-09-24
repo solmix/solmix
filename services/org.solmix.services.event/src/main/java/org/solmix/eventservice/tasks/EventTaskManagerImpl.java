@@ -31,9 +31,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.log.LogService;
-
-import org.solmix.eventservice.Activator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.eventservice.BlackList;
 import org.solmix.eventservice.EventFilter;
 import org.solmix.eventservice.EventTask;
@@ -50,13 +49,15 @@ import org.solmix.eventservice.security.PermissionsUtil;
 public class EventTaskManagerImpl implements EventTaskManager
 {
 
-    private BundleContext bundleContext;
+    private static final Logger logger = LoggerFactory.getLogger(EventTaskManagerImpl.class);
 
-    private BlackList blackList;
+    private final BundleContext bundleContext;
 
-    private TopicFilter topicFilter;
+    private final BlackList blackList;
 
-    private EventFilter filter;
+    private final TopicFilter topicFilter;
+
+    private final EventFilter filter;
 
     public EventTaskManagerImpl(final BundleContext context, final BlackList blackList, final TopicFilter topic_filter, final EventFilter filter)
     {
@@ -77,7 +78,7 @@ public class EventTaskManagerImpl implements EventTaskManager
         try {
             handlerRefs = bundleContext.getServiceReferences(EventHandler.class, topicFilter.createFilter(event.getTopic()));
         } catch (InvalidSyntaxException e) {
-            Activator.getLogService().log(LogService.LOG_WARNING, "Invalid EVENT_TOPIC [" + event.getTopic() + "]", e);
+            logger.warn("Invalid EVENT_TOPIC [" + event.getTopic() + "]", e);
         }
 
         if (null == handlerRefs || handlerRefs.size() == 0) {
@@ -90,17 +91,23 @@ public class EventTaskManagerImpl implements EventTaskManager
             ServiceReference<EventHandler> ref = it.next();
             final Bundle serviceBundle = ref.getBundle();
             if (serviceBundle != null) {
-                if (!blackList.contains(ref) && serviceBundle.hasPermission(PermissionsUtil.createSubscribePermission(event.getTopic()))) {
-                    try {
-                        if (event.matches(filter.createFilter((String) ref.getProperty(EventConstants.EVENT_FILTER)))) {
-                            result.add(new EventTaskImpl(this, event, ref));
+                if (!blackList.contains(ref)) {
+                    if (serviceBundle.hasPermission(PermissionsUtil.createSubscribePermission(event.getTopic()))) {
+                        try {
+                            if (event.matches(filter.createFilter((String) ref.getProperty(EventConstants.EVENT_FILTER)))) {
+                                result.add(new EventTaskImpl(this, event, ref));
+                            }
+                        } catch (InvalidSyntaxException e) {
+                            logger.warn("Invalid EVENT_FILTER - Blacklisting ServiceReference [" + ref + " | Bundle(" + serviceBundle + ")]", e);
+                            blackList.add(ref);
                         }
-                    } catch (InvalidSyntaxException e) {
-                        Activator.getLogService().log(ref, LogService.LOG_WARNING,
-                            "Invalid EVENT_FILTER - Blacklisting ServiceReference [" + ref + " | Bundle(" + serviceBundle + ")]", e);
-
-                        blackList.add(ref);
+                    } else {
+                        if (logger.isDebugEnabled())
+                            logger.debug("Topic :" + event.getTopic() + " have no permission.");
                     }
+                } else {
+                    if (logger.isDebugEnabled())
+                        logger.debug("Topic :" + event.getTopic() + " is blacklisting.");
                 }
             }
         }
@@ -131,8 +138,7 @@ public class EventTaskManagerImpl implements EventTaskManager
     public void addToBlackList(ServiceReference<EventHandler> eventHandlerRef) {
         blackList.add(eventHandlerRef);
 
-        Activator.getLogService().log(LogService.LOG_WARNING,
-            "Blacklisting ServiceReference [" + eventHandlerRef + " | Bundle(" + eventHandlerRef.getBundle() + ")] due to timeout!");
+        logger.warn("Blacklisting ServiceReference [" + eventHandlerRef + " | Bundle(" + eventHandlerRef.getBundle() + ")] due to timeout!");
 
     }
 
@@ -149,6 +155,7 @@ public class EventTaskManagerImpl implements EventTaskManager
          * 
          * @param event an event that is not used
          */
+        @Override
         public void handleEvent(final Event event) {
             // This is a null object that is supposed to do nothing at this
             // point. This is used once a EventHandler is requested for a

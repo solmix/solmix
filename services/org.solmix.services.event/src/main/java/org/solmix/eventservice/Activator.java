@@ -39,7 +39,6 @@ public class Activator implements BundleActivator
         logTracker.open();
         //start Event Service
         server = new EventServer(bundleContext);
-//        System.out.println("1");
 //        // Create event admin impl
 //        eventAdminImpl = new DistributedEventAdmin(bundleContext);
 //        try {

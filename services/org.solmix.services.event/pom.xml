@@ -27,11 +27,16 @@
   	<groupId>org.eclipse</groupId>
   	<artifactId>osgi</artifactId>
   </dependency>
+  <dependency>
+  	<groupId>org.solmix.framework</groupId>
+  	<artifactId>org.solmix.framework.api</artifactId>
+  </dependency>
   </dependencies>
     <properties>
-		<solmix.osgi.export.pkg>org.solmix.eventservice,org.osgi.service.event</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.eventservice</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		    org.eclipse.ecf.core.sharedobject;resolution:=optional,
+		    org.solmix.api.event;resolution:=optional,
 			*</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
@@ -54,7 +59,7 @@
 						<!-- <Private-Package></Private-Package> -->
 						<!--<_failok>${solmix.osgi.failok}</_failok>-->
 						<!--<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>-->
-						<Bundle-Activator>org.solmix.eventservice.Activator</Bundle-Activator>
+						<!-- <Bundle-Activator>org.solmix.eventservice.Activator</Bundle-Activator> -->
 					</instructions>
 					<!--<unpackBundle>false</unpackBundle>-->
 				</configuration>
