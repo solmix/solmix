@@ -59,10 +59,10 @@ public class BasicGenerator implements DataSourceGenerator
      */
     @Override
     public DataSource generateDataSource(DataSourceData context) throws SlxException {
-        if (context == null || context.getTdataSource().getSchemaClass() == null)
+        if (context == null || context.getTdataSource().getSchemaBean() == null)
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 " configure anto gernerate DataSource must figure out a schema class");
-        String entity = context.getTdataSource().getSchemaClass();
+        String entity = context.getTdataSource().getSchemaBean();
         Class<?> clz = null;
         try {
             clz = Reflection.classForName(entity);

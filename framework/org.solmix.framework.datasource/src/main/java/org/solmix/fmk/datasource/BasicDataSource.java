@@ -36,8 +36,6 @@ import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
-
 import org.solmix.api.VelocityExpression;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.data.DataSourceData;
@@ -74,6 +72,7 @@ import org.solmix.fmk.js.JSExpression;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.DefaultValidators;
+import org.w3c.dom.Element;
 
 /**
  * @author solmix.f@gmail.com
@@ -518,6 +517,7 @@ public class BasicDataSource implements DataSource
     }
 
     /**
+     * Used this key to cache transaction object in context,the subclass may override this method to used it.
      * @return
      */
     @Override
@@ -1022,6 +1022,7 @@ public class BasicDataSource implements DataSource
             } else {
                 autoSchema = gen.generateDataSource(data);
             }
+            //cache auto derived datasource schema
             if (autoSchema != null) {
                 data.setAutoDeriveSchema(autoSchema);
             }

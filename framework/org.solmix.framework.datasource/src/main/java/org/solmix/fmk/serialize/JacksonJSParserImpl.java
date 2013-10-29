@@ -40,7 +40,6 @@ import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Module;
 import org.solmix.api.jaxb.ObjectFactory;
@@ -299,8 +298,8 @@ public class JacksonJSParserImpl implements JSParser
     public <T> T toJavaObject(String inputString, Class<T> valueType) throws SlxException {
         ObjectMapper mapper = initISCMapper();
         try {
-            if (log.isDebugEnabled()) {
-                log.debug("transform json: " + inputString + " to javaObject <" + valueType.getName() + ">");
+            if (log.isTraceEnabled()) {
+                log.trace("transform json: " + inputString + " to javaObject <" + valueType.getName() + ">");
             }
             return mapper.readValue(inputString, valueType);
         } catch (IOException e) {

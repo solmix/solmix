@@ -21,7 +21,7 @@
 				value="org.solmix.framework.datasource">
 			</entry>
 		</service-properties>
-		<bean class="org.solmix.fmk.internel.DSConfigManager" />
+		<bean class="org.solmix.fmk.internal.DSConfigManager" />
 	</service>
 	<!--______________________________________________________ -->
 	<!--                       eventAdmin Service Holder             -->

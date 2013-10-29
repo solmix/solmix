@@ -77,7 +77,7 @@
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
 						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
-						<Private-Package>org.solmix.fmk.internel</Private-Package>
+						<Private-Package>org.solmix.fmk.internal</Private-Package>
 						 <_failok>false</_failok> 
 
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
@@ -92,7 +92,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>!org.solmix.fmk.internel,org.solmix.fmk*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>!org.solmix.fmk.internal,org.solmix.fmk*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		javax.servlet;version="[2.5,4)",
 		javax.servlet.http;version="[2.5,4)",

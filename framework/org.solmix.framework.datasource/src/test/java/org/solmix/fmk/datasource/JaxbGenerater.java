@@ -26,6 +26,10 @@ import java.io.Writer;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.EserverType;
@@ -34,6 +38,9 @@ import org.solmix.api.jaxb.ObjectFactory;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.Tfields;
+import org.solmix.api.jaxb.Tobject;
+import org.solmix.api.jaxb.ToperationBinding;
+import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.jaxb.request.Roperations;
@@ -43,6 +50,8 @@ import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author solmix.f@gmail.com
@@ -61,9 +70,10 @@ public class JaxbGenerater
      * @throws NoSuchFieldException
      * @throws SecurityException
      * @throws SlxException
+     * @throws ParserConfigurationException 
      */
     public static void main(String[] args) throws NotFoundException, CannotCompileException, InstantiationException, IllegalAccessException,
-        SecurityException, NoSuchFieldException, SlxException {
+        SecurityException, NoSuchFieldException, SlxException, ParserConfigurationException {
         XMLParserFactory xmlFactory = XMLParserFactoryImpl.getInstance();
         XMLParser xmlParser = xmlFactory.get();
         JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
@@ -72,6 +82,12 @@ public class JaxbGenerater
         ObjectFactory factory = new ObjectFactory();
         Module module = factory.createModule();
         TdataSource ds = factory.createTdataSource();
+        ToperationBindings bins=factory.createToperationBindings();
+        ds.setOperationBindings(bins);
+        ToperationBinding bin=factory.createToperationBinding();
+        bins.getOperationBinding().add(bin);
+        Tobject obj=factory.createTobject();
+        bin.setConfiguration(obj);
         {
             ds.setID("button");
             org.solmix.api.jaxb.Tdescription desc = factory.createTdescription();
@@ -104,6 +120,16 @@ public class JaxbGenerater
             ds.setFields(fields);
 
         }
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+       dbf.setNamespaceAware(true);
+        Document doc=builder.newDocument();
+        Element e = doc.createElementNS("ss","BB");
+//        e.setAttribute("xmlns:ns", "http://org.solmix.org/ds");
+//        e.setAttribute("xmlns", null);
+        e.setPrefix("slx");
+        doc.appendChild(e);
+        obj.getAny().add(doc.getDocumentElement());
         module.setDataSource(ds);
         Writer out = new StringWriter();
         org.solmix.api.jaxb.request.ObjectFactory f = new org.solmix.api.jaxb.request.ObjectFactory();
@@ -145,6 +171,8 @@ public class JaxbGenerater
         XMLParserFactory xmlFactory1 = XMLParserFactoryImpl.getInstance();
         XMLParser xmlParser1 = xmlFactory1.get();
         Request aa = xmlParser1.unmarshalReq(new StringReader(is3));
+        xmlParser1.marshalDS(out, module);
+        System.out.println(out.toString());
         System.out.println(aa.getOperations().getElem().get(0).getStartRow());
     }
 }

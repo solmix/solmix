@@ -22,7 +22,6 @@ package org.solmix.fmk.event;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.event.EventManager;
 import org.solmix.api.event.IEvent;
@@ -77,6 +76,7 @@ public class OsgiEventManager implements EventManager
      * @throws SecurityException If the caller does not have <code>TopicPermission[topic,PUBLISH]</code> for the topic
      *         specified in the event.
      */
+    @Override
     public void sendEvent(IEvent event) {
 
         if (eventAdmin != null)
@@ -86,8 +86,11 @@ public class OsgiEventManager implements EventManager
     }
 
     private Event toOsgiEvent(IEvent event) {
-        return new Event(event.getTopic(), event.getProperties());
-
+        if(event.getClass().isAssignableFrom(Event.class)){
+            return Event.class.cast(event);
+        }else{
+            return new Event(event.getTopic(), event.getProperties());
+        }
     }
 
     protected static void notSet() {
