@@ -178,16 +178,25 @@ descriptor.DataSource Configuration files using this schema must indicate
 			form="unqualified">
 		</xsd:attribute>
 		<xsd:attribute name="useFlatFields" type="xsd:boolean"
-			form="unqualified"></xsd:attribute>
+			form="unqualified">
+		</xsd:attribute>
 		<xsd:attribute name="showLocalFieldsOnly" type="xsd:boolean"
 			form="unqualified">
 		</xsd:attribute>
 		<xsd:attribute name="useParentFieldOrder" type="xsd:boolean"
-			form="unqualified"></xsd:attribute>
+			form="unqualified">
+		</xsd:attribute>
 		<xsd:attribute name="autoDeriveSchema" type="xsd:boolean"
-			form="unqualified"></xsd:attribute>
-        <xsd:attribute name="validateRecords" type="xsd:boolean" form="unqualified"></xsd:attribute>
-        <xsd:attribute name="schemaClass" type="xsd:string" form="unqualified"></xsd:attribute>
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="validateRecords" type="xsd:boolean"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="schemaBean" type="xsd:string"
+			form="unqualified">
+		</xsd:attribute>
+		<xsd:attribute name="persistenceUnit" type="xsd:string" form="unqualified"></xsd:attribute>
+        <xsd:attribute name="bean" type="xsd:string"></xsd:attribute>
     </xsd:attributeGroup>
 	<xsd:complexType name="Tobject">
 		<xsd:sequence>

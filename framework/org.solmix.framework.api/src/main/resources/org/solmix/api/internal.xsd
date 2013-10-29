@@ -36,4 +36,6 @@
     <xsd:complexType name="boolean">
     	<xsd:attribute name="validators" type="validator"></xsd:attribute>
     </xsd:complexType>
+
+    <xsd:element name="NewElement" type="xsd:string"></xsd:element>
 </xsd:schema>
