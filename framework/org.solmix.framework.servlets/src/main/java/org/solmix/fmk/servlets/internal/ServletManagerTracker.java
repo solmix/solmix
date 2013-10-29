@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlets.internel;
+package org.solmix.fmk.servlets.internal;
 
 import static org.solmix.api.servlets.ServletManager.SERVLET_NAME;
 import static org.solmix.api.servlets.ServletManager.SERVLET_PATTERN;
@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
-import org.solmix.fmk.servlets.internel.handler.ServletHandler;
+import org.solmix.fmk.servlets.internal.handler.ServletHandler;
 
 /**
  * 

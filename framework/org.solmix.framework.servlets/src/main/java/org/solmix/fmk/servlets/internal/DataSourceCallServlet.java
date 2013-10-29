@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlets.internel;
+package org.solmix.fmk.servlets.internal;
 
 import java.io.IOException;
 

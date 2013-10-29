@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlets.internel;
+package org.solmix.fmk.servlets.internal;
 
 import static org.solmix.api.servlets.FilterManager.FILTER_NAME;
 import static org.solmix.api.servlets.FilterManager.FILTER_ORDER;
@@ -36,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.solmix.fmk.servlets.internel.helper.SlxFilterConfig;
+import org.solmix.fmk.servlets.internal.helper.SlxFilterConfig;
 
 /**
  * 

@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlets.internel.handler;
+package org.solmix.fmk.servlets.internal.handler;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,8 +30,8 @@ import javax.servlet.ServletException;
 
 import org.osgi.framework.ServiceReference;
 
-import org.solmix.fmk.servlets.internel.ServletManagerImpl;
-import org.solmix.fmk.servlets.internel.helper.SlxServletConfig;
+import org.solmix.fmk.servlets.internal.ServletManagerImpl;
+import org.solmix.fmk.servlets.internal.helper.SlxServletConfig;
 
 /**
  * 

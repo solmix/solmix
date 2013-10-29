@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlets.internel.helper;
+package org.solmix.fmk.servlets.internal.helper;
 
 import java.util.Arrays;
 import java.util.Collections;

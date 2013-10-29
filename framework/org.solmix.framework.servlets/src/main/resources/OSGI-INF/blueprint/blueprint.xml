@@ -16,7 +16,7 @@
 	<!--______________________________________________________ -->
 	<!--       servletManager                                                 -->
 	<!--______________________________________________________ -->
-	<bean id="servletManager"	class="org.solmix.fmk.servlets.internel.ServletManagerImpl"
+	<bean id="servletManager"	class="org.solmix.fmk.servlets.internal.ServletManagerImpl"
 		init-method="init" destroy-method="destroy">
 			<property name="bundleContext"  ref="blueprintBundleContext" />
 		<property name="servletContext">
@@ -27,7 +27,7 @@
 	<!--______________________________________________________ -->
 	<!--       filterManager                                                 -->
 	<!--______________________________________________________ -->
-	<bean id="filter_manager"	class="org.solmix.fmk.servlets.internel.FilterManagerImpl"
+	<bean id="filter_manager"	class="org.solmix.fmk.servlets.internal.FilterManagerImpl"
 		init-method="init" destroy-method="destroy">
 			<property name="bundleContext"  ref="blueprintBundleContext" />
 		<property name="servletContext">
@@ -37,10 +37,10 @@
 	<!--______________________________________________________ -->
 	<!--       DataSourceLoaderImpl                            -->
 	<!--______________________________________________________ -->
-	<bean id="datasourceLoader" class="org.solmix.fmk.servlets.internel.DataSourceLoaderServlet">
+	<bean id="datasourceLoader" class="org.solmix.fmk.servlets.internal.DataSourceLoaderServlet">
 		<property name="dsmService" ref="dsManager"/>
 		</bean>
-	<bean id="datasourceCall" class="org.solmix.fmk.servlets.internel.DataSourceCallServlet">
+	<bean id="datasourceCall" class="org.solmix.fmk.servlets.internal.DataSourceCallServlet">
 		<property name="rpcService" ref="prcManager"/>
 	</bean>
 	
