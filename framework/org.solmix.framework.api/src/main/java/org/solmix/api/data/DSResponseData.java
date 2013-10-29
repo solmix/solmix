@@ -28,8 +28,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.solmix.api.datasource.ResponseData;
 import org.solmix.api.datasource.DSResponse.Status;
-import org.solmix.api.datasource.annotation.ResponseData;
 import org.solmix.commons.util.DataUtil;
 
 /**

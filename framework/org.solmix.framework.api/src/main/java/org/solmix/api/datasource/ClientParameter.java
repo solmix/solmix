@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * SOLMIX PROJECT
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,21 +16,27 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.api.datasource.annotation;
+
+package org.solmix.api.datasource;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.solmix.api.types.ClientParameterType;
+
 /**
  * 
- * @author solmix.f@gmail.com
- * @version 110035  2011-3-26
+ * @author Administrator
+ * @version 110035 2012-3-26
  */
-@Target(ElementType.FIELD)
+@Target({ ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SQLCacheData {
+public @interface ClientParameter {
 
-   Class<?> value() default String.class;
+    String path() default "./";
+
+    ClientParameterType type() default ClientParameterType.DEFAULT;
+
 }

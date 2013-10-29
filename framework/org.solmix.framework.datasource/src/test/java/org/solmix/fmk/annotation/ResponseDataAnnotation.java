@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.solmix.api.data.DSResponseData;
-import org.solmix.api.datasource.annotation.ResponseData;
+import org.solmix.api.datasource.ResponseData;
 import org.solmix.commons.util.DataUtil;
 
 /**
