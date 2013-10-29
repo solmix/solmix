@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.engine.internel.helper;
+package org.solmix.fmk.engine.internal.helper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +35,8 @@ import javax.servlet.ServletRequestWrapper;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletResponseWrapper;
 
-import org.solmix.fmk.engine.internel.request.SlxHttpServletRequestImpl;
-import org.solmix.fmk.engine.internel.request.SlxHttpServletResponseImpl;
+import org.solmix.fmk.engine.internal.request.SlxHttpServletRequestImpl;
+import org.solmix.fmk.engine.internal.request.SlxHttpServletResponseImpl;
 
 /**
  * Wrapper around a ServletContext for an external servlet context, i.e. one returned by

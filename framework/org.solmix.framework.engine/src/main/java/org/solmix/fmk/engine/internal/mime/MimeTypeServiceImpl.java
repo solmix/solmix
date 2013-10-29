@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.engine.internel.mime;
+package org.solmix.fmk.engine.internal.mime;
 
 import java.io.BufferedReader;
 import java.io.IOException;

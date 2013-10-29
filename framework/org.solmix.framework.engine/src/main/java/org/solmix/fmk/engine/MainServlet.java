@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.request.RequestProcessor;
 import org.solmix.api.servlets.FilterManager;
 import org.solmix.api.servlets.ServletManager;
-import org.solmix.fmk.engine.internel.SlxHttpContext;
-import org.solmix.fmk.engine.internel.SlxServletContext;
-import org.solmix.fmk.engine.internel.request.SlxRequestProcessor;
+import org.solmix.fmk.engine.internal.SlxHttpContext;
+import org.solmix.fmk.engine.internal.SlxServletContext;
+import org.solmix.fmk.engine.internal.request.SlxRequestProcessor;
 
 /**
  * 
@@ -253,7 +253,7 @@ public class MainServlet extends GenericServlet
     }
 
     /**
-     * Inject servletManager to {@link org.solmix.fmk.engine.internel.request.SlxRequestProcessor requestProcessor}
+     * Inject servletManager to {@link org.solmix.fmk.engine.internal.request.SlxRequestProcessor requestProcessor}
      * 
      * @param servletManager the servletManager to set
      */

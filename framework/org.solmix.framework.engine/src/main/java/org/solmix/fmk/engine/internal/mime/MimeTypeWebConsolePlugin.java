@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.solmix.fmk.engine.internel.mime;
+package org.solmix.fmk.engine.internal.mime;
 
 import java.io.IOException;
 import java.io.PrintWriter;

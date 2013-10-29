@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.engine.internel;
+package org.solmix.fmk.engine.internal;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -40,8 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.solmix.fmk.engine.MainServlet;
-import org.solmix.fmk.engine.internel.helper.ExternalServletContextWrapper;
-import org.solmix.fmk.engine.internel.request.SlxRequestDispatcher;
+import org.solmix.fmk.engine.internal.helper.ExternalServletContextWrapper;
+import org.solmix.fmk.engine.internal.request.SlxRequestDispatcher;
 
 /**
  * 

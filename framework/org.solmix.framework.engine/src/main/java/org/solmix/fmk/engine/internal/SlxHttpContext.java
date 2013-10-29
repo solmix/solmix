@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.engine.internel;
+package org.solmix.fmk.engine.internal;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +29,7 @@ import org.osgi.service.http.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.fmk.engine.MimeTypeService;
-import org.solmix.fmk.engine.internel.mime.MimeTypeServiceImpl;
+import org.solmix.fmk.engine.internal.mime.MimeTypeServiceImpl;
 
 /**
  * 

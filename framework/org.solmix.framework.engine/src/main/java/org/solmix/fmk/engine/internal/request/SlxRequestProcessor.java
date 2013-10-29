@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.engine.internel.request;
+package org.solmix.fmk.engine.internal.request;
 
 import java.io.IOException;
 import java.security.AccessControlException;
@@ -39,7 +39,7 @@ import org.solmix.api.request.SlxHttpServletRequest;
 import org.solmix.api.request.SlxHttpServletResponse;
 import org.solmix.api.servlets.FilterManager;
 import org.solmix.api.servlets.ServletManager;
-import org.solmix.fmk.engine.internel.filter.RequestFilterChain;
+import org.solmix.fmk.engine.internal.filter.RequestFilterChain;
 
 /**
  * 
