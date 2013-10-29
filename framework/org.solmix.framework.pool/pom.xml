@@ -29,7 +29,7 @@
   </dependencies>
   <packaging>bundle</packaging>
   <properties>
-		<solmix.osgi.export.pkg>!org.solmix.fmk.pool.internel,org.solmix.fmk*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>!org.solmix.fmk.pool.internal,org.solmix.fmk*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		javax.servlet;version="[2.5,4)",
 		javax.servlet.http;version="[2.5,4)",
@@ -50,10 +50,10 @@
 						<Export-Package>${solmix.osgi.export.pkg}*</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}*</Import-Package>
 						<!-- <Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle> -->
-						<Private-Package>org.solmix.fmk.pool.internel</Private-Package>
+						<Private-Package>org.solmix.fmk.pool.internal</Private-Package>
 						<!--<_failok>${solmix.osgi.failok}</_failok> -->
 						<!-- <_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
-						<Bundle-Activator>org.solmix.fmk.pool.internel.PoolActivator</Bundle-Activator>
+						<Bundle-Activator>org.solmix.fmk.pool.internal.PoolActivator</Bundle-Activator>
 						<DynamicImport-Package>*</DynamicImport-Package>
 					</instructions>
 					<!--<unpackBundle>false</unpackBundle> -->

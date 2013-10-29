@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.pool.internel;
+package org.solmix.fmk.pool.internal;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
