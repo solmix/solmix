@@ -10,6 +10,7 @@ package org.solmix.api.jaxb;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
@@ -35,7 +36,7 @@ import javax.xml.namespace.QName;
  *       &lt;attribute name="filter" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="class" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="method" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="curdName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="serviceName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="targetXPath" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
@@ -63,11 +64,11 @@ public class Tservice {
     @XmlAttribute
     protected String method;
     @XmlAttribute
-    protected String curdName;
+    protected String serviceName;
     @XmlAttribute
     protected String targetXPath;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private final Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the methodArguments property.
@@ -221,8 +222,8 @@ public class Tservice {
      *     {@link String }
      *     
      */
-    public String getCurdName() {
-        return curdName;
+    public String getServiceName() {
+        return serviceName;
     }
 
     /**
@@ -233,8 +234,8 @@ public class Tservice {
      *     {@link String }
      *     
      */
-    public void setCurdName(String value) {
-        this.curdName = value;
+    public void setServiceName(String value) {
+        this.serviceName = value;
     }
 
     /**
