@@ -36,7 +36,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.application.Application;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.WebContext;
@@ -70,6 +69,8 @@ public class DmiDataSource
 {
 
     private static final Logger log = LoggerFactory.getLogger(DmiDataSource.class.getName());
+    
+    public static String VT_TMP_NAME="_slxResult";
 
     protected DSRequest request;
 
@@ -185,8 +186,8 @@ public class DmiDataSource
             explicitMethodName = srvConfig.getMethod();
             if (explicitMethodName != null) {
                 if (_opBinding.getServerMethod() != null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(new StringBuilder().append("Datasource: ").append(_ds.getName()).append(", operationId: ").append(_opID).append(
+                    if (log.isTraceEnabled()) {
+                        log.trace(new StringBuilder().append("Datasource: ").append(_ds.getName()).append(", operationId: ").append(_opID).append(
                             " found a 'methodName' (").append(explicitMethodName).append(
                             ") on the service-bject configuration AND a 'serverMethod' (").append(_opBinding.getServerMethod()).append(
                             ") on operation-binding config.serviceObject.method takes precedence .and Call:").append(explicitMethodName).toString());
@@ -241,8 +242,8 @@ public class DmiDataSource
             throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, "can't find method:" + methodName, e);
         }
         if (method == null) {
-            if (log.isDebugEnabled()) {
-                log.debug(new StringBuilder().append("DMI: no public method :").append(methodName).append(" available on class: ").append(srvObjClass).toString());
+            if (log.isTraceEnabled()) {
+                log.trace(new StringBuilder().append("DMI: no public method :").append(methodName).append(" available on class: ").append(srvObjClass).toString());
             }
         }
         try {
@@ -283,13 +284,13 @@ public class DmiDataSource
                 String methodArg = methodArgList.get(i);
                 try {
                     vgen.evaluate(vContext, out, "DMIDatasource",
-                        new StringBuilder().append("#set($slxResult = ").append(methodArg).append(")\n").toString());
+                        new StringBuilder().append("#set($").append(VT_TMP_NAME).append(" = ").append(methodArg).append(")\n").toString());
                 } catch (Exception e) {
                     throw new SlxException(Tmodule.DATASOURCE, Texception.VELOCITY_EVALUATE_EXCEPTION, "Velocity evalute exception:\n", e);
                 }
-                Object value = vContext.get("slxResult");
-                if (log.isDebugEnabled())
-                    log.debug(new StringBuilder().append("assigning").append(methodArg).append(" type: ").append(
+                Object value = vContext.get(VT_TMP_NAME);
+                if (log.isTraceEnabled())
+                    log.trace(new StringBuilder().append("assigning").append(methodArg).append(" type: ").append(
                         value != null ? value.getClass().getName() : " null").toString());
                 requireArgs[i] = new ReflectionArgument(value == null ? null : value.getClass(), value);
             }
@@ -329,7 +330,7 @@ public class DmiDataSource
         Object returnValue;
         try {
 
-            returnValue = Reflection.adaptArgsAndInvoke(srvObjInstance, method, factoryOptionsArgs, optionalArgs, _ds);
+            returnValue = Reflection.adaptArgsAndInvoke(srvObjInstance, method, requireArgs, optionalArgs, _ds);
         } catch (Exception e) {
             throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, e.getCause());
         }

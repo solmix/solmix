@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Tfield;
@@ -399,16 +398,16 @@ public class Reflection
                         assignedRequiredArg = true;
                     }
                     if (assignedRequiredArg) {
-                        if (log.isDebugEnabled())
-                            log.debug((new StringBuilder()).append("Successfully adapted required arg type: ").append(
+                        if (log.isTraceEnabled())
+                            log.trace((new StringBuilder()).append("Successfully adapted required arg type: ").append(
                                 reqArg.getType() != null ? reqArg.getType().getName() : "null").append(" to type: ").append(paramType.getName()).toString());
                         requiredArgIndex++;
                         continue;
                     }
                 } catch (Exception e) {
-                    if (log.isDebugEnabled()) {
+                    if (log.isTraceEnabled()) {
                         Class<?> type = requiredArgs[requiredArgIndex].getType();
-                        log.debug((new StringBuilder()).append("Failed to adapt required arg type: ").append(type != null ? type.getName() : "null").append(
+                        log.trace((new StringBuilder()).append("Failed to adapt required arg type: ").append(type != null ? type.getName() : "null").append(
                             " to type: ").append(paramType.getName()).append(". Error string: ").append(e.toString()).append(" in ").append(
                             e.getStackTrace()[0].toString()).toString());
                     }
@@ -421,8 +420,8 @@ public class Reflection
                 try {
                     methodArgs.add(adaptValue(paramType, genericParamInfo, optionalArg, optionalArgs, dataSource, null, null, null));
                     assignedOptionalArg = true;
-                    if (log.isDebugEnabled())
-                        log.debug((new StringBuilder()).append("Successfully adapted optional arg type: ").append(optionalArg.getType().getName()).append(
+                    if (log.isTraceEnabled())
+                        log.trace((new StringBuilder()).append("Successfully adapted optional arg type: ").append(optionalArg.getType().getName()).append(
                             " to type: ").append(paramType.getName()).toString());
                     break;
                 } catch (Exception e) {
@@ -451,10 +450,10 @@ public class Reflection
         }
 
         Object args[] = DataUtil.listToArray(methodArgs);
-        if(log.isDebugEnabled()){
-            log.debug((new StringBuilder()).append("method takes: ").append(parameterTypes.size()).append(" args.  I've assembled: ").append(
+        if(log.isTraceEnabled()){
+            log.trace((new StringBuilder()).append("method takes: ").append(parameterTypes.size()).append(" args.  I've assembled: ").append(
                 methodArgs.size()).append(" args").toString());
-            log.debug((new StringBuilder()).append("invoking method:\n").append(getFormattedMethodSignature(method)).append("\n\nwith arg types: ").append(
+            log.trace((new StringBuilder()).append("invoking method:\n").append(getFormattedMethodSignature(method)).append("\n\nwith arg types: ").append(
                 getFormattedParamTypes(args)).toString());
         }
         return method.invoke(instance, args);
@@ -541,7 +540,8 @@ public class Reflection
         targetTypeName = targetType.getName();
         if (argType == null && argValue == null)
             return null;
-        log.debug((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
+        if(log.isTraceEnabled())
+        log.trace((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
         // If the target type is a collection class type.
         // && !IDoNotAdapt.class.isAssignableFrom(targetType)
         if ((Collection.class.isAssignableFrom(targetType) || Map.class.isAssignableFrom(targetType))) {
@@ -674,7 +674,8 @@ public class Reflection
                 }
 
             }
-        log.debug((new StringBuilder()).append("Converting Map arg to bean of type: ").append(targetTypeName).toString());
+        if(log.isTraceEnabled())
+            log.trace((new StringBuilder()).append("Converting Map arg to bean of type: ").append(targetTypeName).toString());
         if (argValue == null) {
             log.debug((new StringBuilder()).append("Assigning null value to bean: ").append(targetTypeName).toString());
             return null;
@@ -782,7 +783,7 @@ public class Reflection
         }
         // return DataTools.setProperties(newArgMap, beanInstance, dataSource);
         if (arg.isAllowTypeConversion()) {
-            log.debug("trying convertType");
+            log.trace("trying convertType");
             return DataUtil.convertType(targetType, argValue);
         } else {
             throw new Exception((new StringBuilder()).append(argTypeName).append(" not adaptable to: ").append(targetTypeName).toString());

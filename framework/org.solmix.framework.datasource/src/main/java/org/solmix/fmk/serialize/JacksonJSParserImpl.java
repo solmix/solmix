@@ -127,10 +127,10 @@ public class JacksonJSParserImpl implements JSParser
 
         ObjectMapper mapper = initISCMapper();
         try {
-            if (log.isDebugEnabled()) {
+            if (log.isTraceEnabled()) {
                 StringWriter record = new StringWriter();
                 IOUtil.copyCharacterStreams(src, record);
-                log.debug("transform json: " + record.toString() + " to javaObject <" + valueType.getName() + ">");
+                log.trace("transform json: " + record.toString() + " to javaObject <" + valueType.getName() + ">");
                 return mapper.readValue(record.toString(), valueType);
             }
 
@@ -150,13 +150,13 @@ public class JacksonJSParserImpl implements JSParser
         }
         ObjectMapper mapper = initISCMapper();
         try {
-            if (log.isDebugEnabled())
-                log.debug("transform Object Class: <" + obj.getClass().getName() + "> to JavaScript.");
+            if (log.isTraceEnabled())
+                log.trace("transform Object Class: <" + obj.getClass().getName() + "> to JavaScript.");
             mapper.writeValue(out, obj);
         } catch (Exception ignore) {
             try {
-                if (log.isDebugEnabled())
-                    log.debug("transform js account exception try to restart the objectmapper", ignore);
+                if (log.isTraceEnabled())
+                    log.trace("transform js account exception try to restart the objectmapper", ignore);
                 mapper = initISCMapper(true);
                 // FilterBeanSerializerFactory _filter = new FilterBeanSerializerFactory();
                 // if (DataUtil.isNotNullAndEmpty(this.filterProperties))

@@ -22,7 +22,7 @@ package org.solmix.fmk.base;
 /**
  * The wrapper of a method argument.
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2011-4-8
  */
 
