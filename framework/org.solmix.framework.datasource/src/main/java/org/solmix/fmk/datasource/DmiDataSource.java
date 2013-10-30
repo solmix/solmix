@@ -60,9 +60,10 @@ import org.solmix.fmk.rpc.RPCManagerImpl;
 import org.solmix.fmk.rpc.ServiceObject;
 
 /**
- * 
- * @author Administrator
- * @version 110035 2011-7-11
+ * Direct Method Invoke DataSource.
+ * @author solmix.f@gmail.com
+ * @version 110041 modified at 2013-7-11
+ * @since 0.0.1
  */
 
 public class DmiDataSource
@@ -206,9 +207,9 @@ public class DmiDataSource
         if (methodName == null) {
             // use datasource service-object CURD generate method name.
             if (dsSrvConfig != null) {
-                String curdKey = dsSrvConfig.getCurdName();
-                if (curdKey != null) {
-                    String key = curdKey.substring(0, 1).toUpperCase() + curdKey.substring(1);
+                String serviceName = dsSrvConfig.getServiceName();
+                if (serviceName != null) {
+                    String key = serviceName.substring(0, 1).toUpperCase() + serviceName.substring(1);
                     methodName = _opType.value() + key;
                 }
             }// END curd generation.
@@ -259,6 +260,7 @@ public class DmiDataSource
             methodArguments = srvConfig.getMethodArguments();
         Map valuesOrCriteria = request.getContext().getValues() == null ? request.getContext().getCriteria() : request.getContext().getValues();
 
+        //making method require arguments.
         if (methodArguments != null) {
             List<String> methodArgList = DataUtil.simpleSplit(methodArguments, ",");
             requireArgs = new ReflectionArgument[methodArgList.size()];
