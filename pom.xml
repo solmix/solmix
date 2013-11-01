@@ -25,7 +25,7 @@
 		<module>framework</module>
 		<module>modules</module> 
 		<module>launch/base</module>
-		<module>bundles</module>
+		<!-- <module>bundles</module> -->
 		<module>assemblies</module>
 		<!-- <module>samples</module> -->
 		<!-- <module>cms</module> -->
