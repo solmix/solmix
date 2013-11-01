@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
@@ -208,8 +207,8 @@ public class FileSystemRepository extends AbstractDSRepository
      */
     @Override
     public DataSource loadDS(String ds) throws SlxException {
-        Object obj = this.load(ds);
-        return obj instanceof DataSource ? (DataSource) obj : null;
+       
+            throw new SlxException(Tmodule.REPO, Texception.NO_SUPPORT, ("The file system ds repository not support the method ,please call load(name); '"));
     }
 
 }
