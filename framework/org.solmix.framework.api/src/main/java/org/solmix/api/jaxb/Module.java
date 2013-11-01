@@ -11,6 +11,7 @@ package org.solmix.api.jaxb;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "module", propOrder = {
     "dataSource"
 })
+@XmlRootElement(name="module")
 public class Module {
 
     @XmlElement(name = "DataSource", required = true)
