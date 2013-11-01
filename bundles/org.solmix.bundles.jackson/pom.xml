@@ -3,12 +3,11 @@
   <parent>
     <artifactId>bundles</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>org.solmix.bundles.jackson</artifactId>
   <version>1.9.8</version>
-  <packaging>bundle</packaging>
  <properties>
     <pkgVersion>1.9.8</pkgVersion>
     <pkgArtifactId>jackson</pkgArtifactId>
@@ -59,4 +58,5 @@
   </build>
    <groupId>org.solmix.bundles</groupId>
    <name>Solmix :: Bundles :: jackson</name>
+   <packaging>war</packaging>
 </project>

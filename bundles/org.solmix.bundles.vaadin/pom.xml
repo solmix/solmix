@@ -3,7 +3,7 @@
   <parent>
     <artifactId>bundles</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>org.solmix.bundles.vaadin</groupId>

@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.modules</groupId>
     <artifactId>sgt</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.modules.sgt</groupId>
   <artifactId>sgt-extensions-server</artifactId>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
-			<version>1.1.0.RC3</version>
+			<version>2.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.modules</groupId>
@@ -60,9 +60,8 @@
 		com.smartgwt.extensions.fusionchart.server,
 		com.smartgwt.extensions.fusionchart.shared,
 		org.solmix.sgt.server,
-		org.atmosphere.gwt.shared,
-		org.atmosphere.gwt.server*,
-		org.atmosphere.jackson
+		org.solmix.atmosphere.shared,
+		org.solmix.atmosphere.server*
 		</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 		javax.servlet;version="[2.5,4)",

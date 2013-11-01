@@ -3,7 +3,7 @@
   <parent>
     <artifactId>framework</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>org.solmix.framework</groupId>
@@ -63,6 +63,21 @@
   		<groupId>org.solmix.framework</groupId>
   		<artifactId>org.solmix.framework.dsrepo</artifactId>
   	</dependency>
+  	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
+		</dependency>
   </dependencies>
   <build>
 		<plugins>
@@ -99,6 +114,7 @@
 		org.apache.poi*;resolution:=optional,
 		org.apache.commons.fileupload;resolution:=optional,
 		org.apache.shiro*;resolution:=optional,
+		org.springframework*;resolution:=optional;version="${spring.version}",
 		org.solmix.commons*,*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>

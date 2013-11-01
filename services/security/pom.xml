@@ -2,8 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.solmix</groupId>
-    <artifactId>modules</artifactId>
+    <artifactId>services</artifactId>
     <version>0.4-SNAPSHOT</version>
   </parent>
-  <artifactId>org.solmix.modules.jquery</artifactId>
+  <groupId>org.solmix.services</groupId>
+  <artifactId>security</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>rbac</module>
+  </modules>
 </project>

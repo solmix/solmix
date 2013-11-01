@@ -3,7 +3,7 @@
   <parent>
     <artifactId>solmix</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>services</artifactId>
@@ -11,7 +11,8 @@
   <modules>
   	<!-- <module>log</module> -->
   	<!-- <module>event</module> -->
-  	<module>org.solmix.services.event</module>
   <!-- 	<module>auth</module> -->
+  <module>event</module>
+  <module>security</module>
   </modules>
 </project>

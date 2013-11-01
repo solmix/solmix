@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.solmix.services</groupId>
+    <artifactId>security</artifactId>
+    <version>0.4-SNAPSHOT</version>
+  </parent>
+  <groupId>org.solmix.services.security</groupId>
+  <artifactId>rbac</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.solmix.modules</groupId>
+  		<artifactId>org.solmix.modules.jpa</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.solmix.modules</groupId>
+  		<artifactId>org.solmix.modules.spring</artifactId>
+  		<scope>test</scope>
+  	</dependency>
+  </dependencies>
+</project>

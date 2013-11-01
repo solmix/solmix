@@ -3,7 +3,7 @@
   <parent>
     <artifactId>modules</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.modules</groupId>
   <artifactId>org.solmix.modules.sql</artifactId>
@@ -44,7 +44,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>!org.solmix.sql.internel,org.solmix.sql*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>!org.solmix.sql.internal,org.solmix.sql*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>org.solmix.commons*,*</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

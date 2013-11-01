@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix</groupId>
     <artifactId>bundles</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.bundles</groupId>
   <artifactId>org.solmix.bundles.dbcp</artifactId>

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.solmix</groupId>
 		<artifactId>assemblies</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.4-SNAPSHOT</version>
 	</parent>
 	<groupId>org.solmix.assemblies</groupId>
 	<artifactId>org.solmix.assemblies.launcher</artifactId>
@@ -216,8 +216,8 @@
 			<artifactId>geronimo-jta_1.1_spec</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.services</groupId>
-			<artifactId>org.solmix.services.event</artifactId>
+			<groupId>org.solmix.services.event</groupId>
+			<artifactId>event-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.framework</groupId>

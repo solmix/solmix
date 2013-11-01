@@ -23,7 +23,7 @@
     <parent>
         <artifactId>assemblies</artifactId>
         <groupId>org.solmix</groupId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>org.solmix.assemblies.features</groupId>

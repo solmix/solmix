@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.solmix</groupId>
 	<artifactId>solmix</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solmix  Project Pom</name>
 	<licenses>
@@ -36,7 +36,7 @@
 		<asm.bundle.version>3.1_2</asm.bundle.version>
 		<cglib.bundle.version>2.1_3_6</cglib.bundle.version>
 		<jasypt.bundle.version>1.7_1</jasypt.bundle.version>
-		<jetty.version>8.1.9.v20130131</jetty.version>
+		<jetty.version>9.0.5.v20130815</jetty.version>
 		<junit.bundle.version>4.7_2</junit.bundle.version>
 		<jta.version>1.1.1</jta.version>
 		<geronimo.servlet.version>1.2</geronimo.servlet.version>
@@ -79,7 +79,7 @@
 		<servlet.api.version>2.5</servlet.api.version>
 		<spring.osgi.version>1.2.0</spring.osgi.version>
 		<spring2.version>2.5.6.SEC02</spring2.version>
-		<spring.version>3.1.3.RELEASE</spring.version>
+		<spring.version>3.2.4.RELEASE</spring.version>
 		<sshd.version>0.5.0</sshd.version>
 		<xbean.version>3.7</xbean.version>
 		<apache.shiro.version>1.2.2</apache.shiro.version>
@@ -780,8 +780,8 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.solmix.services</groupId>
-				<artifactId>org.solmix.services.event</artifactId>
+				<groupId>org.solmix.services.event</groupId>
+				<artifactId>event-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
