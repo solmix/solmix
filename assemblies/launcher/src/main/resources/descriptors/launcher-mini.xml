@@ -249,7 +249,7 @@
 				org/solmix/services/${artifact.artifactId}/${artifact.baseVersion}/${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
 			<includes>
-				<include>org.solmix.services:org.solmix.services.event</include>
+				<include>org.solmix.services.event:event-core</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>

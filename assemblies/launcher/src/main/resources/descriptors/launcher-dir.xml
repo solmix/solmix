@@ -203,7 +203,7 @@
 			<unpack>false</unpack>
 			<useProjectArtifact>false</useProjectArtifact>
 			<includes>
-				<include>org.solmix.services:org.solmix.services.event</include>
+				<include>org.solmix.services.event:event-core</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
