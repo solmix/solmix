@@ -516,7 +516,7 @@ public class Reflection
     /**
      * Auto adapt method argument value.
      * 
-     * @param targetType
+     * @param targetType Target parameter class type.
      * @param targetGenericInfo
      * @param arg
      * @param optionalArgs
@@ -915,6 +915,7 @@ public class Reflection
     }
 
     /**
+     * 
      * @param method
      * @param class1
      * @return

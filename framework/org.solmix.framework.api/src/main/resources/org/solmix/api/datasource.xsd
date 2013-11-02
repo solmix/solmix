@@ -713,7 +713,8 @@ descriptor.DataSource Configuration files using this schema must indicate
 	<xsd:complexType name="TqueryClauses">
 		<xsd:sequence>
 			<xsd:element name="customSQL" type="xsd:string"
-				minOccurs="0"></xsd:element>
+				minOccurs="0">
+			</xsd:element>
 			<xsd:element name="selectClause" type="xsd:string"
 				minOccurs="0" maxOccurs="1">
 			</xsd:element>
@@ -735,6 +736,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 			<xsd:element name="groupWhereClause" type="xsd:string"
 				minOccurs="0" maxOccurs="1">
 			</xsd:element>
+			<xsd:element name="customQL" type="xsd:string" minOccurs="0" maxOccurs="1"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 

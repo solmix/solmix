@@ -162,6 +162,7 @@ public class DmiDataSource
         }
         if (!findSrvConfig)
             return null;
+            
 
         if (!app.havePermission(request, context)) {
             dsResponse = new DSResponseImpl();
@@ -170,10 +171,17 @@ public class DmiDataSource
         }
         // operation level service-object configuration override all ds level service-object configuration.
         if (opSrvConfig != null) {
+            if(log.isTraceEnabled()&&dsSrvConfig!=null){
+                log.trace("Tservice :operation level service configuration override all datasource level service configuration");
+            }
             srvConfig = opSrvConfig;
             opLevleSrvConfig = true;
         } else
             srvConfig = dsSrvConfig;
+        if(log.isTraceEnabled()){
+            String inf= srvConfig.getInterface()==null?srvConfig.getClazz():srvConfig.getInterface();
+            log.trace("Find server config object named:"+inf+" with method is:"+srvConfig.getMethod());
+        }
         ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(RPCManagerImpl.class, rpc, false, false),
             new ReflectionArgument(DSRequestImpl.class, request, false, false) };
 

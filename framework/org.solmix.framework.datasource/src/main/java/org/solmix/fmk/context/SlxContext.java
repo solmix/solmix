@@ -397,7 +397,6 @@ public final class SlxContext
         T result;
         try {
             SlxContext.setContext(SlxContext.getSystemContext());
-            System.out.println(Thread.currentThread().getId());
             result = op.exe();
             if (releaseAfterExecution) {
                 SlxContext.release();

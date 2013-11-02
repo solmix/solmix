@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.data.DataSourceData;
+import org.solmix.api.datasource.ClientParameter;
 import org.solmix.api.datasource.ConvertDSContextToMap;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -46,7 +47,6 @@ import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.IType;
-import org.solmix.api.datasource.annotation.ClientParameter;
 import org.solmix.api.event.IValidationEvent.Level;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
@@ -157,8 +157,8 @@ public class BasicDataSource implements DataSource
         this.setContext(data);
         JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
         jsParser = jsFactory.get();
-        if (log.isDebugEnabled())
-            log.debug((new StringBuilder()).append("Creating instance of DataSource '").append(data.getName()).append("'").toString());
+        if (log.isTraceEnabled())
+            log.trace((new StringBuilder()).append("Creating instance of DataSource '").append(data.getName()).append("'").toString());
         // If dataSource used as other build in datasource ,will not contain a TdataSouece.
         if (data.getTdataSource() != null && DataUtil.isNotEqual(data.getTdataSource().getServerType(), EserverType.CUSTOM)) {
             autoFitDS(this).buildDS(this).validateDS(this);
@@ -834,7 +834,7 @@ public class BasicDataSource implements DataSource
         Object typeValidators = null;
         if (baseType != null)
             typeValidators = baseType.getValidators();
-        List allValidators = DataUtil.makeListIfSingle(DataUtil.combineAsLists(typeValidators, fieldValidators));
+        List<Object> allValidators = DataUtil.makeListIfSingle(DataUtil.combineAsLists(typeValidators, fieldValidators));
         if (allValidators == null)
             allValidators = new ArrayList();
         boolean _foundvm = false;
@@ -1020,6 +1020,10 @@ public class BasicDataSource implements DataSource
                     + this.getServerType() + "] not supprote auto derive schema.";
                 throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR, __info);
             } else {
+                if(log.isTraceEnabled()){
+                    log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:")
+                        .append(gen.getClass().toString()).append(" to generate schema").toString());
+                }
                 autoSchema = gen.generateDataSource(data);
             }
             //cache auto derived datasource schema
@@ -1039,6 +1043,8 @@ public class BasicDataSource implements DataSource
             if (_super != null) {
                 data.setSuperDSName(_superName);
                 data.setSuperDS(_super);
+                if(log.isTraceEnabled())
+                    log.trace("Found the super datasource:"+_superName+" for "+ds.getName());
             } else {
                 log.warn("can not found the super datasource [" + _superName + "] of datasource [" + data.getName() + "]");
             }
@@ -1046,6 +1052,11 @@ public class BasicDataSource implements DataSource
         return ds;
     }
 
+    /**
+     * Used the auto derived schema as a super datasource.
+     * @return
+     * @throws SlxException
+     */
     protected BasicDataSource _buildSuperDS(BasicDataSource ds) throws SlxException {
         DataSourceData context = ds.getContext();
         boolean autoDerive = DataUtil.booleanValue(ds.getContext().getTdataSource().isAutoDeriveSchema());
