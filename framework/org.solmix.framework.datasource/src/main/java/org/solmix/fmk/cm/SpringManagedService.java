@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.spring.cm;
+package org.solmix.fmk.cm;
 
 import java.io.IOException;
 import java.io.InputStream;
