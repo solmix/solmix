@@ -208,7 +208,7 @@ public class Reflection
         return findMethod(instance.getClass().getName(), methodName, new Class[0]);
     }
 
-    public static Method findMethod(String className, String methodName, Class<?> methodArgs[]) throws Exception {
+    public static Method findMethod(String className, String methodName, Class<?>... methodArgs) throws Exception {
         Map<String,Object> classCache = getClassCache(className);
         Class<?> classObject = (Class<?>) classCache.get("ClassObject");
         Map<?,?> methodCache = (Map<?,?>) classCache.get("methods");
