@@ -16,21 +16,27 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
 package org.solmix.api.cm;
 
-import java.util.Properties;
+import java.io.IOException;
+import java.util.Dictionary;
+
+import org.solmix.commons.collections.DataTypeMap;
+
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-12-2
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-11-5
  */
 
-public interface ConfigManager
+public interface ConfigureUnit
 {
-
-    void updateConfig(Properties properties);
-
+    public static final String USER_CONFIG_DIR="classpath*:config/*.cfg";
+    public static final String USER_CONFIG_DIR_PROPERTY_NAME="solmix.config.dir";
+    public DataTypeMap getProperties();
+    public void delete() throws IOException;
+    public void update() throws IOException;
+    public void update(Dictionary<String, ? > properties) throws IOException;
     public String getPid();
 }

@@ -16,21 +16,20 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.api.cm;
 
-package org.solmix.api.context;
+import java.io.IOException;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-10-9
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-11-5
  */
 
-public interface ContextFactory
+public interface  ConfigureUnitManager
 {
-
-    public WebContext createWebContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext);
+    public ConfigureUnit createFactoryConfigureUnit(String factoryPid) throws IOException;
+    public ConfigureUnit getConfigureUnit(String pid) throws IOException;
+    public ConfigureUnit[] listConfigureUnits(String filter) throws IOException;
 }
