@@ -34,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Request;
@@ -86,7 +87,7 @@ public class RestRequestParser implements HttpServletRequestParser
         String viewType = request.getParameter("viewType");
         if ("fchart".equals(viewType)) {
             ConfigBean cf = getDataSourceFromURL(request);
-            DSRequest dsrequest = SlxContext.getDataSourceManager().createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
+            DSRequest dsrequest = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
             if (cf.getOperationId() == null)
                 dsrequest.getContext().setOperation(cf.getDataSourceName() + "_" + cf.getOperationType());
             else
@@ -106,8 +107,8 @@ public class RestRequestParser implements HttpServletRequestParser
         } else {
             try {
                 String queryStr = request.getParameter("_transaction");
-               StringWriter out = new StringWriter();
                 if (queryStr == null) {
+                    StringWriter out = new StringWriter();
                     IOUtil.copyCharacterStreams(request.getReader(), out);
                     queryStr =out.toString();
                 }
@@ -139,7 +140,7 @@ public class RestRequestParser implements HttpServletRequestParser
                                 }
                                 if (operation.getDataSource() == null)
                                     operation.setDataSource(cf.getDataSourceName());
-                                DSRequest dsr = SlxContext.getDataSourceManager().createDSRequest(operation, SlxContext.getWebContext());
+                                DSRequest dsr = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(operation, SlxContext.getWebContext());
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.getContext().setFreeOnExecute(freeOnExecute);
                                 dsr.setJoinTransaction(!freeOnExecute);

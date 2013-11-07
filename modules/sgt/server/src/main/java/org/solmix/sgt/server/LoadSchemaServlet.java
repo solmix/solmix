@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
@@ -73,7 +72,7 @@ public class LoadSchemaServlet extends HttpServlet
         // List<DataSource> dsToFree = new ArrayList<DataSource>();
         response.setCharacterEncoding("UTF-8");
         if (dsmService == null)
-            dsmService = SlxContext.getDataSourceManager();
+            dsmService =SlxContext.getThreadSystemContext().getBean(DataSourceManager.class);
         try {
             String ids = request.getParameter("dataSource");
             String multipleIDs[] = ids.split(",");

@@ -75,8 +75,8 @@ public class DSCallServlet extends HttpServlet
         RPCManager rpc = null;
         WebContext context = null;
         try {
-            RPCManagerFactory factory = SlxContext.getRPCManagerFactory();
-            rpc = factory.getRPCManager(wc, new RestRequestParser());
+            RPCManagerFactory factory = SlxContext.getThreadSystemContext().getBean(RPCManagerFactory.class);
+            rpc = factory.createRPCManager(wc, new RestRequestParser());
             log.debug("Performing " + rpc.requestCount() + " operation(s) ");
             Exception exceptionHolder=null;
             if (rpc.getRequests() != null)
