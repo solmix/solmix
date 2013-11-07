@@ -100,7 +100,7 @@ public class Reflection
 
     private static Logger log = LoggerFactory.getLogger(Reflection.class);
 
-    private static Map<String,Object> reflectionCache = new ConcurrentHashMap<String,Object>();
+    private static Map<String, Object> reflectionCache = new ConcurrentHashMap<String, Object>();
 
     public static Throwable getRealTargetException(Throwable ite) {
         if (ite instanceof InvocationTargetException)
@@ -208,15 +208,45 @@ public class Reflection
         return findMethod(instance.getClass().getName(), methodName, new Class[0]);
     }
 
-    public static Method findMethod(String className, String methodName, Class<?>... methodArgs) throws Exception {
-        Map<String,Object> classCache = getClassCache(className);
-        Class<?> classObject = (Class<?>) classCache.get("ClassObject");
-        Map<?,?> methodCache = (Map<?,?>) classCache.get("methods");
-        Method directLookup = null;
-        try {
-            directLookup = classObject.getMethod(methodName, methodArgs);
-        } catch (NoSuchMethodException ignored) {
+    public static Method findMethod(Class<?> cls, String name, Class<?>... params) {
+        
+        if (cls == null) {
+            return null;
         }
+        for (Class<?> cs : cls.getInterfaces()) {
+            if (Modifier.isPublic(cs.getModifiers())) {
+                Method m = findMethod(cs, name, params);
+                if (m != null && Modifier.isPublic(m.getModifiers())) {
+                    return m;
+                }
+            }
+        }
+        try {
+            Method m = cls.getDeclaredMethod(name, params);
+            if (m != null && Modifier.isPublic(m.getModifiers())) {
+                return m;
+            }
+        } catch (Exception e) {
+            //ignore
+        }
+        Method m = findMethod(cls.getSuperclass(), name, params);
+        if (m == null) {
+            try {
+                m = cls.getMethod(name, params);
+            } catch (Exception e) {
+                //ignore
+            }
+        }
+        return m;
+
+    }
+
+    public static Method findMethod(String className, String methodName, Class<?>... methodArgs) throws Exception {
+        Map<String, Object> classCache = getClassCache(className);
+        Class<?> classObject = (Class<?>) classCache.get("ClassObject");
+        Map<?, ?> methodCache = (Map<?, ?>) classCache.get("methods");
+        Method directLookup = null;
+            directLookup = findMethod(classObject,methodName, methodArgs);
         if (directLookup != null)
             return directLookup;
         Object value = methodCache.get(methodName);
@@ -227,7 +257,7 @@ public class Reflection
         if (value instanceof Method)
             return (Method) value;
         if (value instanceof Map) {
-            Object argValue = ((Map<?,?>) value).get(new Integer(methodArgs.length));
+            Object argValue = ((Map<?, ?>) value).get(new Integer(methodArgs.length));
             if (argValue == null) {
                 String message = (new StringBuilder()).append("Method ").append(methodName).append(" exists on ").append(className).append(
                     " but with a different number of parameters - you passed in ").append(methodArgs.length).toString();
@@ -251,18 +281,18 @@ public class Reflection
         }
     }
 
-    private static Map<String,Object> getClassCache(String className) throws Exception {
-        Map<String,Object> classCache = (Map<String,Object>) reflectionCache.get(className);
+    private static Map<String, Object> getClassCache(String className) throws Exception {
+        Map<String, Object> classCache = (Map<String, Object>) reflectionCache.get(className);
         if (classCache == null)
             classCache = populateClassCache(className);
         return classCache;
     }
 
-    private static Map<String,Object> populateClassCache(String className) throws Exception {
-        Map<String,Object> classCache = new HashMap<String,Object>();
+    private static Map<String, Object> populateClassCache(String className) throws Exception {
+        Map<String, Object> classCache = new HashMap<String, Object>();
         Class<?> classObject = classForName(className);
         classCache.put("ClassObject", classObject);
-        Map<String,Object> methodCache = new HashMap<String,Object>();
+        Map<String, Object> methodCache = new HashMap<String, Object>();
         classCache.put("methods", methodCache);
         Method classMethods[] = classObject.getMethods();
         for (int ii = 0; ii < classMethods.length; ii++) {
@@ -273,18 +303,18 @@ public class Reflection
         return classCache;
     }
 
-    private static void addMethodToCache(Method method, Map<String,Object> methodCache) throws Exception {
+    private static void addMethodToCache(Method method, Map<String, Object> methodCache) throws Exception {
         String methodName = method.getName();
         Object value = methodCache.get(methodName);
         if (value == null)
             methodCache.put(methodName, method);
         else if (value instanceof Method) {
-            Map<String,Object> argCache = new HashMap<String,Object>();
+            Map<String, Object> argCache = new HashMap<String, Object>();
             methodCache.put(methodName, argCache);
             addMethodToCache((Method) value, methodCache);
             addMethodToCache(method, methodCache);
         } else if (value instanceof Map) {
-            Map<Object,Object> argCache = (Map<Object,Object>) value;
+            Map<Object, Object> argCache = (Map<Object, Object>) value;
             Integer numArgs = new Integer(method.getParameterTypes().length);
             Object argValue = argCache.get(numArgs);
             if (argValue == null)
@@ -450,7 +480,7 @@ public class Reflection
         }
 
         Object args[] = DataUtil.listToArray(methodArgs);
-        if(log.isTraceEnabled()){
+        if (log.isTraceEnabled()) {
             log.trace((new StringBuilder()).append("method takes: ").append(parameterTypes.size()).append(" args.  I've assembled: ").append(
                 methodArgs.size()).append(" args").toString());
             log.trace((new StringBuilder()).append("invoking method:\n").append(getFormattedMethodSignature(method)).append("\n\nwith arg types: ").append(
@@ -540,8 +570,8 @@ public class Reflection
         targetTypeName = targetType.getName();
         if (argType == null && argValue == null)
             return null;
-        if(log.isTraceEnabled())
-        log.trace((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
+        if (log.isTraceEnabled())
+            log.trace((new StringBuilder()).append("checking whether type: ").append(argTypeName).append(" fulfills type: ").append(targetTypeName).toString());
         // If the target type is a collection class type.
         // && !IDoNotAdapt.class.isAssignableFrom(targetType)
         if ((Collection.class.isAssignableFrom(targetType) || Map.class.isAssignableFrom(targetType))) {
@@ -674,7 +704,7 @@ public class Reflection
                 }
 
             }
-        if(log.isTraceEnabled())
+        if (log.isTraceEnabled())
             log.trace((new StringBuilder()).append("Converting Map arg to bean of type: ").append(targetTypeName).toString());
         if (argValue == null) {
             log.debug((new StringBuilder()).append("Assigning null value to bean: ").append(targetTypeName).toString());
@@ -851,7 +881,7 @@ public class Reflection
                     for (Object i : constants) {
                         String proName = i.toString();
                         String name = DataUtil.deriveTileFromName(proName);
-                        Tvalue value= new Tvalue();
+                        Tvalue value = new Tvalue();
                         value.setId(name);
                         valueMap.getValue().add(value);
                     }

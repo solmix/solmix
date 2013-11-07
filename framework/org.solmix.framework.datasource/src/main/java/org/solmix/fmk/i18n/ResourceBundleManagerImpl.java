@@ -24,12 +24,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.annotation.Resource;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.i18n.ResourceBundleManager;
 
@@ -46,7 +48,6 @@ import org.solmix.api.i18n.ResourceBundleManager;
  * @author Administrator
  * @version 110035 2011-3-15
  */
-@SuppressWarnings("unchecked")
 public class ResourceBundleManagerImpl implements ResourceBundleManager
 {
 
@@ -54,24 +55,40 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
 
     private final BundleContext bundleContext;
 
-    private final Map resourceBundleCaches;
+    private final Map<Object, ResourceBundleCache> resourceBundleCaches;
 
     private final ResourceBundleCache defaultCache;
 
     private String defaultLocale;
 
-    public ResourceBundleManagerImpl()
+    private SystemContext sc;
+
+    public ResourceBundleManagerImpl(SystemContext sc)
     {
-        this(null);
+        this(sc, null);
 
     }
 
-    public ResourceBundleManagerImpl(final BundleContext bundleContext)
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+        if (sc != null) {
+            sc.setBean(this, ResourceBundleManager.class);
+        }
+    }
+
+    public ResourceBundleManagerImpl(SystemContext sc, final BundleContext bundleContext)
     {
-        this.bundleContext = bundleContext;
-        resourceBundleCaches = new HashMap();
-        if (bundleContext != null) {
-            this.defaultCache = new ResourceBundleCache(bundleContext.getBundle());
+        setSystemContext(sc);
+        if (bundleContext == null && sc != null) {
+            BundleContext scBundleContext = sc.getBean(BundleContext.class);
+            this.bundleContext = scBundleContext;
+        } else {
+            this.bundleContext = bundleContext;
+        }
+        resourceBundleCaches = new HashMap<Object, ResourceBundleCache>();
+        if (this.bundleContext != null) {
+            this.defaultCache = new ResourceBundleCache(this.bundleContext.getBundle());
             bundleContext.addBundleListener(this);
         } else {
             this.defaultCache = new ResourceBundleCache();
@@ -117,7 +134,8 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
 
     /**
      * {@inheritDoc}
-     * @throws SlxException 
+     * 
+     * @throws SlxException
      * 
      * @see org.solmix.api.i18n.ResourceBundleManager#getResourceBundle(org.osgi.framework.Bundle, java.util.Locale)
      */
@@ -130,7 +148,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
         ResourceBundleCache cache;
         synchronized (resourceBundleCaches) {
             Long key = new Long(provider.getBundleId());
-            cache = (ResourceBundleCache) resourceBundleCaches.get(key);
+            cache = resourceBundleCaches.get(key);
             if (cache == null) {
                 cache = new ResourceBundleCache(provider);
                 resourceBundleCaches.put(key, cache);
@@ -146,7 +164,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
      * @see org.solmix.api.i18n.ResourceBundleManager#getResourceBundle(java.util.Locale)
      */
     @Override
-    public ResourceBundle getResourceBundle(Locale locale) throws SlxException{
+    public ResourceBundle getResourceBundle(Locale locale) throws SlxException {
         return getResourceBundle(null, locale);
     }
 

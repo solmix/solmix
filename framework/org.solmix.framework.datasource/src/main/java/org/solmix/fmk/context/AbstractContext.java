@@ -24,14 +24,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.solmix.api.context.AttributeProvider;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.exception.SlxException;
-import org.solmix.api.i18n.ResourceBundleManager;
 
 /**
  * 
@@ -48,7 +45,6 @@ public abstract class AbstractContext implements Context
 
     protected Locale locale;
 
-    private  ResourceBundleManager resourceBundleManager;
 
     /**
      * @return the attributeProvider
@@ -67,7 +63,7 @@ public abstract class AbstractContext implements Context
     /**
      * @return the systemContext
      */
-    protected SystemContext getSystemContext() {
+    public SystemContext getSystemContext() {
         return systemContext;
     }
 
@@ -261,7 +257,7 @@ public abstract class AbstractContext implements Context
      */
     @Override
     public void release() {
-        // TODO Auto-generated method stub
+           attributeProvider=null;
 
     }
 
@@ -306,20 +302,5 @@ public abstract class AbstractContext implements Context
     public void removeAttribute(String name, Scope scope) {
         this.getAttributeProvider().removeAttribute(name, scope);
 
-    }
-    @Override
-    public ResourceBundle getResourceBundle() throws SlxException {
-        return getResourceBundleManager().getResourceBundle(getLocale());
-    }
-
-    public void setResourceBundleManager(ResourceBundleManager resourceBundleManager) {
-        this.resourceBundleManager = resourceBundleManager;
-    }
-
-    /**
-     * @return the resourceBundleManager
-     */
-    ResourceBundleManager getResourceBundleManager() {
-        return resourceBundleManager;
     }
 }

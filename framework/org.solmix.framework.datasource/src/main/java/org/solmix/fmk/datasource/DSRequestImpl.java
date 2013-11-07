@@ -51,7 +51,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.application.ApplicationManagerImpl;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.servlet.SlxFileItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.ErrorReport;
@@ -369,7 +369,7 @@ public class DSRequestImpl implements DSRequest
             return;
         DataSource _ds = getDataSource();
         DataSourceData _dsData = _ds.getContext();
-        int _dftMaxSize = DSConfigManager.maxUploadFilesize;
+        int _dftMaxSize = DatasourceCM.getProperties().getInt(DatasourceCM.P_MAX_UPLOAD_FILESIZE);
         Map<String, Object> _values = data.getValues();
         Map<String, Object> _addFields = new HashMap<String, Object>();
         if (_values != null) {

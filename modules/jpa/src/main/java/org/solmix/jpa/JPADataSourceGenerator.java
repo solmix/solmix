@@ -55,7 +55,8 @@ import org.solmix.fmk.datasource.BasicDataSource;
 public class JPADataSourceGenerator implements DataSourceGenerator
 {
    /**
-    * {@inheritDoc}
+    * Generate {@link DataSource} schema,the rule is:
+    * 
     * 
     * @see org.solmix.services.datasource.DataSourceGenerator#generateDataSource(org.solmix.services.data.DataSourceData)
     */
@@ -63,9 +64,9 @@ public class JPADataSourceGenerator implements DataSourceGenerator
    public DataSource generateDataSource(DataSourceData context) throws SlxException
    {
       
-      if (context == null || context.getTdataSource().getSchemaClass() == null)
+      if (context == null || context.getTdataSource().getSchemaBean() == null)
          throw new SlxException(Tmodule.JPA, Texception.DS_DSCONFIG_ERROR, "JPA DataSource must have a Entity schema class");
-      String entity = context.getTdataSource().getSchemaClass();
+      String entity = context.getTdataSource().getSchemaBean();
       Class<?> entityClass = null;
       try
       {

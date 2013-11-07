@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -43,12 +42,13 @@ import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.Context;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
+import org.solmix.api.i18n.ResourceBundleManager;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.Tservice;
 import org.solmix.api.jaxb.Tvalidator;
@@ -1099,19 +1099,18 @@ public class DefaultValidators
      * @throws SlxException 
      */
     public static ErrorMessage localizedErrorMessage(ErrorMessage error, ValidationContext context) throws SlxException {
+        if (error == null)
+            return null;
         MessageTools _msgTool = null;
         Object msg = context.get(Constants.MESSAGE_TOOL_IN_CONTEXT);
         if (msg == null) {
-            ResourceBundle resource = SlxContext.getResourceBundle();
+            SystemContext sc = SlxContext.getThreadSystemContext();
+            ResourceBundleManager rbm= sc.getBean(ResourceBundleManager.class);
             // VirtualManager.getVirtual(context.getRequestContext());
-            _msgTool = new MessageTools(resource, SlxContext.getContext());
+            _msgTool = new MessageTools(rbm.getResourceBundle(SlxContext.getLocale()));
             context.put(Constants.MESSAGE_TOOL_IN_CONTEXT, _msgTool);
         }
-        if (error == null)
-            return null;
-        if (_msgTool == null) {
-            _msgTool = new MessageTools();
-        }
+        
         String _error_msg = error.getErrorString();
         if (error.getErrorString().startsWith("%")) {
             _error_msg = _error_msg.substring(1);

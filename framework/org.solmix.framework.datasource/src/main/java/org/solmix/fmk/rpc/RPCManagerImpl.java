@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.RPCManagerData;
@@ -82,7 +81,7 @@ import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.export.ExportManager;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.ISCJavaScript;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
@@ -155,12 +154,12 @@ public class RPCManagerImpl implements RPCManager
         responseMap = new HashMap<RequestType, ResponseType>();
         data = null;
         setContext(new RPCManagerData());
-        data.setCharset(DSConfigManager.getConfig().getString("rpc.defaultCharset", "UTF-8"));
+        data.setCharset(DatasourceCM.getProperties().getString("rpc.defaultCharset", "UTF-8"));
         data.setCloseConnection(false);
-        data.setOmitNullMapValuesInResponse(DSConfigManager.getConfig().getBoolean("rpc.omitNullMapValuesInResponse", false));
-        data.setPrettyPrintResponse(DSConfigManager.getConfig().getBoolean("rpc.prettyPrintResponse", false));
-        data.setCustomHTML(DSConfigManager.getConfig().getString("rpc.customHTML", null));
-        data.setServerVersion(DSConfigManager.getConfig().getString("rpc.serverVersionNumber"));
+        data.setOmitNullMapValuesInResponse(DatasourceCM.getProperties().getBoolean("rpc.omitNullMapValuesInResponse", false));
+        data.setPrettyPrintResponse(DatasourceCM.getProperties().getBoolean("rpc.prettyPrintResponse", false));
+        data.setCustomHTML(DatasourceCM.getProperties().getString("rpc.customHTML", null));
+        data.setServerVersion(DatasourceCM.getProperties().getString("rpc.serverVersionNumber"));
         setTransactionPolicy(TransactionPolicy.ANY_CHANGE);
         setRequestProcessingStarted(false);
         HttpServletRequest request = context == null ? null : context.getRequest();
@@ -223,8 +222,8 @@ public class RPCManagerImpl implements RPCManager
         String _clientVersion = getClientVersion(context.getRequest());
         String _serverVersion = data.getServerVersion();
         if (_serverVersion == null || _serverVersion.trim().equals(""))
-            _serverVersion = DSConfigManager.slxVersionNumber;
-        String _machClient = DSConfigManager.clientVersionNumber;
+            _serverVersion = DatasourceCM.SLX_VERSION_NUMBER;
+        String _machClient = DatasourceCM.CLIENT_VERSION_NUMBER;
         if (_clientVersion == null || !_machClient.equals(_clientVersion)) {
             if (_clientVersion == null)
                 _clientVersion = "SC_SNAPSHOT-2011-12-05";
@@ -635,7 +634,7 @@ public class RPCManagerImpl implements RPCManager
         if (log.isDebugEnabled())
             log.debug((new StringBuilder()).append("Content type for RPC transaction: ").append(contentType).toString());
         Writer _out;
-        if (DSConfigManager.showClientOutput)
+        if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_SHOW_CLIENT_OUTPUT, Boolean.FALSE))
             _out = new StringWriter();
         else
             _out = context.getOut();
@@ -706,8 +705,8 @@ public class RPCManagerImpl implements RPCManager
                     log.debug((new StringBuilder()).append("Uncompressed result size: ").append(outputSize).append(" bytes").toString());
                 context.getOut().write(output);
                 context.getOut().flush();
-                if (DSConfigManager.development) {
-                    log.debug("output String :\n" + _out.toString());
+                if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_DEVELOPMENT, Boolean.FALSE)) {
+                    log.trace("output String :\n" + _out.toString());
                 }
             }
         } catch (IOException e) {

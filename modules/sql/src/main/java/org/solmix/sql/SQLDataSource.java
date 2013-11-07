@@ -45,7 +45,7 @@ import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.ISQLDataSource;
-import org.solmix.api.datasource.annotation.SQLCacheData;
+import org.solmix.api.datasource.SQLCacheData;
 import org.solmix.api.event.EventManager;
 import org.solmix.api.event.MonitorEventFactory;
 import org.solmix.api.event.TimeMonitorEvent;

@@ -23,11 +23,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Tobject;
 import org.solmix.api.jaxb.ToperationBinding;
@@ -61,7 +61,7 @@ public final class FChartDataSource
         Map<String, Object> map = XMLUtil.toMap(object);
         DSResponse response ;
         Object data=getData(req, ds);
-    	response = SlxContext.getDataSourceManager().createDSResponse();
+    	response = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSResponse();
     	response.getContext().setData(data);
         Map context = Velocity.getStandardContextMap(req);
         context.putAll(map);

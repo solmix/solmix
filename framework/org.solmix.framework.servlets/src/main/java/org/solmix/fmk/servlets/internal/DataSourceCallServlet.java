@@ -28,9 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.solmix.api.context.ContextFactory;
 import org.solmix.api.context.WebContext;
+import org.solmix.api.context.WebContextFactory;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
@@ -62,19 +61,19 @@ public class DataSourceCallServlet extends HttpServlet
 
     RPCManagerFactory rpcService;
 
-    private ContextFactory contextFactory;
+    private WebContextFactory contextFactory;
 
     /**
      * @return the contextFactory
      */
-    public ContextFactory getContextFactory() {
+    public WebContextFactory getContextFactory() {
         return contextFactory;
     }
 
     /**
      * @param contextFactory the contextFactory to set
      */
-    public void setContextFactory(ContextFactory contextFactory) {
+    public void setContextFactory(WebContextFactory contextFactory) {
         this.contextFactory = contextFactory;
     }
 
@@ -95,7 +94,7 @@ public class DataSourceCallServlet extends HttpServlet
         try {
             context = contextFactory.createWebContext(request, response, this.getServletContext());
             if (rpcService != null)
-                rpc = rpcService.getRPCManager(context);
+                rpc = rpcService.createRPCManager(context);
             log.info("Performing " + rpc.requestCount() + " operation(s) ");
             if (rpc.getRequests() != null)
                 for (RequestType req : rpc.getRequests()) {

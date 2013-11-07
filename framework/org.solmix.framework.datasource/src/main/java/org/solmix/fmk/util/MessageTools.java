@@ -32,11 +32,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.solmix.api.context.Context;
-import org.solmix.api.exception.SlxException;
-import org.solmix.api.i18n.ResourceBundleManager;
-import org.solmix.fmk.i18n.ResourceBundleManagerImpl;
-
 /**
  * 
  * @author solmix.f@gmail.com
@@ -50,7 +45,6 @@ public class MessageTools
 
     protected ResourceBundle bundle;
 
-    protected Context context;
 
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 
@@ -62,24 +56,14 @@ public class MessageTools
 
     private final Set<Long> docsToRefresh = new HashSet<Long>();
 
-    public MessageTools()
-    {
-        ResourceBundleManager rbm = new ResourceBundleManagerImpl();
-
-        try {
-            this.bundle = rbm.getResourceBundle(Locale.ENGLISH);
-        } catch (SlxException e) {
-        }
-    }
 
     /**
      * @param bundle
      * @param virtualContext
      */
-    public MessageTools(ResourceBundle bundle, Context context)
+    public MessageTools(ResourceBundle bundlet)
     {
         this.bundle = bundle;
-        this.context = context;
     }
 
     public String get(String key) {

@@ -36,7 +36,7 @@ import org.solmix.api.jaxb.EserverType;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.cache.StructCache;
 import org.solmix.fmk.context.SlxContext;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 
 /**
  * Initialize Datasource.all datasource initialized thought {@link #forName(String)}
@@ -169,7 +169,7 @@ public class DataSourceProvider
      */
     public synchronized static ParserHandler getParserHander() {
         if (parser == null) {
-            String defaultParser = DSConfigManager.defaultParser;
+            String defaultParser =DatasourceCM.DEFAULT_PARSER;
             if (defaultParser.equals("default")) {
                 parser = new DefaultParser();
             }

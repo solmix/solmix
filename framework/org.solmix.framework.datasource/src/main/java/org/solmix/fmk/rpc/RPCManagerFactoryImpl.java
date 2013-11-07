@@ -19,6 +19,9 @@
 
 package org.solmix.fmk.rpc;
 
+import javax.annotation.Resource;
+
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.rpc.HttpServletRequestParser;
@@ -34,7 +37,23 @@ import org.solmix.api.rpc.RPCManagerFactory;
  */
 public class RPCManagerFactoryImpl implements RPCManagerFactory
 {
-    public RPCManager getRPCManager() throws SlxException {
+    
+    private SystemContext sc;
+    public RPCManagerFactoryImpl(){
+    }
+    public RPCManagerFactoryImpl(SystemContext sc){
+        setSystemContext(sc);
+    }
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+        if(sc!=null){
+            sc.setBean(this, RPCManagerFactory.class);
+        }
+    }
+ 
+    @Override
+    public RPCManager createRPCManager() throws SlxException {
 
         return new RPCManagerImpl();
     }
@@ -44,12 +63,13 @@ public class RPCManagerFactoryImpl implements RPCManagerFactory
      * @see org.solmix.api.rpc.RPCManagerFactory#getRPCManager(java.lang.Object)
      */
     @Override
-    public RPCManager getRPCManager(WebContext context) throws SlxException {
+    public RPCManager createRPCManager(WebContext context) throws SlxException {
 
         return new RPCManagerImpl(context);
     }
 
-    public RPCManager getRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException {
+    @Override
+    public RPCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException {
 
         return new RPCManagerImpl(context, parser);
     }

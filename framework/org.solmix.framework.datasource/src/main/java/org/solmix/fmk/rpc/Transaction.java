@@ -1,10 +1,11 @@
 package org.solmix.fmk.rpc;
 
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.rpc.RPCManager;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.api.rpc.RPCManagerFactory;
 
 
 public class Transaction
@@ -12,15 +13,27 @@ public class Transaction
     
     private  RPCManagerImpl rpc;
     private boolean isCreated;
-    public Transaction(RPCManager rpc){
+    public Transaction(RPCManager rpc,SystemContext sc){
+        if(rpc==null){
+            RPCManagerFactory factory=   sc.getBean(RPCManagerFactory.class);
+            if(factory!=null){
+                try {
+                    rpc=factory.createRPCManager();
+                } catch (SlxException e) {
+                    //Ignore
+                }
+                if(rpc.getClass().isAssignableFrom(RPCManagerImpl.class)){
+                    isCreated=true;
+                    this.rpc=RPCManagerImpl.class.cast(rpc);
+                }
+                
+            }
+        }
         this.rpc=(RPCManagerImpl)rpc;
         
     }
-    public Transaction() throws SlxException{
-        RPCManager rpc  =SlxContext.getRPCManagerFactory().getRPCManager();
-        this.rpc=(RPCManagerImpl)rpc;
-        isCreated=true;
-        
+    public Transaction(SystemContext sc) throws SlxException{
+        this(null,sc);
     }
     public void begin(){
         rpc.beginTransaction();

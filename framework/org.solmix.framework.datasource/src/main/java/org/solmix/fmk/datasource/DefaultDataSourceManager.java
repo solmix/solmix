@@ -23,10 +23,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
 import org.solmix.api.context.Context;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -58,7 +61,19 @@ public class DefaultDataSourceManager implements DataSourceManager
     private static volatile DSRepositoryManager repoService;
 
     private static Logger log;
-
+    
+    private SystemContext sc;
+ 
+    public DefaultDataSourceManager(SystemContext sc){
+        setSystemContext(sc);
+    }
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+        if(sc!=null){
+            sc.setBean(this, DataSourceManager.class);
+        }
+    }
     /**
      * @return the poolServiceFactory
      */

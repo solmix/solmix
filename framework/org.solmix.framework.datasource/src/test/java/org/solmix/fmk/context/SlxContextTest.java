@@ -23,8 +23,11 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import org.solmix.fmk.mock.ContextMocks;
+import org.solmix.api.context.SystemContext;
+import org.solmix.api.context.SystemContextFactory;
+import org.solmix.api.datasource.DataSourceManager;
+import org.solmix.api.i18n.ResourceBundleManager;
+import org.solmix.api.rpc.RPCManagerFactory;
 
 /**
  * 
@@ -40,12 +43,37 @@ public class SlxContextTest
      */
     @Before
     public void setUp() throws Exception {
-        ContextMocks.initContext();
     }
 
     @Test
-    public void test() {
-        Assert.assertNotNull(SlxContext.getEventManager());
+    public void systemContextGetAndSet() {
+        SystemContextFactory.setDefaultSystemContext(null);
+        SystemContextFactory.setThreadDefaultSystemContext(null);
+        SystemContext newsc = SystemContextFactory.newInstance().createContext();
+        SystemContext origisc=SystemContextFactory.getThreadDefaultSystemContext(false);
+        Assert.assertSame(newsc, origisc);
+        newsc.close(true);
+    }
+    @Test
+    public void getRPCManagerFactory() {
+        SystemContext sc= SlxContext.getSystemContext();
+        RPCManagerFactory dsm=sc.getBean(RPCManagerFactory.class);
+        Assert.assertNotNull(dsm);
+        sc.close(true);
+    }
+    @Test
+    public void getDastaSourceManager() {
+        SystemContext sc= SlxContext.getSystemContext();
+        DataSourceManager dsm=sc.getBean(DataSourceManager.class);
+        Assert.assertNotNull(dsm);
+        sc.close(true);
+    }
+    @Test
+    public void getResourceBundleManager() {
+        SystemContext sc= SlxContext.getSystemContext();
+        ResourceBundleManager dsm=sc.getBean(ResourceBundleManager.class);
+        Assert.assertNotNull(dsm);
+        sc.close(true);
     }
 
 }

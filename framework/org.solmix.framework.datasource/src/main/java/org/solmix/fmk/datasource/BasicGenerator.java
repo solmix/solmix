@@ -34,7 +34,7 @@ import org.solmix.api.jaxb.Tfields;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.base.Reflection;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 
 /**
  * 
@@ -76,7 +76,7 @@ public class BasicGenerator implements DataSourceGenerator
         data.setID(ID);
         /** ServerType */
         data.setServerType(EserverType.BASIC);
-        String core_version = DSConfigManager.frameworkVersion;
+        String core_version = DatasourceCM.FRAMEWORK_VERSION;
         /** generatedBy */
         data.getOtherAttributes().put(new QName("generatedBy"), core_version);
         data.getOtherAttributes().put(new QName("beanClassName"), clz.getName());

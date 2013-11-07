@@ -3,7 +3,7 @@ package org.solmix.fmk.datasource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
@@ -19,7 +19,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
 
     private String dataSourceName;
 
-    private Eoperation type;
+    private final Eoperation type;
 
     protected String opId;
     private DataSource dataSource;
@@ -43,7 +43,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
         DSRequest request = null;
         try {
             if(dataSourceName!=null&&dataSource==null){
-            _dataSourceManager = SlxContext.getDataSourceManager();
+            _dataSourceManager = getDataSourceManager();
             dataSource = _dataSourceManager.get(dataSourceName);
             }
             request = _dataSourceManager.createDSRequest();
@@ -70,6 +70,10 @@ public abstract class DsOp<D> implements Op<D, SlxException>
         this.opId = opId;
         return this;
 
+    }
+    protected DataSourceManager getDataSourceManager() {
+        SystemContext sc = SlxContext.getThreadSystemContext();
+        return sc.getBean(DataSourceManager.class);
     }
 
     public abstract D exe(DSRequest request) throws SlxException;

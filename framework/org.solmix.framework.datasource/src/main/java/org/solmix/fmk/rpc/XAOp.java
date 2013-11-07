@@ -3,6 +3,7 @@ package org.solmix.fmk.rpc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -15,8 +16,9 @@ import org.solmix.fmk.datasource.DsOp;
 
 /**
  * Used with transaction operations.
+ * 
  * @author solmix.f@gmail.com
- * @version 110082  2013-8-27
+ * @version 110082 2013-8-27
  */
 public abstract class XAOp
 {
@@ -34,6 +36,7 @@ public abstract class XAOp
     protected String opId;
 
     private DataSource dataSource;
+
     private DSRequest request;
 
     public XAOp(DataSource dataSource, Eoperation type)
@@ -54,7 +57,7 @@ public abstract class XAOp
 
         try {
             if (dataSourceName != null && dataSource == null) {
-                _dataSourceManager = SlxContext.getDataSourceManager();
+                _dataSourceManager = getDataSourceManager();
                 dataSource = _dataSourceManager.get(dataSourceName);
             }
             request = _dataSourceManager.createDSRequest();
@@ -81,8 +84,8 @@ public abstract class XAOp
         }
         return d;
     }
-    
-    public DSRequest getRequest(){
+
+    public DSRequest getRequest() {
         return this.request;
     }
 
@@ -111,20 +114,23 @@ public abstract class XAOp
         return this;
 
     }
-    
+
     public static class DfXAOp extends XAOp
     {
 
         public DfXAOp(String dataSourceName, Eoperation type)
         {
-            super(dataSourceName,type);
+            super(dataSourceName, type);
         }
-
-   
 
         @Override
         public DSResponse exe(DSRequest request) throws SlxException {
             return request.execute();
         }
+    }
+
+    private DataSourceManager getDataSourceManager() {
+        SystemContext sc = SlxContext.getThreadSystemContext();
+        return sc.getBean(DataSourceManager.class);
     }
 }

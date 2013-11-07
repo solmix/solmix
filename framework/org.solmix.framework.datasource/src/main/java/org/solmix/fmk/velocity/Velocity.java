@@ -33,7 +33,6 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
@@ -44,7 +43,7 @@ import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.util.DataTools;
 
 /**
@@ -147,7 +146,7 @@ public class Velocity
             vEngine = new VelocityEngine();
             Properties properties = new Properties();
             // For velocity resource loader.
-            properties.put("file.resource.loader.path", DSConfigManager.velocityTemplateDir);
+            properties.put("file.resource.loader.path", DatasourceCM.getProperties().get(DatasourceCM.P_VELOCITY_TEMPLATE_DIR));
             properties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
             properties.put("runtime.log.logsystem.log4j.category", "org.apache.Velocity");
             vEngine.init(properties);
@@ -156,7 +155,7 @@ public class Velocity
     }
 
     public static synchronized Object evaluateTemplateFile(String fileName, Map parameters) throws SlxException {
-        String path = DSConfigManager.velocityTemplateDir;
+        String path = DatasourceCM.getProperties().getString(DatasourceCM.P_VELOCITY_TEMPLATE_DIR);
         
         try {
             SlxFile file = new SlxFile((new StringBuilder()).append(path).append("/").append(fileName).toString());
@@ -328,5 +327,6 @@ public class Velocity
     private static Logger log = LoggerFactory.getLogger(Velocity.class.getName());
 
     private static VelocityEngine vEngine;
+    
 
 }

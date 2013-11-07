@@ -32,7 +32,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.SlxConstants;
 import org.solmix.commons.util.DataUtil;
 
@@ -111,6 +110,8 @@ public class ServiceUtil
         }
     }
 
+
+    
     /**
      * @param interfaceName
      * @param filter
@@ -155,18 +156,15 @@ public class ServiceUtil
         ServiceReference<AdapterType> ref = context.getServiceReference(infClazz);
         return ref == null ? null : context.getService(ref);
     }
+    
 
-    /**
-     * @param interfaceName
-     * @param filter
-     * @return
-     */
+
     public static Object[] getOSGIServices(String interfaceName, String filter) {
         if (context != null) {
             Object[] res;
             try {
                 if (DataUtil.isNotNullAndEmpty(filter)) {
-                    ServiceReference[] ref = context.getServiceReferences(interfaceName, filter);
+                    ServiceReference<?>[] ref = context.getServiceReferences(interfaceName, filter);
                     if (ref != null) {
                         res = new Object[ref.length];
                         for (int i = 0; i < ref.length; i++) {
@@ -176,7 +174,7 @@ public class ServiceUtil
                     }
                 } else {
 
-                    ServiceReference ref = context.getServiceReference(interfaceName);
+                    ServiceReference<?> ref = context.getServiceReference(interfaceName);
                     if (ref != null) {
                         res = new Object[1];
                         res[0] = context.getService(ref);
@@ -189,11 +187,18 @@ public class ServiceUtil
         }
         return null;
     }
+    public static boolean hasBundleContext(){
+        return context!=null;
+    }
 
     public static Object getOSGIService(String serviceName) {
         if (log.isTraceEnabled())
             log.trace("ServiceUtilities:getOSGIService(): service[" + serviceName + "]");
-        ServiceReference ref = context.getServiceReference(serviceName);
+        ServiceReference<?> ref = context.getServiceReference(serviceName);
         return ref == null ? null : context.getService(ref);
+    }
+    
+    public void destory(){
+        context=null;
     }
 }

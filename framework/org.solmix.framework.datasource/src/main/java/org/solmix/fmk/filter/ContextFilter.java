@@ -31,13 +31,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.Context;
-import org.solmix.api.context.ContextFactory;
 import org.solmix.api.context.WebContext;
+import org.solmix.api.context.WebContextFactory;
 import org.solmix.api.exception.SlxException;
-import org.solmix.fmk.context.ContextFactoryImpl;
 import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.context.web.WebContextFactoryImpl;
 
 /**
  * 
@@ -50,7 +49,7 @@ public class ContextFilter extends AbstractFilter implements Filter
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private ContextFactory contextFactory;
+    private WebContextFactory contextFactory;
 
     private ServletContext servletContext;
 
@@ -71,7 +70,7 @@ public class ContextFilter extends AbstractFilter implements Filter
         final Context originalContext = SlxContext.hasContext() ? SlxContext.getContext() : null;
         boolean initializedContext = false;
         request.setCharacterEncoding("UTF-8");
-        contextFactory = ContextFactoryImpl.getInstance();
+        contextFactory = WebContextFactoryImpl.getInstance();
         if (SlxContext.isSystemContext() || !SlxContext.hasContext()) {
             final WebContext context = contextFactory.createWebContext(request, response, servletContext);
             SlxContext.setContext(context);

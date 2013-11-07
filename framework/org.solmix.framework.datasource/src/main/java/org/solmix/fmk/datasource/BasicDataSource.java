@@ -67,7 +67,7 @@ import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.ValidationContext.Vtype;
 import org.solmix.fmk.event.EventUtils;
-import org.solmix.fmk.internal.DSConfigManager;
+import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.JSExpression;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.util.DataTools;
@@ -542,7 +542,8 @@ public class BasicDataSource implements DataSource
     }
 
     protected Boolean autoJoinAtGlobalLevel(DSRequest req) throws SlxException {
-        String autoJoin = DSConfigManager.autoJoinTransactions;
+        String autoJoin = DatasourceCM.getProperties()
+            .getString(DatasourceCM.P_AUTO_JOIN_TRANSACTIONS);
         if (autoJoin == null)
             return null;
         if (autoJoin.toLowerCase().equals("true") || autoJoin.toLowerCase().equals("ALL"))

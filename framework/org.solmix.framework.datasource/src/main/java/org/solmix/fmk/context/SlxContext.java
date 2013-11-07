@@ -21,26 +21,21 @@ package org.solmix.fmk.context;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.SlxConstants;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.Context.Scope;
 import org.solmix.api.context.SystemContext;
+import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
-import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.event.EventManager;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.i18n.ResourceBundleManager;
 import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerFactory;
 import org.solmix.fmk.rpc.Transaction;
 
 /**
@@ -66,13 +61,13 @@ public final class SlxContext
      */
     private static InheritableThreadLocal<Context> localContext = new InheritableThreadLocal<Context>();
 
-    private static SystemContext systemContext;
-    
+
     /**
      * Do not instantiate this class. The constructor must be public to use discovery
      */
-    public SlxContext(){
-        
+    public SlxContext()
+    {
+
     }
 
     public static Subject getSubject() {
@@ -83,14 +78,39 @@ public final class SlxContext
      * @return the systemContext
      */
     public static SystemContext getSystemContext() {
-        return systemContext;
+      
+        return   SystemContextFactory.getDefaultSystemContext();
+    }
+    
+    public static SystemContext getThreadSystemContext() {
+        return   SystemContextFactory.getThreadDefaultSystemContext();
     }
 
     /**
+     * At most condition must reset the SystemContext after you used completely.
+     * <p>
+     * <code>
+     * Context original =SlxContext.getContext();
+     * .....
+     *  SlxContext.setContext(otherContext);
+     * .....
+     *     reset context.
+     * SlxContext.setContext(originalCtx);
+     * 
+     * </code>
+     * 
      * @param systemContext the systemContext to set
      */
     public static void setSystemContext(SystemContext systemContext) {
-        SlxContext.systemContext = systemContext;
+        SystemContextFactory.setDefaultSystemContext(systemContext);
+    }
+    
+    /**
+     * set the thread dependency system context.
+     * @param systemContext
+     */
+    public static void setThreadSystemContext(SystemContext systemContext){
+        SystemContextFactory.setThreadDefaultSystemContext(systemContext);
     }
 
     /**
@@ -110,43 +130,11 @@ public final class SlxContext
         localContext.remove();
     }
 
-    public static RPCManagerFactory getRPCManagerFactory() {
-        AbstractSystemContext abc = getAbstractSystemContext();
-        if (abc != null) {
-            RPCManagerFactory dsm = abc.getRpcManagerFactory();
-            if (dsm == null) {
-                throw new IllegalArgumentException("RPCManagerFactory is not set.");
-            }
-            return dsm;
-        } else {
-            return null;
-        }
-
-    }
-
     public static SecurityManager getSecurityManager() {
         SecurityManager sm = SecurityUtils.getSecurityManager();
         if (sm == null)
             throw new java.lang.IllegalStateException("Shiro SecurityManager is null ,checkout shiro configuration,and try agin.");
         return sm;
-    }
-
-    /**
-     * Get the OSGI bundleContext ,if used in OSGI-ENV
-     * 
-     * @return
-     */
-    public static BundleContext getBundleContext() {
-        AbstractSystemContext abc = getAbstractSystemContext();
-        if (abc != null) {
-            BundleContext ctx = abc.getBundleContext();
-            if (ctx == null && SlxConstants.isOSGI()) {
-                log.warn("The envirement is not  osgi,the bundlecontext is not set");
-            }
-            return ctx;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -275,80 +263,12 @@ public final class SlxContext
         return hasContext() ? getContext() instanceof SystemContext : false;
     }
 
-   
     public static boolean isWebContext() {
         return hasContext() ? getContext() instanceof WebContext : false;
     }
 
-    public static ResourceBundle getResourceBundle(Locale locale) throws SlxException {
-        AbstractContext _ac = getAbstractContext();
-        if (_ac == null || _ac.getResourceBundle() == null) {
-            AbstractSystemContext abc = getAbstractSystemContext();
-            if (abc != null) {
-                ResourceBundleManager rbm = abc.getResourceBundleManager();
-                if (rbm == null) {
-                    throw new IllegalArgumentException("ResourceBundleManager is not set.");
-                }
-                return rbm.getResourceBundle(locale);
-            } else {
-                return null;
-            }
-        } else {
-            return _ac.getResourceBundle();
-
-        }
-    }
-
-    protected static AbstractSystemContext getAbstractSystemContext() {
-        if (getSystemContext() instanceof AbstractSystemContext) {
-            return (AbstractSystemContext) getSystemContext();
-        } else {
-            return null;
-        }
-
-    }
-
-    private static AbstractContext getAbstractContext() {
-        if (!hasContext())
-            return null;
-        if (getContext() instanceof AbstractContext) {
-            return (AbstractContext) getContext();
-        } else {
-            return null;
-        }
-
-    }
-
-    /**
-     * Get the ResourceBundle for this thread,if not exits,use system resourceBundle.
-     * 
-     * @return
-     * @throws SlxException
-     */
-    public static ResourceBundle getResourceBundle() throws SlxException {
-        return getResourceBundle(getLocale());
-    }
-
-    /**
-     * Get this DataSourceManager in systemContext.
-     * <p>
-     * <b>Note:</b> This is a convenience method,If In OSGI-ENV should use dynamic service discovery to found this
-     * service or use IOC to inject in,for example spring or juice.
-     * 
-     * @return the dataSourceManager
-     */
-    public static DataSourceManager getDataSourceManager() {
-        AbstractSystemContext abc = getAbstractSystemContext();
-        if (abc != null) {
-            DataSourceManager dsm = abc.getDataSourceManager();
-            if (dsm == null) {
-                throw new IllegalArgumentException("DataSourceManager is not set.");
-            }
-            return dsm;
-        } else {
-            return null;
-        }
-    }
+   
+   
 
     /**
      * Releases the current thread (if not a system context) and calls the releaseThread() method of the system context.
@@ -428,7 +348,7 @@ public final class SlxContext
 
     public static Transaction getTransaction() throws SlxException {
 
-        return new Transaction();
+        return new Transaction(getThreadSystemContext());
     }
 
     /**
@@ -437,7 +357,7 @@ public final class SlxContext
      */
     public static Transaction getTransaction(RPCManager rpc) {
 
-        return new Transaction(rpc);
+        return new Transaction(rpc,getThreadSystemContext());
     }
 
     /**
