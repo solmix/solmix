@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * SOLMIX PROJECT
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,20 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
-package org.solmix.api.rpc;
-
-import org.solmix.api.context.WebContext;
-import org.solmix.api.exception.SlxException;
-
 /**
  * 
- * @version 110035
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013年11月4日
  */
-public interface RPCManagerFactory
-{
-    RPCManager createRPCManager() throws SlxException;
-    RPCManager createRPCManager(WebContext requestContext) throws SlxException;
 
-    RPCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException;
-}
+package org.solmix.api.bean.spring;

@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * SOLMIX PROJECT
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,19 +17,25 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.bean.spring;
 
-import org.solmix.api.context.WebContext;
-import org.solmix.api.exception.SlxException;
+import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 
 /**
  * 
- * @version 110035
+ * @author solmix.f@gmail.com
+ * @version $Id$ 2013年11月4日
  */
-public interface RPCManagerFactory
-{
-    RPCManager createRPCManager() throws SlxException;
-    RPCManager createRPCManager(WebContext requestContext) throws SlxException;
 
-    RPCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException;
+public class BeanDefinitionParser extends AbstractSingleBeanDefinitionParser
+{
+
+    public static final String WIRE_ATTRIBUTE = BeanDefinitionParser.class.getName() + ".wire";
+
+    public static final String WIRE_NAME = BeanDefinitionParser.class.getName() + ".wireName";
+
+    public static final String WIRE_CREATE = BeanDefinitionParser.class.getName() + ".wireCreate";
+
+    public static final String WIRE_HANDLER = "org.apache.cxf.bus.spring.BusWiringBeanFactoryPostProcessor";
+
 }

@@ -110,7 +110,7 @@
 		<solmix.osgi.export.pkg>org.solmix,org.solmix.api*,org.osgi.service.event</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.dom4j;resolution:=optional,
-			org.solmix.commmons.logs;resolution:=optional,
+			org.springframework*;resolution:=optional;version="${spring.version}",
 			org.apache.commons.pool,
 			javax.servlet;version="[2.5,4)",
 			javax.servlet.http;version="[2.5,4)",
@@ -141,10 +141,6 @@
 		    <artifactId>velocity</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<!--<dependency> <groupId>org.solmix.bundles</groupId> <artifactId>org.solmix.bundles.dom4j</artifactId> 
-			<version>1.6.1_1</version> <scope>compile</scope> <exclusions> <exclusion> 
-			<groupId>xml-apis</groupId> <artifactId>xml-apis</artifactId> </exclusion> 
-			</exclusions> </dependency> -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -156,6 +152,21 @@
 		<dependency>
 			<groupId>org.solmix.framework</groupId>
 			<artifactId>org.solmix.framework.util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 	<packaging>bundle</packaging>

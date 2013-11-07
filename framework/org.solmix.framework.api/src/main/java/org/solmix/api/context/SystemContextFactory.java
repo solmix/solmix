@@ -41,7 +41,7 @@ public abstract class SystemContextFactory
 
     public static final String DEFAULT_FACTORY = "org.solmix.fmk.context.SystemContextFactoryImpl";
 
-    public static final String FACTORY_PROPERTY_NAME = "org.solmix.context.system.fatory";
+    public static final String FACTORY_PROPERTY_NAME = "org.solmix.context.system.factory";
 
     protected static SystemContext defaultContext;
 
@@ -56,8 +56,8 @@ public abstract class SystemContextFactory
      * 
      * @return the default system context.
      */
-    public static synchronized SystemContext getDefaultContext() {
-        return getDefaultContext(true);
+    public static synchronized SystemContext getDefaultSystemContext() {
+        return getDefaultSystemContext(true);
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class SystemContextFactory
      * @param b
      * @return
      */
-    public static synchronized SystemContext getDefaultContext(boolean createIfNeeded) {
+    public static synchronized SystemContext getDefaultSystemContext(boolean createIfNeeded) {
         if (defaultContext == null && createIfNeeded) {
             defaultContext = newInstance().createContext();
         }
@@ -77,7 +77,23 @@ public abstract class SystemContextFactory
             return defaultContext;
         }
     }
-
+    /**
+     * Sets the default bus if a default context is not already set.
+     *
+     * @param context the default context.
+     * @return true if the SystemContext was not set and is now set
+     */
+    public static synchronized boolean possiblySetDefaultSystemContext(SystemContext context) {
+        ContextHolder h = getThreadContextHolder(false);
+        if (h.context == null) {
+           h.context=context;
+        }
+        if (defaultContext == null) {
+            defaultContext = context;
+            return true;
+        }
+        return false;
+    }
     /**
      * Create a new SystemContextFactory the class of {@link SystemContextFactory} is determined by looking for the
      * system property:org.solmix.context.system.fatory or by searching the classpath for:
@@ -153,7 +169,7 @@ public abstract class SystemContextFactory
                     }
                 }
             }
-            if (factoryClass != null && "".equals(factoryClass.trim())) {
+            if (factoryClass != null &&! "".equals(factoryClass.trim())) {
                 // XXX In OSGI maybe need import another class,and those class can configured in
                 // META-INF/services/xxx,this version we just used dynamic-import:*
                 return factoryClass;
@@ -225,7 +241,7 @@ public abstract class SystemContextFactory
     private static synchronized SystemContext createThreadContext() {
         ContextHolder h = getThreadContextHolder(false);
         if (h.context == null) {
-            h.context = getDefaultContext(true);
+            h.context = getDefaultSystemContext(true);
         }
         return h.context;
     }
@@ -257,7 +273,7 @@ public abstract class SystemContextFactory
      * @param context the new thread default context
      * @return the old thread default system context or null
      */
-    public static SystemContext getAndSetThreadDefaultBus(SystemContext context) {
+    public static SystemContext getAndSetThreadDefaultSystemContext(SystemContext context) {
         if (context == null) {
             ContextHolder h = threadContext.get();
             if (h == null) {
