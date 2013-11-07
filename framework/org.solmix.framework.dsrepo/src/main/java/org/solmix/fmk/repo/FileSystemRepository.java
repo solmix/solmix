@@ -86,7 +86,7 @@ public class FileSystemRepository extends AbstractDSRepository
     }
 
     /**
-     * 检查指定路径的文件是否存在，如果存在返回文件路劲。
+     * 检查指定路径的文件是否存在，如果存在返回文件路径。
      * 
      * @param baseName 文件路径
      * @return
