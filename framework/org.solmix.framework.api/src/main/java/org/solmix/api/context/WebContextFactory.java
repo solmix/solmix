@@ -19,19 +19,18 @@
 
 package org.solmix.api.context;
 
-import org.solmix.api.datasource.DataSourceManager;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 
  * @author Administrator
- * @version 110035 2012-10-8
+ * @version 110035 2012-10-9
  */
 
-public interface DataSourceManagerProvider
+public interface WebContextFactory
 {
 
-    DataSourceManager getDataSourceManager();
-
-    void release();
-
+    public WebContext createWebContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext);
 }

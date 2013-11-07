@@ -21,9 +21,6 @@ package org.solmix.api.context;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
-
-import org.solmix.api.exception.SlxException;
 
 /**
  * 
@@ -69,8 +66,6 @@ public interface Context extends Map
      */
     public Locale getLocale();
 
-
-    ResourceBundle getResourceBundle()throws SlxException;
 
     /**
      * Set attribute value, scope of the attribute is defined.

@@ -31,11 +31,35 @@ import org.solmix.api.i18n.ResourceBundleManager;
 public interface SystemContext extends Context
 {
 
+    public static final String DEFAULT_CONTEXT_ID="solmix";
+    public static final String CONTEXT_PROPERTY_NAME="solmix.context.system.id";
     /**
      * System context not used this method.used default with {@linkplain ResourceBundleManager}
      */
+    @Override
     @Deprecated
     void setLocale(Locale locale);
 
-    void init();
+    <T> T getBean(Class<T> beanType);
+    
+    <T> void setBean(T bean, Class<T> beanType);
+    
+    boolean hasBeanByName(String name);
+    
+    /**
+     * Return the SystemContext ID
+     * @return
+     */
+    String getId();
+    
+    /**
+     * Close this context.
+     * @param wait
+     */
+    void close(boolean wait);
+    
+    /**
+     * Open this context for using.
+     */
+    void open();
 }
