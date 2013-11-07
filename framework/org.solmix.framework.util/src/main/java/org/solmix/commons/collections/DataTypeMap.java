@@ -53,7 +53,7 @@ public class DataTypeMap extends AbstractMapDecorator
      */
     public DataTypeMap()
     {
-        super(new HashMap());
+        super(new HashMap<Object,Object>());
     }
 
     /**
@@ -61,7 +61,7 @@ public class DataTypeMap extends AbstractMapDecorator
      * 
      * @param map
      */
-    public DataTypeMap(Map map)
+    public DataTypeMap(Map<?,?> map)
     {
         super(map);
     }

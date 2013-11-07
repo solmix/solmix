@@ -52,6 +52,7 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.commons.collections.CaseInsensitiveHashMap;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.io.SlxFile;
@@ -79,7 +79,7 @@ public class DataUtil
 
     public static final Object EMPTY_ARRAY[] = new Object[0];
 
-    private static final Logger log =  LoggerFactory.getLogger(DataUtil.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DataUtil.class.getName());
 
     private static Perl5Util globalPerl = new Perl5Util();
 
@@ -1050,8 +1050,9 @@ public class DataUtil
     public static Map<Object, Object> getProperties(Object bean) throws Exception {
         return getProperties(bean, (Collection<String>) null);
     }
-    public static Map<Object, Object> getProperties(Object bean,boolean omitNullValue) throws Exception {
-        return getProperties(bean, (Collection<String>) null,omitNullValue);
+
+    public static Map<Object, Object> getProperties(Object bean, boolean omitNullValue) throws Exception {
+        return getProperties(bean, (Collection<String>) null, omitNullValue);
     }
 
     /**
@@ -1239,10 +1240,12 @@ public class DataUtil
         }
         return __return;
     }
+
     public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep) throws Exception {
-        return getProperties(bean,propsToKeep,false);
+        return getProperties(bean, propsToKeep, false);
     }
-    public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep,boolean omitNullValue) throws Exception {
+
+    public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep, boolean omitNullValue) throws Exception {
         if (bean == null)
             return null;
         Map<Object, Object> propertyMap = new HashMap<Object, Object>();
@@ -1255,7 +1258,7 @@ public class DataUtil
             if (propertyDescriptor == null)
                 continue;
             String propertyName = propertyDescriptor.getName();
-            if("class".equals(propertyName))
+            if ("class".equals(propertyName))
                 continue;
             if (propsToKeep != null && !propsToKeep.contains(propertyName))
                 continue;
@@ -1276,7 +1279,8 @@ public class DataUtil
                     error).append("\nSetting value to the error string and continuing").toString());
                 value = t.toString();
             }
-            if(value==null&&omitNullValue){ }else{
+            if (value == null && omitNullValue) {
+            } else {
                 propertyMap.put(propertyName, value);
             }
         }
@@ -2673,5 +2677,53 @@ public class DataUtil
 
     public static String removeEnd(String str, String remove) {
         return StringUtils.removeEnd(str, remove);
+    }
+
+    public static String getTemplateValue(String value) {
+        return getTemplateValue(value,null);
+    }
+
+    public static String getTemplateValue(String value, Hashtable<String, String> staticProp) {
+        if (value.indexOf("$") < 0) {
+            return value;
+        }
+        StringBuilder sb = new StringBuilder();
+        int prev = 0;
+        // assert value!=nil
+        int pos;
+        while ((pos = value.indexOf("$", prev)) >= 0) {
+            if (pos > 0) {
+                sb.append(value.substring(prev, pos));
+            }
+            if (pos == (value.length() - 1)) {
+                sb.append('$');
+                prev = pos + 1;
+            } else if (value.charAt(pos + 1) != '{') {
+                sb.append('$');
+                prev = pos + 1; // XXX
+            } else {
+                int endName = value.indexOf('}', pos);
+                if (endName < 0) {
+                    sb.append(value.substring(pos));
+                    prev = value.length();
+                    continue;
+                }
+                String n = value.substring(pos + 2, endName);
+                String v = null;
+                if (staticProp != null) {
+                    v = staticProp.get(n);
+                } else {
+                    v = System.getProperty(n);
+                }
+                if (v == null)
+                    v = "${" + n + "}";
+
+                sb.append(v);
+                prev = endName + 1;
+            }
+        }
+        if (prev < value.length())
+            sb.append(value.substring(prev));
+        return sb.toString();
     }
 }
