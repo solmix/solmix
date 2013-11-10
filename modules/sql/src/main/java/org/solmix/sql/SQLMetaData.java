@@ -32,7 +32,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.sql.internal.SQLConfigManager;
 
 /**
  * 
@@ -43,33 +42,27 @@ import org.solmix.sql.internal.SQLConfigManager;
 public class SQLMetaData
 {
 
-    public SQLMetaData()
+
+    private final ConnectionManager connectionManager;
+
+    public SQLMetaData(Connection conn, ConnectionManager connectionManager)
     {
-        this(null, null);
+        this("derivedFromConnection", conn, connectionManager);
     }
 
-    public SQLMetaData(Connection conn)
-    {
-        this("derivedFromConnection", conn);
-    }
+  
 
-    public SQLMetaData(String database)
-    {
-        this(database, null);
-    }
-
-    public SQLMetaData(String database, Connection conn)
+    public SQLMetaData(String database, Connection conn,ConnectionManager connectionManager)
     {
         this.database = database;
-        if (database == null)
-            this.database = SQLConfigManager.defaultDatabase;
         this.conn = conn;
+        this.connectionManager=connectionManager;
     }
 
     public Connection conn() throws SQLException {
         if (conn == null || conn.isClosed())
             try {
-                conn = ConnectionManager.getConnection(database);
+                conn = connectionManager.get(database);
             } catch (Exception e) {
                 throw new SQLException(e.toString());
             }

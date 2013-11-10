@@ -19,6 +19,7 @@
 
 package org.solmix.sql;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,12 +30,13 @@ import org.apache.commons.dbcp.PoolableConnection;
 import org.apache.commons.pool.ObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.IPoolableObjectFactory;
 import org.solmix.api.pool.SlxPoolableObjectFactory;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.sql.internal.SQLConfigManager;
 
 /**
  * 
@@ -61,6 +63,9 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
 
     private DataSource ds;
 
+    private SystemContext sc;
+
+
     public PoolableSQLConnectionFactory()
     {
         autoDeriveConfig = false;
@@ -69,7 +74,20 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
 
     public PoolableSQLConnectionFactory(String serverName) throws SlxException
     {
-        this(serverName, SQLConfigManager.getConfig().getSubtree((new StringBuilder()).append(serverName).toString()));
+       DataTypeMap serconfig= getConfig().getSubtree(serverName);
+       autoDeriveConfig = false;
+       interfaceType = EInterfaceType.DATASOURCE;
+       this.serverName = serverName;
+       this.sqlConfig = serconfig;
+       EInterfaceType _interfaceType = EInterfaceType.fromValue(sqlConfig.getString("interface.type"));
+       if (_interfaceType == null)
+           log.warn((new StringBuilder()).append("sql.").append(serverName).append(".interface.type not set - assuming ").append(
+               this.interfaceType).toString());
+       else
+           this.interfaceType = _interfaceType;
+       if (!sqlConfig.getBoolean("autoDeriveConfig", false)) {
+           pingTest = sqlConfig.getString("pingTest");
+       }
     }
 
     /**
@@ -94,6 +112,31 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
     }
 
     /**
+     * @param sc
+     */
+    public PoolableSQLConnectionFactory(SystemContext sc)
+    {
+        autoDeriveConfig = false;
+        interfaceType = EInterfaceType.DATASOURCE;
+        this.sc=sc;
+    }
+    protected DataTypeMap getConfig()  {
+        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnit cu=null;
+        try {
+            cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);
+        } catch (IOException e) {
+            //ignore
+        }
+        if (cu != null)
+            return cu.getProperties();
+        else
+            return new DataTypeMap();
+    }
+
+  
+
+    /**
      * {@inheritDoc}
      * 
      * @see org.solmix.api.pool.SlxPoolableObjectFactory#makeUnpooledObject()
@@ -103,12 +146,12 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
         switch (interfaceType) {
             case DATASOURCE: {
                 if (ds == null) {
-                    ds = ConnectionManager.getInternalDs(serverName, sqlConfig);
+                    ds = ConnectionManagerImpl.getInternalDs(serverName, sqlConfig);
                 }
                 return ds.getConnection();
             }
             default:
-                return ConnectionManager.getInternalConn(serverName, interfaceType, sqlConfig);
+                return ConnectionManagerImpl.getInternalConn(serverName, interfaceType, sqlConfig);
 
         }
 

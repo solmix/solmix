@@ -19,6 +19,7 @@
 
 package org.solmix.sql;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,9 +35,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
@@ -46,9 +52,6 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.ISQLDataSource;
 import org.solmix.api.datasource.SQLCacheData;
-import org.solmix.api.event.EventManager;
-import org.solmix.api.event.MonitorEventFactory;
-import org.solmix.api.event.TimeMonitorEvent;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Eoperation;
@@ -59,31 +62,27 @@ import org.solmix.api.jaxb.TqueryClauses;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.rpc.RPCManagerCompletionCallback;
-import org.solmix.api.serialize.JSParser;
-import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
-import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.servlet.SlxFileItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.EscapedValuesMap.Mode;
-import org.solmix.sql.internal.Activator;
-import org.solmix.sql.internal.SQLConfigManager;
+import org.solmix.sql.internal.SqlCM;
 
 /**
  * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 0.1.1 2012-12-16 solmix-sql
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, RPCManagerCompletionCallback
 {
 
@@ -91,11 +90,14 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     protected static String DEFAULT_SEQUENCE_NAME = "__default";
 
-    protected static JSParser jsParser;
+    public static final String SERVICE_PID = "org.solmix.modules.sql";
+
 
     protected volatile SQLDriver driver;
 
     protected volatile SQLTable table;
+    
+    protected ConnectionManager connectionManager;
 
     public static final String INTERFACE_TYPE = "interface.type";
 
@@ -105,7 +107,6 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     public static final String DEFAULTDATABASE = "defaultDatabase";
 
-    public static final String SQL_DEFAULTDATABASE = "sql.defaultDatabase";
 
     @SQLCacheData
     private Object lastRow;
@@ -118,18 +119,17 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     private DSRequest downloadDsRequest;
 
-    private static synchronized JSParser getJsParser() {
-        if (jsParser == null) {
-            JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
-            jsParser = jsFactory.get();
-        }
-        return jsParser;
+  
+
+    public SQLDataSource(SystemContext sc)
+    {
+        setSystemContext(sc);
+
     }
 
-    public SQLDataSource(DataSourceData data) throws SlxException
-    {
-        this.init(data);
-
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
     }
 
     /**
@@ -137,6 +137,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     */
     public SQLDataSource()
     {
+        this(null);
     }
 
     @Override
@@ -172,7 +173,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     @Override
     public DSResponse executeDownload(DSRequest req) throws SlxException {
         // String fieldName = req.getContext().getDownloadFieldName();
-        Map criteria = req.getContext().getCriteria();
+        Map<String, Object> criteria = req.getContext().getCriteria();
         downloadDsRequest = new DSRequestImpl(getName(), Eoperation.FETCH);
         downloadDsRequest.getContext().setCriteria(criteria);
         downloadDsRequest.getContext().setFreeOnExecute(false);
@@ -210,49 +211,49 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (log.isDebugEnabled()) {
             List values = req.getContext().getValueSets();
             StringBuilder __info = new StringBuilder();
-            switch(_opType){
-                case ADD:{
+            switch (_opType) {
+                case ADD: {
                     if (values != null) {
                         if (values.size() == 1) {
                             __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
                         } else {
-                            __info.append("\t values: ").append( values.size()).append(" valuesSets");
+                            __info.append("\t values: ").append(values.size()).append(" valuesSets");
                         }
                     }
                 }
                     break;
                 case FETCH:
-                case REMOVE:case REPLACE:
-                {
+                case REMOVE:
+                case REPLACE: {
                     if (req.getContext().getRawCriteria() != null)
                         __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
                 }
                     break;
-                case UPDATE:{
+                case UPDATE: {
                     if (req.getContext().getRawCriteria() != null)
                         __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
                     if (values != null) {
                         if (values.size() == 1) {
                             __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
                         } else {
-                            __info.append("\t values: ").append( values.size()).append(" valuesSets");
+                            __info.append("\t values: ").append(values.size()).append(" valuesSets");
                         }
                     }
                 }
                     break;
                 default:
                     break;
-                
+
             }
             if (req.getContext().getConstraints() != null)
                 __info.append("\t constraints: ").append(req.getContext().getConstraints().toString());
             if (req.getContext().getOutputs() != null)
                 __info.append("\t outputs: ").append(req.getContext().getOutputs().toString());
             if (req.getContext().getRawCriteria() != null)
-            if(__info.toString().length()>2){
-                log.debug(new StringBuilder().append("Performing ").append(_opType).append(" operation with \n").append(__info.toString()).toString());
-            }
-           
+                if (__info.toString().length() > 2) {
+                    log.debug(new StringBuilder().append("Performing ").append(_opType).append(" operation with \n").append(__info.toString()).toString());
+                }
+
         }
         // dsObject
         if (dsObject == null) {
@@ -260,8 +261,9 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 throw new SlxException(Tmodule.DATASOURCE, Texception.REQ_NO_DATASOURCE,
                     "no datasources specified in argument and no operation config to look them up; can't proceed");
             dsObject = _dsContext.getDataSourceNames();
-            if(log.isDebugEnabled())
-                log.debug((new StringBuilder()).append("No point out datasource find") .append( dsObject.toString() ).append(" in request configuration.").toString());
+            if (log.isDebugEnabled())
+                log.debug((new StringBuilder()).append("No point out datasource find").append(dsObject.toString()).append(
+                    " in request configuration.").toString());
         }
         List<SQLDataSource> _datasources;
         if ((dsObject instanceof String) || (dsObject instanceof SQLDataSource)) {
@@ -345,12 +347,13 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             _excludeCriteriaFields, __bind);
 
         if ((DataTools.isAdd(_opType) || DataTools.isUpdate(_opType) || DataTools.isReplace(_opType))
-            && (__bind == null || __bind.getQueryClauses()==null||__bind.getQueryClauses().getCustomSQL() == null) && context.get("defaultValuesClause") == null) {
+            && (__bind == null || __bind.getQueryClauses() == null || __bind.getQueryClauses().getCustomSQL() == null)
+            && context.get("defaultValuesClause") == null) {
             String __info;
-            if(req.getContext().getRawValues()==null)
+            if (req.getContext().getRawValues() == null)
                 __info = "Insert, update or replace operation requires non-empty values; check submitted values parameter";
             else
-                __info="Auto generate  Insert, update or replace sql  requires non-empty  ValuesClause; check submitted values in DataSource fields";
+                __info = "Auto generate  Insert, update or replace sql  requires non-empty  ValuesClause; check submitted values in DataSource fields";
             log.warn(__info);
             throw new SlxException(Tmodule.SQL, Texception.SQL_BUILD_SQL_ERROR, __info);
         }
@@ -366,7 +369,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         // return executeBatchUpdate(req, _valueSets, statement, valueMap, _firstDS);
         // }
         // log.info("SQL Statement: "+statement);
-        __return = new DSResponseImpl(_firstDS,req);
+        __return = new DSResponseImpl(_firstDS, req);
         if (DataUtil.isNullOrEmpty(statement))
             __return.getContext().setStatus(Status.STATUS_SUCCESS);
         /*******************************************************************
@@ -375,7 +378,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if ((DataTools.isFetch(_opType))) {
             boolean __canPage = true;
             if (!req.getContext().isPaged()
-                || (SQLConfigManager.getConfig().getBoolean("customSQLReturnsAllRows", false) && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind)))) {
+                || (this.config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false) && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind)))) {
                 __canPage = false;
                 log.warn("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
             }
@@ -386,7 +389,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 long start = System.currentTimeMillis();
                 __return = executeWindowedSelect(req, _datasources, context, statement);
                 long end = System.currentTimeMillis();
-                createAndFireTMEvent(end - start, "SQL QueryTime");
+                getEventWork().createAndFireTimeEvent(end - start, "SQL QueryTime");
             } else {
                 /*******************************************************************
                  * NOTE:[FETCH] Normal Fetch
@@ -446,7 +449,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                         __return.getContext().setInvalidateCache(true);
                     } else {
                         Map storeValues = req.getContext().getCriteria();
-                        if (DataTools.isAdd(_opType)&&storeValues!=null) {
+                        if (DataTools.isAdd(_opType) && storeValues != null) {
                             Iterator i1 = storeValues.keySet().iterator();
                             do {
                                 if (!i1.hasNext())
@@ -513,7 +516,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     private DSResponse executeWindowedSelect(DSRequest req, List<SQLDataSource> dataSources, Map<String, Object> context, String query)
         throws SlxException {
         // Constructed return DSResponse.
-        DSResponse __return = new DSResponseImpl(dataSources.get(0),req);
+        DSResponse __return = new DSResponseImpl(dataSources.get(0), req);
         SQLDataSource _firstDS = dataSources.get(0);
         SQLDriver _driver = _firstDS.getDriver();
         Eoperation __opType = req.getContext().getOperationType();
@@ -538,7 +541,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             Integer count = new Integer(objCount == null ? "0" : objCount.toString());
             long $_ = System.currentTimeMillis();
             __return.getContext().setTotalRows(count);
-            createAndFireTMEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
+            getEventWork().createAndFireTimeEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
             if (__return.getContext().getTotalRows() == 0L) {
                 __return.getContext().setData(Collections.EMPTY_LIST);
                 __return.getContext().setStartRow(0);
@@ -573,7 +576,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             Integer count = new Integer(objCount == null ? "0" : objCount.toString());
             long $_ = System.currentTimeMillis();
             __return.getContext().setTotalRows(count);
-            createAndFireTMEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
+            getEventWork().createAndFireTimeEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
             if (__return.getContext().getTotalRows() == 0L) {
                 __return.getContext().setData(new ArrayList());
                 __return.getContext().setStartRow(0);
@@ -649,7 +652,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             try {
                 __currentConn = _firstDS.getTransactionalConnection(req);
                 if (__currentConn == null) {
-                    __currentConn = ConnectionManager.getConnection(_driver.getDbName());
+                    __currentConn = connectionManager.get(_driver.getDbName());
                     __userTransaction = false;
                 }
                 s = _driver.createFetchStatement(__currentConn);
@@ -657,12 +660,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             } catch (SQLException e) {
                 if (__userTransaction) {
                     try {
-                        ConnectionManager.freeConnection(__currentConn);
-                        __currentConn = ConnectionManager.getNewConnection(_driver.getDbName());
+                        connectionManager.free(__currentConn);
+                        __currentConn = connectionManager.getNew(_driver.getDbName());
                         s = _driver.createFetchStatement(__currentConn);
                         rs = s.executeQuery(query);
                     } catch (SQLException sql1) {
-                        ConnectionManager.freeConnection(__currentConn);
+                        connectionManager.free(__currentConn);
                         throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, sql1);
                     }
                 } else {
@@ -688,7 +691,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             } catch (Exception ignored) {
             }
             if (!__userTransaction)
-                ConnectionManager.freeConnection(__currentConn);
+                connectionManager.free(__currentConn);
         }
     }
 
@@ -786,22 +789,22 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 statement = (new StringBuilder()).append(statement).append(" GROUP BY ").append(groupClause).toString();
             if (!"$defaultGroupWhereClause".equals(groupWhereClause))
                 statement = (new StringBuilder()).append("SELECT * FROM (").append(statement).append(") work WHERE ").append(groupWhereClause).toString();
-            if (req.getContext().getRawSortBy() != null){
-            	Object o = req.getContext().getRawSortBy();
-            	StringBuilder s = (new StringBuilder()).append(statement);
-            	if(o instanceof List){
-            		int size =((List)o).size();
-            		if(size>0){
-            			s.append(" ORDER BY ");
-            			for(int i=0;i<size;i++){
-            				s.append(((List)o).get(i).toString());
-            				if(i<size)
-            				s.append(", ");
-            			}
-            		}
-            	}
-            	statement=s.toString();
-            }else if( !"$defaultOrderClause".equals(orderClause))
+            if (req.getContext().getRawSortBy() != null) {
+                Object o = req.getContext().getRawSortBy();
+                StringBuilder s = (new StringBuilder()).append(statement);
+                if (o instanceof List) {
+                    int size = ((List) o).size();
+                    if (size > 0) {
+                        s.append(" ORDER BY ");
+                        for (int i = 0; i < size; i++) {
+                            s.append(((List) o).get(i).toString());
+                            if (i < size)
+                                s.append(", ");
+                        }
+                    }
+                }
+                statement = s.toString();
+            } else if (!"$defaultOrderClause".equals(orderClause))
                 statement = (new StringBuilder()).append(statement).append(" ORDER BY ").append(orderClause).toString();
             log.debug((new StringBuilder()).append("derived query: ").append(statement).toString());
         } else if (DataTools.isAdd(__opType))
@@ -973,8 +976,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     }
 
     /**
-     * Once the garbage collector frees memory space occupied by the object,
-     *  the first call this method.
+     * Once the garbage collector frees memory space occupied by the object, the first call this method.
      * 
      */
     @Override
@@ -1051,7 +1053,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (lastRow != null)
             return lastRow;
         Map primaryKeys = getLastPrimaryKeys(req);
-        boolean printSQL = SQLConfigManager.getConfig().getBoolean("printSQL", false);
+        boolean printSQL = config.getBoolean(SqlCM.P_PRINT_SQL, false);
         if (printSQL) {
             log.debug((new StringBuilder()).append("primaryKeys: ").append(primaryKeys).toString());
         }
@@ -1210,8 +1212,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     }
                     if (fieldName == null)
                         fieldName = field.getName();
-                    if(field.getTableName()!=null)
-                    	selfTableName=field.getTableName();
+                    if (field.getTableName() != null)
+                        selfTableName = field.getTableName();
                     relateCriterias.add(new StringBuilder().append(selfTableName).append(".").append(fieldName).append(" = ").append(foreign).toString());
                 }
             }
@@ -1276,7 +1278,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (driver != null) {
             conn = driver.getConnection();
             if (conn == null)
-                conn = ConnectionManager.getConnection(driver.getDbName());
+                conn = connectionManager.get(driver.getDbName());
         }
         return conn;
     }
@@ -1314,7 +1316,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 _invalidateCache = true;
             try {
                 if (i % 1000 == 0)
-                    driver.dbConnection.commit();
+                    driver.getConnection().commit();
             } catch (SQLException e) {
                 throw new SlxException(Tmodule.DATASOURCE, Texception.SQL_SQLEXCEPTION, e);
             }
@@ -1368,7 +1370,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     @Override
     public void freeConnection(Connection conn) throws SlxException {
-        ConnectionManager.freeConnection(conn);
+        connectionManager.free(conn);
     }
 
     /**
@@ -1391,26 +1393,41 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (data == null)
             return;
         super.init(data);
-        JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
-        jsParser = jsFactory.get();
         table = findSQLTable();
         String databaseName = data.getTdataSource().getDbName();
         if (databaseName == null) {
-            databaseName = SQLConfigManager.defaultDatabase;
+            databaseName = config.getString(SqlCM.P_DEFAULT_DATABASE, "HSQL");
         }
         if (databaseName != null) {
-            driver = SQLDriver.instance(databaseName, table);
+            driver = SQLDriver.instance(databaseName, table,getConfig(),this);
         } else {
-            String __info =(new StringBuilder()).append("datasource [").append( databaseName
-                ).append( "] does not define a target db,and the sql.defaultDatabase is not specified in the config.").toString();
+            String __info = (new StringBuilder()).append("datasource [").append(databaseName).append(
+                "] does not define a target db,and the sql.defaultDatabase is not specified in the config.").toString();
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_DEFINED_DBNAME, __info);
         }
 
     }
 
     @Override
+    protected DataTypeMap getConfig() throws SlxException {
+        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnit cu=null;
+        try {
+            cu = cum.getConfigureUnit(SERVICE_PID);
+        } catch (IOException e) {
+            throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
+        }
+        if (cu != null)
+            return cu.getProperties();
+        else
+            return new DataTypeMap();
+    }
+
+    @Override
     public DataSource instance(DataSourceData data) throws SlxException {
-        return new SQLDataSource(data);
+        SQLDataSource sql = new SQLDataSource(sc);
+        sql.init(data);
+        return sql;
     }
 
     public String getConfigRealmName() {
@@ -1618,7 +1635,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (tvalue instanceof Connection)
                 conn = (Connection) tvalue;
             if (conn == null && shouldAutoStartTransaction(req, false)) {
-                SQLTransaction.startTransaction(req.getRpc(), driver.getDbName());
+                SQLTransaction.startTransaction(req.getRpc(), driver.getDbName(),connectionManager);
                 conn = (Connection) getTransactionObject(req);
                 if (req != null && req.getRpc() != null)
                     req.getRpc().registerCallback(this);
@@ -1633,8 +1650,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     protected Boolean autoJoinAtProviderLevel(DSRequest req) throws SlxException {
         String dbName = data.getTdataSource().getDbName();
         if (dbName == null)
-            dbName = SQLConfigManager.defaultDatabase;
-        String autoJoin = SQLConfigManager.getConfig().getString((new StringBuilder()).append(dbName).append(".autoJoinTransactions").toString());
+            dbName = SqlCM.DEFAULT_DATABASE;
+        String autoJoin = config.getString((new StringBuilder()).append(dbName).append(".autoJoinTransactions").toString());
         if (autoJoin == null)
             return null;
         if (autoJoin.toLowerCase().equals("true") || autoJoin.toLowerCase().equals("ALL"))
@@ -1663,11 +1680,11 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     @Override
     public void onFailure(RPCManager rpcmanager, boolean isFailed) throws SlxException {
         if (isFailed)
-            SQLTransaction.rollbackTransaction(rpcmanager, driver.getDbName());
+            SQLTransaction.rollbackTransaction(rpcmanager, driver.getDbName(),connectionManager);
         else
-            SQLTransaction.commitTransaction(rpcmanager, driver.getDbName());
+            SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
 
-        SQLTransaction.endTransaction(rpcmanager, driver.getDbName());
+        SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
     }
 
     /**
@@ -1677,8 +1694,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      */
     @Override
     public void onSuccess(RPCManager rpcmanager) throws SlxException {
-        SQLTransaction.commitTransaction(rpcmanager, driver.getDbName());
-        SQLTransaction.endTransaction(rpcmanager, driver.getDbName());
+        SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
+        SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
 
     }
 
@@ -1692,34 +1709,25 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     @Override
     public DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new SQLDataSourceGenerator();
+            dataSourceGenerator = new SQLDataSourceGenerator(connectionManager);
         return dataSourceGenerator;
     }
 
-    protected static void createAndFireTMEvent(long time, String msg) {
-        createAndFireTMEvent(time, msg, null);
+    
+    /**
+     * @return the connectionManager
+     */
+    public ConnectionManager getConnectionManager() {
+        return connectionManager;
     }
 
-    protected static void createAndFireTMEvent(long time, String msg, String query) {
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(TimeMonitorEvent.TOTAL_TIME, time);
-        properties.put(TimeMonitorEvent.MESSAGE, msg);
-        if (query != null)
-            properties.put("Query String", query);
-        MonitorEventFactory mef;
-        if (Activator.getContext() == null)
-            mef = MonitorEventFactory.getDefault();
-        else
-            mef = MonitorEventFactory.getInstance(Activator.getContext());
-
-        TimeMonitorEvent event = mef.createTimeMonitorEvent(properties);
-        // TODO
-        EventManager em = SlxContext.getEventManager();
-        if (em != null)
-            em.postEvent(event);
-        else
-            LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug((new StringBuilder()).append(event.getProperty(TimeMonitorEvent.MESSAGE)).append("used :[").append(
-                event.getProperty(TimeMonitorEvent.TOTAL_TIME)).append("]ms").toString());
+    
+    /**
+     * @param connectionManager the connectionManager to set
+     */
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
 
+  
 }

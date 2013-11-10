@@ -35,7 +35,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
@@ -46,6 +46,9 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
 import org.solmix.fmk.base.Reflection;
+import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.event.EventWorker;
+import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.SLXDate;
 
@@ -68,9 +71,6 @@ public class SQLTransform
         return driver.hasBrokenCursorAPIs();
     }
 
-    public static boolean hasBrokenCursorAPIs(String dbName) throws SlxException {
-        return hasBrokenCursorAPIs(SQLDriver.instance(dbName));
-    }
 
     public static List<Object> toListOfMapsOrBeans(ResultSet rs, boolean brokenCursorAPIs, List<SQLDataSource> dataSources) throws SQLException,
         SlxException {
@@ -206,7 +206,7 @@ public class SQLTransform
 
         } while (true);
         long $_ = System.currentTimeMillis();
-        SQLDataSource.createAndFireTMEvent($_ - _$, "SQLTransform (" + __return.size() + " rows): ");
+        createEventWork().createAndFireTimeEvent($_ - _$, "SQLTransform (" + __return.size() + " rows): ");
         return __return;
     }
 
@@ -240,9 +240,9 @@ public class SQLTransform
             Object obj = resultSet.getObject(colCursor);
             if (outputs != null && !outputs.contains(columnName))
                 continue;
-            if(obj==null){
-            	 __return.put(columnName, obj);
-            	 continue;
+            if (obj == null) {
+                __return.put(columnName, obj);
+                continue;
             }
             if (dataSources != null) {
                 for (Object o : dataSources) {
@@ -365,7 +365,7 @@ public class SQLTransform
 
         } while (true);
         long $_ = System.currentTimeMillis();
-        SQLDataSource.createAndFireTMEvent($_ - _$, "SQLTransform (" + __return.size() + " rows): ");
+        createEventWork().createAndFireTimeEvent($_ - _$, new StringBuilder().append("SQLTransform (" ).append( __return.size() ).append( " rows): ").toString());
         return __return;
 
     }
@@ -454,5 +454,12 @@ public class SQLTransform
         }
         return _return;
 
+    }
+    public static EventWorker createEventWork( ) {
+        return createEventWork(SlxContext.getThreadSystemContext());
+    }
+    public static EventWorker createEventWork(SystemContext sc) {
+        EventWorkerFactory factory = EventWorkerFactory.getInstance();
+        return factory.createWorker(sc);
     }
 }

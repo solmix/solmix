@@ -32,7 +32,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
@@ -47,6 +47,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.AutoDeriver;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.velocity.Velocity;
@@ -77,6 +78,8 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
     private String ID;
 
     private Connection connection;
+
+    private ConnectionManager connectionManager;
 
     private String discoveredSchema;
 
@@ -117,9 +120,9 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         jdbcTypes.put(new Integer(16), "boolean");
     }
 
-    public SQLDataSourceGenerator()
+    public SQLDataSourceGenerator(ConnectionManager connectionManager)
     {
-
+        this.connectionManager = connectionManager;
     }
 
     /**
@@ -147,7 +150,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
      * @see org.solmix.api.datasource.DataSourceGenerator#generateDataSource(org.solmix.api.data.DataSourceData)
      */
     @Override
-    public DataSource generateDataSource(DataSourceData context) throws SlxException {
+    public DataSource generateDataSource(DataSourceData context, SystemContext sc) throws SlxException {
 
         TdataSource tds = context.getTdataSource();
         String serverType = AutoDeriver.getServerType(tds).value();
@@ -155,7 +158,8 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         SQLDataSourceGenerator sqlgen = new SQLDataSourceGenerator(dbName, tds.getSqlSchema(), tds.getTableName(), serverType, "datetime", false);
         TdataSource data = sqlgen.generate();
         DataSourceData schemaContext = new DataSourceData(data);
-        BasicDataSource schema = new BasicDataSource(schemaContext);
+        BasicDataSource schema = new BasicDataSource(SlxContext.getThreadSystemContext());
+        schema.init(schemaContext);
         return schema;
     }
 
@@ -182,7 +186,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         data.setTitle("Auto Gernerated " + ID);
         if (this.connection == null) {
             freeConnection = true;
-            connection = ConnectionManager.getConnection(dbName);
+            connection = connectionManager.get(dbName);
         }
         try {
             fields = this.autoDeriveSchemaOperation != null ? this.getFieldsFromOperation(autoDeriveSchemaOperation) : getFieldsFromTable();
@@ -202,7 +206,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             data.setOperationBindings(binds);
         }
         if (freeConnection)
-            ConnectionManager.freeConnection(connection);
+            connectionManager.free(connection);
         return data;
 
     }
@@ -217,9 +221,9 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         List<Tfield> fields = null;
         if (this.connection == null) {
             freeConnection = true;
-            connection = ConnectionManager.getConnection(dbName);
+            connection = connectionManager.get(dbName);
         }
-        SQLMetaData md = new SQLMetaData(connection);
+        SQLMetaData md = new SQLMetaData(connection,connectionManager);
         String catalog = connection.getCatalog();
         log.warn((new StringBuilder()).append("Fetching column metadata for table: ").append(tableName).toString());
         log.warn((new StringBuilder()).append("=============Using catalog: ").append(catalog).toString());
@@ -280,7 +284,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             }
         } while (true);
         if (freeConnection)
-            ConnectionManager.freeConnection(connection);
+            connectionManager.free(connection);
         return fields;
     }
 
@@ -289,7 +293,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         List<Tfield> fields = null;
         if (this.connection == null) {
             freeConnection = true;
-            connection = ConnectionManager.getConnection(dbName);
+            connection = connectionManager.get(dbName);
         }
         String query = operation.getCommand();
         if (query == null)
@@ -345,7 +349,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             fields.add(dsField);
         }
         if (freeConnection)
-            ConnectionManager.freeConnection(connection);
+            connectionManager.free(connection);
         return fields;
 
     }

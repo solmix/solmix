@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -97,19 +96,19 @@ public class SQLWhereClause
         this.relatedCriterias = relatedCriterias;
     }
 
-    public List getCustomCriteriaFields() {
+    public List<String> getCustomCriteriaFields() {
         return customCriteriaFields;
     }
 
-    public void setCustomCriteriaFields(List customCriteriaFields) {
+    public void setCustomCriteriaFields(List<String> customCriteriaFields) {
         this.customCriteriaFields = customCriteriaFields;
     }
 
-    public List getExcludeCriteriaFields() {
+    public List<String> getExcludeCriteriaFields() {
         return excludeCriteriaFields;
     }
 
-    public void setExcludeCriteriaFields(List excludeCriteriaFields) {
+    public void setExcludeCriteriaFields(List<String> excludeCriteriaFields) {
         this.excludeCriteriaFields = excludeCriteriaFields;
     }
 
@@ -132,6 +131,7 @@ public class SQLWhereClause
      * @param textMatchStyle
      * @throws SlxException
      */
+    @SuppressWarnings("rawtypes")
     public SQLWhereClause(boolean qualifyColumnNames, DSRequest req, List dataSources, boolean isFilter, String filterStyle) throws SlxException
     {
         this(req.getContext().getCriteria(), dataSources, isFilter, filterStyle);
@@ -146,7 +146,8 @@ public class SQLWhereClause
             Map m = new HashMap((Map) whereStructure);
             whereStructure = DataUtil.subsetMap((Map) whereStructure, new ArrayList(field2ColumnMap.keySet()));
             if (((Map) whereStructure).isEmpty()) {
-                log.warn((new StringBuilder()).append("primaryKeysOnly forced removal of all criteria.  criteria was: ").append(
+                if(log.isDebugEnabled())
+                log.debug((new StringBuilder()).append("primaryKeysOnly forced removal of all criteria.  criteria was: ").append(
                     DataTools.prettyPrint(m)).append(", primaryKeys are: ").append(DataTools.prettyPrint(field2ColumnMap.keySet())).toString());
                 whereStructure = null;
             }
@@ -175,7 +176,8 @@ public class SQLWhereClause
      * @param dataSources
      * @throws SlxException
      */
-    public SQLWhereClause(Object rawCriteria, List dataSources) throws SlxException
+    @SuppressWarnings("rawtypes")
+    public SQLWhereClause(Object rawCriteria, List<SQLDataSource> dataSources) throws SlxException
     {
         this.doFilter = false;
         this.whereStructure = rawCriteria;
@@ -183,7 +185,7 @@ public class SQLWhereClause
         column2TableMap = new HashMap();
         DataSource ds = null;
         if (dataSources != null && dataSources.size() > 0)
-            ds = (DataSource) dataSources.get(0);
+            ds = dataSources.get(0);
         field2ColumnMap = SQLDataSource.getField2ColumnMap(dataSources);
         if (whereStructure == null)
             return;
@@ -230,7 +232,7 @@ public class SQLWhereClause
     public String toString(SQLDriver driver) throws SlxException {
         String __return;
         if (isEmpty()) {
-            log.debug("no data; returning empty string");
+            log.trace("no data; returning empty string");
             __return = "('1'='1')";
         } else {
             __return = getOutput(whereStructure, driver);
@@ -251,6 +253,7 @@ public class SQLWhereClause
      * @return
      * @throws SlxException
      */
+    @SuppressWarnings("rawtypes")
     private String getOutput(Object condition, SQLDriver driver) throws SlxException {
         if (condition instanceof String)
             return (new StringBuilder()).append("(").append(condition).append(")").toString();
@@ -283,7 +286,7 @@ public class SQLWhereClause
                 if ("and".equals(operator) || "or".equals(operator) || "not".equals(operator)) {
                     criteriaObject = ((Map) condition).get("criteria");
                     if (!(criteriaObject instanceof List)) {
-                        log.warn("Subcriteria of AdvancedCriteria not an instance of List - using empty ArrayList");
+                        log.debug("Subcriteria of AdvancedCriteria not an instance of List - using empty ArrayList");
                         criteriaObject = new ArrayList();
                     }
                     criteria = (List) criteriaObject;
@@ -389,7 +392,7 @@ public class SQLWhereClause
                 driver);
         }
         if (operator.equals("regexp") || operator.equals("iregexp")) {
-            log.info("'regexp' and 'iregexp' conditions are ignored on the server");
+            log.debug("'regexp' and 'iregexp' conditions are ignored on the server");
             return "('1'='1')";
         } else {
             log.warn((new StringBuilder()).append("Found unknown operator ").append(operator).toString());
@@ -817,6 +820,7 @@ public class SQLWhereClause
             return (new StringBuilder()).append("(").append(fieldName).append(" IS NOT NULL)").toString();
     }
 
+    @SuppressWarnings("rawtypes")
     private String setComparison(String fieldName, String columnType, String operator, Object value, boolean negate, SQLDriver driver,
         String realFieldName) {
         if (fieldName == null) {

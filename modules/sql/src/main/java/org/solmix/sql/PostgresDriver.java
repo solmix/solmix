@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
+import org.solmix.commons.collections.DataTypeMap;
 
 
 /**
@@ -38,11 +39,13 @@ public class PostgresDriver extends SQLDriver
     * @param dbNamedd
     * @throws Exception
     */
-   public PostgresDriver(String dbName) throws Exception
-   {
-      super(dbName);
-      // TODO Auto-generated constructor stub
-   }
+    public static SQLDriver instance(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
+        return new PostgresDriver(dbName, table,config,ds);
+    }
+    public PostgresDriver(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException
+    {
+        super(dbName, table,config,ds);
+    }
 
    /**
     * {@inheritDoc}

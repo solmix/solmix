@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
+import org.solmix.commons.collections.DataTypeMap;
 
 
 /**
@@ -34,16 +35,13 @@ import org.solmix.api.exception.SlxException;
 public class SQLServerDriver extends SQLDriver
 {
 
-   /**
-    * @param dbName
-    * @param table
-    * @throws Exception
-    */
-   public SQLServerDriver(String dbName, SQLTable table) throws Exception
-   {
-      super(dbName, table);
-      // TODO Auto-generated constructor stub
-   }
+    public static SQLDriver instance(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
+        return new SQLServerDriver(dbName, table,config,ds);
+    }
+    public SQLServerDriver(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException
+    {
+        super(dbName, table,config,ds);
+    }
 
    /**
     * {@inheritDoc}
