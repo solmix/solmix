@@ -27,6 +27,7 @@ import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 
 /**
  * 
@@ -37,33 +38,21 @@ import org.solmix.api.types.Tmodule;
 public class MysqlDriver extends SQLDriver
 {
 
-    public static MysqlDriver instance(String dbName, SQLTable table) throws SlxException {
-        return new MysqlDriver(dbName, table);
-    }
+ 
 
-    public static MysqlDriver instance(String dbName) throws SlxException {
-        return new MysqlDriver(dbName);
+    public static SQLDriver instance(String dbName, SQLTable table, DataTypeMap config, SQLDataSource ds) throws SlxException {
+        return new MysqlDriver(dbName, table, config, ds);
     }
 
     private final boolean supportsSQLLimit;
     /**
      * @param dbName
-     * @throws SlxException
-     */
-    public MysqlDriver(String dbName) throws SlxException
-    {
-        super(dbName);
-        supportsSQLLimit = true;
-    }
-
-    /**
-     * @param dbName
      * @param table
      * @throws SlxException 
      */
-    public MysqlDriver(String dbName, SQLTable table) throws SlxException
+    public MysqlDriver(String dbName, SQLTable table, DataTypeMap config, SQLDataSource ds) throws SlxException
     {
-        super(dbName, table);
+        super(dbName, table,config,ds);
         supportsSQLLimit = true;
     }
 
@@ -111,14 +100,14 @@ public class MysqlDriver extends SQLDriver
      */
     @Override
     public Map fetchLastPrimaryKeys(Map primaryKeysPresent, List list, SQLDataSource ds, DSRequest req) throws SlxException {
-        if (dbConnection == null && req == null)
+        if (connection == null && req == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, "no existing db connection exists for last row fetch");
         Map primaryKeys = primaryKeysPresent;
         for (Object key : primaryKeys.keySet()) {
             String sequenceName = (String) key;
             String sequence = getCurrentSequenceValue(sequenceName, ds);
             if (sequence != null) {
-                Object obj = getScalarResult((new StringBuilder()).append("SELECT ").append(sequence).append(" FROM DUAL").toString(), dbConnection,
+                Object obj = getScalarResult((new StringBuilder()).append("SELECT ").append(sequence).append(" FROM DUAL").toString(), connection,
                     dbName, this, req);
                 BigDecimal value = new BigDecimal(obj.toString());
                 primaryKeys.put(sequenceName, value.toString());

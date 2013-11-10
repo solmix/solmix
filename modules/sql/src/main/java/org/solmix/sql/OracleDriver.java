@@ -32,9 +32,10 @@ import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.util.DataTools;
-import org.solmix.sql.internal.SQLConfigManager;
+import org.solmix.sql.internal.SqlCM;
 
 /**
  * 
@@ -50,38 +51,25 @@ public class OracleDriver extends SQLDriver
 
     boolean databaseSupportsSQLLimit;
 
-    /**
-     * @param dbName
-     * @throws Exception
-     */
-    public OracleDriver(String dbName) throws SlxException
-    {
-        super(dbName);
-        driverSupportsSQLLimit = false;
-        databaseSupportsSQLLimit = false;
-        init(dbName);
-    }
 
-    public OracleDriver(String dbName, SQLTable table) throws SlxException
+
+    public OracleDriver(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException
     {
-        super(dbName, table);
+        super(dbName, table,config,ds);
         driverSupportsSQLLimit = false;
         databaseSupportsSQLLimit = false;
         init(dbName);
     }
 
     public void init(String dbName) throws SlxException {
-        driverSupportsSQLLimit = SQLConfigManager.getConfig().getBoolean(dbName + "driver.supportsSQLLimit", false);
-        databaseSupportsSQLLimit = SQLConfigManager.getConfig().getBoolean(dbName + "oracle.supportsSQLLimit", false);
+        driverSupportsSQLLimit = thisConfig.getBoolean(dbName + "driver.supportsSQLLimit", false);
+        databaseSupportsSQLLimit = thisConfig.getBoolean(dbName + "oracle.supportsSQLLimit", false);
     }
 
-    public static SQLDriver instance(String dbName, SQLTable table) throws SlxException {
-        return new OracleDriver(dbName, table);
+    public static SQLDriver instance(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
+        return new OracleDriver(dbName, table,config,ds);
     }
 
-    public static SQLDriver instance(String dbName) throws SlxException {
-        return new OracleDriver(dbName);
-    }
 
     /**
      * {@inheritDoc}
@@ -137,7 +125,7 @@ public class OracleDriver extends SQLDriver
      */
     @Override
     public Map fetchLastPrimaryKeys(Map primaryKeysPresent, List list, SQLDataSource ds, DSRequest req) throws SlxException {
-        if (dbConnection == null && req == null)
+        if (connection == null && req == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, "no existing db connection exists for last row fetch");
        
         Map primaryKeys = primaryKeysPresent;
@@ -145,7 +133,7 @@ public class OracleDriver extends SQLDriver
             String sequenceName = (String) key;
             String sequence = getCurrentSequenceValue(sequenceName, ds);
             if (sequence != null) {
-                Object obj = getScalarResult((new StringBuilder()).append("SELECT ").append(sequence).append(" FROM DUAL").toString(), dbConnection,
+                Object obj = getScalarResult((new StringBuilder()).append("SELECT ").append(sequence).append(" FROM DUAL").toString(), connection,
                     dbName, this, req);
                 BigDecimal value = new BigDecimal(obj.toString());
                 primaryKeys.put(sequenceName, value.toString());
@@ -247,24 +235,24 @@ public class OracleDriver extends SQLDriver
 
     @Override
     public String sqlInTransform(Object value, Tfield field) {
-    	if(field!=null&&(field.getType()==Efield.DATE||field.getType()==Efield.DATETIME)){
-    		String dateTime=null;
-    		String format=null;
-    		if(field.getType()==Efield.DATE)
-    			format=SQLConfigManager.defaultDateFormat;
-    		else
-    			format = SQLConfigManager.defaultDateTimeFormat;
-    		if(value instanceof Date){
-    			 long timeStamp = ((Date) value).getTime();
-    	             dateTime = (new Timestamp(timeStamp)).toString();
-    	            int periodIndex;
-    	            if ((periodIndex = dateTime.lastIndexOf(".")) != -1)
-    	                dateTime = dateTime.substring(0, periodIndex);
-    		}else{
-    			dateTime=value.toString();
-    		}
-    		return (new StringBuilder()).append("TO_DATE(").append(escapeValue(dateTime)).append(",'").append(format).append("')").toString();
-    	}else if (value instanceof Boolean || DataTools.typeIsBoolean(value.toString())) {
+        if (field != null && (field.getType() == Efield.DATE || field.getType() == Efield.DATETIME)) {
+            String dateTime = null;
+            String format = null;
+            if (field.getType() == Efield.DATE)
+                format = thisConfig.getSubtree(dbType).getString(SqlCM.P_DEFAULT_DATE_FORMAT, SqlCM.DEFAULT_DATE_FORMAT);
+            else
+                format = thisConfig.getSubtree(dbType).getString(SqlCM.P_DEFAULT_DATETIME_FORMAT, SqlCM.DEFAULT_DATETIME_FORMAT);
+            if (value instanceof Date) {
+                long timeStamp = ((Date) value).getTime();
+                dateTime = (new Timestamp(timeStamp)).toString();
+                int periodIndex;
+                if ((periodIndex = dateTime.lastIndexOf(".")) != -1)
+                    dateTime = dateTime.substring(0, periodIndex);
+            } else {
+                dateTime = value.toString();
+            }
+            return (new StringBuilder()).append("TO_DATE(").append(escapeValue(dateTime)).append(",'").append(format).append("')").toString();
+        } else if (value instanceof Boolean || DataTools.typeIsBoolean(value.toString())) {
             return value.equals(Boolean.TRUE) || value.equals("true") ? "'1'" : "'0'";
         } else {
             return super.sqlInTransform(value, field);

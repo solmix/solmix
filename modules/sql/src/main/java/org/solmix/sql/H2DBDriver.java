@@ -26,6 +26,7 @@ import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 
 
 /**
@@ -39,33 +40,23 @@ public class H2DBDriver extends SQLDriver
 
     boolean supportsSQLLimit;
 
-    public H2DBDriver(String dbName, SQLTable table) throws SlxException
+    public H2DBDriver(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException
     {
-       super(dbName, table);
+       super(dbName, table,config,ds);
        supportsSQLLimit = true;
        init(dbName);
     }
 
-    public H2DBDriver(String dbName) throws SlxException
-    {
-       super(dbName, null);
-       supportsSQLLimit = true;
-       init(dbName);
-    }
 
     @Override
     public boolean hasBrokenCursorAPIs()
     {
        return true;
     }
-    public static SQLDriver instance(String dbName, SQLTable table) throws SlxException
-    {
-       return new HSQLDBDriver(dbName, table);
-    }
+  
 
-    public static SQLDriver instance(String dbName) throws SlxException
-    {
-       return new HSQLDBDriver(dbName);
+    public static SQLDriver instance(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
+        return new H2DBDriver(dbName, table,config,ds);
     }
 
     public void init(String s) throws SlxException
@@ -129,14 +120,14 @@ public class H2DBDriver extends SQLDriver
           "sequencesNotPresent: ").append(sequencesNotPresent.toString()).toString());
        if (sequencesNotPresent.size() > 1)
           throw new SlxException("HSQLDB can't handle more than one auto_increment primary_key");
-       if (dbConnection == null && req == null)
+       if (connection == null && req == null)
           throw new SlxException("no connection exists for last row fetch");
        java.sql.Statement sqlStatement = null;
        Map primaryKeys = primaryKeysPresent;
        if (!sequencesNotPresent.isEmpty())
        {
           String sequenceName = (String) sequencesNotPresent.get(0);
-          Object obj = getScalarResult("CALL IDENTITY()", dbConnection, dbName, this, req).toString();
+          Object obj = getScalarResult("CALL IDENTITY()", connection, dbName, this, req).toString();
           Long sequenceValue = new Long(obj.toString());
           primaryKeys.put(sequenceName, sequenceValue);
        }
