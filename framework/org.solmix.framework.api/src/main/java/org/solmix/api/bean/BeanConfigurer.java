@@ -29,7 +29,7 @@ package org.solmix.api.bean;
 public interface BeanConfigurer
 {
 
-    String USER_CFG_FILE_PROPERTY_NAME = "solmix.spring.cfg.file";
+    String USER_CFG_FILE_PROPERTY_NAME = "solmix.cfg.file";
     String USER_CFG_FILE = "solmix.xml";
 
     /**
