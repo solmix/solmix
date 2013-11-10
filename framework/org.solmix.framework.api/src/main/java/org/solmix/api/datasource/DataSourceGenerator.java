@@ -18,6 +18,7 @@
  */
 package org.solmix.api.datasource;
 
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
 
@@ -31,6 +32,6 @@ import org.solmix.api.exception.SlxException;
 public interface DataSourceGenerator
 {
    public static final String INHERIT_KEY = "_inheritsForm";
-  DataSource generateDataSource(DataSourceData context)throws SlxException;
+  DataSource generateDataSource(DataSourceData data,SystemContext sc)throws SlxException;
    
 }

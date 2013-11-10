@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
@@ -58,7 +59,7 @@ public class BasicGenerator implements DataSourceGenerator
      * @see org.solmix.api.datasource.DataSourceGenerator#generateDataSource(java.lang.Object)
      */
     @Override
-    public DataSource generateDataSource(DataSourceData context) throws SlxException {
+    public DataSource generateDataSource(DataSourceData context,SystemContext sc) throws SlxException {
         if (context == null || context.getTdataSource().getSchemaBean() == null)
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 " configure anto gernerate DataSource must figure out a schema class");
