@@ -25,17 +25,19 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.datasource.ParserHandler;
-import org.solmix.api.event.IEvent;
-import org.solmix.api.event.MonitorEventFactory;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.cache.StructCache;
 import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.event.EventWorker;
+import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.internal.DatasourceCM;
 
 /**
@@ -89,11 +91,11 @@ public class DataSourceProvider
          group = dsName.substring(0, dsName.lastIndexOf(SlxConstants.GROUP_SEP));
          dsName = dsName.substring(dsName.lastIndexOf(SlxConstants.GROUP_SEP) + 1);
          }*/
-        return forName(dsName, "default", null);
+        return forName(null,dsName, "default", null);
     }
 
-    public static DataSource forName(String dsName, DSRequest request) throws SlxException {
-        return forName(dsName, "default", request);
+    public static DataSource forName(SystemContext sc,String dsName, DSRequest request) throws SlxException {
+        return forName(sc,dsName, "default", request);
     }
 
     /**
@@ -102,7 +104,10 @@ public class DataSourceProvider
      * @return
      * @throws SlxException
      */
-    public static DataSource forName(String dsName, /* String group, */String repoName, DSRequest request) throws SlxException {
+    public static DataSource forName(SystemContext sc,String dsName, /* String group, */String repoName, DSRequest request) throws SlxException {
+       if(sc==null){
+           sc= SlxContext.getThreadSystemContext();
+       }
         DataSource _datasource = null;
         /**
          * find datasource without configure file.
@@ -114,7 +119,7 @@ public class DataSourceProvider
         /**
          * Parser ds configuration file Before initial the datasource.
          */
-        ParserHandler _parser = getParserHander();
+        ParserHandler _parser = getParserHander(sc);
         long __start = new Date().getTime();
         DataSourceData data = (DataSourceData) _parser.parser(repoName, /* group, */dsName, ParserHandler.DS_SUFFIX, request);
         if (data == null) {
@@ -135,7 +140,7 @@ public class DataSourceProvider
             _dsType = EserverType.BASIC;
         }
 
-        List<DataSource> dsList = DefaultDataSourceManager.getDataSourceProviders();
+        List<DataSource> dsList = sc.getBean(DataSourceManager.class).getProviders();
         for (DataSource provider : dsList) {
             if (provider.getServerType().equals(_dsType.value())) {
                 _datasource = provider.instance(data);
@@ -151,7 +156,7 @@ public class DataSourceProvider
          */
         boolean isPass = ValidationContext.instance().validate(_datasource);
         long __end = new Date().getTime();
-        SlxContext.getEventManager().postEvent(createTimeMonitorEvent(__end - __start, "initial datasource:" + data.getName()));
+        fireTimeEvent(__end - __start, "initial datasource:" + data.getName());
         setMaxInitialTime(__end - __start);
         if (isPass)// passed validation,continue
         {
@@ -162,16 +167,21 @@ public class DataSourceProvider
             // interrupt ,return null
             return null;
     }
+    private static void fireTimeEvent(long time,String msg){
+        EventWorkerFactory factory= EventWorkerFactory.getInstance();
+        EventWorker worker= factory.createWorker(SlxContext.getThreadSystemContext());
+        worker.createAndFireTimeEvent(time, msg);
+    }
 
     /**
      * Get the Single datasource ParserHandler instance.
      * @return Single instance.
      */
-    public synchronized static ParserHandler getParserHander() {
+    public synchronized static ParserHandler getParserHander(SystemContext sc) {
         if (parser == null) {
             String defaultParser =DatasourceCM.DEFAULT_PARSER;
             if (defaultParser.equals("default")) {
-                parser = new DefaultParser();
+                parser = new DefaultParser(sc);
             }
             // XXX Extension point.
         }
@@ -185,18 +195,5 @@ public class DataSourceProvider
         DataSourceProvider.parser = parser;
     }
 
-    static IEvent createTimeMonitorEvent(long time, String msg) {
-        MonitorEventFactory factory;
-        boolean destory = false;
-        if (SlxContext.getBundleContext() != null) {
-            destory = true;
-            factory = MonitorEventFactory.getInstance(SlxContext.getBundleContext());
-        } else {
-            factory = MonitorEventFactory.getDefault();
-        }
-        IEvent e = factory.createTimeMonitorEvent(time, msg);
-        if (destory)
-            factory = null;
-        return e;
-    }
+    
 }
