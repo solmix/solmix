@@ -21,6 +21,9 @@ package org.solmix.fmk.repo;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.repo.DSRepository;
 import org.solmix.api.repo.DSRepositoryManager;
@@ -36,11 +39,30 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
     private DSRepositoryTracker tracker;
 
     private DSRepository defaultRepo;
-
+    private SystemContext sc;
+    
+    public static final String PID="org.solmix.framework.dsrepo";
+    
+    public DSRepositoryManagerImpl(){
+        this(null);
+    }
+    public DSRepositoryManagerImpl(SystemContext sc){
+        setSystemContext(sc);
+    }
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+        if (sc != null) {
+            sc.setBean(this, DSRepositoryManager.class);
+        }
+    }
     /**
      * @return the defaultRepo
      */
     public DSRepository getDefaultRepo() {
+        if(defaultRepo==null){
+            defaultRepo=new FileSystemRepository(sc);
+        }
         return defaultRepo;
     }
 

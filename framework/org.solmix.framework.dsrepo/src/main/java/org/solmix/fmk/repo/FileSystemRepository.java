@@ -25,10 +25,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
 
@@ -79,10 +82,26 @@ public class FileSystemRepository extends AbstractDSRepository
         this.sysLocation = sysLocation;
     }
 
-    private final static Logger log=LoggerFactory.getLogger(FileSystemRepository.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(FileSystemRepository.class.getName());
 
     public FileSystemRepository()
     {
+    }
+
+    /**
+     * @param sc
+     */
+    public FileSystemRepository(SystemContext sc)
+    {
+        if (sc != null) {
+            ConfigureUnitManager cm = sc.getBean(ConfigureUnitManager.class);
+            try {
+                DataTypeMap config = cm.getConfigureUnit(DSRepositoryManagerImpl.PID).getProperties();
+                location = config.getString("repo.location");
+                sysLocation = config.getString("repo.syslocation");
+            } catch (IOException e) {
+            }
+        }
     }
 
     /**
@@ -192,8 +211,7 @@ public class FileSystemRepository extends AbstractDSRepository
                 }
             }
             if (dsFile == null)
-                log.warn((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(
-                    location).toString());
+                log.warn((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(location).toString());
             // find in system repo
             log.warn("try to found in system ds repo");
             return this.loadSystem(dsName);
@@ -207,8 +225,9 @@ public class FileSystemRepository extends AbstractDSRepository
      */
     @Override
     public DataSource loadDS(String ds) throws SlxException {
-       
-            throw new SlxException(Tmodule.REPO, Texception.NO_SUPPORT, ("The file system ds repository not support the method ,please call load(name); '"));
+
+        throw new SlxException(Tmodule.REPO, Texception.NO_SUPPORT,
+            ("The file system ds repository not support the method ,please call load(name); '"));
     }
 
 }
