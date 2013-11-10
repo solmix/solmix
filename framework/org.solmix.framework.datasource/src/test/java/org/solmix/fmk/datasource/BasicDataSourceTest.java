@@ -26,7 +26,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.ObjectFactory;
@@ -71,6 +70,7 @@ public class BasicDataSourceTest extends AbstractSolmixTestCase
         tds.setDbName("solmix");
         tds.setFields(fields);
         DataSourceData data = new DataSourceData(tds);
-        ds = new BasicDataSource(data);
+        ds = new BasicDataSource();
+        ds.init(data);
     }
 }

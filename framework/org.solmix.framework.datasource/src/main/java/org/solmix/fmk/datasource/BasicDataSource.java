@@ -37,6 +37,7 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.ClientParameter;
@@ -63,10 +64,13 @@ import org.solmix.api.types.ClientParameterType;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.api.types.TransactionPolicy;
+import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
+import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.ValidationContext.Vtype;
-import org.solmix.fmk.event.EventUtils;
+import org.solmix.fmk.event.EventWorker;
+import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.JSExpression;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
@@ -85,13 +89,19 @@ public class BasicDataSource implements DataSource
 
     private static final Logger log = LoggerFactory.getLogger(BasicDataSource.class.getName());
 
-    private JSParser jsParser;
+    protected  static JSParser jsParser;
 
     private String dsName;
 
     protected DataSourceData data;
 
     protected DataSourceGenerator dataSourceGenerator;
+
+    protected EventWorker worker;
+
+    protected DataTypeMap config;
+
+    protected  SystemContext sc;
 
     final static Map<Object, Object> buildInValidator;
     static {
@@ -115,15 +125,22 @@ public class BasicDataSource implements DataSource
         buildInValidator.put(Efield.PASSWORD, null);
     }
 
-    protected BasicDataSource()
+    public BasicDataSource()
     {
+        this(SlxContext.getThreadSystemContext());
     }
 
-    public BasicDataSource(DataSourceData data) throws SlxException
+    public BasicDataSource(SystemContext sc) 
     {
-        this.init(data);
+       this.sc=sc;
     }
-
+    public static synchronized JSParser getJsParser() {
+        if (jsParser == null) {
+            JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
+            jsParser = jsFactory.get();
+        }
+        return jsParser;
+    }
     /**
      * {@inheritDoc}
      * 
@@ -136,7 +153,8 @@ public class BasicDataSource implements DataSource
 
     @Override
     public DataSource instance(DataSourceData data) throws SlxException {
-        BasicDataSource basic = new BasicDataSource(data);
+        BasicDataSource basic = new BasicDataSource(sc);
+        basic.init(data);
         return basic;
     }
 
@@ -149,20 +167,28 @@ public class BasicDataSource implements DataSource
      */
     @Override
     public void init(DataSourceData data) throws SlxException {
+        
         if (data == null)
             return;
+        this.config=getConfig();
         this.dataSourceGenerator = null;
         this.dsName = null;
         this.data = null;
         this.setContext(data);
-        JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
-        jsParser = jsFactory.get();
+        jsParser =getJsParser();
         if (log.isTraceEnabled())
             log.trace((new StringBuilder()).append("Creating instance of DataSource '").append(data.getName()).append("'").toString());
         // If dataSource used as other build in datasource ,will not contain a TdataSouece.
         if (data.getTdataSource() != null && DataUtil.isNotEqual(data.getTdataSource().getServerType(), EserverType.CUSTOM)) {
             autoFitDS(this).buildDS(this).validateDS(this);
         }
+    }
+
+    /**
+     * @return
+     */
+   protected DataTypeMap getConfig() throws SlxException{
+        return new DataTypeMap();
     }
 
     /**
@@ -639,7 +665,7 @@ public class BasicDataSource implements DataSource
                 "'s at path '").append(vcontext.getPath()).append("': ").append(end - start).append("ms").append(
                 _recordList.size() != 0 ? (new StringBuilder()).append(" (avg ").append((end - start) / _recordList.size()).append(")").toString()
                     : "").toString();
-            EventUtils.createAndFireTimeEvent(end - start, __info);
+            getEventWork().createAndFireTimeEvent(end - start, __info);
             LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
             return result;
         }
@@ -648,11 +674,17 @@ public class BasicDataSource implements DataSource
         long end = System.currentTimeMillis();
         String __info = (new StringBuilder()).append("Done validating a '").append(getName()).append("' at path '").append(vcontext.getPath()).append(
             "': ").append(end - start).append("ms").toString();
-        EventUtils.createAndFireTimeEvent(end - start, __info);
+        getEventWork().createAndFireTimeEvent(end - start, __info);
        LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
         return result;
     }
-
+    public EventWorker getEventWork() {
+        if (worker == null) {
+            EventWorkerFactory factory = EventWorkerFactory.getInstance();
+            worker = factory.createWorker(sc);
+        }
+        return worker;
+    }
     public Object toRecords(List<Object> data, ValidationContext context) throws SlxException {
         if (data == null)
             return null;
@@ -791,14 +823,14 @@ public class BasicDataSource implements DataSource
         if (type == null && field != null) {
             String __vinfo = (new StringBuilder()).append("No such type '").append(field.getType()).append("', not processing field value at ").append(
                 vcontext.getPath()).toString();
-            EventUtils.createFieldValidationEvent(Level.WARNING, __vinfo);
+            getEventWork().createFieldValidationEvent(Level.WARNING, __vinfo);
             vcontext.removePathSegment();
             return value;
         }
         if (LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).isDebugEnabled()) {
             String __vinfo = (new StringBuilder()).append("Validating field:").append(vcontext.getPath()).append(" as ").append(getName()).append(".").append(
                 _fieldName).append(" type: ").append(type.getName()).toString();
-            EventUtils.createFieldValidationEvent(Level.DEBUG, __vinfo);
+            getEventWork().createFieldValidationEvent(Level.DEBUG, __vinfo);
         }
         if (field != null && !vcontext.isIdAllowed()) {
             vcontext.setIdAllowed(true);
@@ -1025,7 +1057,7 @@ public class BasicDataSource implements DataSource
                     log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:")
                         .append(gen.getClass().toString()).append(" to generate schema").toString());
                 }
-                autoSchema = gen.generateDataSource(data);
+                autoSchema = gen.generateDataSource(data,sc);
             }
             //cache auto derived datasource schema
             if (autoSchema != null) {
@@ -1196,11 +1228,11 @@ public class BasicDataSource implements DataSource
                     Tfield old = _tmpFields.get(_name);
                     String __vinfo = new StringBuilder().append("Field name is unique.").append("the old Field is").append(jsParser.toJavaScript(old)).append(
                         "will replace by:").append(jsParser.toJavaScript(_field)).toString();
-                    EventUtils.createFieldValidationEvent(Level.WARNING, __vinfo);
+                    getEventWork().createFieldValidationEvent(Level.WARNING, __vinfo);
                 }
                 if (_field.getType() == null) {
                     _field.setType(Efield.TEXT);
-                    EventUtils.createFieldValidationEvent(Level.DEBUG, "DS Field not set type used text by default");
+                    getEventWork().createFieldValidationEvent(Level.DEBUG, "DS Field not set type used text by default");
                 }
                 _tmpFields.put(_field.getName(), _field);
 
@@ -1349,7 +1381,7 @@ public class BasicDataSource implements DataSource
         TdataSource tds = data.getTdataSource();
         Map<String, ?> context = ConvertDSContextToMap.toClientValueMap(tds);
         long s_ = System.currentTimeMillis();
-        EventUtils.createAndFireTimeEvent(s_ - _s, "time used to convert datasource context to map value");
+        getEventWork().createAndFireTimeEvent(s_ - _s, "time used to convert datasource context to map value");
         return context;
 
     }
