@@ -29,9 +29,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.util.tracker.ServiceTracker;
-
-import org.solmix.api.pool.PoolServiceFactory;
-import org.solmix.fmk.pool.PoolManagerFactory;
+import org.solmix.api.pool.PoolManagerFactory;
+import org.solmix.fmk.pool.PoolManagerFactoryImpl;
 
 /**
  * 
@@ -46,14 +45,14 @@ public class PoolActivator implements BundleActivator
 
     private ConfigAdminSupport cmSuport;
 
-    private PoolManagerFactory factory;
+    private PoolManagerFactoryImpl factory;
 
     @Override
     public void start(BundleContext context) throws Exception {
         this.context = context;
-        factory = new PoolManagerFactory();
+        factory = new PoolManagerFactoryImpl();
         cmSuport = new ConfigAdminSupport(context, factory);
-        context.registerService(PoolServiceFactory.class, factory, null);
+        context.registerService(PoolManagerFactory.class, factory, null);
 
     }
 
@@ -72,7 +71,7 @@ public class PoolActivator implements BundleActivator
     private static class ConfigAdminSupport implements Runnable
     {
 
-        private Tracker tracker;
+        private final Tracker tracker;
 
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private ConfigAdminSupport(BundleContext context, PoolManagerFactory factory)
@@ -84,6 +83,7 @@ public class PoolActivator implements BundleActivator
             tracker.open();
         }
 
+        @Override
         public void run() {
             tracker.close();
         }
@@ -92,7 +92,7 @@ public class PoolActivator implements BundleActivator
         private class Tracker extends ServiceTracker implements ManagedServiceFactory
         {
 
-            private PoolManagerFactory factory;
+            private final PoolManagerFactory factory;
 
             /**
              * @param context
@@ -113,7 +113,7 @@ public class PoolActivator implements BundleActivator
              */
             @Override
             public String getName() {
-                return PoolManagerFactory.SERVICE_PID;
+                return PoolManagerFactoryImpl.SERVICE_PID;
             }
 
             /**

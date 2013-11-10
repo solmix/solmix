@@ -19,18 +19,19 @@
 
 package org.solmix.fmk.pool;
 
+import java.io.IOException;
 import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import org.osgi.service.cm.ManagedService;
-import org.solmix.api.cm.ConfigManager;
+import javax.annotation.Resource;
+
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.pool.IPoolableObjectFactory;
-import org.solmix.api.pool.PoolService;
-import org.solmix.api.pool.PoolServiceFactory;
+import org.solmix.api.pool.PoolManager;
+import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.commons.collections.DataTypeMap;
 
 /**
@@ -41,7 +42,7 @@ import org.solmix.commons.collections.DataTypeMap;
  */
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class PoolManagerFactory implements PoolServiceFactory , ManagedService, ConfigManager
+public class PoolManagerFactoryImpl implements PoolManagerFactory
 {
 
     public static String SERVICE_PID = "org.solmix.framework.pool";
@@ -50,10 +51,11 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
      * Note:Modify this properties needed to update the default configuration file
      */
     private static final Map DEFAULT_CONFIG;
+    private SystemContext sc;
+    private DataTypeMap configProperties;
 
-    private static Map<String, PoolConf> cache = Collections.synchronizedMap(new HashMap<String, PoolConf>());
+    private final  Map<String, PoolConf> cache = Collections.synchronizedMap(new HashMap<String, PoolConf>());
 
-    private static final  Map<String, Object> propertiesCache = Collections.synchronizedMap(new HashMap<String, Object>());
 
     static {
         DEFAULT_CONFIG = new HashMap();
@@ -69,7 +71,33 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
         DEFAULT_CONFIG.put("numTestsPerEvictionRun", -1);
         DEFAULT_CONFIG.put("enabled", "true");
     }
-
+    
+    public PoolManagerFactoryImpl(){
+        
+    }
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+        if(sc!=null){
+            sc.setBean(this, PoolManagerFactory.class);
+           
+        }
+    } 
+    private synchronized DataTypeMap  getConfig(){
+        if(configProperties==null&&sc!=null){
+            ConfigureUnitManager cum= sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnit cu=null;
+            try {
+                cu = cum.getConfigureUnit(SERVICE_PID);
+            } catch (IOException e) {
+                //ignore
+            }
+            if(cu!=null){
+                configProperties=cu.getProperties();
+            }
+        }
+        return configProperties;
+    }
     /**
      * {@inheritDoc}
      * 
@@ -77,23 +105,23 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
      *      org.solmix.api.pool.IPoolableObjectFactory)
      */
     @Override
-    public PoolService createPoolService(String name, IPoolableObjectFactory factory) {
+    public PoolManager createPoolManager(String name, IPoolableObjectFactory factory) {
         Map temp = null;
-        if (propertiesCache != null) {
-            temp = new DataTypeMap(propertiesCache).getSubtree(name);
+        if (getConfig() != null) {
+            temp = getConfig().getSubtree(name);
         }
         if (temp == null||temp.isEmpty()) {
             temp = new HashMap();
             temp.putAll(DEFAULT_CONFIG);
         }
-        return createPoolService(name, factory, temp);
+        return createPoolManager(name, factory, temp);
     }
 
-    public PoolService createPoolService(String name, IPoolableObjectFactory factory, Map config) {
+    public PoolManager createPoolManager(String name, IPoolableObjectFactory factory, Map config) {
         PoolConf conf = cache.get(name);
-        PoolService cached;
+        PoolManager cached;
         if (conf == null || conf.service == null) {
-            cached = new PoolManager(name, factory, config);
+            cached = new PoolManagerImpl(name, factory, config);
             if (cached != null)
                 cache.put(name, new PoolConf(cached, factory));
         } else {
@@ -102,20 +130,7 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
         return cached;
     }
 
-    @Override
-    public void updated(Dictionary properties) {
-        if (properties == null)
-            return;
-      
-        Enumeration em = properties.keys();
-        Map<String, Object> config = new HashMap<String, Object>();
-        while (em.hasMoreElements()) {
-            String key = (String) em.nextElement();
-            config.put(key, properties.get(key));
-        }
-        this.propertiesCache.putAll(config);
-//        this.updatePoolService(config);
-    }
+  
 
     /**
      * @param pid
@@ -126,7 +141,7 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
             PoolConf c = cache.remove(name);
             c.service.destroy();
             c.service = null;
-            c.service = createPoolService(name, cache.get(name).factory, properties);
+            c.service = createPoolManager(name, cache.get(name).factory, properties);
         }
 
     }
@@ -134,13 +149,13 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
     private class PoolConf
     {
 
-        PoolConf(PoolService service, IPoolableObjectFactory factory)
+        PoolConf(PoolManager service, IPoolableObjectFactory factory)
         {
             this.service = service;
             this.factory = factory;
         }
 
-        public PoolService service;
+        public PoolManager service;
 
         public IPoolableObjectFactory factory;
     }
@@ -156,24 +171,7 @@ public class PoolManagerFactory implements PoolServiceFactory , ManagedService, 
         }
     }
 
-    @Override
-    public void updateConfig(Properties properties) {
-        if (properties == null)
-            return;
-      
-        Enumeration em = properties.keys();
-        Map<String, Object> config = new HashMap<String, Object>();
-        while (em.hasMoreElements()) {
-            String key = (String) em.nextElement();
-            config.put(key, properties.get(key));
-        }
-        this.propertiesCache.putAll(config);
         
-    }
-
-    @Override
-    public String getPid() {
-        return SERVICE_PID;
-    }
+ 
 
 }

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.IPoolableObjectFactory;
-import org.solmix.api.pool.PoolService;
+import org.solmix.api.pool.PoolManager;
 import org.solmix.api.pool.SlxKeyedPoolableObjectFactory;
 import org.solmix.api.pool.SlxPoolableObjectFactory;
 import org.solmix.api.types.Texception;
@@ -42,10 +42,10 @@ import org.solmix.commons.util.DataUtil;
  * @since 0.0.1
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class PoolManager implements PoolService
+public class PoolManagerImpl implements PoolManager
 {
 
-    private final Logger log =  LoggerFactory.getLogger(PoolManager.class.getName());
+    private final Logger log =  LoggerFactory.getLogger(PoolManagerImpl.class.getName());
 
     protected IPoolableObjectFactory factory;
 
@@ -66,7 +66,7 @@ public class PoolManager implements PoolService
     // @Inject
     // @Reference(id = "ds-config", serviceInterface = ConfigRealm.class, timeout = 100, filter = FILTER)
 
-    public PoolManager(String name, IPoolableObjectFactory factory, Map config)
+    public PoolManagerImpl(String name, IPoolableObjectFactory factory, Map config)
     {
         sources = new HashMap();
         this.name = name;
