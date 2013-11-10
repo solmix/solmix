@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.datasource;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,6 +28,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
+import org.solmix.api.bean.ConfiguredBeanProvider;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
@@ -37,12 +38,12 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.pool.PoolService;
-import org.solmix.api.pool.PoolServiceFactory;
-import org.solmix.api.repo.DSRepositoryManager;
+import org.solmix.api.pool.PoolManager;
+import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.fmk.context.SlxContext;
 
 /**
  * DataSourceManager service implements.
@@ -52,79 +53,68 @@ import org.solmix.api.types.Tmodule;
 public class DefaultDataSourceManager implements DataSourceManager
 {
 
-    private static List<DataSource> providers;
+    private final List<DataSource> providers = new CopyOnWriteArrayList<DataSource>();
 
-    public static volatile PoolService manager;
+    public volatile PoolManager manager;
 
-    private PoolServiceFactory poolServiceFactory;
-
-    private static volatile DSRepositoryManager repoService;
+    private PoolManagerFactory poolManagerFactory;
 
     private static Logger log;
-    
+
     private SystemContext sc;
- 
-    public DefaultDataSourceManager(SystemContext sc){
-        setSystemContext(sc);
+
+    public DefaultDataSourceManager()
+    {
+        this(null);
+
     }
+
+    public DefaultDataSourceManager(SystemContext sc)
+    {
+        setSystemContext(sc);
+        providers.add(new BasicDataSource(sc));
+    }
+
     @Resource
     public void setSystemContext(SystemContext sc) {
         this.sc = sc;
-        if(sc!=null){
+        if (sc != null) {
             sc.setBean(this, DataSourceManager.class);
         }
     }
+
     /**
      * @return the poolServiceFactory
      */
-    public PoolServiceFactory getPoolServiceFactory() {
-        return poolServiceFactory;
+    public synchronized PoolManagerFactory getPoolManagerFactory() {
+        if (poolManagerFactory == null && sc != null) {
+            poolManagerFactory = sc.getBean(PoolManagerFactory.class);
+        }
+        return poolManagerFactory;
     }
 
     /**
      * @param poolServiceFactory the poolServiceFactory to set
      */
-    public void setPoolServiceFactory(PoolServiceFactory poolServiceFactory) {
-        this.poolServiceFactory = poolServiceFactory;
+    public void setPoolManagerFactory(PoolManagerFactory poolManagerFactory) {
+        this.poolManagerFactory = poolManagerFactory;
     }
 
-    static {
-        providers = new CopyOnWriteArrayList<DataSource>();
-        // and the default datasource implementations.
-        providers.add(new BasicDataSource());
-        // providers.add( new SQLDataSource() );
-
-    }
-
-    public DefaultDataSourceManager()
-    {
+    public static void freeDataSource(DataSource ds) {
+        SystemContext sc = SlxContext.getThreadSystemContext();
+        sc.getBean(DataSourceManager.class).free(ds);
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.datasource.DataSourceManagerService#free(org.solmix.api.datasource.DataSource)
-     */
     @Override
     public void free(DataSource ds) {
-        freeDataSource(ds);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.datasource.DataSourceManagerService#freeDataSource(org.solmix.api.datasource.DataSource)
-     */
-    public static void freeDataSource(DataSource ds) {
         if (ds == null) {
             return;
         } else if (ds.getContext().isWaitForFree()) {
-            manager.returnObject(ds.getName(), ds);
+            getPoolManager().returnObject(ds.getName(), ds);
             ds.getContext().setWaitForFree(false);
-        }else{
-            ds=null;
+        } else {
+            ds = null;
         }
 
     }
@@ -137,17 +127,7 @@ public class DefaultDataSourceManager implements DataSourceManager
      */
     @Override
     public DataSource get(String name) throws SlxException {
-        return getDataSource(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws Exception
-     * @see org.solmix.api.datasource.DataSourceManagerService#getDataSource(java.lang.String)
-     */
-    public static DataSource getDataSource(String name) throws SlxException {
-        return getDataSource(name,null);
+        return get(name, null);
     }
 
     /**
@@ -159,11 +139,14 @@ public class DefaultDataSourceManager implements DataSourceManager
     @Override
     public DataSource getUnpooledDataSource(String name) throws SlxException {
 
-        return (DataSource) manager.borrowUnpooledObject(name);
+        return (DataSource) getPoolManager().borrowUnpooledObject(name);
     }
 
     @Override
-    public PoolService getPoolService() {
+    public synchronized PoolManager getPoolManager() {
+        if (manager == null) {
+
+        }
         return manager;
 
     }
@@ -175,35 +158,40 @@ public class DefaultDataSourceManager implements DataSourceManager
      */
     @Override
     public List<DataSource> getProviders() {
-        return providers;
-    }
-
-    public synchronized void setProviders(List<DataSource> provider) {
-        
-        DefaultDataSourceManager.providers =Collections.synchronizedList(provider);
-    }
-
-    public static List<DataSource> getDataSourceProviders() {
+        if (sc != null) {
+            ConfiguredBeanProvider cbp = sc.getBean(org.solmix.api.bean.ConfiguredBeanProvider.class);
+            Collection<? extends DataSource> cc = cbp.getBeansOfType(DataSource.class);
+            for (DataSource c : cc){
+                if(!providers.contains(c))
+                    providers.add(c);
+            }
+              
+        }
         return providers;
     }
 
     public void unregister(DataSource datasource) {
-        synchronized (providers) {
-            providers.remove(datasource);
-        }
+        providers.remove(datasource);
     }
 
     public void register(DataSource datasource) {
         String serverType = datasource.getServerType();
         if (serverType == null)
             return;
-        synchronized (providers) {
-            for (DataSource ds : providers) {
-                if (serverType.equalsIgnoreCase(ds.getServerType()))
-                    providers.remove(ds);
-            }
-            providers.add(datasource);
+        for (DataSource ds : providers) {
+            if (serverType.equalsIgnoreCase(ds.getServerType()))
+                providers.remove(ds);
         }
+        providers.add(datasource);
+    }
+
+    public static DataSource getDataSource(String name) throws SlxException {
+        return getDataSource(name, null);
+    }
+
+    public static DataSource getDataSource(String name, DSRequest request) throws SlxException {
+        SystemContext sc = SlxContext.getThreadSystemContext();
+        return sc.getBean(DataSourceManager.class).get(name, request);
     }
 
     /**
@@ -214,23 +202,19 @@ public class DefaultDataSourceManager implements DataSourceManager
      */
     @Override
     public DataSource get(String name, DSRequest request) throws SlxException {
-        return getDataSource(name, request);
-    }
-
-    public static DataSource getDataSource(String name, DSRequest request) throws SlxException {
         DataSource _return = null;
         try {
-            _return = (DataSource) manager.borrowObject(name, request);
-            if(_return!=null)
+            _return = (DataSource) getPoolManager().borrowObject(name, request);
+            if (_return != null)
                 _return.getContext().setWaitForFree(true);
         } catch (Exception e1) {
-            log.warn("Borrow object from pool failed, try to used unpooled object",e1);
+            log.warn("Borrow object from pool failed, try to used unpooled object", e1);
         }
-        try{
-            //Re try.
-            if(_return==null)
-            return (DataSource) manager.borrowUnpooledObject(name);
-        }catch (Exception trye) {
+        try {
+            // Re try.
+            if (_return == null)
+                return (DataSource) getPoolManager().borrowUnpooledObject(name);
+        } catch (Exception trye) {
             throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild ", trye);
         }
         return _return;
@@ -244,40 +228,19 @@ public class DefaultDataSourceManager implements DataSourceManager
     public void init() {
         log = LoggerFactory.getLogger(DataSourceManager.class.getName());
         log.debug("Initial & create DataSource Pool");
-        manager = poolServiceFactory.createPoolService(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory());
+        manager = getPoolManagerFactory().createPoolManager(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory());
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.datasource.DataSourceManagerService#restartPoolService()
+     * @see org.solmix.api.datasource.DataSourceManagerService#restartPoolManager()
      */
     @Override
-    public void restartPoolService() {
+    public void restartPoolManager() {
         log.info("Restart DataSource Pool");
-        manager = poolServiceFactory.createPoolService(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory());
+        manager = getPoolManagerFactory().createPoolManager(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory(sc));
 
-    }
-
-    /**
-     * @return the repoService
-     */
-    public static DSRepositoryManager getRepoService() {
-        if (repoService == null) {
-            try {
-                throw new SlxException(Tmodule.REPO, Texception.OSGI_SERVICE_UNAVAILABLE, "osgi DSRepositoryManager is unavalable");
-            } catch (SlxException e) {
-                log.error(e.getMessage());
-            }
-        }
-        return repoService;
-    }
-
-    /**
-     * @param repoService the repoService to set
-     */
-    public void setRepoService(DSRepositoryManager repoService) {
-        DefaultDataSourceManager.repoService = repoService;
     }
 
     /**
@@ -323,9 +286,7 @@ public class DefaultDataSourceManager implements DataSourceManager
 
     @Override
     public DSResponse createDSResponse() {
-        return  new DSResponseImpl();
+        return new DSResponseImpl();
     }
-
-   
 
 }

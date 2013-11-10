@@ -22,9 +22,12 @@ package org.solmix.fmk.datasource;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
@@ -44,7 +47,8 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.context.SlxContext;
-import org.solmix.fmk.event.EventUtils;
+import org.solmix.fmk.event.EventWorker;
+import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.JaxbXMLParserImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
@@ -65,19 +69,25 @@ public class DefaultParser implements ParserHandler
 
     public static final String DEFAULT_REPO_SUFFIX = "ds";
     public static final String GROUP_SEP = SlxConstants.GROUP_SEP;
+    private  EventWorker worker;
 
 
     protected static XMLParser xmlParser;
 
     private static AtomicLong numParsered;
+    private SystemContext sc;
 
 
-    public DefaultParser()
+    public DefaultParser(SystemContext sc)
     {
         numParsered = new AtomicLong();
+        setSystemContext(sc);
        
     }
-    
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
+    }
     protected  synchronized JSParser getJSParser(){
         JSParserFactory factory = JSParserFactoryImpl.getInstance();
         return factory.get();
@@ -130,9 +140,9 @@ public class DefaultParser implements ParserHandler
     @Override
     public Object parser(String repoName, /* String group, */String dsName, String suffix, DSRequest request) throws SlxException {
         long _$ = System.currentTimeMillis();
-        String __info = new StringBuilder().append(">>Parser datasource [").append( dsName).append("]").toString();
-        log.debug(__info);
-        DSRepository repo = DefaultDataSourceManager.getRepoService().loadDSRepo(repoName);
+        String __info = new StringBuilder().append(">>Parser datasource [").append(dsName).append("]").toString();
+        log.trace(__info);
+        DSRepository repo = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class).loadDSRepo(repoName);
         //
         String explicitName = DataUtil.isNullOrEmpty(suffix) ? dsName : dsName + "." + suffix.toLowerCase().trim();
 
@@ -140,7 +150,7 @@ public class DefaultParser implements ParserHandler
          * Loading datasource from configuration file.*
          *********************************************/
         Object obj = repo.load(explicitName);
-        DataSourceData  data=null;
+        DataSourceData data = null;
         // begin
         if (obj == null)
             return null;
@@ -161,17 +171,17 @@ public class DefaultParser implements ParserHandler
                 td.setID(dsName);
                 /************************************
                  * find real name.
-                 ************************************/ 
-                String realName =dsName.substring(dsName.lastIndexOf(GROUP_SEP)+1);
-                if(!realName.equals(ID)){
-                    String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(", but got: ").append(
-                        ID).toString();
-                    EventUtils.createAndFireDSValidateEvent(Level.WARNING, info, new IllegalArgumentException());
+                 ************************************/
+                String realName = dsName.substring(dsName.lastIndexOf(GROUP_SEP) + 1);
+                if (!realName.equals(ID)) {
+                    String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(
+                        ", but got: ").append(ID).toString();
+                    getThreadEventWork().createAndFireDSValidateEvent(Level.WARNING, info, new IllegalArgumentException());
                 }
-                
+
             }
             try {
-                //new datasource data.
+                // new datasource data.
                 data = new DataSourceData(td);
                 data.setDsConfigFile(slx.getCanonicalPath());
                 data.setConfigTimestamp(slx.lastModified());
@@ -183,11 +193,18 @@ public class DefaultParser implements ParserHandler
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_OBJECT_TYPE_ERROR,
                 "ds-config java object error,the return ds-config object should be SlxFile.");
         }
-        preBuild(data,request);
-        SlxContext.getEventManager().postEvent(EventUtils.createTimeMonitorEvent(System.currentTimeMillis() - _$, __info));
+        preBuild(data, request);
+        getThreadEventWork().createAndFireTimeEvent(System.currentTimeMillis() - _$, __info);
         return data;
     }
-  
+
+    public EventWorker getThreadEventWork() {
+        if (worker == null) {
+            EventWorkerFactory factory = EventWorkerFactory.getInstance();
+            worker = factory.createWorker(SlxContext.getThreadSystemContext());
+        }
+        return worker;
+    }
     protected DataSourceData preBuild(DataSourceData data,DSRequest request) throws SlxException {
         /************************************************************
          * customer configuration.DataSource.${serverType}.QName=xxxN.
@@ -211,13 +228,13 @@ public class DefaultParser implements ParserHandler
         TdataSource td = data.getTdataSource();
         String dsID = data.getTdataSource().getID();
         if (data.getName() == null) {
-            EventUtils.createAndFireDSValidateEvent(Level.WARNING, "Datasource configuration with no ID", null);
+            getThreadEventWork().createAndFireDSValidateEvent(Level.WARNING, "Datasource configuration with no ID", null);
         }
         // data.addValidationEvent(new DSValidation(Level.WARNING, "Datasource configuration with no ID"));
         if (td.getServerType() == EserverType.SQL && data.getTdataSource().getTableName() == null) {
             data.getTdataSource().setTableName(dsID);
             String __info = "SQL DataSource with no set TableName try to use ID as tableName";
-            EventUtils.createAndFireDSValidateEvent(Level.DEBUG, __info, null);
+            getThreadEventWork().createAndFireDSValidateEvent(Level.DEBUG, __info, null);
             // if (log.isDebugEnabled())
             // log.debug(__info);
         }
@@ -245,14 +262,14 @@ public class DefaultParser implements ParserHandler
             try {
                 __vinfo = new StringBuilder().append("Looking up superDS of DataSource ").append(data.getName()).append(": '").append(_superDS).append(
                     "'").toString();
-                EventUtils.createAndFireDSValidateEvent(Level.DEBUG, __vinfo, null);
+                getThreadEventWork().createAndFireDSValidateEvent(Level.DEBUG, __vinfo, null);
                 // data.addValidationEvent(new DSValidation(Level.DEBUG, __vinfo));
                 _superDS = DefaultDataSourceManager.getDataSource(_superDSName, dsRequest);
                 if (_superDS == null) {
                     data.setSuperDSName(null);
                     __vinfo = (new StringBuilder()).append("DataSource ").append(data.getName()).append(" declared to inherit from DataSource ").append(
                         _superDSName).append(" which could not be loaded.set superDSName=null").toString();
-                    EventUtils.createAndFireDSValidateEvent(Level.DEBUG, __vinfo, null);
+                    getThreadEventWork().createAndFireDSValidateEvent(Level.DEBUG, __vinfo, null);
                     // data.addValidationEvent(new DSValidation(Level.WARNING, __vinfo));
                 } else {
                     data.setSuperDS(_superDS);
