@@ -24,7 +24,7 @@ package org.solmix.api.pool;
  * @author solmix.f@gmail.com
  * @version 110035
  */
-public interface PoolServiceFactory
+public interface PoolManagerFactory
 {
 
     /**
@@ -38,7 +38,7 @@ public interface PoolServiceFactory
      * @param factory
      * @return
      */
-    PoolService createPoolService(String name, IPoolableObjectFactory factory);
+    PoolManager createPoolManager(String name, IPoolableObjectFactory factory);
 
     /**
      * Destroy this factory,when not used.

@@ -26,7 +26,7 @@ import org.solmix.api.exception.SlxException;
  * @author solmix.f@gmail.com
  * @version 110035
  */
-public interface PoolService
+public interface PoolManager
 {
 
     /**

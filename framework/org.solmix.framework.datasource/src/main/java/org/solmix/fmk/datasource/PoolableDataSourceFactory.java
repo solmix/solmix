@@ -21,9 +21,12 @@ package org.solmix.fmk.datasource;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -45,9 +48,23 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
 
     private DSRequest dsRequest;
 
+    private SystemContext sc;
+    private DataSourceProvider provider;
+
     PoolableDataSourceFactory()
     {
+        this(null);
+    }
 
+    public PoolableDataSourceFactory(SystemContext sc)
+    {
+        setSystemContext(sc);
+       
+    }
+
+    @Resource
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
     }
 
     /**
@@ -68,7 +85,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public DataSource makeUnpooledObject(Object key, DSRequest request) throws Exception {
-        return DataSourceProvider.forName(key.toString(), request);
+        return DataSourceProvider.forName(sc,key.toString(), request);
     }
 
     /**
@@ -95,9 +112,10 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
         numActivateObjectCalls.getAndIncrement();
         if (obj instanceof DataSource) {
             DataSource ds = (DataSource) obj;
-            if(!ds.getName().equals(key.toString())){
-                throw new java.lang.IllegalStateException(new StringBuilder().append("Miss match datasource,the key is ")
-                    .append(key.toString()).append(" but the datasource is ").append(ds.getName()).toString());
+            if (!ds.getName().equals(key.toString())) {
+                throw new java.lang.IllegalStateException(
+                    new StringBuilder().append("Miss match datasource,the key is ").append(key.toString()).append(" but the datasource is ").append(
+                        ds.getName()).toString());
             }
         }
 
@@ -112,7 +130,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
     public void destroyObject(Object key, Object obj) throws Exception {
         numDestroyObjectCalls.getAndIncrement();
         ((DataSource) obj).clearState();
-        obj=null;
+        obj = null;
 
     }
 
@@ -154,7 +172,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
                 return false;
             long lastTimeStamp = 0;
             try {
-                DSRepository repo = DefaultDataSourceManager.getRepoService().loadDSRepo(DefaultParser.DEFAULT_REPO);
+                DSRepository repo = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class).loadDSRepo(DefaultParser.DEFAULT_REPO);
                 String dsName = key == null ? null : key.toString() + "." + DefaultParser.DEFAULT_REPO_SUFFIX;
 
                 Object configFile = repo.load(dsName);
@@ -164,11 +182,11 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
             } catch (IOException e) {
                 log.warn("Get da config file failed,IO Exception", e);
             }
-           
+
             if (lastTimeStamp != timestamp)
                 return false;
         }
-        
+
         return true;
     }
 
@@ -179,7 +197,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
      */
     @Override
     public IPoolableObjectFactory newInstance(Object obj) throws SlxException {
-        return new PoolableDataSourceFactory();
+        return new PoolableDataSourceFactory(sc);
     }
 
 }
