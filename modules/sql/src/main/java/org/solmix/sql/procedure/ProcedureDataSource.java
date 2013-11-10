@@ -33,7 +33,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
@@ -48,7 +47,6 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.ConnectionManager;
-import org.solmix.sql.internal.SQLConfigManager;
 
 public final class ProcedureDataSource
 {
@@ -59,6 +57,7 @@ public final class ProcedureDataSource
 
     public static String OUTPUT = "out";
 
+    private ConnectionManager connectionManager;
     private static final Logger log = LoggerFactory.getLogger(ProcedureDataSource.class.getName());
 
     @SuppressWarnings("unchecked")
@@ -78,12 +77,13 @@ public final class ProcedureDataSource
         }
         Map context = Velocity.getStandardContextMap(req);
         String explictSQL = Velocity.evaluateAsString(sql, context);
-        boolean printSQL = SQLConfigManager.getConfig().getBoolean("printSQL", false);
+        //XXX
+        boolean printSQL = true;
         if (printSQL)
             log.info(explictSQL);
 
         try {
-            conn = ConnectionManager.getConnection(getDbName(data));
+            conn = connectionManager.get(getDbName(data));
             CallableStatement pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);
             int inputLength = l.size();
@@ -143,7 +143,7 @@ public final class ProcedureDataSource
             e.printStackTrace();
         } finally {
             if (conn != null)
-                ConnectionManager.freeConnection(conn);
+                connectionManager.free(conn);
 
         }
         __resp.setContext(respData);
@@ -152,7 +152,6 @@ public final class ProcedureDataSource
 
     private String getDbName(DataSourceData data) {
         String dbName = data.getTdataSource() != null ? data.getTdataSource().getDbName() : null;
-        dbName = dbName == null ? SQLConfigManager.defaultDatabase : dbName;
         return dbName;
     }
 }

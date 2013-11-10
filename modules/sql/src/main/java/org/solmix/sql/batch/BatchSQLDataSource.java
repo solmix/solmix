@@ -34,7 +34,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
@@ -51,7 +50,6 @@ import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.ConnectionManager;
 import org.solmix.sql.SQLTransform;
-import org.solmix.sql.internal.SQLConfigManager;
 
 /**
  * 
@@ -65,17 +63,16 @@ public final class BatchSQLDataSource
     private static final Logger log = LoggerFactory.getLogger(BatchSQLDataSource.class.getName());
 
     private String dbName;
-
+    private ConnectionManager connectionManager;
     protected String getDbName(DataSourceData data) {
         if (this.dbName == null) {
             dbName = data.getTdataSource() != null ? data.getTdataSource().getDbName() : null;
-            dbName = dbName == null ? SQLConfigManager.defaultDatabase : dbName;
         }
         return dbName;
     }
 
     public void freeConnection(Connection connection) throws SlxException {
-        ConnectionManager.freeConnection(connection);
+        connectionManager.free(connection);
 
     }
 
@@ -86,7 +83,7 @@ public final class BatchSQLDataSource
         Connection conn = null;
         try {
             Map context = Velocity.getStandardContextMap(req);
-            conn = ConnectionManager.getConnection(getDbName(data));
+            conn = connectionManager.get(getDbName(data));
             Eoperation _optType = req.getContext().getOperationType();
             String _opID = req.getContext().getOperationId();
             ToperationBinding _bind = data.getOperationBinding(_optType, _opID);
@@ -122,7 +119,7 @@ public final class BatchSQLDataSource
             throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
 
         } finally {
-            ConnectionManager.freeConnection(conn);
+            connectionManager.free(conn);
         }
         __resp.setContext(respData);
         return __resp;
@@ -165,7 +162,7 @@ public final class BatchSQLDataSource
             Map context = Velocity.getStandardContextMap(req);
             explictSQL = Velocity.evaluateAsString(sql, context);
 
-            conn = ConnectionManager.getConnection(getDbName(data));
+            conn = connectionManager.get(getDbName(data));
 
             PreparedStatement pre = conn.prepareStatement(explictSQL);
             int affectRow = 0;
@@ -247,7 +244,7 @@ public final class BatchSQLDataSource
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } finally {
             if (conn != null)
-                ConnectionManager.freeConnection(conn);
+                connectionManager.free(conn);
 
         }
         __resp.setContext(respData);
