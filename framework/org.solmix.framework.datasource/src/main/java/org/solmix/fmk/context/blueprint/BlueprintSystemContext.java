@@ -20,12 +20,15 @@ package org.solmix.fmk.context.blueprint;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.solmix.api.bean.BeanConfigurer;
 import org.solmix.api.bean.ConfiguredBeanProvider;
 import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.fmk.cm.osgi.OsgiConfigureUnitManager;
 import org.solmix.fmk.context.ext.SolmixSystemContext;
 
@@ -57,6 +60,9 @@ public class BlueprintSystemContext extends SolmixSystemContext
         super.setBean(bundleClassLoader, ClassLoader.class);
         super.setBean(bundleContext, BundleContext.class);
         super.setBean(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
+        Dictionary<String, Object > properties= new Hashtable<String,Object>();
+        properties.put(CONTEXT_PROPERTY_NAME, getId());
+        bundleContext.registerService(SystemContext.class, this, properties);
     }
     
     /**
@@ -72,8 +78,7 @@ public class BlueprintSystemContext extends SolmixSystemContext
     @Override
     public String getId() {
         if (id == null) {
-            id = bundleContext.getBundle().getSymbolicName() + "-" 
-                + DEFAULT_CONTEXT_ID + Integer.toString(this.hashCode());
+            id =/* bundleContext.getBundle().getSymbolicName() + "-"  +*/ DEFAULT_CONTEXT_ID +"-"+ Integer.toString(this.hashCode());
         }
         return id;
     }

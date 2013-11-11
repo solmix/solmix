@@ -12,10 +12,9 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
 	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
-	<bean id="org.solmix.api.repo.DSRepositoryManager" class="org.solmix.fmk.repo.DSRepositoryManagerImpl">
+	<bean id="org.solmix.fmk.pool.PoolManagerFactory" class="org.solmix.fmk.pool.PoolManagerFactoryImpl">
 		<argument ref="solmix"/>
 	</bean>
 	<reference interface="org.solmix.api.context.SystemContext" id="solmix"/>
-
 
 </blueprint>
