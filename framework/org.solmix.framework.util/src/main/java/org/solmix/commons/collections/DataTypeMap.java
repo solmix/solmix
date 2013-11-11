@@ -430,4 +430,5 @@ public class DataTypeMap extends AbstractMapDecorator
         else
             return new Double(value.toString().trim());
     }
+
 }

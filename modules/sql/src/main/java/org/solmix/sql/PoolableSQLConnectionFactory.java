@@ -72,10 +72,10 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
         interfaceType = EInterfaceType.DATASOURCE;
     }
 
-    public PoolableSQLConnectionFactory(String serverName) throws SlxException
+    public PoolableSQLConnectionFactory(String serverName,SystemContext sc) throws SlxException
     {
+        this(sc);
        DataTypeMap serconfig= getConfig().getSubtree(serverName);
-       autoDeriveConfig = false;
        interfaceType = EInterfaceType.DATASOURCE;
        this.serverName = serverName;
        this.sqlConfig = serconfig;
@@ -249,7 +249,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      */
     @Override
     public IPoolableObjectFactory newInstance(Object key) throws SlxException {
-        return new PoolableSQLConnectionFactory(key.toString());
+        return new PoolableSQLConnectionFactory(key.toString(),sc);
     }
 
 }

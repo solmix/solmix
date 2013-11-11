@@ -50,7 +50,7 @@ public class PoolActivator implements BundleActivator
     @Override
     public void start(BundleContext context) throws Exception {
         this.context = context;
-        factory = new PoolManagerFactoryImpl();
+        factory = new PoolManagerFactoryImpl(null);
         cmSuport = new ConfigAdminSupport(context, factory);
         context.registerService(PoolManagerFactory.class, factory, null);
 

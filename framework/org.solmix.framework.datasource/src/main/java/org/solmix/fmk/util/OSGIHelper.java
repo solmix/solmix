@@ -28,16 +28,12 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.SlxConstants;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.repo.DSRepositoryManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
-import org.solmix.fmk.repo.DSRepositoryManagerImpl;
-import org.solmix.fmk.repo.FileSystemRepository;
-import org.solmix.fmk.servlet.ServletTools;
 
 /**
  * @version 110035
@@ -135,35 +131,6 @@ public class OSGIHelper
         }
     }
 
-    /**
-     * @return the dSR
-     */
-    public static DSRepositoryManager getDSR() {
-        if (DSR == null && SlxConstants.isOSGI()) {
-            try {
-                throw new SlxException(Tmodule.REPO, Texception.OSGI_SERVICE_UNAVAILABLE, "osgi DSRepoService is unavalable");
-            } catch (SlxException e) {
-                log.error(e.getMessage());
-            }
-            log.debug("use the OSGI container to find out datasource repository service");
-        } else {
-            if (DSR == null) {
-                log.debug("Not under OSGI-ENV ,use default datasource repository  service implementation.");
-                DSRepositoryManagerImpl repoManager = new DSRepositoryManagerImpl();
-                String repoLoacation = "";
-                try {
-                    repoLoacation = ServletTools.getContainerPath(servletContext) + "datasource";
-                } catch (SlxException e) {
-                    log.error(e.getMessage());
-                }
-                FileSystemRepository repo = new FileSystemRepository();
-                repo.setLocation(repoLoacation);
-                repoManager.setDefaultRepo(repo);
-                DSR = repoManager;
-            }
-        }
-        return DSR;
-    }
 
     private synchronized void refresh_dsm() {
         if (dsmanagers != null && dsmanagers.size() >= 1)

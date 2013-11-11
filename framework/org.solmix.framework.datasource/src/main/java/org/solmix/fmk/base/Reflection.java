@@ -162,7 +162,7 @@ public class Reflection
         return invokeStaticMethod(className, methodName, params);
     }
 
-    public static Object invokeStaticMethod(String className, String methodName, Object params[]) throws Exception {
+    public static Object invokeStaticMethod(String className, String methodName, Object... params) throws Exception {
         try {
             Method method = findMethod(className, methodName, lookupTypes(params));
             return method.invoke(null, params);

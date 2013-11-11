@@ -57,7 +57,8 @@ public class DataSourceMock
         DataSourceData context = new DataSourceData(tds);
         BasicDataSource _return = null;
         try {
-            _return = new BasicDataSource(context);
+            _return = new BasicDataSource();
+            _return.init(context);
         } catch (SlxException e) {
             e.printStackTrace();
         }

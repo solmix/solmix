@@ -33,7 +33,6 @@ import org.solmix.api.context.Context.Scope;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
-import org.solmix.api.event.EventManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.fmk.rpc.Transaction;
@@ -142,7 +141,7 @@ public final class SlxContext
      * 
      * @return
      */
-    public static EventManager getEventManager() {
+   /* public static EventManager getEventManager() {
         AbstractSystemContext abc = getAbstractSystemContext();
         if (abc != null) {
             EventManager ctx = abc.getEventManager();
@@ -153,7 +152,7 @@ public final class SlxContext
         } else {
             return null;
         }
-    }
+    }*/
 
     /**
      * Set the context for locale thread.

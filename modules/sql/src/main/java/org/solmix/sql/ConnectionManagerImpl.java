@@ -271,7 +271,7 @@ public class ConnectionManagerImpl implements ConnectionManager
         DataTypeMap dbConfig = getSqlConfig().getSubtree(dbName);
         Boolean usedPool = dbConfig.getBoolean(SQLDataSource.USED_POOL);
         if (usedPool == null || usedPool.booleanValue())
-            __return = (Connection) manager.borrowObject(dbName);
+            __return = (Connection) getManager().borrowObject(dbName);
         else {
             String _interfaceType = dbConfig.getString(SQLDataSource.INTERFACE_TYPE);
             EInterfaceType type = EInterfaceType.fromValue(_interfaceType);
@@ -415,7 +415,7 @@ public class ConnectionManagerImpl implements ConnectionManager
         if (dbName == null)
             dbName = getSqlConfig().getString(SqlCM.P_DEFAULT_DATABASE, SqlCM.DEFAULT_DATABASE);
         try {
-            __return = (Connection) manager.borrowNewObject(dbName);
+            __return = (Connection) getManager().borrowNewObject(dbName);
         } catch (Exception e) {
             throw new SlxException(Tmodule.SQL, Texception.POOL_BORROW_OBJECT_FAILD, e);
         }

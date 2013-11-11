@@ -20,6 +20,7 @@
 package org.solmix.fmk.datasource;
 
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,11 +33,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.data.DataSourceData;
@@ -132,7 +137,12 @@ public class BasicDataSource implements DataSource
 
     public BasicDataSource(SystemContext sc) 
     {
-       this.sc=sc;
+        setSystemContext(sc);
+    }
+    
+    @Resource
+    public void setSystemContext(SystemContext sc){
+        this.sc=sc;
     }
     public static synchronized JSParser getJsParser() {
         if (jsParser == null) {
@@ -188,7 +198,23 @@ public class BasicDataSource implements DataSource
      * @return
      */
    protected DataTypeMap getConfig() throws SlxException{
-        return new DataTypeMap();
+           ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+           ConfigureUnit cu=null;
+           try {
+               cu = cum.getConfigureUnit(getPID());
+           } catch (IOException e) {
+               throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
+           }
+           if (cu != null)
+               return cu.getProperties();
+           else
+               return new DataTypeMap();
+       }
+    /**
+     * @return
+     */
+    protected  String getPID() {
+        return "org.solmix.framework.datasource";
     }
 
     /**

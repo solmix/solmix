@@ -89,7 +89,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
         resourceBundleCaches = new HashMap<Object, ResourceBundleCache>();
         if (this.bundleContext != null) {
             this.defaultCache = new ResourceBundleCache(this.bundleContext.getBundle());
-            bundleContext.addBundleListener(this);
+            this.bundleContext.addBundleListener(this);
         } else {
             this.defaultCache = new ResourceBundleCache();
         }

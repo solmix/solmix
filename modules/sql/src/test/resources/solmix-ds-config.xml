@@ -24,14 +24,13 @@
     </type-converters>
 
     <!-- Allow usage of System properties, especially the karaf.base property -->
-    <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
+  <!--   <ext:property-placeholder placeholder-prefix="$[" placeholder-suffix="]"/>
 
-    <!-- AdminConfig property place holder for the org.apache.karaf.jaas  -->
     <cm:property-placeholder persistent-id="org.solmix.modules.sql" >
         <cm:default-properties>
-            <!-- mode defined -->
+            mode defined
            
-             <!--=========SQL configuration  ===========-->
+             =========SQL configuration  ===========
             <cm:property name="sql.defaultDatabase" value="HSQLDB"/>
             <cm:property name="sql.jndi.autoDetect" value="true"/>
             <cm:property name="sql.jndi.autoDetectSpace" value="jdbc/"/>
@@ -55,7 +54,7 @@
             <cm:property name="sql.ORACLE.autoJoinTransactions" value="true"/>
             <cm:property name="sql.ORACLE.jndiosgi" value="(osgi.jndi.service.name=jdbc/NoTxOracleDataSource)"/>
         </cm:default-properties>
-    </cm:property-placeholder>
+    </cm:property-placeholder> -->
     <bean>
     	<property name="NCName">
     		<map>

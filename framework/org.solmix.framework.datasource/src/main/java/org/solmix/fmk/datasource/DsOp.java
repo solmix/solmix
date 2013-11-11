@@ -52,7 +52,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
                 request.getContext().setOperation(opId);
             request.getContext().setOperationType(type);
         } catch (Exception e) {
-            log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" + e.getMessage());
+            log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" ,e);
         }
 
         D d=null;

@@ -179,7 +179,7 @@ public class AppBase implements Application
                 MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
             }
         } else {
-            if (log.isDebugEnabled()) {
+            if (log.isTraceEnabled()) {
                 MDC.put(
                     SlxLog.LOG_CONTEXT,
                     (new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(
@@ -228,7 +228,7 @@ public class AppBase implements Application
             // if ( !result.getContext().statusIsError() )
             dsresponse = result;
         } finally {
-            if (log.isDebugEnabled()) {
+            if (log.isTraceEnabled()) {
                 MDC.remove(SlxLog.LOG_CONTEXT);
             }
             freeDataSources();
@@ -242,7 +242,7 @@ public class AppBase implements Application
      */
     protected boolean userTypePermission() {
         if (definedUserTypes == null) {
-            log.debug("No userTypes defined, allowing anyone access to all operations for this application");
+            log.trace("No userTypes defined, allowing anyone access to all operations for this application");
             return true;
         }
         switch (definedUserTypes) {

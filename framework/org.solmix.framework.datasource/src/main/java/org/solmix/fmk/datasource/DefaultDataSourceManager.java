@@ -145,7 +145,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     @Override
     public synchronized PoolManager getPoolManager() {
         if (manager == null) {
-
+            manager = getPoolManagerFactory().createPoolManager(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory(sc));
         }
         return manager;
 

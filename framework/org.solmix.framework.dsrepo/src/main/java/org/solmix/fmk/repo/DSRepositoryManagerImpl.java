@@ -95,7 +95,7 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
     @Override
     public DSRepository loadDSRepo(String ID) throws SlxException {
         if ("default".equals(ID) || ID == null) {
-            return this.defaultRepo;
+            return getDefaultRepo();
         } else {
             List<DSRepository> repos = this.tracker.getRepos();
             for (DSRepository repo : repos) {

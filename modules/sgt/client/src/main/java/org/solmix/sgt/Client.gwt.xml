@@ -4,7 +4,7 @@
 	<inherits name="com.smartgwt.SmartGwtNoSmartClient"/>
 	<inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.core.Core"/>
-    <inherits name="org.atmosphere.gwt.Client"/>
+    <inherits name="org.solmix.atmosphere.Client"/>
     <inherits name="com.smartgwt.extensions.pagebar.PageBar" />
  	<inherits name="com.smartgwt.extensions.advanceds.AdvanceDS" />
 	<inherits name="com.gwtplatform.mvp.Mvp" />

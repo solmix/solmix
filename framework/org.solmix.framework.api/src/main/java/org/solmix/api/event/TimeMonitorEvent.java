@@ -37,7 +37,7 @@ public class TimeMonitorEvent extends Event implements ITimeMonitorEvent, java.i
      */
     private static final long serialVersionUID = 1L;
 
-    private Map<String, Object> map;
+    private final Map<String, Object> map;
 
     /**
      * @param topic
@@ -57,6 +57,18 @@ public class TimeMonitorEvent extends Event implements ITimeMonitorEvent, java.i
     @Override
     public Map<String, Object> getProperties() {
         return map;
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Topic is [").append(getTopic()).append("] values\n");
+        if(map!=null){
+            for(String key:map.keySet()){
+                sb.append(key).append(" = ").append(map.get(key));
+            }
+        }
+        return sb.toString();
+        
     }
 
 }

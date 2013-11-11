@@ -22,6 +22,7 @@ package org.solmix.fmk.serialize;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
 
@@ -39,6 +40,8 @@ public class JSParserFactoryImpl implements JSParserFactory
 
     private final List<JSParser> parsers = new CopyOnWriteArrayList<JSParser>();
 
+    private final SystemContext sc;
+
     public synchronized static JSParserFactory getInstance() {
         if (instance == null) {
             instance = new JSParserFactoryImpl();
@@ -46,9 +49,14 @@ public class JSParserFactoryImpl implements JSParserFactory
         return instance;
     }
 
-    private JSParserFactoryImpl()
+    public JSParserFactoryImpl()
     {
+        this(null);
+    }
 
+    public JSParserFactoryImpl(SystemContext sc)
+    {
+        this.sc = sc;
     }
 
     /**

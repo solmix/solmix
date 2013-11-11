@@ -13,9 +13,30 @@
   		<artifactId>org.solmix.modules.jpa</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>org.solmix.modules</groupId>
-  		<artifactId>org.solmix.modules.spring</artifactId>
-  		<scope>test</scope>
-  	</dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.3.172</version>
+			<scope>test</scope>
+		</dependency>
+  	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.aries.blueprint</groupId>
+            <artifactId>org.apache.aries.blueprint.core</artifactId>
+            <optional>true</optional>
+        </dependency>
   </dependencies>
 </project>

@@ -31,10 +31,6 @@ import java.util.Map;
 import org.osgi.service.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
-
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.event.IValidationEvent.Level;
@@ -47,9 +43,14 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
+import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.datasource.ValidationEventFactory;
-import org.solmix.fmk.event.EventUtils;
+import org.solmix.fmk.event.EventWorker;
+import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.js.ISCJavaScript;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 public class DataTools
 {
@@ -96,7 +97,7 @@ public class DataTools
                     if (value != null || name != null)
                         map.put(name, value);
                 } catch (SlxException e1) {
-                    EventUtils.createAndFireDSValidateEvent(Level.WARNING, "The request data " + element.toString()
+                    getThreadEventWork().createAndFireDSValidateEvent(Level.WARNING, "The request data " + element.toString()
                         + "is not a Element type values,check the Request-Data", null);
                     // if (validation != null)
                     // validation.add(new DSValidation(Level.WARNING, "The request data " + element.toString()
@@ -104,7 +105,7 @@ public class DataTools
                 }
 
             } else {
-                EventUtils.createAndFireDSValidateEvent(Level.WARNING, "The request data " + element.toString()
+                getThreadEventWork().createAndFireDSValidateEvent(Level.WARNING, "The request data " + element.toString()
                     + "is not a Element type values,check the Request-Data", null);
                 // if (validation != null)
                 // validation.add(new DSValidation(Level.WARNING, "The request data " + element.toString()
@@ -114,6 +115,11 @@ public class DataTools
         }
         return map;
 
+    }
+    public static EventWorker getThreadEventWork(){
+        EventWorkerFactory factory= EventWorkerFactory.getInstance();
+        EventWorker worker= factory.createWorker(SlxContext.getThreadSystemContext());
+        return worker;
     }
 
     public static Object XMLtoRecord(Object xmlObj) throws SlxException {

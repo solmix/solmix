@@ -58,7 +58,7 @@ public class SystemApplicationContext extends ClassPathXmlApplicationContext
 
     public static final String DEFAULT_CFG_FILE = "META-INF/solmix/solmix.xml";
 
-    public static final String DEFAULT_EXT_CFG_FILE = "classpath*:META-INF/solmix/solmix-";
+    public static final String DEFAULT_EXT_CFG_FILE = "classpath*:META-INF/solmix/solmix.modules";
 
     private static final Logger log = LoggerFactory.getLogger(SystemApplicationContext.class);
 

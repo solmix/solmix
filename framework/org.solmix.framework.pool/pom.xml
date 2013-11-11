@@ -53,7 +53,7 @@
 						<Private-Package>org.solmix.fmk.pool.internal</Private-Package>
 						<!--<_failok>${solmix.osgi.failok}</_failok> -->
 						<!-- <_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
-						<Bundle-Activator>org.solmix.fmk.pool.internal.PoolActivator</Bundle-Activator>
+						<!-- <Bundle-Activator>org.solmix.fmk.pool.internal.PoolActivator</Bundle-Activator> -->
 						<DynamicImport-Package>*</DynamicImport-Package>
 					</instructions>
 					<!--<unpackBundle>false</unpackBundle> -->

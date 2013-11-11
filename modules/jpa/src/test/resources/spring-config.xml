@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	<context:property-placeholder location="classpath:config/org.solmix.framework.dsrepo.cfg"	system-properties-mode="OVERRIDE" />
+	<bean	id="config_manager" class="org.solmix.fmk.spring.cm.SpringManagedService">
+	<property name="locations">
+		<list>
+			<value>classpath:config/org.solmix.framework.dsrepo.cfg</value>
+			<value>classpath:config/org.solmix.modules.sql.cfg</value>
+			<value>classpath:config/org.solmix.framework.datasource.cfg</value>
+			<value>classpath:config/org.solmix.framework.pool.cfg</value>
+			</list>
+	</property>
+	<property name="managers">
+		<list>
+			<bean id="sql_manager" class="org.solmix.sql.internal.SQLConfigManager"></bean>
+			<bean id="ds_manager" class="org.solmix.fmk.internal.DSConfigManager"></bean>
+			<bean id="pool_manager" class="org.solmix.fmk.pool.PoolManagerFactory"></bean>
+		</list>
+	</property>
+</bean>
+
+</beans>

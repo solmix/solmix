@@ -19,7 +19,6 @@
 
 package org.solmix.sql;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -35,13 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -64,7 +59,6 @@ import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.BasicDataSource;
@@ -123,13 +117,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     public SQLDataSource(SystemContext sc)
     {
-        setSystemContext(sc);
+       super(sc);
 
-    }
-
-    @Resource
-    public void setSystemContext(SystemContext sc) {
-        this.sc = sc;
     }
 
     /**
@@ -1408,24 +1397,15 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     }
 
-    @Override
-    protected DataTypeMap getConfig() throws SlxException {
-        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
-        ConfigureUnit cu=null;
-        try {
-            cu = cum.getConfigureUnit(SERVICE_PID);
-        } catch (IOException e) {
-            throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
-        }
-        if (cu != null)
-            return cu.getProperties();
-        else
-            return new DataTypeMap();
-    }
+   @Override
+protected String getPID(){
+       return SERVICE_PID;
+   }
 
     @Override
     public DataSource instance(DataSourceData data) throws SlxException {
         SQLDataSource sql = new SQLDataSource(sc);
+        sql.setConnectionManager(connectionManager);
         sql.init(data);
         return sql;
     }
