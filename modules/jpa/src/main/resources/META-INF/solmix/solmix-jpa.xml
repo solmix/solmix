@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+   <bean id="org.solmix.jpa.JPADataSource" class="org.solmix.jpa.JPADataSource" lazy-init="true">
+        <constructor-arg ref="solmix"/>
+        <property name="entityManagerFactoryProvider" ref="org.solmix.jpa.EntityManagerFactoryProvider" />
+   </bean>
+    <bean id="org.solmix.jpa.EntityManagerFactoryProvider" class="org.solmix.jpa.LocalEntityManagerFactoryProvider" lazy-init="true">
+        <constructor-arg ref="solmix"/>
+   </bean>
+</beans>

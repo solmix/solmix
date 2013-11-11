@@ -34,6 +34,7 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -49,6 +50,7 @@ import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.datasource.BasicDataSource;
@@ -67,7 +69,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     private final static Logger log = LoggerFactory.getLogger(JPADataSource.class.getName());
 
-    // private boolean strictSQLFiltering;
+    public static final String SERVICE_PID = "org.solmix.modules.jpa";
 
     private boolean useQualifiedClassName;
 
@@ -81,7 +83,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     private Object transaction;
 
-    private JPATransactionManager transactionManager;
+    private EntityManagerFactoryProvider entityManagerFactoryProvider;
 
     String entity = null;
 
@@ -92,6 +94,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     /**
      * This Constructor used by inject,such as spring guice.Coding instance call
      * {@link org.solmix.jpa.JPADataSource#instance(DataSourceData)}
+     * 
      * @throws SlxException
      */
     public JPADataSource() throws SlxException
@@ -99,11 +102,9 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     }
 
-     JPADataSource(DataSourceData data) throws SlxException
+    public JPADataSource(SystemContext sc)
     {
-        // strictSQLFiltering = false;
-        useQualifiedClassName = false;
-        this.init(data);
+        setSystemContext(sc);
     }
 
     /**
@@ -116,18 +117,46 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         return EserverType.JPA.value();
     }
 
+    /**
+     * @return the entityManagerFactoryProvider
+     */
+    public EntityManagerFactoryProvider getEntityManagerFactoryProvider() {
+        return entityManagerFactoryProvider;
+    }
+
+    /**
+     * @param entityManagerFactoryProvider the entityManagerFactoryProvider to set
+     */
+    public void setEntityManagerFactoryProvider(EntityManagerFactoryProvider entityManagerFactoryProvider) {
+        this.entityManagerFactoryProvider = entityManagerFactoryProvider;
+    }
+
     @Override
     public void init(DataSourceData data) throws SlxException {
         // adaptProvider(data);
         try {
-            if(transactionManager!=null){
-                entityManager = transactionManager.getEntityManager();
-                transactionManager.returnEntityManager(entityManager);
+            if (entityManager == null) {
+                entityManager = JPATransaction.getEntityManager(getEmf(data));
+                JPATransaction.returnEntityManager(entityManager);
             }
         } catch (Exception e) {
             log.error("Unexpected exception while initial entityManager", e);
         }
         super.init(data);
+    }
+
+    private EntityManagerFactory getEmf(DataSourceData data) throws SlxException {
+        String persistenceUnit = data.getTdataSource() == null ? null : data.getTdataSource().getPersistenceUnit();
+        if (persistenceUnit == null)
+            persistenceUnit = getConfig().getString(JpaCM.P_DEFAULT_UNIT, "default");
+
+        DataTypeMap pconfig = getConfig().getSubtree(new StringBuilder().append(JpaCM.P_UNIT_PREFIX).append(persistenceUnit).toString());
+        if (pconfig.isEmpty()) {
+            return this.entityManagerFactoryProvider.createEntityManagerFactory(persistenceUnit);
+        } else {
+            return this.entityManagerFactoryProvider.createEntityManagerFactory(persistenceUnit, pconfig);
+        }
+
     }
 
     public void destroy() {
@@ -165,17 +194,18 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     @Override
     public DataSource instance(DataSourceData data) throws SlxException {
-        JPADataSource ds = new JPADataSource(data);
-        if(this.getTransactionManager()!=null){
-            ds.setTransactionManager(getTransactionManager());
+        JPADataSource ds = new JPADataSource(sc);
+        if (this.getEntityManagerFactoryProvider() != null) {
+            ds.setEntityManagerFactoryProvider(getEntityManagerFactoryProvider());
         }
+        init(data);
         return ds;
     }
 
     protected void adaptProvider(DataSourceData context) throws SlxException {
         String unit = context == null ? null : context.getTdataSource() == null ? null : context.getTdataSource().getPersistenceUnit();
         if (unit == null) {
-            unit = JPAConfigManager.getConfig().getString("default.persistenceUnit", "default");
+            unit = getConfig().getString("default.persistenceUnit", "default");
         }
         Object[] objs = ServiceUtil.getOSGIServices(EntityManagerFactory.class.getName(), "(osgi.unit.name=" + unit + ")");
         EntityManagerFactory factory = objs == null ? null : objs.length >= 1 ? (EntityManagerFactory) objs[0] : null;
@@ -239,8 +269,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             if (holder == null) {
                 if (shouldAutoStartTransaction(req, false)) {
                     try {
-                        entityManager = transactionManager.getEntityManager();
-                        transaction = transactionManager.getTransaction(entityManager);
+                        entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
+                        transaction = JPATransaction.getTransaction(entityManager);
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
@@ -250,8 +280,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     req.getRpc().registerCallback(this);
                 } else {
                     try {
-                        entityManager = transactionManager.getEntityManager();
-                        transaction = transactionManager.getTransaction(entityManager);
+                        entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
+                        transaction = JPATransaction.getTransaction(entityManager);
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
@@ -263,8 +293,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             req.setPartOfTransaction(true);
         } else {
             try {
-                entityManager = transactionManager.getEntityManager();
-                transaction = transactionManager.getTransaction(entityManager);
+                entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
+                transaction = JPATransaction.getTransaction(entityManager);
             } catch (Exception e) {
                 log.error("Unexpected exception while initial entityManager", e);
             }
@@ -385,8 +415,9 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         StringBuffer jpaQuery = new StringBuffer().append("select ").append(entityName).append(" from ").append(
             useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
         // result count JPAQL string.
-        StringBuffer jpaCountQ = new StringBuffer().append("select count (").append(data.getPrimaryKey()==null?entityName:entityName+"."+data.getPrimaryKey()).append(
-            ") from ").append(useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
+        StringBuffer jpaCountQ = new StringBuffer().append("select count (").append(
+            data.getPrimaryKey() == null ? entityName : entityName + "." + data.getPrimaryKey()).append(") from ").append(
+            useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
         if (DataUtil.isNotNullAndEmpty(whereClause)) {
             jpaQuery.append(" where ").append(whereClause);
             jpaCountQ.append(" where ").append(whereClause);
@@ -418,7 +449,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                 req.getContext().getOperation().toString());
         } catch (NullPointerException e) {
         }
-        if (!req.getContext().isPaged() && JPAConfigManager.getConfig().getBoolean("customSQLReturnsAllRows", false)
+        if (!req.getContext().isPaged() && getConfig().getBoolean("customSQLReturnsAllRows", false)
             && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))) {
             __canPage = false;
             log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
@@ -451,6 +482,11 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         __return.getContext().setData(results);
         increaseOpCount();
         return __return;
+    }
+
+    @Override
+    protected String getPID() {
+        return SERVICE_PID;
     }
 
     @Override
@@ -583,13 +619,13 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         EntityManagerHolder holder = (EntityManagerHolder) obj;
         try {
             log.debug("committing transaction for" + holder.getOpCount() + "queued operation(s)");
-            this.transactionManager.commitTansaction(holder.getTransaction());
+            JPATransaction.commitTansaction(holder.getTransaction());
         } catch (Exception e) {
-            transactionManager.rollbackTransaction(transaction);
+            JPATransaction.rollbackTransaction(transaction);
             log.error("Failed to commit transaction,Rolling back", e);
         }
         try {
-            transactionManager.returnEntityManager(holder.getEntityManager());
+            JPATransaction.returnEntityManager(holder.getEntityManager());
         } catch (Exception e) {
         }
     }
@@ -614,8 +650,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         try {
             if (log.isTraceEnabled())
                 log.trace("rolling back transaction for" + holder.getOpCount() + "queued operation(s)");
-            this.transactionManager.rollbackTransaction(holder.getTransaction());
-            this.transactionManager.returnEntityManager(holder.getEntityManager());
+            JPATransaction.rollbackTransaction(holder.getTransaction());
+            JPATransaction.returnEntityManager(holder.getEntityManager());
         } catch (Exception e) {
             throw new SlxException(Tmodule.JPA, Texception.JPA_JPAEXCEPTION, e);
         }
@@ -627,19 +663,19 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             if (shouldRollBackTransaction) {
                 if (log.isTraceEnabled())
                     log.trace("rolling back transaction!");
-                this.transactionManager.rollbackTransaction(transaction);
+                JPATransaction.rollbackTransaction(transaction);
             } else {
                 try {
                     if (log.isTraceEnabled())
                         log.trace("committing transaction");
-                    transactionManager.commitTansaction(transaction);
+                    JPATransaction.commitTansaction(transaction);
                 } catch (Exception ex) {
-                    transactionManager.rollbackTransaction(transaction);
+                    JPATransaction.rollbackTransaction(transaction);
                     log.error("Failed to commit transaction,Rolling back", ex);
                 }
             }
             try {
-                transactionManager.returnEntityManager(entityManager);
+                JPATransaction.returnEntityManager(entityManager);
             } catch (Exception ignore) {
             }
         }
@@ -676,18 +712,5 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         log.debug("mark transaction for roll back");
     }
 
-    /**
-     * @return the transactionManager
-     */
-    public JPATransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-    /**
-     * @param transactionManager the transactionManager to set
-     */
-    public void setTransactionManager(JPATransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
 
 }

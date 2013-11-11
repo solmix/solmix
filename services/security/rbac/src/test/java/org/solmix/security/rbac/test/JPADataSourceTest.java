@@ -19,20 +19,18 @@
 
 package org.solmix.security.rbac.test;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
-import org.solmix.api.jaxb.TdataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
-import org.solmix.jpa.JPADataSource;
-import org.springframework.context.ApplicationContext;
 
 /**
  * 
@@ -40,23 +38,18 @@ import org.springframework.context.ApplicationContext;
  * @version $Id$ 2013-10-21
  */
 
-public class JPADataSourceTest
+public class JPADataSourceTest extends Assert
 {
 
-    ApplicationContext ctx;
-
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
-    public void setUp() throws Exception {
-        // Mocks.initContext();
-        //System.setProperty("solmix.base", "web-root");
-        //ctx = new ClassPathXmlApplicationContext("spring-jpa.xml");
+    public void init() {
+        URL root= getClass().getResource("/");
+       String rootPath= root.getPath();
+       System.out.println("Used:"+rootPath+" As [solmix.base]");
+       System.setProperty("solmix.base", rootPath);
     }
-
-//    @Test
-    public void test() throws SlxException {
+    @Test
+    public void test2() throws SlxException {
        DataSource ds =mockds();
         DSRequestImpl dsreq = new DSRequestImpl(ds, Eoperation.FETCH);
         DSResponse res = ds.execute(dsreq);
@@ -75,13 +68,13 @@ public class JPADataSourceTest
         
     }
     private DataSource mockds() throws SlxException{
-        JPADataSource jpa = ctx.getBean("jpaDatasource", JPADataSource.class);
-        TdataSource tds = new TdataSource();
-        tds.setID("JPA_TEST");
-        tds.setSchemaBean("org.solmix.security.entity.AuthAction");
-        DataSourceData dsd = new DataSourceData(tds);
-        DataSource ds = jpa.instance(dsd);
-        return ds;
+//        JPADataSource jpa = ctx.getBean("jpaDatasource", JPADataSource.class);
+//        TdataSource tds = new TdataSource();
+//        tds.setID("JPA_TEST");
+//        tds.setSchemaBean("org.solmix.security.entity.AuthAction");
+//        DataSourceData dsd = new DataSourceData(tds);
+//        DataSource ds = jpa.instance(dsd);
+        return null;
     }
 
 }
