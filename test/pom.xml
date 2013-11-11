@@ -8,6 +8,6 @@
   <artifactId>test</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>integration</module>
+  	<module>intergration</module>
   </modules>
 </project>

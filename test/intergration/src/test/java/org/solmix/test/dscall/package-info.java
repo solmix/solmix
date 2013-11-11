@@ -16,23 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
-package org.solmix.fmk;
-
-import org.junit.Before;
-
 /**
  * 
- * @author Administrator
- * @version 110035 2012-12-2
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-11-10
  */
 
-public abstract class AbstractSolmixTestCase
-{
-
-    @Before
-    public void init() {
-//        ContextMocks.initContext();
-    }
-
-}
+package org.solmix.test.dscall;

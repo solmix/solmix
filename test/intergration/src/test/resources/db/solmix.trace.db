@@ -1,0 +1,115 @@
+07-14 18:16:10 jdbc[3]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-172]
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:171)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:116)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:90)
+	at org.h2.Driver.connect(Driver.java:73)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:655)
+	at org.h2.server.web.WebApp.login(WebApp.java:900)
+	at org.h2.server.web.WebApp.process(WebApp.java:205)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:164)
+	at org.h2.server.web.WebThread.process(WebThread.java:138)
+	at org.h2.server.web.WebThread.run(WebThread.java:94)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: org.h2.jdbc.JdbcSQLException: The connection was not closed by the application and is garbage collected [90018-172]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	... 14 more
+07-14 18:16:10 jdbc[3]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-172]
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:171)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:116)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:90)
+	at org.h2.Driver.connect(Driver.java:73)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:655)
+	at org.h2.server.web.WebApp.login(WebApp.java:900)
+	at org.h2.server.web.WebApp.process(WebApp.java:205)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:164)
+	at org.h2.server.web.WebThread.process(WebThread.java:138)
+	at org.h2.server.web.WebThread.run(WebThread.java:94)
+	at java.lang.Thread.run(Thread.java:662)
+Caused by: org.h2.jdbc.JdbcSQLException: The connection was not closed by the application and is garbage collected [90018-172]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	... 14 more
+07-25 22:55:45 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-25 22:55:45 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-25 22:55:45 jdbc[6]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-25 22:55:45 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-25 22:55:45 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-25 22:55:45 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLException: Table "LINELOSECHART" not found; SQL statement:
+SELECT * FROM LineLoseChart WHERE ('1'='1') [42102-172]
+07-27 18:27:56 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-172]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1413)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1388)
+	at org.h2.jdbc.JdbcConnection.createStatement(JdbcConnection.java:189)
+	at org.apache.commons.dbcp.DelegatingConnection.createStatement(DelegatingConnection.java:257)
+	at org.solmix.sql.SQLDriver.createFetchStatement(SQLDriver.java:426)
+	at org.solmix.sql.SQLDriver.getTransformedResults(SQLDriver.java:374)
+	at org.solmix.sql.SQLDriver.executeQuery(SQLDriver.java:304)
+	at org.solmix.sql.SQLDataSource.executeNativeQuery(SQLDataSource.java:718)
+	at org.solmix.sql.SQLDataSource.executeNativeQuery(SQLDataSource.java:706)
+	at org.solmix.sql.SQLDataSource.executeSQLDataSource(SQLDataSource.java:369)
+	at org.solmix.sql.SQLDataSource.execute(SQLDataSource.java:166)
+	at org.solmix.fmk.application.AppBase.executeDefaultDSOperation(AppBase.java:481)
+	at org.solmix.fmk.application.AppBase.executeAppOperation(AppBase.java:448)
+	at org.solmix.fmk.application.AppBase.execute(AppBase.java:228)
+	at org.solmix.fmk.datasource.DSRequestImpl.execute(DSRequestImpl.java:504)
+	at org.solmix.sgt.server.DSCallServlet.handleDSRequest(DSCallServlet.java:149)
+	at org.solmix.sgt.server.DSCallServlet.processRequest(DSCallServlet.java:99)
+	at org.solmix.sgt.server.DSCallServlet.doPost(DSCallServlet.java:65)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:637)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.solmix.sgt.server.SGTServlet.processRequest(SGTServlet.java:91)
+	at org.solmix.sgt.server.SGTServlet.doPost(SGTServlet.java:64)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:637)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:487)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1097)
+	at org.solmix.fmk.filter.ContextFilter.doFilter(ContextFilter.java:118)
+	at org.solmix.fmk.filter.AbstractFilter.doFilter(AbstractFilter.java:49)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)
+	at org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)
+	at org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)
+	at org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)
+	at org.apache.shiro.web.servlet.AbstractShiroFilter.doFilterInternal(AbstractShiroFilter.java:362)
+	at org.apache.shiro.web.servlet.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:125)
+	at org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1088)
+	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:360)
+	at org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	at org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:181)
+	at org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:729)
+	at org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:405)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.handler.RequestLogHandler.handle(RequestLogHandler.java:49)
+	at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	at org.mortbay.jetty.Server.handle(Server.java:324)
+	at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:505)
+	at org.mortbay.jetty.HttpConnection$RequestHandler.content(HttpConnection.java:843)
+	at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:647)
+	at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:211)
+	at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:380)
+	at org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:395)
+	at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:488)

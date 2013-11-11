@@ -16,23 +16,32 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.test;
 
-package org.solmix.fmk;
+import java.net.URL;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
+
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-12-2
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-11-10
  */
 
-public abstract class AbstractSolmixTestCase
+public class SolmixTestCase extends Assert
 {
-
     @Before
     public void init() {
-//        ContextMocks.initContext();
+        URL root= getClass().getResource("/");
+       String rootPath= root.getPath();
+       System.out.println("Used:"+rootPath+" As [solmix.base]");
+       System.setProperty("solmix.base", rootPath);
     }
-
+    @Test
+    public void test(){
+        
+    }
 }

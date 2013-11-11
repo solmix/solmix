@@ -26,8 +26,10 @@ import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.fmk.context.SlxContext;
+import org.solmix.jpa.JPADataSource;
 import org.solmix.sql.ConnectionManager;
 import org.solmix.sql.SQLDataSource;
+import org.solmix.test.SolmixTestCase;
 
 
 /**
@@ -36,7 +38,7 @@ import org.solmix.sql.SQLDataSource;
  * @version $Id$  2013-11-10
  */
 
-public class SqlDataSourceTest
+public class SqlDataSourceTest extends SolmixTestCase
 {
 
     @Test
@@ -47,6 +49,8 @@ public class SqlDataSourceTest
        for(DataSource ds:dss){
            if(ds.getServerType().equals("sql")){
                Assert.assertTrue(ds instanceof SQLDataSource);
+           }else if(ds.getServerType().equals("jpa")){
+               Assert.assertTrue(ds instanceof JPADataSource);
            }
        }
        Assert.assertTrue(dss.size()>1);
