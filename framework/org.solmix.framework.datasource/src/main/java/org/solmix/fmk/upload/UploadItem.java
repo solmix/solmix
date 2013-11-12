@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.servlet;
+package org.solmix.fmk.upload;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,19 +18,19 @@ import org.solmix.commons.io.ByteCountingOutputStream;
 import org.solmix.commons.io.IByteCounter;
 import org.solmix.commons.util.IOUtil;
 
-public class SlxFileItem implements FileItem
+public class UploadItem implements FileItem
 {
 
     private static final long serialVersionUID = 5709803430443515506L;
     private FileItemHeaders header;
 
-    public SlxFileItem(String fieldName)
+    public UploadItem(String fieldName)
     {
         expectedSize = -1L;
         this.fieldName = fieldName;
     }
 
-    public SlxFileItem(String fieldName, String contentType, boolean isFormField, String fileName, IByteCounter byteCounter)
+    public UploadItem(String fieldName, String contentType, boolean isFormField, String fileName, IByteCounter byteCounter)
     {
         this(fieldName);
         this.contentType = contentType;

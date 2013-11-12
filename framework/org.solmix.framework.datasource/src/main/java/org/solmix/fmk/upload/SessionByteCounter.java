@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.servlet;
+package org.solmix.fmk.upload;
 
 import java.util.List;
 

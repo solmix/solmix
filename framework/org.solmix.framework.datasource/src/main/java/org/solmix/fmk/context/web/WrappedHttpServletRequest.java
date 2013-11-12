@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.servlet;
+package org.solmix.fmk.context.web;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -14,16 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.IByteCounter;
 import org.solmix.commons.util.DataUtil;
+import org.solmix.fmk.upload.SessionByteCounter;
+import org.solmix.fmk.upload.UploadItem;
+import org.solmix.fmk.upload.UploadItemFactory;
+import org.solmix.fmk.util.ServletTools;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class WrappedHttpServletRequest extends HttpServletRequestWrapper
@@ -39,7 +42,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
 
     Map allParams;
 
-    Map fileParams;
+    Map<String,FileItem> fileParams;
 
     Map<String, String> queryParams;
 
@@ -56,7 +59,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
         fileItemParts = new ArrayList();
         this.request = request;
         contentType = request.getContentType();
-        requestIsMultipart = FileUpload.isMultipartContent(request);
+        requestIsMultipart = ServletFileUpload.isMultipartContent(request);
     }
 
     public Map<String, String> getQueryParams() {
@@ -105,14 +108,14 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
         return stringParams;
     }
 
-    public Map getFileParams() throws SlxException {
+    public Map<String,FileItem> getFileParams() throws SlxException {
         return getFileParams(null);
     }
 
-    public Map getFileParams(List errors) throws SlxException {
+    public Map<String,FileItem> getFileParams(List errors) throws SlxException {
         if (fileParams == null) {
             parseRequest(errors);
-            fileParams = new HashMap();
+            fileParams = new HashMap<String,FileItem>();
             Iterator i = fileItemParts.iterator();
             do {
                 if (!i.hasNext())
@@ -142,10 +145,10 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
             return;
         if (requestParsed) {
             if (errors != null && errors.size() > 0) {
-                SlxFileItem fileItem;
+                UploadItem fileItem;
                 List allErrors;
                 for (Iterator i = fileItemParts.iterator(); i.hasNext(); fileItem.setErrors(allErrors)) {
-                    fileItem = (SlxFileItem) i.next();
+                    fileItem = (UploadItem) i.next();
                     allErrors = fileItem.getErrors();
                     if (allErrors == null)
                         allErrors = errors;
@@ -158,7 +161,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
         } else {
             long contentLength = request.getContentLength();
             IByteCounter byteCounter = new SessionByteCounter(request, contentLength, request.getParameter("formID"), errors);
-            FileUpload upload = new FileUpload(new SlxFileItemFactory(byteCounter));
+            ServletFileUpload upload = new ServletFileUpload(new UploadItemFactory(byteCounter));
             try {
                 fileItemParts = upload.parseRequest(request);
             } catch (FileUploadException e) {
@@ -169,15 +172,15 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
         }
     }
 
-    public SlxFileItem getUploadedFile(String fieldName) throws Exception {
+    public UploadItem getUploadedFile(String fieldName) throws Exception {
         return getUploadedFile(fieldName, null);
     }
 
-    public SlxFileItem getUploadedFile(String fieldName, List errors) throws SlxException {
+    public UploadItem getUploadedFile(String fieldName, List errors) throws SlxException {
         if (!isMultipart())
             return null;
         else
-            return (SlxFileItem) getFileParams(errors).get(fieldName);
+            return (UploadItem) getFileParams(errors).get(fieldName);
     }
 
     @Override

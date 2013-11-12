@@ -1,29 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>framework</artifactId>
-    <groupId>org.solmix</groupId>
-    <version>0.4-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-  <groupId>org.solmix.framework</groupId>
-  <artifactId>org.solmix.framework.datasource</artifactId>
-  <name>Solmix :: FrameWork :: DataSource</name>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.apache.poi</groupId>
-  		<artifactId>poi</artifactId>
-  		<scope>provided</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-jxpath</groupId>
-  		<artifactId>commons-jxpath</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-dbcp</groupId>
-  		<artifactId>commons-dbcp</artifactId>
-  	</dependency>
-  	<dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>framework</artifactId>
+		<groupId>org.solmix</groupId>
+		<version>0.4-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<groupId>org.solmix.framework</groupId>
+	<artifactId>org.solmix.framework.datasource</artifactId>
+	<name>Solmix :: FrameWork :: DataSource</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-jxpath</groupId>
+			<artifactId>commons-jxpath</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
 		</dependency>
@@ -31,35 +32,32 @@
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
 		</dependency>
-  	<!-- <dependency>
-    <groupId>org.javassist</groupId>
-    <artifactId>javassist</artifactId>
-    <version>3.16.1-GA</version>
-</dependency> -->
-  	<dependency>
-  		<groupId>org.osgi</groupId>
-  		<artifactId>org.osgi.compendium</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.servicemix.bundles</groupId>
-  		<artifactId>
+		<!-- <dependency> <groupId>org.javassist</groupId> <artifactId>javassist</artifactId> 
+			<version>3.16.1-GA</version> </dependency> -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>
   			org.apache.servicemix.bundles.javassist
   		</artifactId>
-  		<version>3.12.1.GA_2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-io</groupId>
-  		<artifactId>commons-io</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.solmix.framework</groupId>
-  		<artifactId>org.solmix.framework.util</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.solmix.framework</groupId>
-  		<artifactId>org.solmix.framework.api</artifactId>
-  	</dependency>
-  	<dependency>
+			<version>3.12.1.GA_2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<optional>true</optional>
@@ -75,12 +73,12 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-            <groupId>org.apache.aries.blueprint</groupId>
-            <artifactId>org.apache.aries.blueprint.core</artifactId>
-            <optional>true</optional>
-        </dependency>
-  </dependencies>
-  <build>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
@@ -94,15 +92,13 @@
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
 						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
 						<Private-Package>org.solmix.fmk.internal</Private-Package>
-						 <_failok>false</_failok> 
+						<_failok>false</_failok>
 
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
 
-						<!--
-							<Bundle-Activator>org.saio.solmix.daoservice.Activator</Bundle-Activator>
-						-->
+						<!-- <Bundle-Activator>org.saio.solmix.daoservice.Activator</Bundle-Activator> -->
 					</instructions>
-					<!--<unpackBundle>false</unpackBundle>-->
+					<!--<unpackBundle>false</unpackBundle> -->
 				</configuration>
 			</plugin>
 		</plugins>
@@ -110,13 +106,13 @@
 	<properties>
 		<solmix.osgi.export.pkg>!org.solmix.fmk.internal,org.solmix.fmk*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
-		javax.servlet;version="[2.5,4)",
-		javax.servlet.http;version="[2.5,4)",
-		org.apache.poi*;resolution:=optional,
-		org.apache.commons.fileupload;resolution:=optional,
-		org.apache.shiro*;resolution:=optional,
-		org.springframework*;resolution:=optional;version="${spring.version}",
-		org.solmix.commons*,*
+			javax.servlet;version="[2.5,4)",
+			javax.servlet.http;version="[2.5,4)",
+			org.apache.poi*;resolution:=optional,
+			org.apache.commons.fileupload;resolution:=optional,
+			org.apache.shiro*;resolution:=optional,
+			org.springframework*;resolution:=optional;version="${spring.version}",
+			org.solmix.commons*,*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

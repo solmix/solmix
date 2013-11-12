@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.servlet;
+package org.solmix.fmk.util;
 
 import java.io.IOException;
 import java.io.Writer;

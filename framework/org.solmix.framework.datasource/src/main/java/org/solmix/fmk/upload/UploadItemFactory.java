@@ -3,30 +3,29 @@
 // Decompiler options: packimports(3) 
 // Source File Name:   ISCFileItemFactory.java
 
-package org.solmix.fmk.servlet;
+package org.solmix.fmk.upload;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.solmix.commons.io.IByteCounter;
 
-// Referenced classes of package org.solmix.web.core.servlet:
-//            ISCFileItem
 
-public class SlxFileItemFactory implements FileItemFactory
+public class UploadItemFactory implements FileItemFactory
 {
 
-   public SlxFileItemFactory()
+   public UploadItemFactory()
    {
    }
 
-   public SlxFileItemFactory( IByteCounter byteCounter )
+   public UploadItemFactory( IByteCounter byteCounter )
    {
       this.byteCounter = byteCounter;
    }
 
-   public FileItem createItem( String fieldName, String contentType, boolean isFormField, String fileName )
+   @Override
+public FileItem createItem( String fieldName, String contentType, boolean isFormField, String fileName )
    {
-      return new SlxFileItem( fieldName, contentType, isFormField, fileName, byteCounter );
+      return new UploadItem( fieldName, contentType, isFormField, fileName, byteCounter );
    }
 
    IByteCounter byteCounter;
