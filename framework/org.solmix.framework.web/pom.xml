@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>framework</artifactId>
+		<groupId>org.solmix</groupId>
+		<version>0.4-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<groupId>org.solmix.framework</groupId>
+	<artifactId>org.solmix.framework.web</artifactId>
+	<name>Solmix :: FrameWork :: Web Servlet</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.datasource</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+	  		<groupId>org.springframework</groupId>
+	  		<artifactId>spring-web</artifactId>
+	  		<optional>true</optional>
+	  	</dependency> 
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
+						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
+						<Private-Package>org.solmix.fmk.servlets.internal*</Private-Package>
+						<_failok>false</_failok>
+
+						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
+
+						<!-- <Bundle-Activator>org.saio.solmix.daoservice.Activator</Bundle-Activator> -->
+					</instructions>
+					<!--<unpackBundle>false</unpackBundle> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<solmix.osgi.export.pkg>org.solmix.fmk.servlets</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>
+			org.springframework*;resolution:=optional;version="${spring.version}",
+			javax.servlet;version="[2.5,4)",
+			javax.servlet.http;version="[2.5,4)",
+			org.solmix.commons*,*
+		</solmix.osgi.import.pkg>
+		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+	</properties>
+	<packaging>bundle</packaging>
+</project>
