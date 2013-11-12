@@ -12,19 +12,25 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
 	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
-	<!--______________________________________________________ -->
-	<!--______Configuration Manager  Holder ____________ -->
-	<!--______________________________________________________ -->
+
+	<reference interface="org.solmix.api.context.SystemContext"
+		id="solmix" />
+	<bean id="eventadmin" class="org.solmix.eventservice.EventAdminImpl"
+		init-method="start" destroy-method="stop">
+		<argument ref="solmix" />
+		<property name="bundleContext" ref="blueprintBundleContext" />
+	</bean>
+
+	<bean id="org.solmix.api.event.EventManager" class="org.solmix.eventservice.EventManagerImpl">
+		<argument ref="solmix" />
+		<property name="eventAdmin" ref="eventadmin" />
+	</bean>
+
+	<service interface="org.osgi.service.event.EventAdmin" ref="eventadmin"></service>
 	<service interface="org.osgi.service.cm.ManagedService" ref="eventadmin">
 		<service-properties>
-			<entry key="service.pid"
-				value="org.solmix.framework.pool">
+			<entry key="service.pid" value="org.solmix.services.event">
 			</entry>
 		</service-properties>
 	</service>
-	<service interface="org.osgi.service.event.EventAdmin" ref="eventadmin"></service>
-	<bean id="eventadmin" class="org.solmix.eventservice.EventAdminImpl" init-method="start"
-		destroy-method="stop">
-		<property name="bundleContext" ref="blueprintBundleContext"></property>
-	</bean>
 </blueprint>
