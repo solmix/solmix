@@ -27,7 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.solmix.fmk.spring.ManagedContextFilter;
+import org.solmix.web.filter.ContextFilter;
 
 /**
  * 
@@ -35,7 +35,7 @@ import org.solmix.fmk.spring.ManagedContextFilter;
  * @version 110035 2012-12-3
  */
 
-public class SGTContextFilter extends ManagedContextFilter
+public class SGTContextFilter extends ContextFilter
 {
 
 

@@ -22,6 +22,7 @@ package org.solmix.sgt.server;
 import java.io.IOException;
 
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,8 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.fmk.context.SlxContext;
+import org.solmix.web.DataSourceCallServlet;
+import org.solmix.web.LoadSchemaServlet;
 
 /**
  * 
@@ -46,15 +49,21 @@ public class SGTServlet extends HttpServlet
 
     private volatile LoadSchemaServlet loadSchemaService;
 
-    private volatile DSCallServlet dsCallService;
+    private volatile DataSourceCallServlet dsCallService;
 
     private volatile Servlet cometServlet;
 
     private static final Logger log = LoggerFactory.getLogger(SGTServlet.class);
-
+    private String characterEncoding;
     @Override
-    public void init() throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         preLoading();
+        String encode = config.getInitParameter("CharacterEncoding");
+        if (encode != null)
+            characterEncoding = encode.trim();
+        else
+            characterEncoding="UTF-8";
     }
 
     /**
@@ -88,7 +97,8 @@ public class SGTServlet extends HttpServlet
                     break;
                 default:
                     if (dsCallService == null) {
-                        dsCallService = new DSCallServlet();
+                        dsCallService = new DataSourceCallServlet();
+                        dsCallService.setRequestParser(new RestRequestParser());
                         dsCallService.init(getServletConfig());
                     }
                     dsCallService.service(request, response);

@@ -19,15 +19,14 @@
 			<version>2.0.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.modules</groupId>
-			<artifactId>org.solmix.modules.spring</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
 			<artifactId>sgt-extensions-shared</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>org.solmix.framework.web</artifactId>
+			</dependency>
   </dependencies>
   <build>
   <plugins>
