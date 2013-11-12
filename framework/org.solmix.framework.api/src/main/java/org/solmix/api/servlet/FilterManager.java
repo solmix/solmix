@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.servlets;
+package org.solmix.api.servlet;
 
 import javax.servlet.Filter;
 
