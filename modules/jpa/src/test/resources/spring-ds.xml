@@ -24,16 +24,28 @@
 		<property name="providers">
 		<list>
 		<bean id="sqlDataSource" class="org.solmix.sql.SQLDataSource" />
-		<bean id="basicDataSource" class="org.solmix.fmk.datasource.BasicDataSource" />
+		<bean id="basicDataSource" class="org.solmix.fmk.datasource.BasicDataSource" /><ref bean="jpaDatasource" />
 		</list>
 		</property>
 		
 	</bean>
+	<bean id="jpaDatasource" class="org.solmix.jpa.JPADataSource">
+		<property name="transactionManager" ref="transactionManager"></property>
+
+	</bean>
+	<bean id="transactionManager" class="org.solmix.jpa.JPATransactionManager">
+		<property name="entityManagerFactoryProvider">
+			<bean class="org.solmix.jpa.LocalEntityManagerFactoryProvider">
+				<property name="persistenceUnitName" value="h2"></property></bean></property></bean>
 	<bean id="sqlDataSource" class="org.solmix.sql.SQLDataSource" />
 	<bean id="pool_factory" class="org.solmix.fmk.pool.PoolManagerFactory"></bean>
 	<bean id="security_admin" class="org.solmix.fmk.security.SecurityAdminImpl"></bean>
 	<!--  -->
-	<bean id="eventManager" class="org.solmix.fmk.spring.event.SpringEventManager"/>
+	<!-- <bean id="eventManager" class="org.solmix.fmk.spring.event.SpringEventManager"/> -->
+	<bean id="eventManager" class="org.solmix.fmk.spring.event.DefaultEventManager"  init-method="start" destroy-method="stop">
+		<property name="config" value="classpath:config/org.solmix.services.event.cfg"/>
+	</bean>
+	
 	<!-- <bean id="listener" class="org.solmix.fmk.spring.event.SpringEventListener"/> -->
 	<bean id="rpcManagerFactory" class="org.solmix.fmk.rpc.RPCManagerFactoryImpl"></bean>
 	
