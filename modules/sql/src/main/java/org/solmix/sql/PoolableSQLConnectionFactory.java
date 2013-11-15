@@ -46,7 +46,7 @@ import org.solmix.commons.collections.DataTypeMap;
  * 
  * 
  */
-public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
+public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Connection>
 {
 
     private static Logger log = LoggerFactory.getLogger(PoolableSQLConnectionFactory.class.getName());
@@ -142,7 +142,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.solmix.api.pool.SlxPoolableObjectFactory#makeUnpooledObject()
      */
     @Override
-    public Object makeUnpooledObject() throws Exception {
+    public Connection makeUnpooledObject() throws Exception {
         switch (interfaceType) {
             case DATASOURCE: {
                 if (ds == null) {
@@ -163,7 +163,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.apache.commons.pool.PoolableObjectFactory#activateObject(java.lang.Object)
      */
     @Override
-    public void activateObject(Object obj) throws Exception {
+    public void activateObject(Connection obj) throws Exception {
         numActivateObjectCalls++;
        
     }
@@ -174,7 +174,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.apache.commons.pool.PoolableObjectFactory#destroyObject(java.lang.Object)
      */
     @Override
-    public void destroyObject(Object arg0) throws Exception {
+    public void destroyObject(Connection arg0) throws Exception {
         numDestroyObjectCalls++;
        
     }
@@ -185,9 +185,9 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.apache.commons.pool.PoolableObjectFactory#makeObject()
      */
     @Override
-    public Object makeObject() throws Exception {
+    public Connection makeObject() throws Exception {
         numMakeObjectCalls++;
-        Connection conn = (Connection) makeUnpooledObject();
+        Connection conn = makeUnpooledObject();
         if (pool == null) {
             log.debug("Returning unpooled Connection");
             return conn;
@@ -203,7 +203,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.apache.commons.pool.PoolableObjectFactory#passivateObject(java.lang.Object)
      */
     @Override
-    public void passivateObject(Object arg0) throws Exception {
+    public void passivateObject(Connection arg0) throws Exception {
         numPassivateObjectCalls++;
     }
 
@@ -213,8 +213,8 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory
      * @see org.apache.commons.pool.PoolableObjectFactory#validateObject(java.lang.Object)
      */
     @Override
-    public boolean validateObject(Object obj) {
-        Connection conn = (Connection) obj;
+    public boolean validateObject(Connection obj) {
+        Connection conn = obj;
         /**
          * This method generally cannot be called to determine whether a connection to a database is valid or invalid. A typical client can determine that a connection is invalid by catching any exceptions that might be thrown when an operation is attempted.
          */

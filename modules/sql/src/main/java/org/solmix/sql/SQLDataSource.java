@@ -65,7 +65,7 @@ import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
-import org.solmix.fmk.servlet.SlxFileItem;
+import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.EscapedValuesMap.Mode;
@@ -1082,7 +1082,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             return null;
         List __return = new ArrayList();
         for (Object o : _files) {
-            SlxFileItem file = (SlxFileItem) o;
+            UploadItem file = (UploadItem) o;
             String fieldName = file.getFieldName();
             if (req.getContext().getValues().get(fieldName) instanceof InputStream)
                 __return.add(req.getContext().getValues().get(fieldName));
