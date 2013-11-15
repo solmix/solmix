@@ -32,13 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.request.RequestProcessor;
 import org.solmix.api.request.RequestProgressTracker;
 import org.solmix.api.request.SlxHttpServletRequest;
 import org.solmix.api.request.SlxHttpServletResponse;
-import org.solmix.api.servlets.FilterManager;
-import org.solmix.api.servlets.ServletManager;
+import org.solmix.api.servlet.FilterManager;
+import org.solmix.api.servlet.ServletManager;
 import org.solmix.fmk.engine.internal.filter.RequestFilterChain;
 
 /**

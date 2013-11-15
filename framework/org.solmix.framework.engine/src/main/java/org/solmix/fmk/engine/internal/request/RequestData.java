@@ -36,7 +36,7 @@ import org.solmix.api.request.RequestProgressTracker;
 import org.solmix.api.request.RequestUtil;
 import org.solmix.api.request.SlxHttpServletRequest;
 import org.solmix.api.request.SlxHttpServletResponse;
-import org.solmix.api.servlets.ServletManager;
+import org.solmix.api.servlet.ServletManager;
 import org.solmix.fmk.engine.MainServlet;
 
 /**
@@ -50,15 +50,15 @@ public class RequestData
 
     private RequestProgressTracker requestProgressTracker;
 
-    private SlxRequestProcessor requestProcessor;
+    private final SlxRequestProcessor requestProcessor;
 
     private HttpServletRequest servletRequest;
 
     private HttpServletResponse servletResponse;
 
-    private SlxHttpServletRequestImpl slxRequest;
+    private final SlxHttpServletRequestImpl slxRequest;
 
-    private SlxHttpServletResponseImpl slxResponse;
+    private final SlxHttpServletResponseImpl slxResponse;
 
     private String activeServletName;
 

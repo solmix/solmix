@@ -39,10 +39,9 @@ import org.osgi.framework.Version;
 import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.request.RequestProcessor;
-import org.solmix.api.servlets.FilterManager;
-import org.solmix.api.servlets.ServletManager;
+import org.solmix.api.servlet.FilterManager;
+import org.solmix.api.servlet.ServletManager;
 import org.solmix.fmk.engine.internal.SlxHttpContext;
 import org.solmix.fmk.engine.internal.SlxServletContext;
 import org.solmix.fmk.engine.internal.request.SlxRequestProcessor;
