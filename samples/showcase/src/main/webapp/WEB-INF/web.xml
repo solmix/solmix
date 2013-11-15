@@ -9,16 +9,8 @@
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
 	<listener>
-		<listener-class>org.solmix.fmk.spring.SpringShiroContextLoader</listener-class>
+		<listener-class>org.solmix.web.context.ShiroSystemContextLoader</listener-class>
 	</listener>
-	<filter>
-		<filter-name>contextFilter</filter-name>
-		<filter-class>org.solmix.fmk.spring.ManagedContextFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>contextFilter</filter-name>
-		<url-pattern>/data/*</url-pattern>
-	</filter-mapping>
 	<filter>
 		<filter-name>securityFilter</filter-name>
 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
@@ -26,19 +18,41 @@
 	<filter-mapping>
 		<filter-name>securityFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher> 
-	    <dispatcher>FORWARD</dispatcher> 
-	    <dispatcher>INCLUDE</dispatcher> 
-	    <dispatcher>ERROR</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
+	<filter>
+		<filter-name>contextFilter</filter-name>
+		<filter-class>org.solmix.web.filter.ContextFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>contextFilter</filter-name>
+		<url-pattern>/data/*</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>solmix</servlet-name>
 		<servlet-class>org.solmix.sgt.server.SGTServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>solmix</servlet-name>
-		<url-pattern>/data/*</url-pattern>
+		<url-pattern>/data/bin/*</url-pattern>
 	</servlet-mapping>
+
+	<!-- <servlet>
+		<servlet-name>event</servlet-name>
+		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
+		<init-param>
+			<param-name>org.atmosphere.cpr.packages</param-name>
+			<param-value>org.solmix.showcase.server.event</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>event</servlet-name>
+		<url-pattern>/data/event/*</url-pattern>
+	</servlet-mapping> -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>

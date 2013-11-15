@@ -31,7 +31,7 @@
 			<artifactId>sgt-extensions-shared</artifactId>
 			<version>0.4-SNAPSHOT</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.solmix.modules</groupId>
 			<artifactId>org.solmix.modules.spring</artifactId>
 			<exclusions>
@@ -40,7 +40,7 @@
 					<artifactId>geronimo-servlet_2.5_spec</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
@@ -114,6 +114,42 @@
 			<groupId>org.solmix.services.security</groupId>
 			<artifactId>rbac</artifactId>
 			<version>0.4-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.services</groupId>
+			<artifactId>security-core</artifactId>
+			<version>0.4-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.dsrepo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.pool</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.modules</groupId>
+			<artifactId>org.solmix.modules.sql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.modules</groupId>
+			<artifactId>org.solmix.modules.jpa</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

@@ -22,7 +22,6 @@ package org.solmix.sgt.server;
 import java.io.IOException;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -54,17 +53,7 @@ public class SGTServlet extends HttpServlet
     private volatile Servlet cometServlet;
 
     private static final Logger log = LoggerFactory.getLogger(SGTServlet.class);
-    private String characterEncoding;
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        preLoading();
-        String encode = config.getInitParameter("CharacterEncoding");
-        if (encode != null)
-            characterEncoding = encode.trim();
-        else
-            characterEncoding="UTF-8";
-    }
+
 
     /**
      * 
