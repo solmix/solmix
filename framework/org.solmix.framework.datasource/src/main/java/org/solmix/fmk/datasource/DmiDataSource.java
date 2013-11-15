@@ -37,7 +37,9 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
+import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.context.Context;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -53,14 +55,15 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.application.ApplicationManagerImpl;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
+import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.rpc.RPCManagerImpl;
 import org.solmix.fmk.rpc.ServiceObject;
 
 /**
  * Direct Method Invoke DataSource.
+ * 
  * @author solmix.f@gmail.com
  * @version 110041 modified at 2013-7-11
  * @since 0.0.1
@@ -70,8 +73,8 @@ public class DmiDataSource
 {
 
     private static final Logger log = LoggerFactory.getLogger(DmiDataSource.class.getName());
-    
-    public static String VT_TMP_NAME="_slxResult";
+
+    public static String VT_TMP_NAME = "_slxResult";
 
     protected DSRequest request;
 
@@ -118,7 +121,17 @@ public class DmiDataSource
 
     public static DSResponse execute(final DSRequest dsRequest, RPCManager rpc, Context requestContext) throws SlxException {
         String appID = dsRequest.getContext().getAppID();
-        return execute(dsRequest, rpc, requestContext, ApplicationManagerImpl.findAppByID(appID));
+        Application app = null;
+        SystemContext sc;
+        if (requestContext instanceof WebContext) {
+            sc = ((WebContext) requestContext).getSystemContext();
+        } else {
+            sc = SlxContext.getThreadSystemContext();
+        }
+        ApplicationManager am = sc.getBean(ApplicationManager.class);
+        if (am != null)
+            app = am.findByID(appID);
+        return execute(dsRequest, rpc, requestContext, app);
     }
 
     public DSResponse execute() throws SlxException {
@@ -162,25 +175,24 @@ public class DmiDataSource
         }
         if (!findSrvConfig)
             return null;
-            
 
-        if (!app.havePermission(request, context)) {
+        if (!app.isPermitted(request, context)) {
             dsResponse = new DSResponseImpl();
             dsResponse.getContext().setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
             return dsResponse;
         }
         // operation level service-object configuration override all ds level service-object configuration.
         if (opSrvConfig != null) {
-            if(log.isTraceEnabled()&&dsSrvConfig!=null){
+            if (log.isTraceEnabled() && dsSrvConfig != null) {
                 log.trace("Tservice :operation level service configuration override all datasource level service configuration");
             }
             srvConfig = opSrvConfig;
             opLevleSrvConfig = true;
         } else
             srvConfig = dsSrvConfig;
-        if(log.isTraceEnabled()){
-            String inf= srvConfig.getInterface()==null?srvConfig.getClazz():srvConfig.getInterface();
-            log.trace("Find server config object named:"+inf+" with method is:"+srvConfig.getMethod());
+        if (log.isTraceEnabled()) {
+            String inf = srvConfig.getInterface() == null ? srvConfig.getClazz() : srvConfig.getInterface();
+            log.trace("Find server config object named:" + inf + " with method is:" + srvConfig.getMethod());
         }
         ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(RPCManagerImpl.class, rpc, false, false),
             new ReflectionArgument(DSRequestImpl.class, request, false, false) };
@@ -268,7 +280,7 @@ public class DmiDataSource
             methodArguments = srvConfig.getMethodArguments();
         Map valuesOrCriteria = request.getContext().getValues() == null ? request.getContext().getCriteria() : request.getContext().getValues();
 
-        //making method require arguments.
+        // making method require arguments.
         if (methodArguments != null) {
             List<String> methodArgList = DataUtil.simpleSplit(methodArguments, ",");
             requireArgs = new ReflectionArgument[methodArgList.size()];

@@ -26,7 +26,6 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.security.GroupManager;
 import org.solmix.api.security.Realm;
 import org.solmix.api.security.RoleManager;

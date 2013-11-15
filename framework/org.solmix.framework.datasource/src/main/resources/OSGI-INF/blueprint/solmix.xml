@@ -17,7 +17,10 @@
 		<property name="bundleContext" ref="blueprintBundleContext"></property>
 		<property name="blueprintContainer" ref="blueprintContainer"></property>
 	</bean>
-	 <bean id="org.solmix.api.datasource.DataSourceManager" class="org.solmix.fmk.datasource.DefaultDataSourceManager">
+	<bean id="org.solmix.api.datasource.DataSourceManager" class="org.solmix.fmk.datasource.DefaultDataSourceManager">
+		<argument ref="solmix" />
+	</bean>
+	<bean id="org.solmix.api.application.ApplicationManager" class="org.solmix.fmk.application.ApplicationManagerImpl">
 		<argument ref="solmix"/>
 	</bean> 
 	<bean  id="org.solmix.api.i18n.ResourceBundleManager" class="org.solmix.fmk.i18n.ResourceBundleManagerImpl">
@@ -26,8 +29,7 @@
      <bean id="org.solmix.api.rpc.RPCManagerFactory" class="org.solmix.fmk.rpc.RPCManagerFactoryImpl">
         <argument ref="solmix"/>
     </bean>
-     <service interface="org.solmix.api.datasource.DataSourceManager"
-     	ref="org.solmix.api.datasource.DataSourceManager" />
+     <service interface="org.solmix.api.datasource.DataSourceManager"	ref="org.solmix.api.datasource.DataSourceManager" />
      <!-- 
 	<bean class="org.solmix.fmk.event.OsgiEventManager" id="eventManager">
 		<property name="context" ref="blueprintBundleContext" />

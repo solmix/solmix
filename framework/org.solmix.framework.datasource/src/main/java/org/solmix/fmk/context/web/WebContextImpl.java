@@ -46,8 +46,7 @@ import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.context.AbstractContext;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
-import org.solmix.fmk.servlet.ServletTools;
-import org.solmix.fmk.servlet.WrappedHttpServletRequest;
+import org.solmix.fmk.util.ServletTools;
 
 /**
  * The method of this type ,can't use local cache to provider result,because every time of new request will be

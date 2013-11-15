@@ -37,7 +37,7 @@ import org.springframework.core.io.Resource;
 
 public class SpringSystemContextFactory extends SystemContextFactory
 {
-    private  ApplicationContext springContext;
+    private  ApplicationContext parent;
     /**
      * {@inheritDoc}
      * 
@@ -84,10 +84,10 @@ public class SpringSystemContextFactory extends SystemContextFactory
                         }
                     });
             }
-            if (springContext == null && includeDefaults&&(r==null||!exists)) {
+            if (parent == null && includeDefaults&&(r==null||!exists)) {
                 return new org.solmix.fmk.context.SystemContextFactoryImpl().createContext();
             }
-            ConfigurableApplicationContext cac = createApplicationContext(cfgFiles, includeDefaults, springContext);
+            ConfigurableApplicationContext cac = createApplicationContext(cfgFiles, includeDefaults, parent);
             return completeCreating(cac);
         } catch (BeansException ex) {
             throw new java.lang.RuntimeException(ex);
@@ -117,16 +117,16 @@ public class SpringSystemContextFactory extends SystemContextFactory
      * @param springContext2
      * @return
      */
-    private ConfigurableApplicationContext createApplicationContext(String[] cfgFiles, boolean includeDefaults, ApplicationContext springContext2) {
+    private ConfigurableApplicationContext createApplicationContext(String[] cfgFiles, boolean includeDefaults, ApplicationContext parent) {
         try {  
-        return new SystemApplicationContext(cfgFiles,springContext2,includeDefaults);
+        return new SystemApplicationContext(cfgFiles,parent,includeDefaults);
         } catch (BeansException ex) {
             ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
             if (contextLoader != SystemApplicationContext.class.getClassLoader()) {
                 Thread.currentThread().setContextClassLoader(
                     SystemApplicationContext.class.getClassLoader());
                 try {
-                    return new SystemApplicationContext(cfgFiles, springContext2,includeDefaults );        
+                    return new SystemApplicationContext(cfgFiles, parent,includeDefaults );        
                 } finally {
                     Thread.currentThread().setContextClassLoader(contextLoader);
                 }
@@ -137,10 +137,25 @@ public class SpringSystemContextFactory extends SystemContextFactory
     }
 
     private boolean defaultContextNotExists() {
-        if (null != springContext) {
-            return !springContext.containsBean(SystemContext.DEFAULT_CONTEXT_ID);
+        if (null != parent) {
+            return !parent.containsBean(SystemContext.DEFAULT_CONTEXT_ID);
         }
         return true;
+    }
+    
+    /**
+     * @return the parent
+     */
+    public ApplicationContext getParent() {
+        return parent;
+    }
+
+    
+    /**
+     * @param parent the parent to set
+     */
+    public void setParent(ApplicationContext parent) {
+        this.parent = parent;
     }
 
 }

@@ -22,10 +22,6 @@ package org.solmix.fmk.context;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.context.Context;
@@ -69,9 +65,7 @@ public final class SlxContext
 
     }
 
-    public static Subject getSubject() {
-        return SecurityUtils.getSubject();
-    }
+ 
 
     /**
      * @return the systemContext
@@ -129,12 +123,7 @@ public final class SlxContext
         localContext.remove();
     }
 
-    public static SecurityManager getSecurityManager() {
-        SecurityManager sm = SecurityUtils.getSecurityManager();
-        if (sm == null)
-            throw new java.lang.IllegalStateException("Shiro SecurityManager is null ,checkout shiro configuration,and try agin.");
-        return sm;
-    }
+ 
 
     /**
      * Get EventManager of this framework .
@@ -195,13 +184,6 @@ public final class SlxContext
         }
         return null;
 
-    }
-
-    public static void login(Subject subject, AuthenticationToken authenticationToken) {
-        SecurityManager sm = SecurityUtils.getSecurityManager();
-        if (sm == null)
-            throw new java.lang.IllegalStateException("Shiro SecurityManager is null ,checkout shiro configuration,and try agin.");
-        sm.login(subject, authenticationToken);
     }
 
     /**

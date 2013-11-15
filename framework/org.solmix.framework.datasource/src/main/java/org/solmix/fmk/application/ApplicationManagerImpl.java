@@ -19,11 +19,19 @@
 
 package org.solmix.fmk.application;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Resource;
+
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
+import org.solmix.api.application.ApplicationSecurity;
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
+import org.solmix.commons.collections.DataTypeMap;
 
 /**
  * 
@@ -34,43 +42,74 @@ import org.solmix.api.application.ApplicationManager;
 public class ApplicationManagerImpl implements ApplicationManager
 {
 
+    private SystemContext sc;
+    public static final String SERVICE_PID="org.solmix.framework.app";
+    public static final String P_DEFAULT_PREFIX="default";
+
+    public ApplicationManagerImpl(){
+        this(null);
+    }
+    public ApplicationManagerImpl(SystemContext sc){
+        setApplicationManager(sc);
+    }
+    /**
+     * @param sc
+     */
+    @Resource
+    private void setApplicationManager(SystemContext sc) {
+       this.sc=sc;
+       if(sc!=null){
+           sc.setBean(this, ApplicationManager.class);
+       }
+        
+    }
     private static final Map<String, Application> providers;
     static {
         providers = new ConcurrentHashMap<String, Application>();
         // and the default datasource implementations.
-        // providers.put(key, value)( new AppBase() );
 
     }
 
     /**
+     * find the application by id,if the id is <code>null</code>,used as default "builtinApplication".
      * {@inheritDoc}
      * 
      * @see org.solmix.api.application.ApplicationManager#findByID(java.lang.String)
      */
     @Override
     public Application findByID(String appID) {
-        // TODO Auto-generated method stub
+        if (appID == null)
+            appID = BUILT_IN_APPLICATION;
+        Application application = providers.get(BUILT_IN_APPLICATION);
+        if (application == null && (appID.equalsIgnoreCase(BUILT_IN_APPLICATION) || appID.equalsIgnoreCase(DEFAULT_APPLICATION))) {
+            application = new BuiltInApplication(getConfig().getSubtree(P_DEFAULT_PREFIX));
+            return application;
+
+        }
+        application.setApplicationSecurity(findApplicationSecurity());
+        return application;
+    }
+    protected ApplicationSecurity findApplicationSecurity(){
+        if(sc!=null){
+           return sc.getBean(ApplicationSecurity.class);
+        }
         return null;
     }
 
-    /**
-     * find the application by id,if the id is <code>null</code>,used as default "builtinApplication".
-     * @param appID
-     * @return
-     */
-    public synchronized static Application findAppByID(String appID) {
-        if (appID == null)
-            appID=BUILT_IN_APPLICATION;
-        Application theApp = null;
-        if (appID.equalsIgnoreCase(BUILT_IN_APPLICATION) || appID.equalsIgnoreCase(DEFAULT_APPLICATION)) {
-            
-                theApp = new AppBase();
-                return theApp;
-            
-        } else {
-            //XXX extension point
+    protected DataTypeMap getConfig() {
+        DataTypeMap appConfig;
+        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnit cu = null;
+        try {
+            cu = cum.getConfigureUnit(SERVICE_PID);
+        } catch (IOException e) {
         }
-        return theApp;
+        if (cu != null)
+            appConfig = cu.getProperties();
+        else
+            appConfig = new DataTypeMap();
+
+        return appConfig;
 
     }
 

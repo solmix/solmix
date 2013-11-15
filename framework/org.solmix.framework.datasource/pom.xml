@@ -24,14 +24,14 @@
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency> <groupId>org.javassist</groupId> <artifactId>javassist</artifactId> 
 			<version>3.16.1-GA</version> </dependency> -->
 		<dependency>
@@ -77,6 +77,14 @@
 			<artifactId>org.apache.aries.blueprint.core</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.pool</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>org.solmix.framework.dsrepo</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -110,7 +118,6 @@
 			javax.servlet.http;version="[2.5,4)",
 			org.apache.poi*;resolution:=optional,
 			org.apache.commons.fileupload;resolution:=optional,
-			org.apache.shiro*;resolution:=optional,
 			org.springframework*;resolution:=optional;version="${spring.version}",
 			org.solmix.commons*,*
 		</solmix.osgi.import.pkg>

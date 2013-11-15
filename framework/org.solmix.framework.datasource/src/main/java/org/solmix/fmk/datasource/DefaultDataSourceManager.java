@@ -59,7 +59,7 @@ public class DefaultDataSourceManager implements DataSourceManager
 
     private PoolManagerFactory poolManagerFactory;
 
-    private static Logger log;
+    private static Logger log = LoggerFactory.getLogger(DataSourceManager.class.getName());
 
     private SystemContext sc;
 
@@ -145,6 +145,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     @Override
     public synchronized PoolManager getPoolManager() {
         if (manager == null) {
+            log.debug("Initial & create DataSource Pool");
             manager = getPoolManagerFactory().createPoolManager(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory(sc));
         }
         return manager;
@@ -218,17 +219,6 @@ public class DefaultDataSourceManager implements DataSourceManager
             throw new SlxException(Tmodule.POOL, Texception.POOL_BORROW_OBJECT_FAILD, "borrow unpooled Object faild ", trye);
         }
         return _return;
-    }
-
-    public void destroy() {
-        if (manager != null)
-            manager.destroy();
-    }
-
-    public void init() {
-        log = LoggerFactory.getLogger(DataSourceManager.class.getName());
-        log.debug("Initial & create DataSource Pool");
-        manager = getPoolManagerFactory().createPoolManager(SlxConstants.MODULE_DS_NAME, new PoolableDataSourceFactory());
     }
 
     /**

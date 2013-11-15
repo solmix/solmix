@@ -70,20 +70,21 @@ public class SpringConfigureUnitManager implements ConfigureUnitManager
     }
 
     @Override
-    public ConfigureUnit getConfigureUnit(String pid) throws IOException {
-
+    public synchronized ConfigureUnit getConfigureUnit(String pid) throws IOException {
+ 
         if (configCache == null) {
-            configCache = buildConfig();
+                configCache = buildConfig();
         }
         return configCache.get(pid);
     }
 
-    private synchronized Map<String, ConfigureUnit> buildConfig() throws IOException {
+    private  Map<String, ConfigureUnit> buildConfig() throws IOException {
         Map<String, ConfigureUnit> configs = new java.util.concurrent.ConcurrentHashMap<String, ConfigureUnit>();
         List<Resource> defaultResources = getConfigureResource(DEFAULT_CFG_FILES);
         for (Resource re : defaultResources) {
             String pid = getPidByFileName(re.getFilename());
             configs.put(pid, new ConfigureUnitImpl(pid, loadProperties(re), this));
+            logTraceMessage("Loaded default configuration properties  from file:",re);
         }
         String userParttern = System.getProperty(ConfigureUnit.USER_CONFIG_DIR_PROPERTY_NAME);
         if (userParttern == null)
@@ -96,13 +97,23 @@ public class SpringConfigureUnitManager implements ConfigureUnitManager
                     ConfigureUnit cu = configs.get(pid);
                     Properties p = loadProperties(re);
                     cu.update(toDictionary(p));
+                    logTraceMessage("merge user configured properties to merge system default:",re);
                 } else {
                     configs.put(pid, new ConfigureUnitImpl(pid, loadProperties(re), this));
+                    logTraceMessage("Loaded user configuration properties  from file:",re);
                 }
             }
         }
 
         return configs;
+    }
+    private void logTraceMessage(String msg,Resource location){
+        if (logger.isTraceEnabled()) {
+            try {
+                logger.trace(msg + location.getURL().getPath());
+            } catch (IOException e) {
+            }
+        }
     }
 
     private Dictionary<String, ?> toDictionary(Properties properties) {
@@ -151,9 +162,6 @@ public class SpringConfigureUnitManager implements ConfigureUnitManager
 
     protected Properties loadProperties(Resource location) {
         Properties props = new Properties();
-        if (logger.isInfoEnabled()) {
-            logger.info("Loading properties file from " + location.getFilename());
-        }
         InputStream is = null;
         try {
             is = location.getInputStream();

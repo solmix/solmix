@@ -28,7 +28,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
+import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.context.Context;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DSResponseData;
@@ -50,9 +52,9 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.application.ApplicationManagerImpl;
+import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
-import org.solmix.fmk.servlet.SlxFileItem;
+import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.ErrorReport;
 
@@ -128,8 +130,19 @@ public class DSRequestImpl implements DSRequest
      * @throws SlxException
      */
     public synchronized Application getApp() throws SlxException {
-        if (app == null)
-            app = ApplicationManagerImpl.findAppByID(data.getAppID());
+        if (app == null) {
+            SystemContext sc;
+            if (requestContext instanceof WebContext) {
+                 sc = ((WebContext) requestContext).getSystemContext();
+                
+            }else{
+                sc=SlxContext.getThreadSystemContext();
+            }
+            ApplicationManager am = sc.getBean(ApplicationManager.class);
+            if (am != null)
+                app = am.findByID(data.getAppID());
+        }
+
         return app;
     }
 
@@ -380,7 +393,7 @@ public class DSRequestImpl implements DSRequest
                     String shortFilename = filename;
                     if (shortFilename.indexOf("/") != -1)
                         shortFilename = shortFilename.substring(shortFilename.lastIndexOf("/") + 1);
-                    SlxFileItem _file = null;
+                    UploadItem _file = null;
                     List<Object> errors = null;
                     if (webContext.getRequest().getParameter("singleUpload") != null) {
                         long fileSize = webContext.getRequest().getContentLength();
@@ -398,7 +411,7 @@ public class DSRequestImpl implements DSRequest
                             errorReport.addError(fieldName, __errorString);
                         }
                     }
-                    _file = (SlxFileItem) webContext.getUploadedFile(fieldName, errors);
+                    _file = (UploadItem) webContext.getUploadedFile(fieldName, errors);
                     if (_file != null) {
                         _file.setFieldName(fieldName);
                         _file.setShortFileName(shortFilename);
@@ -469,7 +482,7 @@ public class DSRequestImpl implements DSRequest
 
             if (_tmpFiles != null)
                 for (Object o : _tmpFiles) {
-                    SlxFileItem file = (SlxFileItem) o;
+                    UploadItem file = (UploadItem) o;
                     List errors = file.getErrors();
                     if (errors != null) {
                         _dsResponse = new DSResponseImpl(getDataSource(),this);
@@ -503,7 +516,7 @@ public class DSRequestImpl implements DSRequest
             Eoperation opType = data.getOperationType();
             String opId = data.getOperationId();
             ToperationBinding operationBinding = null;
-            List<String> outputColumns = new ArrayList();
+            List<String> outputColumns = new ArrayList<String>();
             if (dataSource != null)
                 operationBinding = dataSource.getContext().getOperationBinding(opType, opId);
             if (operationBinding != null && operationBinding.getOutputs() != null) {

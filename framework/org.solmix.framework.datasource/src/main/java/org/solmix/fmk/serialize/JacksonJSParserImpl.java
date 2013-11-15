@@ -48,7 +48,6 @@ import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.IOUtil;
 import org.solmix.fmk.serialize.jackson.ContextualDateSerializer;
 import org.solmix.fmk.serialize.jackson.ModuleSerializer;
@@ -71,9 +70,9 @@ public class JacksonJSParserImpl implements JSParser
 
     private static Logger log = LoggerFactory.getLogger(JacksonJSParserImpl.class.getName());
 
-    public static ObjectMapper iscMapper;
+    public  ObjectMapper iscMapper;
 
-    public static ObjectMapper mapper;
+    public  ObjectMapper mapper;
 
     public boolean prettyPrint = true;
 
@@ -188,8 +187,8 @@ public class JacksonJSParserImpl implements JSParser
             iscMapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
             iscMapper = customConfig(iscMapper, true);
             long s_ = System.currentTimeMillis();
-            if (LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).isDebugEnabled()) {
-                LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug("time used to initial jackson objectMapper:[" + (s_ - _s) + "]ms");
+            if (log.isDebugEnabled()) {
+               log.debug("time used to initial jackson objectMapper:[" + (s_ - _s) + "]ms");
             }
         }
 

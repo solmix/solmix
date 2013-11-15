@@ -74,7 +74,6 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.api.types.TransactionPolicy;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
-import org.solmix.fmk.auth.Authentication;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
@@ -85,8 +84,8 @@ import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.ISCJavaScript;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
-import org.solmix.fmk.servlet.ServletTools;
 import org.solmix.fmk.util.DataTools;
+import org.solmix.fmk.util.ServletTools;
 import org.solmix.fmk.velocity.ServletRequestAttributeMapFacade;
 import org.solmix.fmk.velocity.SessionAttributeMapFacade;
 import org.solmix.fmk.velocity.Velocity;
@@ -312,12 +311,12 @@ public class RPCManagerImpl implements RPCManager
                         dsRequest.getContext().setIsClientRequest(true);
                         dsRequest.setRpc(this);
                         // authentication
-                        // String auth_global= OSGIHelper.getCM().getString("authorization.enabled", "false");
                         Boolean auth = (Boolean) context.getRequest().getAttribute("authenticationEnabled");
                         if (Boolean.TRUE.equals(auth)) {
-                            String user = Authentication.getUsername(context);
-                            if (user != null)
-                                dsRequest.getContext().setUserId(user);
+                            //XXX
+//                            String user = Authentication.getUsername(context);
+//                            if (user != null)
+//                                dsRequest.getContext().setUserId(user);
                         }
                         // for debug log
                         if (log.isDebugEnabled()) {

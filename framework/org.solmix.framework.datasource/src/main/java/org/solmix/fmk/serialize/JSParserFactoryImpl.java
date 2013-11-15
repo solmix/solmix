@@ -64,9 +64,8 @@ public class JSParserFactoryImpl implements JSParserFactory
      */
     public synchronized JSParser getDefaultParser() {
         if (defaultParser == null)
-            return new JacksonJSParserImpl();
-        else
-            return defaultParser;
+            defaultParser = new JacksonJSParserImpl();
+        return defaultParser;
     }
 
     /**
