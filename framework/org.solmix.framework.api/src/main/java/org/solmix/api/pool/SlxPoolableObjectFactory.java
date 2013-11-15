@@ -25,8 +25,9 @@ import org.apache.commons.pool.PoolableObjectFactory;
  * Add function {@link #makeUnpooledObject(Object)}
  * @author solmix.f@gmail.com
  * @version 110035
+ * @param <T>
  */
-public abstract class SlxPoolableObjectFactory implements PoolableObjectFactory, IPoolableObjectFactory
+public abstract class SlxPoolableObjectFactory<T> implements PoolableObjectFactory<T>, IPoolableObjectFactory
 {
 
     public SlxPoolableObjectFactory()
@@ -51,7 +52,7 @@ public abstract class SlxPoolableObjectFactory implements PoolableObjectFactory,
      * @return
      * @throws Exception
      */
-    public abstract Object makeUnpooledObject() throws Exception;
+    public abstract T makeUnpooledObject() throws Exception;
 
     public int numActivateObjectCalls;
 
