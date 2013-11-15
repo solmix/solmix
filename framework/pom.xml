@@ -16,7 +16,7 @@
    	  <module>org.solmix.framework.pool</module>
   	  <module>org.solmix.framework.datasource</module>
   	  <module>org.solmix.framework.engine</module>
-  	  <module>org.solmix.framework.servlets</module>
+  	  <module>org.solmix.framework.web</module>
   	  <module>org.solmix.framework.jaas</module>
   </modules>
 </project>

@@ -256,7 +256,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.servlets</artifactId>
+			<artifactId>org.solmix.framework.web</artifactId>
 		</dependency>
 
 	</dependencies>

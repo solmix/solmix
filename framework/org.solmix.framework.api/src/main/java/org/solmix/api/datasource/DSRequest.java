@@ -145,6 +145,7 @@ public interface DSRequest extends RequestType
     boolean isBeenThroughDMI();
 
     /**
+     * Pointed out that this DSRequest is passed through DMI checking or not.
      * @param beenThroughDMI
      */
     void setBeenThroughDMI(boolean beenThroughDMI);

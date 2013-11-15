@@ -9,6 +9,5 @@
   <artifactId>security</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>rbac</module>
   </modules>
 </project>

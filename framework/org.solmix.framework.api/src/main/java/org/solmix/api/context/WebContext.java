@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
-
 import org.solmix.api.exception.SlxException;
 
 /**
@@ -47,33 +46,33 @@ public interface WebContext extends Context
      * 
      * @return parameter value
      */
-    public String getParameter(String name);
+    String getParameter(String name);
 
     /**
      * Get all parameter values as a Map&lt;String, String&gt;.
      * 
      * @return parameter values
      */
-    public Map<String, String> getParameters();
+    Map<String, String> getParameters();
 
     /**
      * Get the current context path.
      */
-    public String getContextPath();
+    String getContextPath();
 
     /**
      * Get the solmix wrapped http-request.
      * 
      * @return the request
      */
-    public HttpServletRequest getRequest();
+    HttpServletRequest getRequest();
 
     /**
      * Get the solmix wrapped http-response.
      * 
      * @return
      */
-    public HttpServletResponse getResponse();
+    HttpServletResponse getResponse();
 
     /**
      * Get the current Servlet Context.
@@ -102,11 +101,11 @@ public interface WebContext extends Context
      * 
      * @return
      */
-    public String getHeadersAsString();
+    String getHeadersAsString();
 
-    public String getParamsAsString() throws SlxException;
+    String getParamsAsString() throws SlxException;
 
-    public void setNoCacheHeaders() throws SlxException;
+    void setNoCacheHeaders() throws SlxException;
 
     /**
      * Return the ServletResponse writer.if the content type is null set "text/html"
@@ -114,55 +113,57 @@ public interface WebContext extends Context
      * @return the out
      * @throws SlxException
      */
-    public Writer getOut() throws SlxException;
+    Writer getOut() throws SlxException;
 
-     public void setOut(Writer out);
+    void setOut(Writer out);
 
     /**
      * @return the requestPath
      */
-    public String getRequestPath();
+    String getRequestPath();
 
     /**
      * @return the servletPath
      */
-    public String getServletPath();
+    String getServletPath();
 
     /**
      * @return the session
      */
-    public HttpSession getSession();
+    HttpSession getSession();
 
-    public boolean isCachingEnabled();
+    boolean isCachingEnabled();
 
-    public void setCachingEnabled(boolean cachingEnabled);
+    void setCachingEnabled(boolean cachingEnabled);
 
     /**
      * @param request the request to set
      */
-    public void setRequest(HttpServletRequest request);
+    void setRequest(HttpServletRequest request);
 
     /**
      * @param response the response to set
      */
-    public void setResponse(HttpServletResponse response);
+    void setResponse(HttpServletResponse response);
 
     /**
      * @return
      */
-    public boolean isMultipart();
+    boolean isMultipart();
 
     /**
      * @param fieldName
      * @param errors
      * @return
      */
-    public FileItem getUploadedFile(String fieldName, List<Object> errors) throws SlxException;
+    FileItem getUploadedFile(String fieldName, List<Object> errors) throws SlxException;
 
     /**
      * @param mimeType
      */
-    public void setContentType(String mimeType);
+    void setContentType(String mimeType);
 
-    public void init(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws SlxException;
+    void init(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws SlxException;
+
+    SystemContext getSystemContext();
 }

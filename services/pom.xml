@@ -10,9 +10,7 @@
   <packaging>pom</packaging>
   <modules>
   	<!-- <module>log</module> -->
-  	<!-- <module>event</module> -->
-  <!-- 	<module>auth</module> -->
   <module>event</module>
-  <module>security</module>
+<!--   <module>security</module> -->
   </modules>
 </project>

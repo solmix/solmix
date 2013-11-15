@@ -42,11 +42,6 @@
   		<groupId>org.solmix.framework</groupId>
   		<artifactId>org.solmix.framework.datasource</artifactId>
   	</dependency>
-  	<dependency>
-  		<groupId>org.solmix.modules</groupId>
-  		<artifactId>org.solmix.modules.spring</artifactId>
-  		<scope>test</scope>
-  	</dependency>
   </dependencies>
   <build>
 		<plugins>

@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.commons.util.IOUtil;
-import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 
 /**
@@ -129,7 +128,7 @@ public class SolmixEventHandler extends AbstractReflectorAtmosphereHandler imple
             if (data != null && data.size() != 0) {
                 event = new DelegateClientEvent(data);
                 event.setBroadcasterID(r.getBroadcaster().getID());
-                SlxContext.getEventManager().postEvent(event);
+//                SlxContext.getEventManager().postEvent(event);
             }
         } catch (SlxException e) {
             logger.error("Can't parser string to JavaObject", e);

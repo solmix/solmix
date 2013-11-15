@@ -19,6 +19,14 @@
 			<groupId>org.solmix.framework</groupId>
 			<artifactId>org.solmix.framework.datasource</artifactId>
 		</dependency>
+		 <dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -71,7 +79,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix.fmk.servlets</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.web*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.springframework*;resolution:=optional;version="${spring.version}",
 			javax.servlet;version="[2.5,4)",

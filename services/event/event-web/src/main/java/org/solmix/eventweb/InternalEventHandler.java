@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.eventweb;
 
 import java.util.HashMap;
@@ -30,16 +31,17 @@ import org.solmix.api.event.AbstractEventHandler;
 import org.solmix.api.event.EventTopic;
 import org.solmix.api.event.IEvent;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-10-17
+ * @version $Id$ 2013-10-17
  */
-@EventTopic("org/solmix/*" )
+@EventTopic("org/solmix/*")
 public class InternalEventHandler extends AbstractEventHandler
 {
+
     static final Logger logger = LoggerFactory.getLogger(WebEventHandler.class);
+
     /**
      * {@inheritDoc}
      * 
@@ -48,19 +50,19 @@ public class InternalEventHandler extends AbstractEventHandler
     @Override
     protected void handleIEvent(IEvent event) {
         // TODO Auto-generated method stub
-       
-          BroadcasterFactory factory = DefaultBroadcasterFactory.getDefault();
-        Broadcaster b=null;
-          b=  factory.lookup("/data/event/*");
-        if(b==null){
+
+        BroadcasterFactory factory = DefaultBroadcasterFactory.getDefault();
+        if (factory == null)
+            return;
+        Broadcaster b = factory.lookup("/data/event/*");
+        if (b == null) {
             logger.info("Can't find broadcaster");
-        }else{
-            Map<String,Object> res= new HashMap<String,Object>();
+        } else {
+            Map<String, Object> res = new HashMap<String, Object>();
             res.put("topic", event.getTopic());
             res.put("data", event.getProperties());
-                b.broadcast(res);
+            b.broadcast(res);
         }
-         
 
     }
 

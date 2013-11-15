@@ -330,6 +330,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
@@ -792,7 +797,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.servlets</artifactId>
+				<artifactId>org.solmix.framework.web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

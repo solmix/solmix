@@ -10,9 +10,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>sql</module>
-  	<module>spring</module>
   	<module>sgt</module>
-  	<!-- <module>test</module> -->
   	<module>jpa</module>
   </modules>
 </project>

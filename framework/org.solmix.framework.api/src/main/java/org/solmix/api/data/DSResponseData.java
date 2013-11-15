@@ -27,9 +27,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.solmix.api.datasource.ResponseData;
 import org.solmix.api.datasource.DSResponse.Status;
+import org.solmix.api.datasource.ResponseData;
 import org.solmix.commons.util.DataUtil;
 
 /**
@@ -123,11 +122,6 @@ public class DSResponseData
     private String operationType;
 
     private boolean requestConnectionClose;
-
-    /**
-    * 
-    */
-    private static final long serialVersionUID = -2991653788073500386L;
 
     public void init() {
         this.status = Status.UNSET;
