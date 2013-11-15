@@ -80,4 +80,23 @@ public class ErrorMessage extends HashMap<Object,Object> implements Serializable
    {
       return getErrorString() + "Suggested Value is:" + getSuggestedValue().toString();
    }
+   @Override
+   public String toString(){
+       StringBuilder sb = new StringBuilder();
+       sb.append("{");
+       sb.append(" errorMessage:").append(getErrorString());
+       if(getSuggestedValue()!=null)
+       sb.append(" suggestedValue:").append(getSuggestedValue());
+       if(getArgments()!=null){
+           sb.append(" arememts:[");
+           for(Object o:getArgments()){
+               sb.append(o!=null?o.toString():"null");
+           }
+           sb.append("]");
+       }
+       sb.append("}");
+       
+       return sb.toString();
+       
+   }
 }

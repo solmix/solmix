@@ -35,6 +35,11 @@ import org.solmix.api.criterion.ValidationEventLocator;
 public abstract class AbstractValidationEvent implements IValidationEvent, java.io.Serializable
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public static final String ERROR_MESSAGE = "errorMessage";
 
     public static final String OUT_TYPE = "outType";
@@ -249,5 +254,13 @@ public abstract class AbstractValidationEvent implements IValidationEvent, java.
     public String getTopic() {
         return (String) getProperty("topic");
     }
-
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Topic is [").append(getTopic()).append("] values:");
+        sb.append(" Level :").append(getLevel());
+        sb.append(" ErrorMes sage :").append(getErrorMessage().toString());
+        return sb.toString();
+        
+    }
 }

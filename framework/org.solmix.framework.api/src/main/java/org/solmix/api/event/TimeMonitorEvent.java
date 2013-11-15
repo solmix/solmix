@@ -61,10 +61,10 @@ public class TimeMonitorEvent extends Event implements ITimeMonitorEvent, java.i
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Topic is [").append(getTopic()).append("] values\n");
+        sb.append("Topic is [").append(getTopic()).append("] values:");
         if(map!=null){
             for(String key:map.keySet()){
-                sb.append(key).append(" = ").append(map.get(key));
+                sb.append(key).append(" = ").append(map.get(key)).append(" ");
             }
         }
         return sb.toString();
