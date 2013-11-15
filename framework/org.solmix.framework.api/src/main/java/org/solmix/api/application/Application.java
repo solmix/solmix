@@ -75,7 +75,7 @@ public interface Application
 
     public static final String DEFAULT_APPLICATION = ApplicationManager.DEFAULT_APPLICATION;
 
-    public DataSource getDataSource(String dsName) throws SlxException;
+     DataSource getDataSource(String dsName) throws SlxException;
 
     /**
      * @param request
@@ -83,15 +83,17 @@ public interface Application
      * @return
      * @throws SlxException
      */
-    public DSResponse execute(DSRequest request, Context context) throws SlxException;
+     DSResponse execute(DSRequest request, Context context) throws SlxException;
 
     /**
      * Return the unique ID of this Application implementation.
      * 
      * @return
      */
-    public String getServerID();
+     String getServerID();
+    
+    void  setApplicationSecurity(ApplicationSecurity security);
 
-    public boolean havePermission(DSRequest request, Object context) throws SlxException;
+    public boolean isPermitted(DSRequest request, Context context) throws SlxException;
 
 }

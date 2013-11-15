@@ -84,7 +84,7 @@ public class DataSourceData implements Serializable
 
     private Map<String, Tfield> mapFields;
 
-    private Map<Object, Object> derivedClientToServerFieldMap = new LinkedHashMap<Object, Object>();
+    private  Map<Object, Object> derivedClientToServerFieldMap = new LinkedHashMap<Object, Object>();
 
     private Map<Object, Object> ds2NativeFieldMap;
 
@@ -136,7 +136,7 @@ public class DataSourceData implements Serializable
     private VelocityExpression requires;
 
     private List<String> requiresRoles;
-
+    private final Map<OpBindHolder, ToperationBinding> _cachedBindings = new LinkedHashMap<OpBindHolder, ToperationBinding>();
     /**
      * Return this datasource needed resource.if the {@link #requires} is null,used {@link #tdataSource}to initial it.
      * 
@@ -522,13 +522,20 @@ public class DataSourceData implements Serializable
     public ToperationBinding getOperationBinding(Eoperation opType, String opId) {
         if (tdataSource == null)
             return null;
+        OpBindHolder holder = new OpBindHolder(opType, opId);
+        ToperationBinding finded = this._cachedBindings.get(holder);
+        if (finded != null) {
+            return finded;
+        }
         ToperationBinding autoOperationBinding = null;
         // is auto generate operation id.
         boolean operationIdIsAuto = opId != null && opType != null && opId.equals(getAutoOperationId(opType));
         if (tdataSource.getOperationBindings() != null) {
             for (ToperationBinding action : tdataSource.getOperationBindings().getOperationBinding()) {
-                if (action.getOperationId() != null && action.getOperationId().equals(opId) && action.getOperationType() == opType)
-                    return action;
+                if (action.getOperationId() != null && action.getOperationId().equals(opId) && action.getOperationType() == opType){
+                    autoOperationBinding= action;
+                    break;
+                }
                 if (action.getOperationType() == opType && action.getOperationId() == null && (operationIdIsAuto || opId == null))
                     autoOperationBinding = action;
             }
@@ -539,19 +546,18 @@ public class DataSourceData implements Serializable
                     return null;
                 } else if (binds.size() == 1) {
                     autoOperationBinding = binds.get(0);
-                    if (log.isWarnEnabled())
-                        log.warn(new StringBuilder().append("Checkout operation type:").append(opType).append(" But not found ,used :").append(
-                            autoOperationBinding.getOperationId()).append(" instead of .").toString());
-                    return autoOperationBinding;
+                    if (log.isDebugEnabled())
+                        log.debug(new StringBuilder().append("Checkout operation TYPE:[")
+                            .append(opType).append("] ID:[").append(opId).append("] but not found ,Used auto discoveried bind -TYPE:[").append(opType)
+                            .append("] ID:[").append(autoOperationBinding.getOperationId()).append("]!").toString());
                 } else {
                     throw new java.lang.IllegalStateException(new StringBuilder().append("Get opation type:").append(opType.value()).append(
                         "find multi opation :").append(binds.size()).append(" Please check the datasource configuation .").toString());
                 }
             }
         }
-        if (autoOperationBinding != null)
-            return autoOperationBinding;
-        return null;
+        _cachedBindings.put(holder, autoOperationBinding);
+        return autoOperationBinding;
     }
 
     /**
@@ -785,5 +791,27 @@ public class DataSourceData implements Serializable
         if (otherAttributes != null)
             otherAttributes.remove(key);
 
+    }
+    class OpBindHolder{
+      final  Eoperation type;
+       final String id;
+       OpBindHolder(Eoperation opType, String opId){
+           type=opType;
+           id=opId;
+       }
+       @Override
+       public boolean equals(Object obj) {
+           if (!(obj instanceof OpBindHolder)) {
+               return false;
+           }
+           OpBindHolder other = (OpBindHolder)obj;
+           return type.equals(other.type) && ((id==other.id||id!=null&&id.equals(other.id)));
+       }
+       @Override
+       public int hashCode(){
+           int hash = type.hashCode();
+           return  (hash ^ (hash >>> 32)*31)+(this.id!=null?this.id.hashCode():0);
+           
+       }
     }
 }
