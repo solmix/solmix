@@ -132,7 +132,7 @@ public class DataSourceCallServlet extends HttpServlet
             RPCManagerFactory factory=sc.getBean(RPCManagerFactory.class);
             context = SlxContext.getWebContext();
             if (factory != null)
-                rpc = factory.createRPCManager(context);
+                rpc = factory.createRPCManager(context,this.requestParser);
             if(log.isTraceEnabled())
                 log.trace("Performing " + rpc.requestCount() + " operation(s) ");
             Exception exceptionHolder=null;
