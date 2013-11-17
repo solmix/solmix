@@ -137,7 +137,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         try {
             if (entityManager == null) {
                 entityManager = JPATransaction.getEntityManager(getEmf(data));
-                JPATransaction.returnEntityManager(entityManager);
+                JPATransaction.returnEntityManager(getEntityManager());
             }
         } catch (Exception e) {
             log.error("Unexpected exception while initial entityManager", e);
@@ -166,8 +166,12 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     /**
      * @return the entityManager
+     * @throws SlxException 
      */
-    public EntityManager getEntityManager() {
+    public synchronized EntityManager getEntityManager() throws SlxException {
+        if(entityManager==null&&!entityManager.isOpen()){
+            entityManager= JPATransaction.getEntityManager(getEmf(data));
+        }
         return entityManager;
     }
 
@@ -198,7 +202,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         if (this.getEntityManagerFactoryProvider() != null) {
             ds.setEntityManagerFactoryProvider(getEntityManagerFactoryProvider());
         }
-        init(data);
+        ds.init(data);
         return ds;
     }
 
@@ -269,8 +273,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             if (holder == null) {
                 if (shouldAutoStartTransaction(req, false)) {
                     try {
-                        entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
-                        transaction = JPATransaction.getTransaction(entityManager);
+                        transaction = JPATransaction.getTransaction(getEntityManager());
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
@@ -280,8 +283,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     req.getRpc().registerCallback(this);
                 } else {
                     try {
-                        entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
-                        transaction = JPATransaction.getTransaction(entityManager);
+                        transaction = JPATransaction.getTransaction(getEntityManager());
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
@@ -293,8 +295,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             req.setPartOfTransaction(true);
         } else {
             try {
-                entityManager = JPATransaction.getEntityManager(getEmf(getContext()));
-                transaction = JPATransaction.getTransaction(entityManager);
+                transaction = JPATransaction.getTransaction(getEntityManager());
             } catch (Exception e) {
                 log.error("Unexpected exception while initial entityManager", e);
             }
@@ -710,6 +711,22 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         if (resp != null)
             resp.getContext().setStatus(Status.STATUS_FAILURE);
         log.debug("mark transaction for roll back");
+    }
+
+    
+    /**
+     * @return the useQualifiedClassName
+     */
+    public boolean isUseQualifiedClassName() {
+        return useQualifiedClassName;
+    }
+
+    
+    /**
+     * @param useQualifiedClassName the useQualifiedClassName to set
+     */
+    public void setUseQualifiedClassName(boolean useQualifiedClassName) {
+        this.useQualifiedClassName = useQualifiedClassName;
     }
 
 

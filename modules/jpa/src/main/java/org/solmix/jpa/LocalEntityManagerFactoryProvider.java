@@ -39,6 +39,7 @@ import org.solmix.api.context.SystemContext;
 public class LocalEntityManagerFactoryProvider implements EntityManagerFactoryProvider
 {
     private PersistenceProvider persistenceProvider;
+    private final Map<String,EntityManagerFactory> _tempCache= new java.util.concurrent.ConcurrentHashMap<String, EntityManagerFactory>();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -82,21 +83,33 @@ public class LocalEntityManagerFactoryProvider implements EntityManagerFactoryPr
     
     @Override
     public EntityManagerFactory createEntityManagerFactory(String persistenceUnitName, Map jpaProperties){
-        if (logger.isTraceEnabled()) {
-            logger.trace("Building JPA EntityManagerFactory for persistence unit '" + persistenceUnitName + "'");
+        if(_tempCache.get(persistenceUnitName)!=null){
+            logger.debug("return EntityManagerFactory from locale cache");
+            EntityManagerFactory emf= _tempCache.get(persistenceUnitName);
+            if(!emf.isOpen()){
+                _tempCache.remove(persistenceUnitName);
+            }else{
+                return emf;
+            }
         }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Building JPA EntityManagerFactory for persistence unit '" + persistenceUnitName + "'");
+        }
+        EntityManagerFactory emf;
         PersistenceProvider provider = getPersistenceProvider();
         if (provider != null) {
             // Create EntityManagerFactory directly through PersistenceProvider.
-            EntityManagerFactory emf = provider.createEntityManagerFactory(persistenceUnitName, jpaProperties);
+             emf = provider.createEntityManagerFactory(persistenceUnitName, jpaProperties);
             if (emf == null) {
                 throw new IllegalStateException("PersistenceProvider [" + provider + "] did not return an EntityManagerFactory for name '"
                     + persistenceUnitName + "'");
             }
-            return emf;
+            
         } else {
             // Let JPA perform its standard PersistenceProvider autodetection.
-            return Persistence.createEntityManagerFactory(persistenceUnitName, jpaProperties);
+            emf= Persistence.createEntityManagerFactory(persistenceUnitName, jpaProperties);
         }
+        _tempCache.put(persistenceUnitName, emf);
+        return emf;
     }
 }
