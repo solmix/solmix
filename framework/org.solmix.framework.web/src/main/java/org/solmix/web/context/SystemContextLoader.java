@@ -22,6 +22,8 @@ package org.solmix.web.context;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.api.context.SystemContextFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
@@ -38,15 +40,22 @@ public class SystemContextLoader extends ContextLoaderListener
 
     public static final String SYSTEM_CONTEXT_CONFIG = "systemContextConfig";
 
+    private static final Logger LOG = LoggerFactory.getLogger(SystemContextLoader.class);
     @Override
     public void contextInitialized(ServletContextEvent event) {
         //initial web configured spring applicationContext
         super.contextInitialized(event);
         ServletContext servletContext = event.getServletContext();
         String root = servletContext.getRealPath("/");
+        if(LOG.isInfoEnabled()){
+            LOG.info("Initial Web context,used path:"+root+" As [solmix.base]");
+        }
         System.setProperty("solmix.base", root);
         String userConfig = event.getServletContext().getInitParameter("solmix.cfg.file");
         if (userConfig != null) {
+            if(LOG.isInfoEnabled()){
+                LOG.info("Initial Web context,used configure:"+userConfig);
+            }
             System.setProperty("solmix.cfg.file", userConfig);
         }
         initialSystemContext(servletContext, ContextLoader.getCurrentWebApplicationContext());
