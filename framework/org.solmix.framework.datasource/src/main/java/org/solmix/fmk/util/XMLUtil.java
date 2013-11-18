@@ -370,9 +370,9 @@ public class XMLUtil
                 _buildList(child, (List) _value, mapAsAttribute);
             } else {
                 if (mapAsAttribute)
-                    child.setAttribute((String) _key, _value.toString());
+                    child.setAttribute((String) _key, _value!=null?_value.toString():"");
                 else
-                    child.setTextContent(_value.toString());
+                    child.setTextContent(_value!=null?_value.toString():"");
             }
         }
 

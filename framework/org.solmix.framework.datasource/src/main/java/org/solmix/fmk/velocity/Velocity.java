@@ -139,14 +139,15 @@ public class Velocity
      * @return
      * @throws Exception
      */
-    public static VelocityEngine getEngine()  {
+    public synchronized static VelocityEngine getEngine()  {
         if (vEngine != null) {
             return vEngine;
         } else {
             vEngine = new VelocityEngine();
             Properties properties = new Properties();
             // For velocity resource loader.
-            properties.put("file.resource.loader.path", DatasourceCM.getProperties().get(DatasourceCM.P_VELOCITY_TEMPLATE_DIR));
+            String vtl = DatasourceCM.getProperties().getString(DatasourceCM.P_VELOCITY_TEMPLATE_DIR,"./");
+            properties.put("file.resource.loader.path",vtl);
             properties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
             properties.put("runtime.log.logsystem.log4j.category", "org.apache.Velocity");
             vEngine.init(properties);
