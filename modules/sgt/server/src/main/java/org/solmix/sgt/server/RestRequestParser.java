@@ -83,6 +83,7 @@ public class RestRequestParser implements HttpServletRequestParser
     @Override
     public void parseRequest(RPCManager rpc, WebContext webContext) throws SlxException {
 
+        rpc.getContext().setRest(true);
         HttpServletRequest request = webContext.getRequest();
         String viewType = request.getParameter("viewType");
         if ("fchart".equals(viewType)) {

@@ -125,7 +125,7 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
                 return res;
             }
         } else {
-            DSRepository res[] = { defaultRepo };
+            DSRepository res[] = { getDefaultRepo() };
             return res;
         }
     }

@@ -23,7 +23,7 @@
 	<modules>
 		<module>services</module>
 		<module>framework</module>
-		<module>modules</module> 
+		<module>modules</module>
 		<module>launch/base</module>
 		<!-- <module>bundles</module> -->
 		<module>assemblies</module>
@@ -505,10 +505,10 @@
 				<version>${geronimo.servlet.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_3.0_spec</artifactId>
-			<version>1.0</version>
-		</dependency>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-servlet_3.0_spec</artifactId>
+				<version>1.0</version>
+			</dependency>
 			<dependency>
 				<groupId>org.easymock</groupId>
 				<artifactId>easymock</artifactId>
@@ -576,20 +576,20 @@
 				<version>${servlet.api.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint.api</artifactId>
-			<version>${aries.blueprint.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint.cm</artifactId>
-			<version>${aries.cm.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.aries.blueprint</groupId>
-			<artifactId>org.apache.aries.blueprint.core</artifactId>
-			<version>${aries.blueprint.core.version}</version>
-		</dependency>
+				<groupId>org.apache.aries.blueprint</groupId>
+				<artifactId>org.apache.aries.blueprint.api</artifactId>
+				<version>${aries.blueprint.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.blueprint</groupId>
+				<artifactId>org.apache.aries.blueprint.cm</artifactId>
+				<version>${aries.cm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.aries.blueprint</groupId>
+				<artifactId>org.apache.aries.blueprint.core</artifactId>
+				<version>${aries.blueprint.core.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.aries.blueprint</groupId>
 				<artifactId>org.apache.aries.blueprint.annotation.api</artifactId>
@@ -744,17 +744,17 @@
 			<!-- ===================================================================================== -->
 			<!-- solmix version dependency -->
 			<!-- ===================================================================================== -->
-		<dependency>
-			<groupId>org.solmix.launch</groupId>
-			<artifactId>org.solmix.launch.base</artifactId>
-			<classifier>web</classifier>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.modules</groupId>
-			<artifactId>org.solmix.modules.spring</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+			<dependency>
+				<groupId>org.solmix.launch</groupId>
+				<artifactId>org.solmix.launch.base</artifactId>
+				<classifier>web</classifier>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.solmix.modules</groupId>
+				<artifactId>org.solmix.modules.spring</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.solmix.launch</groupId>
 				<artifactId>org.solmix.launch.base</artifactId>
@@ -786,7 +786,7 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.solmix.services.event</groupId>
+				<groupId>org.solmix.services</groupId>
 				<artifactId>event-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
