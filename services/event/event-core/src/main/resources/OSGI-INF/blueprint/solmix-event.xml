@@ -17,7 +17,6 @@
 		id="solmix" />
 	<bean id="eventadmin" class="org.solmix.eventservice.EventAdminImpl"
 		init-method="start" destroy-method="stop">
-		<argument ref="solmix" />
 		<property name="bundleContext" ref="blueprintBundleContext" />
 	</bean>
 
