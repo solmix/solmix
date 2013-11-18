@@ -21,5 +21,6 @@
         <argument ref="solmix"/>
    </bean>
 	<service interface="org.solmix.sql.ConnectionManager" ref="org.solmix.sql.ConnectionManager"/>
+	<service interface="org.solmix.api.datasource.DataSource" ref="org.solmix.sql.SQLDataSource"/>
 
 </blueprint>
