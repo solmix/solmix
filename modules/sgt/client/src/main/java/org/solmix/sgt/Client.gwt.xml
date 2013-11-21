@@ -5,10 +5,9 @@
 	<inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.core.Core"/>
     <inherits name="org.solmix.atmosphere.Client"/>
-    <inherits name="com.smartgwt.extensions.pagebar.PageBar" />
- 	<inherits name="com.smartgwt.extensions.advanceds.AdvanceDS" />
+    <inherits name="org.solmix.pagebar.PageBar" />
+ 	<inherits name="org.solmix.advanceds.AdvanceDS" />
 	<inherits name="com.gwtplatform.mvp.Mvp" />
-	<inherits name="com.google.gwt.inject.Inject" />
 	<script src="sc/extensions/AdvanceDataSource.js"/>
 	<source path="client"/>
 </module>
