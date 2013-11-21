@@ -169,7 +169,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
      * @throws SlxException 
      */
     public synchronized EntityManager getEntityManager() throws SlxException {
-        if(entityManager==null&&!entityManager.isOpen()){
+        if(entityManager==null||!entityManager.isOpen()){
             entityManager= JPATransaction.getEntityManager(getEmf(data));
         }
         return entityManager;
