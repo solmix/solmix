@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="new"/>
  *     &lt;enumeration value="osgi"/>
  *     &lt;enumeration value="jndi"/>
- *     &lt;enumeration value="osgi_jndi"/>
+ *     &lt;enumeration value="bean"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -40,8 +40,8 @@ public enum EserviceStyle {
     OSGI("osgi"),
     @XmlEnumValue("jndi")
     JNDI("jndi"),
-    @XmlEnumValue("osgi_jndi")
-    OSGI_JNDI("osgi_jndi");
+    @XmlEnumValue("bean")
+    BEAN("bean");
     private final String value;
 
     EserviceStyle(String v) {

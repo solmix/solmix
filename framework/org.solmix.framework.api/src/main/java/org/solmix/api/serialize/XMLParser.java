@@ -26,7 +26,7 @@ import java.io.Writer;
 import javax.xml.bind.JAXBContext;
 
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.jaxb.Module;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.commons.io.SlxFile;
 
@@ -70,21 +70,21 @@ public interface XMLParser
      * @return
      * @throws SlxException
      */
-    Module unmarshalDS(SlxFile file) throws SlxException;
+    Tsolmix unmarshalDS(SlxFile file) throws SlxException;
 
     /**
      * @param is
      * @return
      * @throws SlxException
      */
-    Module unmarshalDS(Reader is) throws SlxException;
+    Tsolmix unmarshalDS(Reader is) throws SlxException;
 
     /**
      * @param is
      * @return
      * @throws SlxException
      */
-    Module unmarshalDS(InputStream is) throws SlxException;
+    Tsolmix unmarshalDS(InputStream is) throws SlxException;
 
     /**
      * @param out

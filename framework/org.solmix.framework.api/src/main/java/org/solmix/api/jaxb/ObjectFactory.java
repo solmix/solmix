@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
+import org.codehaus.jackson.map.Module;
+
 
 /**
  * This object contains factory methods for each 
@@ -92,8 +94,8 @@ public class ObjectFactory {
      * Create an instance of {@link Module }
      * 
      */
-    public Module createModule() {
-        return new Module();
+    public Tsolmix createTsolmix() {
+        return new Tsolmix();
     }
 
     /**
@@ -189,8 +191,8 @@ public class ObjectFactory {
      * 
      */
     @XmlElementDecl(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1", name = "module")
-    public JAXBElement<Module> createModule(Module value) {
-        return new JAXBElement<Module>(_Module_QNAME, Module.class, null, value);
+    public JAXBElement<Tsolmix> createModule(Tsolmix value) {
+        return new JAXBElement<Tsolmix>(_Module_QNAME, Tsolmix.class, null, value);
     }
 
 }
