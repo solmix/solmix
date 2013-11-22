@@ -39,7 +39,7 @@ import org.solmix.commons.util.DataUtil;
  * 
  * @version 110035
  */
-public class FileSystemRepository extends AbstractDSRepository
+public class DefaultRepository extends AbstractDSRepository
 {
 
     private String location;
@@ -82,16 +82,16 @@ public class FileSystemRepository extends AbstractDSRepository
         this.sysLocation = sysLocation;
     }
 
-    private final static Logger log = LoggerFactory.getLogger(FileSystemRepository.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(DefaultRepository.class.getName());
 
-    public FileSystemRepository()
+    public DefaultRepository()
     {
     }
 
     /**
      * @param sc
      */
-    public FileSystemRepository(SystemContext sc)
+    public DefaultRepository(SystemContext sc)
     {
         if (sc != null) {
             ConfigureUnitManager cm = sc.getBean(ConfigureUnitManager.class);

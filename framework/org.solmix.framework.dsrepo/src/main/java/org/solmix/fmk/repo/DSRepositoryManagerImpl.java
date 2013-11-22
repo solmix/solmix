@@ -61,7 +61,7 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
      */
     public DSRepository getDefaultRepo() {
         if(defaultRepo==null){
-            defaultRepo=new FileSystemRepository(sc);
+            defaultRepo=new DefaultRepository(sc);
         }
         return defaultRepo;
     }
