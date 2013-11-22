@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.jaxb.Module;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
@@ -62,7 +62,7 @@ public class JaxbDataSource
         SlxFile file1 = new SlxFile(url1);
         XMLParserFactory factory = XMLParserFactoryImpl.getInstance();
         XMLParser parser = factory.get();
-        Module module = null;
+        Tsolmix module = null;
         Request transaction = null;
         try {
             module = parser.unmarshalDS(file.getInputStream());

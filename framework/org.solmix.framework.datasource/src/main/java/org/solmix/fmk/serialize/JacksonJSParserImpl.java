@@ -41,9 +41,9 @@ import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.jaxb.Module;
 import org.solmix.api.jaxb.ObjectFactory;
 import org.solmix.api.jaxb.TdataSource;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.types.Texception;
@@ -143,7 +143,7 @@ public class JacksonJSParserImpl implements JSParser
     protected void _toIscJS(Writer out, Object obj) throws SlxException {
         if (obj instanceof TdataSource) {
             org.solmix.api.jaxb.ObjectFactory factory = new ObjectFactory();
-            Module module = factory.createModule();
+            Tsolmix module = factory.createTsolmix();
             module.setDataSource((TdataSource) obj);
             obj = module;
         }
@@ -235,7 +235,7 @@ public class JacksonJSParserImpl implements JSParser
             module.addSerializer(org.solmix.api.jaxb.TvalueMap.class, new TvalueMapSerializer());
             module.addSerializer(org.solmix.api.jaxb.Tvalidators.class, new TvalidatorsSerializer());
             module.addSerializer(org.solmix.api.jaxb.Tfields.class, new TfieldsSerializer());
-            module.addSerializer(org.solmix.api.jaxb.Module.class, new ModuleSerializer());
+            module.addSerializer(org.solmix.api.jaxb.Tsolmix.class, new ModuleSerializer());
             module.addSerializer(org.solmix.api.datasource.DSResponse.Status.class, new ResponseStatusSerializer());
             module.addSerializer(org.solmix.api.jaxb.ToperationBindings.class, new ToperationBindingsSerializer());
             module.addSerializer(org.solmix.api.jaxb.ToperationBinding.class, new ToperationBindingSerializer());

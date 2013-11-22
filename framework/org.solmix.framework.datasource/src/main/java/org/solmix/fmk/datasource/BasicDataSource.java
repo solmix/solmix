@@ -333,7 +333,7 @@ public class BasicDataSource implements DataSource
                 req.setDataSource(this);
             }
             if (!req.isBeenThroughDMI()) {
-                DSResponse _dsResponse = DmiDataSource.execute(req, req.getRpc(), req.getRequestContext());
+                DSResponse _dsResponse = ServiceDataSource.execute(req, req.getRpc(), req.getRequestContext());
                 if (_dsResponse != null)
                     return _dsResponse;
             }

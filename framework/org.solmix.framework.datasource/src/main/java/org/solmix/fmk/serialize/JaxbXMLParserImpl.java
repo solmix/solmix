@@ -32,7 +32,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.jaxb.Module;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.types.Texception;
@@ -52,13 +52,13 @@ public class JaxbXMLParserImpl implements XMLParser
     private static JAXBContext requestJC;
 
     @Override
-    public Module unmarshalDS(InputStream is) throws SlxException {
+    public Tsolmix unmarshalDS(InputStream is) throws SlxException {
         initDataSourceJaxbContext();
         Object obj = unmarshal(is, dataSourceJC);
         if (obj instanceof JAXBElement<?>)
-            return (Module) ((JAXBElement<?>) obj).getValue();
+            return (Tsolmix) ((JAXBElement<?>) obj).getValue();
         else
-            return (Module) obj;
+            return (Tsolmix) obj;
 
     }
 
@@ -92,13 +92,13 @@ public class JaxbXMLParserImpl implements XMLParser
     }
 
     @Override
-    public Module unmarshalDS(Reader is) throws SlxException {
+    public Tsolmix unmarshalDS(Reader is) throws SlxException {
         initDataSourceJaxbContext();
-        return (Module) unmarshal(is, dataSourceJC);
+        return (Tsolmix) unmarshal(is, dataSourceJC);
     }
 
     @Override
-    public Module unmarshalDS(SlxFile file) throws SlxException {
+    public Tsolmix unmarshalDS(SlxFile file) throws SlxException {
         try {
             return unmarshalDS(file.getInputStream());
         } catch (IOException e) {
@@ -182,7 +182,7 @@ public class JaxbXMLParserImpl implements XMLParser
     protected synchronized void initDataSourceJaxbContext() throws SlxException {
         try {
             if (dataSourceJC == null)
-                dataSourceJC = JAXBContext.newInstance(Module.class);
+                dataSourceJC = JAXBContext.newInstance(Tsolmix.class);
         } catch (JAXBException e) {
             throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance Datasource JAXBContext.\n exception:", e);
         }

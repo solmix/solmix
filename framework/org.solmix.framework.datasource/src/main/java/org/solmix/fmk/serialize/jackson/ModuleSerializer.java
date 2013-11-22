@@ -24,7 +24,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
-import org.solmix.api.jaxb.Module;
+import org.solmix.api.jaxb.Tsolmix;
 
 
 /**
@@ -33,7 +33,7 @@ import org.solmix.api.jaxb.Module;
  * @version 110035  2011-4-12
  */
 
-public class ModuleSerializer extends JsonSerializer<Module>
+public class ModuleSerializer extends JsonSerializer<Tsolmix>
 {
 
    /**
@@ -42,7 +42,7 @@ public class ModuleSerializer extends JsonSerializer<Module>
     * @see org.codehaus.jackson.map.JsonSerializer#serialize(java.lang.Object, org.codehaus.jackson.JsonGenerator, org.codehaus.jackson.map.SerializerProvider)
     */
    @Override
-   public void serialize(Module value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException
+   public void serialize(Tsolmix value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException
    {
       if (value.getDataSource() != null)
       {

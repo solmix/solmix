@@ -31,7 +31,7 @@
 					<!--<unpackBundle>false</unpackBundle> -->
 				</configuration>
 			</plugin>
-			<!--  <plugin>
+			  <plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-xjc-plugin</artifactId>
 				<version>2.3.0</version>
@@ -49,7 +49,7 @@
 					<extensions>
 						<extension>org.apache.cxf.xjcplugins:cxf-xjc-dv:2.3.0</extension>
 					</extensions>
-					<sourceRoot>${basedir}/src/main/java/</sourceRoot>
+					<sourceRoot>${basedir}/src/test/java/</sourceRoot>
 					<xsdOptions>
 						<xsdOption>
 							<xsd>${basedir}/src/main/resources/org/solmix/api/datasource.xsd</xsd>
@@ -61,7 +61,7 @@
 						</xsdOption>
 					</xsdOptions>
 				</configuration>
-			</plugin>   -->
+			</plugin>   
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>

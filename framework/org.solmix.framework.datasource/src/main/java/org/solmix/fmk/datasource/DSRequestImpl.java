@@ -509,7 +509,7 @@ public class DSRequestImpl implements DSRequest
                     hashFieldValues();
                     populateModifierAndCreatorFields(data.getOperationType() == Eoperation.ADD);
                 }
-                _dsResponse = DmiDataSource.execute(this, rpc, requestContext, getApp());
+                _dsResponse = ServiceDataSource.execute(this, rpc, requestContext, getApp());
             }
             if (_dsResponse == null)
                 _dsResponse = getApp().execute(this, requestContext);

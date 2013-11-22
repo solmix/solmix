@@ -33,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.EserverType;
-import org.solmix.api.jaxb.Module;
 import org.solmix.api.jaxb.ObjectFactory;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
@@ -41,6 +40,7 @@ import org.solmix.api.jaxb.Tfields;
 import org.solmix.api.jaxb.Tobject;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.jaxb.request.Roperations;
@@ -80,7 +80,7 @@ public class JaxbGenerater
         JSParser jsParser = jsFactory.get();
 
         ObjectFactory factory = new ObjectFactory();
-        Module module = factory.createModule();
+        Tsolmix module = factory.createTsolmix();
         TdataSource ds = factory.createTdataSource();
         ToperationBindings bins=factory.createToperationBindings();
         ds.setOperationBindings(bins);

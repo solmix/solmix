@@ -35,8 +35,8 @@ import org.solmix.api.datasource.ParserHandler;
 import org.solmix.api.event.IValidationEvent.Level;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
-import org.solmix.api.jaxb.Module;
 import org.solmix.api.jaxb.TdataSource;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.repo.DSRepository;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
@@ -158,7 +158,7 @@ public class DefaultParser implements ParserHandler
             SlxFile slx = (SlxFile) obj;
             if (xmlParser == null)
                 xmlParser = new JaxbXMLParserImpl();
-            Module module = xmlParser.unmarshalDS(slx);
+            Tsolmix module = xmlParser.unmarshalDS(slx);
             TdataSource td = module.getDataSource();
             if (numParsered == null)
                 numParsered = new AtomicLong();

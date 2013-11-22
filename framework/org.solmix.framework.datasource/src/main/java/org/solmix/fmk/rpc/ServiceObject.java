@@ -27,7 +27,6 @@ import java.util.List;
 import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.Context;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserviceStyle;
@@ -127,7 +126,7 @@ public class ServiceObject
                     serverObjectInstance = objects[0];
             }
                 break;
-            case OSGI_JNDI: {
+            case BEAN: {
                 serverObjectInterface = srvConfig.getInterface();
                 serverObjectFilter = srvConfig.getFilter();
                 serverObjectInstance = ServiceUtil.getOsgiJndiService(serverObjectInterface, serverObjectFilter);
@@ -185,8 +184,9 @@ public class ServiceObject
                 case NEW:
                     return serverObjectClassName;
                 case OSGI:
-                case OSGI_JNDI:
                     return serverObjectInterface + serverObjectFilter;
+                case BEAN:
+                    return serverObjectInterface;
             }
         }
         return null;

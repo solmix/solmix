@@ -69,10 +69,10 @@ import org.solmix.fmk.rpc.ServiceObject;
  * @since 0.0.1
  */
 
-public class DmiDataSource
+public class ServiceDataSource
 {
 
-    private static final Logger log = LoggerFactory.getLogger(DmiDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ServiceDataSource.class.getName());
 
     public static String VT_TMP_NAME = "_slxResult";
 
@@ -84,7 +84,7 @@ public class DmiDataSource
 
     protected Application app;
 
-    public DmiDataSource(DSRequest dsRequest, RPCManager rpc, Context context, Application app)
+    public ServiceDataSource(DSRequest dsRequest, RPCManager rpc, Context context, Application app)
     {
         this.request = dsRequest;
         this.rpc = rpc;
@@ -111,7 +111,7 @@ public class DmiDataSource
             MDC.put(SlxLog.LOG_CONTEXT,
                 (new StringBuilder()).append(appID).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
         try {
-            response = (new DmiDataSource(dsRequest, rpc, requestContext, app)).execute();
+            response = (new ServiceDataSource(dsRequest, rpc, requestContext, app)).execute();
         } finally {
             if (log.isDebugEnabled())
                 MDC.remove(SlxLog.LOG_CONTEXT);

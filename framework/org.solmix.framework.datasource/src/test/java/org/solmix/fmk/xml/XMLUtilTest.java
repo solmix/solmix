@@ -27,14 +27,13 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
-import org.w3c.dom.Element;
-
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.jaxb.Module;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tobject;
+import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.fmk.serialize.JaxbXMLParserImpl;
 import org.solmix.fmk.util.XMLUtil;
+import org.w3c.dom.Element;
 
 
 /**
@@ -54,7 +53,7 @@ public class XMLUtilTest
         l.add(mapdata("aaa","bbb")); l.add(mapdata("aaa","bbb"));
         xmldata.put("aa", l);
         Element e= XMLUtil.toElement("asda", l);
-        Module m = new Module();
+        Tsolmix m = new Tsolmix();
         TdataSource tds = new TdataSource();
         Tobject o = new Tobject();
         o.getAny().add(e);

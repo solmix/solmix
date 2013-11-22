@@ -9,11 +9,11 @@
 		<xsd:documentation>Transport to use for all operations on this
 			DataSource. </xsd:documentation>
 	</xsd:annotation>
-	<xsd:element name="module" type="module"></xsd:element>
+	<xsd:element name="solmix" type="Tsolmix"></xsd:element>
 
-	<xsd:complexType name="module">
+	<xsd:complexType name="Tsolmix">
 		<xsd:sequence>
-			<xsd:element name="DataSource" type="TdataSource"></xsd:element>
+			<xsd:element name="DataSource" type="TdataSource" minOccurs="1" maxOccurs="1"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -352,7 +352,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 		<xsd:attribute name="method" type="xsd:string"
 			form="unqualified">
 		</xsd:attribute>
-		<xsd:attribute name="curdName" type="xsd:string"
+		<xsd:attribute name="serviceName" type="xsd:string"
 			form="unqualified">
 		</xsd:attribute>
 		<xsd:attribute name="targetXPath" type="xsd:string"
@@ -365,7 +365,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 			<xsd:enumeration value="new"></xsd:enumeration>
 			<xsd:enumeration value="osgi"></xsd:enumeration>
 			<xsd:enumeration value="jndi"></xsd:enumeration>
-			<xsd:enumeration value="osgi_jndi"></xsd:enumeration>
+			<xsd:enumeration value="bean"></xsd:enumeration>
 		</xsd:restriction>
 	</xsd:simpleType>
 
