@@ -19,5 +19,6 @@
      <generate-with class="org.solmix.atmosphere.rebind.SerializerGenerator">
         <when-type-assignable class="org.solmix.atmosphere.client.GwtRpcClientSerializer"/>
     </generate-with> 
-    <script src="atmosphere/atmosphere.js"/>
+    <!-- Used atomsphere client javascript from  war  -->
+    <!-- <script src="atmosphere/atmosphere.js"/> -->
 </module>

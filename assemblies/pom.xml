@@ -9,6 +9,6 @@
   <artifactId>assemblies</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>launcher</module>
+  <!-- 	<module>launcher</module> -->
   </modules>
 </project>

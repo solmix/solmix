@@ -216,7 +216,7 @@
 			<artifactId>geronimo-jta_1.1_spec</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.services.event</groupId>
+			<groupId>org.solmix.services</groupId>
 			<artifactId>event-core</artifactId>
 		</dependency>
 		<dependency>
