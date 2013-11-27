@@ -447,7 +447,7 @@ public class BasicDataSource implements DataSource
         if (req.isBeenThroughValidation())
             return null;
         req.setBeenThroughValidation(true);
-        List errors = validateDSRequst(this, req);
+        List<Object> errors = validateDSRequst(this, req);
         if (errors != null) {
             LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).info((new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
             DSResponse dsResponse = new DSResponseImpl(this,req);
@@ -1075,7 +1075,7 @@ public class BasicDataSource implements DataSource
             DataSourceGenerator gen = getDataSourceGenerator();
             DataSource autoSchema = null;
             if (gen == null) {
-                String __info = "Config file of " + data.getDsConfigFile() + " set autoDeriveSchema is true, but the DataSource type:["
+                String __info = "Config file of " + data.getUrlString() + " set autoDeriveSchema is true, but the DataSource type:["
                     + this.getServerType() + "] not supprote auto derive schema.";
                 throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR, __info);
             } else {

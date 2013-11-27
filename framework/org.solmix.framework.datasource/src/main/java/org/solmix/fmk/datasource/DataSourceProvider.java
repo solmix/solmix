@@ -83,19 +83,12 @@ public class DataSourceProvider
     }
 
     public static DataSource forName(String dsName) throws SlxException {
-        /*
-         *Group setting,this feature may be in next version. 
-         */
-        /* String group = null;
-         if (dsName.lastIndexOf(SlxConstants.GROUP_SEP) > 0) {
-         group = dsName.substring(0, dsName.lastIndexOf(SlxConstants.GROUP_SEP));
-         dsName = dsName.substring(dsName.lastIndexOf(SlxConstants.GROUP_SEP) + 1);
-         }*/
-        return forName(null,dsName, "default", null);
+       
+        return forName(null,dsName, null, null);
     }
 
     public static DataSource forName(SystemContext sc,String dsName, DSRequest request) throws SlxException {
-        return forName(sc,dsName, "default", request);
+        return forName(sc,dsName, null, request);
     }
 
     /**
@@ -104,7 +97,7 @@ public class DataSourceProvider
      * @return
      * @throws SlxException
      */
-    public static DataSource forName(SystemContext sc,String dsName, /* String group, */String repoName, DSRequest request) throws SlxException {
+    public static DataSource forName(SystemContext sc,String dsName, String repoName, DSRequest request) throws SlxException {
        if(sc==null){
            sc= SlxContext.getThreadSystemContext();
        }
@@ -121,10 +114,10 @@ public class DataSourceProvider
          */
         ParserHandler _parser = getParserHander(sc);
         long __start = new Date().getTime();
-        DataSourceData data = (DataSourceData) _parser.parser(repoName, /* group, */dsName, ParserHandler.DS_SUFFIX, request);
+        DataSourceData data = (DataSourceData) _parser.parser(repoName, dsName, ParserHandler.DS_SUFFIX, request);
         if (data == null) {
             if (log.isErrorEnabled())
-                log.error("can't parser datasource:" + dsName + " from datasource repository:" + repoName + ". the request will breakup");
+                log.error("can't parser datasource:" + dsName + " from datasource  from  " + (repoName==null?"all":repoName) + " repository:. the request will breakup");
             return null;
         }
         EserverType _dsType = data.getServerType();

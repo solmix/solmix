@@ -19,8 +19,11 @@
 package org.solmix.fmk.cm.spring;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.solmix.api.cm.ConfigureUnit;
@@ -51,19 +54,23 @@ public class ConfigureUnitImpl implements ConfigureUnit
     @Override
     public DataTypeMap getProperties() {
         if(internal==null){
-            internal=new DataTypeMap();
+          Map<String,Object> prop= new HashMap<String,Object>();
             if (properties != null) {
                 Enumeration<Object> en = properties.keys();
                 while (en.hasMoreElements()) {
                     Object key = en.nextElement();
-                    internal.put(key.toString(), properties.get(key));
+                    prop.put(key.toString(), properties.get(key));
                 }
             }
+            internal =new DataTypeMap(prop);
         }
        
         return internal;
     }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static Map wrap(Map properties) {
+        return properties == null ? Collections.emptyMap() : Collections.unmodifiableMap( properties );
+  }
   
     @Override
     public void delete() throws IOException {

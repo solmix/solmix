@@ -25,7 +25,6 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.SlxConstants;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
@@ -44,12 +43,9 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
 
     private static final Logger log = LoggerFactory.getLogger(PoolableDataSourceFactory.class.getName());
 
-    private static final String FILTER = SlxConstants.SERVICE_CM_NAME + "=" + SlxConstants.MODULE_DS_NAME;
-
     private DSRequest dsRequest;
 
     private SystemContext sc;
-    private DataSourceProvider provider;
 
     PoolableDataSourceFactory()
     {
@@ -167,12 +163,15 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
         numValidateObjectCalls.getAndIncrement();
         if (obj instanceof DataSource) {
             DataSource ds = (DataSource) obj;
+           String id= ds.getContext().getRepositoryId();
+           if(id.equals(DSRepository.BUILDIN_FILE))
+               return true;
             long timestamp = ds.getContext().getConfigTimestamp();
             if (timestamp == 0)
                 return false;
             long lastTimeStamp = 0;
             try {
-                DSRepository repo = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class).loadDSRepo(DefaultParser.DEFAULT_REPO);
+                DSRepository repo = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class).getRepository(id);
                 String dsName = key == null ? null : key.toString() + "." + DefaultParser.DEFAULT_REPO_SUFFIX;
 
                 Object configFile = repo.load(dsName);

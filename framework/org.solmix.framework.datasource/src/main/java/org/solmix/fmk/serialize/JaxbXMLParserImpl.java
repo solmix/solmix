@@ -38,6 +38,7 @@ import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
+import org.solmix.commons.util.IOUtil;
 
 /**
  * @author solmix.f@gmail.com
@@ -84,10 +85,14 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public Request unmarshalReq(SlxFile file) throws SlxException {
+        InputStream is = null;
         try {
-            return unmarshalReq(file.getInputStream());
+            is = file.getInputStream();
+            return unmarshalReq(is);
         } catch (IOException e) {
             throw new SlxException(Tmodule.XML, Texception.DS_DSFILE_NOT_FOUND, "load ds config file failed", e);
+        } finally {
+            IOUtil.closeQuitely(is);
         }
     }
 
@@ -99,10 +104,14 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public Tsolmix unmarshalDS(SlxFile file) throws SlxException {
+        InputStream is = null;
         try {
-            return unmarshalDS(file.getInputStream());
+            is = file.getInputStream();
+            return unmarshalDS(is);
         } catch (IOException e) {
             throw new SlxException(Tmodule.XML, Texception.DS_DSFILE_NOT_FOUND, "load ds config file failed", e);
+        } finally {
+            IOUtil.closeQuitely(is);
         }
     }
 
@@ -179,6 +188,7 @@ public class JaxbXMLParserImpl implements XMLParser
             throw new SlxException(Tmodule.XML, Texception.XML_JAXB_UNMARSHAL, "Can not instance request JAXBContext.\n exception:", e);
         }
     }
+
     protected synchronized void initDataSourceJaxbContext() throws SlxException {
         try {
             if (dataSourceJC == null)
