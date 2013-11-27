@@ -21,7 +21,6 @@ package org.solmix.fmk.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.repo.DSRepository;
 
 /**
@@ -33,21 +32,17 @@ public abstract class AbstractDSRepository implements DSRepository
 
     private static final Logger log = LoggerFactory.getLogger(AbstractDSRepository.class.getName());
 
-    private String objectField;
+    private final ObjectType objectType;
 
-    private String objectFormat;
+    private final ObjectFormat objectFormat;
 
     public String name;
 
-    public AbstractDSRepository()
-    {
-        this("default", "object", "xml");
-    }
-
-    public AbstractDSRepository(String name, String objectField, String objectFormat)
+ 
+    public AbstractDSRepository(String name, ObjectType objectType, ObjectFormat objectFormat)
     {
         this.name = name;
-        this.objectField = objectField;
+        this.objectType = objectType;
         this.objectFormat = objectFormat;
     }
 
@@ -55,31 +50,21 @@ public abstract class AbstractDSRepository implements DSRepository
      * @return the objectField
      */
     @Override
-    public String getObjectField() {
-        return objectField;
+    public ObjectType getObjectType() {
+        return objectType;
     }
 
-    /**
-     * @param objectField the objectField to set
-     */
-    public void setObjectField(String objectField) {
-        this.objectField = objectField;
-    }
+   
 
     /**
      * @return the objectFormat
      */
     @Override
-    public String getObjectFormat() {
+    public ObjectFormat getObjectFormat() {
         return objectFormat;
     }
 
-    /**
-     * @param objectFormat the objectFormat to set
-     */
-    public void setObjectFormat(String objectFormat) {
-        this.objectFormat = objectFormat;
-    }
+  
 
     /**
      * @param name the name to set

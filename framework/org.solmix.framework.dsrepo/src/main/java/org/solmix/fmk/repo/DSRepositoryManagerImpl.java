@@ -19,7 +19,10 @@
 
 package org.solmix.fmk.repo;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -27,7 +30,6 @@ import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.repo.DSRepository;
 import org.solmix.api.repo.DSRepositoryManager;
-import org.solmix.commons.util.DataUtil;
 
 /**
  * 
@@ -39,16 +41,26 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
     private DSRepositoryTracker tracker;
 
     private DSRepository defaultRepo;
+
     private SystemContext sc;
-    
-    public static final String PID="org.solmix.framework.dsrepo";
-    
-    public DSRepositoryManagerImpl(){
+
+    private final Map<String, DSRepository> internal;
+
+    private boolean delayInit;
+
+    public static final String PID = "org.solmix.framework.dsrepo";
+
+    public DSRepositoryManagerImpl()
+    {
         this(null);
     }
-    public DSRepositoryManagerImpl(SystemContext sc){
+
+    public DSRepositoryManagerImpl(SystemContext sc)
+    {
         setSystemContext(sc);
+        internal = new HashMap<String, DSRepository>();
     }
+
     @Resource
     public void setSystemContext(SystemContext sc) {
         this.sc = sc;
@@ -56,12 +68,13 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
             sc.setBean(this, DSRepositoryManager.class);
         }
     }
+
     /**
      * @return the defaultRepo
      */
     public DSRepository getDefaultRepo() {
-        if(defaultRepo==null){
-            defaultRepo=new DefaultRepository(sc);
+        if (defaultRepo == null) {
+            defaultRepo = new ExtXmlFileRepository(sc);
         }
         return defaultRepo;
     }
@@ -93,41 +106,48 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
      * @see org.solmix.api.repo.DSRepoService#loadDSRepo()
      */
     @Override
-    public DSRepository loadDSRepo(String ID) throws SlxException {
-        if ("default".equals(ID) || ID == null) {
-            return getDefaultRepo();
-        } else {
-            List<DSRepository> repos = this.tracker.getRepos();
-            for (DSRepository repo : repos) {
-                if (repo.getName().equals(ID)) {
-                    return repo;
-                }
+    public synchronized DSRepository getRepository(String ID) throws SlxException {
+        delayInit();
+        DSRepository frepo = internal.get(ID);
+        if (frepo != null)
+            return frepo;
+
+        List<DSRepository> repos = this.tracker.getRepos();
+        for (DSRepository repo : repos) {
+            if (repo.getName().equals(ID)) {
+                internal.put(repo.getName(), frepo);
+                return repo;
             }
-            return null;
+        }
+        return null;
+    }
+
+    private synchronized void delayInit() {
+        if (!delayInit) {
+            internal.put(DSRepository.EXT_FILE, getDefaultRepo());
+            internal.put(DSRepository.BUILDIN_FILE, getBuildInFileRepo());
+            delayInit=true;
         }
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.repo.DSRepoService#getRepos()
+     * @return
      */
-    @Override
-    public DSRepository[] getRepos() throws Exception {
-        DSRepository[] rps;
+    private DSRepository getBuildInFileRepo() {
+        return new ConfiguredFileRepository(sc);
+    }
 
+    @Override
+    public DSRepository[] getRepositories() throws SlxException {
+        delayInit();
+        Collection<DSRepository> buildIns=internal.values();
         if (tracker != null) {
             List<DSRepository> repos = this.tracker.getRepos();
             if (repos != null && !repos.isEmpty())
-                return (DSRepository[]) DataUtil.listToArray(tracker.getRepos());
-            else {
-                DSRepository res[] = { defaultRepo };
-                return res;
-            }
-        } else {
-            DSRepository res[] = { getDefaultRepo() };
-            return res;
-        }
+                buildIns.addAll(repos);
+        } 
+        DSRepository valueArr[] = new DSRepository[buildIns.size()];
+       return buildIns.toArray(valueArr);
     }
 
 }
