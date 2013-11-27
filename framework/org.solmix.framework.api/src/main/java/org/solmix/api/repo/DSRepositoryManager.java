@@ -29,12 +29,8 @@ import org.solmix.api.exception.SlxException;
 public interface DSRepositoryManager
 {
 
-    /**
-     * @param ID
-     * @return
-     * @throws Exception
-     */
-    DSRepository loadDSRepo(String ID) throws SlxException;
+   
+    DSRepository getRepository(String ID) throws SlxException;
 
-    DSRepository[] getRepos() throws Exception;
+    DSRepository[] getRepositories() throws SlxException;
 }

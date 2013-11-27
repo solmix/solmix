@@ -126,7 +126,7 @@ public class DataSourceData implements Serializable
     /**
      * <B><li>ANNOTATE:</B> This is DS dynamical config.
      */
-    private String dsConfigFile;
+    private String urlString;
 
     /**
      * <B><li>ANNOTATE:</B> This is DS runtime variable
@@ -365,6 +365,8 @@ public class DataSourceData implements Serializable
      * <B><li>ANNOTATE:</B> This is DS dynamical runtime variable
      */
     private List<IValidationEvent> validationList;
+
+    private String repositoryId;
 
     /**
      * @return the customerConfig
@@ -650,15 +652,15 @@ public class DataSourceData implements Serializable
      * <B><li>ANNOTATE:</B> This is DS runtime variable
      * @return the dsConfigFile
      */
-    public String getDsConfigFile() {
-        return dsConfigFile;
+    public String getUrlString() {
+        return urlString;
     }
 
     /**
      * @param dsConfigFile the dsConfigFile to set
      */
-    public void setDsConfigFile(String dsConfigFile) {
-        this.dsConfigFile = dsConfigFile;
+    public void setUrlString(String urlString) {
+        this.urlString = urlString;
     }
 
     /**
@@ -814,4 +816,20 @@ public class DataSourceData implements Serializable
            
        }
     }
+    /**
+     * @param name
+     */
+    public void setRepositoryId(String name) {
+     this.repositoryId=name;
+        
+    }
+
+    
+    /**
+     * @return the repositoryId
+     */
+    public String getRepositoryId() {
+        return repositoryId;
+    }
+    
 }

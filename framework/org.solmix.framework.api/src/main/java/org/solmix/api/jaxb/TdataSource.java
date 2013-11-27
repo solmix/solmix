@@ -10,6 +10,7 @@ package org.solmix.api.jaxb;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
@@ -146,7 +147,7 @@ public class TdataSource {
     protected String schemaBean;
     @XmlAttribute
     protected String persistenceUnit;
-    @XmlAttribute(namespace = "http://www.solmix.org/xmlns/datasource/v1.0.1")
+    @XmlAttribute
     protected String bean;
     @XmlAttribute
     protected String tableName;
@@ -187,7 +188,7 @@ public class TdataSource {
     @XmlAttribute
     protected String testFileName;
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private final Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the description property.

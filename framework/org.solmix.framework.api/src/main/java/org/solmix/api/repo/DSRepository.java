@@ -19,7 +19,6 @@
 
 package org.solmix.api.repo;
 
-import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 
 /**
@@ -29,13 +28,25 @@ import org.solmix.api.exception.SlxException;
 public interface DSRepository
 {
 
+    public enum ObjectType
+    {
+        URL , SLX_FILE , STREAM;
+    }
+
+    public enum ObjectFormat
+    {
+        XML , CLASS;
+    }
+
+    public static final String EXT_FILE = "ExtFile";
+
+    public static final String BUILDIN_FILE = "BuildInFile";
+
     String getName();
 
-    String getObjectField();
+    ObjectType getObjectType();
 
-    String[] getLocations();
-
-    String getObjectFormat();
+    ObjectFormat getObjectFormat();
 
     /**
      * Load Ds object.
@@ -46,31 +57,4 @@ public interface DSRepository
      */
     Object load(String ds) throws SlxException;
 
-    /*
-     * Used Filed path ,so not used group at all.
-     */
-    // Object load(String group, String ds) throws SlxException;
-
-    /**
-     * Load system internal Ds object.
-     * 
-     * @param name
-     * @return
-     * @throws Exception
-     */
-    Object loadSystem(String name) throws SlxException;
-
-    /**
-     * @param ds
-     * @return
-     * @throws Exception
-     */
-    DataSource loadDS(String ds) throws SlxException;
-
-    /*
-     * Used Filed path ,so not used group at all.
-     */
-    // DataSource loadDS(String group, String ds) throws SlxException;
-
-    DataSource loadSystemDS(String ds) throws SlxException;
 }
