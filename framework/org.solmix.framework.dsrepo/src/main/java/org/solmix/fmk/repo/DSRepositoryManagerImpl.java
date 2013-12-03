@@ -20,7 +20,7 @@
 package org.solmix.fmk.repo;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +58,7 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
     public DSRepositoryManagerImpl(SystemContext sc)
     {
         setSystemContext(sc);
-        internal = new HashMap<String, DSRepository>();
+        internal = new LinkedHashMap<String, DSRepository>();
     }
 
     @Resource
