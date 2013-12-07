@@ -20,7 +20,6 @@
 package org.solmix.fmk.export;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -31,7 +30,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.export.IExport;
 import org.solmix.api.types.Texception;
@@ -81,13 +79,11 @@ public void exportResultSet(List<Map<Object, Object>> rows, Map<String, String> 
        String tagName= context.get(IExport.XML_TAG_NAME)==null?null:context.get(IExport.XML_TAG_NAME).toString();
        out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
        out.write("<List>\n");
-       MapperUtil.records2XML(tagName,rows, out);
+       MapperUtil.records2XML(tagName,rows, pw);
        out.write("</List>\n");
         out.flush();
-    } catch (IOException e) {
-        e.printStackTrace();
-    } catch (Exception e) {
-        e.printStackTrace();
+    }  catch (Exception e) {
+        log.error("",e);
     }
 }
 

@@ -585,7 +585,7 @@ public class DataUtil
         if (obj == null)
             return null;
         else if (obj instanceof List<?>)
-            return (List) obj;
+            return (List<T>) obj;
         else
             return makeList(obj);
     }
@@ -609,29 +609,30 @@ public class DataUtil
 
     /**
      * re-mapping rows to new map.
+     * @param <V>
+     * @param <T>
      * 
      * @param rows List of maps.
      * @param remap
      * @param keepNonRemapped
      * @return
      */
-    public static List remapRows(List rows, Map remap, boolean keepNonRemapped) {
+    public static List<Map<Object,Object>> remapRows(List<Map<Object,Object>> rows, Map<String, String> remap, boolean keepNonRemapped) {
         if (remap == null)
             return rows;
-        List<Map> newRows = new ArrayList<Map>();
-        for (Object row : rows) {
-            Map oldRow = (Map) row;
-            Map newRow = remapRow(oldRow, remap, keepNonRemapped);
+        List<Map<Object,Object>> newRows = new ArrayList<Map<Object,Object>>();
+        for (Map<Object,Object> oldRow : rows) {
+            Map<Object,Object> newRow = remapRow(oldRow, remap, keepNonRemapped);
             if (newRow.size() > 0)
                 newRows.add(newRow);
         }
         return newRows;
     }
 
-    public static Map remapRow(Map row, Map remap, boolean keepNonRemapped) {
+    public static  Map<Object, Object> remapRow(Map<Object,Object> row, Map<String, String> remap, boolean keepNonRemapped) {
         if (remap == null)
             return row;
-        Map newRow = new HashMap();
+        Map<Object,Object> newRow = new HashMap<Object,Object>();
         for (Object oldKey : row.keySet()) {
             Object newKey = remap.get(oldKey);
             Object data = row.get(oldKey);

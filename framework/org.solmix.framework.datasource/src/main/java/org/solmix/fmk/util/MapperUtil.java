@@ -66,7 +66,7 @@ public class MapperUtil
 
                     out.write("<" + key + ">" + strValue + "</" + key + ">\n");
                 } else if (value instanceof Map<?, ?>) {
-                    records2XML(null, (List<Map<Object, Object>>) DataUtil.makeListIfSingle((Map<Object, Object>) value), out);
+                    records2XML(null, DataUtil.makeListIfSingle((Map<Object, Object>) value), out);
                 } else {
                     Map<Object, Object> map = DataUtil.getProperties(value);
                     records2XML(null, map, out);
@@ -78,7 +78,7 @@ public class MapperUtil
 
     public static String quoteXMLString(String value, boolean asAttr) throws Exception {
         StringWriter out = new StringWriter();
-        quoteXMLString(value, ((Writer) (out)), asAttr);
+        quoteXMLString(value, ((out)), asAttr);
         return out.toString();
     }
 
