@@ -115,6 +115,7 @@ public class DataSourceData implements Serializable
     private List<String> primaryKeys;
 
     private Object autoDeriveSchema;
+    private boolean autoJoinTransaction;
 
     /**
      * <B><li>ANNOTATE:</B> This is DS runtime variable
@@ -136,7 +137,8 @@ public class DataSourceData implements Serializable
     private VelocityExpression requires;
 
     private List<String> requiresRoles;
-    private final Map<OpBindHolder, ToperationBinding> _cachedBindings = new LinkedHashMap<OpBindHolder, ToperationBinding>();
+    private final Map<OpBindHolder, ToperationBinding> _cachedBindings = new LinkedHashMap<OpBindHolder, ToperationBinding>(2);
+    private final Map<String, IType> fieldTypeCache = Collections.synchronizedMap(new HashMap<String, IType>());
     /**
      * Return this datasource needed resource.if the {@link #requires} is null,used {@link #tdataSource}to initial it.
      * 
@@ -223,7 +225,6 @@ public class DataSourceData implements Serializable
         this.mapFields.put(field.getName(), field);
     }
 
-    private final Map<String, IType> fieldTypeCache = Collections.synchronizedMap(new HashMap<String, IType>());;
 
     public IType getCachedFiledType(String fieldName) {
         return fieldTypeCache.get(fieldName);
@@ -273,8 +274,6 @@ public class DataSourceData implements Serializable
 
         return mapFields;
     }
-
-    private boolean autoJoinTransaction;
 
     /**
      * @return the autoJoinTransaction
@@ -343,8 +342,6 @@ public class DataSourceData implements Serializable
      */
     public void setSuperDSName(String superDSName) {
         this.superDSName = superDSName;
-        // if (tdataSource.getInheritsFrom() == null)
-        // tdataSource.setInheritsFrom(superDSName);
     }
 
     /**

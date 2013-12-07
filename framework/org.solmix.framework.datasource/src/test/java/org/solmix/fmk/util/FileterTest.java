@@ -43,7 +43,7 @@ public class FileterTest
    public static void main(String[] args)
    {
       FileterTest.class.getResource("");
-      Enumeration e = new FilterEnumeration("CLASSPATH:/org/solmix/fmk/util", "*.class", false);
+      Enumeration e = new FilterEnumeration("CLASSPATH:/org/solmix/fmk/util", "*.class");
       while (e.hasMoreElements())
       {
          System.out.println(e.nextElement().toString());
@@ -72,7 +72,7 @@ public class FileterTest
    @Test
    public void filterTest()
    {
-      Enumeration e = new FilterEnumeration("CLASSPATH:/org/solmix/fmk/util", "FileterTest.class", false);
+      Enumeration e = new FilterEnumeration("CLASSPATH:/org/solmix/fmk/util", "FileterTest.class");
 
       while (e.hasMoreElements())
       {

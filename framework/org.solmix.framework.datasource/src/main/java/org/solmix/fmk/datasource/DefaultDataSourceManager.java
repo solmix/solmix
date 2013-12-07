@@ -31,12 +31,15 @@ import org.solmix.SlxConstants;
 import org.solmix.api.bean.ConfiguredBeanProvider;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
+import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
+import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.pool.PoolManager;
 import org.solmix.api.pool.PoolManagerFactory;
@@ -73,6 +76,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     {
         setSystemContext(sc);
         providers.add(new BasicDataSource(sc));
+        providers.add(new FileSystemDataSource(sc));
     }
 
     @Resource
@@ -162,11 +166,11 @@ public class DefaultDataSourceManager implements DataSourceManager
         if (sc != null) {
             ConfiguredBeanProvider cbp = sc.getBean(org.solmix.api.bean.ConfiguredBeanProvider.class);
             Collection<? extends DataSource> cc = cbp.getBeansOfType(DataSource.class);
-            for (DataSource c : cc){
-                if(!providers.contains(c))
+            for (DataSource c : cc) {
+                if (!providers.contains(c))
                     providers.add(c);
             }
-              
+
         }
         return providers;
     }
@@ -270,13 +274,46 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     @Override
-    public DSRequest createDSRequest(DataSource dataSource) {
-        return new DSRequestImpl(dataSource);
+    public DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, String operationID) {
+        return new DSRequestImpl(dataSourceName, opType, operationID);
+    }
+
+    @Override
+    public DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType) {
+        return new DSRequestImpl(dataSourceName, opType);
+    }
+
+    @Override
+    public DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, RPCManager rpc) {
+        return new DSRequestImpl(dataSourceName, opType, rpc);
     }
 
     @Override
     public DSResponse createDSResponse() {
         return new DSResponseImpl();
+    }
+
+    /**
+     * @param context
+     * @return
+     * @throws SlxException
+     */
+    @Override
+    public DataSource generateDataSource(DataSourceData context) throws SlxException {
+        if (context == null)
+            throw new java.lang.IllegalArgumentException("DataSourceData must be not null.");
+        EserverType serverType = context.getServerType();
+        for (DataSource ds : getProviders()) {
+            if (ds.getServerType().equals(serverType.value())) {
+                DataSourceGenerator generator = ds.getDataSourceGenerator();
+                DataSource instance = generator.generateDataSource(context);
+                // not from pool.
+                instance.getContext().setWaitForFree(false);
+                return instance;
+            }
+        }
+        return null;
+
     }
 
 }

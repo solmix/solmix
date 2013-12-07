@@ -193,7 +193,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 			form="unqualified">
 		</xsd:attribute>
 		<xsd:attribute name="schemaBean" type="xsd:string"
-			form="unqualified" use="required">
+			form="unqualified" use="optional">
 		</xsd:attribute>
 		<xsd:attribute name="persistenceUnit" type="xsd:string" form="unqualified"></xsd:attribute>
         <xsd:attribute name="bean" type="xsd:string" form="unqualified"></xsd:attribute>

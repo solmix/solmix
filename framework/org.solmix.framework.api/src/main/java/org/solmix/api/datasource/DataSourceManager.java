@@ -22,6 +22,7 @@ package org.solmix.api.datasource;
 import java.util.List;
 
 import org.solmix.api.context.Context;
+import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
@@ -52,15 +53,6 @@ public interface DataSourceManager
      * @return
      * @throws Exception
      */
-    // IDataSource getDataSource(String name) throws Exception;
-
-    /**
-     * Return the DataSource by datasource's name.
-     * 
-     * @param name
-     * @return
-     * @throws Exception
-     */
     DataSource get(String name) throws SlxException;
 
     DataSource get(String name, DSRequest request) throws SlxException;
@@ -74,27 +66,42 @@ public interface DataSourceManager
      */
     DataSource getUnpooledDataSource(String name) throws SlxException;
 
-    /**
-     * free DS resource.
-     * 
-     * @param ds
-     */
-    // void freeDataSource(IDataSource ds);
-
     void free(DataSource ds);
 
     List<DataSource> getProviders();
 
-    DSRequest createDSRequest();
+    /**
+     * Create a void DSResponse,from some situation,such as return datasource call.
+     * 
+     * @return
+     */
     DSResponse createDSResponse();
-    
-    DSRequest createDSRequest(DataSource dataSource);
 
-    DSRequest createDSRequest(String dataSourceName, Eoperation opType, RPCManager rpc);
+    /**
+     * Create a void DSRequest.
+     * 
+     * @return
+     */
+    DSRequest createDSRequest();
 
     DSRequest createDSRequest(Roperation operation, Context context) throws SlxException;
 
+    DSRequest createDSRequest(String dataSourceName, Eoperation opType, String operationID);
+
     DSRequest createDSRequest(String dataSourceName, Eoperation opType);
 
-    DSRequest createDSRequest(String dataSourceName, Eoperation opType, String operationID);
+    DSRequest createDSRequest(String dataSourceName, Eoperation opType, RPCManager rpc);
+
+    DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, String operationID);
+
+    DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType);
+
+    DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, RPCManager rpc);
+
+    /**
+     * @param context
+     * @return
+     * @throws SlxException
+     */
+    DataSource generateDataSource(DataSourceData context) throws SlxException;
 }

@@ -48,6 +48,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
             }
             request = _dataSourceManager.createDSRequest();
             request.setDataSource(dataSource);
+            request.setDataSourceName(dataSourceName);
             if (opId != null)
                 request.getContext().setOperation(opId);
             request.getContext().setOperationType(type);

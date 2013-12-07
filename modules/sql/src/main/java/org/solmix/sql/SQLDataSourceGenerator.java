@@ -32,7 +32,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
@@ -144,13 +143,8 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
         this.returnSqlType = returnSqlType;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.datasource.DataSourceGenerator#generateDataSource(org.solmix.api.data.DataSourceData)
-     */
-    @Override
-    public DataSource generateDataSource(DataSourceData context, SystemContext sc) throws SlxException {
+  
+    public DataSource generateDataSource(DataSourceData context) throws SlxException {
 
         TdataSource tds = context.getTdataSource();
         String serverType = AutoDeriver.getServerType(tds).value();

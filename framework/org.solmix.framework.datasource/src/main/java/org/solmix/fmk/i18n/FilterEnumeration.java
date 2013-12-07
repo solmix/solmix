@@ -39,8 +39,7 @@ import org.solmix.commons.util.SimpleFilter;
  * @version 110035 2011-3-15
  */
 
-@SuppressWarnings("unchecked")
-public class FilterEnumeration implements Enumeration
+public class FilterEnumeration implements Enumeration<Object>
 {
 
    private final URL k_path;
@@ -53,7 +52,7 @@ public class FilterEnumeration implements Enumeration
 
    private final List<Object> k_nextEntries = new ArrayList<Object>(2);
 
-   public FilterEnumeration(String path, String filePattern, boolean recurse)
+   public FilterEnumeration(String path, String filePattern)
    {
       if (path == null)
       {
@@ -83,9 +82,9 @@ public class FilterEnumeration implements Enumeration
             file = file.substring(5, file.indexOf('!'));
             try {
                 JarFile jf = new JarFile(file);
-                Enumeration jenm = jf.entries();
+                Enumeration<JarEntry> jenm = jf.entries();
                 while (jenm.hasMoreElements()) {
-                    JarEntry entry = (JarEntry) jenm.nextElement();
+                    JarEntry entry = jenm.nextElement();
                     if (entry.isDirectory())
                         continue;
                     String jar = entry.getName();
@@ -123,8 +122,6 @@ public class FilterEnumeration implements Enumeration
                             }
                         }
                 } catch (MalformedURLException e) {
-                    // igonore.
-                } catch (IOException e) {
                     // igonore.
                 }
             }

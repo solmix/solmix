@@ -93,6 +93,130 @@ public class DSRequestImpl implements DSRequest
 
     private boolean beenThroughValidation = false;
 
+    FreeResourcesHandler freeResourcesHandler;
+
+    public DSRequestImpl()
+    {
+        this((Roperation) null);
+        data.setAppID(DSRequestData.BUILTIN_APPLICATION);
+
+    }
+
+    public DSRequestImpl(DataSource dataSource)
+    {
+        this(dataSource, (Eoperation) null, (String) null);
+    }
+
+    public DSRequestImpl(String dataSourceName, Eoperation opType)
+    {
+        this(dataSourceName, opType, (String) null);
+    }
+
+    public DSRequestImpl(DataSource dataSource, Eoperation opType)
+    {
+        this(dataSource, opType, (String) null);
+    }
+
+    public DSRequestImpl(DataSource dataSource, Eoperation opType, String operationID)
+    {
+        this();
+        this.dataSource = dataSource;
+        data.setOperationType(opType);
+        data.setOperation(operationID);
+    }
+
+    public DSRequestImpl(String dsName, Eoperation opType, String operationID)
+    {
+        this();
+        this.dataSourceName = dsName;
+        data.setOperationType(opType);
+        data.setOperation(operationID);
+    }
+
+    public DSRequestImpl(String dataSourceName, String opType)
+    {
+        this(dataSourceName, Eoperation.fromValue(opType));
+    }
+
+    public DSRequestImpl(Roperation operation, Context context) throws SlxException
+    {
+        this(operation);
+        if (data.getOperation() == null)
+            throw new SlxException(Tmodule.DATASOURCE, Texception.DS_NO_OPERATION_DEFINED, "operation not specified");
+        else if (context != null) {
+            this.requestContext = context;
+            data.setIsClientRequest(true);
+            if (context instanceof WebContext)
+                parseUploadedFiles((WebContext) context);
+        }
+    }
+
+    public DSRequestImpl(DataSource datasource, Eoperation opType, RPCManager rpc2)
+    {
+        this(datasource, opType, (String) null);
+        setRpc(rpc);
+    }
+
+    public DSRequestImpl(String dataSourceName, Eoperation opType, RPCManager rpc)
+    {
+        this(dataSourceName, opType, (String) null);
+        setRpc(rpc);
+    }
+
+    /**
+     * construct function,initial {@link org.solmix.api.datasource.DSRequest}
+     * 
+     * @param operation
+     */
+    public DSRequestImpl(Roperation operation)
+    {
+        data = null;
+        data = new DSRequestData();
+        data.init();
+        if (operation == null)
+            return;
+        data.setRoperation(operation);
+        String _operation = data.getOperationId();
+
+        // parser values.
+        if (operation.getValues() != null) {
+            data.setValues(operation.getValues());
+        }
+        if (operation.getCriteria() != null) {
+            data.setCriteria(operation.getCriteria());
+        }
+        if (operation.getOldValues() != null) {
+            data.setRawOldValues(operation.getOldValues());
+        }
+        // operationType and sourceName.
+        if (operation.getDataSource() != null) {
+            data.setOperationType(operation.getOperationType() == null ? null : Eoperation.fromValue(operation.getOperationType()));
+            dataSourceName = operation.getDataSource();
+            data.setRepo(operation.getRepo());
+        } else if (_operation != null && _operation.indexOf('_') != -1) {
+            if (log.isDebugEnabled())
+                log.debug("cannot find Datasource name use " + _operation + " transform to datasource");
+            data.setOperationType(Eoperation.fromValue(_operation.substring(_operation.lastIndexOf('_') + 1)));
+            dataSourceName = _operation.substring(0, _operation.lastIndexOf('_'));
+        }
+        // Application
+        if (!data.getAppID().equals("builtinApplication")) {
+            // List<String> qualifiedUserTypes = DataUtil.makeList("*");
+            // try {
+            // DataUtil.addAll(qualifiedUserTypes, app.userIsOfTypes());
+            // } catch (Exception e) {
+            // log.error("Can't look up app users", e);
+            // }
+        }
+
+        if (data.getOutputs() == null) {
+            if (operation.getOutputs() != null)
+                data.setOutputs(DataUtil.commaSeparatedStringToList(operation.getOutputs()));
+        }
+        if (data.getSortBy() == null && operation.getSortBy() != null && operation.getSortBy().size() > 1)
+            data.setRawSortBy(operation.getSortBy());
+    }
+
     /**
      * @return the beenThroughDMI
      */
@@ -133,16 +257,15 @@ public class DSRequestImpl implements DSRequest
         if (app == null) {
             SystemContext sc;
             if (requestContext instanceof WebContext) {
-                 sc = ((WebContext) requestContext).getSystemContext();
-                
-            }else{
-                sc=SlxContext.getThreadSystemContext();
+                sc = ((WebContext) requestContext).getSystemContext();
+
+            } else {
+                sc = SlxContext.getThreadSystemContext();
             }
             ApplicationManager am = sc.getBean(ApplicationManager.class);
             if (am != null)
                 app = am.findByID(data.getAppID());
         }
-
         return app;
     }
 
@@ -231,8 +354,6 @@ public class DSRequestImpl implements DSRequest
         dataSource = null;
     }
 
-    FreeResourcesHandler freeResourcesHandler;
-
     /**
      * @return the dataSource
      * @throws SlxException
@@ -270,92 +391,6 @@ public class DSRequestImpl implements DSRequest
     @Override
     public void setRpc(RPCManager rpc) {
         this.rpc = rpc;
-    }
-
-    public DSRequestImpl()
-    {
-        this((Roperation)null);
-        data.setAppID(DSRequestData.BUILTIN_APPLICATION);
-
-    }
-
-    public DSRequestImpl(String dataSourceName, String opType)
-    {
-        this(dataSourceName, Eoperation.fromValue(opType));
-    }
-
-    /**
-     * construct function,initial {@link org.solmix.api.datasource.DSRequest}
-     * 
-     * @param operation
-     */
-    public DSRequestImpl(Roperation operation)
-    {
-        data = null;
-        data = new DSRequestData();
-        data.init();
-        if (operation == null)
-            return;
-        // List< IValidationEvent > validations = new ArrayList< IValidationEvent >();
-        // data.setValidationList( validations );
-        data.setRoperation(operation);
-        String _operation = data.getOperationId();
-
-        // parser values.
-        if (operation.getValues() != null) {
-            data.setValues(operation.getValues());
-        }
-        if (operation.getCriteria() != null) {
-            data.setCriteria(operation.getCriteria());
-        }
-        if (operation.getOldValues() != null) {
-            // List<Object> elementOldValues = operation.getOldValues().getContent();
-            // data.setRawOldValues(DataTools.parserRequestValues(elementOldValues));
-            data.setRawOldValues(operation.getOldValues());
-        }
-        // operationType and sourceName.
-        if (operation.getDataSource() != null) {
-            data.setOperationType(operation.getOperationType() == null ? null : Eoperation.fromValue(operation.getOperationType()));
-            dataSourceName = operation.getDataSource();
-            data.setRepo(operation.getRepo());
-        } else if (_operation != null && _operation.indexOf('_') != -1) {
-            if (log.isDebugEnabled())
-                log.debug("cannot find Datasource name use " + _operation + " transform to datasource");
-            data.setOperationType(Eoperation.fromValue(_operation.substring(_operation.lastIndexOf('_') + 1)));
-            dataSourceName = _operation.substring(0, _operation.lastIndexOf('_'));
-        }
-        // Application
-        if (!data.getAppID().equals("builtinApplication")) {
-            // List<String> qualifiedUserTypes = DataUtil.makeList("*");
-            // try {
-            // DataUtil.addAll(qualifiedUserTypes, app.userIsOfTypes());
-            // } catch (Exception e) {
-            // log.error("Can't look up app users", e);
-            // }
-        }
-
-        if (data.getOutputs() == null) {
-            if (operation.getOutputs() != null)
-                data.setOutputs(DataUtil.commaSeparatedStringToList(operation.getOutputs()));
-        }
-        if (data.getSortBy() == null&&operation.getSortBy()!=null&&operation.getSortBy().size()>1)
-            data.setRawSortBy(operation.getSortBy());
-        // if(data.getBatchSize() == null)
-        // data.setBatchSize(operation.)
-
-    }
-
-    public DSRequestImpl(Roperation operation, Context context) throws SlxException
-    {
-        this(operation);
-        if (data.getOperation() == null)
-            throw new SlxException(Tmodule.DATASOURCE, Texception.DS_NO_OPERATION_DEFINED, "operation not specified");
-        else if (context != null) {
-            this.requestContext = context;
-            data.setIsClientRequest(true);
-            if (context instanceof WebContext)
-                parseUploadedFiles((WebContext) context);
-        }
     }
 
     @Override
@@ -427,42 +462,6 @@ public class DSRequestImpl implements DSRequest
 
     }
 
-    public DSRequestImpl(String dataSourceName, Eoperation opType)
-    {
-        this();
-        this.dataSourceName = dataSourceName;
-        data.setOperationType(opType);
-    }
-
-    public DSRequestImpl(DataSource dataSource, Eoperation opType)
-    {
-        this();
-        this.dataSource = dataSource;
-        data.setOperationType(opType);
-    }
-    public DSRequestImpl(DataSource dataSource){
-        this();
-        this.dataSource = dataSource;
-    }
-    public DSRequestImpl(String dataSourceName, Eoperation opType, RPCManager rpc)
-    {
-        this();
-        this.dataSourceName = dataSourceName;
-        data.setOperationType(opType);
-        setRpc(rpc);
-    }
-
-    /**
-     * @param dataSourceName2
-     * @param opType
-     * @param operationID
-     */
-    public DSRequestImpl(String dsName, Eoperation opType, String operationID)
-    {
-        this(dsName, opType);
-        data.setOperation(operationID);
-    }
-
     /**
      * {@inheritDoc}
      * 
@@ -479,13 +478,12 @@ public class DSRequestImpl implements DSRequest
             }
 
             List<Object> _tmpFiles = data.getUploadedFiles();
-
             if (_tmpFiles != null)
                 for (Object o : _tmpFiles) {
                     UploadItem file = (UploadItem) o;
-                    List errors = file.getErrors();
+                    List<Object> errors = file.getErrors();
                     if (errors != null) {
-                        _dsResponse = new DSResponseImpl(getDataSource(),this);
+                        _dsResponse = new DSResponseImpl(getDataSource(), this);
                         _dsResponse.getContext().setErrors(errors);
                         _dsResponse.getContext().setRequestConnectionClose(true);
                     }
@@ -540,7 +538,6 @@ public class DSRequestImpl implements DSRequest
             }
             if (operationBinding != null) {
                 processExport(operationBinding, _dsResponse);
-
             }
         } catch (Exception e) {
             log.error("execute()", e);
@@ -639,11 +636,8 @@ public class DSRequestImpl implements DSRequest
                         throw new SlxException(Tmodule.DATASOURCE, Texception.NO_SUCH_ALGORITHM, "hash fields with no such algorithm.", e);
                     }
                 data.getValues().put(field.getName(), value);
-
             }
-
         }
-
     }
 
     /**
@@ -657,7 +651,6 @@ public class DSRequestImpl implements DSRequest
      */
     protected boolean passesSecurityChecks() throws SlxException {
         return true;
-
     }
 
     /**
@@ -678,7 +671,6 @@ public class DSRequestImpl implements DSRequest
     @Override
     public void setContext(DSRequestData data) {
         this.data = data;
-
     }
 
     /**
@@ -703,12 +695,6 @@ public class DSRequestImpl implements DSRequest
         freeResourcesHandler = handler;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws SlxException
-     * @see org.solmix.api.datasource.DSRequest#isModificationRequest(org.solmix.api.datasource.DSRequest)
-     */
     @Override
     public boolean isModificationRequest(DSRequest req) throws SlxException {
         return DataTools.isModificationOperation(req.getContext().getOperationType());
@@ -727,7 +713,6 @@ public class DSRequestImpl implements DSRequest
     @Override
     public void setRequestContext(Context context) throws SlxException {
         requestContext = context;
-
     }
 
 }

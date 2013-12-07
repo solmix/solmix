@@ -369,7 +369,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (!req.getContext().isPaged()
                 || (this.config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false) && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind)))) {
                 __canPage = false;
-                log.warn("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
+                log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
             }
             /*******************************************************************
              * NOTE:[FETCH] Windows Fetch

@@ -266,7 +266,7 @@ public class BasicDataSource implements DataSource
     @Override
     public DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new BasicGenerator();
+            dataSourceGenerator = new BasicGenerator(sc);
         return dataSourceGenerator;
     }
 
@@ -1050,7 +1050,7 @@ public class BasicDataSource implements DataSource
      * @see org.solmix.api.datasource.DataSource#isAdvancedCriteria(java.util.Map)
      */
     @Override
-    public boolean isAdvancedCriteria(Map criteria) {
+    public boolean isAdvancedCriteria(Map<String, ?> criteria) {
         if (criteria == null)
             return false;
         String constructor = (String) criteria.get("_constructor");
@@ -1083,7 +1083,7 @@ public class BasicDataSource implements DataSource
                     log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:")
                         .append(gen.getClass().toString()).append(" to generate schema").toString());
                 }
-                autoSchema = gen.generateDataSource(data,sc);
+                autoSchema = gen.generateDataSource(data);
             }
             //cache auto derived datasource schema
             if (autoSchema != null) {

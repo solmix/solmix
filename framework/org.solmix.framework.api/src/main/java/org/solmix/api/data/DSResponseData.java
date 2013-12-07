@@ -305,9 +305,7 @@ public class DSResponseData
                 _return.add(_getData(type, obj));
 
             }
-        }
-
-        else {
+        }else {
             try {
                 _return.add(DataUtil.convertType(type, data));
             } catch (Exception e) {

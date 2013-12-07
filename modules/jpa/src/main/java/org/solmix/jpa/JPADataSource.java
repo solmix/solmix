@@ -102,6 +102,11 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     }
 
+    /**
+     * This construction is always called by injector,such as spring, blueprint etc.
+     * Please use {@link org.solmix.jpa.JPADataSource#instance(DataSourceData) instance } to init datasource.
+     * @param sc
+     */ 
     public JPADataSource(SystemContext sc)
     {
         setSystemContext(sc);
@@ -689,7 +694,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     @Override
     public DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new JPADataSourceGenerator();
+            dataSourceGenerator = new JPADataSourceGenerator(sc);
         return dataSourceGenerator;
     }
 

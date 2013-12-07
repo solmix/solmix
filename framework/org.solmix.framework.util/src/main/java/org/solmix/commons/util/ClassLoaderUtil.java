@@ -29,6 +29,19 @@ import java.net.URL;
 
 public class ClassLoaderUtil
 {
+    
+    public static URL getResource(ClassLoader loader,String resourceName, Class<?> callingClass) {
+        URL url=null;
+        if(loader!=null){
+            url=  loader.getResource(resourceName);
+            if(url!=null)
+                return url;
+            else
+                return getResource(resourceName,callingClass);
+        }else{
+            return getResource(resourceName,callingClass);
+        }
+    }
     /**
      * Load a given resource. <p/> This method will try to load the resource
      * using the following methods (in order):
@@ -61,16 +74,14 @@ public class ClassLoaderUtil
             url = cluClassloader.getResource(resourceName.substring(1));
         }
 
-        if (url == null) {
+        if (url == null&&callingClass!=null) {
             ClassLoader cl = callingClass.getClassLoader();
 
             if (cl != null) {
                 url = cl.getResource(resourceName);
             }
-        }
-
-        if (url == null) {
-            url = callingClass.getResource(resourceName);
+            if(url==null)
+                url = callingClass.getResource(resourceName); 
         }
         
         if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {

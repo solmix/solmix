@@ -16,22 +16,23 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.api.datasource;
 
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
-
 
 /**
  * 
  * @author Administrator
- * @version 110035  2011-6-22
+ * @version 110035 2011-6-22
  */
 
 public interface DataSourceGenerator
 {
-   public static final String INHERIT_KEY = "_inheritsForm";
-  DataSource generateDataSource(DataSourceData data,SystemContext sc)throws SlxException;
-   
+
+    public static final String INHERIT_KEY = "_inheritsForm";
+
+    DataSource generateDataSource(DataSourceData data) throws SlxException;
+
 }

@@ -137,6 +137,7 @@ public class DataSourceProvider
         for (DataSource provider : dsList) {
             if (provider.getServerType().equals(_dsType.value())) {
                 _datasource = provider.instance(data);
+                break;
             }
         }
         if (_datasource == null) {

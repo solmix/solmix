@@ -16,18 +16,15 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.test;
 
-import java.net.URL;
-
-import org.solmix.api.repo.archive.ArchiveDescriptor;
-import org.solmix.fmk.repo.archive.ArchiveDescriptorFactoryImpl;
-
+import java.util.Random;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013年11月24日
+ * @version $Id$ 2013年11月24日
  */
 
 public class Other
@@ -37,11 +34,21 @@ public class Other
      * @param args
      */
     public static void main(String[] args) {
-     URL url=  Thread.currentThread().getContextClassLoader().getResource("META-INF/spring.schemas");
 
-     ArchiveDescriptorFactoryImpl arc= ArchiveDescriptorFactoryImpl.INSTANCE;
-     ArchiveDescriptor archive=  arc.buildArchiveDescriptor(url);
-     System.out.println(url.getPath());
+        double a = 0;
+        double b = 1;
+        Random random = new Random();
+        Double[] sums = new Double[100];
+        for (int i = 0; i < 100; i++) {
+            sums[i] = random.nextGaussian();
+            System.out.println(random.nextGaussian());
+        }
+        double sum = 0;
+        for (int i = 0; i < 100; i++) {
+            sum += sums[i];
+        }
+        System.out.println("----");
+        System.out.println(sum);
     }
 
 }

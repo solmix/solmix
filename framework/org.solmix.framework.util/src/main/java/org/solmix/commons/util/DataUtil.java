@@ -2485,10 +2485,7 @@ public class DataUtil
         return map == null || map.isEmpty();
     }
 
-    @Deprecated
-    public static boolean assertTrue(Boolean obj) {
-        return booleanValue(obj);
-    }
+  
 
     public static <T> boolean isEqual(T actual, T expect) {
         return actual == null ? (expect == null ? true : false) : actual.equals(expect);
@@ -2501,10 +2498,7 @@ public class DataUtil
      * @param expect
      * @return
      */
-    @Deprecated
-    public static <T> boolean assertEqual(T actual, T expect) {
-        return isEqual(actual, expect);
-    }
+   
 
     public static <T> boolean isNotEqual(T actual, T expect) {
         return actual == null ? (expect == null ? false : true) : !actual.equals(expect);
@@ -2518,15 +2512,7 @@ public class DataUtil
      * @param expect
      * @return
      */
-    @Deprecated
-    public static <T> boolean assertNotEqual(T actual, T expect) {
-        return actual == null ? (expect == null ? false : true) : !actual.equals(expect);
-    }
 
-    @Deprecated
-    public static boolean assertTrue(String booleanValue) {
-        return booleanValue(booleanValue);
-    }
 
     public static boolean booleanValue(String booleanValue) {
         if ("true".equalsIgnoreCase(booleanValue))

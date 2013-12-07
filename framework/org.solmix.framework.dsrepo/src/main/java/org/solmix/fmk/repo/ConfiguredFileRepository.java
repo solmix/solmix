@@ -57,19 +57,27 @@ public class ConfiguredFileRepository extends AbstractDSRepository
      */
     @Override
     public Object load(String ds) throws SlxException {
-        ClassLoader cl= sc.getBean(ClassLoader.class);
+        String path = new StringBuilder().append(DEFAULT_DS_FILES).append(ds).append(".xml").toString();
+        Object _return = loadFrom(Thread.currentThread().getContextClassLoader(),path);
+        if(_return==null){
+            _return=loadFrom(sc.getBean(ClassLoader.class),path);
+        }
+       
+        return _return;
+    }
+    private Object loadFrom(ClassLoader loader,String path){
         try {
-            Enumeration<URL> urls= cl.getResources(DEFAULT_DS_FILES+ds+".xml");
+            Enumeration<URL> urls= loader.getResources(path);
             URL find=null ;
             while(urls.hasMoreElements()){
                 URL tmp=urls.nextElement();
                 if(find==null){
                     find= tmp;
                     if(log.isTraceEnabled())
-                        log.trace("used url "+find.getPath()+" for datasource "+ds);
+                        log.trace("used url "+find.getPath()+" for datasource "+path);
                 } else{
                     if(log.isWarnEnabled())
-                        log.warn("find other resource for datasource :"+ds);
+                        log.warn("find other resource for datasource :"+path);
                 }
             }
             return find;
