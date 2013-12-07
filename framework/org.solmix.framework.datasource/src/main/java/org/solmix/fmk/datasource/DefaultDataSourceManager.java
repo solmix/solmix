@@ -303,17 +303,21 @@ public class DefaultDataSourceManager implements DataSourceManager
         if (context == null)
             throw new java.lang.IllegalArgumentException("DataSourceData must be not null.");
         EserverType serverType = context.getServerType();
+        DataSourceGenerator generator=null;
         for (DataSource ds : getProviders()) {
             if (ds.getServerType().equals(serverType.value())) {
-                DataSourceGenerator generator = ds.getDataSourceGenerator();
-                DataSource instance = generator.generateDataSource(context);
-                // not from pool.
-                instance.getContext().setWaitForFree(false);
-                return instance;
+                 generator = ds.getDataSourceGenerator();
+                 break;
             }
         }
-        return null;
-
+        if(generator!=null){
+            DataSource instance = generator.generateDataSource(context);
+            // not from pool.
+            instance.getContext().setWaitForFree(false);
+            return instance;
+        }else{
+           throw new SlxException(Tmodule.DATASOURCE,Texception.DS_DSCONFIG_OBJECT_TYPE_ERROR,"No found Datasource generator"); 
+        }
     }
 
 }
