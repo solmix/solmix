@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
@@ -46,25 +45,30 @@ import org.solmix.fmk.internal.DatasourceCM;
 public class BasicGenerator implements DataSourceGenerator
 {
 
-    private final SystemContext sc;
+    private final DataSource datasource;
 
     /**
      * @param sc
      */
-    public BasicGenerator(SystemContext sc)
+    public BasicGenerator(DataSource datasource)
     {
-        this.sc = sc;
+        this.datasource = datasource;
+    }
+
+    @Override
+    public DataSource generateDataSource(DataSourceData context) throws SlxException {
+        DataSource ds = datasource.instance(context);
+        return ds;
+
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @throws SlxException
-     * 
-     * @see org.solmix.api.datasource.DataSourceGenerator#generateDataSource(java.lang.Object)
+     * @see org.solmix.api.datasource.DataSourceGenerator#deriveSchema(org.solmix.api.data.DataSourceData)
      */
     @Override
-    public DataSource generateDataSource(DataSourceData context) throws SlxException {
+    public DataSource deriveSchema(DataSourceData context) throws SlxException {
         if (context == null || context.getTdataSource().getSchemaBean() == null)
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 " configure anto gernerate DataSource must figure out a schema class");
@@ -97,12 +101,10 @@ public class BasicGenerator implements DataSourceGenerator
             fields.getField().addAll(f);
             data.setFields(fields);
         }
-        BasicDataSource ds = new BasicDataSource();
         DataSourceData schemaContext = new DataSourceData(data);
         schemaContext.setAttribute("_entity_class", clz);
-        ds.init(schemaContext);
-        return ds;
 
+        return generateDataSource(schemaContext);
     }
 
 }

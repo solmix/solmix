@@ -37,6 +37,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.commons.util.ClassLoaderUtil;
+import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
 import org.solmix.fmk.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -73,17 +74,8 @@ public class FileSystemDataSource extends BasicDataSource
     @Override
     public DSResponse executeFetch(DSRequest req) throws SlxException {
         ToperationBinding opBind = this.getContext().getOperationBinding(req);
-        String url = null;
-        String xpath=null;
-        if (opBind == null) {
-            if (getContext().getTdataSource() != null){
-                url = getContext().getTdataSource().getDataURL();
-                xpath=getContext().getTdataSource().getRecordXPath();
-            }
-        } else {
-            url = opBind.getDataURL();
-            xpath=opBind.getRecordXPath();
-        }
+        String url =  (String) DataUtil.getProperty("dataURL", opBind, getContext().getTdataSource());
+        String xpath=(String) DataUtil.getProperty("recordXPath", opBind, getContext().getTdataSource());
         DSResponse res = new DSResponseImpl();
         Object value = getDataFromFile(url);
         if(xpath!=null){

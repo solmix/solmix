@@ -692,9 +692,9 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
      * @return the dataSourceGenerator
      */
     @Override
-    public DataSourceGenerator getDataSourceGenerator() {
+    public synchronized DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new JPADataSourceGenerator(sc);
+            dataSourceGenerator = new JPADataSourceGenerator(this);
         return dataSourceGenerator;
     }
 

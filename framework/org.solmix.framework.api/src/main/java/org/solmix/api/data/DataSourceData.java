@@ -402,6 +402,8 @@ public class DataSourceData implements Serializable
 
     public DataSourceData(TdataSource datasource)
     {
+        if(datasource==null)
+            throw new java.lang.IllegalStateException("The TdataSource must be not null to initial DataSourceData!");
         this.setTdataSource(datasource);
 
     }

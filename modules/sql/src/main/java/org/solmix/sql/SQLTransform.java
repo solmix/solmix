@@ -154,7 +154,7 @@ public class SQLTransform
                 SQLDriver driver = ((SQLDataSource) firstDS).getDriver();
                 _useColumnLabel = driver.useColumnLabelInMetadata();
             }
-            _beanClassName = (String) DataUtil.getProperties("schemaClass", opConfig, firstDS.getContext().getTdataSource());
+            _beanClassName = (String) DataUtil.getProperty("bean", opConfig, firstDS.getContext().getTdataSource());
         }
         if (dataSources != null) {
             int count = _rsmd.getColumnCount();

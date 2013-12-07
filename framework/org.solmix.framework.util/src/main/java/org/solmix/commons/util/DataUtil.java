@@ -48,20 +48,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
-import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.collections.CaseInsensitiveHashMap;
@@ -81,7 +79,7 @@ public class DataUtil
 
     private static final Logger log = LoggerFactory.getLogger(DataUtil.class.getName());
 
-    private static Perl5Util globalPerl = new Perl5Util();
+//    private static Perl5Util globalPerl = new Perl5Util();
 
     public static boolean useMimeTypesJS = false;
 
@@ -1207,10 +1205,10 @@ public class DataUtil
      * @param propertyName
      * @return
      */
-    public static Object getProperties(Object bean, String propertyName) {
+    public static Object getProperty(Object bean, String propertyName) {
         if (bean == null || propertyName == null)
             return null;
-        Set<String> collection = new HashSet<String>();
+        List<String> collection = new ArrayList<String>(1);
         collection.add(propertyName);
         Object __return = null;
         try {
@@ -1229,12 +1227,12 @@ public class DataUtil
      * @param objects
      * @return
      */
-    public static Object getProperties(String propertyName, Object... objects) {
+    public static Object getProperty(String propertyName, Object... objects) {
         if (isNullOrEmpty(objects))
             return null;
         Object __return = null;
         for (int i = 0; i < objects.length; i++) {
-            __return = getProperties(objects[i], propertyName);
+            __return = getProperty(objects[i], propertyName);
             if (__return != null) {
                 break;
             }
@@ -1249,11 +1247,11 @@ public class DataUtil
     public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep, boolean omitNullValue) throws Exception {
         if (bean == null)
             return null;
-        Map<Object, Object> propertyMap = new HashMap<Object, Object>();
         BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
         PropertyDescriptor propertyDescriptors[] = beanInfo.getPropertyDescriptors();
         if (propertyDescriptors == null)
-            return propertyMap;
+            return Collections.emptyMap();
+        Map<Object, Object> propertyMap = new HashMap<Object, Object>();
         for (int i = 0; i < propertyDescriptors.length; i++) {
             PropertyDescriptor propertyDescriptor = propertyDescriptors[i];
             if (propertyDescriptor == null)
@@ -1265,7 +1263,7 @@ public class DataUtil
                 continue;
             Method getter = propertyDescriptor.getReadMethod();
             if (getter == null) {
-                String methodName = "is" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
+                String methodName = new StringBuilder().append("is").append(propertyName.substring(0, 1).toUpperCase()).append( propertyName.substring(1)).toString();
                 getter = bean.getClass().getMethod(methodName, new Class[0]);
             }
             if (getter == null || !Modifier.isPublic(getter.getModifiers()))
@@ -1299,7 +1297,7 @@ public class DataUtil
     public static Map<String, PropertyDescriptor> getPropertyDescriptors(Class beanClass) throws Exception {
         if (beanClass == null)
             return null;
-        Map<String, PropertyDescriptor> properties = new HashMap<String, PropertyDescriptor>();
+        Map<String, PropertyDescriptor> properties = new Hashtable<String, PropertyDescriptor>();
         BeanInfo beanInfo = Introspector.getBeanInfo(beanClass);
         PropertyDescriptor propertyDescriptors[] = beanInfo.getPropertyDescriptors();
         if (propertyDescriptors == null)
@@ -2232,7 +2230,6 @@ public class DataUtil
                     try {
                         value = method.invoke(bean);
                     } catch (InvocationTargetException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
             }
@@ -2247,7 +2244,7 @@ public class DataUtil
         Map<String, PropertyDescriptor> properties = getPropertyDescriptors(bean);
         if (properties == null)
             return null;
-        Map _return = new HashMap();
+        Map<Object, Object> _return = new HashMap<Object, Object>();
         for (String key : properties.keySet()) {
             PropertyDescriptor pd = properties.get(key);
             Method method = pd.getReadMethod();
@@ -2257,7 +2254,6 @@ public class DataUtil
                     if (value != null)
                         _return.put(key, value);
                 } catch (InvocationTargetException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
         }

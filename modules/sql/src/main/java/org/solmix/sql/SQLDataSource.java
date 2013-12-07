@@ -324,7 +324,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
          * Whether to qualify columnNames with table,first find in the operationBinding config,if not found then find in
          * dataSource config.
          ******************************************************************************/
-        Boolean qualifyColumnNames = (Boolean) DataUtil.getProperties("qualifyColumnNames", __bind, _firstDS.getContext().getTdataSource());
+        Boolean qualifyColumnNames = (Boolean) DataUtil.getProperty("qualifyColumnNames", __bind, _firstDS.getContext().getTdataSource());
         if (qualifyColumnNames == null) {
             qualifyColumnNames = autoQualifyColumnNames(_datasources);
         }
@@ -1687,9 +1687,9 @@ protected String getPID(){
      * @return the dataSourceGenerator
      */
     @Override
-    public DataSourceGenerator getDataSourceGenerator() {
+    public synchronized DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new SQLDataSourceGenerator(connectionManager);
+            dataSourceGenerator = new SQLDataSourceGenerator(connectionManager,this);
         return dataSourceGenerator;
     }
 

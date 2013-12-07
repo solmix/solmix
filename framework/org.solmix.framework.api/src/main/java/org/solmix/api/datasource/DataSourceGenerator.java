@@ -24,7 +24,7 @@ import org.solmix.api.exception.SlxException;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2011-6-22
  */
 
@@ -33,6 +33,23 @@ public interface DataSourceGenerator
 
     public static final String INHERIT_KEY = "_inheritsForm";
 
-    DataSource generateDataSource(DataSourceData data) throws SlxException;
+    /**
+     * used the datasourcedata context to instance a datasource.if you want to derive a super datasource,please use
+     * {@link #deriveSchema(DataSourceData)}
+     * 
+     * @param context The context of the datasource whiche used to instance a datasource.
+     * @return
+     * @throws SlxException
+     */
+    DataSource generateDataSource(DataSourceData context) throws SlxException;
 
+    /**
+     * Generate the schema for the datasource.this method will be called when set autoDeriveSchema=true; and the
+     * gererated schema used as a super-datasource and merged the field to local.
+     * 
+     * @param context The context of the datasource whiche want to derive schema
+     * @return
+     * @throws SlxException
+     */
+    DataSource deriveSchema(DataSourceData context) throws SlxException;
 }

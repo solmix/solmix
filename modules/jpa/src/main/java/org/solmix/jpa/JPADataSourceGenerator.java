@@ -28,7 +28,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.xml.namespace.QName;
 
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
@@ -45,70 +44,27 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
-import org.solmix.fmk.datasource.BasicDataSource;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version $Id$ 2011-6-27
  */
 
 public class JPADataSourceGenerator implements DataSourceGenerator
 {
 
-    private final SystemContext sc;
+    private final JPADataSource jpa;
 
-    /**
-     * @param sc
-     */
-    public JPADataSourceGenerator(SystemContext sc)
+    
+    public JPADataSourceGenerator(JPADataSource jpa)
     {
-        this.sc = sc;
+        this.jpa = jpa;
     }
 
     @Override
     public DataSource generateDataSource(DataSourceData context) throws SlxException {
-
-        if (context == null || context.getTdataSource().getSchemaBean() == null)
-            throw new SlxException(Tmodule.JPA, Texception.DS_DSCONFIG_ERROR, "JPA DataSource must have a Entity schema class");
-        String entity = context.getTdataSource().getSchemaBean();
-        Class<?> entityClass = null;
-        try {
-            entityClass = Reflection.classForName(entity);
-        } catch (Exception e) {
-            throw new SlxException(Tmodule.JPA, Texception.NO_FOUND, e);
-        }
-        if (entityClass == null || !entityClass.isAnnotationPresent(Entity.class))
-            throw new SlxException(Tmodule.JPA, Texception.DS_DSCONFIG_ERROR, "JPA DataSource must have a Entity schema class");
-        ObjectFactory factory = new ObjectFactory();
-        TdataSource data = factory.createTdataSource();
-        /** ID */
-        Entity e = entityClass.getAnnotation(Entity.class);
-        String ID = e.name();
-        if (DataUtil.isNullOrEmpty(ID))
-            ID = entityClass.getName().substring(entityClass.getName().lastIndexOf(".") + 1);
-        ID = ID + INHERIT_KEY;
-        data.setID(ID);
-        /** ServerType */
-        data.setServerType(EserverType.BASIC);
-        String core_version = "Default core generation";
-        /** generatedBy */
-        data.getOtherAttributes().put(new QName("generatedBy"), core_version);
-        data.getOtherAttributes().put(new QName("beanClassName"), entityClass.getName());
-        List<Tfield> autoFields = null;
-        try {
-            autoFields = this.getEntityFields(entityClass);
-        } catch (Exception e1) {
-            throw new SlxException(Tmodule.JPA, Texception.DS_GENERAT_SCHEMA_EXCEPTION, e1);
-        }
-        Tfields fields = factory.createTfields();
-        fields.getField().addAll(autoFields);
-        data.setFields(fields);
-        DataSourceData schemaContext = new DataSourceData(data);
-        schemaContext.setAttribute("_entity_class", entityClass);
-        BasicDataSource schema = new BasicDataSource(sc);
-        schema.init(schemaContext);
-        return schema;
+        return jpa.instance(context);
     }
 
     private List<Tfield> getEntityFields(Class<?> clz) throws Exception {
@@ -178,5 +134,52 @@ public class JPADataSourceGenerator implements DataSourceGenerator
 
         return fields;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.api.datasource.DataSourceGenerator#deriveSchema(org.solmix.api.data.DataSourceData)
+     */
+    @Override
+    public DataSource deriveSchema(DataSourceData context) throws SlxException {
+        if (context == null || context.getTdataSource().getSchemaBean() == null)
+            throw new SlxException(Tmodule.JPA, Texception.DS_DSCONFIG_ERROR, "JPA DataSource must have a Entity schema class");
+        String entity = context.getTdataSource().getSchemaBean();
+        Class<?> entityClass = null;
+        try {
+            entityClass = Reflection.classForName(entity);
+        } catch (Exception e) {
+            throw new SlxException(Tmodule.JPA, Texception.NO_FOUND, e);
+        }
+        if (entityClass == null || !entityClass.isAnnotationPresent(Entity.class))
+            throw new SlxException(Tmodule.JPA, Texception.DS_DSCONFIG_ERROR, "JPA DataSource must have a Entity schema class");
+        ObjectFactory factory = new ObjectFactory();
+        TdataSource data = factory.createTdataSource();
+        /** ID */
+        Entity e = entityClass.getAnnotation(Entity.class);
+        String ID = e.name();
+        if (DataUtil.isNullOrEmpty(ID))
+            ID = entityClass.getName().substring(entityClass.getName().lastIndexOf(".") + 1);
+        ID = ID + INHERIT_KEY;
+        data.setID(ID);
+        /** ServerType */
+        data.setServerType(EserverType.BASIC);
+        String core_version = "Default core generation";
+        /** generatedBy */
+        data.getOtherAttributes().put(new QName("generatedBy"), core_version);
+        data.getOtherAttributes().put(new QName("beanClassName"), entityClass.getName());
+        List<Tfield> autoFields = null;
+        try {
+            autoFields = this.getEntityFields(entityClass);
+        } catch (Exception e1) {
+            throw new SlxException(Tmodule.JPA, Texception.DS_GENERAT_SCHEMA_EXCEPTION, e1);
+        }
+        Tfields fields = factory.createTfields();
+        fields.getField().addAll(autoFields);
+        data.setFields(fields);
+        DataSourceData schemaContext = new DataSourceData(data);
+        schemaContext.setAttribute("_entity_class", entityClass);
+        return generateDataSource(schemaContext);
     }
 }

@@ -177,7 +177,6 @@ public class BasicDataSource implements DataSource
      */
     @Override
     public void init(DataSourceData data) throws SlxException {
-        
         if (data == null)
             return;
         this.config=getConfig();
@@ -264,9 +263,9 @@ public class BasicDataSource implements DataSource
      * @return the dataSourceGenerator
      */
     @Override
-    public DataSourceGenerator getDataSourceGenerator() {
+    public synchronized DataSourceGenerator getDataSourceGenerator() {
         if (dataSourceGenerator == null)
-            dataSourceGenerator = new BasicGenerator(sc);
+            dataSourceGenerator = new BasicGenerator(this);
         return dataSourceGenerator;
     }
 
@@ -995,11 +994,11 @@ public class BasicDataSource implements DataSource
         return getProperties(obj, null, dropExtraFields, dropIgnoredFields, validationContext);
     }
 
-    public Map<Object, Object> getProperties(Object obj, Collection propsToKeep) {
+    public Map<Object, Object> getProperties(Object obj, Collection<String> propsToKeep) {
         return getProperties(obj, propsToKeep, false, false);
     }
 
-    public Map<Object, Object> getProperties(Object obj, Collection propsToKeep, boolean dropExtraFields, boolean dropIgnoredFields) {
+    public Map<Object, Object> getProperties(Object obj, Collection<String> propsToKeep, boolean dropExtraFields, boolean dropIgnoredFields) {
         return getProperties(obj, propsToKeep, dropExtraFields, dropIgnoredFields, null);
     }
 
@@ -1083,7 +1082,7 @@ public class BasicDataSource implements DataSource
                     log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:")
                         .append(gen.getClass().toString()).append(" to generate schema").toString());
                 }
-                autoSchema = gen.generateDataSource(data);
+                autoSchema = gen.deriveSchema(data);
             }
             //cache auto derived datasource schema
             if (autoSchema != null) {
