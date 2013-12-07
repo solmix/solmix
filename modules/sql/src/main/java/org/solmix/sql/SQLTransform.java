@@ -329,7 +329,7 @@ public class SQLTransform
     }
 
     public static List<Map<String, ?>> toListOfMaps(ResultSet resultSet, long numRows, boolean hasBrokenCursorAPIs) throws SQLException {
-        List<Map<String, ?>> __return = new ArrayList<Map<String, ?>>();
+        List<Map<String, ?>> __return = new ArrayList<Map<String, ?>>(128);
         /**
          * get bean class name from datasource.
          */
@@ -371,7 +371,7 @@ public class SQLTransform
     }
 
     public static Map<String, List<Object>> toMapOfLists(ResultSet rs) throws SQLException {
-        Map<String, List<Object>> result = new HashMap<String, List<Object>>();
+        Map<String, List<Object>> result = new HashMap<String, List<Object>>(128);
         ResultSetMetaData header = rs.getMetaData();
         for (int ii = 1; ii <= header.getColumnCount(); ii++)
             result.put(header.getColumnName(ii), new ArrayList<Object>());
@@ -387,7 +387,7 @@ public class SQLTransform
 
     public static List<List<Object>> toFormatList(ResultSet results, List<String> column) throws SQLException {
 
-        List<List<Object>> __return = new ArrayList<List<Object>>();
+        List<List<Object>> __return = new ArrayList<List<Object>>(128);
         if (results == null)
             return __return;
         ResultSetMetaData header = results.getMetaData();
@@ -414,7 +414,7 @@ public class SQLTransform
     }
 
     public static List<Object> toValuesList(ResultSet results, String column) throws SQLException {
-        List<Object> valuesList = new ArrayList<Object>();
+        List<Object> valuesList = new ArrayList<Object>(128);
         do {
             if (!results.next())
                 break;

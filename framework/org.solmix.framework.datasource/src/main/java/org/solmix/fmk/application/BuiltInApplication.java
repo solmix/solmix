@@ -129,7 +129,7 @@ public class BuiltInApplication implements Application
     public BuiltInApplication(DataTypeMap config)
     {
         this.appConfig=config;
-        leasedDataSources = new HashMap<String, DataSource>();
+        leasedDataSources = new HashMap<String, DataSource>(2);
         authorizationEnabled=appConfig.getBoolean(P_AUTHORIZATION_ENABLED, false);
         authenticationEnabled=appConfig.getBoolean(P_AUTHENTICATION_ENABLED, false);
         String operations = appConfig.getString("definedOperations", "*");
@@ -247,7 +247,7 @@ public class BuiltInApplication implements Application
     public Map<String, Roperation> getOperationsMap() {
         Object opmap = appConfig.get("operations");
         if (opmap == null)
-            appConfig.put("operations", new HashMap<Object, Roperation>());
+            appConfig.put("operations", new HashMap<Object, Roperation>(4));
         if (operationsMap == null)
             operationsMap = ((Map<String, Roperation>) appConfig.get("operations"));
         return operationsMap;

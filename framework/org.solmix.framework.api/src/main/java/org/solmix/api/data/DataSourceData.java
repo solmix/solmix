@@ -21,8 +21,8 @@ package org.solmix.api.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,8 +137,8 @@ public class DataSourceData implements Serializable
     private VelocityExpression requires;
 
     private List<String> requiresRoles;
-    private final Map<OpBindHolder, ToperationBinding> _cachedBindings = new LinkedHashMap<OpBindHolder, ToperationBinding>(2);
-    private final Map<String, IType> fieldTypeCache = Collections.synchronizedMap(new HashMap<String, IType>());
+    private final Map<OpBindHolder, ToperationBinding> _cachedBindings = new LinkedHashMap<OpBindHolder, ToperationBinding>();
+    private final Map<String, IType> fieldTypeCache = new Hashtable<String, IType>();
     /**
      * Return this datasource needed resource.if the {@link #requires} is null,used {@link #tdataSource}to initial it.
      * 
@@ -236,7 +236,7 @@ public class DataSourceData implements Serializable
 
     public void addToPrimaryKeys(String key) {
         if (primaryKeys == null) {
-            primaryKeys = new ArrayList<String>();
+            primaryKeys = new ArrayList<String>(5);
         }
         if (!primaryKeys.contains(key)) {
             primaryKeys.add(key);

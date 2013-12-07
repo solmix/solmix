@@ -355,15 +355,15 @@ public class DSRequestData implements java.io.Serializable
 
         if (getRawCriteria() == null) {
             rawCriteria = new HashMap<String, Object>();
-            ((Map) rawCriteria).put(key, value);
+            ((Map<Object,Object>) rawCriteria).put(key, value);
         } else {
             if (rawCriteria instanceof Map) {
-                ((Map) rawCriteria).put(key, value);
+                ((Map<Object,Object>) rawCriteria).put(key, value);
             } else {
                 rawCriteria = DataUtil.makeListIfSingle(rawCriteria);
-                Map _tmp = new HashMap();
+                Map<Object,Object> _tmp = new HashMap<Object,Object>();
                 _tmp.put(key, value);
-                ((List) rawCriteria).add(_tmp);
+                ((List<Object>) rawCriteria).add(_tmp);
             }
         }
     }
