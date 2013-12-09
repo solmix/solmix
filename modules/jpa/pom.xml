@@ -38,10 +38,36 @@
 			<version>1.3.172</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
+			<optional>true</optional>
+		</dependency>
   	<dependency>
   		<groupId>org.solmix.framework</groupId>
   		<artifactId>org.solmix.framework.datasource</artifactId>
   	</dependency>
+  	<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.3.172</version>
+			<scope>test</scope>
+		</dependency>
   </dependencies>
   <build>
 		<plugins>

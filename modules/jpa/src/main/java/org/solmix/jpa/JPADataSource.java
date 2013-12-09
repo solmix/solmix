@@ -139,14 +139,14 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     @Override
     public void init(DataSourceData data) throws SlxException {
         // adaptProvider(data);
-        try {
+    /*    try {
             if (entityManager == null) {
                 entityManager = JPATransaction.getEntityManager(getEmf(data));
                 JPATransaction.returnEntityManager(getEntityManager());
             }
         } catch (Exception e) {
             log.error("Unexpected exception while initial entityManager", e);
-        }
+        }*/
         super.init(data);
     }
 
@@ -241,7 +241,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             entityClass = (Class<?>) entitySchema.getContext().getAttribute("_entity_class");
         }
         if (entity == null || entityClass == null) {
-            String entityName = __ds.getContext().getTdataSource() == null ? null : __ds.getContext().getTdataSource().getSchemaBean();
+            String entityName = __ds.getContext().getTdataSource() == null ? null : __ds.getContext().getTdataSource().getSchemaClass();
             if (DataUtil.isNotNullAndEmpty(entityName)) {
                 try {
                     entityClass = Reflection.classForName(entityName);

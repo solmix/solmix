@@ -192,7 +192,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 		<xsd:attribute name="validateRecords" type="xsd:boolean"
 			form="unqualified">
 		</xsd:attribute>
-		<xsd:attribute name="schemaBean" type="xsd:string"
+		<xsd:attribute name="schemaClass" type="xsd:string"
 			form="unqualified" use="optional">
 		</xsd:attribute>
 		<xsd:attribute name="persistenceUnit" type="xsd:string" form="unqualified"></xsd:attribute>

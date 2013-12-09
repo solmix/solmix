@@ -42,10 +42,7 @@ import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.datasource.DataSource;
-import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Tfield;
-import org.solmix.api.jaxb.Tvalue;
-import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.DataSourceProvider;
 
@@ -853,70 +850,6 @@ public class Reflection
 
         }
         return result;
-    }
-
-    /**
-     * Return the Fields of given bean.
-     * 
-     * @param clz
-     * @return
-     * @throws Exception
-     */
-    public static List<Tfield> getBeanFields(Class<?> clz) throws Exception {
-        Map<String, PropertyDescriptor> propDes = DataUtil.getPropertyDescriptors(clz);
-        List<Tfield> fields = new ArrayList<Tfield>();
-        if (DataUtil.isNullOrEmpty(propDes))
-            return fields;
-        for (String key : propDes.keySet()) {
-            if (!key.equals("class")) {
-                PropertyDescriptor des = propDes.get(key);
-                Class<?> type = des.getPropertyType();
-                String typeName = type.getName();
-                Efield fieldType = null;
-                TvalueMap valueMap = null;
-                if (type.isEnum()) {
-                    fieldType = Efield.ENUM;
-                    Object constants[] = des.getPropertyType().getEnumConstants();
-                    valueMap = new TvalueMap();
-                    for (Object i : constants) {
-                        String proName = i.toString();
-                        String name = DataUtil.deriveTileFromName(proName);
-                        Tvalue value = new Tvalue();
-                        value.setId(name);
-                        valueMap.getValue().add(value);
-                    }
-                }
-                if (String.class.isAssignableFrom(type) || Character.class.isAssignableFrom(type) || "char".equals(typeName))
-                    fieldType = Efield.TEXT;
-                else if (Boolean.class.isAssignableFrom(type) || "boolean".equals(typeName))
-                    fieldType = Efield.BOOLEAN;
-                else if (java.sql.Time.class.isAssignableFrom(type))
-                    fieldType = Efield.TIME;
-                else if (java.sql.Timestamp.class.isAssignableFrom(type))
-                    fieldType = Efield.DATETIME;
-                else if (java.util.Date.class.isAssignableFrom(type))
-                    fieldType = Efield.DATE;
-                else if (java.lang.Byte.class.isAssignableFrom(type) || "byte".equals(typeName) || java.lang.Short.class.isAssignableFrom(type)
-                    || "short".equals(typeName) || java.lang.Integer.class.isAssignableFrom(type) || "int".equals(typeName)
-                    || java.lang.Long.class.isAssignableFrom(type) || "long".equals(typeName) || java.math.BigInteger.class.isAssignableFrom(type))
-                    fieldType = Efield.INTEGER;
-                else if (java.lang.Float.class.isAssignableFrom(type) || "float".equals(typeName) || java.lang.Double.class.isAssignableFrom(type)
-                    || "double".equals(typeName) || java.lang.Number.class.isAssignableFrom(type)
-                    || java.math.BigDecimal.class.isAssignableFrom(type))
-                    fieldType = Efield.FLOAT;
-                else
-                    fieldType = Efield.UNKNOWN;
-                Tfield field = new Tfield();
-                field.setName(key);
-                field.setType(fieldType);
-                field.setDerived(true);
-                if (valueMap != null)
-                    field.setValueMap(valueMap);
-                fields.add(field);
-            }
-        }
-        return fields;
-
     }
 
     public static String typesAsString(Class<?> classes[]) {

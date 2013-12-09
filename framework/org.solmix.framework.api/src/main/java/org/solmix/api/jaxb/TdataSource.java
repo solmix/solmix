@@ -144,7 +144,7 @@ public class TdataSource {
     @XmlAttribute
     protected Boolean validateRecords;
     @XmlAttribute
-    protected String schemaBean;
+    protected String schemaClass;
     @XmlAttribute
     protected String persistenceUnit;
     @XmlAttribute
@@ -1079,27 +1079,27 @@ public class TdataSource {
     }
 
     /**
-     * Gets the value of the schemaBean property.
+     * Gets the value of the schemaClass property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getSchemaBean() {
-        return schemaBean;
+    public String getSchemaClass() {
+        return schemaClass;
     }
 
     /**
-     * Sets the value of the schemaBean property.
+     * Sets the value of the schemaClass property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setSchemaBean(String value) {
-        this.schemaBean = value;
+    public void setSchemaClass(String value) {
+        this.schemaClass = value;
     }
 
     /**

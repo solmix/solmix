@@ -26,7 +26,7 @@
 			<property name="hibernate.archive.autodetection" value="class" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:h2:tcp://localhost/~/mini-web" />
+			<property name="hibernate.connection.url" value="jdbc:h2:~/unit-test" />
 			<property name="hibernate.connection.user" value="sa" />
 			<property name="hibernate.show_sql" value="true"/> 
 			<property name="hibernate.flushMode" value="FLUSH_AUTO" />

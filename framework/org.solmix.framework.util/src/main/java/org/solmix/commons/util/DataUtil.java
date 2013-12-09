@@ -1257,8 +1257,6 @@ public class DataUtil
             if (propertyDescriptor == null)
                 continue;
             String propertyName = propertyDescriptor.getName();
-            if ("class".equals(propertyName))
-                continue;
             if (propsToKeep != null && !propsToKeep.contains(propertyName))
                 continue;
             Method getter = propertyDescriptor.getReadMethod();
@@ -1305,6 +1303,7 @@ public class DataUtil
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
             if (propertyDescriptor != null) {
                 String propertyName = propertyDescriptor.getName();
+                if(!"class".equals(propertyName))
                 properties.put(propertyName, propertyDescriptor);
             }
         }

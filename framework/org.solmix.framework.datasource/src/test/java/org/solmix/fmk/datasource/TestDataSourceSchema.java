@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * SOLMIX PROJECT
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -18,40 +18,27 @@
  */
 package org.solmix.fmk.datasource;
 
-import java.util.List;
+import java.util.Date;
 
-import org.solmix.api.jaxb.TdataSource;
-import org.solmix.api.jaxb.Tfield;
 
 /**
+ * 
  * @author solmix.f@gmail.com
- * @since 0.0.1
- * @version 110035  2011-2-14 solmix-ds 
+ * @version $Id$  2013年12月8日
  */
-public class TTdataSource extends TdataSource
+
+public class TestDataSourceSchema
 {
-   public TTdataSource(TdataSource ds)
-   {
-      super();
-      setField(ds.getFields().getField());
-   }
 
-   List<Tfield> field;
-
-   /**
-    * @return the field
-    */
-   public List<Tfield> getField()
-   {
-      return field;
-   }
-
-   /**
-    * @param field
-    *           the field to set
-    */
-   public void setField(List<Tfield> field)
-   {
-      this.field = field;
-   }
+    private String username;
+    private String password;
+    private long org_id;
+    private Date locktime;
+    private EnumType type;
+    
+   
+    public enum EnumType{
+        AA,bb,ccc,ddd;
+    }
+    
 }

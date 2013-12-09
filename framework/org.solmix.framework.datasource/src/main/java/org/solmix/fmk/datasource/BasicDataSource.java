@@ -94,7 +94,9 @@ public class BasicDataSource implements DataSource
 
     private static final Logger log = LoggerFactory.getLogger(BasicDataSource.class.getName());
 
-    protected  static JSParser jsParser;
+    public static final String PID = "org.solmix.framework.datasource";
+
+    protected static JSParser jsParser;
 
     private String dsName;
 
@@ -106,7 +108,7 @@ public class BasicDataSource implements DataSource
 
     protected DataTypeMap config;
 
-    protected  SystemContext sc;
+    protected SystemContext sc;
 
     final static Map<Object, Object> buildInValidator;
     static {
@@ -135,15 +137,16 @@ public class BasicDataSource implements DataSource
         this(SlxContext.getThreadSystemContext());
     }
 
-    public BasicDataSource(SystemContext sc) 
+    public BasicDataSource(SystemContext sc)
     {
         setSystemContext(sc);
     }
-    
+
     @Resource
-    public void setSystemContext(SystemContext sc){
-        this.sc=sc;
+    public void setSystemContext(SystemContext sc) {
+        this.sc = sc;
     }
+
     public static synchronized JSParser getJsParser() {
         if (jsParser == null) {
             JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
@@ -151,6 +154,7 @@ public class BasicDataSource implements DataSource
         }
         return jsParser;
     }
+
     /**
      * {@inheritDoc}
      * 
@@ -179,12 +183,8 @@ public class BasicDataSource implements DataSource
     public void init(DataSourceData data) throws SlxException {
         if (data == null)
             return;
-        this.config=getConfig();
-        this.dataSourceGenerator = null;
-        this.dsName = null;
-        this.data = null;
+        this.config = getConfig();
         this.setContext(data);
-        jsParser =getJsParser();
         if (log.isTraceEnabled())
             log.trace((new StringBuilder()).append("Creating instance of DataSource '").append(data.getName()).append("'").toString());
         // If dataSource used as other build in datasource ,will not contain a TdataSouece.
@@ -196,24 +196,25 @@ public class BasicDataSource implements DataSource
     /**
      * @return
      */
-   protected DataTypeMap getConfig() throws SlxException{
-           ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
-           ConfigureUnit cu=null;
-           try {
-               cu = cum.getConfigureUnit(getPID());
-           } catch (IOException e) {
-               throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
-           }
-           if (cu != null)
-               return cu.getProperties();
-           else
-               return new DataTypeMap();
-       }
+    protected DataTypeMap getConfig() throws SlxException {
+        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnit cu = null;
+        try {
+            cu = cum.getConfigureUnit(getPID());
+        } catch (IOException e) {
+            throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
+        }
+        if (cu != null)
+            return cu.getProperties();
+        else
+            return new DataTypeMap();
+    }
+
     /**
      * @return
      */
-    protected  String getPID() {
-        return "org.solmix.framework.datasource";
+    protected String getPID() {
+        return PID;
     }
 
     /**
@@ -448,8 +449,9 @@ public class BasicDataSource implements DataSource
         req.setBeenThroughValidation(true);
         List<Object> errors = validateDSRequst(this, req);
         if (errors != null) {
-            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).info((new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
-            DSResponse dsResponse = new DSResponseImpl(this,req);
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).info(
+                (new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
+            DSResponse dsResponse = new DSResponseImpl(this, req);
             dsResponse.getContext().setStatus(Status.STATUS_VALIDATION_ERROR);
             dsResponse.getContext().setErrors(errors);
             return dsResponse;
@@ -569,6 +571,7 @@ public class BasicDataSource implements DataSource
 
     /**
      * Used this key to cache transaction object in context,the subclass may override this method to used it.
+     * 
      * @return
      */
     @Override
@@ -593,8 +596,7 @@ public class BasicDataSource implements DataSource
     }
 
     protected Boolean autoJoinAtGlobalLevel(DSRequest req) throws SlxException {
-        String autoJoin = DatasourceCM.getProperties()
-            .getString(DatasourceCM.P_AUTO_JOIN_TRANSACTIONS);
+        String autoJoin = DatasourceCM.getProperties().getString(DatasourceCM.P_AUTO_JOIN_TRANSACTIONS);
         if (autoJoin == null)
             return null;
         if (autoJoin.toLowerCase().equals("true") || autoJoin.toLowerCase().equals("ALL"))
@@ -700,9 +702,10 @@ public class BasicDataSource implements DataSource
         String __info = (new StringBuilder()).append("Done validating a '").append(getName()).append("' at path '").append(vcontext.getPath()).append(
             "': ").append(end - start).append("ms").toString();
         getEventWork().createAndFireTimeEvent(end - start, __info);
-       LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
+        LoggerFactory.getLogger(SlxLog.TIME_LOGNAME).debug(__info);
         return result;
     }
+
     public EventWorker getEventWork() {
         if (worker == null) {
             EventWorkerFactory factory = EventWorkerFactory.getInstance();
@@ -710,6 +713,7 @@ public class BasicDataSource implements DataSource
         }
         return worker;
     }
+
     public Object toRecords(List<Object> data, ValidationContext context) throws SlxException {
         if (data == null)
             return null;
@@ -760,8 +764,9 @@ public class BasicDataSource implements DataSource
             return record;
         } else {
             if (!vcontext.isIdAllowed() || !(data instanceof String))
-                LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).warn((new StringBuilder()).append("Unexpected Java type '").append(data.getClass()).append(
-                    "' passed to DataSource '").append(getName()).append("'").append(" at path '").append(vcontext.getPath()).append("'").toString());
+                LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).warn(
+                    (new StringBuilder()).append("Unexpected Java type '").append(data.getClass()).append("' passed to DataSource '").append(
+                        getName()).append("'").append(" at path '").append(vcontext.getPath()).append("'").toString());
             return data;
         }
     }
@@ -788,7 +793,7 @@ public class BasicDataSource implements DataSource
                 if (checkRequired(record, field, value, vcontext) && (value != null || record.containsKey(name))) {
                     if (value instanceof JSExpression)
                         return;
-                    if (field.isMultiple()!=null&&field.isMultiple())
+                    if (field.isMultiple() != null && field.isMultiple())
                         value = DataUtil.makeListIfSingle(value);
                     // if (field.getUniqueProperty() != null) {
                     // value=DataUtil.indexOnProperty(DataUtil.makeListIfSingle(value), field.getUniqueProperty());
@@ -807,7 +812,8 @@ public class BasicDataSource implements DataSource
      * @throws SlxException
      */
     protected boolean checkRequired(Map<Object, Object> record, Tfield field, Object value, ValidationContext vcontext) throws SlxException {
-        if (field.isRequired() !=null&&field.isRequired()&& ("".equals(value) || value == null && (!vcontext.isPropertiesOnly() || record.containsKey(field.getName())))) {
+        if (field.isRequired() != null && field.isRequired()
+            && ("".equals(value) || value == null && (!vcontext.isPropertiesOnly() || record.containsKey(field.getName())))) {
 
             vcontext.addError(field.getName(), DefaultValidators.localizedErrorMessage(new ErrorMessage("%validator_requiredField"), vcontext));
             return false;
@@ -913,9 +919,10 @@ public class BasicDataSource implements DataSource
                 }
             }
         if (LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).isDebugEnabled())
-            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Creating field validator for field ").append(getName()).append(".").append(
-                field.getName()).append(", of simple type: ").append(field.getType()).append(", with inline validators: ").append(fieldValidators).append(
-                ", and type validators: ").append(typeValidators).toString());
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(
+                (new StringBuilder()).append("Creating field validator for field ").append(getName()).append(".").append(field.getName()).append(
+                    ", of simple type: ").append(field.getType()).append(", with inline validators: ").append(fieldValidators).append(
+                    ", and type validators: ").append(typeValidators).toString());
         type = new BulidInType(_typeId, allValidators);
         this.data.addCachedFieldType(_fieldName, type);
         return type;
@@ -940,8 +947,9 @@ public class BasicDataSource implements DataSource
      */
     private void handleExtraValue(Map<Object, Object> record, String fieldName, Object value, ValidationContext vcontext) {
         if (value != null) {
-            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug((new StringBuilder()).append("Value provided for unknown field: ").append(getName()).append(".").append(fieldName).append(
-                ": value is: ").append(value).toString());
+            LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).debug(
+                (new StringBuilder()).append("Value provided for unknown field: ").append(getName()).append(".").append(fieldName).append(
+                    ": value is: ").append(value).toString());
         }
     }
 
@@ -1078,13 +1086,13 @@ public class BasicDataSource implements DataSource
                     + this.getServerType() + "] not supprote auto derive schema.";
                 throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR, __info);
             } else {
-                if(log.isTraceEnabled()){
-                    log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:")
-                        .append(gen.getClass().toString()).append(" to generate schema").toString());
+                if (log.isTraceEnabled()) {
+                    log.trace(new StringBuilder().append("the datasource set autoDeriveSchema is true,used DataSourceGenerator:").append(
+                        gen.getClass().toString()).append(" to generate schema").toString());
                 }
                 autoSchema = gen.deriveSchema(data);
             }
-            //cache auto derived datasource schema
+            // cache auto derived datasource schema
             if (autoSchema != null) {
                 data.setAutoDeriveSchema(autoSchema);
             }
@@ -1101,8 +1109,8 @@ public class BasicDataSource implements DataSource
             if (_super != null) {
                 data.setSuperDSName(_superName);
                 data.setSuperDS(_super);
-                if(log.isTraceEnabled())
-                    log.trace("Found the super datasource:"+_superName+" for "+ds.getName());
+                if (log.isTraceEnabled())
+                    log.trace("Found the super datasource:" + _superName + " for " + ds.getName());
             } else {
                 log.warn("can not found the super datasource [" + _superName + "] of datasource [" + data.getName() + "]");
             }
@@ -1112,6 +1120,7 @@ public class BasicDataSource implements DataSource
 
     /**
      * Used the auto derived schema as a super datasource.
+     * 
      * @return
      * @throws SlxException
      */
@@ -1251,8 +1260,8 @@ public class BasicDataSource implements DataSource
                 // field name is unique
                 if (_tmpFields.containsKey(_name)) {
                     Tfield old = _tmpFields.get(_name);
-                    String __vinfo = new StringBuilder().append("Field name is unique.").append("the old Field is").append(jsParser.toJavaScript(old)).append(
-                        "will replace by:").append(jsParser.toJavaScript(_field)).toString();
+                    String __vinfo = new StringBuilder().append("Field name is unique.").append("the old Field is").append(
+                        getJsParser().toJavaScript(old)).append("will replace by:").append(getJsParser().toJavaScript(_field)).toString();
                     getEventWork().createFieldValidationEvent(Level.WARNING, __vinfo);
                 }
                 if (_field.getType() == null) {

@@ -31,7 +31,7 @@ import org.solmix.api.exception.SlxException;
 public interface DataSourceGenerator
 {
 
-    public static final String INHERIT_KEY = "_inheritsForm";
+    public static final String DERIVE_KEY = "_DeriveForm_";
 
     /**
      * used the datasourcedata context to instance a datasource.if you want to derive a super datasource,please use
