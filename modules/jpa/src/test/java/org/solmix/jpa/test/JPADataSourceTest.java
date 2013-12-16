@@ -42,6 +42,7 @@ import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.api.jaxb.TqueryClauses;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.AddOp;
+import org.solmix.fmk.datasource.FetchOp;
 import org.solmix.fmk.datasource.RemoveOp;
 import org.solmix.fmk.datasource.UpdateOp;
 import org.solmix.jpa.JPADataSourceBuilder;
@@ -73,6 +74,26 @@ public class JPADataSourceTest
         sc.close(true);
     }
 
+    @Test
+    public void fetchEntity()  {
+        try {
+            JPADataSourceBuilder builder = new JPADataSourceBuilder();
+            DataSource ds= builder.build(AuthUser.class,true);
+            List<AuthUser> aUser= SlxContext.doInSystemContext(new FetchOp<List<AuthUser>>(ds){
+
+                @Override
+                public List<AuthUser> fetch(DSRequest request) throws SlxException {
+                    DSResponse res= request.execute();
+                    return res.getContext().getDataList(AuthUser.class);
+                }
+                
+            });
+            Assert.assertNotNull(aUser);
+        } catch (SlxException e) {
+            e.printStackTrace();
+        }
+    
+    }
     @Test
     public void addByEntity()  {
         AuthUser au = new AuthUser();
