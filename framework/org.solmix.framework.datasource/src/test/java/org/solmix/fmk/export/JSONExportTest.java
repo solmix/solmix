@@ -45,7 +45,7 @@ public class JSONExportTest
     public void test() throws SlxException, IOException{
         File f = new File("csvTest.js");
         OutputStream outs = new FileOutputStream(f);
-        IExport export =ExportManager.get(EexportAs.JSON);
+        IExport export =ExportManagerImpl.get(EexportAs.JSON);
         Map<Object,Object > map = new HashMap<Object,Object>();
         map.put("13", "救命");
         List< Map<Object,Object >> l = new ArrayList< Map<Object,Object >>();

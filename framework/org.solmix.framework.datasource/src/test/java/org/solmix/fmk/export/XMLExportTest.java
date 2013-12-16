@@ -47,7 +47,7 @@ public class XMLExportTest
         OutputStream outs = new FileOutputStream(f);
         Map conf = new HashMap();
         conf.put(IExport.XML_TAG_NAME, "对象标示");
-        IExport export =ExportManager.get(EexportAs.XML,conf);
+        IExport export =ExportManagerImpl.get(EexportAs.XML,conf);
         Map<Object,Object > map = new HashMap<Object,Object>();
         map.put("一个标示", "一个值");
         List< Map<Object,Object >> l = new ArrayList< Map<Object,Object >>();

@@ -46,7 +46,7 @@ public class CSVExportTest
     public void resultTest() throws SlxException, IOException{
         File f = new File("csvTest.csv");
         OutputStream outs = new FileOutputStream(f);
-        IExport export =ExportManager.get(EexportAs.CSV);
+        IExport export =ExportManagerImpl.get(EexportAs.CSV);
         Map<Object,Object > map = new HashMap<Object,Object>();
         map.put("13", "救命");
         List< Map<Object,Object >> l = new ArrayList< Map<Object,Object >>();

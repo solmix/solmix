@@ -22,7 +22,7 @@ package org.solmix.fmk.export;
 import java.util.Map;
 
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.export.ExportService;
+import org.solmix.api.export.ExportManager;
 import org.solmix.api.export.IExport;
 import org.solmix.api.jaxb.EexportAs;
 import org.solmix.commons.util.DataUtil;
@@ -32,14 +32,14 @@ import org.solmix.commons.util.DataUtil;
  * @since 0.0.1
  * @version 110035 2010-12-22 solmix-ds
  */
-public class ExportManager implements ExportService
+public class ExportManagerImpl implements ExportManager
 {
 
 private static ExportManager exportManager;
 
 public static IExport get(EexportAs type,Map<String,Object> context) throws SlxException {
     if (exportManager == null)
-        exportManager = new ExportManager();
+        exportManager = new ExportManagerImpl();
     return exportManager.getExport(type,context);
 
 }

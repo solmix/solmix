@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.context;
+package org.solmix.fmk;
 
 import java.util.Locale;
 import java.util.Map;
@@ -31,6 +31,7 @@ import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.rpc.RPCManager;
+import org.solmix.fmk.context.ContextDecorator;
 import org.solmix.fmk.rpc.Transaction;
 
 /**

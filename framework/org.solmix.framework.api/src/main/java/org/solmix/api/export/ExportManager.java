@@ -29,19 +29,18 @@ import org.solmix.api.jaxb.EexportAs;
  * @since 0.0.1
  * @version 110035 2010-12-22 solmix-ds
  */
-public interface ExportService
+public interface ExportManager
 {
 
-   IExport getExport( String formatName ) throws Exception;
+    IExport getExport(String formatName) throws Exception;
 
+    IExport getExport(EexportAs type) throws Exception;
 
-   IExport getExport( EexportAs type ) throws Exception;
-
-/**
- * @param type
- * @param context
- * @return
- * @throws SlxException
- */
-IExport getExport(EexportAs type, Map<String, Object> context) throws SlxException;
+    /**
+     * @param type
+     * @param context
+     * @return
+     * @throws SlxException
+     */
+    IExport getExport(EexportAs type, Map<String, Object> context) throws SlxException;
 }
