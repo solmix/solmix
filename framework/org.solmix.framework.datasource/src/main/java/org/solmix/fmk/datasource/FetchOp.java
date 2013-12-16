@@ -42,6 +42,10 @@ public abstract class FetchOp<D> extends DsOp<D>
         {
             super(dataSourceName);
         }
+        public DfFetchOp(DataSource dataSource)
+        {
+            super(dataSource);
+        }
 
         @Override
         public DSResponse fetch(DSRequest request) throws SlxException {

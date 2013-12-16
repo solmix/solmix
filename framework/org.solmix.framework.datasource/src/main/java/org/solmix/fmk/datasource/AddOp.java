@@ -80,7 +80,10 @@ public abstract class AddOp<D> extends DsOp<D>
         {
             super(dataSourceName);
         }
-
+        public DfAddOp(DataSource dataSource)
+        {
+            super(dataSource);
+        }
         /**
          * {@inheritDoc}
          * 

@@ -90,7 +90,10 @@ public abstract class UpdateOp<D> extends DsOp<D>
         {
             super(dataSourceName);
         }
-
+        public DfUpdateOp(DataSource dataSource)
+        {
+            super(dataSource);
+        }
         /**
          * {@inheritDoc}
          * 

@@ -21,6 +21,7 @@ package org.solmix.fmk.datasource;
 
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 
@@ -46,7 +47,10 @@ public abstract class CustomOp<D> extends DsOp<D>
     {
         super(dataSourceName, Eoperation.CUSTOM);
     }
-
+    public CustomOp(DataSource dataSource)
+    {
+        super(dataSource, Eoperation.CUSTOM);
+    }
     /**
      * {@inheritDoc}
      * 
@@ -85,6 +89,10 @@ public abstract class CustomOp<D> extends DsOp<D>
         public DfCustomOp(String dataSourceName)
         {
             super(dataSourceName);
+        }
+        public DfCustomOp(DataSource dataSource)
+        {
+            super(dataSource);
         }
 
         /**

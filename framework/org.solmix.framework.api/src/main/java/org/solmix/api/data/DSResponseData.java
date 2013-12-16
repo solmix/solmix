@@ -325,7 +325,6 @@ public class DSResponseData
         }
         return _return;
     }
-
     /**
      * @param data the data to set
      */
