@@ -75,7 +75,7 @@ public class DSResponseData
     private Integer totalRows;
 
     @ResponseData
-    private List errors;
+    private Object[] errors;
 
     @ResponseData
     private Status status;
@@ -269,21 +269,32 @@ public class DSResponseData
             }
         } else if (!type.isPrimitive() && !type.isInterface() && !type.isArray()) {
             try {
-
-                Object instance = type.newInstance();
                 if (data instanceof Map<?, ?>) {
-                    DataUtil.setProperties((Map) data, instance, false);
+                    Object instance = type.newInstance();
+                    DataUtil.setProperties((Map<?, ?>) data, instance, false);
                     return (T) instance;
                 } else if (data instanceof List<?>) {
                     List<Object> datas = (List<Object>) data;
-
-                    if (datas.size() == 1 && datas.get(0) instanceof Map<?, ?>) {
-                        DataUtil.setProperties((Map) datas.get(0), instance, false);
-                    } else if (datas.size() > 1 && datas.get(0) instanceof Map<?, ?>) {
-                        DataUtil.setProperties((Map) datas.get(0), instance, false);
-                        log.warn("The data is more than one map or bean, used the first one and drop other " + (datas.size() - 1) + "(s)");
+                    int size=datas.size();
+                    if(size>0){
+                        Object one=datas.get(0);
+                        T _return=null;
+                        if(type.isAssignableFrom(one.getClass())){
+                            _return= (T) one;
+                        }else if(one instanceof Map<?, ?>){
+                            _return = type.newInstance();
+                            DataUtil.setProperties((Map<?, ?>)one, _return, false);
+                        }
+                        if(size>1){
+                            log.warn("The data is more than one map or bean, used the first one and drop other " + (datas.size() - 1) + "(s)");
+                        }
+                        return _return;
+                        
+                    }else{
+                        log.warn("The data is List is empty ,return object is null "); 
+                        return null;
                     }
-                    return (T) instance;
+                   
                 } else {
                     return (T) DataUtil.castValue(data, type);
                 }
@@ -508,14 +519,14 @@ public class DSResponseData
     /**
      * @return the errors
      */
-    public List getErrors() {
+    public Object[] getErrors() {
         return errors;
     }
 
     /**
      * @param errors the errors to set
      */
-    public void setErrors(List errors) {
+    public void setErrors(Object[] errors) {
         this.errors = errors;
     }
 

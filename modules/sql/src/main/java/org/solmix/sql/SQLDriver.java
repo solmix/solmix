@@ -324,7 +324,7 @@ public abstract class SQLDriver
         Connection __currentConn;
         Connection __userOrAutoConn = null;
         if (req != null) {
-            RPCManager rpc = req.getRpc();
+            RPCManager rpc = req.getRPC();
             // is rpc
             if (rpc != null) {
                 __userOrAutoConn = ((SQLDataSource) req.getDataSource()).getTransactionalConnection(req);
@@ -459,7 +459,7 @@ public abstract class SQLDriver
             dbName = thisConfig.getString("defaultDatabase", "");
         Connection __userOrAutoConn = null;
         if (req != null) {
-            RPCManager rpc = req.getRpc();
+            RPCManager rpc = req.getRPC();
             if (rpc != null) {
                 SQLDataSource ds = (SQLDataSource) req.getDataSource();
                 __userOrAutoConn = ds.getTransactionalConnection(req);

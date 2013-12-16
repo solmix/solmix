@@ -32,7 +32,7 @@ import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 
 
 /**

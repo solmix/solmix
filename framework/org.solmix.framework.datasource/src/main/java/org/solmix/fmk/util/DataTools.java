@@ -43,7 +43,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.ValidationEventFactory;
 import org.solmix.fmk.event.EventWorker;
 import org.solmix.fmk.event.EventWorkerFactory;

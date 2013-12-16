@@ -40,7 +40,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.ClassLoaderUtil;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
 
 /**
@@ -98,7 +98,7 @@ public class BasicGenerator implements DataSourceGenerator
         }
         if (data != null) {
             DataSourceData schemaContext = new DataSourceData(data);
-            schemaContext.setAttribute("_entity_class", clz);
+            schemaContext.setAttribute(SCHEMA_CLASS, clz);
             return generateDataSource(schemaContext);
         }
 
@@ -260,10 +260,10 @@ public class BasicGenerator implements DataSourceGenerator
     }
 
 
-    protected Class<?> loadClass(String className) throws SlxException {
+    public static Class<?> loadClass(String className) throws SlxException {
         Class<?> clz = null;
         try {
-            clz = ClassLoaderUtil.loadClass(className, getClass());
+            clz = ClassLoaderUtil.loadClass(className,BasicGenerator.class);
             if (clz == null) {
                 ClassLoader loader = SlxContext.getThreadSystemContext().getBean(ClassLoader.class);
                 clz = loader.loadClass(className);

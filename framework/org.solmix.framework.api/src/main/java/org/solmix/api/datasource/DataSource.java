@@ -50,10 +50,6 @@ public interface DataSource extends FreeResourcesHandler
      */
     String getServerType();
 
-
-
-    // void setDataSourceData();
-
     /**
      * This attribute only can initialized at {@link #init(DataSourceData) init(data)}. so no <code>Set</code> method.
      * 
@@ -64,6 +60,7 @@ public interface DataSource extends FreeResourcesHandler
     DSResponse execute(DSRequest req) throws SlxException;
 
     DSResponse execute(Eoperation operationBindingType, String operationBindingID) throws SlxException;
+
     void clearState();
 
     /**
@@ -132,7 +129,7 @@ public interface DataSource extends FreeResourcesHandler
      * @return
      * @throws Exception
      */
-    Map fetchById(Object id) throws Exception;
+    Object fetchById(Object id) throws Exception;
 
     /**
      * @param whereStructure

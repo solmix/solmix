@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.FetchOp;
 import org.solmix.test.SolmixTestCase;
 

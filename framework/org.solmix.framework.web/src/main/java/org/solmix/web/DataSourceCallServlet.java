@@ -42,7 +42,7 @@ import org.solmix.api.rpc.RPCManagerFactory;
 import org.solmix.api.rpc.RPCRequest;
 import org.solmix.api.rpc.RPCResponse;
 import org.solmix.api.rpc.RequestType;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.rpc.RPCResponseImpl;
 

@@ -68,6 +68,10 @@ public interface DataSourceManager
 
     void free(DataSource ds);
 
+    /**
+     * Get datasource providers.
+     * @return
+     */
     List<DataSource> getProviders();
 
     /**

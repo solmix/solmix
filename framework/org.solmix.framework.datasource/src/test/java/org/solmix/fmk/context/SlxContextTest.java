@@ -28,6 +28,7 @@ import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.i18n.ResourceBundleManager;
 import org.solmix.api.rpc.RPCManagerFactory;
+import org.solmix.fmk.SlxContext;
 
 /**
  * 

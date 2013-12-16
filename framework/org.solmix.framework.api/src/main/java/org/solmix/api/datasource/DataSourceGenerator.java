@@ -32,6 +32,7 @@ public interface DataSourceGenerator
 {
 
     public static final String DERIVE_KEY = "_DeriveForm_";
+    public static final String SCHEMA_CLASS="$_shema_class_key";
 
     /**
      * used the datasourcedata context to instance a datasource.if you want to derive a super datasource,please use

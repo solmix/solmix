@@ -31,7 +31,7 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Tobject;
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.util.XMLUtil;
 import org.solmix.fmk.velocity.Velocity;
 

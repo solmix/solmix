@@ -12,82 +12,73 @@ public class SessionByteCounter implements IByteCounter
 {
 
     @SuppressWarnings("rawtypes")
-   public SessionByteCounter( HttpServletRequest request, long totalBytes, String formID, List errors )
-   {
-//      log = LoggerFactory.getLogger( SessionByteCounter.class.getName() );
-      bytesSoFar = 0L;
-      this.totalBytes = 0L;
-      lastUpdateMod = 0L;
-      updateSessionFrequency = 1024L;
-      this.request = request;
-      session = request.getSession( true );
-      this.totalBytes = totalBytes;
-      this.formID = formID;
-      clearSession();
-      session.setAttribute( "totalBytes", new Long( totalBytes ) );
-      if ( errors != null )
-         setErrors( errors );
-   }
+    public SessionByteCounter(HttpServletRequest request, long totalBytes, String formID, List errors)
+    {
+        // log = LoggerFactory.getLogger( SessionByteCounter.class.getName() );
+        bytesSoFar = 0L;
+        this.totalBytes = 0L;
+        lastUpdateMod = 0L;
+        updateSessionFrequency = 1024L;
+        this.request = request;
+        session = request.getSession(true);
+        this.totalBytes = totalBytes;
+        this.formID = formID;
+        clearSession();
+        session.setAttribute("totalBytes", new Long(totalBytes));
+        if (errors != null)
+            setErrors(errors);
+    }
 
-   @Override
-public long getTotalBytes()
-   {
-      return totalBytes;
-   }
+    @Override
+    public long getTotalBytes() {
+        return totalBytes;
+    }
 
-   public long getBytesSoFar()
-   {
-      return bytesSoFar;
-   }
+    public long getBytesSoFar() {
+        return bytesSoFar;
+    }
 
-   @Override
-public void incrementBy( long numBytes )
-   {
-      bytesSoFar += numBytes;
-      long mod = bytesSoFar / updateSessionFrequency;
-      if ( mod > lastUpdateMod )
-      {
-         lastUpdateMod = mod;
-         session.setAttribute( "bytesSoFar", new Long( bytesSoFar ) );
-      }
-   }
+    @Override
+    public void incrementBy(long numBytes) {
+        bytesSoFar += numBytes;
+        long mod = bytesSoFar / updateSessionFrequency;
+        if (mod > lastUpdateMod) {
+            lastUpdateMod = mod;
+            session.setAttribute("bytesSoFar", new Long(bytesSoFar));
+        }
+    }
 
-   @Override
+    @Override
+    @SuppressWarnings("rawtypes")
+    public void setErrors(List errors) {
+        session.setAttribute("errors", errors);
+    }
 
-   @SuppressWarnings("rawtypes")
-public void setErrors( List errors )
-   {
-      session.setAttribute( "errors", errors );
-   }
+    @Override
+    @SuppressWarnings("rawtypes")
+    public List getErrors() {
+        return (List) session.getAttribute("errors");
+    }
 
-   @Override
+    public void clearSession() {
+        session.removeAttribute("errors");
+        session.removeAttribute("totalBytes");
+        session.removeAttribute("bytesSoFar");
+    }
 
-   @SuppressWarnings("rawtypes")
-public List getErrors()
-   {
-      return (List) session.getAttribute( "errors" );
-   }
+    // private final Logger log;
 
-   public void clearSession()
-   {
-      session.removeAttribute( "errors" );
-      session.removeAttribute( "totalBytes" );
-      session.removeAttribute( "bytesSoFar" );
-   }
+    HttpServletRequest request;
 
-//   private final Logger log;
+    HttpSession session;
 
-   HttpServletRequest request;
+    String formID;
 
-   HttpSession session;
+    long bytesSoFar;
 
-   String formID;
+    long totalBytes;
 
-   long bytesSoFar;
+    long lastUpdateMod;
 
-   long totalBytes;
-
-   long lastUpdateMod;
-
-   long updateSessionFrequency;
+    long updateSessionFrequency;
 }

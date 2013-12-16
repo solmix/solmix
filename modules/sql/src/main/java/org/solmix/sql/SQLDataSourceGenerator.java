@@ -46,7 +46,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.AutoDeriver;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.velocity.Velocity;

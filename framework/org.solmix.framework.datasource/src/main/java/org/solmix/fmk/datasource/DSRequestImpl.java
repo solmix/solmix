@@ -52,7 +52,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.util.DataTools;
@@ -89,16 +89,16 @@ public class DSRequestImpl implements DSRequest
 
     private boolean partOfTransaction;
 
-    private boolean beenThroughDMI = false;
+    private boolean serviceCalled = false;
 
-    private boolean beenThroughValidation = false;
+    private boolean validated = false;
 
     FreeResourcesHandler freeResourcesHandler;
 
     public DSRequestImpl()
     {
         this((Roperation) null);
-        data.setAppID(DSRequestData.BUILTIN_APPLICATION);
+        data.setAppID(Application.BUILT_IN_APPLICATION);
 
     }
 
@@ -154,13 +154,13 @@ public class DSRequestImpl implements DSRequest
     public DSRequestImpl(DataSource datasource, Eoperation opType, RPCManager rpc2)
     {
         this(datasource, opType, (String) null);
-        setRpc(rpc);
+        setRPC(rpc);
     }
 
     public DSRequestImpl(String dataSourceName, Eoperation opType, RPCManager rpc)
     {
         this(dataSourceName, opType, (String) null);
-        setRpc(rpc);
+        setRPC(rpc);
     }
 
     /**
@@ -170,7 +170,6 @@ public class DSRequestImpl implements DSRequest
      */
     public DSRequestImpl(Roperation operation)
     {
-        data = null;
         data = new DSRequestData();
         data.init();
         if (operation == null)
@@ -221,32 +220,23 @@ public class DSRequestImpl implements DSRequest
      * @return the beenThroughDMI
      */
     @Override
-    public boolean isBeenThroughDMI() {
-        return beenThroughDMI;
+    public boolean isServiceCalled() {
+        return serviceCalled;
     }
 
-    /**
-     * @param beenThroughDMI the beenThroughDMI to set
-     */
     @Override
-    public void setBeenThroughDMI(boolean beenThroughDMI) {
-        this.beenThroughDMI = beenThroughDMI;
+    public void setServiceCalled(boolean serviceCalled) {
+        this.serviceCalled = serviceCalled;
     }
 
-    /**
-     * @return the beenThroughValidation
-     */
     @Override
-    public boolean isBeenThroughValidation() {
-        return beenThroughValidation;
+    public boolean isValidated() {
+        return validated;
     }
 
-    /**
-     * @param beenThroughValidation the beenThroughValidation to set
-     */
     @Override
-    public void setBeenThroughValidation(boolean beenThroughValidation) {
-        this.beenThroughValidation = beenThroughValidation;
+    public void setValidated(boolean validated) {
+        this.validated = validated;
     }
 
     /**
@@ -280,23 +270,17 @@ public class DSRequestImpl implements DSRequest
      * @return the joinTransaction
      */
     @Override
-    public Boolean getJoinTransaction() {
+    public Boolean isCanJoinTransaction() {
         return joinTransaction;
     }
 
-    /**
-     * @return the partOfTransaction
-     */
     @Override
-    public boolean isPartOfTransaction() {
+    public boolean isJoinTransaction() {
         return partOfTransaction;
     }
 
-    /**
-     * @param partOfTransaction the partOfTransaction to set
-     */
     @Override
-    public void setPartOfTransaction(boolean partOfTransaction) {
+    public void setJoinTransaction(boolean partOfTransaction) {
         this.partOfTransaction = partOfTransaction;
     }
 
@@ -305,7 +289,7 @@ public class DSRequestImpl implements DSRequest
      * @throws SlxException
      */
     @Override
-    public void setJoinTransaction(Boolean joinTransaction) throws SlxException {
+    public void setCanJoinTransaction(Boolean joinTransaction) throws SlxException {
         if (requestStarted) {
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_REQUEST_ALREADY_STARTED,
                 "Request processing has started;  join transactions setting cannot be changed");
@@ -349,9 +333,9 @@ public class DSRequestImpl implements DSRequest
      */
     @Override
     public void setDataSourceName(String dataSourceName) {
+        if (this.dataSourceName != null && !this.dataSourceName.equals(dataSourceName))
+            DefaultDataSourceManager.freeDataSource(dataSource);
         this.dataSourceName = dataSourceName;
-        DefaultDataSourceManager.freeDataSource(dataSource);
-        dataSource = null;
     }
 
     /**
@@ -375,13 +359,14 @@ public class DSRequestImpl implements DSRequest
         if (this.dataSource != null)
             DefaultDataSourceManager.freeDataSource(this.dataSource);
         this.dataSource = dataSource;
+        this.dataSourceName = dataSource.getName();
     }
 
     /**
      * @return the rpc
      */
     @Override
-    public RPCManager getRpc() {
+    public RPCManager getRPC() {
         return rpc;
     }
 
@@ -389,7 +374,7 @@ public class DSRequestImpl implements DSRequest
      * @param rpc the rpc to set
      */
     @Override
-    public void setRpc(RPCManager rpc) {
+    public void setRPC(RPCManager rpc) {
         this.rpc = rpc;
     }
 
@@ -462,6 +447,30 @@ public class DSRequestImpl implements DSRequest
 
     }
 
+    private DSResponse validateDSRequest() throws SlxException {
+        if (getDataSourceName() == null) {
+            return createResponse(Status.STATUS_VALIDATION_ERROR, "DataSource name must be assigned");
+        }
+        return null;
+    }
+
+    private DSResponse createResponse(Status status, Object... errors) throws SlxException {
+        DSResponse dsResponse = new DSResponseImpl(getDataSource(), this);
+        DSResponseData cx = dsResponse.getContext();
+        cx.setStatus(status);
+        cx.setErrors(errors);
+        return dsResponse;
+    }
+
+    private DSResponse prepareReturn(DSResponse _dsResponse) throws SlxException {
+        if (data.isFreeOnExecute()) {
+            freeResources();
+            if (rpc != null)
+                rpc.freeDataSources();
+        }
+        return _dsResponse;
+    }
+
     /**
      * {@inheritDoc}
      * 
@@ -469,38 +478,30 @@ public class DSRequestImpl implements DSRequest
      */
     @Override
     public DSResponse execute() throws SlxException {
-        DSResponse _dsResponse = null;
+        DSResponse _dsResponse = validateDSRequest();
+        if (_dsResponse != null)
+            return prepareReturn(_dsResponse);
         try {
-            // DataSourceData _dsData = getDataSource().getContext();
-            if (!passesSecurityChecks()) {
-                String __vinfo = "";
-                throw new SlxException(Tmodule.DATASOURCE, Texception.SECURITY_DENIED, __vinfo);
-            }
-
+            _dsResponse = securityChecks();
+            if (_dsResponse != null)
+                return prepareReturn(_dsResponse);
             List<Object> _tmpFiles = data.getUploadedFiles();
             if (_tmpFiles != null)
                 for (Object o : _tmpFiles) {
                     UploadItem file = (UploadItem) o;
                     List<Object> errors = file.getErrors();
                     if (errors != null) {
-                        _dsResponse = new DSResponseImpl(getDataSource(), this);
-                        _dsResponse.getContext().setErrors(errors);
+                        _dsResponse = createResponse(Status.STATUS_FAILURE, errors.toArray(new Object[errors.size()]));
                         _dsResponse.getContext().setRequestConnectionClose(true);
                     }
                 }// end upload files loop
             if (_dsResponse != null) {
-                if (data.isFreeOnExecute()) {
-                    freeResources();
-                    if (rpc != null)
-                        rpc.freeDataSources();
-                }
-                // return is there is a file upload errors.
-                return _dsResponse;
+                return prepareReturn(_dsResponse);
             }
             /**
              * checkout datasource is passed DMI datasource or not.
              */
-            if (!this.isBeenThroughDMI()) {
+            if (!this.isServiceCalled()) {
                 if (rpc != null)
                     rpc.applyEarlierResponseValues(this);
                 if (data.getOperationType() == Eoperation.ADD || data.getOperationType() == Eoperation.UPDATE) {
@@ -649,8 +650,8 @@ public class DSRequestImpl implements DSRequest
      * @return
      * @throws Exception
      */
-    protected boolean passesSecurityChecks() throws SlxException {
-        return true;
+    protected DSResponse securityChecks() throws SlxException {
+        return null;
     }
 
     /**

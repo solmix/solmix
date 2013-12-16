@@ -25,7 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 
 
 /**

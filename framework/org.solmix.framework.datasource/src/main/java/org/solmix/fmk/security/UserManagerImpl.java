@@ -23,13 +23,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.security.User;
 import org.solmix.api.security.UserManager;
 import org.solmix.api.security.auth.ACL;
-import org.solmix.fmk.context.SlxContext;
-import org.solmix.fmk.context.SlxContext.Op;
+import org.solmix.fmk.SlxContext;
+import org.solmix.fmk.SlxContext.Op;
 
 /**
  * 

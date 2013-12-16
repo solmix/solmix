@@ -124,7 +124,7 @@ public class SecurityAdminImpl implements SecurityAdmin
     }
 
     /**
-     * login using {@link org.solmix.fmk.context.SlxContext#login login}
+     * login using {@link org.solmix.fmk.SlxContext#login login}
      * 
      * @see org.solmix.api.security.SecurityAdmin#authenticate(org.solmix.api.security.auth.callback.CredentialsCallbackHandler,
      *      java.lang.String)

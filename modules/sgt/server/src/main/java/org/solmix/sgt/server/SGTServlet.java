@@ -33,7 +33,7 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.web.DataSourceCallServlet;
 import org.solmix.web.LoadSchemaServlet;
 

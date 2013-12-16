@@ -46,7 +46,7 @@ import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -101,7 +101,7 @@ public class RestRequestParser implements HttpServletRequestParser
             if (cf.getValues() != null && cf.getValues().size() > 0)
                 dsrequest.getContext().setValues(cf.getValues());
             dsrequest.getContext().setIsClientRequest(true);
-            dsrequest.setRpc(rpc);
+            dsrequest.setRPC(rpc);
             dsrequest.setRequestContext(webContext);
             rpc.addRequest(dsrequest);
 
@@ -144,8 +144,8 @@ public class RestRequestParser implements HttpServletRequestParser
                                 DSRequest dsr = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(operation, SlxContext.getWebContext());
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.getContext().setFreeOnExecute(freeOnExecute);
-                                dsr.setJoinTransaction(!freeOnExecute);
-                                dsr.setRpc(rpc);
+                                dsr.setCanJoinTransaction(!freeOnExecute);
+                                dsr.setRPC(rpc);
                                 dsr.setRequestContext(webContext);
                                 rpc.addRequest(dsr);
                             }

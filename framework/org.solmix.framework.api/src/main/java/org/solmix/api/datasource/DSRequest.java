@@ -61,13 +61,13 @@ public interface DSRequest extends RequestType
      * 
      * @return
      */
-    RPCManager getRpc();
+    RPCManager getRPC();
 
     DataSource getDataSource() throws SlxException;
 
     void setDataSource(DataSource dataSource);
 
-    void setRpc(RPCManager rpc);
+    void setRPC(RPCManager rpc);
 
     /**
      * release datasource
@@ -108,46 +108,49 @@ public interface DSRequest extends RequestType
     boolean isRequestStarted();
 
     /**
-     * @param joinTransaction
+     * @param canJoinTransaction
      * @throws SlxException
      */
-    void setJoinTransaction(Boolean joinTransaction) throws SlxException;
+    void setCanJoinTransaction(Boolean canJoinTransaction) throws SlxException;
 
     /**
      * Global transaction support,Indicate This Request is auto join a Transaction.
      * @return
      */
-    Boolean getJoinTransaction();
+    Boolean isCanJoinTransaction();
 
     /**
-     * @param partOfTransaction
+     * Indicate this request join a transaction.
+     * @param joinTransaction
      */
-    void setPartOfTransaction(boolean partOfTransaction);
+    void setJoinTransaction(boolean joinTransaction);
 
     /**
      * @return
      */
-    boolean isPartOfTransaction();
+    boolean isJoinTransaction();
 
     /**
-     * @param beenThroughValidation
+     * If true indicate the ds-request have been validated.
+     * @param validated.
      */
-    void setBeenThroughValidation(boolean beenThroughValidation);
+    void setValidated(boolean validate);
+
+    /**
+     * Checkout the Ds-request is validated or not.
+     * @return
+     */
+    boolean isValidated();
 
     /**
      * @return
      */
-    boolean isBeenThroughValidation();
+    boolean isServiceCalled();
 
     /**
-     * @return
-     */
-    boolean isBeenThroughDMI();
-
-    /**
-     * Pointed out that this DSRequest is passed through DMI checking or not.
+     * Pointed out that this DSRequest is passed through ServiceObject checking or not.
      * @param beenThroughDMI
      */
-    void setBeenThroughDMI(boolean beenThroughDMI);
+    void setServiceCalled(boolean aerviceCalled);
 
 }

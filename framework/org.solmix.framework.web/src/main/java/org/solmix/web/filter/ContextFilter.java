@@ -35,7 +35,7 @@ import org.solmix.api.context.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.context.WebContextFactory;
 import org.solmix.api.exception.SlxException;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.context.web.WebContextFactoryImpl;
 
 /**

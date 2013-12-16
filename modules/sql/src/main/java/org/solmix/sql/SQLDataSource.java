@@ -106,7 +106,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     private Object lastRow;
 
     @SQLCacheData
-    private Map<Object, Object> lastPrimaryKeysData;
+    private Map<String, Object> lastPrimaryKeysData;
 
     @SQLCacheData
     private Map<Object, Object> lastPrimaryKeys;
@@ -181,6 +181,53 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             return result.get(0);
     }
 
+    private void logDebugInfo( Eoperation _opType,DSRequestData data) throws SlxException{
+
+        List values = data.getValueSets();
+        StringBuilder __info = new StringBuilder();
+        switch (_opType) {
+            case ADD: {
+                if (values != null) {
+                    if (values.size() == 1) {
+                        __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
+                    } else {
+                        __info.append("\t values: ").append(values.size()).append(" valuesSets");
+                    }
+                }
+            }
+                break;
+            case FETCH:
+            case REMOVE:
+            case REPLACE: {
+                if (data.getRawCriteria() != null)
+                    __info.append("\t Criteria: ").append(getJsParser().toJavaScript(data.getCriteria()));
+            }
+                break;
+            case UPDATE: {
+                if (data.getRawCriteria() != null)
+                    __info.append("\t Criteria: ").append(getJsParser().toJavaScript(data.getCriteria()));
+                if (values != null) {
+                    if (values.size() == 1) {
+                        __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
+                    } else {
+                        __info.append("\t values: ").append(values.size()).append(" valuesSets");
+                    }
+                }
+            }
+                break;
+            default:
+                break;
+
+        }
+        if (data.getConstraints() != null)
+            __info.append("\t constraints: ").append(data.getConstraints().toString());
+        if (data.getOutputs() != null)
+            __info.append("\t outputs: ").append(data.getOutputs().toString());
+        if (data.getRawCriteria() != null)
+            if (__info.toString().length() > 2) {
+                log.debug(new StringBuilder().append("Performing ").append(_opType).append(" operation with \n").append(__info.toString()).toString());
+            }
+    }
     /**
      * Execute Sql operation,default is Fetch/Add/Replace/Update/Remove
      * 
@@ -191,80 +238,27 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      */
     public DSResponse executeSQLDataSource(DSRequest req, Object dsObject) throws SlxException {
         DSResponse __return;
-        // req
-        if (req.getContext() == null)
-            return null;
-        // boolean batchUpdate = globalConfig().getBoolean("batchUpdate", false);
-        Eoperation _opType = req.getContext().getOperationType();
-        DSRequestData _dsContext = req.getContext();
+        DSRequestData __requestCX = req.getContext();
+        Eoperation _opType = __requestCX.getOperationType();
         if (log.isDebugEnabled()) {
-            List values = req.getContext().getValueSets();
-            StringBuilder __info = new StringBuilder();
-            switch (_opType) {
-                case ADD: {
-                    if (values != null) {
-                        if (values.size() == 1) {
-                            __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
-                        } else {
-                            __info.append("\t values: ").append(values.size()).append(" valuesSets");
-                        }
-                    }
-                }
-                    break;
-                case FETCH:
-                case REMOVE:
-                case REPLACE: {
-                    if (req.getContext().getRawCriteria() != null)
-                        __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
-                }
-                    break;
-                case UPDATE: {
-                    if (req.getContext().getRawCriteria() != null)
-                        __info.append("\t Criteria: ").append(getJsParser().toJavaScript(req.getContext().getCriteria()));
-                    if (values != null) {
-                        if (values.size() == 1) {
-                            __info.append("\t values: ").append(getJsParser().toJavaScript(values.get(0)));
-                        } else {
-                            __info.append("\t values: ").append(values.size()).append(" valuesSets");
-                        }
-                    }
-                }
-                    break;
-                default:
-                    break;
-
-            }
-            if (req.getContext().getConstraints() != null)
-                __info.append("\t constraints: ").append(req.getContext().getConstraints().toString());
-            if (req.getContext().getOutputs() != null)
-                __info.append("\t outputs: ").append(req.getContext().getOutputs().toString());
-            if (req.getContext().getRawCriteria() != null)
-                if (__info.toString().length() > 2) {
-                    log.debug(new StringBuilder().append("Performing ").append(_opType).append(" operation with \n").append(__info.toString()).toString());
-                }
-
+            logDebugInfo(_opType, __requestCX);
         }
         // dsObject
-        if (dsObject == null) {
-            if (_dsContext.getDataSourceNames() == null)
-                throw new SlxException(Tmodule.DATASOURCE, Texception.REQ_NO_DATASOURCE,
-                    "no datasources specified in argument and no operation config to look them up; can't proceed");
-            dsObject = _dsContext.getDataSourceNames();
-            if (log.isDebugEnabled())
-                log.debug((new StringBuilder()).append("No point out datasource find").append(dsObject.toString()).append(
-                    " in request configuration.").toString());
+        if (dsObject == null && __requestCX.getDataSourceNames() == null) {
+            throw new SlxException(Tmodule.DATASOURCE, Texception.REQ_NO_DATASOURCE,
+                "no datasources specified in argument and no operation config to look them up; can't proceed");
         }
         List<SQLDataSource> _datasources;
         if ((dsObject instanceof String) || (dsObject instanceof SQLDataSource)) {
             _datasources = getDataSources(DataUtil.makeListIfSingle(dsObject));
-        } else if (dsObject instanceof List) {
-            _datasources = getDataSources((List) dsObject);
+        } else if (dsObject instanceof List<?>) {
+            _datasources = getDataSources((List<?>) dsObject);
         } else {
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 "in the app operation config, datasource must be set to a string or list");
         }
         SQLDataSource _firstDS = _datasources.get(0);
-        List _valueSets = req.getContext().getValueSets();
+        List _valueSets = __requestCX.getValueSets();
         /*******************************************************************
          * NOTE:[UPDATE] multiple insert support. for normal insert.
          ******************************************************************/
@@ -274,13 +268,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
          * NOTE:[REPLACE] NATIVE SUPPORT REPLACE .
          *******************************************************************/
         if (Eoperation.REPLACE == _opType && !_firstDS.getDriver().isSupportsNativeReplace()) {
-            req.getContext().setOperationType(Eoperation.REMOVE);
+            __requestCX.setOperationType(Eoperation.REMOVE);
             executeSQLDataSource(req, _datasources);
-            req.getContext().setOperationType(Eoperation.ADD);
+            __requestCX.setOperationType(Eoperation.ADD);
             return executeSQLDataSource(req, _datasources);
         }
-        ToperationBinding __bind = req.getDataSource().getContext().getOperationBinding(req.getContext().getOperationType(),
-            req.getContext().getOperationId());
+        ToperationBinding __bind = req.getDataSource().getContext().getOperationBinding(__requestCX.getOperationType(), __requestCX.getOperationId());
         /*******************************************************************
          * NOTE:Proccess customer configuration for generate SQL .
          *******************************************************************/
@@ -339,7 +332,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             && (__bind == null || __bind.getQueryClauses() == null || __bind.getQueryClauses().getCustomSQL() == null)
             && context.get("defaultValuesClause") == null) {
             String __info;
-            if (req.getContext().getRawValues() == null)
+            if (__requestCX.getRawValues() == null)
                 __info = "Insert, update or replace operation requires non-empty values; check submitted values parameter";
             else
                 __info = "Auto generate  Insert, update or replace sql  requires non-empty  ValuesClause; check submitted values in DataSource fields";
@@ -350,14 +343,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             context.putAll(getVariablesContext(req, _datasources));
         }
         String statement = generateSQLStatement(req, context);
-        /*******************************************************************
-         * NOTE:[UPDATE]OR [AND] batch update.
-         *******************************************************************/
-        // if (batchUpdate && (DataTools.isAdd(_opType) || DataTools.isUpdate(_opType))) {
-        // List<String> valueMap = (List<String>) context.get("batchUpdateReturnValue");
-        // return executeBatchUpdate(req, _valueSets, statement, valueMap, _firstDS);
-        // }
-        // log.info("SQL Statement: "+statement);
+
         __return = new DSResponseImpl(_firstDS, req);
         if (DataUtil.isNullOrEmpty(statement))
             __return.getContext().setStatus(Status.STATUS_SUCCESS);
@@ -366,7 +352,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
          *******************************************************************/
         if ((DataTools.isFetch(_opType))) {
             boolean __canPage = true;
-            if (!req.getContext().isPaged()
+            if (!__requestCX.isPaged()
                 || (this.config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false) && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind)))) {
                 __canPage = false;
                 log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
@@ -418,7 +404,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     if ((skipCustomCheck || !__f.isCustomSQL()) && binaryStreams != null && binaryStreams.size() > binaryStreamsIndex)
                         streams.add(binaryStreams.get(binaryStreamsIndex++));
                     else {
-                        Map values = req.getContext().getValues();
+                        Map values = __requestCX.getValues();
                         if (values != null && values.get(name) != null)
                             streams.add(new StringBuffer((String) values.get(name)));
                     }
@@ -437,7 +423,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                     if (shouldInvalidateCache(req, _firstDS.getDriver())) {
                         __return.getContext().setInvalidateCache(true);
                     } else {
-                        Map storeValues = req.getContext().getCriteria();
+                        Map storeValues = __requestCX.getCriteria();
                         if (DataTools.isAdd(_opType) && storeValues != null) {
                             Iterator i1 = storeValues.keySet().iterator();
                             do {
@@ -455,7 +441,6 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                                 : _firstDS.getLastRow(req, __qualifyColumnNames)));
                     }
                 } else {
-                    // __return.getContext().setData(new ArrayList());
                     log.warn((new StringBuilder()).append(_opType).append(" operation affected no rows").toString());
                 }
             }
@@ -603,7 +588,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                             Iterator<String> i = remap.keySet().iterator();
                             if (i.hasNext())
                                 orderClause = i.next();
-                            orderClause = (String) DataUtil.enumToList(remap.values().iterator()).get(0);
+                            orderClause = DataUtil.enumToList(remap.values().iterator()).get(0);
                             log.debug((new StringBuilder()).append("Using first field as default sorter: ").append(orderClause).toString());
                         }
                     }
@@ -1321,7 +1306,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      * @return
      * @throws SlxException
      */
-    private static List<SQLDataSource> getDataSources(List<Object> list) throws SlxException {
+    private static List<SQLDataSource> getDataSources(List<?> list) throws SlxException {
         List<SQLDataSource> _return = new ArrayList<SQLDataSource>();
         if (list == null)
             return null;
@@ -1453,8 +1438,8 @@ protected String getPID(){
      * @return
      */
     private boolean isSQLOperationType(Eoperation operationType) {
-        return DataTools.isAdd(operationType) || DataTools.isRemove(operationType) || DataTools.isUpdate(operationType)
-            || DataTools.isReplace(operationType) || DataTools.isFetch(operationType);
+        return DataTools.isFetch(operationType)||DataTools.isAdd(operationType) || DataTools.isRemove(operationType) || DataTools.isUpdate(operationType)
+            || DataTools.isReplace(operationType)  ;
     }
 
     /**
@@ -1615,13 +1600,13 @@ protected String getPID(){
             if (tvalue instanceof Connection)
                 conn = (Connection) tvalue;
             if (conn == null && shouldAutoStartTransaction(req, false)) {
-                SQLTransaction.startTransaction(req.getRpc(), driver.getDbName(),connectionManager);
+                SQLTransaction.startTransaction(req.getRPC(), driver.getDbName(),connectionManager);
                 conn = (Connection) getTransactionObject(req);
-                if (req != null && req.getRpc() != null)
-                    req.getRpc().registerCallback(this);
+                if (req != null && req.getRPC() != null)
+                    req.getRPC().registerCallback(this);
             }
             if (conn != null && req != null)
-                req.setPartOfTransaction(true);
+                req.setJoinTransaction(true);
         }
         return conn;
     }
@@ -1638,11 +1623,11 @@ protected String getPID(){
             return Boolean.TRUE;
         if (autoJoin.toLowerCase().equals("false") || autoJoin.toLowerCase().equals("NONE"))
             return Boolean.FALSE;
-        if (req != null && req.getRpc() != null) {
+        if (req != null && req.getRPC() != null) {
             if (autoJoin.equals("FROM_FIRST_CHANGE"))
-                return Boolean.valueOf(req.getRpc().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getRPC().requestQueueIncludesUpdates());
             if (autoJoin.equals("ANY_CHANGE"))
-                return Boolean.valueOf(req.getRpc().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getRPC().requestQueueIncludesUpdates());
         }
         return null;
     }

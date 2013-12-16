@@ -140,7 +140,7 @@ public class JPADataSourceGenerator extends BasicGenerator implements DataSource
                 else {// AccessType=PROPERTY
                     PropertyDescriptor propDesc = propDes.get(propertyName);
                     Method read= propDesc.getReadMethod();
-                    if(read.getAnnotation(Id.class)!=null)
+                    if(read!=null&&read.getAnnotation(Id.class)!=null)
                         buildField.setPrimaryKey(true);
                 }
                 fields.getField().add(buildField);

@@ -48,7 +48,8 @@ import javax.xml.bind.annotation.XmlType;
     "whereClause",
     "groupClause",
     "orderCaluse",
-    "groupWhereClause"
+    "groupWhereClause",
+    "customQL"
 })
 public class TqueryClauses {
 
@@ -60,6 +61,23 @@ public class TqueryClauses {
     protected String groupClause;
     protected String orderCaluse;
     protected String groupWhereClause;
+    protected String customQL;
+
+    
+    /**
+     * @return the customQL
+     */
+    public String getCustomQL() {
+        return customQL;
+    }
+
+    
+    /**
+     * @param customQL the customQL to set
+     */
+    public void setCustomQL(String customQL) {
+        this.customQL = customQL;
+    }
 
     /**
      * Gets the value of the customSQL property.

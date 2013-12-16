@@ -135,7 +135,7 @@ public final class BatchSQLDataSource
         try {
             DataSourceData data = ds.getContext();
 
-            List<Object> values = req.getContext().getValueSets();
+            List<?> values = req.getContext().getValueSets();
             columnNames = (List<Object>) values.get(values.size() - 1);
             Eoperation _optType = req.getContext().getOperationType();
             String _opID = req.getContext().getOperationId();

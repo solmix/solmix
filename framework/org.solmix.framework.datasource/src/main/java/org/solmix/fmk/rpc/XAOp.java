@@ -11,7 +11,7 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.rpc.RPCManager;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DsOp;
 
 /**
@@ -69,8 +69,8 @@ public abstract class XAOp
             if (values != null)
                 request.getContext().setValues(values);
             request.getContext().setOperationType(type);
-            request.setJoinTransaction(true);
-            request.setRpc(rpc);
+            request.setCanJoinTransaction(true);
+            request.setRPC(rpc);
         } catch (Exception e) {
             log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" + e.getMessage());
         }

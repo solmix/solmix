@@ -9,8 +9,8 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
-import org.solmix.fmk.context.SlxContext;
-import org.solmix.fmk.context.SlxContext.Op;
+import org.solmix.fmk.SlxContext;
+import org.solmix.fmk.SlxContext.Op;
 
 public abstract class DsOp<D> implements Op<D, SlxException>
 {
@@ -22,8 +22,9 @@ public abstract class DsOp<D> implements Op<D, SlxException>
     private final Eoperation type;
 
     protected String opId;
+
     private DataSource dataSource;
-    
+
     public DsOp(DataSource dataSource, Eoperation type)
     {
         this.dataSource = dataSource;
@@ -42,25 +43,25 @@ public abstract class DsOp<D> implements Op<D, SlxException>
     public D exe() throws SlxException {
         DSRequest request = null;
         try {
-            if(dataSourceName!=null&&dataSource==null){
             _dataSourceManager = getDataSourceManager();
-            dataSource = _dataSourceManager.get(dataSourceName);
+            if (dataSourceName != null && dataSource == null) {
+                dataSource = _dataSourceManager.get(dataSourceName);
             }
             request = _dataSourceManager.createDSRequest();
             request.setDataSource(dataSource);
-            request.setDataSourceName(dataSourceName);
+            request.setDataSourceName(dataSource.getName());
             if (opId != null)
                 request.getContext().setOperation(opId);
             request.getContext().setOperationType(type);
         } catch (Exception e) {
-            log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" ,e);
+            log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is", e);
         }
 
-        D d=null;
+        D d = null;
         try {
             d = exe(request);
-        } finally{
-            if(dataSource!=null){
+        } finally {
+            if (dataSource != null) {
                 _dataSourceManager.free(dataSource);
             }
         }
@@ -72,6 +73,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
         return this;
 
     }
+
     protected DataSourceManager getDataSourceManager() {
         SystemContext sc = SlxContext.getThreadSystemContext();
         return sc.getBean(DataSourceManager.class);

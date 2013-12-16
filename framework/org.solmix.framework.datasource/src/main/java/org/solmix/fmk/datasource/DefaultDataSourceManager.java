@@ -46,7 +46,7 @@ import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 
 /**
  * DataSourceManager service implements.
@@ -302,6 +302,8 @@ public class DefaultDataSourceManager implements DataSourceManager
     public DataSource generateDataSource(DataSourceData context) throws SlxException {
         if (context == null)
             throw new java.lang.IllegalArgumentException("DataSourceData must be not null.");
+        if(context.getServerType()==null)
+            throw new java.lang.IllegalArgumentException("DataSourceData must setting serverType.");
         EserverType serverType = context.getServerType();
         DataSourceGenerator generator=null;
         for (DataSource ds : getProviders()) {

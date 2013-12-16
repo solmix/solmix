@@ -37,7 +37,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.js.ISCJavaScript;
 
 /**

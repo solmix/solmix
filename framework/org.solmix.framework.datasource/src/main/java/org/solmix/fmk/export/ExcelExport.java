@@ -41,7 +41,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-
 import org.solmix.api.exception.SlxException;
 
 /**
@@ -56,20 +55,20 @@ public class ExcelExport extends AbstractExport
 
     private Workbook workbook;
 
-    private final Map colorCache;
+    private final Map<String,Short> colorCache;
 
-    private final Map styleCache;
+    private final Map<String,CellStyle> styleCache;
 
-    private final Map fontCache;
+    private final Map<String,Font> fontCache;
 
-    private final Map formatCache;
+    private final Map<String,DataFormat> formatCache;
 
     ExcelExport()
     {
-        colorCache = new HashMap();
-        styleCache = new HashMap();
-        fontCache = new HashMap();
-        formatCache = new HashMap();
+        colorCache = new HashMap<String,Short>();
+        styleCache = new HashMap<String,CellStyle>();
+        fontCache = new HashMap<String,Font>();
+        formatCache = new HashMap<String,DataFormat>();
     }
 
     private CellStyle getCellStyle(Map cellStyleElements, boolean justApplyDateFormatter) {
@@ -86,12 +85,12 @@ public class ExcelExport extends AbstractExport
         }
         String combo = (new StringBuilder()).append(color).append(backgroundColor).append(dateFormatter).toString();
         if (styleCache.get(combo) != null) {
-            style = (CellStyle) styleCache.get(combo);
+            style = styleCache.get(combo);
         } else {
             font = getFont(cellStyleElements);
             if (dateFormatter != null || justApplyDateFormatter)
                 if (formatCache.get(dateFormatter) != null) {
-                    format = (DataFormat) formatCache.get(dateFormatter);
+                    format = formatCache.get(dateFormatter);
                 } else {
                     format = workbook.createDataFormat();
                     formatCache.put(dateFormatter, format);
@@ -172,7 +171,7 @@ public class ExcelExport extends AbstractExport
             if (color != null || fontFamily != null || fontWeight != null || fontSize != null || fontStyle != null) {
                 String key = (new StringBuilder()).append(color).append(fontFamily).append(fontWeight).append(fontSize).append(fontStyle).toString();
                 if (fontCache.get(key) != null) {
-                    font = (Font) fontCache.get(key);
+                    font = fontCache.get(key);
                 } else {
                     font = workbook.createFont();
                     if (color != null)
@@ -198,7 +197,7 @@ public class ExcelExport extends AbstractExport
 
     private short getClosestColor(String targetColor) {
         if (colorCache.get(targetColor) != null)
-            return ((Short) colorCache.get(targetColor)).shortValue();
+            return colorCache.get(targetColor).shortValue();
         int red = Integer.parseInt(targetColor.substring(1, 3), 16);
         int green = Integer.parseInt(targetColor.substring(3, 5), 16);
         int blue = Integer.parseInt(targetColor.substring(5), 16);
@@ -293,8 +292,8 @@ public class ExcelExport extends AbstractExport
                     Object styleObj = record.get(columnName + "$style");
                     List<Object> styles = null;
                     if (styleObj != null)
-                        if (styleObj instanceof List) {
-                            styles = (List) styleObj;
+                        if (styleObj instanceof List<?>) {
+                            styles = (List<Object>) styleObj;
                         } else {
                             styles = new ArrayList<Object>();
                             styles.add(styleObj);

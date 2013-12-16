@@ -50,7 +50,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.event.EventWorker;
 import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;

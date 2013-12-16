@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.application.Application;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
@@ -45,8 +46,6 @@ import org.w3c.dom.Text;
 @SuppressWarnings("unchecked")
 public class DSRequestData implements java.io.Serializable
 {
-
-    public static final String BUILTIN_APPLICATION = "builtinApplication";
 
     private static final Logger log =LoggerFactory.getLogger(DSRequestData.class.getName());
 
@@ -82,16 +81,12 @@ public class DSRequestData implements java.io.Serializable
     public void init() {
         isClientRequest = false;
         batchSize = null;
-        // if ( toperation.getStartRow() == null )
-        // toperation.setStartRow( 0L );
-        // if ( toperation.getEndRow() == null )
-        // toperation.setEndRow( -1L );
         _allowMultiUpdate = false;
         forceInvalidateCache = false;
         freeOnExecute = true;
         beforeValidatedValues = null;
         if (getAppID() == null)
-            setAppID(BUILTIN_APPLICATION);
+            setAppID(Application.BUILT_IN_APPLICATION);
         if (getRepo() == null)
             repo = "default";
     }
@@ -387,14 +382,6 @@ public class DSRequestData implements java.io.Serializable
     public Object getRawValues() {
         return rawValues;
     }
-
-    // public void addToValues(String key, Object value)
-    // {
-    // if (getRawValues() == null)
-    // values = new HashMap<String, Object>();
-    // values.put(key, value);
-    // }
-
     /**
      * The values always be Map or List of Map.
      * 
@@ -690,7 +677,7 @@ public class DSRequestData implements java.io.Serializable
         if (obj == null)
             return;
         if (constraints == null)
-            constraints = new ArrayList();
+            constraints = new ArrayList<Object>();
         List newConstraints = DataUtil.makeListIfSingle(obj);
         if (newConstraints.contains("*")) {
             constraints = null;
@@ -920,8 +907,10 @@ public class DSRequestData implements java.io.Serializable
                 log.warn("getCriteria() called on dsRequest containing multiple where clauses, returning first in list.");
                 return (Map<String, Object>) l.get(0);
             }
-        } else {
+        } else if(criteria instanceof Map<?, ?>){
             return (Map<String, Object>) criteria;
+        }else{
+            return null;
         }
     }
 
@@ -930,7 +919,7 @@ public class DSRequestData implements java.io.Serializable
      * 
      * @return
      */
-    public List getCriteriaSets() {
+    public List<?> getCriteriaSets() {
         if (getOperationType().equals(Eoperation.ADD)) {
             return getValueSets();
         }
@@ -978,7 +967,7 @@ public class DSRequestData implements java.io.Serializable
      * 
      * @return
      */
-    public List<Object> getValueSets() {
+    public List<?> getValueSets() {
         if (getOperationType() == Eoperation.FETCH || getOperationType() == Eoperation.REMOVE) {
             return getCriteriaSets();
         } else {
@@ -1007,7 +996,7 @@ public class DSRequestData implements java.io.Serializable
         }
     }
 
-    public List getSortByFields() {
+    public List<?> getSortByFields() {
         return DataUtil.makeListIfSingle(rawSortBy);
     }
 
@@ -1015,7 +1004,12 @@ public class DSRequestData implements java.io.Serializable
      * @return
      */
     public boolean isPaged() {
-        if (getStartRow() != null && getStartRow() >= 0 && getEndRow() != null && getEndRow() > 0 && getBatchSize() != null && getBatchSize() > 0)
+        if (getStartRow() != null 
+            && getStartRow() >= 0 
+            && getEndRow() != null 
+            && getEndRow() > 0 
+            && getBatchSize() != null 
+            && getBatchSize() > 0)
             return true;
         return false;
     }

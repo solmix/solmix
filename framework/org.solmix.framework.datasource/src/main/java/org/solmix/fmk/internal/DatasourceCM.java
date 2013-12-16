@@ -25,7 +25,7 @@ import org.solmix.api.cm.ConfigureUnit;
 import org.solmix.api.cm.ConfigureUnitManager;
 import org.solmix.api.context.SystemContext;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.fmk.context.SlxContext;
+import org.solmix.fmk.SlxContext;
 
 /**
  * 

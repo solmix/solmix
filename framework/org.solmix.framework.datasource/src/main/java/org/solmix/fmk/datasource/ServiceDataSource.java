@@ -55,9 +55,9 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
-import org.solmix.fmk.context.SlxContext;
 import org.solmix.fmk.rpc.RPCManagerImpl;
 import org.solmix.fmk.rpc.ServiceObject;
 
@@ -135,7 +135,7 @@ public class ServiceDataSource
     }
 
     public DSResponse execute() throws SlxException {
-        request.setBeenThroughDMI(true);
+        request.setServiceCalled(true);
         DataSource _ds = null;
         Eoperation _opType = null;
         String _opID = null;

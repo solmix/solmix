@@ -79,7 +79,7 @@ import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
-import org.solmix.fmk.export.ExportManager;
+import org.solmix.fmk.export.ExportManagerImpl;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.ISCJavaScript;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
@@ -309,7 +309,7 @@ public class RPCManagerImpl implements RPCManager
                         DSRequest dsRequest = new DSRequestImpl(operation, context);
                         dsRequest.getContext().setFreeOnExecute(freeOnExcute);
                         dsRequest.getContext().setIsClientRequest(true);
-                        dsRequest.setRpc(this);
+                        dsRequest.setRPC(this);
                         // authentication
                         Boolean auth = (Boolean) context.getRequest().getAttribute("authenticationEnabled");
                         if (Boolean.TRUE.equals(auth)) {
@@ -572,7 +572,7 @@ public class RPCManagerImpl implements RPCManager
             if (exportFooter != null) {
                 conf.put(IExport.EXPORT_FOOTER_STRING, exportFooter);
             }
-            IExport export = ExportManager.get(exportAs, conf);
+            IExport export = ExportManagerImpl.get(exportAs, conf);
             try {
                 ServletOutputStream os = context.getResponse().getOutputStream();
                 BufferedOutputStream bufferedOS = new BufferedOutputStream(os);
@@ -815,7 +815,7 @@ public class RPCManagerImpl implements RPCManager
             for (Object obj : requests) {
                 if (obj instanceof DSRequest) {
                     DSRequest req = (DSRequest) obj;
-                    if (req.isPartOfTransaction()) {
+                    if (req.isJoinTransaction()) {
                         DSResponse resp = getResponse(req);
                         if (resp != null && resp.getContext().getStatus() == DSResponse.Status.STATUS_SUCCESS)
                             resp.getContext().setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
@@ -1267,8 +1267,8 @@ public class RPCManagerImpl implements RPCManager
         if(!transactionStarted){
             throw new SlxException(Tmodule.RPC,Texception.TRANSACTION_NOT_STARTED,"Transaction not started ,you should call method startTransaction()");
         }
-        request.setRpc(this);
-        request.setJoinTransaction(true);
+        request.setRPC(this);
+        request.setCanJoinTransaction(true);
 //        setRequestProcessingStarted(true);
         DSResponse res=null;
         try {
@@ -1292,7 +1292,7 @@ public class RPCManagerImpl implements RPCManager
     }
     
     private void transactionFailed(DSRequest request, DSResponse resp) throws SlxException {
-        if (request.isPartOfTransaction()) {
+        if (request.isJoinTransaction()) {
             if (resp != null && resp.getContext().getStatus() == DSResponse.Status.STATUS_SUCCESS)
                 resp.getContext().setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
         }
@@ -1306,7 +1306,7 @@ public class RPCManagerImpl implements RPCManager
         boolean _transactionFailure = false;
         if (res != null && res.getContext().getStatus().value() < 0)
             if (req.isRequestStarted()) {
-                if (req.isPartOfTransaction())
+                if (req.isJoinTransaction())
                     _transactionFailure = true;
             } else {
                 BasicDataSource ds = (BasicDataSource) req.getDataSource();

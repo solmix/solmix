@@ -32,6 +32,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -92,11 +93,11 @@ public class DataUtil
      * @param keys
      * @return
      */
-    public static Map subsetMap(Map origMap, List keys) {
+    public static <V,T>Map<V,T> subsetMap(Map<V,T> origMap, List<V> keys) {
         if (origMap == null || keys == null)
             return null;
-        Map newMap = new HashMap();
-        for (Object key : keys) {
+        Map<V,T> newMap = new HashMap<V,T>();
+        for (V key : keys) {
             if (origMap.containsKey(key)) {
                 newMap.put(key, origMap.get(key));
             }
@@ -143,10 +144,10 @@ public class DataUtil
             return ((Number) value).intValue();
     }
 
-    public static List enumToList(Iterator i) {
+    public static <T>List<T> enumToList(Iterator<T> i) {
         if (i == null)
             return null;
-        List list = new ArrayList();
+        List<T> list = new ArrayList<T>();
         for (; i.hasNext(); list.add(i.next()))
             ;
         return list;
@@ -579,12 +580,20 @@ public class DataUtil
      * @param obj
      * @return
      */
-    public static <T> List<T> makeListIfSingle(T obj) {
+    public static  List makeListIfSingle(Object obj) {
         if (obj == null)
             return null;
         else if (obj instanceof List<?>)
-            return (List<T>) obj;
-        else
+            return (List<?>) obj;
+        else if(obj.getClass().isArray()){
+           List<Object> alist= new ArrayList<Object>();
+           int l= Array.getLength(obj);
+           for(int i=0;i<l;i++){
+               alist.add(Array.get(obj, i));
+           }
+           return alist;
+            
+        }else
             return makeList(obj);
     }
 
@@ -2236,14 +2245,14 @@ public class DataUtil
         return value;
     }
 
-    public static Map<Object, Object> getMapFromBean(Object bean) throws Exception {
+    public static Map<String, Object> getMapFromBean(Object bean) throws Exception {
 
         if (bean == null)
             return null;
         Map<String, PropertyDescriptor> properties = getPropertyDescriptors(bean);
         if (properties == null)
             return null;
-        Map<Object, Object> _return = new HashMap<Object, Object>();
+        Map<String, Object> _return = new HashMap<String, Object>();
         for (String key : properties.keySet()) {
             PropertyDescriptor pd = properties.get(key);
             Method method = pd.getReadMethod();

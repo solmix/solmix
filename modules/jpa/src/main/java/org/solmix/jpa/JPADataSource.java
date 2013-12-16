@@ -22,7 +22,11 @@ package org.solmix.jpa;
 import static org.solmix.commons.util.DataUtil.isNotNullAndEmpty;
 
 import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +34,13 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Id;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.context.SystemContext;
+import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -43,9 +49,11 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
+import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
+import org.solmix.api.jaxb.TqueryClauses;
 import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.types.Texception;
@@ -54,7 +62,10 @@ import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.datasource.BasicDataSource;
+import org.solmix.fmk.datasource.BasicGenerator;
 import org.solmix.fmk.datasource.DSResponseImpl;
+import org.solmix.fmk.datasource.DefaultDataSourceManager;
+import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.ServiceUtil;
 
 /**
@@ -70,7 +81,11 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     private final static Logger log = LoggerFactory.getLogger(JPADataSource.class.getName());
 
     public static final String SERVICE_PID = "org.solmix.modules.jpa";
+    String entity = null;
 
+    String entityName = null;
+
+    Class<?> entityClass = null;
     private boolean useQualifiedClassName;
 
     private boolean shouldRollBackTransaction;
@@ -84,12 +99,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     private Object transaction;
 
     private EntityManagerFactoryProvider entityManagerFactoryProvider;
-
-    String entity = null;
-
-    String entityName = null;
-
-    Class<?> entityClass = null;
+ 
+    private enum QueryType{
+        ENTITY,NATIVE_QUERY,OTHER;
+    }
 
     /**
      * This Constructor used by inject,such as spring guice.Coding instance call
@@ -138,19 +151,19 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
     @Override
     public void init(DataSourceData data) throws SlxException {
-        // adaptProvider(data);
-    /*    try {
-            if (entityManager == null) {
-                entityManager = JPATransaction.getEntityManager(getEmf(data));
-                JPATransaction.returnEntityManager(getEntityManager());
-            }
-        } catch (Exception e) {
-            log.error("Unexpected exception while initial entityManager", e);
-        }*/
         super.init(data);
+       String entityBean= getContext().getTdataSource().getBean();
+       if(entityBean!=null){
+           try {
+               entityClass = BasicGenerator.loadClass(entityBean);
+           } catch (Exception e) {
+               throw new SlxException(Tmodule.JPA, Texception.NO_FOUND, e);
+           }
+       }
+     
     }
 
-    private EntityManagerFactory getEmf(DataSourceData data) throws SlxException {
+    protected EntityManagerFactory getEmf(DataSourceData data) throws SlxException {
         String persistenceUnit = data.getTdataSource() == null ? null : data.getTdataSource().getPersistenceUnit();
         if (persistenceUnit == null)
             persistenceUnit = getConfig().getString(JpaCM.P_DEFAULT_UNIT, "default");
@@ -219,23 +232,81 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         Object[] objs = ServiceUtil.getOSGIServices(EntityManagerFactory.class.getName(), "(osgi.unit.name=" + unit + ")");
         EntityManagerFactory factory = objs == null ? null : objs.length >= 1 ? (EntityManagerFactory) objs[0] : null;
     }
-
     @Override
     public DSResponse execute(DSRequest req) throws SlxException {
+        req.registerFreeResourcesHandler(this);
+        shouldRollBackTransaction = false;
+        holder = null;
+        Eoperation _opType = req.getContext().getOperationType();
+        DSResponse __return = null;
+        if(isJpaOperation(_opType)){
+            DSResponse validationFailure = validateDSRequest(req);
+            if (validationFailure != null) {
+                return validationFailure;
+            }
+            // if DSRequest not have a DataSource with it,use this by default.
+            if (req.getDataSource() == null && req.getDataSourceName() == null) {
+                req.setDataSource(this);
+            }
+            req.setRequestStarted(true);
+            Object dsObject = null;
+            Object datasources = req.getContext().getDataSourceNames();
+            // may be have other datasource.if just one,used as SQL datasource.
+            if (datasources != null 
+                && (datasources instanceof List<?> 
+                   && ((List<?>) datasources).size() > 1)) {
+                dsObject = datasources;
+            } else {
+                dsObject = this;
+            }
+            __return=executeJpaDataSource(req,dsObject);
+        }else{
+            __return= super.execute(req);
+        }
+        
+        return __return;
+    }
+    
+   
+
+   
+
+    private static JPADataSource[] getDataSources(List<?> list) throws SlxException {
+        List<JPADataSource> _return = new ArrayList<JPADataSource>();
+        if (list == null)
+            return null;
+        for (Object ds : list) {
+            if (ds instanceof JPADataSource) {
+                _return.add((JPADataSource) ds);
+            } else {
+                DataSource datasource = DefaultDataSourceManager.getDataSource((String) ds);
+                if (datasource instanceof JPADataSource) {
+                    _return.add((JPADataSource) datasource);
+                } else {
+                    log.warn("the datasource [" + ds.toString() + "] cannot processed by JPA DataSource.");
+                }
+            }
+        }
+        return _return.toArray(new JPADataSource[_return.size()]);
+    }
+    public DSResponse execute___(DSRequest req) throws SlxException {
         shouldRollBackTransaction = false;
         holder = null;
         req.registerFreeResourcesHandler(this);
-        // req.getContext().setFreeOnExecute(false);
         DataSource __ds = req.getDataSource();
         if (__ds == null)
             throw new SlxException(Tmodule.JPA, Texception.DS_NO_FONUN_DATASOURCE, "must define a datasource");
+        Eoperation _opType = req.getContext().getOperationType();
+        DSResponse __return = null;
+        if(isJpaOperation(_opType)){
+            
+        }else{
+            return super.execute(req);
+        }
         /**********************************************************************
          **** Just assume entity class have been generated. *******************
          **********************************************************************/
         DataSource entitySchema = (DataSource) __ds.getContext().getAutoDeriveSchema();
-        /**********************************************************************
-         * 
-         *********************************************************************/
         if (entitySchema != null) {
             entity = entitySchema.getName();
             entityClass = (Class<?>) entitySchema.getContext().getAttribute("_entity_class");
@@ -264,7 +335,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         }
 
         entityName = "_" + entity;
-        if (req.getRpc() != null && this.shouldAutoJoinTransaction(req)) {
+        if (req.getRPC() != null && this.shouldAutoJoinTransaction(req)) {
             log.debug("Auto get transaction object!");
             Object obj = this.getTransactionObject(req);
             if (!(holder instanceof EntityManagerHolder)) {
@@ -284,8 +355,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     }
                     log.debug("Creating EntityManager, starting transaction and setting it to RPCManager.");
                     holder = new EntityManagerHolder(this, entityManager, transaction);
-                    req.getRpc().getContext().setAttribute(this.getTransactionObjectKey(), holder);
-                    req.getRpc().registerCallback(this);
+                    req.getRPC().getContext().setAttribute(this.getTransactionObjectKey(), holder);
+                    req.getRPC().registerCallback(this);
                 } else {
                     try {
                         transaction = JPATransaction.getTransaction(getEntityManager());
@@ -297,7 +368,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                 entityManager = holder.getEntityManager();
                 transaction = holder.getTransaction();
             }
-            req.setPartOfTransaction(true);
+            req.setJoinTransaction(true);
         } else {
             try {
                 transaction = JPATransaction.getTransaction(getEntityManager());
@@ -311,6 +382,15 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             markTrnsactionForRollBack(null);
             throw new SlxException(Tmodule.JPA, Texception.JPA_JPAEXCEPTION, e);
         }
+    }
+
+    /**
+     * @param _opType
+     * @return
+     */
+    private boolean isJpaOperation(Eoperation operationType) {
+        return DataTools.isFetch(operationType)||DataTools.isAdd(operationType) || DataTools.isRemove(operationType) || DataTools.isUpdate(operationType)
+            || DataTools.isReplace(operationType)  ;
     }
 
     @Override
@@ -733,6 +813,447 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     public void setUseQualifiedClassName(boolean useQualifiedClassName) {
         this.useQualifiedClassName = useQualifiedClassName;
     }
+    /**
+     * Execute Sql operation,default is Fetch/Add/Replace/Update/Remove
+     * 
+     * @param req
+     * @param dsObject
+     * @return
+     * @throws SlxException
+     */
+    private DSResponse executeJpaDataSource(DSRequest req, Object dsObject) throws SlxException {
+        JPADataSource[] datasources;
+        if (dsObject instanceof JPADataSource) {
+            datasources = new JPADataSource[1];
+            datasources[0] = (JPADataSource) dsObject;
+        } else if ((dsObject instanceof String)) {
+            datasources = getDataSources(DataUtil.makeListIfSingle(dsObject));
+        } else if (dsObject instanceof List<?>) {
+            datasources = getDataSources((List<?>) dsObject);
+        } else {
+            throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
+                "in the app operation config, datasource must be set to a string or list");
+        }
+        if (req.getRPC() != null && this.shouldAutoJoinTransaction(req)) {
+            log.debug("Auto get transaction object!");
+            Object obj = this.getTransactionObject(req);
+            if (!(holder instanceof EntityManagerHolder)) {
+                if (log.isWarnEnabled())
+                    log.warn("JPA DataSource transaction holer should be a org.solmix.jpa.EntityManagerHolder instance,but is"
+                        + obj.getClass().getName() + " Assume the transaction object is invalid and set it to null");
+                holder = null;
+            } else {
+                holder = (EntityManagerHolder) obj;
+            }
+            if (holder == null) {
+                if (shouldAutoStartTransaction(req, false)) {
+                    try {
+                        transaction = JPATransaction.getTransaction(getEntityManager());
+                    } catch (Exception e) {
+                        log.error("Unexpected exception while initial entityManager", e);
+                    }
+                    log.debug("Creating EntityManager, starting transaction and setting it to RPCManager.");
+                    holder = new EntityManagerHolder(this, entityManager, transaction);
+                    req.getRPC().getContext().setAttribute(this.getTransactionObjectKey(), holder);
+                    req.getRPC().registerCallback(this);
+                } else {
+                    try {
+                        transaction = JPATransaction.getTransaction(getEntityManager());
+                    } catch (Exception e) {
+                        log.error("Unexpected exception while initial entityManager", e);
+                    }
+                }
+            } else {
+                entityManager = holder.getEntityManager();
+                transaction = holder.getTransaction();
+            }
+            req.setJoinTransaction(true);
+        } else {
+            try {
+                transaction = JPATransaction.getTransaction(getEntityManager());
+            } catch (Exception e) {
+                log.error("Unexpected exception while initial entityManager", e);
+            }
+        }
+        DSRequestData __requestCX=req.getContext();
+        Eoperation _req=__requestCX.getOperationType();
+        DSResponse __return =null;
+        switch(_req){
+            case ADD:
+                __return=addEntity(req,datasources);
+                break;
+            case FETCH:
+                __return=fetchEntity(req,datasources);
+                break;
+            case REMOVE:
+                __return=removeEntity(req,datasources);
+                break;
+            case UPDATE:
+                __return=updateEntity(req,datasources);
+                break;
+            default:
+                break;
+            
+        }
+        /*QueryType qt = analysisQueryType(req, datasources);
+        DSResponse __return = null;
+        switch (qt) {
+            case ENTITY:
+                __return = executeEntityQuery(req, datasources);
+                break;
+            case NATIVE_QUERY:
+                __return = executeNativeQuery(req, datasources);
+                break;
+            case OTHER:
+                __return = executeJpqlQuery(req, datasources);
+                break;
+        }*/
+        return __return;
+    }
+   
+    /**
+     * @param req
+     * @param datasources
+     * @return
+     * @throws SlxException 
+     */
+    private DSResponse updateEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
+        JPADataSource  __firstDS=datasources[0];
+        DSRequestData __requestCX=req.getContext();
+        DSResponse __return = new DSResponseImpl();
+        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setDataSource(req.getDataSource());
+        Object criteria =req.getContext().getRawValues();
+        int batchsize=__requestCX.getBatchSize();
+        //batch size.
+        batchsize=batchsize<100?100:batchsize;
+        if(isEntityPresent(criteria)){
+            List records= DataUtil.makeListIfSingle(criteria);
+            Object result= updateBean(batchsize,records);
+            __return.getContext().setData(result);
+            return __return;
+        }  
+      //check jpql configured
+        ToperationBinding _op=__firstDS.getContext().getOperationBinding(req);
+        if(_op!=null&&_op.getQueryClauses()!=null&&_op.getQueryClauses().getCustomQL()!=null){
+            //velocity exp
+            return __return;
+        }
+        if(isEntityClass(entityClass)){
+            List<?> records = req.getContext().getValueSets();
+            List<Object> beans= new ArrayList<Object>();
+            for (Object o : records) {
+                Object bean = instance(entityClass);
+                try {
+                    DataUtil.setProperties((Map) o, bean, false);
+                } catch (Exception e) {
+                    String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
+                    throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
+                }
+                beans.add(bean);
+            }
+            Object result= updateBean(batchsize,beans);
+            __return.getContext().setData(result);
+            return __return;
+            
+        }else{
+            throw new SlxException(Tmodule.JPA,Texception.JPA_NO_ENTITY,"JPA DataSource no configured Entity bean");
+        }
+    }
 
+
+    private DSResponse removeEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
+        JPADataSource  __firstDS=datasources[0];
+        DSRequestData __requestCX=req.getContext();
+        DSResponse __return = new DSResponseImpl();
+        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setDataSource(req.getDataSource());
+        Object criteria =req.getContext().getRawCriteria();
+        int batchsize=__requestCX.getBatchSize();
+        //batch size.
+        batchsize=batchsize<100?100:batchsize;
+        if(isEntityPresent(criteria)){
+            List records= DataUtil.makeListIfSingle(criteria);
+            Object result= removeBean(batchsize,records);
+            __return.getContext().setData(result);
+            return __return;
+        }  
+        //check jpql configured
+        ToperationBinding _op=__firstDS.getContext().getOperationBinding(req);
+        if(_op!=null&&_op.getQueryClauses()!=null&&_op.getQueryClauses().getCustomQL()!=null){
+            //velocity exp
+            return __return;
+        }
+        if(isEntityClass(entityClass)){
+            List<?> records = req.getContext().getValueSets();
+            List<Object> beans= new ArrayList<Object>();
+            for (Object o : records) {
+                Object bean = instance(entityClass);
+                try {
+                    DataUtil.setProperties((Map) o, bean, false);
+                } catch (Exception e) {
+                    String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
+                    throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
+                }
+                beans.add(bean);
+            }
+            Object result= removeBean(batchsize,beans);
+            __return.getContext().setData(result);
+            return __return;
+            
+        }else{
+            throw new SlxException(Tmodule.JPA,Texception.JPA_NO_ENTITY,"JPA DataSource no configured Entity bean");
+        }
+    }
+
+
+
+    private DSResponse fetchEntity(DSRequest req, JPADataSource[] datasources) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+ 
+    private DSResponse addEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
+        JPADataSource  __firstDS=datasources[0];
+        DSRequestData __requestCX=req.getContext();
+        DSResponse __return = new DSResponseImpl();
+        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setDataSource(req.getDataSource());
+        Object values=req.getContext().getRawValues();
+        int batchsize=__requestCX.getBatchSize();
+        //batch size.
+        batchsize=batchsize<100?100:batchsize;
+        //java entity bean values.
+        if(isEntityPresent(values)){
+            List records= DataUtil.makeListIfSingle(values);
+            Object result= persistBean(batchsize,records);
+            __return.getContext().setData(result);
+            return __return;
+        }
+        //check jpql configured
+        ToperationBinding _op=__firstDS.getContext().getOperationBinding(req);
+        if(_op!=null&&_op.getQueryClauses()!=null&&_op.getQueryClauses().getCustomQL()!=null){
+            //velocity exp
+            return __return;
+        }
+        if(isEntityClass(entityClass)){
+            List<?> records = req.getContext().getValueSets();
+            List<Object> beans= new ArrayList<Object>();
+            for (Object o : records) {
+                Object bean = instance(entityClass);
+                try {
+                    DataUtil.setProperties((Map) o, bean, false);
+                } catch (Exception e) {
+                    String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
+                    throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
+                }
+                beans.add(bean);
+            }
+            Object result= persistBean(batchsize,beans);
+            __return.getContext().setData(result);
+            return __return;
+            
+        }else{
+            throw new SlxException(Tmodule.JPA,Texception.JPA_NO_ENTITY,"JPA DataSource no configured Entity bean");
+        }
+    }
+    
+    private Object instance(Class<?> clz) throws SlxException{
+       try {
+        return Reflection.newInstance(clz);
+    } catch (Exception e) {
+        throw new SlxException(Tmodule.JPA, Texception.CAN_NOT_INSTANCE, e);
+    }
+    }
+    
+
+    private DSResponse executeEntityQuery(DSRequest req, JPADataSource[] datasources) throws SlxException {
+        JPADataSource  __firstDS=datasources[0];
+        DSRequestData __requestCX=req.getContext();
+        Eoperation _req=__requestCX.getOperationType();
+        DSResponse __return = new DSResponseImpl();
+        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setDataSource(req.getDataSource());
+        switch(_req){
+            case ADD:{
+                Object o=__requestCX.getRawValues();
+                int batchsize=__requestCX.getBatchSize();
+                if(batchsize<100)
+                    batchsize=100;
+                List records= DataUtil.makeListIfSingle(o);
+                Object result= persistBean(batchsize,records);
+                __return.getContext().setData(result);
+                increaseOpCount();
+                break;
+            }
+                
+            case FETCH:
+                break;
+            case REMOVE:
+                break;
+            case REPLACE:
+                break;
+            case UPDATE:
+                Object o=__requestCX.getRawValues();
+                if(o==null)
+                    o=__requestCX.getRawCriteria();
+                int batchsize=__requestCX.getBatchSize();
+                if(batchsize<100)
+                    batchsize=100;
+                List records= DataUtil.makeListIfSingle(o);
+                for(int i=0;i<records.size();i++){
+                    Object record= records.get(i);
+                   Object rr= entityManager.find(record.getClass(), record);
+                   entityManager.refresh(rr);
+                    if (i % batchsize == 0) {
+                        entityManager.flush();
+                        entityManager.clear();
+                    }
+                }
+                entityManager.flush();
+                entityManager.clear();
+                __return.getContext().setData(records);
+                increaseOpCount();
+                break;
+            default:
+                break;
+        }
+        return __return;
+    }
+
+    private Object persistBean(int batchsize, List records) {
+        // batch update.
+        int i = 0;
+        for (Object o : records) {
+            entityManager.persist(o);
+            i++;
+            if (i % batchsize == 0) {
+                entityManager.flush();
+                entityManager.clear();
+            }
+        }
+        entityManager.flush();
+        entityManager.clear();
+        return records;
+    }
+    private Object updateBean(int batchsize, List<Object> records) throws SlxException {
+        // batch update.
+           int i = 0;
+           List<Object> _return = new ArrayList<Object>();
+           for (Object o : records) {
+               Object attached=findAttachedBean(o);
+              try {
+                DataUtil.setProperties( DataUtil.getProperties(o, true),attached);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+               entityManager.refresh(attached);
+               _return.add(attached);
+               i++;
+               if (i % batchsize == 0) {
+                   entityManager.flush();
+                   entityManager.clear();
+               }
+           }
+           entityManager.flush();
+           entityManager.clear();
+           return _return;
+       }
+    private Object removeBean(int batchsize, List<Object> records) throws SlxException {
+     // batch update.
+        int i = 0;
+        List<Object> _return = new ArrayList<Object>();
+        for (Object o : records) {
+            Object attached=findAttachedBean(o);
+            entityManager.remove(attached);
+            _return.add(attached);
+            i++;
+            if (i % batchsize == 0) {
+                entityManager.flush();
+                entityManager.clear();
+            }
+        }
+        entityManager.flush();
+        entityManager.clear();
+        return _return;
+    }
+
+    /**
+     * @param o
+     * @return
+     * @throws SlxException 
+     */
+    private Object findAttachedBean(Object o) throws SlxException {
+        try {
+            Field[] declaredFields = o.getClass().getDeclaredFields();
+            Map<String, PropertyDescriptor> propDes = DataUtil.getPropertyDescriptors(o.getClass());
+            Object id = null;
+            for (Field field : declaredFields) {
+                int modifier = field.getModifiers();
+                String propertyName = field.getName();
+                if (Modifier.isStatic(modifier))
+                    continue;
+                if (field.getAnnotation(Id.class) != null) {
+                    id = DataUtil.getProperty(propertyName, o);
+                    break;
+                } else {// AccessType=PROPERTY
+                    PropertyDescriptor propDesc = propDes.get(propertyName);
+                    Method read = propDesc.getReadMethod();
+                    if (read!=null&&read.getAnnotation(Id.class) != null) {
+                        id = read.invoke(o, new Object[0]);
+                        break;
+                    }
+                }
+
+            }
+            if (id != null) {
+                return entityManager.find(o.getClass(), id);
+            }else{
+                throw new SlxException(Tmodule.JPA, Texception.JPA_JPAEXCEPTION, "JPA Entity Bean no declear ID field or Method");
+            }
+        } catch (Exception e) {
+            throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, "can not find id");
+        }
+    }
+
+    private QueryType analysisQueryType(DSRequest req, JPADataSource[] datasources) {
+        JPADataSource  __firstDS=datasources[0];
+        Object criterias=req.getContext().getRawCriteria();
+        Object values=req.getContext().getRawValues();
+        boolean entity=isEntityPresent(criterias)||isEntityPresent(values);
+        if(entity)
+            return QueryType.ENTITY;
+        ToperationBinding __bind=__firstDS.getContext().getOperationBinding(req);
+        TqueryClauses query=__bind.getQueryClauses();
+        if(query!=null){
+            if(query.getCustomSQL()!=null){
+                return QueryType.NATIVE_QUERY;
+            }
+        }
+        return QueryType.OTHER;
+    }
+    private boolean isEntityClass(Class<?> clz){
+        if(clz==null)
+            return false;
+        return clz.isAnnotationPresent(Entity.class);
+    }
+    private boolean isEntityPresent(Object o){
+        if(o==null)
+            return false;
+        if(o instanceof List<?>){
+            List<?> criterias=(List<?>)o;
+            if(criterias.size()>0){
+                Object getOne = criterias.get(0);
+                return isEntityPresent(getOne);
+            }
+        }else if(o.getClass().isArray()){
+           Class<?> ctype= o.getClass().getComponentType();
+           return ctype.isAnnotationPresent(Entity.class);
+        }else{
+           return o.getClass().isAnnotationPresent(Entity.class);
+        }
+        return false;
+    }
+    
 
 }

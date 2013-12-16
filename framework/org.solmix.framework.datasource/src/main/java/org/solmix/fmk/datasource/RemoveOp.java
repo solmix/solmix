@@ -70,7 +70,10 @@ public abstract class RemoveOp<D> extends DsOp<D>
         {
             super(dataSourceName);
         }
-
+        public DfRemoveOp(DataSource datasource)
+        {
+            super(datasource);
+        }
      
         @Override
         public DSResponse remove(DSRequest request) throws SlxException {

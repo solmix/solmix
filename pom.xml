@@ -74,7 +74,7 @@
 		<pax.exam.version2>2.0.0-RC5</pax.exam.version2>
 		<pax.logging.version>1.7.0</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
-		<pax.url.version>1.5.2</pax.url.version>
+		<pax.url.version>1.3.6</pax.url.version>
 		<pax.web.version>3.0.1</pax.web.version>
 		<pax.tinybundles.version>1.3.0</pax.tinybundles.version>
 		<servlet.api.version>2.5</servlet.api.version>
@@ -94,7 +94,7 @@
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
-		<apache.karaf.version>3.0.0.RC1</apache.karaf.version>
+		<apache.karaf.version>2.3.3</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
