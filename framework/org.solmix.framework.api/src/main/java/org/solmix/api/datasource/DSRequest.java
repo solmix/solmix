@@ -23,6 +23,7 @@ import org.solmix.api.context.Context;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.rpc.RPCManager;
+import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.rpc.RequestType;
 
 /**
@@ -152,5 +153,24 @@ public interface DSRequest extends RequestType
      * @param beenThroughDMI
      */
     void setServiceCalled(boolean aerviceCalled);
+    /**
+     * Used to support RPC transaction.
+     * <p>
+     * If this value is true ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
+     * with {@link RPCManagerCompletionCallback} to commit the transaction. if not,should commit it yourself.
+     * 
+     * @return the freeOnExecute
+     */
+    public boolean isFreeOnExecute() ;
+
+    /**
+     * If <code>true<code>,this request will free datasource at the end of this request process.
+     * <P>
+     * <b>NOTE:</B> if set this value is <code>false<code>,you must free datasource manual.
+     * 
+     * @see #isFreeOnExecute()
+     * @param freeOnExecute the freeOnExecute to set
+     */
+    public void setFreeOnExecute(boolean freeOnExecute) ;
 
 }

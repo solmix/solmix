@@ -30,7 +30,6 @@ import org.solmix.api.application.Application;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.commons.util.DataUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -62,7 +61,6 @@ public class DSRequestData implements java.io.Serializable
     // 验证失败返回的信息
     protected String securityFailureMessage;
 
-    private boolean freeOnExecute;
 
     private List<Object> uploadedFiles;
 
@@ -79,12 +77,6 @@ public class DSRequestData implements java.io.Serializable
     protected Object beforeValidatedValues;
 
     public void init() {
-        isClientRequest = false;
-        batchSize = null;
-        _allowMultiUpdate = false;
-        forceInvalidateCache = false;
-        freeOnExecute = true;
-        beforeValidatedValues = null;
         if (getAppID() == null)
             setAppID(Application.BUILT_IN_APPLICATION);
         if (getRepo() == null)
@@ -766,29 +758,6 @@ public class DSRequestData implements java.io.Serializable
         this.securityFailureMessage = securityFailureMessage;
     }
 
-    /**
-     * Used to support RPC transaction.
-     * <p>
-     * If this value is true ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
-     * with {@link RPCManagerCompletionCallback} to commit the transaction. if not,should commit it yourself.
-     * 
-     * @return the freeOnExecute
-     */
-    public boolean isFreeOnExecute() {
-        return freeOnExecute;
-    }
-
-    /**
-     * If <code>true<code>,this request will free datasource at the end of this request process.
-     * <P>
-     * <b>NOTE:</B> if set this value is <code>false<code>,you must free datasource manual.
-     * 
-     * @see #isFreeOnExecute()
-     * @param freeOnExecute the freeOnExecute to set
-     */
-    public void setFreeOnExecute(boolean freeOnExecute) {
-        this.freeOnExecute = freeOnExecute;
-    }
 
     /**
      * @return the fetchAll
@@ -910,6 +879,9 @@ public class DSRequestData implements java.io.Serializable
         } else if(criteria instanceof Map<?, ?>){
             return (Map<String, Object>) criteria;
         }else{
+            try {
+                return DataUtil.getProperties(criteria, true);
+            } catch (Exception e) { }
             return null;
         }
     }

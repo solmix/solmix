@@ -77,7 +77,7 @@ public class FileSystemDataSource extends BasicDataSource
         String url =  (String) DataUtil.getProperty("dataURL", opBind, getContext().getTdataSource());
         String xpath=(String) DataUtil.getProperty("recordXPath", opBind, getContext().getTdataSource());
         DSResponse res = new DSResponseImpl();
-        Object value = getDataFromFile(url);
+        Object value = getDataFromFile(sc.getBean(ClassLoader.class),url);
         if(xpath!=null){
             JXPathContext context = JXPathContext.newContext(value);
             res.getContext().setData(context.getValue(xpath));
@@ -88,12 +88,11 @@ public class FileSystemDataSource extends BasicDataSource
         return res;
     }
 
-    private Object getDataFromFile(String resourceName) {
+    public static  Object getDataFromFile(ClassLoader loader,String resourceName) {
         InputStream is = null;
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = dbf.newDocumentBuilder();
-            ClassLoader loader = sc.getBean(ClassLoader.class);
             URL url = ClassLoaderUtil.getResource(loader, resourceName, FileSystemDataSource.class);
             is = url.openStream();
             Document doc = builder.parse(is);

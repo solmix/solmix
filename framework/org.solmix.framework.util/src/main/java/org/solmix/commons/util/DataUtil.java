@@ -1055,11 +1055,11 @@ public class DataUtil
             return getPropertyDescriptors(bean.getClass());
     }
 
-    public static Map<Object, Object> getProperties(Object bean) throws Exception {
+    public static Map<String, Object> getProperties(Object bean) throws Exception {
         return getProperties(bean, (Collection<String>) null);
     }
 
-    public static Map<Object, Object> getProperties(Object bean, boolean omitNullValue) throws Exception {
+    public static Map<String, Object> getProperties(Object bean, boolean omitNullValue) throws Exception {
         return getProperties(bean, (Collection<String>) null, omitNullValue);
     }
 
@@ -1221,7 +1221,7 @@ public class DataUtil
         collection.add(propertyName);
         Object __return = null;
         try {
-            Map<Object, Object> values = getProperties(bean, collection);
+            Map<String, Object> values = getProperties(bean, collection);
             __return = values.get(propertyName);
         } catch (Exception e) {
             log.error("" + e);
@@ -1249,18 +1249,18 @@ public class DataUtil
         return __return;
     }
 
-    public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep) throws Exception {
+    public static Map<String, Object> getProperties(Object bean, Collection<String> propsToKeep) throws Exception {
         return getProperties(bean, propsToKeep, false);
     }
 
-    public static Map<Object, Object> getProperties(Object bean, Collection<String> propsToKeep, boolean omitNullValue) throws Exception {
+    public static Map<String, Object> getProperties(Object bean, Collection<String> propsToKeep, boolean omitNullValue) throws Exception {
         if (bean == null)
             return null;
         BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
         PropertyDescriptor propertyDescriptors[] = beanInfo.getPropertyDescriptors();
         if (propertyDescriptors == null)
             return Collections.emptyMap();
-        Map<Object, Object> propertyMap = new HashMap<Object, Object>();
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
         for (int i = 0; i < propertyDescriptors.length; i++) {
             PropertyDescriptor propertyDescriptor = propertyDescriptors[i];
             if (propertyDescriptor == null)

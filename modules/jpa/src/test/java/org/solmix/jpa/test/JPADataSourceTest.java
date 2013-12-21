@@ -41,6 +41,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.api.jaxb.TqueryClauses;
 import org.solmix.fmk.SlxContext;
+import org.solmix.fmk.criterion.Criteria;
 import org.solmix.fmk.datasource.AddOp;
 import org.solmix.fmk.datasource.FetchOp;
 import org.solmix.fmk.datasource.RemoveOp;
@@ -74,8 +75,9 @@ public class JPADataSourceTest
         sc.close(true);
     }
 
-    @Test
+//    @Test
     public void fetchEntity()  {
+        Criteria c = new Criteria("userName","superadminzz");
         try {
             JPADataSourceBuilder builder = new JPADataSourceBuilder();
             DataSource ds= builder.build(AuthUser.class,true);
@@ -87,14 +89,14 @@ public class JPADataSourceTest
                     return res.getContext().getDataList(AuthUser.class);
                 }
                 
-            });
+            }.withCriteria(c));
             Assert.assertNotNull(aUser);
         } catch (SlxException e) {
             e.printStackTrace();
         }
     
     }
-    @Test
+//    @Test
     public void addByEntity()  {
         AuthUser au = new AuthUser();
         au.setUserName("superadminzz");
@@ -147,21 +149,11 @@ public class JPADataSourceTest
         }.withCriteria(au));
         
     }
-//    @Test
+    @Test
     public void removeByJPQL()  {
         try {
-            JPADataSourceBuilder builder = new JPADataSourceBuilder();
-            TdataSource tds= builder.getJPATdata();
-            ToperationBindings ops= new ToperationBindings();
-            ToperationBinding op= new ToperationBinding();
-            op.setOperationType(Eoperation.REMOVE);
-            TqueryClauses qc = new TqueryClauses();
-            qc.setCustomQL("delete from AuthUser");
-            op.setQueryClauses(qc);
-            ops.getOperationBinding().add(op);
-            tds.setOperationBindings(ops);
-            DataSourceData dsd = new DataSourceData(tds);
-            DataSource ds= builder.build(dsd);
+            
+            DataSource ds=getJPQLDataSource(Eoperation.REMOVE,"DELETE FROM AuthUser");
            
             DSResponse aUser= SlxContext.doInSystemContext(new org.solmix.fmk.datasource.RemoveOp.DfRemoveOp(ds));
             System.out.println(aUser);
@@ -169,6 +161,21 @@ public class JPADataSourceTest
         } catch (SlxException e) {
             e.printStackTrace();
         }
+    }
+    
+    private DataSource getJPQLDataSource(Eoperation operation,String jpql) throws SlxException{
+        JPADataSourceBuilder builder = new JPADataSourceBuilder();
+        TdataSource tds= builder.getJPATdata();
+        ToperationBindings ops= new ToperationBindings();
+        ToperationBinding op= new ToperationBinding();
+        op.setOperationType(operation);
+        TqueryClauses qc = new TqueryClauses();
+        qc.setCustomQL(jpql);
+        op.setQueryClauses(qc);
+        ops.getOperationBinding().add(op);
+        tds.setOperationBindings(ops);
+        DataSourceData dsd = new DataSourceData(tds);
+        return builder.build(dsd);
     }
 //    @Test
     public void addByBean()  {

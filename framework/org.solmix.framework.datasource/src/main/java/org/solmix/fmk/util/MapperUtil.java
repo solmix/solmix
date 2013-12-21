@@ -66,9 +66,9 @@ public class MapperUtil
 
                     out.write("<" + key + ">" + strValue + "</" + key + ">\n");
                 } else if (value instanceof Map<?, ?>) {
-                    records2XML(null, DataUtil.makeListIfSingle((Map<Object, Object>) value), out);
+                    records2XML(null, DataUtil.makeListIfSingle(value), out);
                 } else {
-                    Map<Object, Object> map = DataUtil.getProperties(value);
+                    Map<String, Object> map = DataUtil.getProperties(value);
                     records2XML(null, map, out);
                 }
             }

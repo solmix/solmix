@@ -86,6 +86,7 @@ public class DSRequestImpl implements DSRequest
     private String dataSourceName;
 
     private Boolean joinTransaction;
+    private boolean freeOnExecute;
 
     private boolean partOfTransaction;
 
@@ -216,6 +217,15 @@ public class DSRequestImpl implements DSRequest
             data.setRawSortBy(operation.getSortBy());
     }
 
+    @Override
+    public boolean isFreeOnExecute() {
+        return freeOnExecute;
+    }
+
+    @Override
+    public void setFreeOnExecute(boolean freeOnExecute) {
+        this.freeOnExecute = freeOnExecute;
+    }
     /**
      * @return the beenThroughDMI
      */
@@ -463,7 +473,7 @@ public class DSRequestImpl implements DSRequest
     }
 
     private DSResponse prepareReturn(DSResponse _dsResponse) throws SlxException {
-        if (data.isFreeOnExecute()) {
+        if (isFreeOnExecute()) {
             freeResources();
             if (rpc != null)
                 rpc.freeDataSources();
@@ -546,7 +556,7 @@ public class DSRequestImpl implements DSRequest
             _dsResponse.getContext().setData(e.getMessage());
             _dsResponse.getContext().setStatus(Status.STATUS_FAILURE);
         } finally {
-            if (data.isFreeOnExecute()) {
+            if (isFreeOnExecute()) {
                 this.freeResources();
                 if (rpc != null)
                     rpc.freeDataSources();

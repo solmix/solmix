@@ -143,7 +143,7 @@ public class RestRequestParser implements HttpServletRequestParser
                                     operation.setDataSource(cf.getDataSourceName());
                                 DSRequest dsr = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(operation, SlxContext.getWebContext());
                                 dsr.getContext().setIsClientRequest(true);
-                                dsr.getContext().setFreeOnExecute(freeOnExecute);
+                                dsr.setFreeOnExecute(freeOnExecute);
                                 dsr.setCanJoinTransaction(!freeOnExecute);
                                 dsr.setRPC(rpc);
                                 dsr.setRequestContext(webContext);

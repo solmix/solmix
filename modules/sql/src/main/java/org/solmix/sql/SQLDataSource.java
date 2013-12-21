@@ -165,7 +165,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         Map<String, Object> criteria = req.getContext().getCriteria();
         downloadDsRequest = new DSRequestImpl(getName(), Eoperation.FETCH);
         downloadDsRequest.getContext().setCriteria(criteria);
-        downloadDsRequest.getContext().setFreeOnExecute(false);
+        downloadDsRequest.setFreeOnExecute(false);
         DSResponse resp = downloadDsRequest.execute();
         resp.getContext().setData(forceSingle(resp.getContext().getDataList(Map.class)));
         return resp;

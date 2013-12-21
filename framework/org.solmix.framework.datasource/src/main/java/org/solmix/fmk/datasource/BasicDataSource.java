@@ -365,7 +365,7 @@ public class BasicDataSource implements DataSource
                 return executeCustomer(req);
             }
         } finally {
-            if (req.getContext().isFreeOnExecute()) {
+            if (req.isFreeOnExecute()) {
                 req.freeResources();
             }
         }
@@ -1010,9 +1010,9 @@ public class BasicDataSource implements DataSource
         return getProperties(obj, propsToKeep, dropExtraFields, dropIgnoredFields, null);
     }
 
-    public Map<Object, Object> getProperties(Object data, Collection<String> popToKeep, boolean dropExtraFields, boolean dropIgnoreFields,
+    public Map getProperties(Object data, Collection<String> popToKeep, boolean dropExtraFields, boolean dropIgnoreFields,
         ValidationContext validationContext) {
-        Map<Object, Object> result = new LinkedMap();
+        Map result = new LinkedMap();
         if (data == null)
             return null;
         Map<Object, Object> source = null;

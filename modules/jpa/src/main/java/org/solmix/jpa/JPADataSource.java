@@ -253,6 +253,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             if (validationFailure != null) {
                 return validationFailure;
             }
+            //when used FetchType.LAZY,the transaction must be commit after data send to client.
+            if(req.getContext().getIsClientRequest()){
+                req.setFreeOnExecute(false);
+            }
             // if DSRequest not have a DataSource with it,use this by default.
             if (req.getDataSource() == null && req.getDataSourceName() == null) {
                 req.setDataSource(this);
@@ -650,7 +654,12 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         // check jpql configured
         ToperationBinding _op = __firstDS.getContext().getOperationBinding(req);
         if (_op != null && _op.getQueryClauses() != null && _op.getQueryClauses().getCustomQL() != null) {
-            // velocity exp
+            Query query=  entityManager.createQuery(_op.getQueryClauses().getCustomQL());
+            query.executeUpdate();
+            Map<String, Object> c =req.getContext().getCriteria();
+            if(c!=null){
+                
+            }
             return __return;
         }
         if (isEntityClass(entityClass)) {
@@ -679,6 +688,9 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
         Map<String, Object> parameters = new HashMap<String, Object>();
         StringBuffer whereClause = new StringBuffer();
         StringBuffer orderClause = new StringBuffer();
+        if (!isEntityClass(entityClass)) {
+            throw new SlxException(Tmodule.JPA, Texception.JPA_NO_ENTITY, "JPA DataSource no configured Entity bean");
+        }
         DSResponse __return = new DSResponseImpl();
         __return.getContext().setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
@@ -701,14 +713,14 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                             fieldName.replace('/', '.');
                         if (value == null) {
                             if (isNotNullAndEmpty(whereClause))
-                                whereClause.append(" and ");
+                                whereClause.append(" AND ");
                             whereClause.append(entityName).append(".").append(fieldName).append(" is null");
 
                         } else if (value instanceof List) {
                             List<?> valueList = (List<?>) value;
                             if (valueList.size() > 0) {
                                 if (!isNotNullAndEmpty(whereClause))
-                                    whereClause.append(" and ");
+                                    whereClause.append(" AND ");
                                 whereClause.append("(");
                                 Class<?> ftype = DataUtil.getPropertyType(entityClass, fieldName);
                                 for (int i = 0; i < valueList.size(); i++) {
@@ -724,7 +736,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
 
                         } else {
                             if (DataUtil.isNotNullAndEmpty(whereClause))
-                                whereClause.append(" and ");
+                                whereClause.append(" AND ");
                             if (_ft == Efield.TEXT || _ft == Efield.IMAGE || _ft == Efield.PASSWORD || _ft == Efield.LINK) {
                                 String matchStyle = null;
                                 try {
@@ -777,18 +789,18 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             }// END SORT FIELD LOOP
         }
         // query JPAQL string.
-        StringBuffer jpaQuery = new StringBuffer().append("select ").append(entityName).append(" from ").append(
+        StringBuffer jpaQuery = new StringBuffer().append("SELECT ").append(entityName).append(" FROM ").append(
             useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
         // result count JPAQL string.
-        StringBuffer jpaCountQ = new StringBuffer().append("select count (").append(
-            data.getPrimaryKey() == null ? entityName : entityName + "." + data.getPrimaryKey()).append(") from ").append(
+        StringBuffer jpaCountQ = new StringBuffer().append("SELECT COUNT (").append(
+            data.getPrimaryKey() == null ? entityName : entityName + "." + data.getPrimaryKey()).append(") FROM ").append(
             useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
         if (DataUtil.isNotNullAndEmpty(whereClause)) {
-            jpaQuery.append(" where ").append(whereClause);
-            jpaCountQ.append(" where ").append(whereClause);
+            jpaQuery.append(" WHERE ").append(whereClause);
+            jpaCountQ.append(" WHERE ").append(whereClause);
         }
         if (DataUtil.isNotNullAndEmpty(orderClause)) {
-            jpaQuery.append(" order by ").append(orderClause);
+            jpaQuery.append(" ORDER BY ").append(orderClause);
         }
         if (log.isTraceEnabled())
             log.trace("JPA-Query String:" + jpaQuery);
@@ -935,7 +947,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            entityManager.refresh(attached);
+            entityManager.merge(attached);
             _return.add(attached);
             i++;
             if (i % batchsize == 0) {

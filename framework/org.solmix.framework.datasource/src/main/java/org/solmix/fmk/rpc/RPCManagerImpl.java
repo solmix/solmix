@@ -307,7 +307,7 @@ public class RPCManagerImpl implements RPCManager
                     requestNum++;
                     if (operation.getAppID() != null) {
                         DSRequest dsRequest = new DSRequestImpl(operation, context);
-                        dsRequest.getContext().setFreeOnExecute(freeOnExcute);
+                        dsRequest.setFreeOnExecute(freeOnExcute);
                         dsRequest.getContext().setIsClientRequest(true);
                         dsRequest.setRPC(this);
                         // authentication
@@ -445,271 +445,273 @@ public class RPCManagerImpl implements RPCManager
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void completeResponse() throws SlxException {
-        /**
-         * loop requests to free resource.because some request support transaction,so it's datasource is not free no
-         * execute ,but now a RPC session is complete,the DataSource borrow from PoolManager must return .
-         */
-        for (Object request : requests) {
-            // process DSRequest
-            if (request instanceof DSRequest) {
-                DSRequest dsRequest = (DSRequest) request;
-                if (!dsRequest.getContext().isFreeOnExecute()) {
-                    dsRequest.freeResources();
-                }
-                DSResponse response = (DSResponse) responseMap.get(request);
-
-                if (response instanceof HasRPCHandler) {
-                    ((HasRPCHandler) response).handler(this, dsRequest, response);
-                    // Only can handle one DsRequest.
-                    return;
-
-                }
-            }
-        }
-        // process file download
-        if (data.getIsDownload()) {
-            String mimeType = null;
-            try {
-                mimeType = ServletTools.mimeTypeForContext(context);
-            } catch (Exception e) {
-                throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_MIME_TYPE_ERROR, e);
-            }
-            if (mimeType != null)
-                context.setContentType(mimeType);
-            DSRequest dsRequest = (DSRequest) getRequests().get(0);
-            DSResponse dsResponse = (DSResponse) responseMap.get(dsRequest);
-            Map data = (Map) dsResponse.getContext().getData();
-            String fileName = dsRequest.getContext().getDownloadFileName();
-            String fieldName = dsRequest.getContext().getDownloadFieldName();
-            long contentLength = Long.valueOf(data.get((new StringBuilder()).append(fieldName).append("_filesize").toString()).toString()).longValue();
-            InputStream is = (InputStream) data.get(fieldName);
-            String fileNameEncoding = encodeParameter("fileName", fileName);
-            if (dsRequest.getContext().getOperationType() == Eoperation.DOWNLOAD_FILE)
-                context.getResponse().addHeader("content-disposition",
-                    (new StringBuilder()).append("attachment; ").append(fileNameEncoding).toString());
-            else
-                context.getResponse().addHeader("content-disposition", (new StringBuilder()).append("inline; ").append(fileNameEncoding).toString());
-            context.getResponse().setContentLength((int) contentLength);
-            try {
-                OutputStream os = context.getResponse().getOutputStream();
-                IOUtil.copyStreams(is, os);
-                os.flush();
-            } catch (IOException e) {
-                throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
-            }
-            return;
-        }// end isdownlaod.
-
-        // export process
-        if (data.getIsExport()) {
-            DSRequest dsRequest = (DSRequest) getRequests().get(0);
-            DSResponse dsResponse = (DSResponse) responseMap.get(dsRequest);
-            // put request export relative info to response.
-            processExport(dsRequest, dsResponse);
-            // used filter from datasource.if not ,can used dsResponse.getContext().getDataList(Map.class);
-            List<Map<Object, Object>> data = dsResponse.getRecords();
-
-            Map<String, String> fieldMap = new HashMap<String, String>();
-            DataSource ds = dsResponse.getDataSource() == null ? dsRequest.getDataSource() : dsResponse.getDataSource();
-            List<String> fieldNames = dsResponse.getContext().getExportFields();
-            List<String> finalFields = new ArrayList<String>();
-            // if no defined export fields used datasource's fields.
-            if (fieldNames == null || fieldNames.isEmpty())
-                fieldNames = ds.getContext().getFieldNames();
-            EexportAs exportAs = EexportAs.fromValue(dsResponse.getContext().getExportAs());
-            String separatorChar = dsResponse.getContext().getExportTitleSeparatorChar();
-            List<String> efields = dsResponse.getContext().getExportFields();
-            // List<String> efieldName = dsResponse.getContext().gete
-            if (efields == null) {
-                ToperationBinding __op = DataTools.getOperationBindingFromDSByRequest(ds, dsRequest);
-                if (__op != null) {
-                    String fields = __op.getExport() != null ? __op.getExport().getExportFields() : null;
-                    efields = DataUtil.isNotNullAndEmpty(fields) ? DataUtil.simpleSplit(fields, ",") : null;
-                }
-            }
-            // loop fieldName.
-            for (int i = 0; i < fieldNames.size(); i++) {
-                String fieldName = fieldNames.get(i);
-                String fieldTitle = null;
-                Tfield field = ds.getContext().getField(fieldName);
-                if (field != null && !field.isHidden() && (field.isCanExport() == null || field.isCanExport())) {
-                    fieldTitle = field.getTitle();
-                    if (fieldTitle == null) {
-                        fieldTitle = fieldName;
+        try {
+            for (Object request : requests) {
+                // process DSRequest
+                if (request instanceof DSRequest) {
+                    DSResponse response = (DSResponse) responseMap.get(request);
+                    if (response instanceof HasRPCHandler) {
+                        ((HasRPCHandler) response).handler(this, (DSRequest)request, response);
+                        // Only can handle one DsRequest.
+                        return;
                     }
-                    if (exportAs == EexportAs.XML) {
-                        if (separatorChar == null)
-                            separatorChar = "";
-                        fieldTitle = fieldTitle.replaceAll("[$&<>() ]", separatorChar);
-                    }
-                    fieldMap.put(fieldName, fieldTitle);
-                    finalFields.add(fieldName);
                 }
             }
-            if (efields == null) {
-                efields = finalFields;
-            }
-            int lineBreakStyleId = 4;
-            if (dsResponse.getContext().getLineBreakStyle() != null) {
-                String lineBreakStyle = dsResponse.getContext().getLineBreakStyle().toLowerCase();
-                lineBreakStyleId = lineBreakStyle.equals("mac") ? 1 : ((int) (lineBreakStyle.equals("unix") ? 2
-                    : ((int) (lineBreakStyle.equals("dos") ? 3 : 4))));
-            }
-
-            String delimiter = dsResponse.getContext().getExportDelimiter();
-            if (delimiter == null || delimiter == "")
-                delimiter = ",";
-            // get export provider.
-            Map<String, Object> conf = new HashMap<String, Object>();
-            conf.put(IExport.LINE_BREAK_STYLE, lineBreakStyleId);
-            conf.put(IExport.EXPORT_DELIMITER, delimiter);
-            conf.put(IExport.ORDER, efields);
-            String exportHeader = dsResponse.getContext().getExportHeader();
-            if (exportHeader != null) {
-                conf.put(IExport.EXPORT_HEADER_STRING, exportHeader);
-            }
-            String exportFooter = dsResponse.getContext().getExportFooter();
-            if (exportFooter != null) {
-                conf.put(IExport.EXPORT_FOOTER_STRING, exportFooter);
-            }
-            IExport export = ExportManagerImpl.get(exportAs, conf);
-            try {
-                ServletOutputStream os = context.getResponse().getOutputStream();
-                BufferedOutputStream bufferedOS = new BufferedOutputStream(os);
-                String fileNameEncoding = encodeParameter("filename", dsResponse.getContext().getExportFilename());
-                if (dsResponse.getContext().getExportDisplay().equals("download")) {
-                    context.getResponse().addHeader("content-disposition", "attachment;" + fileNameEncoding);
-                    String contentType = null;
-                    switch (exportAs) {
-                        case XML: // '\003'
-                            contentType = "unknown";
-                            break;
-
-                        case JSON: // '\002'
-                            contentType = "application/json";
-                            break;
-
-                        case XLS: // '\004'
-                            contentType = "application/vnd.ms-excel";
-                            break;
-
-                        case OOXML: // '\005'
-                            contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                            break;
-
-                        case CSV: // '\001'
-                            contentType = "text/comma-separated-values";
-                            break;
-
-                        default:
-                            contentType = "text/csv";
-                            break;
-                    }
-                    context.setContentType(contentType);
-                } else {
+            // process file download
+            if (data.getIsDownload()) {
+                String mimeType = null;
+                try {
+                    mimeType = ServletTools.mimeTypeForContext(context);
+                } catch (Exception e) {
+                    throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_MIME_TYPE_ERROR, e);
+                }
+                if (mimeType != null)
+                    context.setContentType(mimeType);
+                DSRequest dsRequest = (DSRequest) getRequests().get(0);
+                DSResponse dsResponse = (DSResponse) responseMap.get(dsRequest);
+                Map data = (Map) dsResponse.getContext().getData();
+                String fileName = dsRequest.getContext().getDownloadFileName();
+                String fieldName = dsRequest.getContext().getDownloadFieldName();
+                long contentLength = Long.valueOf(data.get((new StringBuilder()).append(fieldName).append("_filesize").toString()).toString()).longValue();
+                InputStream is = (InputStream) data.get(fieldName);
+                String fileNameEncoding = encodeParameter("fileName", fileName);
+                if (dsRequest.getContext().getOperationType() == Eoperation.DOWNLOAD_FILE)
+                    context.getResponse().addHeader("content-disposition",
+                        (new StringBuilder()).append("attachment; ").append(fileNameEncoding).toString());
+                else
                     context.getResponse().addHeader("content-disposition",
                         (new StringBuilder()).append("inline; ").append(fileNameEncoding).toString());
+                context.getResponse().setContentLength((int) contentLength);
+                try {
+                    OutputStream os = context.getResponse().getOutputStream();
+                    IOUtil.copyStreams(is, os);
+                    os.flush();
+                } catch (IOException e) {
+                    throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
                 }
-                export.exportResultSet(data, fieldMap, bufferedOS);
-                // String streamData = writer.toString(); int contentLength = streamData.length();
-                // context.getResponse().setContentLength(contentLength);
-                bufferedOS.flush();
-                os.flush();
+                return;
+            }// end isdownlaod.
+
+            // export process
+            if (data.getIsExport()) {
+                DSRequest dsRequest = (DSRequest) getRequests().get(0);
+                DSResponse dsResponse = (DSResponse) responseMap.get(dsRequest);
+                // put request export relative info to response.
+                processExport(dsRequest, dsResponse);
+                // used filter from datasource.if not ,can used dsResponse.getContext().getDataList(Map.class);
+                List<Map<Object, Object>> data = dsResponse.getRecords();
+
+                Map<String, String> fieldMap = new HashMap<String, String>();
+                DataSource ds = dsResponse.getDataSource() == null ? dsRequest.getDataSource() : dsResponse.getDataSource();
+                List<String> fieldNames = dsResponse.getContext().getExportFields();
+                List<String> finalFields = new ArrayList<String>();
+                // if no defined export fields used datasource's fields.
+                if (fieldNames == null || fieldNames.isEmpty())
+                    fieldNames = ds.getContext().getFieldNames();
+                EexportAs exportAs = EexportAs.fromValue(dsResponse.getContext().getExportAs());
+                String separatorChar = dsResponse.getContext().getExportTitleSeparatorChar();
+                List<String> efields = dsResponse.getContext().getExportFields();
+                // List<String> efieldName = dsResponse.getContext().gete
+                if (efields == null) {
+                    ToperationBinding __op = DataTools.getOperationBindingFromDSByRequest(ds, dsRequest);
+                    if (__op != null) {
+                        String fields = __op.getExport() != null ? __op.getExport().getExportFields() : null;
+                        efields = DataUtil.isNotNullAndEmpty(fields) ? DataUtil.simpleSplit(fields, ",") : null;
+                    }
+                }
+                // loop fieldName.
+                for (int i = 0; i < fieldNames.size(); i++) {
+                    String fieldName = fieldNames.get(i);
+                    String fieldTitle = null;
+                    Tfield field = ds.getContext().getField(fieldName);
+                    if (field != null && !field.isHidden() && (field.isCanExport() == null || field.isCanExport())) {
+                        fieldTitle = field.getTitle();
+                        if (fieldTitle == null) {
+                            fieldTitle = fieldName;
+                        }
+                        if (exportAs == EexportAs.XML) {
+                            if (separatorChar == null)
+                                separatorChar = "";
+                            fieldTitle = fieldTitle.replaceAll("[$&<>() ]", separatorChar);
+                        }
+                        fieldMap.put(fieldName, fieldTitle);
+                        finalFields.add(fieldName);
+                    }
+                }
+                if (efields == null) {
+                    efields = finalFields;
+                }
+                int lineBreakStyleId = 4;
+                if (dsResponse.getContext().getLineBreakStyle() != null) {
+                    String lineBreakStyle = dsResponse.getContext().getLineBreakStyle().toLowerCase();
+                    lineBreakStyleId = lineBreakStyle.equals("mac") ? 1 : ((int) (lineBreakStyle.equals("unix") ? 2
+                        : ((int) (lineBreakStyle.equals("dos") ? 3 : 4))));
+                }
+
+                String delimiter = dsResponse.getContext().getExportDelimiter();
+                if (delimiter == null || delimiter == "")
+                    delimiter = ",";
+                // get export provider.
+                Map<String, Object> conf = new HashMap<String, Object>();
+                conf.put(IExport.LINE_BREAK_STYLE, lineBreakStyleId);
+                conf.put(IExport.EXPORT_DELIMITER, delimiter);
+                conf.put(IExport.ORDER, efields);
+                String exportHeader = dsResponse.getContext().getExportHeader();
+                if (exportHeader != null) {
+                    conf.put(IExport.EXPORT_HEADER_STRING, exportHeader);
+                }
+                String exportFooter = dsResponse.getContext().getExportFooter();
+                if (exportFooter != null) {
+                    conf.put(IExport.EXPORT_FOOTER_STRING, exportFooter);
+                }
+                IExport export = ExportManagerImpl.get(exportAs, conf);
+                try {
+                    ServletOutputStream os = context.getResponse().getOutputStream();
+                    BufferedOutputStream bufferedOS = new BufferedOutputStream(os);
+                    String fileNameEncoding = encodeParameter("filename", dsResponse.getContext().getExportFilename());
+                    if (dsResponse.getContext().getExportDisplay().equals("download")) {
+                        context.getResponse().addHeader("content-disposition", "attachment;" + fileNameEncoding);
+                        String contentType = null;
+                        switch (exportAs) {
+                            case XML: // '\003'
+                                contentType = "unknown";
+                                break;
+
+                            case JSON: // '\002'
+                                contentType = "application/json";
+                                break;
+
+                            case XLS: // '\004'
+                                contentType = "application/vnd.ms-excel";
+                                break;
+
+                            case OOXML: // '\005'
+                                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                                break;
+
+                            case CSV: // '\001'
+                                contentType = "text/comma-separated-values";
+                                break;
+
+                            default:
+                                contentType = "text/csv";
+                                break;
+                        }
+                        context.setContentType(contentType);
+                    } else {
+                        context.getResponse().addHeader("content-disposition",
+                            (new StringBuilder()).append("inline; ").append(fileNameEncoding).toString());
+                    }
+                    export.exportResultSet(data, fieldMap, bufferedOS);
+                    // String streamData = writer.toString(); int contentLength = streamData.length();
+                    // context.getResponse().setContentLength(contentLength);
+                    bufferedOS.flush();
+                    os.flush();
+                } catch (IOException e) {
+                    throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
+                }
+                return;
+            }// end Export process
+
+            boolean isXMLHttp = context.getResponse() != null && isXmlHttp(context.getRequest());
+            String restDataForm = getDataformat(context.getRequest());
+            boolean isRest = DataUtil.booleanValue(data.isRest());
+
+            String contentType = isXMLHttp ? "text/plain" : "text/html";
+            if (data.getCharset() != null && !data.getCharset().trim().equals(""))
+                contentType = (new StringBuilder()).append(contentType).append("; charset=").append(data.getCharset()).toString();
+            context.setContentType(contentType);
+            if (log.isDebugEnabled())
+                log.debug((new StringBuilder()).append("Content type for RPC transaction: ").append(contentType).toString());
+            Writer _out;
+            if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_SHOW_CLIENT_OUTPUT, Boolean.FALSE))
+                _out = new StringWriter();
+            else
+                _out = context.getOut();
+            boolean _failure = oneFailureAllFailure();
+            try {
+                if (_failure)
+                    onFailure();
+                else
+                    onSuccess();
+            } catch (Exception e) {
+                log.warn(DataUtil.getStackTrace(e));
+            }
+            //
+            List<Object> orderedResponseList = new ArrayList<Object>();
+            for (Object request : requests) {
+                Object resp = responseMap.get(request);
+                if (resp == null)
+                    throw new SlxException(Tmodule.DATASOURCE, Texception.DS_NO_RESPONSE_DATA, (new StringBuilder()).append(
+                        "No response for request: ").append(request.toString()).toString());
+                if (resp instanceof RPCResponse) {
+                    Map<String, Object> payload = new HashMap<String, Object>();
+                    payload.put("data", ((RPCResponse) resp).getData());
+                    payload.put("status", new Integer(((RPCResponse) resp).getStatus()));
+                    orderedResponseList.add(payload);
+                    if (((RPCResponse) resp).getStatus() < 0)
+                        _failure = true;
+                } else if (resp instanceof DSResponse) {
+                    DSResponse dsResponse = (DSResponse) resp;
+                    if (dsResponse.getContext().isRequestConnectionClose())
+                        data.setCloseConnection(true);
+                    if (dsResponse.getContext().getStatus().value() < 0)
+                        _failure = true;
+                    Object jsResponse = dsResponse.getJSResponse();
+                    // DSRequest dsRequest = (DSRequest) request;
+
+                    orderedResponseList.add(jsResponse);
+                }
+            }// END LOOP REQUESTS.
+            try {
+                if (!isXMLHttp || "json".equals(restDataForm)) {
+                    context.setNoCacheHeaders();
+
+                    if (!isRest)
+                        _out.write(structuredRPCStart);
+
+                    if (isRest) {
+                        Map restContainer = new LinkedMap();
+                        restContainer.put("response", orderedResponseList.get(0));
+                        jsParser.toJSON(_out, restContainer);
+                    } else {
+                        jsParser.toJSON(_out, orderedResponseList);
+                    }
+                    if (!isRest)
+                        _out.write(structuredRPCEnd);
+                } else if (isXMLHttp || "xml".equals(restDataForm)) {
+
+                } else {
+                    iframeWrite(_out, true, orderedResponseList);
+                }
+                _out.flush();
+                if (_out instanceof StringWriter) {
+                    String output = _out.toString();
+                    int outputSize = output.length();
+                    if (log.isDebugEnabled())
+                        log.debug((new StringBuilder()).append("Uncompressed result size: ").append(outputSize).append(" bytes").toString());
+                    context.getOut().write(output);
+                    context.getOut().flush();
+                    if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_DEVELOPMENT, Boolean.FALSE)) {
+                        log.trace("output String :\n" + _out.toString());
+                    }
+                }
             } catch (IOException e) {
                 throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
             }
-            return;
-        }// end Export process
-
-        boolean isXMLHttp = context.getResponse() != null && isXmlHttp(context.getRequest());
-        String restDataForm = getDataformat(context.getRequest());
-        boolean isRest = DataUtil.booleanValue(data.isRest());
-
-       
-        String contentType = isXMLHttp ? "text/plain" : "text/html";
-        if (data.getCharset() != null && !data.getCharset().trim().equals(""))
-            contentType = (new StringBuilder()).append(contentType).append("; charset=").append(data.getCharset()).toString();
-        context.setContentType(contentType);
-        if (log.isDebugEnabled())
-            log.debug((new StringBuilder()).append("Content type for RPC transaction: ").append(contentType).toString());
-        Writer _out;
-        if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_SHOW_CLIENT_OUTPUT, Boolean.FALSE))
-            _out = new StringWriter();
-        else
-            _out = context.getOut();
-        boolean _failure = oneFailureAllFailure();
-        try {
-            if (_failure)
-                onFailure();
-            else
-                onSuccess();
-        } catch (Exception e) {
-            log.warn(DataUtil.getStackTrace(e));
-        }
-        //
-        List<Object> orderedResponseList = new ArrayList<Object>();
-        for (Object request : requests) {
-            Object resp = responseMap.get(request);
-            if (resp == null)
-                throw new SlxException(Tmodule.DATASOURCE, Texception.DS_NO_RESPONSE_DATA,
-                    (new StringBuilder()).append("No response for request: ").append(request.toString()).toString());
-            if (resp instanceof RPCResponse) {
-                Map<String, Object> payload = new HashMap<String, Object>();
-                payload.put("data", ((RPCResponse) resp).getData());
-                payload.put("status", new Integer(((RPCResponse) resp).getStatus()));
-                orderedResponseList.add(payload);
-                if (((RPCResponse) resp).getStatus() < 0)
-                    _failure = true;
-            } else if (resp instanceof DSResponse) {
-                DSResponse dsResponse = (DSResponse) resp;
-                if (dsResponse.getContext().isRequestConnectionClose())
-                    data.setCloseConnection(true);
-                if (dsResponse.getContext().getStatus().value() < 0)
-                    _failure = true;
-                Object jsResponse = dsResponse.getJSResponse();
-                // DSRequest dsRequest = (DSRequest) request;
-
-                orderedResponseList.add(jsResponse);
-            }
-        }// END LOOP REQUESTS.
-        try {
-
-            if (!isXMLHttp || "json".equals(restDataForm)) {
-                context.setNoCacheHeaders();
-
-                if (!isRest)
-                    _out.write(structuredRPCStart);
-
-                if (isRest) {
-                    Map restContainer = new LinkedMap();
-                    restContainer.put("response", orderedResponseList.get(0));
-                    jsParser.toJSON(_out, restContainer);
-                    // jsTrans.toJS(restContainer, _out);
-                } else {
-                    jsParser.toJSON(_out, orderedResponseList);
-                    // jsTrans.toJS(orderedResponseList, _out);
-                }
-                if (!isRest)
-                    _out.write(structuredRPCEnd);
-            } else if (isXMLHttp || "xml".equals(restDataForm)) {
-
-            } else {
-                iframeWrite(_out, true, orderedResponseList);
-            }
-            _out.flush();
-            if (_out instanceof StringWriter) {
-                String output = _out.toString();
-                int outputSize = output.length();
-                if (log.isDebugEnabled())
-                    log.debug((new StringBuilder()).append("Uncompressed result size: ").append(outputSize).append(" bytes").toString());
-                context.getOut().write(output);
-                context.getOut().flush();
-                if (DatasourceCM.getProperties().getBoolean(DatasourceCM.P_DEVELOPMENT, Boolean.FALSE)) {
-                    log.trace("output String :\n" + _out.toString());
+        } finally {
+            /**
+             * loop requests to free resource.because some request support transaction,so it's datasource is not free no
+             * execute ,but now a RPC session is complete,the DataSource borrow from PoolManager must return .
+             */
+            for (Object request : requests) {
+                // process DSRequest
+                if (request instanceof DSRequest) {
+                    DSRequest dsRequest = (DSRequest) request;
+                    if (!dsRequest.isFreeOnExecute())
+                        dsRequest.freeResources();
                 }
             }
-        } catch (IOException e) {
-            throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
         }
     }
     private boolean oneFailureAllFailure(){

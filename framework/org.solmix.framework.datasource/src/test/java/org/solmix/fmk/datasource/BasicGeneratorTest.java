@@ -56,7 +56,7 @@ public class BasicGeneratorTest
         TdataSource tds = new TdataSource();
         tds.setID("test");
         tds.setServerType(EserverType.FILESYSTEM);
-        tds.setSchemaClass("org.solmix.fmk.datasource.TestDataSourceSchema");
+        tds.setSchemaClass("org.solmix.fmk.datasource.DataSourceSchema");
         tds.setAutoDeriveSchema(true);
         DataSourceData dsd = new DataSourceData(tds);
         try {
@@ -81,7 +81,7 @@ public class BasicGeneratorTest
         TdataSource tds = new TdataSource();
         tds.setID("test");
         tds.setServerType(EserverType.FILESYSTEM);
-        tds.setBean("org.solmix.fmk.datasource.TestDataSourceBean");
+        tds.setBean("org.solmix.fmk.datasource.DataSourceBean");
         tds.setAutoDeriveSchema(true);
         DataSourceData dsd = new DataSourceData(tds);
         try {
