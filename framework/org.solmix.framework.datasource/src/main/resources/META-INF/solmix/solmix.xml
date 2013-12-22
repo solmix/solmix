@@ -17,7 +17,7 @@
 		lazy-init="true">
 		<constructor-arg ref="solmix" />
 	</bean>
-	<bean id="org.solmix.api.rpc.RPCManagerFactory" class="org.solmix.fmk.rpc.RPCManagerFactoryImpl"
+	<bean id="org.solmix.api.call.DSCManagerFactory" class="org.solmix.fmk.call.DSCManagerFactoryImpl"
 		lazy-init="true">
 		<constructor-arg ref="solmix" />
 	</bean>

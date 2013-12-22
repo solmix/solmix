@@ -70,7 +70,7 @@ public abstract class XAOp
                 request.getContext().setValues(values);
             request.getContext().setOperationType(type);
             request.setCanJoinTransaction(true);
-            request.setRPC(rpc);
+            request.setDSCManager(rpc);
         } catch (Exception e) {
             log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" + e.getMessage());
         }

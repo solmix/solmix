@@ -155,13 +155,13 @@ public class DSRequestImpl implements DSRequest
     public DSRequestImpl(DataSource datasource, Eoperation opType, DSCManager rpc2)
     {
         this(datasource, opType, (String) null);
-        setRPC(rpc);
+        setDSCManager(rpc);
     }
 
     public DSRequestImpl(String dataSourceName, Eoperation opType, DSCManager rpc)
     {
         this(dataSourceName, opType, (String) null);
-        setRPC(rpc);
+        setDSCManager(rpc);
     }
 
     /**
@@ -376,7 +376,7 @@ public class DSRequestImpl implements DSRequest
      * @return the rpc
      */
     @Override
-    public DSCManager getRPC() {
+    public DSCManager getDSCManager() {
         return rpc;
     }
 
@@ -384,7 +384,7 @@ public class DSRequestImpl implements DSRequest
      * @param rpc the rpc to set
      */
     @Override
-    public void setRPC(DSCManager rpc) {
+    public void setDSCManager(DSCManager rpc) {
         this.rpc = rpc;
     }
 

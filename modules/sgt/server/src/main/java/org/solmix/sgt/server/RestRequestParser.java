@@ -32,8 +32,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.solmix.api.call.HttpServletRequestParser;
 import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.HttpServletRequestParser;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSourceManager;
@@ -101,7 +101,7 @@ public class RestRequestParser implements HttpServletRequestParser
             if (cf.getValues() != null && cf.getValues().size() > 0)
                 dsrequest.getContext().setValues(cf.getValues());
             dsrequest.getContext().setIsClientRequest(true);
-            dsrequest.setRPC(rpc);
+            dsrequest.setDSCManager(rpc);
             dsrequest.setRequestContext(webContext);
             rpc.addRequest(dsrequest);
 
@@ -145,7 +145,7 @@ public class RestRequestParser implements HttpServletRequestParser
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.setFreeOnExecute(freeOnExecute);
                                 dsr.setCanJoinTransaction(!freeOnExecute);
-                                dsr.setRPC(rpc);
+                                dsr.setDSCManager(rpc);
                                 dsr.setRequestContext(webContext);
                                 rpc.addRequest(dsr);
                             }

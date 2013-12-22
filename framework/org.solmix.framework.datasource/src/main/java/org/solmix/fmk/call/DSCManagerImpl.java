@@ -309,7 +309,7 @@ public class DSCManagerImpl implements DSCManager
                         DSRequest dsRequest = new DSRequestImpl(operation, context);
                         dsRequest.setFreeOnExecute(freeOnExcute);
                         dsRequest.getContext().setIsClientRequest(true);
-                        dsRequest.setRPC(this);
+                        dsRequest.setDSCManager(this);
                         // authentication
                         Boolean auth = (Boolean) context.getRequest().getAttribute("authenticationEnabled");
                         if (Boolean.TRUE.equals(auth)) {
@@ -1269,7 +1269,7 @@ public class DSCManagerImpl implements DSCManager
         if(!transactionStarted){
             throw new SlxException(Tmodule.RPC,Texception.TRANSACTION_NOT_STARTED,"Transaction not started ,you should call method startTransaction()");
         }
-        request.setRPC(this);
+        request.setDSCManager(this);
         request.setCanJoinTransaction(true);
 //        setRequestProcessingStarted(true);
         DSResponse res=null;

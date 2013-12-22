@@ -254,7 +254,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
                 return validationFailure;
             }
             //when used FetchType.LAZY,the transaction must be commit after data send to client.
-            if(req.getContext().getIsClientRequest()){
+            if(DataUtil.booleanValue(req.getContext().getIsClientRequest())){
                 req.setFreeOnExecute(false);
             }
             // if DSRequest not have a DataSource with it,use this by default.
@@ -383,7 +383,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.DSCManagerCompletionCallback.rpc.RPCManagerCompletionCallback#onSuccess(org.solmix.DSCManager.rpc.RPCManager)
+     * @see org.solmix.DSCManagerCompletionCallback.rpc.DSCManagerManagerCompletionCallback#onSuccess(org.solmix.DSCManager.rpc.DSCManagerManager)
      */
     @Override
     public void onSuccess(DSCManager rpcmanager) throws SlxException {
@@ -413,7 +413,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.DSCManagerCompletionCallback.rpc.RPCManagerCompletionCallback#onFailure(org.solmix.DSCManager.rpc.RPCManager, boolean)
+     * @see org.solmix.DSCManagerCompletionCallback.rpc.DSCManagerManagerCompletionCallback#onFailure(org.solmix.DSCManager.rpc.DSCManagerManager, boolean)
      */
     @Override
     public void onFailure(DSCManager rpcmanager, boolean flag) throws SlxException {
@@ -527,7 +527,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 "in the app operation config, datasource must be set to a string or list");
         }
-        if (req.getRPC() != null && this.shouldAutoJoinTransaction(req)) {
+        if (req.getDSCManager() != null && this.shouldAutoJoinTransaction(req)) {
             log.debug("Auto get transaction object!");
             Object obj = this.getTransactionObject(req);
             if (!(holder instanceof EntityManagerHolder)) {
@@ -547,8 +547,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
                     }
                     log.debug("Creating EntityManager, starting transaction and setting it to DSCManager.");
                     holder = new EntityManagerHolder(this, entityManager, transaction);
-                    req.getRPC().getContext().setAttribute(this.getTransactionObjectKey(), holder);
-                    req.getRPC().registerCallback(this);
+                    req.getDSCManager().getContext().setAttribute(this.getTransactionObjectKey(), holder);
+                    req.getDSCManager().registerCallback(this);
                 } else {
                     try {
                         transaction = JPATransaction.getTransaction(getEntityManager());

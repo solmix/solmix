@@ -247,9 +247,9 @@ public class Velocity
         if (_reqData == null)
             return new HashMap<String, Object>();
         Map<String, Object> context;
-        if (dsReq.getRPC() != null) {
-            context = new HashMap<String, Object>(dsReq.getRPC().getContext().getTemplateContext());
-            context.put(RESPONSE_DATA, new ResponseDataHandler(dsReq.getRPC(), dsReq));
+        if (dsReq.getDSCManager() != null) {
+            context = new HashMap<String, Object>(dsReq.getDSCManager().getContext().getTemplateContext());
+            context.put(RESPONSE_DATA, new ResponseDataHandler(dsReq.getDSCManager(), dsReq));
         } else {
             context = new HashMap<String, Object>();
         }

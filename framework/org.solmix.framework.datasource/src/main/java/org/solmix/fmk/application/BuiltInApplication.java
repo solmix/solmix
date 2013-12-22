@@ -321,7 +321,7 @@ public class BuiltInApplication implements Application
         /**
          * Validation request.
          */
-        if (request.getContext().getIsClientRequest() && (_operationType == Eoperation.REMOVE || _operationType == Eoperation.UPDATE)) {
+        if (DataUtil.booleanValue(request.getContext().getIsClientRequest()) && (_operationType == Eoperation.REMOVE || _operationType == Eoperation.UPDATE)) {
             Boolean allowMultiUpdate = Boolean.FALSE;
             ToperationBinding _opBinding = _ds.getContext().getOperationBinding(_operationType, request.getContext().getOperationId());
             if (_opBinding != null)

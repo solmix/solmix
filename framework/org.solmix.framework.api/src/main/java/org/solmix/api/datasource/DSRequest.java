@@ -62,13 +62,13 @@ public interface DSRequest extends RequestType
      * 
      * @return
      */
-    DSCManager getRPC();
+    DSCManager getDSCManager();
 
     DataSource getDataSource() throws SlxException;
 
     void setDataSource(DataSource dataSource);
 
-    void setRPC(DSCManager rpc);
+    void setDSCManager(DSCManager rpc);
 
     /**
      * release datasource

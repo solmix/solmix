@@ -1600,10 +1600,10 @@ protected String getPID(){
             if (tvalue instanceof Connection)
                 conn = (Connection) tvalue;
             if (conn == null && shouldAutoStartTransaction(req, false)) {
-                SQLTransaction.startTransaction(req.getRPC(), driver.getDbName(),connectionManager);
+                SQLTransaction.startTransaction(req.getDSCManager(), driver.getDbName(),connectionManager);
                 conn = (Connection) getTransactionObject(req);
-                if (req != null && req.getRPC() != null)
-                    req.getRPC().registerCallback(this);
+                if (req != null && req.getDSCManager() != null)
+                    req.getDSCManager().registerCallback(this);
             }
             if (conn != null && req != null)
                 req.setJoinTransaction(true);
@@ -1623,11 +1623,11 @@ protected String getPID(){
             return Boolean.TRUE;
         if (autoJoin.toLowerCase().equals("false") || autoJoin.toLowerCase().equals("NONE"))
             return Boolean.FALSE;
-        if (req != null && req.getRPC() != null) {
+        if (req != null && req.getDSCManager() != null) {
             if (autoJoin.equals("FROM_FIRST_CHANGE"))
-                return Boolean.valueOf(req.getRPC().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDSCManager().requestQueueIncludesUpdates());
             if (autoJoin.equals("ANY_CHANGE"))
-                return Boolean.valueOf(req.getRPC().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDSCManager().requestQueueIncludesUpdates());
         }
         return null;
     }
