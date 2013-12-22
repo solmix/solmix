@@ -17,20 +17,13 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
-import org.solmix.api.context.WebContext;
-import org.solmix.api.exception.SlxException;
-
-public interface HttpServletRequestParser
+public class QueueAlreadyStartedException extends Exception
 {
 
-    /**
-     * Parser
-     * 
-     * @param rpcmanager
-     * @param httpservletrequest
-     * @throws Exception
-     */
-    public abstract void parseRequest(RPCManager rpcmanager, WebContext webContext) throws SlxException;
+   public QueueAlreadyStartedException( String msg )
+   {
+      super( msg );
+   }
 }

@@ -37,6 +37,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DSCManagerCompletionCallback;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -55,8 +57,6 @@ import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.TqueryClauses;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
@@ -77,7 +77,7 @@ import org.solmix.sql.internal.SqlCM;
  * @version 0.1.1 2012-12-16 solmix-sql
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, RPCManagerCompletionCallback
+public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, DSCManagerCompletionCallback
 {
 
     private static final Logger log = LoggerFactory.getLogger(SQLDataSource.class.getName());
@@ -1640,10 +1640,10 @@ protected String getPID(){
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManagerCompletionCallback#onFailure(org.solmix.api.rpc.RPCManager, boolean)
+     * @see org.solmix.api.call.DSCManagerCompletionCallback#onFailure(org.solmix.api.call.DSCManager, boolean)
      */
     @Override
-    public void onFailure(RPCManager rpcmanager, boolean isFailed) throws SlxException {
+    public void onFailure(DSCManager rpcmanager, boolean isFailed) throws SlxException {
         if (isFailed)
             SQLTransaction.rollbackTransaction(rpcmanager, driver.getDbName(),connectionManager);
         else
@@ -1655,10 +1655,10 @@ protected String getPID(){
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManagerCompletionCallback#onSuccess(org.solmix.api.rpc.RPCManager)
+     * @see org.solmix.api.call.DSCManagerCompletionCallback#onSuccess(org.solmix.api.call.DSCManager)
      */
     @Override
-    public void onSuccess(RPCManager rpcmanager) throws SlxException {
+    public void onSuccess(DSCManager rpcmanager) throws SlxException {
         SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
         SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
 

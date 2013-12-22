@@ -132,6 +132,8 @@ public class ServiceObject
                 serverObjectInstance = ServiceUtil.getOsgiJndiService(serverObjectInterface, serverObjectFilter);
             }
                 break;
+            default:
+                break;
         }
         if (serverObjectClass == null)
             serverObjectClass = serverObjectInstance.getClass();
@@ -187,6 +189,8 @@ public class ServiceObject
                     return serverObjectInterface + serverObjectFilter;
                 case BEAN:
                     return serverObjectInterface;
+                default:
+                    break;
             }
         }
         return null;

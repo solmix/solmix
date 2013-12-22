@@ -17,13 +17,23 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
-public class QueueAlreadyStartedException extends Exception
+import org.solmix.api.exception.SlxException;
+
+public interface DSCManagerCompletionCallback
 {
 
-   public QueueAlreadyStartedException( String msg )
-   {
-      super( msg );
-   }
+   /**
+    * @param rpcmanager
+    * @throws Exception
+    */
+   void onSuccess( DSCManager rpcmanager ) throws SlxException;
+
+   /**
+    * @param rpcmanager
+    * @param flag
+    * @throws Exception
+    */
+   void onFailure( DSCManager rpcmanager, boolean flag ) throws SlxException;
 }

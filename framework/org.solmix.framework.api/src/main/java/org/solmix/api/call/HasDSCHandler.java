@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * SOLMIX PROJECT
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,30 +17,22 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
-import java.util.List;
+import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.exception.SlxException;
 
 /**
+ * If used this interface to handle rpc,One {@link DSCManager} only can process one DSRequest.
  * 
- * @version 110035
+ * @author solmix
+ * @version 0.1.1 2013-1-10
  */
-public interface RPCRequest extends RequestType
+
+public interface HasDSCHandler
 {
 
-   Object getData();
+    void handler(DSCManager rpc, DSRequest req, DSResponse resp) throws SlxException;
 
-   void setData( Object data );
-
-   boolean isDMI();
-
-   String getAppID();
-
-   String getServerObjectID();
-
-   String getMethodName();
-
-   List getMethodArguments();
-
-   RPCResponse execute() throws Exception;
 }

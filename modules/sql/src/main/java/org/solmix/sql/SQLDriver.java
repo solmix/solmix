@@ -38,6 +38,7 @@ import java.util.Map;
 import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -45,7 +46,6 @@ import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
@@ -324,7 +324,7 @@ public abstract class SQLDriver
         Connection __currentConn;
         Connection __userOrAutoConn = null;
         if (req != null) {
-            RPCManager rpc = req.getRPC();
+            DSCManager rpc = req.getRPC();
             // is rpc
             if (rpc != null) {
                 __userOrAutoConn = ((SQLDataSource) req.getDataSource()).getTransactionalConnection(req);
@@ -459,7 +459,7 @@ public abstract class SQLDriver
             dbName = thisConfig.getString("defaultDatabase", "");
         Connection __userOrAutoConn = null;
         if (req != null) {
-            RPCManager rpc = req.getRPC();
+            DSCManager rpc = req.getRPC();
             if (rpc != null) {
                 SQLDataSource ds = (SQLDataSource) req.getDataSource();
                 __userOrAutoConn = ds.getTransactionalConnection(req);

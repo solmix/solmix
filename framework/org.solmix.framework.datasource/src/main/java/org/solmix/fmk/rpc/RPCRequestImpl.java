@@ -21,8 +21,8 @@ package org.solmix.fmk.rpc;
 
 import java.util.List;
 
-import org.solmix.api.rpc.RPCRequest;
-import org.solmix.api.rpc.RPCResponse;
+import org.solmix.api.call.RPCRequest;
+import org.solmix.api.call.RPCResponse;
 
 /**
  * 
@@ -34,7 +34,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#execute()
+    * @see org.solmix.api.call.RPCRequest#execute()
     */
    @Override
    public RPCResponse execute() throws Exception
@@ -46,7 +46,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#getAppID()
+    * @see org.solmix.api.call.RPCRequest#getAppID()
     */
    @Override
    public String getAppID()
@@ -58,7 +58,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#getData()
+    * @see org.solmix.api.call.RPCRequest#getData()
     */
    @Override
    public Object getData()
@@ -70,7 +70,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#getMethodArguments()
+    * @see org.solmix.api.call.RPCRequest#getMethodArguments()
     */
    @Override
    public List getMethodArguments()
@@ -82,7 +82,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#getMethodName()
+    * @see org.solmix.api.call.RPCRequest#getMethodName()
     */
    @Override
    public String getMethodName()
@@ -94,7 +94,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#getServerObjectID()
+    * @see org.solmix.api.call.RPCRequest#getServerObjectID()
     */
    @Override
    public String getServerObjectID()
@@ -106,7 +106,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#isDMI()
+    * @see org.solmix.api.call.RPCRequest#isDMI()
     */
    @Override
    public boolean isDMI()
@@ -118,7 +118,7 @@ public class RPCRequestImpl implements RPCRequest
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCRequest#setData(java.lang.Object)
+    * @see org.solmix.api.call.RPCRequest#setData(java.lang.Object)
     */
    @Override
    public void setData( Object data )

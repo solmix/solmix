@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ import org.solmix.api.types.TransactionPolicy;
  * @since 0.0.1
  * @version 0.1.1 2011-1-1 solmix-api
  */
-public interface RPCManager
+public interface DSCManager
 {
 
     void setContext(RPCManagerData data);
@@ -69,7 +69,7 @@ public interface RPCManager
 
     void sendXMLString(RPCRequest rpcRequest, String xml) throws SlxException;
 
-    void registerCallback(RPCManagerCompletionCallback callback);
+    void registerCallback(DSCManagerCompletionCallback callback);
 
     RPCRequest getRequest();
 

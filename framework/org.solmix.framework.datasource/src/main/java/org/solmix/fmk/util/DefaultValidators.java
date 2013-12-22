@@ -42,6 +42,7 @@ import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -53,7 +54,6 @@ import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.Tservice;
 import org.solmix.api.jaxb.Tvalidator;
 import org.solmix.api.jaxb.Tvalue;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
@@ -894,7 +894,7 @@ public class DefaultValidators
                         new ReflectionArgument(HttpServletResponse.class, web.getResponse(), false, false),
                         new ReflectionArgument(ServletContext.class, web.getServletContext(), false, false),
                         new ReflectionArgument(HttpSession.class, web.getRequest().getSession(true), false, false),
-                        new ReflectionArgument(RPCManager.class, context.getRpcManager(), false, false) };
+                        new ReflectionArgument(DSCManager.class, context.getRpcManager(), false, false) };
                     returnValue = Reflection.adaptArgsAndInvoke(serverObjectInstance, method, requiredArgs, optionalArgs);
                 } else {
                     ReflectionArgument optionalArgs[] = { new ReflectionArgument(DataSource.class, ds, false, false),

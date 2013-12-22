@@ -41,6 +41,8 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DSCManagerCompletionCallback;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -55,8 +57,6 @@ import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerCompletionCallback;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
@@ -75,7 +75,7 @@ import org.solmix.fmk.util.DataTools;
  * @version $Id$ 2011-6-6
  */
 
-public class JPADataSource extends BasicDataSource implements DataSource, RPCManagerCompletionCallback
+public class JPADataSource extends BasicDataSource implements DataSource, DSCManagerCompletionCallback
 {
 
     private final static Logger log = LoggerFactory.getLogger(JPADataSource.class.getName());
@@ -383,10 +383,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.services.rpc.RPCManagerCompletionCallback#onSuccess(org.solmix.services.rpc.RPCManager)
+     * @see org.solmix.DSCManagerCompletionCallback.rpc.RPCManagerCompletionCallback#onSuccess(org.solmix.DSCManager.rpc.RPCManager)
      */
     @Override
-    public void onSuccess(RPCManager rpcmanager) throws SlxException {
+    public void onSuccess(DSCManager rpcmanager) throws SlxException {
         Object obj = rpcmanager.getContext().getAttribute(this.getTransactionObjectKey());
         if (obj == null) {
             log.warn("Transaction Object is null !");
@@ -413,10 +413,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.services.rpc.RPCManagerCompletionCallback#onFailure(org.solmix.services.rpc.RPCManager, boolean)
+     * @see org.solmix.DSCManagerCompletionCallback.rpc.RPCManagerCompletionCallback#onFailure(org.solmix.DSCManager.rpc.RPCManager, boolean)
      */
     @Override
-    public void onFailure(RPCManager rpcmanager, boolean flag) throws SlxException {
+    public void onFailure(DSCManager rpcmanager, boolean flag) throws SlxException {
         Object obj = rpcmanager.getContext().getAttribute(this.getTransactionObjectKey());
         if (obj == null) {
             log.warn("Transaction Object is null !");
@@ -545,7 +545,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, RPCMan
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
-                    log.debug("Creating EntityManager, starting transaction and setting it to RPCManager.");
+                    log.debug("Creating EntityManager, starting transaction and setting it to DSCManager.");
                     holder = new EntityManagerHolder(this, entityManager, transaction);
                     req.getRPC().getContext().setAttribute(this.getTransactionObjectKey(), holder);
                     req.getRPC().registerCallback(this);

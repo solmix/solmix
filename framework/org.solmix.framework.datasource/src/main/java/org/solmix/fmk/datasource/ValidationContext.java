@@ -24,12 +24,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.LoggerFactory;
-
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.Context;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.util.ErrorReport;
@@ -141,7 +140,7 @@ public class ValidationContext extends HashMap
         this.currentRecord = currentRecord;
     }
 
-    RPCManager rpcManager;
+    DSCManager rpcManager;
 
     Context requestContext;
 
@@ -304,14 +303,14 @@ public class ValidationContext extends HashMap
     /**
      * @return the rpcManager
      */
-    public RPCManager getRpcManager() {
+    public DSCManager getRpcManager() {
         return rpcManager;
     }
 
     /**
      * @param rpcManager the rpcManager to set
      */
-    public void setRpcManager(RPCManager rpcManager) {
+    public void setRpcManager(DSCManager rpcManager) {
         this.rpcManager = rpcManager;
     }
 

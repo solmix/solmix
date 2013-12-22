@@ -41,6 +41,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DSCManagerCompletionCallback;
+import org.solmix.api.call.HasDSCHandler;
+import org.solmix.api.call.HttpServletRequestParser;
+import org.solmix.api.call.RPCRequest;
+import org.solmix.api.call.RPCResponse;
+import org.solmix.api.call.RequestType;
+import org.solmix.api.call.ResponseType;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.RPCManagerData;
@@ -57,14 +65,6 @@ import org.solmix.api.jaxb.TfieldNameValue;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.rpc.HasRPCHandler;
-import org.solmix.api.rpc.HttpServletRequestParser;
-import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerCompletionCallback;
-import org.solmix.api.rpc.RPCRequest;
-import org.solmix.api.rpc.RPCResponse;
-import org.solmix.api.rpc.RequestType;
-import org.solmix.api.rpc.ResponseType;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.api.serialize.XMLParser;
@@ -98,10 +98,10 @@ import org.solmix.fmk.velocity.Velocity;
  * @since 0.0.1
  * @version 110040 2011-1-1 solmix-ds
  */
-public class RPCManagerImpl implements RPCManager
+public class DSCManagerImpl implements DSCManager
 {
 
-    private static Logger log = LoggerFactory.getLogger(RPCManagerImpl.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DSCManagerImpl.class.getName());
 
     private static final String structuredRPCStart = "//isc_RPCResponseStart-->";
 
@@ -111,7 +111,7 @@ public class RPCManagerImpl implements RPCManager
 
     private List<RequestType> requests;
 
-    private final HashSet<RPCManagerCompletionCallback> callbacks;
+    private final HashSet<DSCManagerCompletionCallback> callbacks;
 
     private  RPCManagerData data;
 
@@ -128,28 +128,28 @@ public class RPCManagerImpl implements RPCManager
     private Boolean requestProcessingStarted;
     private boolean transactionStarted;
 
-    public RPCManagerImpl() throws SlxException
+    public DSCManagerImpl() throws SlxException
     {
         JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
         jsParser = jsFactory.get();
-        callbacks = new HashSet<RPCManagerCompletionCallback>();
+        callbacks = new HashSet<DSCManagerCompletionCallback>();
         data = null;
         setContext(new RPCManagerData());
         setTransactionPolicy(TransactionPolicy.ANY_CHANGE);
         setRequestProcessingStarted(false);
     }
 
-    public RPCManagerImpl(WebContext context) throws SlxException
+    public DSCManagerImpl(WebContext context) throws SlxException
     {
         this(context, null);
     }
 
-    public RPCManagerImpl(WebContext context, HttpServletRequestParser parser) throws SlxException
+    public DSCManagerImpl(WebContext context, HttpServletRequestParser parser) throws SlxException
     {
         this.context = context;
         JSParserFactory jsFactory = JSParserFactoryImpl.getInstance();
         jsParser = jsFactory.get();
-        callbacks = new HashSet<RPCManagerCompletionCallback>();
+        callbacks = new HashSet<DSCManagerCompletionCallback>();
         responseMap = new HashMap<RequestType, ResponseType>();
         data = null;
         setContext(new RPCManagerData());
@@ -170,7 +170,7 @@ public class RPCManagerImpl implements RPCManager
             data.addToTemplateContext("servletRequest", new ServletRequestAttributeMapFacade(request));
             data.addToTemplateContext("session", new SessionAttributeMapFacade(request.getSession()));
         } else if (request == null && context.getRequest() != null) {
-            throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_UPLOAD_FILE, "RPCManager constructor was passed a null HttpServletRequest");
+            throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_UPLOAD_FILE, "DSCManager constructor was passed a null HttpServletRequest");
         }
 
     }
@@ -411,7 +411,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(org.solmix.api.datasource.DSRequest,
+     * @see org.solmix.api.call.DSCManager#send(org.solmix.api.datasource.DSRequest,
      *      org.solmix.api.datasource.DSResponse)
      */
     @Override
@@ -450,8 +450,8 @@ public class RPCManagerImpl implements RPCManager
                 // process DSRequest
                 if (request instanceof DSRequest) {
                     DSResponse response = (DSResponse) responseMap.get(request);
-                    if (response instanceof HasRPCHandler) {
-                        ((HasRPCHandler) response).handler(this, (DSRequest)request, response);
+                    if (response instanceof HasDSCHandler) {
+                        ((HasDSCHandler) response).handler(this, (DSRequest)request, response);
                         // Only can handle one DsRequest.
                         return;
                     }
@@ -826,7 +826,7 @@ public class RPCManagerImpl implements RPCManager
             }
         }
         if (callbacks != null)
-            for (RPCManagerCompletionCallback callback : callbacks) {
+            for (DSCManagerCompletionCallback callback : callbacks) {
                 callback.onFailure(this, _transactionFailure);
             }
     }
@@ -841,7 +841,7 @@ public class RPCManagerImpl implements RPCManager
     }
 
     protected void onSuccess() throws Exception {
-        for (RPCManagerCompletionCallback callback : callbacks) {
+        for (DSCManagerCompletionCallback callback : callbacks) {
             callback.onSuccess(this);
         }
     }
@@ -941,7 +941,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(org.solmix.api.datasource.DSRequest, java.lang.Object)
+     * @see org.solmix.api.call.DSCManager#send(org.solmix.api.datasource.DSRequest, java.lang.Object)
      */
     @Override
     public void send(DSRequest dsRequest, Object data) throws SlxException {
@@ -954,7 +954,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(java.lang.Object)
+     * @see org.solmix.api.call.DSCManager#send(java.lang.Object)
      */
     @Override
     public void send(Object data) throws SlxException {
@@ -964,7 +964,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(org.solmix.api.rpc.RPCRequest, java.lang.Object)
+     * @see org.solmix.api.call.DSCManager#send(org.solmix.api.call.RPCRequest, java.lang.Object)
      */
     @Override
     public void send(RPCRequest rpcRequest, Object data) throws SlxException {
@@ -975,7 +975,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(org.solmix.api.rpc.RPCRequest, org.solmix.api.rpc.RPCResponse)
+     * @see org.solmix.api.call.DSCManager#send(org.solmix.api.call.RPCRequest, org.solmix.api.call.RPCResponse)
      */
     @Override
     public void send(RPCRequest rpcRequest, RPCResponse rpcResponse) throws SlxException {
@@ -986,7 +986,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#send(org.solmix.api.rpc.RPCResponse)
+     * @see org.solmix.api.call.DSCManager#send(org.solmix.api.call.RPCResponse)
      */
     @Override
     public void send(RPCResponse rpcResponse) throws SlxException {
@@ -997,7 +997,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#sendFailure(java.lang.Object, java.lang.String)
+     * @see org.solmix.api.call.DSCManager#sendFailure(java.lang.Object, java.lang.String)
      */
     @Override
     public void sendFailure(Object request, String error) throws SlxException {
@@ -1016,7 +1016,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#sendFailure(java.lang.Object, java.lang.Throwable)
+     * @see org.solmix.api.call.DSCManager#sendFailure(java.lang.Object, java.lang.Throwable)
      */
     @Override
     public void sendFailure(Object request, Throwable t) throws SlxException {
@@ -1027,7 +1027,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#sendSuccess(org.solmix.api.rpc.RPCRequest)
+     * @see org.solmix.api.call.DSCManager#sendSuccess(org.solmix.api.call.RPCRequest)
      */
     @Override
     public void sendSuccess(RPCRequest rpcRequest) throws SlxException {
@@ -1039,7 +1039,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#sendXMLString(org.solmix.api.datasource.DSRequest, java.lang.String)
+     * @see org.solmix.api.call.DSCManager#sendXMLString(org.solmix.api.datasource.DSRequest, java.lang.String)
      */
     @Override
     public void sendXMLString(DSRequest dsRequest, String xml) throws SlxException {
@@ -1050,7 +1050,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#sendXMLString(org.solmix.api.rpc.RPCRequest, java.lang.String)
+     * @see org.solmix.api.call.DSCManager#sendXMLString(org.solmix.api.call.RPCRequest, java.lang.String)
      */
     @Override
     public void sendXMLString(RPCRequest rpcRequest, String xml) throws SlxException {
@@ -1061,7 +1061,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#getRequest()
+     * @see org.solmix.api.call.DSCManager#getRequest()
      */
     @Override
     public RPCRequest getRequest() {
@@ -1075,7 +1075,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#getRequests()
+     * @see org.solmix.api.call.DSCManager#getRequests()
      */
     @Override
     public List<RequestType> getRequests() {
@@ -1086,7 +1086,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#getResponse(org.solmix.api.datasource.DSRequest)
+     * @see org.solmix.api.call.DSCManager#getResponse(org.solmix.api.datasource.DSRequest)
      */
     @Override
     public DSResponse getResponse(DSRequest req) {
@@ -1100,7 +1100,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#getResponse(org.solmix.api.rpc.RPCRequest)
+     * @see org.solmix.api.call.DSCManager#getResponse(org.solmix.api.call.RPCRequest)
      */
     @Override
     public RPCResponse getResponse(RPCRequest req) {
@@ -1114,10 +1114,10 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#registerCallback(org.solmix.api.rpc.RPCManagerCompletionCallback)
+     * @see org.solmix.api.call.DSCManager#registerCallback(org.solmix.api.call.DSCManagerCompletionCallback)
      */
     @Override
-    public void registerCallback(RPCManagerCompletionCallback callback) {
+    public void registerCallback(DSCManagerCompletionCallback callback) {
         if (!callbacks.contains(callback))
             callbacks.add(callback);
 
@@ -1137,7 +1137,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#getContext()
+     * @see org.solmix.api.call.DSCManager#getContext()
      */
     @Override
     public RPCManagerData getContext() {
@@ -1147,7 +1147,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#setConf(org.solmix.api.data.RPCManagerData)
+     * @see org.solmix.api.call.DSCManager#setConf(org.solmix.api.data.RPCManagerData)
      */
     @Override
     public void setContext(RPCManagerData data) {
@@ -1158,7 +1158,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#requestCount()
+     * @see org.solmix.api.call.DSCManager#requestCount()
      */
     @Override
     public int requestCount() {
@@ -1168,7 +1168,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#freeDataSources()
+     * @see org.solmix.api.call.DSCManager#freeDataSources()
      */
     @Override
     public void freeDataSources() {
@@ -1181,7 +1181,7 @@ public class RPCManagerImpl implements RPCManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManager#applyEarlierResponseValues(org.solmix.api.datasource.DSRequest)
+     * @see org.solmix.api.call.DSCManager#applyEarlierResponseValues(org.solmix.api.datasource.DSRequest)
      */
     @Override
     public void applyEarlierResponseValues(DSRequest dsReq) throws SlxException {
@@ -1299,7 +1299,7 @@ public class RPCManagerImpl implements RPCManager
                 resp.getContext().setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
         }
         if (callbacks != null)
-            for (RPCManagerCompletionCallback callback : callbacks) {
+            for (DSCManagerCompletionCallback callback : callbacks) {
                 callback.onFailure(this, true);
             }
     }
@@ -1332,7 +1332,7 @@ public class RPCManagerImpl implements RPCManager
     public void rollback() throws SlxException {
         transactionStarted = false;
         if (callbacks != null)
-            for (RPCManagerCompletionCallback callback : callbacks) {
+            for (DSCManagerCompletionCallback callback : callbacks) {
                 callback.onFailure(this, true);
             }
     }

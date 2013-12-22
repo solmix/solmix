@@ -17,14 +17,30 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
+
+import java.util.List;
 
 /**
- * @author solmix.f@gmail.com
- * @since 0.0.1
- * @version 110035 2011-1-2 solmix-api
+ * 
+ * @version 110035
  */
-public interface ResponseType
+public interface RPCRequest extends RequestType
 {
 
+   Object getData();
+
+   void setData( Object data );
+
+   boolean isDMI();
+
+   String getAppID();
+
+   String getServerObjectID();
+
+   String getMethodName();
+
+   List getMethodArguments();
+
+   RPCResponse execute() throws Exception;
 }

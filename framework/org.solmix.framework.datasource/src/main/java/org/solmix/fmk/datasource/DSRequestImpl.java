@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -47,7 +48,6 @@ import org.solmix.api.jaxb.Texport;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
@@ -75,7 +75,7 @@ public class DSRequestImpl implements DSRequest
 
     private Application app;
 
-    private RPCManager rpc;
+    private DSCManager rpc;
 
     boolean requestStarted;
 
@@ -152,13 +152,13 @@ public class DSRequestImpl implements DSRequest
         }
     }
 
-    public DSRequestImpl(DataSource datasource, Eoperation opType, RPCManager rpc2)
+    public DSRequestImpl(DataSource datasource, Eoperation opType, DSCManager rpc2)
     {
         this(datasource, opType, (String) null);
         setRPC(rpc);
     }
 
-    public DSRequestImpl(String dataSourceName, Eoperation opType, RPCManager rpc)
+    public DSRequestImpl(String dataSourceName, Eoperation opType, DSCManager rpc)
     {
         this(dataSourceName, opType, (String) null);
         setRPC(rpc);
@@ -376,7 +376,7 @@ public class DSRequestImpl implements DSRequest
      * @return the rpc
      */
     @Override
-    public RPCManager getRPC() {
+    public DSCManager getRPC() {
         return rpc;
     }
 
@@ -384,7 +384,7 @@ public class DSRequestImpl implements DSRequest
      * @param rpc the rpc to set
      */
     @Override
-    public void setRPC(RPCManager rpc) {
+    public void setRPC(DSCManager rpc) {
         this.rpc = rpc;
     }
 

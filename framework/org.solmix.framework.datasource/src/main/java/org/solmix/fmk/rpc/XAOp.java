@@ -3,6 +3,7 @@ package org.solmix.fmk.rpc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -10,7 +11,6 @@ import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DsOp;
 
@@ -91,9 +91,9 @@ public abstract class XAOp
 
     public abstract DSResponse exe(DSRequest request) throws SlxException;
 
-    private RPCManager rpc;
+    private DSCManager rpc;
 
-    protected void setRpc(RPCManager rpc) {
+    protected void setRpc(DSCManager rpc) {
         this.rpc = rpc;
     }
 

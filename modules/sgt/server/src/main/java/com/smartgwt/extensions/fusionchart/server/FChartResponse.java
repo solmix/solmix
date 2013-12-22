@@ -24,14 +24,14 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.HasDSCHandler;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.HasRPCHandler;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 
@@ -41,7 +41,7 @@ import org.solmix.api.types.Tmodule;
  * @version 110035 2013-1-10
  */
 
-public class FChartResponse implements DSResponse, HasRPCHandler
+public class FChartResponse implements DSResponse, HasDSCHandler
 {
 
     private final DSResponse resp;
@@ -54,7 +54,7 @@ public class FChartResponse implements DSResponse, HasRPCHandler
     }
 
     @Override
-    public void handler(RPCManager rpc, DSRequest req, DSResponse resp) throws SlxException {
+    public void handler(DSCManager rpc, DSRequest req, DSResponse resp) throws SlxException {
         WebContext ctx = rpc.getRequestContext();
         String orgEncode = ctx.getResponse().getCharacterEncoding();
         ctx.getResponse().setCharacterEncoding(characterEncoding);

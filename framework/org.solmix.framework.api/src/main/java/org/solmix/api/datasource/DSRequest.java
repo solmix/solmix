@@ -19,12 +19,12 @@
 
 package org.solmix.api.datasource;
 
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DSCManagerCompletionCallback;
+import org.solmix.api.call.RequestType;
 import org.solmix.api.context.Context;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerCompletionCallback;
-import org.solmix.api.rpc.RequestType;
 
 /**
  * </b> DataSource Binding Request</b>
@@ -58,17 +58,17 @@ public interface DSRequest extends RequestType
     void setRequestContext(Context context) throws SlxException;
 
     /**
-     * {@link org.solmix.api.rpc.RPCManager} for this request.
+     * {@link org.solmix.api.call.DSCManager} for this request.
      * 
      * @return
      */
-    RPCManager getRPC();
+    DSCManager getRPC();
 
     DataSource getDataSource() throws SlxException;
 
     void setDataSource(DataSource dataSource);
 
-    void setRPC(RPCManager rpc);
+    void setRPC(DSCManager rpc);
 
     /**
      * release datasource
@@ -157,7 +157,7 @@ public interface DSRequest extends RequestType
      * Used to support RPC transaction.
      * <p>
      * If this value is true ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
-     * with {@link RPCManagerCompletionCallback} to commit the transaction. if not,should commit it yourself.
+     * with {@link DSCManagerCompletionCallback} to commit the transaction. if not,should commit it yourself.
      * 
      * @return the freeOnExecute
      */

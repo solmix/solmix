@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -50,7 +51,6 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.Tservice;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
@@ -58,7 +58,7 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
-import org.solmix.fmk.rpc.RPCManagerImpl;
+import org.solmix.fmk.rpc.DSCManagerImpl;
 import org.solmix.fmk.rpc.ServiceObject;
 
 /**
@@ -78,13 +78,13 @@ public class ServiceDataSource
 
     protected DSRequest request;
 
-    protected RPCManager rpc;
+    protected DSCManager rpc;
 
     protected Context context;
 
     protected Application app;
 
-    public ServiceDataSource(DSRequest dsRequest, RPCManager rpc, Context context, Application app)
+    public ServiceDataSource(DSRequest dsRequest, DSCManager rpc, Context context, Application app)
     {
         this.request = dsRequest;
         this.rpc = rpc;
@@ -102,7 +102,7 @@ public class ServiceDataSource
      * @return
      * @throws SlxException
      */
-    public static DSResponse execute(final DSRequest dsRequest, RPCManager rpc, Context requestContext, Application app) throws SlxException {
+    public static DSResponse execute(final DSRequest dsRequest, DSCManager rpc, Context requestContext, Application app) throws SlxException {
         String appID = app.getServerID();
         String operation = dsRequest.getContext().getOperationId();
         String dataSourceName = dsRequest.getDataSourceName();
@@ -119,7 +119,7 @@ public class ServiceDataSource
         return response;
     }
 
-    public static DSResponse execute(final DSRequest dsRequest, RPCManager rpc, Context requestContext) throws SlxException {
+    public static DSResponse execute(final DSRequest dsRequest, DSCManager rpc, Context requestContext) throws SlxException {
         String appID = dsRequest.getContext().getAppID();
         Application app = null;
         SystemContext sc;
@@ -194,7 +194,7 @@ public class ServiceDataSource
             String inf = srvConfig.getInterface() == null ? srvConfig.getClazz() : srvConfig.getInterface();
             log.trace("Find server config object named:" + inf + " with method is:" + srvConfig.getMethod());
         }
-        ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(RPCManagerImpl.class, rpc, false, false),
+        ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(DSCManagerImpl.class, rpc, false, false),
             new ReflectionArgument(DSRequestImpl.class, request, false, false) };
 
         boolean operationIsAuto = _opID == null || _opID.equals(_ds.getAutoOperationId(_opType));
@@ -333,7 +333,7 @@ public class ServiceDataSource
                 optionalArgs = new ReflectionArgument[] { new ReflectionArgument(Context.class, context, false, false),
                     new ReflectionArgument(HttpServletResponse.class, ((WebContext) context).getRequest(), false, false),
                     new ReflectionArgument(ServletContext.class, ((WebContext) context).getServletContext(), false, false),
-                    new ReflectionArgument(HttpSession.class, session, false, false), new ReflectionArgument(RPCManager.class, rpc, false, false),
+                    new ReflectionArgument(HttpSession.class, session, false, false), new ReflectionArgument(DSCManager.class, rpc, false, false),
                     new ReflectionArgument(DSRequest.class, request, false, false), new ReflectionArgument(DataSource.class, _ds, false, false),
                     new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };
@@ -341,7 +341,7 @@ public class ServiceDataSource
                 optionalArgs = new ReflectionArgument[] { new ReflectionArgument(RequestContext.class, null, false, false),
                     new ReflectionArgument(HttpServletResponse.class, null, false, false),
                     new ReflectionArgument(ServletContext.class, null, false, false), new ReflectionArgument(HttpSession.class, null, false, false),
-                    new ReflectionArgument(RPCManager.class, rpc, false, false), new ReflectionArgument(DSRequest.class, request, false, false),
+                    new ReflectionArgument(DSCManager.class, rpc, false, false), new ReflectionArgument(DSRequest.class, request, false, false),
                     new ReflectionArgument(DataSource.class, _ds, false, false),
                     new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };

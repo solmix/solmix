@@ -24,13 +24,13 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.Context.Scope;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.fmk.context.ContextDecorator;
 import org.solmix.fmk.rpc.Transaction;
 
@@ -337,7 +337,7 @@ public final class SlxContext
      * @param rpc used exited rpc to complete transaction.
      * @return
      */
-    public static Transaction getTransaction(RPCManager rpc) {
+    public static Transaction getTransaction(DSCManager rpc) {
 
         return new Transaction(rpc,getThreadSystemContext());
     }

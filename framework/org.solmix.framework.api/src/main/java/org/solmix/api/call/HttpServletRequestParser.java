@@ -17,35 +17,20 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
-import org.solmix.api.datasource.Const;
+import org.solmix.api.context.WebContext;
+import org.solmix.api.exception.SlxException;
 
-/**
- * 
- * @version 110035
- */
-public interface RPCResponse extends ResponseType
+public interface HttpServletRequestParser
 {
 
-   public static final int STATUS_SUCCESS = Const.SUCCESS;
-
-   public static final int STATUS_FAILURE = Const.BAD_DATA;
-
-   public static final int STATUS_LOGIN_INCORRECT = -5;
-
-   public static final int STATUS_MAX_LOGIN_ATTEMPTS_EXCEEDED = -6;
-
-   public static final int STATUS_LOGIN_REQUIRED = -7;
-
-   public static final int STATUS_LOGIN_SUCCESS = -8;
-
-   Object getData();
-
-   void setData( Object data );
-
-   void setStatus( int status );
-
-   int getStatus();
-
+    /**
+     * Parser
+     * 
+     * @param rpcmanager
+     * @param httpservletrequest
+     * @throws Exception
+     */
+    public abstract void parseRequest(DSCManager rpcmanager, WebContext webContext) throws SlxException;
 }

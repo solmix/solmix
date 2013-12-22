@@ -21,56 +21,56 @@ package org.solmix.fmk.rpc;
 
 import javax.annotation.Resource;
 
+import org.solmix.api.call.HttpServletRequestParser;
+import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DSCManagerFactory;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.HttpServletRequestParser;
-import org.solmix.api.rpc.RPCManager;
-import org.solmix.api.rpc.RPCManagerFactory;
 
 /**
- * Implements {@link org.solmix.api.rpc.RPCManagerFactory}.
+ * Implements {@link org.solmix.api.call.DSCManagerFactory}.
  * 
  * @author solmix.f@gmail.com
  * @since 0.0.1
  * @version 110035 2010-12-31 solmix-ds
  */
-public class RPCManagerFactoryImpl implements RPCManagerFactory
+public class DSCManagerFactoryImpl implements DSCManagerFactory
 {
     
     private SystemContext sc;
-    public RPCManagerFactoryImpl(){
+    public DSCManagerFactoryImpl(){
     }
-    public RPCManagerFactoryImpl(SystemContext sc){
+    public DSCManagerFactoryImpl(SystemContext sc){
         setSystemContext(sc);
     }
     @Resource
     public void setSystemContext(SystemContext sc) {
         this.sc = sc;
         if(sc!=null){
-            sc.setBean(this, RPCManagerFactory.class);
+            sc.setBean(this, DSCManagerFactory.class);
         }
     }
  
     @Override
-    public RPCManager createRPCManager() throws SlxException {
+    public DSCManager createRPCManager() throws SlxException {
 
-        return new RPCManagerImpl();
+        return new DSCManagerImpl();
     }
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.RPCManagerFactory#getRPCManager(java.lang.Object)
+     * @see org.solmix.api.call.DSCManagerFactory#getRPCManager(java.lang.Object)
      */
     @Override
-    public RPCManager createRPCManager(WebContext context) throws SlxException {
+    public DSCManager createRPCManager(WebContext context) throws SlxException {
 
-        return new RPCManagerImpl(context);
+        return new DSCManagerImpl(context);
     }
 
     @Override
-    public RPCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException {
+    public DSCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException {
 
-        return new RPCManagerImpl(context, parser);
+        return new DSCManagerImpl(context, parser);
     }
 }

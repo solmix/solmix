@@ -22,9 +22,9 @@ package org.solmix.api.datasource;
 import java.util.List;
 import java.util.Map;
 
+import org.solmix.api.call.ResponseType;
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.exception.SlxException;
-import org.solmix.api.rpc.ResponseType;
 
 /**
  * 

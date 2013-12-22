@@ -1,5 +1,5 @@
 /*
- * SOLMIX PROJECT
+ * ========THE SOLMIX PROJECT=====================================
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,22 +17,35 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
-import org.solmix.api.datasource.DSRequest;
-import org.solmix.api.datasource.DSResponse;
-import org.solmix.api.exception.SlxException;
+import org.solmix.api.datasource.Const;
 
 /**
- * If used this interface to handle rpc,One {@link RPCManager} only can process one DSRequest.
  * 
- * @author solmix
- * @version 0.1.1 2013-1-10
+ * @version 110035
  */
-
-public interface HasRPCHandler
+public interface RPCResponse extends ResponseType
 {
 
-    void handler(RPCManager rpc, DSRequest req, DSResponse resp) throws SlxException;
+   public static final int STATUS_SUCCESS = Const.SUCCESS;
+
+   public static final int STATUS_FAILURE = Const.BAD_DATA;
+
+   public static final int STATUS_LOGIN_INCORRECT = -5;
+
+   public static final int STATUS_MAX_LOGIN_ATTEMPTS_EXCEEDED = -6;
+
+   public static final int STATUS_LOGIN_REQUIRED = -7;
+
+   public static final int STATUS_LOGIN_SUCCESS = -8;
+
+   Object getData();
+
+   void setData( Object data );
+
+   void setStatus( int status );
+
+   int getStatus();
 
 }

@@ -32,6 +32,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.solmix.api.call.HttpServletRequestParser;
+import org.solmix.api.call.DSCManager;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSourceManager;
@@ -39,8 +41,6 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Request;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.api.rpc.HttpServletRequestParser;
-import org.solmix.api.rpc.RPCManager;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.serialize.XMLParserFactory;
@@ -77,11 +77,11 @@ public class RestRequestParser implements HttpServletRequestParser
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.rpc.HttpServletRequestParser#parseRequest(org.solmix.api.rpc.RPCManager,
+     * @see org.solmix.api.call.HttpServletRequestParser#parseRequest(org.solmix.api.call.DSCManager,
      *      javax.servlet.http.HttpServletRequest)
      */
     @Override
-    public void parseRequest(RPCManager rpc, WebContext webContext) throws SlxException {
+    public void parseRequest(DSCManager rpc, WebContext webContext) throws SlxException {
 
         rpc.getContext().setRest(true);
         HttpServletRequest request = webContext.getRequest();

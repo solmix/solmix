@@ -23,11 +23,11 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.solmix.api.call.DSCManagerFactory;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.i18n.ResourceBundleManager;
-import org.solmix.api.rpc.RPCManagerFactory;
 import org.solmix.fmk.SlxContext;
 
 /**
@@ -58,7 +58,7 @@ public class SlxContextTest
     @Test
     public void getRPCManagerFactory() {
         SystemContext sc= SlxContext.getSystemContext();
-        RPCManagerFactory dsm=sc.getBean(RPCManagerFactory.class);
+        DSCManagerFactory dsm=sc.getBean(DSCManagerFactory.class);
         Assert.assertNotNull(dsm);
         sc.close(true);
     }

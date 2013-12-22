@@ -17,23 +17,19 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.rpc;
+package org.solmix.api.call;
 
+import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 
-public interface RPCManagerCompletionCallback
+/**
+ * 
+ * @version 110035
+ */
+public interface DSCManagerFactory
 {
+    DSCManager createRPCManager() throws SlxException;
+    DSCManager createRPCManager(WebContext requestContext) throws SlxException;
 
-   /**
-    * @param rpcmanager
-    * @throws Exception
-    */
-   void onSuccess( RPCManager rpcmanager ) throws SlxException;
-
-   /**
-    * @param rpcmanager
-    * @param flag
-    * @throws Exception
-    */
-   void onFailure( RPCManager rpcmanager, boolean flag ) throws SlxException;
+    DSCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException;
 }

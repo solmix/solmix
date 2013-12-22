@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.rpc;
 
-import org.solmix.api.rpc.RPCResponse;
+import org.solmix.api.call.RPCResponse;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class RPCResponseImpl implements RPCResponse
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCResponse#getData()
+    * @see org.solmix.api.call.RPCResponse#getData()
     */
    @Override
    public Object getData()
@@ -57,7 +57,7 @@ public class RPCResponseImpl implements RPCResponse
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCResponse#getStatus()
+    * @see org.solmix.api.call.RPCResponse#getStatus()
     */
    @Override
    public int getStatus()
@@ -68,7 +68,7 @@ public class RPCResponseImpl implements RPCResponse
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCResponse#setData(java.lang.Object)
+    * @see org.solmix.api.call.RPCResponse#setData(java.lang.Object)
     */
    @Override
    public void setData( Object data )
@@ -80,7 +80,7 @@ public class RPCResponseImpl implements RPCResponse
    /**
     * {@inheritDoc}
     * 
-    * @see org.solmix.api.rpc.RPCResponse#setStatus(int)
+    * @see org.solmix.api.call.RPCResponse#setStatus(int)
     */
    @Override
    public void setStatus( int status )
