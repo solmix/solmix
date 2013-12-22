@@ -21,19 +21,19 @@ package org.solmix.api.call;
 
 import org.solmix.api.exception.SlxException;
 
-public interface DSCManagerCompletionCallback
+public interface DataSourceCallCompleteCallback
 {
 
    /**
-    * @param rpcmanager
+    * @param call
     * @throws Exception
     */
-   void onSuccess( DSCManager rpcmanager ) throws SlxException;
+   void onSuccess( DataSourceCall call ) throws SlxException;
 
    /**
-    * @param rpcmanager
+    * @param call
     * @param flag
     * @throws Exception
     */
-   void onFailure( DSCManager rpcmanager, boolean flag ) throws SlxException;
+   void onFailure( DataSourceCall call, boolean flag ) throws SlxException;
 }

@@ -333,7 +333,7 @@ public class BasicDataSource implements DataSource
                 req.setDataSource(this);
             }
             if (!req.isServiceCalled()) {
-                DSResponse _dsResponse = ServiceDataSource.execute(req, req.getDSCManager(), req.getRequestContext());
+                DSResponse _dsResponse = ServiceDataSource.execute(req, req.getDataSourceCall(), req.getRequestContext());
                 if (_dsResponse != null)
                     return _dsResponse;
             }
@@ -482,7 +482,7 @@ public class BasicDataSource implements DataSource
         if (request.getContext().getValidationMode() != null && request.getContext().getValidationMode().equals("partial"))
             vcontext.setPropertiesOnly(true);
         vcontext.setVtype(Vtype.DS_REQUEST);
-        vcontext.setRpcManager(request.getDSCManager());
+        vcontext.setRpcManager(request.getDataSourceCall());
         vcontext.setRequestContext(request.getRequestContext());
         vcontext.setDSRequstContext(request.getContext());
         vcontext.setVfactory(ValidationEventFactory.getFieldValidator());
@@ -530,7 +530,7 @@ public class BasicDataSource implements DataSource
      */
     @Override
     public boolean shouldAutoJoinTransaction(DSRequest req) throws SlxException {
-        if (req != null && req.getDSCManager() != null) {
+        if (req != null && req.getDataSourceCall() != null) {
             Boolean reqOverride = req.isCanJoinTransaction();
             if (reqOverride != null)
                 return reqOverride.booleanValue();
@@ -540,8 +540,8 @@ public class BasicDataSource implements DataSource
             // check datasource level
             work = autoJoinAtDataSourceLevel();
             if (work == null) {
-                if (req != null && req.getDSCManager() != null) {
-                    TransactionPolicy policy = req.getDSCManager().getTransactionPolicy();
+                if (req != null && req.getDataSourceCall() != null) {
+                    TransactionPolicy policy = req.getDataSourceCall().getTransactionPolicy();
                     if (policy == TransactionPolicy.NONE)
                         return false;
                     if (policy == TransactionPolicy.ALL)
@@ -563,10 +563,10 @@ public class BasicDataSource implements DataSource
     public Object getTransactionObject(DSRequest req) throws SlxException {
         if (req == null)
             throw new SlxException(Tmodule.DATASOURCE, Texception.OBJECT_IS_NULL, "Datasource request is null");
-        if (req.getDSCManager() == null)
+        if (req.getDataSourceCall() == null)
             return null;
         else
-            return req.getDSCManager().getContext().getAttribute(getTransactionObjectKey());
+            return req.getDataSourceCall().getContext().getAttribute(getTransactionObjectKey());
     }
 
     /**
@@ -603,11 +603,11 @@ public class BasicDataSource implements DataSource
             return Boolean.TRUE;
         if (autoJoin.toLowerCase().equals("false") || autoJoin.toLowerCase().equals("NONE"))
             return Boolean.FALSE;
-        if (req != null && req.getDSCManager() != null) {
+        if (req != null && req.getDataSourceCall() != null) {
             if (autoJoin.equals("FROM_FIRST_CHANGE"))
-                return Boolean.valueOf(req.getDSCManager().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDataSourceCall().requestQueueIncludesUpdates());
             if (autoJoin.equals("ANY_CHANGE"))
-                return Boolean.valueOf(req.getDSCManager().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDataSourceCall().requestQueueIncludesUpdates());
         }
         return null;
     }
@@ -627,7 +627,7 @@ public class BasicDataSource implements DataSource
     }
 
     protected boolean policyShouldOverrideConfig(DSRequest req) throws SlxException {
-        if (req != null && req.getDSCManager() != null) {
+        if (req != null && req.getDataSourceCall() != null) {
             Boolean reqOverride = req.isCanJoinTransaction();
             if (reqOverride != null)
                 return reqOverride.booleanValue();
@@ -649,11 +649,11 @@ public class BasicDataSource implements DataSource
             return false;
         if (!shouldAutoJoinTransaction(req))
             return false;
-        if (req.getDSCManager() == null)
+        if (req.getDataSourceCall() == null)
             return false;
         boolean isUpdate = DataTools.isModificationRequest(req);
         boolean shouldOverride = policyShouldOverrideConfig(req);
-        TransactionPolicy policy = req.getDSCManager().getTransactionPolicy();
+        TransactionPolicy policy = req.getDataSourceCall().getTransactionPolicy();
         if (isUpdate) {
             if (shouldOverride) {
                 if (policy == TransactionPolicy.NONE)
@@ -668,7 +668,7 @@ public class BasicDataSource implements DataSource
                     case ALL:
                         return true;
                     case ANY_CHANGE:
-                        return req.getDSCManager().requestQueueIncludesUpdates();
+                        return req.getDataSourceCall().requestQueueIncludesUpdates();
                     case FROM_FIRST_CHANGE:
                 }
             }

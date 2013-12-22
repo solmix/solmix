@@ -32,5 +32,5 @@ public interface HttpServletRequestParser
      * @param httpservletrequest
      * @throws Exception
      */
-    public abstract void parseRequest(DSCManager rpcmanager, WebContext webContext) throws SlxException;
+    public abstract void parseRequest(DataSourceCall rpcmanager, WebContext webContext) throws SlxException;
 }

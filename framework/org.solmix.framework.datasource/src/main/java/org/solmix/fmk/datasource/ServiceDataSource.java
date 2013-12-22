@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -58,7 +58,7 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
-import org.solmix.fmk.call.DSCManagerImpl;
+import org.solmix.fmk.call.DataSourceCallImpl;
 import org.solmix.fmk.call.ServiceObject;
 
 /**
@@ -78,16 +78,16 @@ public class ServiceDataSource
 
     protected DSRequest request;
 
-    protected DSCManager rpc;
+    protected DataSourceCall dsc;
 
     protected Context context;
 
     protected Application app;
 
-    public ServiceDataSource(DSRequest dsRequest, DSCManager rpc, Context context, Application app)
+    public ServiceDataSource(DSRequest dsRequest, DataSourceCall dsc, Context context, Application app)
     {
         this.request = dsRequest;
-        this.rpc = rpc;
+        this.dsc = dsc;
         this.context = context;
         this.app = app;
     }
@@ -102,7 +102,7 @@ public class ServiceDataSource
      * @return
      * @throws SlxException
      */
-    public static DSResponse execute(final DSRequest dsRequest, DSCManager rpc, Context requestContext, Application app) throws SlxException {
+    public static DSResponse execute(final DSRequest dsRequest, DataSourceCall rpc, Context requestContext, Application app) throws SlxException {
         String appID = app.getServerID();
         String operation = dsRequest.getContext().getOperationId();
         String dataSourceName = dsRequest.getDataSourceName();
@@ -119,7 +119,7 @@ public class ServiceDataSource
         return response;
     }
 
-    public static DSResponse execute(final DSRequest dsRequest, DSCManager rpc, Context requestContext) throws SlxException {
+    public static DSResponse execute(final DSRequest dsRequest, DataSourceCall rpc, Context requestContext) throws SlxException {
         String appID = dsRequest.getContext().getAppID();
         Application app = null;
         SystemContext sc;
@@ -194,7 +194,7 @@ public class ServiceDataSource
             String inf = srvConfig.getInterface() == null ? srvConfig.getClazz() : srvConfig.getInterface();
             log.trace("Find server config object named:" + inf + " with method is:" + srvConfig.getMethod());
         }
-        ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(DSCManagerImpl.class, rpc, false, false),
+        ReflectionArgument[] factoryOptionsArgs = { new ReflectionArgument(DataSourceCallImpl.class, dsc, false, false),
             new ReflectionArgument(DSRequestImpl.class, request, false, false) };
 
         boolean operationIsAuto = _opID == null || _opID.equals(_ds.getAutoOperationId(_opType));
@@ -293,9 +293,9 @@ public class ServiceDataSource
                 vContext.put("response", tmp.getResponse());
                 vContext.put("servletContext", tmp.getServletContext());
             }
-            if (rpc != null) {
-                vContext.put("rpc", rpc);
-                vContext.put("rpcManager", rpc);
+            if (dsc != null) {
+                vContext.put("dsc", dsc);
+                vContext.put("dsCall", dsc);
             }
             vContext.put("dsRequest", request);
             vContext.put("ds", _ds);
@@ -333,7 +333,7 @@ public class ServiceDataSource
                 optionalArgs = new ReflectionArgument[] { new ReflectionArgument(Context.class, context, false, false),
                     new ReflectionArgument(HttpServletResponse.class, ((WebContext) context).getRequest(), false, false),
                     new ReflectionArgument(ServletContext.class, ((WebContext) context).getServletContext(), false, false),
-                    new ReflectionArgument(HttpSession.class, session, false, false), new ReflectionArgument(DSCManager.class, rpc, false, false),
+                    new ReflectionArgument(HttpSession.class, session, false, false), new ReflectionArgument(DataSourceCall.class, dsc, false, false),
                     new ReflectionArgument(DSRequest.class, request, false, false), new ReflectionArgument(DataSource.class, _ds, false, false),
                     new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };
@@ -341,7 +341,7 @@ public class ServiceDataSource
                 optionalArgs = new ReflectionArgument[] { new ReflectionArgument(RequestContext.class, null, false, false),
                     new ReflectionArgument(HttpServletResponse.class, null, false, false),
                     new ReflectionArgument(ServletContext.class, null, false, false), new ReflectionArgument(HttpSession.class, null, false, false),
-                    new ReflectionArgument(DSCManager.class, rpc, false, false), new ReflectionArgument(DSRequest.class, request, false, false),
+                    new ReflectionArgument(DataSourceCall.class, dsc, false, false), new ReflectionArgument(DSRequest.class, request, false, false),
                     new ReflectionArgument(DataSource.class, _ds, false, false),
                     new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };

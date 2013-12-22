@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DataSourceCallFactory;
 import org.solmix.api.call.HttpServletRequestParser;
-import org.solmix.api.call.DSCManager;
-import org.solmix.api.call.DSCManagerFactory;
 import org.solmix.api.call.RPCRequest;
 import org.solmix.api.call.RPCResponse;
 import org.solmix.api.call.RequestType;
@@ -123,28 +123,28 @@ public class DataSourceCallServlet extends HttpServlet
      */
     public void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding(characterEncoding);
-        DSCManager rpc = null;
+        DataSourceCall dsc = null;
         WebContext context = null;
         try {
             if(sc==null){
                 sc=SlxContext.getThreadSystemContext();
             }
-            DSCManagerFactory factory=sc.getBean(DSCManagerFactory.class);
+            DataSourceCallFactory factory=sc.getBean(DataSourceCallFactory.class);
             context = SlxContext.getWebContext();
             if (factory != null)
-                rpc = factory.createRPCManager(context,this.requestParser);
+                dsc = factory.createRPCManager(context,this.requestParser);
             if(log.isTraceEnabled())
-                log.trace("Performing " + rpc.requestCount() + " operation(s) ");
+                log.trace("Performing " + dsc.requestCount() + " operation(s) ");
             Exception exceptionHolder=null;
-            if (rpc.getRequests() != null)
-                for (RequestType req : rpc.getRequests()) {
+            if (dsc.getRequests() != null)
+                for (RequestType req : dsc.getRequests()) {
                     if (req instanceof RPCRequest) {
                         RPCRequest rpcRequest = (RPCRequest) req;
                         try {
-                            rpc.send(rpcRequest, handleRPCRequest(rpcRequest, rpc, context,exceptionHolder));
+                            dsc.send(rpcRequest, handleRPCRequest(rpcRequest, dsc, context,exceptionHolder));
                         } catch (Exception e) {
                             try {
-                                rpc.sendFailure(rpcRequest, e);
+                                dsc.sendFailure(rpcRequest, e);
                                 log.error((new StringBuilder()).append("Error executing Rpc: ").append(rpcRequest.toString()).toString(), e);
                             } catch (Exception ignored) {
                             }
@@ -152,10 +152,10 @@ public class DataSourceCallServlet extends HttpServlet
                     } else if (req instanceof DSRequest) {
                         DSRequest dsRequest = (DSRequest) req;
                         try {
-                            rpc.send(dsRequest, handleDSRequest(dsRequest, rpc, context,exceptionHolder));
+                            dsc.send(dsRequest, handleDSRequest(dsRequest, dsc, context,exceptionHolder));
                         } catch (SlxException e) {
                             try {
-                                rpc.sendFailure(dsRequest, e);
+                                dsc.sendFailure(dsRequest, e);
                                 log.error((new StringBuilder()).append("Error executing operation: ").append(dsRequest.getContext().getOperation()).toString(),e);
                             } catch (SlxException ingnored) {
                             }
@@ -177,14 +177,14 @@ public class DataSourceCallServlet extends HttpServlet
     }
 
     /**
-     * @param rpcRequest
-     * @param rpc
+     * @param dscRequest
+     * @param dsc
      * @param context
      * @return
      */
-    private RPCResponse handleRPCRequest(RPCRequest rpcRequest, DSCManager rpc, WebContext context,Exception exception) {
+    private RPCResponse handleRPCRequest(RPCRequest dscRequest, DataSourceCall dsc, WebContext context,Exception exception) {
         try {
-            return rpcRequest.execute();
+            return dscRequest.execute();
         } catch (Exception e) {
             exception=e;
             RPCResponse rpcResponse = new RPCResponseImpl();
@@ -201,7 +201,7 @@ public class DataSourceCallServlet extends HttpServlet
      * @return
      * @throws SlxException
      */
-    private DSResponse handleDSRequest(DSRequest dsRequest, DSCManager rpc, WebContext context,Exception exception) throws SlxException {
+    private DSResponse handleDSRequest(DSRequest dsRequest, DataSourceCall rpc, WebContext context,Exception exception) throws SlxException {
         try {
             return dsRequest.execute();
         } catch (Exception e) {

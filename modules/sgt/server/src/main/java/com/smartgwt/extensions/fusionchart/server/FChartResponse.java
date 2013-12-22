@@ -24,7 +24,7 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.call.HasDSCHandler;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSResponseData;
@@ -54,7 +54,7 @@ public class FChartResponse implements DSResponse, HasDSCHandler
     }
 
     @Override
-    public void handler(DSCManager rpc, DSRequest req, DSResponse resp) throws SlxException {
+    public void handler(DataSourceCall rpc, DSRequest req, DSResponse resp) throws SlxException {
         WebContext ctx = rpc.getRequestContext();
         String orgEncode = ctx.getResponse().getCharacterEncoding();
         ctx.getResponse().setCharacterEncoding(characterEncoding);

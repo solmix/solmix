@@ -21,7 +21,7 @@ package org.solmix.api.datasource;
 
 import java.util.List;
 
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
@@ -94,13 +94,13 @@ public interface DataSourceManager
 
     DSRequest createDSRequest(String dataSourceName, Eoperation opType);
 
-    DSRequest createDSRequest(String dataSourceName, Eoperation opType, DSCManager rpc);
+    DSRequest createDSRequest(String dataSourceName, Eoperation opType, DataSourceCall rpc);
 
     DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, String operationID);
 
     DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType);
 
-    DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, DSCManager rpc);
+    DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, DataSourceCall rpc);
 
     /**
      * @param context

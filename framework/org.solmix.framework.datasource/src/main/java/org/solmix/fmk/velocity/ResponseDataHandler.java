@@ -19,13 +19,13 @@
 
 package org.solmix.fmk.velocity;
 
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.datasource.DSRequest;
 
 public class ResponseDataHandler
 {
 
-   public ResponseDataHandler( DSCManager rpc, DSRequest dsRequest )
+   public ResponseDataHandler( DataSourceCall rpc, DSRequest dsRequest )
    {
       this.rpc = rpc;
       this.dsRequest = dsRequest;
@@ -63,7 +63,7 @@ public class ResponseDataHandler
       return null;
    }
 
-   private DSCManager rpc;
+   private DataSourceCall rpc;
 
    private DSRequest dsRequest;
 }

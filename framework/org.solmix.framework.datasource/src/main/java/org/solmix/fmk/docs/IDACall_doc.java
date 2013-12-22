@@ -32,8 +32,8 @@ public class IDACall_doc
 
    /**
     * When a IDACall receive wrapped into {@link org.solmix.fmk.upload.RequestContext},then call OSGIService
-    * {@link org.solmix.api.call.DSCManagerFactory DSCManagerFactory}.the responsibility of this service is creating
-    * {@link org.solmix.api.call.DSCManager DSCManager}. the main function of DSCManager is send DSRequest and
+    * {@link org.solmix.api.call.DataSourceCallFactory DataSourceCallFactory}.the responsibility of this service is creating
+    * {@link org.solmix.api.call.DataSourceCall DataSourceCall}. the main function of DataSourceCall is send DSRequest and
     * DSResponse. In this way,DSRequest is initial from request data ,and DSResponse is produce by
     * {@link org.solmix.api.datasource.DataSource#execute(DSRequest)}.
     * 

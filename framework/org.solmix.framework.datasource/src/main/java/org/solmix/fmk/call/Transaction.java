@@ -1,7 +1,7 @@
 package org.solmix.fmk.call;
 
-import org.solmix.api.call.DSCManager;
-import org.solmix.api.call.DSCManagerFactory;
+import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DataSourceCallFactory;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -11,25 +11,25 @@ import org.solmix.api.exception.SlxException;
 public class Transaction
 {
     
-    private  DSCManagerImpl rpc;
+    private  DataSourceCallImpl rpc;
     private boolean isCreated;
-    public Transaction(DSCManager rpc,SystemContext sc){
+    public Transaction(DataSourceCall rpc,SystemContext sc){
         if(rpc==null){
-            DSCManagerFactory factory=   sc.getBean(DSCManagerFactory.class);
+            DataSourceCallFactory factory=   sc.getBean(DataSourceCallFactory.class);
             if(factory!=null){
                 try {
                     rpc=factory.createRPCManager();
                 } catch (SlxException e) {
                     //Ignore
                 }
-                if(rpc.getClass().isAssignableFrom(DSCManagerImpl.class)){
+                if(rpc.getClass().isAssignableFrom(DataSourceCallImpl.class)){
                     isCreated=true;
-                    this.rpc=DSCManagerImpl.class.cast(rpc);
+                    this.rpc=DataSourceCallImpl.class.cast(rpc);
                 }
                 
             }
         }
-        this.rpc=(DSCManagerImpl)rpc;
+        this.rpc=(DataSourceCallImpl)rpc;
         
     }
     public Transaction(SystemContext sc) throws SlxException{

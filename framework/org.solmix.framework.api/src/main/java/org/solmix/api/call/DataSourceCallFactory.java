@@ -26,10 +26,10 @@ import org.solmix.api.exception.SlxException;
  * 
  * @version 110035
  */
-public interface DSCManagerFactory
+public interface DataSourceCallFactory
 {
-    DSCManager createRPCManager() throws SlxException;
-    DSCManager createRPCManager(WebContext requestContext) throws SlxException;
+    DataSourceCall createRPCManager() throws SlxException;
+    DataSourceCall createRPCManager(WebContext requestContext) throws SlxException;
 
-    DSCManager createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException;
+    DataSourceCall createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException;
 }

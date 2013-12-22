@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -75,7 +75,7 @@ public class DSRequestImpl implements DSRequest
 
     private Application app;
 
-    private DSCManager rpc;
+    private DataSourceCall dsc;
 
     boolean requestStarted;
 
@@ -152,16 +152,16 @@ public class DSRequestImpl implements DSRequest
         }
     }
 
-    public DSRequestImpl(DataSource datasource, Eoperation opType, DSCManager rpc2)
+    public DSRequestImpl(DataSource datasource, Eoperation opType, DataSourceCall rpc2)
     {
         this(datasource, opType, (String) null);
-        setDSCManager(rpc);
+        setDataSourceCall(dsc);
     }
 
-    public DSRequestImpl(String dataSourceName, Eoperation opType, DSCManager rpc)
+    public DSRequestImpl(String dataSourceName, Eoperation opType, DataSourceCall rpc)
     {
         this(dataSourceName, opType, (String) null);
-        setDSCManager(rpc);
+        setDataSourceCall(rpc);
     }
 
     /**
@@ -373,19 +373,19 @@ public class DSRequestImpl implements DSRequest
     }
 
     /**
-     * @return the rpc
+     * @return the dsc
      */
     @Override
-    public DSCManager getDSCManager() {
-        return rpc;
+    public DataSourceCall getDataSourceCall() {
+        return dsc;
     }
 
     /**
-     * @param rpc the rpc to set
+     * @param dsc the dsc to set
      */
     @Override
-    public void setDSCManager(DSCManager rpc) {
-        this.rpc = rpc;
+    public void setDataSourceCall(DataSourceCall rpc) {
+        this.dsc = rpc;
     }
 
     @Override
@@ -475,8 +475,8 @@ public class DSRequestImpl implements DSRequest
     private DSResponse prepareReturn(DSResponse _dsResponse) throws SlxException {
         if (isFreeOnExecute()) {
             freeResources();
-            if (rpc != null)
-                rpc.freeDataSources();
+            if (dsc != null)
+                dsc.freeDataSources();
         }
         return _dsResponse;
     }
@@ -512,13 +512,13 @@ public class DSRequestImpl implements DSRequest
              * checkout datasource is passed DMI datasource or not.
              */
             if (!this.isServiceCalled()) {
-                if (rpc != null)
-                    rpc.applyEarlierResponseValues(this);
+                if (dsc != null)
+                    dsc.applyEarlierResponseValues(this);
                 if (data.getOperationType() == Eoperation.ADD || data.getOperationType() == Eoperation.UPDATE) {
                     hashFieldValues();
                     populateModifierAndCreatorFields(data.getOperationType() == Eoperation.ADD);
                 }
-                _dsResponse = ServiceDataSource.execute(this, rpc, requestContext, getApp());
+                _dsResponse = ServiceDataSource.execute(this, dsc, requestContext, getApp());
             }
             if (_dsResponse == null)
                 _dsResponse = getApp().execute(this, requestContext);
@@ -558,8 +558,8 @@ public class DSRequestImpl implements DSRequest
         } finally {
             if (isFreeOnExecute()) {
                 this.freeResources();
-                if (rpc != null)
-                    rpc.freeDataSources();
+                if (dsc != null)
+                    dsc.freeDataSources();
             }
         }
         return _dsResponse;
@@ -609,8 +609,8 @@ public class DSRequestImpl implements DSRequest
         DataSourceData _dsData = getDataSource().getContext();
         String _modifier = data.getUserId();
         Date _modifierTimestamp;
-        if (rpc != null)
-            _modifierTimestamp = (Date) rpc.getContext().getFromTemplateContext("transactionDate");
+        if (dsc != null)
+            _modifierTimestamp = (Date) dsc.getContext().getFromTemplateContext("transactionDate");
         else
             _modifierTimestamp = new Date();
         List<Tfield> _fields = _dsData.getFields();
@@ -655,7 +655,7 @@ public class DSRequestImpl implements DSRequest
      * Authentication checks.the check order is: OperationID &gt; OperationType &gt; DataSource &gt; Project.
      * <p>
      * {@link javax.servlet.http.HttpServletRequest#getRemoteUser() getRemoteUser} get User. validate User's roles in
-     * rpc and httpServletRequest.
+     * dsc and httpServletRequest.
      * 
      * @return
      * @throws Exception

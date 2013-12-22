@@ -26,7 +26,7 @@
 	<bean  id="org.solmix.api.i18n.ResourceBundleManager" class="org.solmix.fmk.i18n.ResourceBundleManagerImpl">
        <argument ref="solmix"/>
     </bean>
-     <bean id="org.solmix.api.call.DSCManagerFactory" class="org.solmix.fmk.call.DSCManagerFactoryImpl">
+     <bean id="org.solmix.api.call.DataSourceCallFactory" class="org.solmix.fmk.call.DataSourceCallFactoryImpl">
         <argument ref="solmix"/>
     </bean>
      <service interface="org.solmix.api.datasource.DataSourceManager"	ref="org.solmix.api.datasource.DataSourceManager" />

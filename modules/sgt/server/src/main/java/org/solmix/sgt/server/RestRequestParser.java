@@ -32,7 +32,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.call.HttpServletRequestParser;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
@@ -77,11 +77,11 @@ public class RestRequestParser implements HttpServletRequestParser
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.call.HttpServletRequestParser#parseRequest(org.solmix.api.call.DSCManager,
+     * @see org.solmix.api.call.HttpServletRequestParser#parseRequest(org.solmix.api.call.DataSourceCall,
      *      javax.servlet.http.HttpServletRequest)
      */
     @Override
-    public void parseRequest(DSCManager rpc, WebContext webContext) throws SlxException {
+    public void parseRequest(DataSourceCall rpc, WebContext webContext) throws SlxException {
 
         rpc.getContext().setRest(true);
         HttpServletRequest request = webContext.getRequest();
@@ -101,7 +101,7 @@ public class RestRequestParser implements HttpServletRequestParser
             if (cf.getValues() != null && cf.getValues().size() > 0)
                 dsrequest.getContext().setValues(cf.getValues());
             dsrequest.getContext().setIsClientRequest(true);
-            dsrequest.setDSCManager(rpc);
+            dsrequest.setDataSourceCall(rpc);
             dsrequest.setRequestContext(webContext);
             rpc.addRequest(dsrequest);
 
@@ -145,7 +145,7 @@ public class RestRequestParser implements HttpServletRequestParser
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.setFreeOnExecute(freeOnExecute);
                                 dsr.setCanJoinTransaction(!freeOnExecute);
-                                dsr.setDSCManager(rpc);
+                                dsr.setDataSourceCall(rpc);
                                 dsr.setRequestContext(webContext);
                                 rpc.addRequest(dsr);
                             }

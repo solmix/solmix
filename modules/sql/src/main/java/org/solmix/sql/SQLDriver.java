@@ -38,7 +38,7 @@ import java.util.Map;
 import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -324,7 +324,7 @@ public abstract class SQLDriver
         Connection __currentConn;
         Connection __userOrAutoConn = null;
         if (req != null) {
-            DSCManager rpc = req.getDSCManager();
+            DataSourceCall rpc = req.getDataSourceCall();
             // is rpc
             if (rpc != null) {
                 __userOrAutoConn = ((SQLDataSource) req.getDataSource()).getTransactionalConnection(req);
@@ -459,13 +459,13 @@ public abstract class SQLDriver
             dbName = thisConfig.getString("defaultDatabase", "");
         Connection __userOrAutoConn = null;
         if (req != null) {
-            DSCManager rpc = req.getDSCManager();
+            DataSourceCall rpc = req.getDataSourceCall();
             if (rpc != null) {
                 SQLDataSource ds = (SQLDataSource) req.getDataSource();
                 __userOrAutoConn = ds.getTransactionalConnection(req);
             }
         }
-        // NO set DSCManager transaction ,no global transaction
+        // NO set DataSourceCall transaction ,no global transaction
         if (__userOrAutoConn == null) {
             if (conn == null) {
                 conn = connectionManager.get(dbName);

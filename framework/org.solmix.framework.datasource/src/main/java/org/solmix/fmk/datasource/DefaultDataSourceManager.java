@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
 import org.solmix.api.bean.ConfiguredBeanProvider;
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DataSourceData;
@@ -248,7 +248,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     @Override
-    public DSRequest createDSRequest(String dataSourceName, Eoperation opType, DSCManager rpc) {
+    public DSRequest createDSRequest(String dataSourceName, Eoperation opType, DataSourceCall rpc) {
         return new DSRequestImpl(dataSourceName, opType, rpc);
     }
 
@@ -284,7 +284,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     @Override
-    public DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, DSCManager rpc) {
+    public DSRequest createDSRequest(DataSource dataSourceName, Eoperation opType, DataSourceCall rpc) {
         return new DSRequestImpl(dataSourceName, opType, rpc);
     }
 

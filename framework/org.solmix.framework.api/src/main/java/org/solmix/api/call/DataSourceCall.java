@@ -34,7 +34,7 @@ import org.solmix.api.types.TransactionPolicy;
  * @since 0.0.1
  * @version 0.1.1 2011-1-1 solmix-api
  */
-public interface DSCManager
+public interface DataSourceCall
 {
 
     void setContext(DSCManagerData data);
@@ -69,7 +69,7 @@ public interface DSCManager
 
     void sendXMLString(RPCRequest rpcRequest, String xml) throws SlxException;
 
-    void registerCallback(DSCManagerCompletionCallback callback);
+    void registerCallback(DataSourceCallCompleteCallback callback);
 
     RPCRequest getRequest();
 

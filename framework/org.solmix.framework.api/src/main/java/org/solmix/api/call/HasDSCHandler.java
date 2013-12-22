@@ -24,7 +24,7 @@ import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
 
 /**
- * If used this interface to handle rpc,One {@link DSCManager} only can process one DSRequest.
+ * If used this interface to handle rpc,One {@link DataSourceCall} only can process one DSRequest.
  * 
  * @author solmix
  * @version 0.1.1 2013-1-10
@@ -33,6 +33,6 @@ import org.solmix.api.exception.SlxException;
 public interface HasDSCHandler
 {
 
-    void handler(DSCManager rpc, DSRequest req, DSResponse resp) throws SlxException;
+    void handler(DataSourceCall rpc, DSRequest req, DSResponse resp) throws SlxException;
 
 }

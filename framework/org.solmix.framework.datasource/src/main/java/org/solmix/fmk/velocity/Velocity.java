@@ -33,7 +33,7 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DSCManager;
+import org.solmix.api.call.DataSourceCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
@@ -247,9 +247,9 @@ public class Velocity
         if (_reqData == null)
             return new HashMap<String, Object>();
         Map<String, Object> context;
-        if (dsReq.getDSCManager() != null) {
-            context = new HashMap<String, Object>(dsReq.getDSCManager().getContext().getTemplateContext());
-            context.put(RESPONSE_DATA, new ResponseDataHandler(dsReq.getDSCManager(), dsReq));
+        if (dsReq.getDataSourceCall() != null) {
+            context = new HashMap<String, Object>(dsReq.getDataSourceCall().getContext().getTemplateContext());
+            context.put(RESPONSE_DATA, new ResponseDataHandler(dsReq.getDataSourceCall(), dsReq));
         } else {
             context = new HashMap<String, Object>();
         }
@@ -275,7 +275,7 @@ public class Velocity
         return context;
     }
 
-    public static Map<String, Object> getServletContextMap(DSCManager rpc) {
+    public static Map<String, Object> getServletContextMap(DataSourceCall rpc) {
         if (rpc == null)
             return new HashMap<String, Object>();
         else

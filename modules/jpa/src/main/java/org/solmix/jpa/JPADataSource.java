@@ -41,8 +41,8 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DSCManager;
-import org.solmix.api.call.DSCManagerCompletionCallback;
+import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DataSourceCallCompleteCallback;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -75,7 +75,7 @@ import org.solmix.fmk.util.DataTools;
  * @version $Id$ 2011-6-6
  */
 
-public class JPADataSource extends BasicDataSource implements DataSource, DSCManagerCompletionCallback
+public class JPADataSource extends BasicDataSource implements DataSource, DataSourceCallCompleteCallback
 {
 
     private final static Logger log = LoggerFactory.getLogger(JPADataSource.class.getName());
@@ -380,13 +380,9 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
         return "_slx_jpa_entityManager_key";
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.DSCManagerCompletionCallback.rpc.DSCManagerManagerCompletionCallback#onSuccess(org.solmix.DSCManager.rpc.DSCManagerManager)
-     */
+   
     @Override
-    public void onSuccess(DSCManager rpcmanager) throws SlxException {
+    public void onSuccess(DataSourceCall rpcmanager) throws SlxException {
         Object obj = rpcmanager.getContext().getAttribute(this.getTransactionObjectKey());
         if (obj == null) {
             log.warn("Transaction Object is null !");
@@ -410,13 +406,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.DSCManagerCompletionCallback.rpc.DSCManagerManagerCompletionCallback#onFailure(org.solmix.DSCManager.rpc.DSCManagerManager, boolean)
-     */
     @Override
-    public void onFailure(DSCManager rpcmanager, boolean flag) throws SlxException {
+    public void onFailure(DataSourceCall rpcmanager, boolean flag) throws SlxException {
         Object obj = rpcmanager.getContext().getAttribute(this.getTransactionObjectKey());
         if (obj == null) {
             log.warn("Transaction Object is null !");
@@ -527,7 +518,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR,
                 "in the app operation config, datasource must be set to a string or list");
         }
-        if (req.getDSCManager() != null && this.shouldAutoJoinTransaction(req)) {
+        if (req.getDataSourceCall() != null && this.shouldAutoJoinTransaction(req)) {
             log.debug("Auto get transaction object!");
             Object obj = this.getTransactionObject(req);
             if (!(holder instanceof EntityManagerHolder)) {
@@ -545,10 +536,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCMan
                     } catch (Exception e) {
                         log.error("Unexpected exception while initial entityManager", e);
                     }
-                    log.debug("Creating EntityManager, starting transaction and setting it to DSCManager.");
+                    log.debug("Creating EntityManager, starting transaction and setting it to DataSourceCall.");
                     holder = new EntityManagerHolder(this, entityManager, transaction);
-                    req.getDSCManager().getContext().setAttribute(this.getTransactionObjectKey(), holder);
-                    req.getDSCManager().registerCallback(this);
+                    req.getDataSourceCall().getContext().setAttribute(this.getTransactionObjectKey(), holder);
+                    req.getDataSourceCall().registerCallback(this);
                 } else {
                     try {
                         transaction = JPATransaction.getTransaction(getEntityManager());
