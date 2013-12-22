@@ -58,8 +58,8 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
-import org.solmix.fmk.rpc.DSCManagerImpl;
-import org.solmix.fmk.rpc.ServiceObject;
+import org.solmix.fmk.call.DSCManagerImpl;
+import org.solmix.fmk.call.ServiceObject;
 
 /**
  * Direct Method Invoke DataSource.

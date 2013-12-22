@@ -60,11 +60,11 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
+import org.solmix.fmk.call.ServiceObject;
 import org.solmix.fmk.datasource.DataSourceProvider;
 import org.solmix.fmk.datasource.ValidationContext;
 import org.solmix.fmk.datasource.Validator;
 import org.solmix.fmk.interfaces.ValidatorFunc;
-import org.solmix.fmk.rpc.ServiceObject;
 import org.solmix.fmk.velocity.Velocity;
 
 /**

@@ -1,4 +1,4 @@
-package org.solmix.fmk.rpc;
+package org.solmix.fmk.call;
 
 import org.solmix.api.call.DSCManager;
 import org.solmix.api.call.DSCManagerFactory;

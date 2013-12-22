@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.rpc;
+package org.solmix.fmk.call;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

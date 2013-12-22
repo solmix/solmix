@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.rpc;
+package org.solmix.fmk.call;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

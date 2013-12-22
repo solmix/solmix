@@ -31,8 +31,8 @@ import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
+import org.solmix.fmk.call.Transaction;
 import org.solmix.fmk.context.ContextDecorator;
-import org.solmix.fmk.rpc.Transaction;
 
 /**
  * This class allows obtaining of the current Request without passing the request around the world.
