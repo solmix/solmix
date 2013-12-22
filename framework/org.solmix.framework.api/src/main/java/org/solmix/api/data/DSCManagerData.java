@@ -29,7 +29,7 @@ import java.util.Map;
  * @version 110035 2011-1-1 solmix-api
  */
 @SuppressWarnings("unchecked")
-public class RPCManagerData implements Serializable
+public class DSCManagerData implements Serializable
 {
 
    /**

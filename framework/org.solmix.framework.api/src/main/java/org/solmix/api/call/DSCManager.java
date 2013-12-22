@@ -22,7 +22,7 @@ package org.solmix.api.call;
 import java.util.List;
 
 import org.solmix.api.context.WebContext;
-import org.solmix.api.data.RPCManagerData;
+import org.solmix.api.data.DSCManagerData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
@@ -37,7 +37,7 @@ import org.solmix.api.types.TransactionPolicy;
 public interface DSCManager
 {
 
-    void setContext(RPCManagerData data);
+    void setContext(DSCManagerData data);
 
     int requestCount();
 
@@ -45,7 +45,7 @@ public interface DSCManager
 
     void addRequest(RPCRequest req);
 
-    RPCManagerData getContext();
+    DSCManagerData getContext();
 
     void send(DSRequest dsRequest, DSResponse dsResponse) throws SlxException;
 

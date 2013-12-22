@@ -51,7 +51,7 @@ import org.solmix.api.call.RequestType;
 import org.solmix.api.call.ResponseType;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.data.DSRequestData;
-import org.solmix.api.data.RPCManagerData;
+import org.solmix.api.data.DSCManagerData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
@@ -91,8 +91,8 @@ import org.solmix.fmk.velocity.SessionAttributeMapFacade;
 import org.solmix.fmk.velocity.Velocity;
 
 /**
- * complex relationship at this class,ant simple configuration at data class {@link org.solmix.api.data.RPCManagerData
- * RPCManagerData}.
+ * complex relationship at this class,ant simple configuration at data class {@link org.solmix.api.data.DSCManagerData
+ * DSCManagerData}.
  * 
  * @author solmix.f@gmail.com
  * @since 0.0.1
@@ -113,7 +113,7 @@ public class DSCManagerImpl implements DSCManager
 
     private final HashSet<DSCManagerCompletionCallback> callbacks;
 
-    private  RPCManagerData data;
+    private  DSCManagerData data;
 
     private WebContext context;
 
@@ -134,7 +134,7 @@ public class DSCManagerImpl implements DSCManager
         jsParser = jsFactory.get();
         callbacks = new HashSet<DSCManagerCompletionCallback>();
         data = null;
-        setContext(new RPCManagerData());
+        setContext(new DSCManagerData());
         setTransactionPolicy(TransactionPolicy.ANY_CHANGE);
         setRequestProcessingStarted(false);
     }
@@ -152,7 +152,7 @@ public class DSCManagerImpl implements DSCManager
         callbacks = new HashSet<DSCManagerCompletionCallback>();
         responseMap = new HashMap<RequestType, ResponseType>();
         data = null;
-        setContext(new RPCManagerData());
+        setContext(new DSCManagerData());
         data.setCharset(DatasourceCM.getProperties().getString("rpc.defaultCharset", "UTF-8"));
         data.setCloseConnection(false);
         data.setOmitNullMapValuesInResponse(DatasourceCM.getProperties().getBoolean("rpc.omitNullMapValuesInResponse", false));
@@ -1140,17 +1140,17 @@ public class DSCManagerImpl implements DSCManager
      * @see org.solmix.api.call.DSCManager#getContext()
      */
     @Override
-    public RPCManagerData getContext() {
+    public DSCManagerData getContext() {
         return data;
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.call.DSCManager#setConf(org.solmix.api.data.RPCManagerData)
+     * @see org.solmix.api.call.DSCManager#setConf(org.solmix.api.data.DSCManagerData)
      */
     @Override
-    public void setContext(RPCManagerData data) {
+    public void setContext(DSCManagerData data) {
         this.data = data;
 
     }
