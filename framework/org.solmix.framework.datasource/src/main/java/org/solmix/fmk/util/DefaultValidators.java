@@ -42,7 +42,7 @@ import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -894,7 +894,7 @@ public class DefaultValidators
                         new ReflectionArgument(HttpServletResponse.class, web.getResponse(), false, false),
                         new ReflectionArgument(ServletContext.class, web.getServletContext(), false, false),
                         new ReflectionArgument(HttpSession.class, web.getRequest().getSession(true), false, false),
-                        new ReflectionArgument(DataSourceCall.class, context.getRpcManager(), false, false) };
+                        new ReflectionArgument(DSCall.class, context.getRpcManager(), false, false) };
                     returnValue = Reflection.adaptArgsAndInvoke(serverObjectInstance, method, requiredArgs, optionalArgs);
                 } else {
                     ReflectionArgument optionalArgs[] = { new ReflectionArgument(DataSource.class, ds, false, false),

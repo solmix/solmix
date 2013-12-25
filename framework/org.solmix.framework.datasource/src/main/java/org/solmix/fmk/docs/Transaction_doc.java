@@ -1,6 +1,6 @@
 package org.solmix.fmk.docs;
 
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 
 
 /**
@@ -33,7 +33,7 @@ import org.solmix.api.call.DataSourceCall;
 相关方法：{@link org.solmix.api.datasource.DSRequest#getJoinTransaction()}
 {@link org.solmix.api.datasource.DSRequest#isPartOfTransaction()}
 
-如果要使用批量事物处理必须在DSRequest 中设置Rpc {@link org.solmix.api.datasource.DSRequest#setRpc(DataSourceCall)}
+如果要使用批量事物处理必须在DSRequest 中设置Rpc {@link org.solmix.api.datasource.DSRequest#setRpc(DSCall)}
 <p>&nbsp;</p>
 
 <p>&nbsp;</p>

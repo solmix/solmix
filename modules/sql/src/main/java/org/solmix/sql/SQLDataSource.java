@@ -37,8 +37,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
-import org.solmix.api.call.DataSourceCall;
-import org.solmix.api.call.DataSourceCallCompleteCallback;
+import org.solmix.api.call.DSCall;
+import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.data.DataSourceData;
@@ -77,7 +77,7 @@ import org.solmix.sql.internal.SqlCM;
  * @version 0.1.1 2012-12-16 solmix-sql
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, DataSourceCallCompleteCallback
+public final class SQLDataSource extends BasicDataSource implements ISQLDataSource, DSCallCompleteCallback
 {
 
     private static final Logger log = LoggerFactory.getLogger(SQLDataSource.class.getName());
@@ -1600,10 +1600,10 @@ protected String getPID(){
             if (tvalue instanceof Connection)
                 conn = (Connection) tvalue;
             if (conn == null && shouldAutoStartTransaction(req, false)) {
-                SQLTransaction.startTransaction(req.getDataSourceCall(), driver.getDbName(),connectionManager);
+                SQLTransaction.startTransaction(req.getDSCall(), driver.getDbName(),connectionManager);
                 conn = (Connection) getTransactionObject(req);
-                if (req != null && req.getDataSourceCall() != null)
-                    req.getDataSourceCall().registerCallback(this);
+                if (req != null && req.getDSCall() != null)
+                    req.getDSCall().registerCallback(this);
             }
             if (conn != null && req != null)
                 req.setJoinTransaction(true);
@@ -1623,11 +1623,11 @@ protected String getPID(){
             return Boolean.TRUE;
         if (autoJoin.toLowerCase().equals("false") || autoJoin.toLowerCase().equals("NONE"))
             return Boolean.FALSE;
-        if (req != null && req.getDataSourceCall() != null) {
+        if (req != null && req.getDSCall() != null) {
             if (autoJoin.equals("FROM_FIRST_CHANGE"))
-                return Boolean.valueOf(req.getDataSourceCall().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDSCall().requestQueueIncludesUpdates(req));
             if (autoJoin.equals("ANY_CHANGE"))
-                return Boolean.valueOf(req.getDataSourceCall().requestQueueIncludesUpdates());
+                return Boolean.valueOf(req.getDSCall().requestQueueIncludesUpdates(req));
         }
         return null;
     }
@@ -1640,10 +1640,10 @@ protected String getPID(){
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.call.DataSourceCallCompleteCallback#onFailure(org.solmix.api.call.DataSourceCall, boolean)
+     * @see org.solmix.api.call.DSCallCompleteCallback#onFailure(org.solmix.api.call.DSCall, boolean)
      */
     @Override
-    public void onFailure(DataSourceCall rpcmanager, boolean isFailed) throws SlxException {
+    public void onFailure(DSCall rpcmanager, boolean isFailed) throws SlxException {
         if (isFailed)
             SQLTransaction.rollbackTransaction(rpcmanager, driver.getDbName(),connectionManager);
         else
@@ -1655,10 +1655,10 @@ protected String getPID(){
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.call.DataSourceCallCompleteCallback#onSuccess(org.solmix.api.call.DataSourceCall)
+     * @see org.solmix.api.call.DSCallCompleteCallback#onSuccess(org.solmix.api.call.DSCall)
      */
     @Override
-    public void onSuccess(DataSourceCall rpcmanager) throws SlxException {
+    public void onSuccess(DSCall rpcmanager) throws SlxException {
         SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
         SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
 

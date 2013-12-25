@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.Context.Scope;
 import org.solmix.api.context.SystemContext;
@@ -337,7 +337,7 @@ public final class SlxContext
      * @param rpc used exited rpc to complete transaction.
      * @return
      */
-    public static Transaction getTransaction(DataSourceCall rpc) {
+    public static Transaction getTransaction(DSCall rpc) {
 
         return new Transaction(rpc,getThreadSystemContext());
     }

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.data.DSRequestData;
 import org.solmix.api.datasource.DataSource;
@@ -83,7 +83,7 @@ public class ValidationContext extends HashMap
     {
         currentDataSource = null;
         propertiesOnly = false;
-        dataSourceCall = null;
+        dSCall = null;
         requestContext = null;
         fieldName = "";
         DSRequstContext = null;
@@ -140,7 +140,7 @@ public class ValidationContext extends HashMap
         this.currentRecord = currentRecord;
     }
 
-    DataSourceCall dataSourceCall;
+    DSCall dSCall;
 
     Context requestContext;
 
@@ -301,17 +301,17 @@ public class ValidationContext extends HashMap
     }
 
     /**
-     * @return the dataSourceCall
+     * @return the dSCall
      */
-    public DataSourceCall getRpcManager() {
-        return dataSourceCall;
+    public DSCall getRpcManager() {
+        return dSCall;
     }
 
     /**
-     * @param dataSourceCall the dataSourceCall to set
+     * @param dSCall the dSCall to set
      */
-    public void setRpcManager(DataSourceCall rpcManager) {
-        this.dataSourceCall = rpcManager;
+    public void setRpcManager(DSCall rpcManager) {
+        this.dSCall = rpcManager;
     }
 
     /**

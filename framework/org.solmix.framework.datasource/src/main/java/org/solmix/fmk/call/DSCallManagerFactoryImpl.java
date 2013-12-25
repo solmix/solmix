@@ -21,12 +21,9 @@ package org.solmix.fmk.call;
 
 import javax.annotation.Resource;
 
-import org.solmix.api.call.HttpServletRequestParser;
-import org.solmix.api.call.DataSourceCall;
-import org.solmix.api.call.DataSourceCallFactory;
+import org.solmix.api.call.DSCallManager;
+import org.solmix.api.call.DSCallManagerFactory;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.WebContext;
-import org.solmix.api.exception.SlxException;
 
 /**
  * Implements {@link org.solmix.api.call.DataSourceCallFactory}.
@@ -35,42 +32,31 @@ import org.solmix.api.exception.SlxException;
  * @since 0.0.1
  * @version 110035 2010-12-31 solmix-ds
  */
-public class DataSourceCallFactoryImpl implements DataSourceCallFactory
+public class DSCallManagerFactoryImpl implements DSCallManagerFactory
 {
     
     private SystemContext sc;
-    public DataSourceCallFactoryImpl(){
+    public DSCallManagerFactoryImpl(){
     }
-    public DataSourceCallFactoryImpl(SystemContext sc){
+    public DSCallManagerFactoryImpl(SystemContext sc){
         setSystemContext(sc);
     }
     @Resource
     public void setSystemContext(SystemContext sc) {
         this.sc = sc;
         if(sc!=null){
-            sc.setBean(this, DataSourceCallFactory.class);
+            sc.setBean(this, DSCallManagerFactoryImpl.class);
         }
     }
+    
+    @Override
+    public DSCallManager createDSCallManager() {
+        return new DSCallManagerImpl(sc);
+    }
+    
+    @Override
+    public DSCallManager createSimpleDSCallManager() {
+        return new DSCallManagerImpl(sc);
+    }
  
-    @Override
-    public DataSourceCall createRPCManager() throws SlxException {
-
-        return new DataSourceCallImpl();
-    }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.call.DataSourceCallFactory#getRPCManager(java.lang.Object)
-     */
-    @Override
-    public DataSourceCall createRPCManager(WebContext context) throws SlxException {
-
-        return new DataSourceCallImpl(context);
-    }
-
-    @Override
-    public DataSourceCall createRPCManager(WebContext context, HttpServletRequestParser parser) throws SlxException {
-
-        return new DataSourceCallImpl(context, parser);
-    }
 }

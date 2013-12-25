@@ -25,7 +25,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -141,10 +140,10 @@ public class DSResponseImpl implements DSResponse
      * {@inheritDoc}
      * 
      * @throws SlxException
-     * @see org.solmix.api.datasource.DSResponse#getJSResponse()
+     * @see org.solmix.api.datasource.DSResponse#getClientResponse()
      */
     @Override
-    public Object getJSResponse() throws SlxException {
+    public Object getClientResponse() throws SlxException {
         return data;
         // Map< String ,Object > __return = null;
         // try

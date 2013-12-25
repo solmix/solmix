@@ -302,8 +302,8 @@ public class WebContextImpl extends AbstractContext implements WebContext
     @Override
     public Writer getOut() throws SlxException {
         Writer out ;
-            if (log.isDebugEnabled())
-                log.debug("Getting output stream via servletResponse.getWriter()");
+            if (log.isTraceEnabled())
+                log.trace("Getting writer via servletResponse.getWriter()");
             if (contentType == null)
                 setContentType(globalConfig.getString("defaultMimeType", "text/html"));
             try {

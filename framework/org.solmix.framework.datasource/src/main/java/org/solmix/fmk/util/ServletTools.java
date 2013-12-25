@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -42,7 +44,6 @@ import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.fileupload.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
@@ -477,5 +478,34 @@ public class ServletTools
         }
         context.getResponse().addCookie(cookie);
         return cookie;
+    }
+    public static String encodeParameter(String name, String value) {
+        Pattern tspecials = Pattern.compile("[<()@,;:/?={} >\"\\[\\]\\t\\\\]");
+        Matcher matcher = tspecials.matcher(value);
+        if (value.length() <= 78)
+            if (!matcher.find())
+                return (new StringBuilder()).append(name).append("=").append(value).toString();
+            else
+                return (new StringBuilder()).append(name).append("=").append("\"").append(value).append("\"").toString();
+        int counter = 0;
+        String returnVal = "";
+        for (; value.length() > 78; value = value.substring(78)) {
+            String work = value.substring(0, 78);
+            matcher.reset(work);
+            if (matcher.find())
+                work = (new StringBuilder()).append("\"").append(work).append("\"").toString();
+            if (counter > 0)
+                returnVal = (new StringBuilder()).append(returnVal).append("; ").toString();
+            returnVal = (new StringBuilder()).append(returnVal).append(name).append("*").append(counter).append("=").append(work).toString();
+            counter++;
+        }
+
+        matcher.reset(value);
+        if (matcher.find())
+            value = (new StringBuilder()).append("\"").append(value).append("\"").toString();
+        if (counter > 0)
+            returnVal = (new StringBuilder()).append(returnVal).append("; ").toString();
+        returnVal = (new StringBuilder()).append(returnVal).append(name).append("*").append(counter).append("=").append(value).toString();
+        return returnVal;
     }
 }

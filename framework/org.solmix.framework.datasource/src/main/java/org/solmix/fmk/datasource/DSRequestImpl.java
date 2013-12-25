@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
@@ -75,7 +75,7 @@ public class DSRequestImpl implements DSRequest
 
     private Application app;
 
-    private DataSourceCall dsc;
+    private DSCall dsc;
 
     boolean requestStarted;
 
@@ -152,16 +152,16 @@ public class DSRequestImpl implements DSRequest
         }
     }
 
-    public DSRequestImpl(DataSource datasource, Eoperation opType, DataSourceCall rpc2)
+    public DSRequestImpl(DataSource datasource, Eoperation opType, DSCall rpc2)
     {
         this(datasource, opType, (String) null);
-        setDataSourceCall(dsc);
+        setDSCall(dsc);
     }
 
-    public DSRequestImpl(String dataSourceName, Eoperation opType, DataSourceCall rpc)
+    public DSRequestImpl(String dataSourceName, Eoperation opType, DSCall rpc)
     {
         this(dataSourceName, opType, (String) null);
-        setDataSourceCall(rpc);
+        setDSCall(rpc);
     }
 
     /**
@@ -376,7 +376,7 @@ public class DSRequestImpl implements DSRequest
      * @return the dsc
      */
     @Override
-    public DataSourceCall getDataSourceCall() {
+    public DSCall getDSCall() {
         return dsc;
     }
 
@@ -384,7 +384,7 @@ public class DSRequestImpl implements DSRequest
      * @param dsc the dsc to set
      */
     @Override
-    public void setDataSourceCall(DataSourceCall rpc) {
+    public void setDSCall(DSCall rpc) {
         this.dsc = rpc;
     }
 
@@ -610,7 +610,7 @@ public class DSRequestImpl implements DSRequest
         String _modifier = data.getUserId();
         Date _modifierTimestamp;
         if (dsc != null)
-            _modifierTimestamp = (Date) dsc.getContext().getFromTemplateContext("transactionDate");
+            _modifierTimestamp = (Date) dsc.getAttribute("transactionDate");
         else
             _modifierTimestamp = new Date();
         List<Tfield> _fields = _dsData.getFields();
@@ -707,8 +707,8 @@ public class DSRequestImpl implements DSRequest
     }
 
     @Override
-    public boolean isModificationRequest(DSRequest req) throws SlxException {
-        return DataTools.isModificationOperation(req.getContext().getOperationType());
+    public boolean isModificationRequest() throws SlxException {
+        return DataTools.isModificationOperation(data.getOperationType());
     }
 
     /**

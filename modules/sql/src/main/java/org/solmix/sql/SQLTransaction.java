@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -51,7 +51,7 @@ public class SQLTransaction
 
     private static boolean autoEndTransactions;
 
-    public static boolean startTransaction(DataSourceCall rpc) throws SlxException {
+    public static boolean startTransaction(DSCall rpc) throws SlxException {
         String dbName = null;
         List dsReqs = rpc.getRequests();
         ConnectionManager connectionManager=null;
@@ -68,7 +68,7 @@ public class SQLTransaction
         }
         if (dbName == null)
             dbName = SqlCM.DEFAULT_DATABASE;
-        rpc.getContext().setAttribute(DBNAME_ATTR, dbName);
+        rpc.setAttribute(DBNAME_ATTR, dbName);
         return startTransaction(rpc, dbName,connectionManager);
 
     }
@@ -78,9 +78,9 @@ public class SQLTransaction
      * @param dbName
      * @throws SlxException
      */
-    public static boolean startTransaction(DataSourceCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static boolean startTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection conn = (Connection) rpc.getContext().getAttribute(connectionKey);
+        Connection conn = (Connection) rpc.getAttribute(connectionKey);
         if (conn == null) {
             conn = connectionManager.get(dbName);
             try {
@@ -88,8 +88,8 @@ public class SQLTransaction
             } catch (SQLException e) {
                 throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
             }
-            rpc.getContext().setAttribute(DBNAME_ATTR, dbName);
-            rpc.getContext().setAttribute(connectionKey, conn);
+            rpc.setAttribute(DBNAME_ATTR, dbName);
+            rpc.setAttribute(connectionKey, conn);
             log.debug("Started new transaction [ " + conn.hashCode() + " ]");
             return true;
         } else {
@@ -100,7 +100,7 @@ public class SQLTransaction
 
     }
 
-    public static Connection getConnection(DataSourceCall rpc) throws SlxException {
+    public static Connection getConnection(DSCall rpc) throws SlxException {
         List dsReqs = rpc.getRequests();
         for (Iterator i = dsReqs.iterator(); i.hasNext();) {
             Object req = i.next();
@@ -109,7 +109,7 @@ public class SQLTransaction
                 DataSource ds = dsReq.getDataSource();
                 if (ds instanceof SQLDataSource) {
                     String dbName = ((SQLDataSource) ds).getDriver().dbName;
-                    rpc.getContext().setAttribute("_isc_default_dbName", dbName);
+                    rpc.setAttribute("_isc_default_dbName", dbName);
                     return getConnection(rpc, dbName);
                 }
             }
@@ -123,20 +123,20 @@ public class SQLTransaction
      * @param dbName
      * @return
      */
-    private static Connection getConnection(DataSourceCall rpc, String dbName) {
+    private static Connection getConnection(DSCall rpc, String dbName) {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getContext().getAttribute(connectionKey);
+        Connection connection = (Connection) rpc.getAttribute(connectionKey);
         return connection;
     }
 
-    public static void rollbackTransaction(DataSourceCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getContext().getAttribute(DBNAME_ATTR);
+    public static void rollbackTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
         rollbackTransaction(rpc, dbName,connectionManager);
     }
 
-    public static void rollbackTransaction(DataSourceCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void rollbackTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getContext().getAttribute(connectionKey);
+        Connection connection = (Connection) rpc.getAttribute(connectionKey);
         if (connection == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
                 dbName).append("'").toString());
@@ -150,14 +150,14 @@ public class SQLTransaction
             endTransaction(rpc, dbName,connectionManager);
     }
 
-    public static void commitTransaction(DataSourceCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getContext().getAttribute(DBNAME_ATTR);
+    public static void commitTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
         commitTransaction(rpc, dbName,connectionManager);
     }
 
-    public static void commitTransaction(DataSourceCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void commitTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getContext().getAttribute(connectionKey);
+        Connection connection = (Connection) rpc.getAttribute(connectionKey);
         if (connection == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
                 dbName).append("'").toString());
@@ -171,22 +171,22 @@ public class SQLTransaction
             endTransaction(rpc, dbName,connectionManager);
     }
 
-    public static void endTransaction(DataSourceCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getContext().getAttribute(DBNAME_ATTR);
+    public static void endTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
         endTransaction(rpc, dbName,connectionManager);
     }
 
-    public static void endTransaction(DataSourceCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void endTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getContext().getAttribute(connectionKey);
+        Connection connection = (Connection) rpc.getAttribute(connectionKey);
         if (connection == null) {
             throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
                 dbName).append("'").toString());
         } else {
             log.debug((new StringBuilder()).append("Ending transaction \"").append(connection.hashCode()).append("\"").toString());
             connectionManager.free(connection);
-            rpc.getContext().removeAttribute(DBNAME_ATTR);
-            rpc.getContext().removeAttribute(connectionKey);
+            rpc.removeAttribute(DBNAME_ATTR);
+            rpc.removeAttribute(connectionKey);
             return;
         }
     }

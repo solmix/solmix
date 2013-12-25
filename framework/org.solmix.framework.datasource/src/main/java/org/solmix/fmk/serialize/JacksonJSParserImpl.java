@@ -23,11 +23,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.Version;
@@ -44,7 +39,6 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.ObjectFactory;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tsolmix;
-import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
@@ -58,7 +52,6 @@ import org.solmix.fmk.serialize.jackson.ToperationBindingSerializer;
 import org.solmix.fmk.serialize.jackson.ToperationBindingsSerializer;
 import org.solmix.fmk.serialize.jackson.TvalidatorsSerializer;
 import org.solmix.fmk.serialize.jackson.TvalueMapSerializer;
-import org.solmix.fmk.util.SLXDate;
 
 /**
  * @author solmix.f@gmail.com
@@ -110,8 +103,6 @@ public class JacksonJSParserImpl implements JSParser
 
     private boolean omitNullValues = true;
 
-    // private boolean isJaxb = true;
-
     /**
      * {@inheritDoc}
      * 
@@ -122,7 +113,8 @@ public class JacksonJSParserImpl implements JSParser
         return "jackson";
     }
 
-    protected <T> T toJavaObject(Reader src, Class<T> valueType) throws SlxException {
+    @Override
+    public <T> T toJavaObject(Reader src, Class<T> valueType) throws SlxException {
 
         ObjectMapper mapper = initISCMapper();
         try {
@@ -157,12 +149,6 @@ public class JacksonJSParserImpl implements JSParser
                 if (log.isTraceEnabled())
                     log.trace("transform js account exception try to restart the objectmapper", ignore);
                 mapper = initISCMapper(true);
-                // FilterBeanSerializerFactory _filter = new FilterBeanSerializerFactory();
-                // if (DataUtil.isNotNullAndEmpty(this.filterProperties))
-                // _filter.addFilterProperty(filterProperties);
-                // if (DataUtil.isNotNullAndEmpty(properties))
-                // _filter.addFilterProperty(properties);
-                // mapper.setSerializerFactory(_filter);
                 mapper.writeValue(out, obj);
             } catch (JsonGenerationException e) {
                 throw new SlxException(Tmodule.JS, Texception.JS_JSON_GENERATION_ERROR, e);
@@ -263,27 +249,6 @@ public class JacksonJSParserImpl implements JSParser
         toJavaScript(out, obj);
         return out.toString();
 
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void main(String args[]) throws JsonGenerationException, JsonMappingException, IOException, SlxException {
-        JacksonJSParserImpl parser = new JacksonJSParserImpl();
-        ObjectMapper mapper = parser.initISCMapper();
-        System.out.println(mapper.writeValueAsString(new SLXDate(new Date().getTime())));
-        TvalueMap map = new TvalueMap();
-        Map data = new HashMap();
-        Map data2 = new HashMap();
-        List l = new ArrayList();
-        l.add("data31");
-        l.add("data32");
-        l.add(map);
-        data.put("1", "data1");
-        data.put("2", data2);
-        data.put("3", l);
-        data2.put("22", "data22");
-        System.out.println(mapper.writeValueAsString(map));
-        JacksonJSParserImpl m = new JacksonJSParserImpl();
-        System.out.println(m.toJavaScript(data));
     }
 
     /**

@@ -43,10 +43,11 @@ public class MapperUtil
 
     private static JSParser jsParser;
 
-    public static void records2XML(String tagName, List<Map<Object, Object>> obj, Writer out) throws Exception {
-        if (DataUtil.isNullOrEmpty(obj))
+    public static void records2XML(String tagName, List<?> list, Writer out) throws Exception {
+        if (DataUtil.isNullOrEmpty(list))
             return;
-        for (Map<Object, Object> data : obj) {
+        for (Object l : list) {
+            Map<?, ?> data=(Map<?, ?>)l;
             if (DataUtil.isNullOrEmpty(tagName)) {
                 tagName = "Object";
             }

@@ -198,4 +198,10 @@ public class JaxbXMLParserImpl implements XMLParser
         }
     }
 
+    @Override
+    public void toXML(Writer out, Object object) throws SlxException {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

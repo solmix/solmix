@@ -575,21 +575,20 @@ public class DataUtil
     /**
      * 传入对象是List就转化为List返回，否则就新建一个List把该对象加入这个List再返回
      * 
-     * @param <T>
-     * 
      * @param obj
      * @return
      */
-    public static  List makeListIfSingle(Object obj) {
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> makeListIfSingle(T obj) {
         if (obj == null)
             return null;
-        else if (obj instanceof List<?>)
-            return (List<?>) obj;
-        else if(obj.getClass().isArray()){
-           List<Object> alist= new ArrayList<Object>();
+        else if (obj instanceof List<?>){
+            return (List<T>) obj;
+        }else if(obj.getClass().isArray()){
+           List<T> alist= new ArrayList<T>();
            int l= Array.getLength(obj);
            for(int i=0;i<l;i++){
-               alist.add(Array.get(obj, i));
+               alist.add((T)Array.get(obj, i));
            }
            return alist;
             

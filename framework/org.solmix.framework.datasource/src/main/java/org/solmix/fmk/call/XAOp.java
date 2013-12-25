@@ -3,7 +3,7 @@ package org.solmix.fmk.call;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.call.DataSourceCall;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
@@ -70,7 +70,7 @@ public abstract class XAOp
                 request.getContext().setValues(values);
             request.getContext().setOperationType(type);
             request.setCanJoinTransaction(true);
-            request.setDataSourceCall(rpc);
+            request.setDSCall(rpc);
         } catch (Exception e) {
             log.error("Find and instance Datasource:" + dataSourceName + " failed,Exception is" + e.getMessage());
         }
@@ -91,9 +91,9 @@ public abstract class XAOp
 
     public abstract DSResponse exe(DSRequest request) throws SlxException;
 
-    private DataSourceCall rpc;
+    private DSCall rpc;
 
-    protected void setRpc(DataSourceCall rpc) {
+    protected void setRpc(DSCall rpc) {
         this.rpc = rpc;
     }
 
