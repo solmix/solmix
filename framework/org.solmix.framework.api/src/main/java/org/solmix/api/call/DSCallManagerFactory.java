@@ -19,21 +19,18 @@
 
 package org.solmix.api.call;
 
-import org.solmix.api.exception.SlxException;
 
-public interface DataSourceCallCompleteCallback
+/**
+ * 
+ * @version 110035
+ */
+public interface DSCallManagerFactory
 {
-
-   /**
-    * @param call
-    * @throws Exception
-    */
-   void onSuccess( DataSourceCall call ) throws SlxException;
-
-   /**
-    * @param call
-    * @param flag
-    * @throws Exception
-    */
-   void onFailure( DataSourceCall call, boolean flag ) throws SlxException;
+    DSCallManager createDSCallManager();
+    
+    /**
+     * create buildin DSCallManager for simple usage,for example transaction dsCall.
+     * @return
+     */
+    DSCallManager createSimpleDSCallManager();
 }

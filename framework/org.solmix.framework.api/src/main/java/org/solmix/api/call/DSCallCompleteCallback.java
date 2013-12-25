@@ -1,5 +1,5 @@
 /*
- * SOLMIX PROJECT
+ * ========THE SOLMIX PROJECT=====================================
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,20 +19,21 @@
 
 package org.solmix.api.call;
 
-import org.solmix.api.datasource.DSRequest;
-import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
 
-/**
- * If used this interface to handle rpc,One {@link DataSourceCall} only can process one DSRequest.
- * 
- * @author solmix
- * @version 0.1.1 2013-1-10
- */
-
-public interface HasDSCHandler
+public interface DSCallCompleteCallback
 {
 
-    void handler(DataSourceCall rpc, DSRequest req, DSResponse resp) throws SlxException;
+   /**
+    * @param call
+    * @throws Exception
+    */
+   void onSuccess( DSCall call ) throws SlxException;
 
+   /**
+    * @param call
+    * @param flag
+    * @throws Exception
+    */
+   void onFailure( DSCall call, boolean flag ) throws SlxException;
 }

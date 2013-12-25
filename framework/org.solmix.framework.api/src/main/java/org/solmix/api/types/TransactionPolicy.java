@@ -38,7 +38,7 @@ public enum TransactionPolicy implements ValueEnum
      */
     ANY_CHANGE( "2" ) ,
     /**
-     * All change should join transaction,include retch operation.
+     * All change should join transaction,include fetch operation.
      */
     ALL( "3" ) ,
     NONE( "4" );

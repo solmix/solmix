@@ -61,10 +61,10 @@ public enum Tmodule implements ValueEnum
      */
     XML("xml") ,
     /**
-     * RPC module.
+     * DSC module.
      * Error code :start with 4...
      */
-    RPC("rpc") ,
+    DSC("dsc") ,
     /**
      * CONFIG module.
      * Error code :start with 5...

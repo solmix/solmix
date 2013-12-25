@@ -106,12 +106,12 @@ public interface DSResponse extends ResponseType
     void setDataSource(DataSource dataSource);
 
     /**
-     * get the response values which will be send to client as JSON format.
+     * get the response values which will be send to client .
      * 
      * @return
      * @throws SlxException
      */
-    Object getJSResponse() throws SlxException;
+    Object getClientResponse() throws SlxException;
 
     /**
      * get the record form {@link org.solmix.api.data.DSResponseData#getData() getData()} and filter data by

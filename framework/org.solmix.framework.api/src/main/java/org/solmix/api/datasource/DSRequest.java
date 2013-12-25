@@ -19,8 +19,8 @@
 
 package org.solmix.api.datasource;
 
-import org.solmix.api.call.DataSourceCall;
-import org.solmix.api.call.DataSourceCallCompleteCallback;
+import org.solmix.api.call.DSCall;
+import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.call.RequestType;
 import org.solmix.api.context.Context;
 import org.solmix.api.data.DSRequestData;
@@ -58,17 +58,17 @@ public interface DSRequest extends RequestType
     void setRequestContext(Context context) throws SlxException;
 
     /**
-     * {@link org.solmix.api.call.DataSourceCall} for this request.
+     * {@link org.solmix.api.call.DSCall} for this request.
      * 
      * @return
      */
-    DataSourceCall getDataSourceCall();
+    DSCall getDSCall();
 
     DataSource getDataSource() throws SlxException;
 
     void setDataSource(DataSource dataSource);
 
-    void setDataSourceCall(DataSourceCall rpc);
+    void setDSCall(DSCall dsc);
 
     /**
      * release datasource
@@ -77,7 +77,7 @@ public interface DSRequest extends RequestType
 
     void registerFreeResourcesHandler(FreeResourcesHandler handler);
 
-    boolean isModificationRequest(DSRequest req) throws SlxException;
+    boolean isModificationRequest() throws SlxException;
 
     /**
      * find out datasource name.
@@ -154,10 +154,10 @@ public interface DSRequest extends RequestType
      */
     void setServiceCalled(boolean aerviceCalled);
     /**
-     * Used to support RPC transaction.
+     * Used to support DSC transaction.
      * <p>
      * If this value is true ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
-     * with {@link DataSourceCallCompleteCallback} to commit the transaction. if not,should commit it yourself.
+     * with {@link DSCallCompleteCallback} to commit the transaction. if not,should commit it yourself.
      * 
      * @return the freeOnExecute
      */

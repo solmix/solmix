@@ -92,6 +92,8 @@ public interface XMLParser
      * @throws SlxException
      */
     void marshalDS(Writer out, Object jaxbObject) throws SlxException;
+    
+    void toXML(Writer out, Object object) throws SlxException;
 
     /**
      * @param is

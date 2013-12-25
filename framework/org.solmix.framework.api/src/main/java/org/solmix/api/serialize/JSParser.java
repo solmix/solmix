@@ -19,6 +19,7 @@
 
 package org.solmix.api.serialize;
 
+import java.io.Reader;
 import java.io.Writer;
 
 import org.solmix.api.exception.SlxException;
@@ -111,5 +112,13 @@ public interface JSParser
      * @throws SlxException
      */
     <T> T toJavaObject(String inputString, Class<T> Type) throws SlxException;
+    /**
+     * Convert input  JavaScript reader to java object. 
+     * @param inputString
+     * @param Type
+     * @return
+     * @throws SlxException
+     */
+    <T> T toJavaObject(Reader reader, Class<T> Type) throws SlxException;
 
 }
