@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.data;
+package org.solmix.api.datasource;
 
 import java.util.Date;
 import java.util.HashMap;

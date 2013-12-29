@@ -34,12 +34,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.data.DSResponseData;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.ToperationBinding;
@@ -78,7 +77,6 @@ public final class BatchSQLDataSource
 
     public DSResponse fetch(DSRequest req, DataSource ds) throws SlxException {
         DSResponse __resp = new DSResponseImpl(ds,req);
-        DSResponseData respData = new DSResponseData();
         DataSourceData data = ds.getContext();
         Connection conn = null;
         try {
@@ -99,35 +97,33 @@ public final class BatchSQLDataSource
             List<List<Object>> result = SQLTransform.toFormatList(rs, columns);
             int row = result.size();
 
-            respData.setStartRow(0);
-            respData.setEndRow(row);
-            respData.setTotalRows(row);
+            __resp.setStartRow(0);
+            __resp.setEndRow(row);
+            __resp.setTotalRows(row);
             // union data.
             List<Object> columnNames = new ArrayList<Object>();
             for (String key : columns) {
                 columnNames.add(key);
             }
             result.add(columnNames);
-            respData.setData(result);
+            __resp.setRawData(result);
             if (conn != null) {
                 conn.commit();
 
             }
-            respData.setStatus(Status.STATUS_SUCCESS);
+            __resp.setStatus(Status.STATUS_SUCCESS);
         } catch (SQLException e) {
-            respData.setStatus(Status.STATUS_FAILURE);
+            __resp.setStatus(Status.STATUS_FAILURE);
             throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
 
         } finally {
             connectionManager.free(conn);
         }
-        __resp.setContext(respData);
         return __resp;
     }
 
     public DSResponse add(DSRequest req, DataSource ds) throws SlxException {
         DSResponse __resp = new DSResponseImpl(ds,req);
-        DSResponseData respData = new DSResponseData();
         Connection conn = null;
         List data_holder = null;
         String explictSQL = "";
@@ -228,10 +224,10 @@ public final class BatchSQLDataSource
             int[] res = pre.executeBatch();
             affectRow = affectRow + res.length;
             conn.commit();
-            respData.setStatus(Status.STATUS_SUCCESS);
-            respData.setTotalRows(affectRow);
+            __resp.setStatus(Status.STATUS_SUCCESS);
+            __resp.setTotalRows(affectRow);
         } catch (SQLException e) {
-            respData.setStatus(Status.STATUS_FAILURE);
+            __resp.setStatus(Status.STATUS_FAILURE);
             log.error("[BAD-DATA]" + data_holder.toString());
             try {
                 conn.rollback();
@@ -240,14 +236,13 @@ public final class BatchSQLDataSource
             }
             log.error("[SQLEXCEPTION]" + e.getLocalizedMessage());
         } catch (IOException e) {
-            respData.setStatus(Status.STATUS_FAILURE);
+            __resp.setStatus(Status.STATUS_FAILURE);
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } finally {
             if (conn != null)
                 connectionManager.free(conn);
 
         }
-        __resp.setContext(respData);
         return __resp;
     }
 

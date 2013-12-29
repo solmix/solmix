@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.mock;
 
-import org.solmix.api.data.DataSourceData;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.EserverType;

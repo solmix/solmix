@@ -26,8 +26,8 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
@@ -76,7 +76,7 @@ public class BasicGenerator implements DataSourceGenerator
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.datasource.DataSourceGenerator#deriveSchema(org.solmix.api.data.DataSourceData)
+     * @see org.solmix.api.datasource.DataSourceGenerator#deriveSchema(org.solmix.api.datasource.DataSourceData)
      */
     @Override
     public DataSource deriveSchema(DataSourceData context) throws SlxException {

@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.data;
+package org.solmix.api.datasource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +72,6 @@ public class DSRequestData implements java.io.Serializable
 
     private Boolean isClientRequest;
 
-    private String exportAs;
 
     protected Object beforeValidatedValues;
 
@@ -127,46 +126,6 @@ public class DSRequestData implements java.io.Serializable
         this.Roperation = Roperation;
     }
 
-    /**
-     * @return the exportHeader
-     */
-    public String getExportHeader() {
-        if (exportHeader == null)
-            exportHeader = Roperation.getExportHeader();
-        return exportHeader;
-    }
-
-    /**
-     * @param exportHeader the exportHeader to set
-     */
-    public void setExportHeader(String exportHeader) {
-        this.exportHeader = exportHeader;
-    }
-
-    /**
-     * @return the exportFooter
-     */
-    public String getExportFooter() {
-        if (exportFooter == null)
-            exportFooter = Roperation.getExportFooter();
-        return exportFooter;
-    }
-
-    /**
-     * @param exportFooter the exportFooter to set
-     */
-    public void setExportFooter(String exportFooter) {
-        this.exportFooter = exportFooter;
-    }
-
-    /**
-     * @return the exportTitleSeparatorChar
-     */
-    public String getExportTitleSeparatorChar() {
-        if (exportTitleSeparatorChar == null)
-            exportTitleSeparatorChar = Roperation.getExportTitleSeparatorChar();
-        return exportTitleSeparatorChar;
-    }
 
     public Object getFieldValue(Object fieldName) {
         Map valueSet = getValues();
@@ -178,141 +137,14 @@ public class DSRequestData implements java.io.Serializable
         else
             return null;
     }
-
-    /**
-     * @param exportTitleSeparatorChar the exportTitleSeparatorChar to set
-     */
-    public void setExportTitleSeparatorChar(String exportTitleSeparatorChar) {
-        this.exportTitleSeparatorChar = exportTitleSeparatorChar;
-    }
-
-    private String exportHeader;
-
-    private String exportFooter;
-
-    private String exportTitleSeparatorChar;
-
-    private String exportFilename;
-
-    private String exportDelimiter;
-
-    private String exportDisplay;
-
-    private String lineBreakStyle;
-
-    private List<String> exportFields;
-
-    /**
-     * @return the exportAs
-     */
-    public String getExportAs() {
-        if (exportAs == null)
-            exportAs = Roperation.getExportAs();
-        return exportAs;
-    }
-
-    /**
-     * @param exportAs the exportAs to set
-     */
-    public void setExportAs(String exportAs) {
-        this.exportAs = exportAs;
-    }
-
-    /**
-     * @return the exportFilename
-     */
-    public String getExportFilename() {
-        if (exportFilename == null && Roperation != null)
-            exportFilename = Roperation.getExportFilename();
-        return exportFilename;
-    }
-
-    /**
-     * @param exportFilename the exportFilename to set
-     */
-    public void setExportFilename(String exportFilename) {
-        this.exportFilename = exportFilename;
-    }
-
-    /**
-     * @return the exportDelimiter
-     */
-    public String getExportDelimiter() {
-        if (exportDelimiter == null && Roperation != null)
-            exportDelimiter = Roperation.getExportDelimiter();
-        return exportDelimiter;
-    }
-
-    /**
-     * @param exportDelimiter the exportDelimiter to set
-     */
-    public void setExportDelimiter(String exportDelimiter) {
-        this.exportDelimiter = exportDelimiter;
-    }
-
-    /**
-     * @return the exportDisplay
-     */
-    public String getExportDisplay() {
-        if (exportDisplay == null && Roperation != null)
-            exportDisplay = Roperation.getExportDisplay();
-        return exportDisplay;
-    }
-
-    /**
-     * @param exportDisplay the exportDisplay to set
-     */
-    public void setExportDisplay(String exportDisplay) {
-        this.exportDisplay = exportDisplay;
-    }
-
-    /**
-     * @return the lineBreakStyle
-     */
-    public String getLineBreakStyle() {
-        if (lineBreakStyle == null && Roperation != null)
-            lineBreakStyle = Roperation.getLineBreakStyle();
-        return lineBreakStyle;
-    }
-
-    /**
-     * @param lineBreakStyle the lineBreakStyle to set
-     */
-    public void setLineBreakStyle(String lineBreakStyle) {
-        this.lineBreakStyle = lineBreakStyle;
-    }
-
-    /**
-     * @return the exportFields
-     */
-    public List<String> getExportFields() {
-        if (exportFields == null) {
-
-            String l = Roperation == null ? null : Roperation.getExportFields();
-            if (l != null) {
-                List<String> fields = new ArrayList<String>();
-
-                fields.addAll(DataUtil.simpleSplit(l, ","));
-                exportFields = fields;
-            }
-        }
-        return exportFields;
-    }
-
-    /**
-     * @param exportFields the exportFields to set
-     */
-    public void setExportFields(List<String> exportFields) {
-        this.exportFields = exportFields;
-    }
-
+   
     /**
      * @return the isExport
      */
-    public Boolean getIsExport() {
+    public boolean getIsExport() {
         if (Roperation == null)
-            return null;
-        return new Boolean(Roperation.isExportResults());
+            return false;
+        return Roperation.isExportResults();
     }
 
     private Object rawCriteria;
@@ -322,7 +154,7 @@ public class DSRequestData implements java.io.Serializable
     private Object rawOldValues;
 
     /**
-     * {@link org.solmix.api.data.DSRequestData#criteria criteria} maybe <code>Map</code> or List &lt Map &gt
+     * {@link org.solmix.api.datasource.DSRequestData#criteria criteria} maybe <code>Map</code> or List &lt Map &gt
      * 
      * @return the criteria
      */
@@ -815,7 +647,7 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * Convenience for get {@link org.solmix.api.data.DSRequestData#getRawOldValues()}.get <code>rawOldValues</code> as
+     * Convenience for get {@link org.solmix.api.datasource.DSRequestData#getRawOldValues()}.get <code>rawOldValues</code> as
      * a <code>Map</code>
      * 
      * @return
@@ -838,7 +670,7 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * Convenience for get {@link org.solmix.api.data.DSRequestData#getRawOldValues()}.get <code>rawOldValues</code> as
+     * Convenience for get {@link org.solmix.api.datasource.DSRequestData#getRawOldValues()}.get <code>rawOldValues</code> as
      * a <code>List</code>
      * 
      * @return
@@ -848,11 +680,11 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * get {@link org.solmix.api.data.DSRequestData#getRawCriteria()} as a <code>Map</code>
+     * get {@link org.solmix.api.datasource.DSRequestData#getRawCriteria()} as a <code>Map</code>
      * <p>
-     * if {@link org.solmix.api.data.DSRequestData#getOperationType() OperationType} is
+     * if {@link org.solmix.api.datasource.DSRequestData#getOperationType() OperationType} is
      * {@link org.solmix.api.jaxb.Eoperation.ADD ADD} the criteria is from
-     * {@link org.solmix.api.data.DSRequestData#getValues()} if the OperationType is
+     * {@link org.solmix.api.datasource.DSRequestData#getValues()} if the OperationType is
      * {@link org.solmix.api.jaxb.Eoperation.UPDATE UPDATE} and {@link #getRawCriteria()} is null ,return
      * {@link #getValues()}
      * 
@@ -887,7 +719,7 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * get {@link org.solmix.api.data.DSRequestData#getRawCriteria()} as a <code>List</code>
+     * get {@link org.solmix.api.datasource.DSRequestData#getRawCriteria()} as a <code>List</code>
      * 
      * @return
      */
@@ -899,12 +731,12 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * get {@link org.solmix.api.data.DSRequestData#getValues()} as a <code>Map</code>
+     * get {@link org.solmix.api.datasource.DSRequestData#getValues()} as a <code>Map</code>
      * <p>
-     * If {@link org.solmix.api.data.DSRequestData#getOperationType() OperationType} is
+     * If {@link org.solmix.api.datasource.DSRequestData#getOperationType() OperationType} is
      * {@link org.solmix.api.jaxb.Eoperation.FETCH FETCH} or {@link org.solmix.api.jaxb.Eoperation.REMOVE REMOVE} return
-     * {@link org.solmix.api.data.DSRequestData#getCriteria()} else return
-     * {@link org.solmix.api.data.DSRequestData#getRawValues() RawValues}
+     * {@link org.solmix.api.datasource.DSRequestData#getCriteria()} else return
+     * {@link org.solmix.api.datasource.DSRequestData#getRawValues() RawValues}
      * 
      * @return
      */
@@ -935,7 +767,7 @@ public class DSRequestData implements java.io.Serializable
     }
 
     /**
-     * get {@link org.solmix.api.data.DSRequestData#getValues()} as a <code>List</code>
+     * get {@link org.solmix.api.datasource.DSRequestData#getValues()} as a <code>List</code>
      * 
      * @return
      */

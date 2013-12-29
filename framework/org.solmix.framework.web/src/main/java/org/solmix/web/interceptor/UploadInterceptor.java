@@ -19,6 +19,7 @@
 package org.solmix.web.interceptor;
 
 import org.solmix.api.call.DSCallWebInterceptor;
+import org.solmix.api.call.InterceptorOrder;
 
 
 /**
@@ -30,5 +31,8 @@ import org.solmix.api.call.DSCallWebInterceptor;
 public class UploadInterceptor extends DSCallWebInterceptor
 {
    
-
+    @Override
+    public PRIORITY priority() {
+        return InterceptorOrder.BEFORE_DEFAULT;
+    }
 }

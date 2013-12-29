@@ -32,8 +32,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.solmix.api.call.DataSourceCall;
-import org.solmix.api.call.HttpServletRequestParser;
+import org.solmix.api.call.DSCall;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSourceManager;
@@ -57,7 +56,7 @@ import org.w3c.dom.Node;
  * @version 110035 2012-12-4
  */
 
-public class RestRequestParser implements HttpServletRequestParser
+public class RestRequestParser 
 {
 
     DocumentBuilder domBuilder;
@@ -74,16 +73,10 @@ public class RestRequestParser implements HttpServletRequestParser
         return domBuilder;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.call.HttpServletRequestParser#parseRequest(org.solmix.api.call.DataSourceCall,
-     *      javax.servlet.http.HttpServletRequest)
-     */
-    @Override
-    public void parseRequest(DataSourceCall rpc, WebContext webContext) throws SlxException {
+  
+    public void parseRequest(DSCall rpc, WebContext webContext) throws SlxException {
 
-        rpc.getContext().setRest(true);
+//        rpc.getContext().setRest(true);
         HttpServletRequest request = webContext.getRequest();
         String viewType = request.getParameter("viewType");
         if ("fchart".equals(viewType)) {
@@ -101,7 +94,7 @@ public class RestRequestParser implements HttpServletRequestParser
             if (cf.getValues() != null && cf.getValues().size() > 0)
                 dsrequest.getContext().setValues(cf.getValues());
             dsrequest.getContext().setIsClientRequest(true);
-            dsrequest.setDataSourceCall(rpc);
+            dsrequest.setDSCall(rpc);
             dsrequest.setRequestContext(webContext);
             rpc.addRequest(dsrequest);
 
@@ -119,7 +112,7 @@ public class RestRequestParser implements HttpServletRequestParser
                 queryStr=queryStr.trim();
                 Request dsRequest=null;
                 if(queryStr.startsWith("{")){
-                    JSParser parser = rpc.getJsParser();
+                    JSParser parser = rpc.getJSParser();
                     dsRequest = parser.toJavaObject(queryStr, Request.class);
                 }else if(queryStr.startsWith("<")){
                     XMLParserFactory xmlFactory = XMLParserFactoryImpl.getInstance();
@@ -145,7 +138,7 @@ public class RestRequestParser implements HttpServletRequestParser
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.setFreeOnExecute(freeOnExecute);
                                 dsr.setCanJoinTransaction(!freeOnExecute);
-                                dsr.setDataSourceCall(rpc);
+                                dsr.setDSCall(rpc);
                                 dsr.setRequestContext(webContext);
                                 rpc.addRequest(dsr);
                             }

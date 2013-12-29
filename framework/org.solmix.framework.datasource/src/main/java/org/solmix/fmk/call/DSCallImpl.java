@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.call.DSCallInterceptor;
-import org.solmix.api.call.DSCallInterceptor.ReturnType;
+import org.solmix.api.call.DSCallInterceptor.Action;
 import org.solmix.api.context.Context;
-import org.solmix.api.data.DSRequestData;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -203,11 +203,16 @@ public class DSCallImpl implements DSCall
     @Override
     public void run() throws SlxException {
         for (DSCallInterceptor i : interceptors) {
+            i.prepareRequest(this, context);
+        }
+        for (DSCallInterceptor i : interceptors) {
             i.inspect(this, context);
         }
         List<DSRequest> reqs = getRequests();
         boolean _failure = false;
         status = STATUS.BEGIN;
+        if (log.isTraceEnabled())
+            log.trace("Performing " +requestCount() + " operation(s) ");
         try {
             for (DSRequest req : reqs) {
                 DSResponse res = req.execute();
@@ -236,8 +241,8 @@ public class DSCallImpl implements DSCall
             }
             // post inspect
             for (DSCallInterceptor i : interceptors) {
-                ReturnType res = i.postInspect(this, context);
-                if (res == ReturnType.CANCELLED)
+                Action res = i.postInspect(this, context);
+                if (res == Action.CANCELLED)
                     break;
             }
         } finally {
@@ -338,7 +343,7 @@ public class DSCallImpl implements DSCall
 
     private boolean isXAFailure(DSRequest req, DSResponse res) throws SlxException {
         boolean _transactionFailure = false;
-        if (res != null && res.getContext().getStatus().value() < 0)
+        if (res != null && res.getStatus().value() < 0)
             if (req.isRequestStarted()) {
                 if (req.isJoinTransaction())
                     _transactionFailure = true;
@@ -419,8 +424,8 @@ public class DSCallImpl implements DSCall
             for (DSRequest req : requests) {
                 if (req.isJoinTransaction()) {
                     DSResponse resp = getResponse(req);
-                    if (resp != null && resp.getContext().getStatus() == DSResponse.Status.STATUS_SUCCESS)
-                        resp.getContext().setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
+                    if (resp != null && resp.getStatus() == DSResponse.Status.STATUS_SUCCESS)
+                        resp.setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
                 }
             }
         }
@@ -461,8 +466,8 @@ public class DSCallImpl implements DSCall
 
     private void transactionFailed(DSRequest request, DSResponse resp) throws SlxException {
         if (request.isJoinTransaction()) {
-            if (resp != null && resp.getContext().getStatus() == DSResponse.Status.STATUS_SUCCESS)
-                resp.getContext().setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
+            if (resp != null && resp.getStatus() == DSResponse.Status.STATUS_SUCCESS)
+                resp.setStatus(DSResponse.Status.STATUS_TRANSACTION_FAILED);
         }
         rollback();
     }

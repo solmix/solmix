@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.docs;
 
-import org.solmix.api.data.DataSourceData;
+import org.solmix.api.datasource.DataSourceData;
 
 
 /**

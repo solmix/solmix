@@ -34,7 +34,8 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.fmk.SlxContext;
-import org.solmix.web.DataSourceCallServlet;
+import org.solmix.web.AbstractDSCallServlet;
+import org.solmix.web.DSCallServlet;
 import org.solmix.web.LoadSchemaServlet;
 
 /**
@@ -48,7 +49,7 @@ public class SGTServlet extends HttpServlet
 
     private volatile LoadSchemaServlet loadSchemaService;
 
-    private volatile DataSourceCallServlet dsCallService;
+    private volatile AbstractDSCallServlet dsCallService;
 
     private volatile Servlet cometServlet;
 
@@ -86,8 +87,7 @@ public class SGTServlet extends HttpServlet
                     break;
                 default:
                     if (dsCallService == null) {
-                        dsCallService = new DataSourceCallServlet();
-                        dsCallService.setRequestParser(new RestRequestParser());
+                        dsCallService = new DSCallServlet();
                         dsCallService.init(getServletConfig());
                     }
                     dsCallService.service(request, response);

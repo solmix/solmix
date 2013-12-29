@@ -26,7 +26,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.data.DataSourceData;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.ObjectFactory;
 import org.solmix.api.jaxb.TdataSource;

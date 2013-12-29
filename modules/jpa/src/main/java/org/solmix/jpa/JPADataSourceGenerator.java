@@ -29,8 +29,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.xml.namespace.QName;
 
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;

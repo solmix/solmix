@@ -8,6 +8,6 @@
     <inherits name="org.solmix.pagebar.PageBar" />
  	<inherits name="org.solmix.advanceds.AdvanceDS" />
 	<inherits name="com.gwtplatform.mvp.Mvp" />
-	<script src="sc/extensions/AdvanceDataSource.js"/>
+	
 	<source path="client"/>
 </module>

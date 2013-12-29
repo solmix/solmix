@@ -45,50 +45,51 @@ public final class FChartDataSource
 {
 
     public static final String TEMPLATE = "template";
-    public static final String TEMPLATE_FILE="template-file";
 
-    private static final Logger log =  LoggerFactory.getLogger(FChartDataSource.class.getName());
+    public static final String TEMPLATE_FILE = "template-file";
 
-  
+    private static final Logger log = LoggerFactory.getLogger(FChartDataSource.class.getName());
+
     public DSResponse fetch(DSRequest req, DataSource ds) throws SlxException {
         ToperationBinding bind = ds.getContext().getOperationBinding(req);
-        Map<String,Object> critera=req.getContext().getCriteria();
-        String characterEncoding="UTF-8";
-        if(critera!=null&&critera.get("characterEncoding")!=null){
-            characterEncoding=critera.get("characterEncoding").toString();
+        Map<String, Object> critera = req.getContext().getCriteria();
+        String characterEncoding = "UTF-8";
+        if (critera != null && critera.get("characterEncoding") != null) {
+            characterEncoding = critera.get("characterEncoding").toString();
         }
         Tobject object = bind.getConfiguration();
         Map<String, Object> map = XMLUtil.toMap(object);
-        DSResponse response ;
-        Object data=getData(req, ds);
-    	response = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSResponse();
-    	response.getContext().setData(data);
+        DSResponse response;
+        Object data = getData(req, ds);
+        response = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSResponse();
+        response.setRawData(data);
         Map context = Velocity.getStandardContextMap(req);
         context.putAll(map);
-        context.put(Velocity.RESPONSE_DATA, response.getContext().getData());
+        context.put(Velocity.RESPONSE_DATA, response.getRawData());
         if (map.get(TEMPLATE_FILE) != null) {
             Object template = map.get(TEMPLATE_FILE);
             try {
-                String returnValue =Velocity.evaluateTemplateFileAsString(template.toString(), context);
-                if(returnValue!=null)
-                    response.getContext().setData(returnValue);
+                String returnValue = Velocity.evaluateTemplateFileAsString(template.toString(), context);
+                if (returnValue != null)
+                    response.setRawData(returnValue);
             } catch (SlxException e) {
                 response.setStatus(Status.STATUS_FAILURE);
-                response.getContext().setData(e.getFullMessage());
+                response.setRawData(e.getFullMessage());
             }
-            
-        }else if (map.get(TEMPLATE) != null) {
+
+        } else if (map.get(TEMPLATE) != null) {
             Object template = map.get(TEMPLATE);
             String returnValue = Velocity.evaluateAsString(template.toString(), context);
             if (returnValue != null)
-                response.getContext().setData(returnValue);
+                response.setRawData(returnValue);
         }
 
-        return new FChartResponse(response,characterEncoding);
+        return response;
 
     }
-    protected Object getData(DSRequest req, DataSource ds) throws SlxException{
-    	return ds.execute(req).getContext().getData();
+
+    protected Object getData(DSRequest req, DataSource ds) throws SlxException {
+        return ds.execute(req).getRawData();
     }
 
 }

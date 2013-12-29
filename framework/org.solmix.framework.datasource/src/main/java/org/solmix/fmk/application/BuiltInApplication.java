@@ -29,8 +29,8 @@ import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.application.ApplicationSecurity;
 import org.solmix.api.context.Context;
-import org.solmix.api.data.DSRequestData;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
@@ -164,7 +164,7 @@ public class BuiltInApplication implements Application
                throw new java.lang.IllegalStateException("BuildIn application configured enable authentication,but the runtime ENV not have applicationSecurity instance");
             }else{
                if( !security.isAuthenticated()){
-                   result.getContext().setStatus(Status.STATUS_LOGIN_REQUIRED);
+                   result.setStatus(Status.STATUS_LOGIN_REQUIRED);
                    return result;
                }
             }
@@ -217,13 +217,13 @@ public class BuiltInApplication implements Application
             if (!isPermitted(request, context)) {
                 log.warn((new StringBuilder()).append("User does not qualify for any userTypes that are allowed to perform this operation ('").append(
                     operation).append("')").toString());
-                result.getContext().setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
+                result.setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
             } else {
                 executeAppOperation();
 
             }
-            if (result != null && result.getContext().getStatus() == Status.UNSET) {
-                result.getContext().setStatus(Status.STATUS_SUCCESS);
+            if (result != null && result.getStatus() == Status.UNSET) {
+                result.setStatus(Status.STATUS_SUCCESS);
             }
             // if ( !result.getContext().statusIsError() )
             dsresponse = result;

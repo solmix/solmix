@@ -51,10 +51,11 @@ import org.solmix.fmk.SlxContext;
  * @version $Id$ 2013-12-24
  */
 
-public class DefaultRestInterceptor extends DSCallRestInterceptor
+public class DefaultRestInterceptor extends AbstractRestInterceptor
 {
     private static  final Logger LOG = LoggerFactory.getLogger(DefaultRestInterceptor.class);
     public static final String PAYLOAD_NAME = "__payload";
+    public static final String DATAFORMAT = "dsc_dataFormat";
 
     public static final String XML_PREFIX = "<";
 
@@ -75,12 +76,8 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
     }
     
     @Override
-    public void inspect(DSCall dsCall, WebContext context) throws SlxException {
+    public void prepareRequest(DSCall dsCall, WebContext context) throws SlxException {
         HttpServletRequest request = context.getRequest();
-//        boolean isRest = isRest(request);
-//        context.setAttribute(REST_PARM, isRest, Scope.LOCAL);
-//        if (!isRest)
-//            return;
         try {
             String payload = request.getParameter(payloadName);
             Request dsRequest = null;
@@ -120,11 +117,11 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
     }
 
     @Override
-    public ReturnType postInspect(DSCall dsCall, WebContext context) throws SlxException {
+    public Action postInspect(DSCall dsCall, WebContext context) throws SlxException {
 //        Object isRest = context.getAttribute(REST_PARM, Scope.LOCAL);
         HttpServletRequest request= context.getRequest();
         if (/*isRest == null||*/request.getParameter("dsc_transport")!=null)
-            return ReturnType.CONTINUE;
+            return Action.CONTINUE;
         String dataFormat = getDataformat(context.getRequest());
         String contentType = new StringBuilder().append("text/").append(dataFormat).append("; charset=").append(charset).toString();
         context.setContentType(contentType);
@@ -134,7 +131,7 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
         List<Object> orderedResponseList = new ArrayList<Object>();
         for(DSRequest req:dsCall.getRequests()){
             DSResponse res= dsCall.getResponse(req);
-            orderedResponseList.add(res.getClientResponse());
+            orderedResponseList.add(getClientResponse(res));
         }
         Writer _out;
         try {
@@ -145,7 +142,10 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
             //Data must no cached.
             context.setNoCacheHeaders();
             Map<String,Object> restContainer = new HashMap<String,Object>();
-            restContainer.put("responses", orderedResponseList);
+            if(orderedResponseList.size()==1)
+                restContainer.put("response", orderedResponseList.get(0));
+            else
+                restContainer.put("responses", orderedResponseList);
             if (JSON.equalsIgnoreCase(dataFormat)) {
                 dsCall.getJSParser().toJSON(_out, restContainer);
             }else if(XML.equalsIgnoreCase(dataFormat)){
@@ -166,7 +166,7 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
         } catch (IOException e) {
             throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
         }
-        return ReturnType.CANCELLED;
+        return Action.CANCELLED;
     }
 
     private Boolean isRest(HttpServletRequest request) {
@@ -179,7 +179,7 @@ public class DefaultRestInterceptor extends DSCallRestInterceptor
     }
 
     public  String getDataformat(HttpServletRequest request) {
-        String queryString = request.getParameter("dsc_format");
+        String queryString = request.getParameter(DATAFORMAT);
         if (queryString == null)
             return "json";
         else

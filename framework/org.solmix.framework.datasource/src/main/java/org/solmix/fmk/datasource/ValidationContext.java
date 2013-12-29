@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
-import org.solmix.api.data.DSRequestData;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.logs.SlxLog;

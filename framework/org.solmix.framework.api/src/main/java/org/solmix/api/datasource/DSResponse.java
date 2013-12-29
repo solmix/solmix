@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.solmix.api.call.ResponseType;
-import org.solmix.api.data.DSResponseData;
-import org.solmix.api.exception.SlxException;
 
 /**
  * 
@@ -78,20 +76,6 @@ public interface DSResponse extends ResponseType
     }
 
     /**
-     * Return datasource response context;
-     * 
-     * @return
-     */
-    DSResponseData getContext();
-
-    /**
-     * Set the Datasource Response context.
-     * 
-     * @param dat
-     */
-    void setContext(DSResponseData dat);
-
-    /**
      * Return the DataSource
      * 
      * @return
@@ -106,34 +90,96 @@ public interface DSResponse extends ResponseType
     void setDataSource(DataSource dataSource);
 
     /**
-     * get the response values which will be send to client .
-     * 
-     * @return
-     * @throws SlxException
-     */
-    Object getClientResponse() throws SlxException;
-
-    /**
-     * get the record form {@link org.solmix.api.data.DSResponseData#getData() getData()} and filter data by
-     * {@link org.solmix.api.datasource.DataSource#getProperties(Object)} if need original data ,use
+     * filter data by {@link org.solmix.api.datasource.DataSource#getProperties(Object)} if need original data ,use
      * <code> getContext().getData()</code>
      * 
      * @return
      */
-    Map<Object, Object> getRecord();
+    Map<Object, Object> getSingleRecord();
 
     /**
-     * get the record form {@link org.solmix.api.data.DSResponseData#getData() getData()} and filter data by
-     * {@link org.solmix.api.datasource.DataSource#getProperties(Object)} if need original data ,use
+     * filter data by {@link org.solmix.api.datasource.DataSource#getProperties(Object)} if need original data ,use
      * <code> getContext().getData()</code>
      * 
      * @return
      */
-    List<Map<Object, Object>> getRecords();
+    List<Map<Object, Object>> getRecordList();
 
     Status getStatus();
 
     void setStatus(Status status);
 
     boolean isSuccess();
+
+    public Object getRawData();
+
+    /**
+     * Setting the raw data to this response.the raw data may be transformed by {@link #getSingleRecord()},
+     * {@link #getRecordList()},{@link #getSingleResult(Class)},{@link #getRecordList()}.
+     * 
+     * @param rawData the rawData to set
+     */
+    public void setRawData(Object rawData);
+
+    public <T> T getSingleResult(Class<T> type);
+
+    public <T> List<T> getResultList(Class<T> type);
+
+    /**
+     * @return
+     */
+    Object[] getErrors();
+
+    /**
+     * @param errors
+     */
+    void setErrors(Object... errors);
+
+    /**
+     * @return
+     */
+    Integer getTotalRows();
+
+    /**
+     * @param totalRows
+     */
+    void setTotalRows(Integer totalRows);
+
+    /**
+     * @return
+     */
+    Integer getEndRow();
+
+    /**
+     * @param endRow
+     */
+    void setEndRow(Integer endRow);
+
+    /**
+     * @return
+     */
+    Integer getStartRow();
+
+    /**
+     * @param startRow
+     */
+    void setStartRow(Integer startRow);
+
+    /**
+     * @param long1
+     */
+    void setAffectedRows(Long long1);
+    
+    
+    Long getAffectedRows(Long long1);
+
+    /**
+     * @param _invalidateCache
+     */
+    void setInvalidateCache(boolean _invalidateCache);
+
+    /**
+     * @return
+     */
+    boolean getInvalidateCache();
 }

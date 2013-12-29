@@ -20,8 +20,8 @@ package org.solmix.jpa;
 
 import java.util.UUID;
 
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;

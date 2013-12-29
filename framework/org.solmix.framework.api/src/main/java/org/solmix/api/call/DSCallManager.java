@@ -20,6 +20,7 @@ package org.solmix.api.call;
 
 import org.solmix.api.context.Context;
 import org.solmix.api.exception.SlxException;
+import org.solmix.commons.collections.DataTypeMap;
 
 
 /**
@@ -31,6 +32,8 @@ import org.solmix.api.exception.SlxException;
 public interface DSCallManager
 {
 
+    void setConfig(DataTypeMap config);
     DSCall getDSCall() throws SlxException;
     DSCall getDSCall(Context requestcontext) throws SlxException;
+    void addInterceptors(DSCallInterceptor... interceptors) ;
 }

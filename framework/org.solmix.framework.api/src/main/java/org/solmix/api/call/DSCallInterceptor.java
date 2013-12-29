@@ -40,7 +40,7 @@ public interface DSCallInterceptor
 
     public static final String DSC_FORMAT = "dsc_format";
 
-    public enum ReturnType
+    public enum Action
     {
         CONTINUE , CANCELLED
     }
@@ -51,9 +51,11 @@ public interface DSCallInterceptor
      * @param config
      */
     void configure(DataTypeMap config);
+    
+    void prepareRequest(DSCall dsCall, Context context)throws SlxException;
 
     void inspect(DSCall dsCall, Context context) throws SlxException;
 
-    ReturnType postInspect(DSCall dsCall, Context context) throws SlxException;
+    Action postInspect(DSCall dsCall, Context context) throws SlxException;
 
 }

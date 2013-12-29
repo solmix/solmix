@@ -83,36 +83,6 @@ public class DSResponseData
     @ResponseData
     private Object data;
 
-    @ResponseData
-    private String exportAs;
-
-    @ResponseData
-    private String exportFilename;
-
-    @ResponseData
-    private String exportDelimiter;
-
-    @ResponseData
-    private String exportHeader;
-
-    @ResponseData
-    private String exportFooter;
-
-    @ResponseData
-    private String exportTitleSeparatorChar;
-
-    @ResponseData
-    private Boolean exportResults;
-
-    @ResponseData
-    private String exportDisplay;
-
-    @ResponseData
-    private String lineBreakStyle;
-
-    @ResponseData
-    private List<String> exportFields;
-
     private Boolean isExport;
 
     private Boolean dropExtraFields;
@@ -130,12 +100,7 @@ public class DSResponseData
         this.isDSResponse = true;
     }
 
-    public void addToExportFields(String field) {
-        if (exportFields == null)
-            exportFields = new ArrayList<String>();
-        exportFields.add(field);
-    }
-
+   
     /**
      * @return the invalidateCache
      */
@@ -210,19 +175,7 @@ public class DSResponseData
         this.totalRows = totalRows;
     }
 
-    /**
-     * @return the exportResults
-     */
-    public Boolean getExportResults() {
-        return exportResults;
-    }
-
-    /**
-     * @param exportResults the exportResults to set
-     */
-    public void setExportResults(Boolean exportResults) {
-        this.exportResults = exportResults;
-    }
+   
 
     /**
      * @return the data
@@ -248,7 +201,7 @@ public class DSResponseData
         if (type.isInstance(data))
             return (T) data;
         // First, assume that the type is Map.
-        if (type.isAssignableFrom(Map.class)) {
+        if (Map.class.isAssignableFrom(type)) {
             if (data instanceof List<?>) {
                 if (((List<?>) data).size() == 0) {
                     return null;
@@ -259,7 +212,7 @@ public class DSResponseData
                 return (T) data;
             }
             // Then,assume that the type is List.
-        } else if (type.isAssignableFrom(List.class)) {
+        } else if (List.class.isAssignableFrom(type)) {
             if (data instanceof List<?>) {
                 return (T) data;
             } else {
@@ -279,7 +232,7 @@ public class DSResponseData
                     if(size>0){
                         Object one=datas.get(0);
                         T _return=null;
-                        if(type.isAssignableFrom(one.getClass())){
+                        if(one.getClass().isAssignableFrom(type)){
                             _return= (T) one;
                         }else if(one instanceof Map<?, ?>){
                             _return = type.newInstance();
@@ -331,133 +284,6 @@ public class DSResponseData
     public void setData(Object data) {
         this.data = data;
     }
-
-    /**
-     * @return the exportHeader
-     */
-    public String getExportHeader() {
-        return exportHeader;
-    }
-
-    /**
-     * @param exportHeader the exportHeader to set
-     */
-    public void setExportHeader(String exportHeader) {
-        this.exportHeader = exportHeader;
-    }
-
-    /**
-     * @return the exportFooter
-     */
-    public String getExportFooter() {
-        return exportFooter;
-    }
-
-    /**
-     * @param exportFooter the exportFooter to set
-     */
-    public void setExportFooter(String exportFooter) {
-        this.exportFooter = exportFooter;
-    }
-
-    /**
-     * @return the exportTitleSeparatorChar
-     */
-    public String getExportTitleSeparatorChar() {
-        return exportTitleSeparatorChar;
-    }
-
-    /**
-     * @param exportTitleSeparatorChar the exportTitleSeparatorChar to set
-     */
-    public void setExportTitleSeparatorChar(String exportTitleSeparatorChar) {
-        this.exportTitleSeparatorChar = exportTitleSeparatorChar;
-    }
-
-    /**
-     * @return the exportAs
-     */
-    public String getExportAs() {
-        return exportAs;
-    }
-
-    /**
-     * @param exportAs the exportAs to set
-     */
-    public void setExportAs(String exportAs) {
-        this.exportAs = exportAs;
-    }
-
-    /**
-     * @return the exportFilename
-     */
-    public String getExportFilename() {
-        return exportFilename;
-    }
-
-    /**
-     * @param exportFilename the exportFilename to set
-     */
-    public void setExportFilename(String exportFilename) {
-        this.exportFilename = exportFilename;
-    }
-
-    /**
-     * @return the exportDelimiter
-     */
-    public String getExportDelimiter() {
-        return exportDelimiter;
-    }
-
-    /**
-     * @param exportDelimiter the exportDelimiter to set
-     */
-    public void setExportDelimiter(String exportDelimiter) {
-        this.exportDelimiter = exportDelimiter;
-    }
-
-    /**
-     * @return the exportDisplay
-     */
-    public String getExportDisplay() {
-        return exportDisplay;
-    }
-
-    /**
-     * @param exportDisplay the exportDisplay to set
-     */
-    public void setExportDisplay(String exportDisplay) {
-        this.exportDisplay = exportDisplay;
-    }
-
-    /**
-     * @return the lineBreakStyle
-     */
-    public String getLineBreakStyle() {
-        return lineBreakStyle;
-    }
-
-    /**
-     * @param lineBreakStyle the lineBreakStyle to set
-     */
-    public void setLineBreakStyle(String lineBreakStyle) {
-        this.lineBreakStyle = lineBreakStyle;
-    }
-
-    /**
-     * @return the exportFields
-     */
-    public List<String> getExportFields() {
-        return exportFields;
-    }
-
-    /**
-     * @param exportFields the exportFields to set
-     */
-    public void setExportFields(List<String> exportFields) {
-        this.exportFields = exportFields;
-    }
-
     /**
      * @return the isExport
      */

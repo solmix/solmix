@@ -32,6 +32,11 @@
             <artifactId>org.apache.aries.blueprint.core</artifactId>
             <optional>true</optional>
         </dependency>
+        	<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.27</version>
+</dependency>
 		<dependency>
 			<groupId>org.solmix.modules</groupId>
 			<artifactId>org.solmix.modules.sql</artifactId>

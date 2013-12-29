@@ -22,8 +22,8 @@ public class HiddenForm  {
 		hiddenForm.name="__slx_hidden_form";
 		var hiddenParm= $wnd.document.createElement("INPUT");
 		hiddenParm.type="hidden";
-		hiddenParm.name="_transaction";
-		hiddenParm.id="_transaction";
+		hiddenParm.name="__payload";
+		hiddenParm.id="__payload";
 		hiddenForm.appendChild(hiddenParm);
 		$wnd.document.body.appendChild(hiddenForm);
 		}

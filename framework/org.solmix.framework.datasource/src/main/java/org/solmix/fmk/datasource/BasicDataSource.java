@@ -44,13 +44,13 @@ import org.solmix.api.cm.ConfigureUnit;
 import org.solmix.api.cm.ConfigureUnitManager;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.criterion.ErrorMessage;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.ClientParameter;
 import org.solmix.api.datasource.ConvertDSContextToMap;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.IType;
 import org.solmix.api.event.IValidationEvent.Level;
@@ -177,7 +177,7 @@ public class BasicDataSource implements DataSource
      * 
      * @throws SlxException
      * 
-     * @see org.solmix.api.datasource.DataSource#init(org.solmix.api.data.DataSourceData)
+     * @see org.solmix.api.datasource.DataSource#init(org.solmix.api.datasource.DataSourceData)
      */
     @Override
     public void init(DataSourceData data) throws SlxException {
@@ -256,7 +256,7 @@ public class BasicDataSource implements DataSource
             req.getContext().setCriteria(criteria);
             // req.context =this
             DSResponse resp = req.execute();
-            return resp.getRecord();
+            return resp.getSingleRecord();
         }
     }
 
@@ -452,8 +452,8 @@ public class BasicDataSource implements DataSource
             LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).info(
                 (new StringBuilder()).append("Validation error: ").append(DataTools.prettyPrint(errors)).toString());
             DSResponse dsResponse = new DSResponseImpl(this, req);
-            dsResponse.getContext().setStatus(Status.STATUS_VALIDATION_ERROR);
-            dsResponse.getContext().setErrors(errors.toArray(new Object[errors.size()]));
+            dsResponse.setStatus(Status.STATUS_VALIDATION_ERROR);
+            dsResponse.setErrors(errors.toArray(new Object[errors.size()]));
             return dsResponse;
         } else {
             return null;
@@ -464,7 +464,7 @@ public class BasicDataSource implements DataSource
      * Validation DataSource and relative DSRequest data.this Datasource operation must be a modification operation (
      * {@link org.solmix.fmk.util.DataTools#isModificationOperation DataTools.isModificationOperation} ) or
      * {@link org.solmix.api.jaxb.Eoperation#VALIDATE VALIDATE} operation. and
-     * {@link org.solmix.api.data.DataSourceData#isValidateRecords()} is true.
+     * {@link org.solmix.api.datasource.DataSourceData#isValidateRecords()} is true.
      * 
      * @param ds basic datasource.
      * @param request datasource request.
@@ -991,11 +991,15 @@ public class BasicDataSource implements DataSource
      */
     @Override
     public Map<Object, Object> getProperties(Object data) {
-        return getProperties(data, true, true);
+        TdataSource tds= getContext().getTdataSource();
+        boolean dropExtra=true;
+        if(tds!=null)
+            dropExtra=DataUtil.booleanValue( tds.isDropExtraFields());
+        return getProperties(data, dropExtra, true);
     }
 
     public Map<Object, Object> getProperties(Object obj, boolean dropExtraFields, boolean dropIgnoredFields) {
-        return getProperties(obj, ((Collection) (null)), dropExtraFields, dropIgnoredFields);
+        return getProperties(obj, ((Collection<String>) (null)), dropExtraFields, dropIgnoredFields);
     }
 
     public Map<Object, Object> getProperties(Object obj, boolean dropExtraFields, boolean dropIgnoredFields, ValidationContext validationContext) {
@@ -1010,7 +1014,7 @@ public class BasicDataSource implements DataSource
         return getProperties(obj, propsToKeep, dropExtraFields, dropIgnoredFields, null);
     }
 
-    public Map getProperties(Object data, Collection<String> popToKeep, boolean dropExtraFields, boolean dropIgnoreFields,
+    public Map<Object, Object> getProperties(Object data, Collection<String> popToKeep, boolean dropExtraFields, boolean dropIgnoreFields,
         ValidationContext validationContext) {
         Map result = new LinkedMap();
         if (data == null)
@@ -1020,7 +1024,7 @@ public class BasicDataSource implements DataSource
         if (popToKeep != null)
             outProperties.addAll(popToKeep);
         List<String> prop = new ArrayList<String>();
-
+        Map<String, String> xpaths = null;
         List<Tfield> __f = this.data.getFields();
         if (__f == null)
             return Collections.emptyMap();
@@ -1030,6 +1034,11 @@ public class BasicDataSource implements DataSource
             if (dropExtraFields && field.getType() == Efield.UNKNOWN)
                 continue;
             prop.add(field.getName());
+            if (field.getValueXPath() != null) {
+                if (xpaths == null)
+                    xpaths = new HashMap<String, String>();
+                xpaths.put(field.getName(), field.getValueXPath());
+            }
         }
         if (prop != null)
             outProperties.addAll(prop);
@@ -1046,6 +1055,15 @@ public class BasicDataSource implements DataSource
             } catch (Exception e) {
                 result = null;
                 log.warn("transform bean object to map failed .caused by" + e.getMessage());
+            }
+        }
+        if (xpaths != null) {
+            for (String key : xpaths.keySet()) {
+                Object value = result.get(key);
+                if (value != null) {
+                    JXPathContext context = JXPathContext.newContext(value);
+                    result.put(key, context.getValue(xpaths.get(key)));
+                }
             }
         }
         return result;

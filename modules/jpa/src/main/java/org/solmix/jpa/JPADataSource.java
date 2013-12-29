@@ -44,12 +44,12 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.data.DSRequestData;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
@@ -314,7 +314,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     @Override
     public DSResponse executeRemove(DSRequest req) throws SlxException {
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         String pk = data.getPrimaryKey();
         Tfield pkField = data.getField(pk);
@@ -334,7 +334,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         }
         Object record = entityManager.find(entityClass, p);
         entityManager.remove(record);
-        __return.getContext().setData(req.getContext().getCriteria());
+        __return.setRawData(req.getContext().getCriteria());
         increaseOpCount();
         return __return;
     }
@@ -342,7 +342,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     @Override
     public DSResponse executeUpdate(DSRequest req) throws SlxException {
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         String pk = data.getPrimaryKey();
         Tfield pkField = data.getField(pk);
@@ -366,7 +366,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         } catch (Exception e) {
             e.printStackTrace();
         }
-        __return.getContext().setData(record);
+        __return.setRawData(record);
         increaseOpCount();
         return __return;
 
@@ -479,7 +479,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     public void markTrnsactionForRollBack(DSResponse resp) {
         this.shouldRollBackTransaction = true;
         if (resp != null)
-            resp.getContext().setStatus(Status.STATUS_FAILURE);
+            resp.setStatus(Status.STATUS_FAILURE);
         log.debug("mark transaction for roll back");
     }
 
@@ -586,7 +586,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         Object criteria = req.getContext().getRawValues();
         int batchsize = __requestCX.getBatchSize();
@@ -595,7 +595,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         if (isEntityPresent(criteria)) {
             List<?> records = DataUtil.makeListIfSingle(criteria);
             Object result = updateBean(batchsize, records);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
         }
         // check jpql configured
@@ -618,7 +618,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 beans.add(bean);
             }
             Object result = updateBean(batchsize, beans);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
 
         } else {
@@ -630,7 +630,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         Object criteria = req.getContext().getRawCriteria();
         int batchsize = __requestCX.getBatchSize();
@@ -639,7 +639,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         if (isEntityPresent(criteria)) {
             List<?> records = DataUtil.makeListIfSingle(criteria);
             Object result = removeBean(batchsize, records);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
         }
         // check jpql configured
@@ -667,7 +667,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 beans.add(bean);
             }
             Object result = removeBean(batchsize, beans);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
 
         } else {
@@ -683,7 +683,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             throw new SlxException(Tmodule.JPA, Texception.JPA_NO_ENTITY, "JPA DataSource no configured Entity bean");
         }
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         Map<String, Object> criteria = req.getContext().getCriteria();
         if (criteria != null) {
@@ -844,16 +844,16 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             results = query.getResultList();
         if (totalRows == -1L)
             totalRows = results.size();
-        __return.getContext().setTotalRows(totalRows);
+        __return.setTotalRows(totalRows);
         Integer startRow = 0;
         Integer endRow = 0;
         if (totalRows != 0L) {
             startRow = req.getContext().getStartRow() == null ? 0 : req.getContext().getStartRow();
             endRow = startRow + results.size();
         }
-        __return.getContext().setStartRow(startRow);
-        __return.getContext().setEndRow(endRow);
-        __return.getContext().setData(results);
+        __return.setStartRow(startRow);
+        __return.setEndRow(endRow);
+        __return.setRawData(results);
         increaseOpCount();
         return __return;
     }
@@ -862,7 +862,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
         DSResponse __return = new DSResponseImpl();
-        __return.getContext().setStatus(Status.STATUS_SUCCESS);
+        __return.setStatus(Status.STATUS_SUCCESS);
         __return.setDataSource(req.getDataSource());
         Object values = req.getContext().getRawValues();
         int batchsize = __requestCX.getBatchSize();
@@ -872,7 +872,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         if (isEntityPresent(values)) {
             List<?> records = DataUtil.makeListIfSingle(values);
             Object result = persistBean(batchsize, records);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
         }
         // check jpql configured
@@ -895,7 +895,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 beans.add(bean);
             }
             Object result = persistBean(batchsize, beans);
-            __return.getContext().setData(result);
+            __return.setRawData(result);
             return __return;
 
         } else {

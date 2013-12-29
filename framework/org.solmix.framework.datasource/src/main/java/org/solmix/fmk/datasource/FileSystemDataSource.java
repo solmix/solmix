@@ -29,10 +29,10 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.ToperationBinding;
@@ -80,9 +80,9 @@ public class FileSystemDataSource extends BasicDataSource
         Object value = getDataFromFile(sc.getBean(ClassLoader.class),url);
         if(xpath!=null){
             JXPathContext context = JXPathContext.newContext(value);
-            res.getContext().setData(context.getValue(xpath));
+            res.setRawData(context.getValue(xpath));
         }else{
-            res.getContext().setData(value);
+            res.setRawData(value);
         }
         
         return res;

@@ -33,12 +33,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.data.DSResponseData;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.ToperationBinding;
@@ -63,7 +62,6 @@ public final class ProcedureDataSource
     @SuppressWarnings("unchecked")
     public DSResponse update(DSRequest req, DataSource ds) throws SlxException {
         DSResponse __resp = new DSResponseImpl();
-        DSResponseData respData = new DSResponseData();
         DataSourceData data = ds.getContext();
         Map<Object, Object> raws = req.getContext().getValues();
         Eoperation _optType = req.getContext().getOperationType();
@@ -126,10 +124,10 @@ public final class ProcedureDataSource
                 pre.registerOutParameter(inputLength + 1, Types.INTEGER);
             }
             pre.execute();
-            respData.setData(pre.getInt(inputLength + 1));
-            respData.setStatus(Status.STATUS_SUCCESS);
+            __resp.setRawData(pre.getInt(inputLength + 1));
+            __resp.setStatus(Status.STATUS_SUCCESS);
         } catch (SQLException e) {
-            respData.setStatus(Status.STATUS_FAILURE);
+            __resp.setStatus(Status.STATUS_FAILURE);
             try {
                 conn.rollback();
             } catch (SQLException e1) {
@@ -137,7 +135,7 @@ public final class ProcedureDataSource
             }
             log.error("[SQLEXCEPTION]" + e.getLocalizedMessage());
         } catch (IOException e) {
-            respData.setStatus(Status.STATUS_FAILURE);
+            __resp.setStatus(Status.STATUS_FAILURE);
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +144,6 @@ public final class ProcedureDataSource
                 connectionManager.free(conn);
 
         }
-        __resp.setContext(respData);
         return __resp;
     }
 

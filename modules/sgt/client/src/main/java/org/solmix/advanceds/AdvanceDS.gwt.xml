@@ -4,5 +4,6 @@
 	<inherits name="com.smartgwt.SmartGwtNoSmartClient"/>
 	<inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.core.Core"/>
+    <script src="sc/extensions/AdvanceDataSource.js"/>
 	<source path="client"/>
 </module>

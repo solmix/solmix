@@ -19,7 +19,6 @@
 
 package org.solmix.api.datasource;
 
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
 
 /**

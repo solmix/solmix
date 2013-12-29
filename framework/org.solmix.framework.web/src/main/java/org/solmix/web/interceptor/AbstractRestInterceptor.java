@@ -19,6 +19,7 @@
 package org.solmix.web.interceptor;
 
 import org.solmix.api.call.DSCallWebInterceptor;
+import org.solmix.api.datasource.DSResponse;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.internal.DatasourceCM;
 
@@ -29,7 +30,7 @@ import org.solmix.fmk.internal.DatasourceCM;
  * @version $Id$  2013年12月25日
  */
 
-public class DSCallRestInterceptor extends DSCallWebInterceptor
+public class AbstractRestInterceptor extends DSCallWebInterceptor
 {
     protected String charset;
     protected boolean showClientOutPut;
@@ -37,5 +38,18 @@ public class DSCallRestInterceptor extends DSCallWebInterceptor
     public void configure(DataTypeMap config) {
         charset=config.getString("defaultCharset",  "UTF-8");
         showClientOutPut=config.getBoolean(DatasourceCM.P_SHOW_CLIENT_OUTPUT, false);
+    }
+    protected RestResponseData getClientResponse(DSResponse res){
+        RestResponseData _return =new RestResponseData ();
+        _return.setStatus(res.getStatus().value());
+        _return.setEndRow(res.getEndRow());
+        _return.setErrors(res.getErrors());
+        _return.setInvalidateCache(res.getInvalidateCache());
+        _return.setIsDSResponse(true);
+        _return.setStartRow(res.getStartRow());
+        _return.setTotalRows(res.getTotalRows());
+        _return.setData(res.getRecordList());
+        return _return;
+        
     }
 }

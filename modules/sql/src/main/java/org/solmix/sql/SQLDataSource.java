@@ -40,12 +40,12 @@ import org.solmix.SlxConstants;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.data.DSRequestData;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceGenerator;
 import org.solmix.api.datasource.ISQLDataSource;
 import org.solmix.api.datasource.SQLCacheData;
@@ -167,7 +167,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         downloadDsRequest.getContext().setCriteria(criteria);
         downloadDsRequest.setFreeOnExecute(false);
         DSResponse resp = downloadDsRequest.execute();
-        resp.getContext().setData(forceSingle(resp.getContext().getDataList(Map.class)));
+        resp.setRawData(forceSingle(resp.getResultList(Map.class)));
         return resp;
 
     }
@@ -346,7 +346,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
         __return = new DSResponseImpl(_firstDS, req);
         if (DataUtil.isNullOrEmpty(statement))
-            __return.getContext().setStatus(Status.STATUS_SUCCESS);
+            __return.setStatus(Status.STATUS_SUCCESS);
         /*******************************************************************
          * NOTE:[FETCH]
          *******************************************************************/
@@ -371,10 +371,10 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                  *******************************************************************/
                 List results = _firstDS.executeNativeQuery(statement, _firstDS, __bind, req);
                 if (results != null) {
-                    __return.getContext().setData(results);
-                    __return.getContext().setTotalRows(results.size());
-                    __return.getContext().setStartRow(0);
-                    __return.getContext().setEndRow(results.size());
+                    __return.setRawData(results);
+                    __return.setTotalRows(results.size());
+                    __return.setStartRow(0);
+                    __return.setEndRow(results.size());
                 }
             }
         } else {
@@ -412,8 +412,8 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 }
             }
             int rowsAffected = _firstDS.executeNativeUpdate(statement, streams, req);
-            __return.getContext().setAffectedRows(new Long(rowsAffected));
-            __return.getContext().setData(rowsAffected);
+            __return.setAffectedRows(new Long(rowsAffected));
+            __return.setRawData(rowsAffected);
             /*******************************************************************
              * NOTE:[UPDATE]OR [AND] SHOW THE AFFECTED ROW.
              *******************************************************************/
@@ -421,7 +421,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 if (rowsAffected > 0) {
                     log.debug((new StringBuilder()).append(_opType).append(" operation affected ").append(rowsAffected).append(" rows").toString());
                     if (shouldInvalidateCache(req, _firstDS.getDriver())) {
-                        __return.getContext().setInvalidateCache(true);
+                        __return.setInvalidateCache(true);
                     } else {
                         Map storeValues = __requestCX.getCriteria();
                         if (DataTools.isAdd(_opType) && storeValues != null) {
@@ -436,7 +436,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                             } while (true);
                         }
                         _firstDS.setLastPrimaryKeysData(storeValues);
-                        __return.getContext().setData(
+                        __return.setRawData(
                             DataUtil.makeListIfSingle(DataTools.isRemove(_opType) ? ((Object) (_firstDS.getLastPrimaryKeys(req)))
                                 : _firstDS.getLastRow(req, __qualifyColumnNames)));
                     }
@@ -514,12 +514,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             Object objCount = _driver.executeScalar(eQuery, req);
             Integer count = new Integer(objCount == null ? "0" : objCount.toString());
             long $_ = System.currentTimeMillis();
-            __return.getContext().setTotalRows(count);
+            __return.setTotalRows(count);
             getEventWork().createAndFireTimeEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
-            if (__return.getContext().getTotalRows() == 0L) {
-                __return.getContext().setData(Collections.EMPTY_LIST);
-                __return.getContext().setStartRow(0);
-                __return.getContext().setEndRow(0);
+            if (__return.getTotalRows() == 0L) {
+                __return.setRawData(Collections.EMPTY_LIST);
+                __return.setStartRow(0);
+                __return.setEndRow(0);
                 return __return;
             }
             int _sRow = req.getContext().getStartRow();
@@ -549,12 +549,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             Object objCount = _driver.executeScalar(eQuery, req);
             Integer count = new Integer(objCount == null ? "0" : objCount.toString());
             long $_ = System.currentTimeMillis();
-            __return.getContext().setTotalRows(count);
+            __return.setTotalRows(count);
             getEventWork().createAndFireTimeEvent(($_ - _$), "SQL window query,Query total rows: " + count.intValue());
-            if (__return.getContext().getTotalRows() == 0L) {
-                __return.getContext().setData(new ArrayList());
-                __return.getContext().setStartRow(0);
-                __return.getContext().setEndRow(0);
+            if (__return.getTotalRows() == 0L) {
+                __return.setRawData(new ArrayList());
+                __return.setStartRow(0);
+                __return.setEndRow(0);
                 return __return;
             }
             int _sRow = req.getContext().getStartRow();
@@ -653,11 +653,11 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             } catch (SQLException e) {
                 throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
             }
-            __return.getContext().setData(rows);
-            __return.getContext().setEndRow(req.getContext().getStartRow() + rows.size());
-            __return.getContext().setStartRow(req.getContext().getStartRow());
+            __return.setRawData(rows);
+            __return.setEndRow(req.getContext().getStartRow() + rows.size());
+            __return.setStartRow(req.getContext().getStartRow());
             if (rows.size() < req.getContext().getBatchSize())
-                __return.getContext().setTotalRows(__return.getContext().getEndRow());
+                __return.setTotalRows(__return.getEndRow());
         } finally {
             try {
                 s.close();
@@ -1281,12 +1281,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             }
             req.getContext().setValues(valueSets.get(i));
             _return = executeSQLDataSource(req, dataSources);
-            List _curResultSet = _return.getContext().getDataList(Map.class);
+            List _curResultSet = _return.getResultList(Map.class);
             if (_curResultSet != null && !_curResultSet.isEmpty()) {
                 // for insert ,the result should be one result(success or failure)
                 _result.add(_curResultSet.get(0));
             }
-            if (_return.getContext().getInvalidateCache())
+            if (_return.getInvalidateCache())
                 _invalidateCache = true;
             try {
                 if (i % 1000 == 0)
@@ -1295,9 +1295,9 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 throw new SlxException(Tmodule.DATASOURCE, Texception.SQL_SQLEXCEPTION, e);
             }
         }
-        _return.getContext().setAffectedRows(new Long(valueSets.size()));
-        _return.getContext().setData(_result);
-        _return.getContext().setInvalidateCache(_invalidateCache);
+        _return.setAffectedRows(new Long(valueSets.size()));
+        _return.setRawData(_result);
+        _return.setInvalidateCache(_invalidateCache);
         return _return;
     }
 
@@ -1360,7 +1360,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.datasource.DataSource#init(org.solmix.api.data.DataSourceData)
+     * @see org.solmix.api.datasource.DataSource#init(org.solmix.api.datasource.DataSourceData)
      */
     @Override
     public void init(DataSourceData data) throws SlxException {

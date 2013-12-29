@@ -29,7 +29,7 @@ public class Transaction
                 }
             }
         }
-        if (dsc.getClass().isAssignableFrom(DSCallImpl.class)) {
+        if (DSCallImpl.class.isAssignableFrom(dsc.getClass())) {
             isCreated = true;
             this.dsc = DSCallImpl.class.cast(dsc);
         }

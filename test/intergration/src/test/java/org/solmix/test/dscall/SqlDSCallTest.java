@@ -42,7 +42,7 @@ public class SqlDSCallTest extends SolmixTestCase
             @Override
             public Object fetch(DSRequest request) throws SlxException {
                 DSResponse res= request.execute();
-                return res.getContext().getData();
+                return res.getRawData();
             }
             
         });

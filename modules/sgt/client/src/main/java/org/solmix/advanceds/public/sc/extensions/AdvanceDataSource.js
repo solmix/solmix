@@ -1,7 +1,7 @@
 var slx=window.slx?window.slx:{};
 slx.transactionNum=0;
 slx.restURLPrefix="data";
-isc.A.dataFormatParamName="slx_dataFormat";
+isc.A.dataFormatParamName="dsc_dataFormat";
 isc.B._maxIndex=isc.C+2;
 isc.defineClass("AdvanceDataSource",RestDataSource);
 isc.A=isc.RestDataSource.getPrototype();

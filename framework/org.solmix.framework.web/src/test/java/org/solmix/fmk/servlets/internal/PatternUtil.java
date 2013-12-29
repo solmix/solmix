@@ -20,7 +20,9 @@
 package org.solmix.fmk.servlets.internal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +54,9 @@ public class PatternUtil
         for (int i = 0; i < l.size(); i++) {
             l.remove(i);
         }
+        HashMap map = new HashMap();
+        System.out.println(map.getClass().isAssignableFrom(Map.class));
+        System.out.println(Map.class.isAssignableFrom(map.getClass()));
 
     }
 

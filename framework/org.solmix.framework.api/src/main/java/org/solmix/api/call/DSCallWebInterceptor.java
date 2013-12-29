@@ -40,7 +40,7 @@ public class DSCallWebInterceptor implements DSCallInterceptor, InterceptorOrder
 
     @Override
     public void inspect(DSCall dsCall, Context context)throws SlxException {
-        if (context != null && context.getClass().isAssignableFrom(WebContext.class)) {
+        if (context != null && WebContext.class.isAssignableFrom(context.getClass())) {
             inspect(dsCall, WebContext.class.cast(context));
         }
 
@@ -50,22 +50,39 @@ public class DSCallWebInterceptor implements DSCallInterceptor, InterceptorOrder
 
     }
 
-    public ReturnType postInspect(DSCall dsCall, WebContext context) throws SlxException{
-        return ReturnType.CONTINUE;
+    public Action postInspect(DSCall dsCall, WebContext context) throws SlxException{
+        return Action.CONTINUE;
 
     }
 
     @Override
-    public ReturnType postInspect(DSCall dsCall, Context context) throws SlxException{
-        if (context != null && context.getClass().isAssignableFrom(WebContext.class)) {
+    public Action postInspect(DSCall dsCall, Context context) throws SlxException{
+        if (context != null && WebContext.class.isAssignableFrom(context.getClass())) {
             return postInspect(dsCall, WebContext.class.cast(context));
         }
-        return ReturnType.CONTINUE;
+        return Action.CONTINUE;
 
     }
 
     @Override
     public PRIORITY priority() {
         return InterceptorOrder.AFTER_DEFAULT;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.api.call.DSCallInterceptor#prepareRequest(org.solmix.api.call.DSCall, org.solmix.api.context.Context)
+     */
+    @Override
+    public void prepareRequest(DSCall dsCall, Context context) throws SlxException {
+        if (context != null && WebContext.class.isAssignableFrom(context.getClass())) {
+            
+             prepareRequest(dsCall, WebContext.class.cast(context));
+        }
+        
+    }
+    public  void prepareRequest(DSCall dsCall, WebContext context) throws SlxException {
+        
     }
 }

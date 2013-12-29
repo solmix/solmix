@@ -33,18 +33,16 @@ import org.solmix.api.call.DSCall;
 import org.solmix.api.context.Context;
 import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
-import org.solmix.api.data.DSRequestData;
-import org.solmix.api.data.DSResponseData;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.FreeResourcesHandler;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Efield;
 import org.solmix.api.jaxb.Eoperation;
-import org.solmix.api.jaxb.Texport;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.request.Roperation;
@@ -466,9 +464,8 @@ public class DSRequestImpl implements DSRequest
 
     private DSResponse createResponse(Status status, Object... errors) throws SlxException {
         DSResponse dsResponse = new DSResponseImpl(getDataSource(), this);
-        DSResponseData cx = dsResponse.getContext();
-        cx.setStatus(status);
-        cx.setErrors(errors);
+        dsResponse.setStatus(status);
+        dsResponse.setErrors(errors);
         return dsResponse;
     }
 
@@ -502,7 +499,7 @@ public class DSRequestImpl implements DSRequest
                     List<Object> errors = file.getErrors();
                     if (errors != null) {
                         _dsResponse = createResponse(Status.STATUS_FAILURE, errors.toArray(new Object[errors.size()]));
-                        _dsResponse.getContext().setRequestConnectionClose(true);
+//                        _dsResponse.getContext().setRequestConnectionClose(true);
                     }
                 }// end upload files loop
             if (_dsResponse != null) {
@@ -547,14 +544,11 @@ public class DSRequestImpl implements DSRequest
                     }
                 }
             }
-            if (operationBinding != null) {
-                processExport(operationBinding, _dsResponse);
-            }
         } catch (Exception e) {
             log.error("execute()", e);
             _dsResponse = new DSResponseImpl();
-            _dsResponse.getContext().setData(e.getMessage());
-            _dsResponse.getContext().setStatus(Status.STATUS_FAILURE);
+            _dsResponse.setRawData(e.getMessage());
+            _dsResponse.setStatus(Status.STATUS_FAILURE);
         } finally {
             if (isFreeOnExecute()) {
                 this.freeResources();
@@ -565,38 +559,6 @@ public class DSRequestImpl implements DSRequest
         return _dsResponse;
     }
 
-    /**
-     * @param operationBinding
-     * @param dsResponse
-     */
-    private void processExport(ToperationBinding bind, DSResponse dsResponse) {
-        DSResponseData _respData = dsResponse.getContext();
-        Texport export = bind.getExport();
-        if (export == null)
-            return;
-        if (export.isExportResults())
-            _respData.setExportResults(new Boolean(export.isExportResults()));
-        if (export.getExportFilename() != null)
-            _respData.setExportFilename(export.getExportFilename());
-        if (export.getExportAs() != null)
-            _respData.setExportAs(export.getExportAs().value());
-        if (export.getLineBreakStyle() != null)
-            _respData.setLineBreakStyle(export.getLineBreakStyle());
-        if (export.getExportDisplay() != null)
-            _respData.setExportDisplay(export.getExportDisplay());
-        if (export.getExportTitleSeparatorChar() != null)
-            _respData.setExportTitleSeparatorChar(export.getExportTitleSeparatorChar());
-        if (export.getExportHeader() != null)
-            _respData.setExportHeader(export.getExportHeader());
-        if (export.getExportDelimiter() != null)
-            _respData.setExportDelimiter(export.getExportDelimiter());
-        if (export.getExportFooter() != null)
-            _respData.setExportFooter(export.getExportFooter());
-        if (export.getExportFields() != null) {
-            for (String str : export.getExportFields().split(","))
-                _respData.addToExportFields(str.trim());
-        }
-    }
 
     /**
      * @param b
@@ -677,7 +639,7 @@ public class DSRequestImpl implements DSRequest
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.datasource.DSRequest#setConf(org.solmix.api.data.DSRequestData)
+     * @see org.solmix.api.datasource.DSRequest#setConf(org.solmix.api.datasource.DSRequestData)
      */
     @Override
     public void setContext(DSRequestData data) {

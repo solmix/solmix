@@ -40,51 +40,18 @@ public interface DSCall
 
     /**
      * Get the requests in the call.
+     * 
      * @return
      */
     List<DSRequest> getRequests();
-    
-//    void setContext(DSCManagerData data);
 
     int requestCount();
 
     void addRequest(DSRequest req);
 
-//    void addRequest(RPCRequest req);
-
-//    DSCManagerData getContext();
-
-//    void send(DSRequest dsRequest, DSResponse dsResponse) throws SlxException;
-//
-//    void send(DSRequest dsRequest, Object data) throws SlxException;
-//
-//    void send(Object data) throws SlxException;
-//
-//    void send(RPCRequest rpcRequest, Object data) throws SlxException;
-//
-//    void send(RPCRequest rpcRequest, RPCResponse rpcResponse) throws SlxException;
-//
-//    void send(RPCResponse rpcResponse) throws SlxException;
-//
-//    void sendFailure(Object request, String error) throws SlxException;
-//
-//    void sendFailure(Object request, Throwable t) throws SlxException;
-//
-//    void sendSuccess(RPCRequest rpcRequest) throws SlxException;
-//
-//    void sendXMLString(DSRequest dsRequest, String xml) throws SlxException;
-//
-//    void sendXMLString(RPCRequest rpcRequest, String xml) throws SlxException;
-
     void registerCallback(DSCallCompleteCallback callback);
 
-//    RPCRequest getRequest();
-
-   
-
     DSResponse getResponse(DSRequest req);
-
-//    RPCResponse getResponse(RPCRequest req);
 
     void freeDataSources() throws SlxException;
 
@@ -112,16 +79,6 @@ public interface DSCall
     /**
      * @return
      */
-//    Boolean getRequestProcessingStarted();
-
-    /**
-     * @param requestProcessingStarted
-     */
-//    void setRequestProcessingStarted(Boolean requestProcessingStarted);
-
-    /**
-     * @return
-     */
     Long getTransactionNum();
 
     /**
@@ -135,7 +92,9 @@ public interface DSCall
     TransactionPolicy getTransactionPolicy();
 
     JSParser getJSParser();
+
     XMLParser getXMLParser();
+
     void run() throws SlxException;
 
     /**
@@ -143,13 +102,12 @@ public interface DSCall
      * @throws SlxException
      */
     void setRequestContext(Context context) throws SlxException;
-    
-    Object getAttribute(Object key);
-    void setAttribute(Object key,Object value);
 
-    /**
-     * @param dbnameAttr
-     */
+    Object getAttribute(Object key);
+
+    void setAttribute(Object key, Object value);
+
     void removeAttribute(Object key);
-     Map< String ,Object > getTemplateContext();
+
+    Map<String, Object> getTemplateContext();
 }

@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.api.data;
+package org.solmix.api.datasource;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,9 +32,6 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
 import org.solmix.api.criterion.IEvaluator;
 import org.solmix.api.criterion.Operator;
-import org.solmix.api.datasource.DSRequest;
-import org.solmix.api.datasource.DataSource;
-import org.solmix.api.datasource.IType;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.EserverType;
@@ -48,7 +45,7 @@ import org.solmix.commons.util.DataUtil;
  * This class used as a datasource context bean,cache ds static configuration , dynamical configuration and runtime
  * variable.
  * <p>
- * <h1>Merge Specification</h1> {@link org.solmix.api.data.DataSourceData DataSourceData} and
+ * <h1>Merge Specification</h1> {@link org.solmix.api.datasource.DataSourceData DataSourceData} and
  * {@link org.solmix.api.jaxb.TdataSource TdataSource} Merge Specification
  * <table border=1 >
  * <tr>
@@ -68,7 +65,7 @@ import org.solmix.commons.util.DataUtil;
  * <li></td>
  * </tr>
  * </table>
- * For <code>From top to bottom<code>:use {@link org.solmix.api.data.DataSourceData DataSourceData}
+ * For <code>From top to bottom<code>:use {@link org.solmix.api.datasource.DataSourceData DataSourceData}
  * <p>
  * For <code>From bottom to top<code>:use {@link org.solmix.api.jaxb.TdataSource TdataSource}
  * 

@@ -54,7 +54,7 @@ import org.solmix.fmk.util.ServletTools;
  * @version $Id$ 2013-12-25
  */
 
-public class IscInterceptor extends DSCallRestInterceptor
+public class IscInterceptor extends AbstractRestInterceptor
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(IscInterceptor.class.getName());
@@ -153,7 +153,7 @@ public class IscInterceptor extends DSCallRestInterceptor
     }
 
     @Override
-    public ReturnType postInspect(DSCall dsCall, WebContext context) throws SlxException {
+    public Action postInspect(DSCall dsCall, WebContext context) throws SlxException {
         HttpServletRequest request = context.getRequest();
         boolean isXMLHttp = isXmlHttp(request);
         String contentType = isXMLHttp ? "text/plain" : "text/html";
@@ -165,7 +165,7 @@ public class IscInterceptor extends DSCallRestInterceptor
         List<Object> orderedResponseList = new ArrayList<Object>();
         for(DSRequest req:dsCall.getRequests()){
             DSResponse res= dsCall.getResponse(req);
-            orderedResponseList.add(res.getClientResponse());
+            orderedResponseList.add(getClientResponse(res));
         }
         Writer _out;
         try {
@@ -218,7 +218,7 @@ public class IscInterceptor extends DSCallRestInterceptor
         } catch (IOException e) {
             throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
         }
-        return ReturnType.CANCELLED;
+        return Action.CANCELLED;
     }
    
     public static boolean isXmlHttp(HttpServletRequest request) {

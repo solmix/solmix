@@ -30,10 +30,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.TdataSource;
@@ -86,7 +86,7 @@ public class JPADataSourceTest
                 @Override
                 public List<AuthUser> fetch(DSRequest request) throws SlxException {
                     DSResponse res= request.execute();
-                    return res.getContext().getDataList(AuthUser.class);
+                    return res.getResultList(AuthUser.class);
                 }
                 
             }.withCriteria(c));
@@ -111,7 +111,7 @@ public class JPADataSourceTest
                 @Override
                 public AuthUser add(DSRequest request) throws SlxException {
                     DSResponse res= request.execute();
-                    return res.getContext().getData(AuthUser.class);
+                    return res.getSingleResult(AuthUser.class);
                 }
                 
             }.withValues(au));
@@ -122,7 +122,7 @@ public class JPADataSourceTest
                 @Override
                 public AuthUser update(DSRequest request) throws SlxException {
                     DSResponse res= request.execute();
-                    return res.getContext().getData(AuthUser.class);
+                    return res.getSingleResult(AuthUser.class);
                 }
                 
             }.withValues(au));
@@ -143,7 +143,7 @@ public class JPADataSourceTest
             @Override
             public AuthUser remove(DSRequest request) throws SlxException {
                 DSResponse res= request.execute();
-                return res.getContext().getData(AuthUser.class);
+                return res.getSingleResult(AuthUser.class);
             }
             
         }.withCriteria(au));
@@ -192,7 +192,7 @@ public class JPADataSourceTest
                 @Override
                 public AuthUser add(DSRequest request) throws SlxException {
                     DSResponse res= request.execute();
-                    return res.getContext().getData(AuthUser.class);
+                    return res.getSingleResult(AuthUser.class);
                 }
                 
             }.withValues(au));
@@ -213,7 +213,7 @@ public class JPADataSourceTest
                 @Override
                 public Object add(DSRequest request) throws SlxException {
                     DSResponse res= request.execute();
-                    return res.getContext().getData();
+                    return res.getRawData();
                 }
             }.withValues(getUsers()));
         } catch (SlxException e) {

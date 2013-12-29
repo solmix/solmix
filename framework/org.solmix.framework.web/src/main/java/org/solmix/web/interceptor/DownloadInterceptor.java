@@ -55,7 +55,7 @@ public class DownloadInterceptor extends DSCallWebInterceptor
     private static final Logger LOG = LoggerFactory.getLogger(DownloadInterceptor.class);
 
     @Override
-    public ReturnType postInspect(DSCall dsCall,WebContext context) throws SlxException {
+    public Action postInspect(DSCall dsCall,WebContext context) throws SlxException {
         List<DSRequest> requests = dsCall.getRequests();
         if (requests != null && !requests.isEmpty()) {
             if (requests.size() > 1)
@@ -71,7 +71,7 @@ public class DownloadInterceptor extends DSCallWebInterceptor
                     throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_MIME_TYPE_ERROR, e);
                 }
                 DSResponse res= dsCall.getResponse(req);
-                Map<?, ?> data =  res.getRecord();
+                Map<?, ?> data =  res.getSingleRecord();
                 String fileName = req.getContext().getDownloadFileName();
                 String fieldName = req.getContext().getDownloadFieldName();
                 long contentLength = Long.valueOf(data.get((new StringBuilder()).append(fieldName).append("_filesize").toString()).toString()).longValue();
@@ -91,11 +91,11 @@ public class DownloadInterceptor extends DSCallWebInterceptor
                 } catch (IOException e) {
                     throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
                 }
-                return ReturnType.CANCELLED;
+                return Action.CANCELLED;
             }
             
         }
-        return ReturnType.CONTINUE;
+        return Action.CONTINUE;
     }
     @Override
     public PRIORITY priority() {

@@ -131,7 +131,7 @@ public class SpringEventManager implements EventManager
     }
 
     private Event toOsgiEvent(IEvent event) {
-        if(event.getClass().isAssignableFrom(Event.class)){
+        if(Event.class.isAssignableFrom(event.getClass())){
             return Event.class.cast(event);
         }else{
             return new Event(event.getTopic(), event.getProperties());

@@ -21,7 +21,6 @@ package org.solmix.api.datasource;
 
 import java.util.Map;
 
-import org.solmix.api.data.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.Tfield;

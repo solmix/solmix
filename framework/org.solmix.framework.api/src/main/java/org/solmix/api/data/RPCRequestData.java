@@ -19,6 +19,8 @@
 
 package org.solmix.api.data;
 
+import org.solmix.api.datasource.DataClass;
+
 /**
  * @author solmix.f@gmail.com
  * @since 0.0.1

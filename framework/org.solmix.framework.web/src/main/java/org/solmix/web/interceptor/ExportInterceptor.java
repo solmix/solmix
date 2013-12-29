@@ -16,9 +16,9 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.web.interceptor;
 
-import static org.solmix.commons.util.DataUtil.booleanValue;
 import static org.solmix.fmk.util.ServletTools.encodeParameter;
 
 import java.io.BufferedOutputStream;
@@ -37,61 +37,62 @@ import org.solmix.api.call.DSCallWebInterceptor;
 import org.solmix.api.call.InterceptorOrder;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
+import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
+import org.solmix.api.export.ExportConfig;
 import org.solmix.api.export.IExport;
 import org.solmix.api.jaxb.EexportAs;
+import org.solmix.api.jaxb.Texport;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
+import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.export.ExportManagerImpl;
-import org.solmix.fmk.util.DataTools;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-12-24
+ * @version $Id$ 2013-12-24
  */
 
 public class ExportInterceptor extends DSCallWebInterceptor
 {
+
     private static final Logger LOG = LoggerFactory.getLogger(ExportInterceptor.class);
 
     @Override
-    public ReturnType postInspect(DSCall dsCall,WebContext context) throws SlxException {
+    public Action postInspect(DSCall dsCall, WebContext context) throws SlxException {
         List<DSRequest> requests = dsCall.getRequests();
         if (requests != null && !requests.isEmpty()) {
             if (requests.size() > 1)
                 LOG.warn("DownLoad DSRequest must be single .");
             DSRequest req = requests.get(0);
-            if (booleanValue(req.getContext().getIsExport())) {
-                DSResponse res= dsCall.getResponse(req);
-             // put request export relative info to response.
-                processExport(req, res);
+            if (req.getContext().getIsExport()) {
+                DSResponse res = dsCall.getResponse(req);
+                // put request export relative info to response.
+                ExportConfig config=null;
+                try {
+                    config= processExport(req, res);
+                } catch (Exception e1) {
+                  throw new SlxException(Tmodule.DSC,Texception.DEFAULT,"collection exportConfiguration error",e1);
+                }
                 // used filter from datasource.if not ,can used res.getContext().getDataList(Map.class);
-                List<Map<Object, Object>> data = res.getRecords();
+                List<Map<Object, Object>> data = res.getRecordList();
                 Map<String, String> fieldMap = new HashMap<String, String>();
                 DataSource ds = res.getDataSource() == null ? req.getDataSource() : res.getDataSource();
-                List<String> fieldNames = res.getContext().getExportFields();
+                List<String> fieldNames = config.getExportFields();
                 List<String> finalFields = new ArrayList<String>();
                 // if no defined export fields used datasource's fields.
                 if (fieldNames == null || fieldNames.isEmpty())
                     fieldNames = ds.getContext().getFieldNames();
-                EexportAs exportAs = EexportAs.fromValue(res.getContext().getExportAs());
-                String separatorChar = res.getContext().getExportTitleSeparatorChar();
-                List<String> efields = res.getContext().getExportFields();
-                // List<String> efieldName = res.getContext().gete
-                if (efields == null) {
-                    ToperationBinding __op = DataTools.getOperationBindingFromDSByRequest(ds, req);
-                    if (__op != null) {
-                        String fields = __op.getExport() != null ? __op.getExport().getExportFields() : null;
-                        efields = DataUtil.isNotNullAndEmpty(fields) ? DataUtil.simpleSplit(fields, ",") : null;
-                    }
-                }
+                EexportAs exportAs = EexportAs.fromValue(config.getExportAs());
+                String separatorChar = config.getExportTitleSeparatorChar();
+                List<String> efields = config.getExportFields();
+               
                 // loop fieldName.
                 for (int i = 0; i < fieldNames.size(); i++) {
                     String fieldName = fieldNames.get(i);
@@ -115,13 +116,13 @@ public class ExportInterceptor extends DSCallWebInterceptor
                     efields = finalFields;
                 }
                 int lineBreakStyleId = 4;
-                if (res.getContext().getLineBreakStyle() != null) {
-                    String lineBreakStyle = res.getContext().getLineBreakStyle().toLowerCase();
+                if (config.getLineBreakStyle() != null) {
+                    String lineBreakStyle = config.getLineBreakStyle().toLowerCase();
                     lineBreakStyleId = lineBreakStyle.equals("mac") ? 1 : ((int) (lineBreakStyle.equals("unix") ? 2
                         : ((int) (lineBreakStyle.equals("dos") ? 3 : 4))));
                 }
 
-                String delimiter = res.getContext().getExportDelimiter();
+                String delimiter =config.getExportDelimiter();
                 if (delimiter == null || delimiter == "")
                     delimiter = ",";
                 // get export provider.
@@ -129,11 +130,11 @@ public class ExportInterceptor extends DSCallWebInterceptor
                 conf.put(IExport.LINE_BREAK_STYLE, lineBreakStyleId);
                 conf.put(IExport.EXPORT_DELIMITER, delimiter);
                 conf.put(IExport.ORDER, efields);
-                String exportHeader = res.getContext().getExportHeader();
+                String exportHeader = config.getExportHeader();
                 if (exportHeader != null) {
                     conf.put(IExport.EXPORT_HEADER_STRING, exportHeader);
                 }
-                String exportFooter = res.getContext().getExportFooter();
+                String exportFooter = config.getExportFooter();
                 if (exportFooter != null) {
                     conf.put(IExport.EXPORT_FOOTER_STRING, exportFooter);
                 }
@@ -141,8 +142,8 @@ public class ExportInterceptor extends DSCallWebInterceptor
                 try {
                     ServletOutputStream os = context.getResponse().getOutputStream();
                     BufferedOutputStream bufferedOS = new BufferedOutputStream(os);
-                    String fileNameEncoding = encodeParameter("filename", res.getContext().getExportFilename());
-                    if (res.getContext().getExportDisplay().equals("download")) {
+                    String fileNameEncoding = encodeParameter("filename",config.getExportFilename());
+                    if (config.getExportDisplay().equals("download")) {
                         context.getResponse().addHeader("content-disposition", "attachment;" + fileNameEncoding);
                         String contentType = null;
                         switch (exportAs) {
@@ -183,33 +184,70 @@ public class ExportInterceptor extends DSCallWebInterceptor
                 } catch (IOException e) {
                     throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
                 }
-                return ReturnType.CANCELLED;
+                return Action.CANCELLED;
             }
-            
+
         }
-        return ReturnType.CONTINUE;
+        return Action.CONTINUE;
     }
-    private void processExport(DSRequest dsreq, DSResponse dsresp) {
-        dsresp.getContext().setIsExport(true);
-        if (dsresp.getContext().getExportAs() == null || dsresp.getContext().getExportAs().equals(""))
-            dsresp.getContext().setExportAs(dsreq.getContext().getExportAs());
-        if (dsresp.getContext().getExportDelimiter() == null || dsresp.getContext().getExportDelimiter().equals(""))
-            dsresp.getContext().setExportDelimiter(dsreq.getContext().getExportDelimiter());
-        if (dsresp.getContext().getExportDisplay() == null || dsresp.getContext().getExportDisplay().equals(""))
-            dsresp.getContext().setExportDisplay(dsreq.getContext().getExportDisplay());
-        if (dsresp.getContext().getExportFilename() == null || dsresp.getContext().getExportFilename().equals(""))
-            dsresp.getContext().setExportFilename(dsreq.getContext().getExportFilename());
-        if (dsresp.getContext().getExportFields() == null || ("".equals(dsresp.getContext().getExportFields())))
-            dsresp.getContext().setExportFields(dsreq.getContext().getExportFields());
-        if (dsresp.getContext().getLineBreakStyle() == null || dsresp.getContext().getLineBreakStyle().equals(""))
-            dsresp.getContext().setLineBreakStyle(dsreq.getContext().getLineBreakStyle());
-        if (dsresp.getContext().getExportHeader() == null || dsresp.getContext().getExportHeader().equals(""))
-            dsresp.getContext().setExportHeader(dsreq.getContext().getExportHeader());
-        if (dsresp.getContext().getExportFooter() == null || dsresp.getContext().getExportFooter().equals(""))
-            dsresp.getContext().setExportFooter(dsreq.getContext().getExportFooter());
-        if (dsresp.getContext().getExportTitleSeparatorChar() == null || dsresp.getContext().getExportTitleSeparatorChar().equals(""))
-            dsresp.getContext().setExportTitleSeparatorChar(dsreq.getContext().getExportTitleSeparatorChar());
+
+    private ExportConfig processExport(DSRequest dsreq, DSResponse dsresp) throws Exception {
+
+        DSRequestData reqCtx = dsreq.getContext();
+        ExportConfig reqconfig = new ExportConfig();
+        ExportConfig bindconfig = new ExportConfig();
+        if (reqCtx.getIsExport()) {
+            Roperation rop = reqCtx.getRoperation();
+            reqconfig.setExportAs(rop.getExportAs());
+            reqconfig.setExportDelimiter(rop.getExportDelimiter());
+            reqconfig.setExportDisplay(rop.getExportDisplay());
+            reqconfig.setExportFilename(rop.getExportFilename());
+            reqconfig.setExportFooter(rop.getExportFooter());
+            reqconfig.setExportHeader(rop.getExportHeader());
+            reqconfig.setExportTitleSeparatorChar(rop.getExportTitleSeparatorChar());
+            reqconfig.setExportDatesAsFormattedString(rop.getExportDatesAsFormattedString());
+            reqconfig.setLineBreakStyle(rop.getLineBreakStyle());
+            String l = rop.getExportFields();
+            if (l != null) {
+                List<String> fields = new ArrayList<String>();
+
+                fields.addAll(DataUtil.simpleSplit(l, ","));
+                reqconfig.setExportFields(fields);
+            }
+        }
+
+        ToperationBinding bind = null;
+        try {
+            DataSource ds = dsreq.getDataSource();
+            if (ds != null)
+                bind = ds.getContext().getOperationBinding(dsreq);
+        } catch (SlxException e) {
+        }
+        if (bind != null) {
+            Texport rop = bind.getExport();
+            if (rop != null) {
+                bindconfig.setExportAs(rop.getExportAs().value());
+                bindconfig.setExportDelimiter(rop.getExportDelimiter());
+                bindconfig.setExportDisplay(rop.getExportDisplay());
+                bindconfig.setExportFilename(rop.getExportFilename());
+                bindconfig.setExportFooter(rop.getExportFooter());
+                bindconfig.setExportHeader(rop.getExportHeader());
+                bindconfig.setExportTitleSeparatorChar(rop.getExportTitleSeparatorChar());
+                bindconfig.setLineBreakStyle(rop.getLineBreakStyle());
+                String l = rop.getExportFields();
+                if (l != null) {
+                    List<String> fields = new ArrayList<String>();
+
+                    fields.addAll(DataUtil.simpleSplit(l, ","));
+                    bindconfig.setExportFields(fields);
+                }
+
+            }
+        }
+        DataUtil.copyProperties(reqconfig, bindconfig);
+        return bindconfig;
     }
+
     @Override
     public PRIORITY priority() {
         return InterceptorOrder.BEFORE_DEFAULT;

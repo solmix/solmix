@@ -178,7 +178,7 @@ public class ServiceDataSource
 
         if (!app.isPermitted(request, context)) {
             dsResponse = new DSResponseImpl();
-            dsResponse.getContext().setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
+            dsResponse.setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
             return dsResponse;
         }
         // operation level service-object configuration override all ds level service-object configuration.
@@ -366,8 +366,8 @@ public class ServiceDataSource
             dsResponse = (DSResponse) returnValue;
         } else {
             dsResponse = new DSResponseImpl();
-            dsResponse.getContext().setData(returnValue);
-            dsResponse.getContext().setStatus(Status.STATUS_SUCCESS);
+            dsResponse.setRawData(returnValue);
+            dsResponse.setStatus(Status.STATUS_SUCCESS);
         }
         return dsResponse;
 

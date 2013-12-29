@@ -20,7 +20,10 @@
 package org.solmix.fmk.call;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.BasicDataSource;
 
 /**
@@ -52,6 +56,7 @@ public class DSCallManagerImpl implements DSCallManager
     private final SystemContext sc;
     private boolean executeFirstSet=false;
     private boolean inited;
+    private DataTypeMap config;
 
     protected final LinkedList<DSCallInterceptor> interceptors = new LinkedList<DSCallInterceptor>();
 
@@ -69,7 +74,7 @@ public class DSCallManagerImpl implements DSCallManager
        }
 
     }
-    private  void init() throws SlxException{
+    public  void init() throws SlxException{
         if(!inited){
             this.configInterceptor();
         }
@@ -97,21 +102,26 @@ public class DSCallManagerImpl implements DSCallManager
                 break;
         }
     }
+    @SuppressWarnings("unchecked")
     protected void configInterceptor() throws SlxException{
         ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
         ConfigureUnit cu = null;
-        DataTypeMap config;
+        DataTypeMap frameworkConfig;
         try {
             cu = cum.getConfigureUnit(BasicDataSource.PID);
         } catch (IOException e) {
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         }
         if (cu != null)
-            config= cu.getProperties();
+            frameworkConfig= cu.getProperties();
         else
-            config= new DataTypeMap();
+            frameworkConfig= new DataTypeMap();
+        Map<Object,Object> merged= new HashMap<Object,Object>();
+        DataUtil.mapMerge(frameworkConfig, merged);
+        DataUtil.mapMerge(config, merged);
+        DataTypeMap interceptorConfig=new DataTypeMap(Collections.unmodifiableMap(merged));
         for(DSCallInterceptor i:interceptors){
-            i.configure(config);
+            i.configure(interceptorConfig);
         }
         
     }
@@ -132,6 +142,16 @@ public class DSCallManagerImpl implements DSCallManager
         DSCall call= getDSCall();
         call.setRequestContext(requestcontext);
         return call;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.api.call.DSCallManager#setConfig(org.solmix.commons.collections.DataTypeMap)
+     */
+    @Override
+    public void setConfig(DataTypeMap config) {
+        this.config=config;
     }
 
 }
