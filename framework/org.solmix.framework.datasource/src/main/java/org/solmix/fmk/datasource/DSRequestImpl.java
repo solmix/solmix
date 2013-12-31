@@ -84,7 +84,8 @@ public class DSRequestImpl implements DSRequest
     private String dataSourceName;
 
     private Boolean joinTransaction;
-    private boolean freeOnExecute;
+    
+    private boolean freeOnExecute = true;
 
     private boolean partOfTransaction;
 

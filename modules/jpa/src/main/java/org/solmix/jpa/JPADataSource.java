@@ -254,7 +254,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 return validationFailure;
             }
             //when used FetchType.LAZY,the transaction must be commit after data send to client.
-            if(DataUtil.booleanValue(req.getContext().getIsClientRequest())){
+            if(DataUtil.booleanValue(req.getContext().getIsClientRequest())&&DataTools.isFetch(_opType)){
                 req.setFreeOnExecute(false);
             }
             // if DSRequest not have a DataSource with it,use this by default.
@@ -557,6 +557,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 transaction = JPATransaction.getTransaction(getEntityManager());
             } catch (Exception e) {
                 log.error("Unexpected exception while initial entityManager", e);
+                throw new SlxException(Tmodule.JPA,Texception.JPA_NO_EMF,e);
             }
         }
         DSRequestData __requestCX = req.getContext();

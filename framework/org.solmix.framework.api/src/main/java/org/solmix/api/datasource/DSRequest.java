@@ -155,9 +155,9 @@ public interface DSRequest extends RequestType
     /**
      * Used to support DSC transaction.
      * <p>
-     * If this value is true ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
+     * If this value is false ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
      * with {@link DSCallCompleteCallback} to commit the transaction. if not,should commit it yourself.
-     * 
+     * The default value is true.
      * @return the freeOnExecute
      */
     public boolean isFreeOnExecute() ;

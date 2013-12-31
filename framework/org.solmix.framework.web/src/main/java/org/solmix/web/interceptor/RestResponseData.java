@@ -23,7 +23,7 @@ package org.solmix.web.interceptor;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2013年12月29日
+ * @version $Id$ 2013-12-29
  */
 
 public class RestResponseData
