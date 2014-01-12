@@ -289,8 +289,8 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     @Override
-    public DSResponse createDSResponse() {
-        return new DSResponseImpl();
+    public DSResponse createDSResponse(DSRequest request) {
+        return new DSResponseImpl(request);
     }
 
     /**
