@@ -177,13 +177,17 @@ public class BuiltInApplication implements Application
             operation = DataTools.autoCreateOperationID(dataSourceName, opType);
             if (log.isDebugEnabled()) {
                 log.debug("can not found the operationID ,auto created ID:[" + operation + "]");
-                MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder()).append(reqData.getAppID()).append("#").append(operation).toString());
+                MDC.put(SlxLog.LOG_CONTEXT, (new StringBuilder())
+                    .append("#")
+                    .append(operation)
+                    .toString());
             }
         } else {
             if (log.isTraceEnabled()) {
                 MDC.put(
                     SlxLog.LOG_CONTEXT,
-                    (new StringBuilder()).append(reqData.getAppID()).append(".").append(dataSourceName.replace('/', '.')).append('#').append(
+                    (new StringBuilder())
+                    .append(dataSourceName.replace('/', '.')).append('#').append(
                         operation).toString());
             }
         }
