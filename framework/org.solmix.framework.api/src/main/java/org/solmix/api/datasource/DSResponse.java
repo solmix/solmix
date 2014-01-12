@@ -182,4 +182,18 @@ public interface DSResponse extends ResponseType
      * @return
      */
     boolean getInvalidateCache();
+
+    /**
+     * @param value
+     */
+    void setOperationType(String value);
+
+    /**
+     * @return
+     */
+    String getOperationType();
+    
+    void setHandlerName(String handlerName);
+    
+    String getHandlerName();
 }
