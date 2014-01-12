@@ -20,6 +20,7 @@
 package org.solmix.fmk.call;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -517,7 +518,9 @@ public class DSCallImpl implements DSCall
 
     @Override
     public Map<String, Object> getTemplateContext() {
-        return this.templateContext;
+        if(templateContext==null)
+            templateContext=Collections.emptyMap();
+        return templateContext;
     }
 
 }
