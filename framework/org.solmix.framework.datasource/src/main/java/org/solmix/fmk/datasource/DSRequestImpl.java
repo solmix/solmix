@@ -85,7 +85,7 @@ public class DSRequestImpl implements DSRequest
 
     private Boolean joinTransaction;
     
-    private boolean freeOnExecute = true;
+    private Boolean freeOnExecute ;
 
     private boolean partOfTransaction;
 
@@ -141,9 +141,7 @@ public class DSRequestImpl implements DSRequest
     public DSRequestImpl(Roperation operation, Context context) throws SlxException
     {
         this(operation);
-        if (data.getOperation() == null)
-            throw new SlxException(Tmodule.DATASOURCE, Texception.DS_NO_OPERATION_DEFINED, "operation not specified");
-        else if (context != null) {
+        if (context != null) {
             this.requestContext = context;
             data.setIsClientRequest(true);
             if (context instanceof WebContext)
@@ -218,7 +216,14 @@ public class DSRequestImpl implements DSRequest
 
     @Override
     public boolean isFreeOnExecute() {
-        return freeOnExecute;
+       if(freeOnExecute==null){
+           if(getDSCall()!=null)
+               return false;
+           else
+               return true;
+       }else{
+           return freeOnExecute.booleanValue();
+       }
     }
 
     @Override
@@ -547,7 +552,7 @@ public class DSRequestImpl implements DSRequest
             }
         } catch (Exception e) {
             log.error("execute()", e);
-            _dsResponse = new DSResponseImpl();
+            _dsResponse = new DSResponseImpl(getDataSource(),this);
             _dsResponse.setRawData(e.getMessage());
             _dsResponse.setStatus(Status.STATUS_FAILURE);
         } finally {
