@@ -76,7 +76,7 @@ public class FileSystemDataSource extends BasicDataSource
         ToperationBinding opBind = this.getContext().getOperationBinding(req);
         String url =  (String) DataUtil.getProperty("dataURL", opBind, getContext().getTdataSource());
         String xpath=(String) DataUtil.getProperty("recordXPath", opBind, getContext().getTdataSource());
-        DSResponse res = new DSResponseImpl();
+        DSResponse res = new DSResponseImpl(this,req);
         Object value = getDataFromFile(sc.getBean(ClassLoader.class),url);
         if(xpath!=null){
             JXPathContext context = JXPathContext.newContext(value);

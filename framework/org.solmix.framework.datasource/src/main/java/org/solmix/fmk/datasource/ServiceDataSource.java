@@ -109,7 +109,10 @@ public class ServiceDataSource
         DSResponse response;
         if (log.isDebugEnabled())
             MDC.put(SlxLog.LOG_CONTEXT,
-                (new StringBuilder()).append(appID).append(".").append(dataSourceName.replace('/', '.')).append('#').append(operation).toString());
+                (new StringBuilder()).append(((Application.BUILT_IN_APPLICATION.equals(appID)||Application.DEFAULT_APPLICATION.equals(appID))?"":appID+"."))
+                .append(dataSourceName.replace('/', '.'))
+                .append('#').append(operation==null?"":operation)
+                .toString());
         try {
             response = (new ServiceDataSource(dsRequest, rpc, requestContext, app)).execute();
         } finally {
@@ -177,8 +180,7 @@ public class ServiceDataSource
             return null;
 
         if (!app.isPermitted(request, context)) {
-            dsResponse = new DSResponseImpl();
-            dsResponse.setStatus(Status.STATUS_AUTHORIZATION_FAILURE);
+            dsResponse = new DSResponseImpl(request,Status.STATUS_AUTHORIZATION_FAILURE);
             return dsResponse;
         }
         // operation level service-object configuration override all ds level service-object configuration.
