@@ -2716,4 +2716,18 @@ public class DataUtil
             sb.append(value.substring(prev));
         return sb.toString();
     }
+
+    /**
+     * @param rawData
+     * @return
+     */
+    public static boolean isArray(Object bean) {
+        if(bean==null)
+            return false;
+        if(List.class.isAssignableFrom(bean.getClass()))
+            return true;
+        else if(bean.getClass().isArray())
+            return true;
+        return false;
+    }
 }
