@@ -115,12 +115,14 @@ public interface DSRequest extends RequestType
 
     /**
      * Global transaction support,Indicate This Request is auto join a Transaction.
+     * 
      * @return
      */
     Boolean isCanJoinTransaction();
 
     /**
      * Indicate this request join a transaction.
+     * 
      * @param joinTransaction
      */
     void setJoinTransaction(boolean joinTransaction);
@@ -132,12 +134,14 @@ public interface DSRequest extends RequestType
 
     /**
      * If true indicate the ds-request have been validated.
+     * 
      * @param validated.
      */
     void setValidated(boolean validate);
 
     /**
      * Checkout the Ds-request is validated or not.
+     * 
      * @return
      */
     boolean isValidated();
@@ -149,18 +153,22 @@ public interface DSRequest extends RequestType
 
     /**
      * Pointed out that this DSRequest is passed through ServiceObject checking or not.
+     * 
      * @param beenThroughDMI
      */
     void setServiceCalled(boolean aerviceCalled);
+
     /**
-     * Used to support DSC transaction.
+     * Used to support DSCall transaction.
      * <p>
-     * If this value is false ,will not free datasource utile manual free it. if used sql or jpa datasource,must used rpc
-     * with {@link DSCallCompleteCallback} to commit the transaction. if not,should commit it yourself.
-     * The default value is true.
-     * @return the freeOnExecute
+     * If this value is false ,will not free datasource utile manual free it. if used sql or jpa datasource,must used
+     * {@link DSCall} with {@link DSCallCompleteCallback} to commit the transaction after DSCall complete. if not,should
+     * commit it yourself.
+     * 
+     * @return When {@link #setFreeOnExecute(boolean)} not set,used {@link DSCall} determine this value,When setting
+     *         {@link #setFreeOnExecute(boolean)} used this configuration
      */
-    public boolean isFreeOnExecute() ;
+    public boolean isFreeOnExecute();
 
     /**
      * If <code>true<code>,this request will free datasource at the end of this request process.
@@ -170,6 +178,6 @@ public interface DSRequest extends RequestType
      * @see #isFreeOnExecute()
      * @param freeOnExecute the freeOnExecute to set
      */
-    public void setFreeOnExecute(boolean freeOnExecute) ;
+    public void setFreeOnExecute(boolean freeOnExecute);
 
 }
