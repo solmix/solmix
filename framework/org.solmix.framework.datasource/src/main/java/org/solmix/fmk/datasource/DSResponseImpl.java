@@ -27,8 +27,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
+import org.solmix.api.exception.SlxException;
 import org.solmix.commons.util.DataUtil;
 
 /**
@@ -54,11 +56,14 @@ public class DSResponseImpl implements DSResponse
 
     private Object[] errors;
 
-    private Status status;
+    private Status status=Status.UNSET;
 
     private Long affectedRows;
 
     private boolean invalidateCache;
+
+    private String operationType;
+    private String handlerName;
 
     public DSResponseImpl()
     {
@@ -66,14 +71,24 @@ public class DSResponseImpl implements DSResponse
 
     public DSResponseImpl(Status status)
     {
-        this();
         setStatus(status);
     }
-
-    public DSResponseImpl(Object data)
+    public DSResponseImpl(DSRequest request){
+        this(request,null);
+    }
+    public DSResponseImpl(DSRequest request, Status status)
     {
-        this();
-        setRawData(data);
+        try {
+            DataSource ds = request.getDataSource();
+            setDataSource(ds);
+        } catch (SlxException e) {
+            // ignore
+        }
+        if (request != null) {
+            setOperationType(request.getContext().getOperationType().value());
+        }
+        if(status!=null)
+            setStatus(status);
     }
 
     public DSResponseImpl(Object data, Status status)
@@ -85,7 +100,6 @@ public class DSResponseImpl implements DSResponse
 
     public DSResponseImpl(DataSource dataSource)
     {
-        this();
         setDataSource(dataSource);
     }
 
@@ -93,6 +107,26 @@ public class DSResponseImpl implements DSResponse
     {
         this(dataSource);
         setStatus(status);
+    }
+    public DSResponseImpl(DataSource dataSource,DSRequest request)
+    {
+        setDataSource(dataSource);
+        if(request!=null){
+            setOperationType(request.getContext().getOperationType().value());
+        }
+    }
+
+    /**
+     * @param value
+     */
+    @Override
+    public void setOperationType(String value) {
+       this.operationType=value;
+        
+    }
+    @Override
+    public String getOperationType(){
+        return this.operationType;
     }
 
     public DSResponseImpl(DataSource dataSource, Object data)
@@ -417,4 +451,23 @@ public class DSResponseImpl implements DSResponse
     public boolean getInvalidateCache() {
         return invalidateCache;
     }
+
+    
+    /**
+     * @return the handlerName
+     */
+    @Override
+    public String getHandlerName() {
+        return handlerName;
+    }
+
+    
+    /**
+     * @param handlerName the handlerName to set
+     */
+    @Override
+    public void setHandlerName(String handlerName) {
+        this.handlerName = handlerName;
+    }
+    
 }
