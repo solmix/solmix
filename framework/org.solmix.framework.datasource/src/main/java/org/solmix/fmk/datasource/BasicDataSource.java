@@ -1016,9 +1016,12 @@ public class BasicDataSource implements DataSource
 
     public Map<Object, Object> getProperties(Object data, Collection<String> popToKeep, boolean dropExtraFields, boolean dropIgnoreFields,
         ValidationContext validationContext) {
-        Map result = new LinkedMap();
         if (data == null)
             return null;
+        if(!dropExtraFields&&Map.class.isAssignableFrom(data.getClass()))
+           return Map.class.cast(data);
+        Map result = new LinkedMap();
+       
         Map<Object, Object> source = null;
         Set<String> outProperties = new HashSet<String>();
         if (popToKeep != null)
