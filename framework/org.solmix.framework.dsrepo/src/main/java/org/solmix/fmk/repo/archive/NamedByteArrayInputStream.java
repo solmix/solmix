@@ -27,7 +27,7 @@ import org.solmix.api.repo.NamedInputStream;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013年11月23日
+ * @version $Id$  2013-11-23
  */
 
 public class NamedByteArrayInputStream implements NamedInputStream

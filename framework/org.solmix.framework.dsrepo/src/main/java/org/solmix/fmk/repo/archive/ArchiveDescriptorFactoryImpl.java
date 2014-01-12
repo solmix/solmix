@@ -31,7 +31,7 @@ import org.solmix.commons.util.DataUtil;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013年11月23日
+ * @version $Id$  2013-11-23
  */
 
 public class ArchiveDescriptorFactoryImpl implements ArchiveDescriptorFactory
@@ -48,6 +48,7 @@ public class ArchiveDescriptorFactoryImpl implements ArchiveDescriptorFactory
     public ArchiveDescriptor buildArchiveDescriptor(URL url) {
         return buildArchiveDescriptor(url,"");
     }
+    @Override
     public ArchiveDescriptor buildArchiveDescriptor(URL url,String entry) {
         final String protocol = url.getProtocol();
         if ( "jar".equals( protocol ) ) {
