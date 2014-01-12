@@ -78,7 +78,7 @@ public interface DataSourceManager
      * 
      * @return
      */
-    DSResponse createDSResponse();
+    DSResponse createDSResponse(DSRequest request);
 
     /**
      * Create a void DSRequest.
