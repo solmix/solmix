@@ -140,14 +140,14 @@ public class ExtXmlFileRepository extends AbstractDSRepository
         for (String dsLocation : dsLocations) {
             dsFile = XMLOrJSFile(dsLocation,dsName);
             if (dsFile != null) {
-                if (log.isDebugEnabled())
-                    log.debug((new StringBuilder()).append("load dsConfigFile sucessed File: [").append(dsName).append("] File Location: ").append(
+                if (log.isTraceEnabled())
+                    log.trace((new StringBuilder()).append("load dsConfigFile sucessed File: [").append(dsName).append("] File Location: ").append(
                         dsLocation).toString());
                 return dsFile;
             }
         }
-        if (log.isDebugEnabled())
-            log.debug((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(location).toString());
+        if (log.isTraceEnabled())
+            log.trace((new StringBuilder()).append("File ").append(dsName).append(" not found at explicitly specified location ").append(location).toString());
         return null;
     }
 }
