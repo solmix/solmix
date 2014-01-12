@@ -386,7 +386,8 @@ public class Reflection
             optionalArgs = new ReflectionArgument[0];
         if (requiredArgs == null)
             requiredArgs = new ReflectionArgument[0];
-        log.debug((new StringBuilder()).append("adaptArgsAndInvoke:\n\n ").append(method.toString()).append("\n\nrequiredArgs: ").append(
+        if(log.isTraceEnabled())
+        log.trace((new StringBuilder()).append("adaptArgsAndInvoke:\n\n ").append(method.getName()).append("\n\nrequiredArgs: ").append(
             typesAsString(requiredArgs)).append(" optionalArgs: ").append(typesAsString(optionalArgs)).toString());
         int requiredArgIndex = 0;
         List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
