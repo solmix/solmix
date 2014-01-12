@@ -80,6 +80,9 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
     @Override
     public List<String> getBeanNamesOfType(Class<?> type) {
         Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
+        if(context.getParent()!=null){
+            s.addAll(_doGetBeanNamesOfType(context.getParent(),type));
+        }
         s.removeAll(passThroughs);
         if (original != null) {
             List<String> origs = original.getBeanNamesOfType(type);
@@ -89,6 +92,14 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         return new ArrayList<String>(s);
     }
 
+    private Set<String> _doGetBeanNamesOfType(ApplicationContext context,Class<?> type) {
+        
+        Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
+        if(context.getParent()!=null){
+            s.addAll(_doGetBeanNamesOfType(context.getParent(),type));
+        }
+        return s;
+    }
     /**
      * {@inheritDoc}
      * 
@@ -102,8 +113,21 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         } catch (NoSuchBeanDefinitionException nsbde) {
             // ignore
         }
+        if(t==null&&context.getParent()!=null){
+            t=_dogetBeanOfType(context.getParent(),name,type);
+        }
         if (t == null && original != null) {
             t = original.getBeanOfType(name, type);
+        }
+        return t;
+    }
+    //get bean from parent;
+    private <T> T _dogetBeanOfType(ApplicationContext context,String name, Class<T> type){
+        T t = null;
+        if(context!=null){
+            t = type.cast(context.getBean(name, type));
+            if(t==null&&context.getParent()!=null)
+                t=_dogetBeanOfType(context.getParent(),name,type);
         }
         return t;
     }
@@ -121,12 +145,32 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         for (String n : s) {
             lst.add(type.cast(context.getBean(n, type)));
         }
+        if(context.getParent()!=null){
+            lst.addAll(_doGetBeansOfType(context.getParent(),type));
+        }
         if(original!=null){
             Collection<? extends T> origs=  original.getBeansOfType(type);
             if(origs!=null)
                 lst.addAll(origs);
         }
         return lst;
+    }
+    //get bean from parent;
+    private <T> Collection<? extends T> _doGetBeansOfType(ApplicationContext context,Class<T> type){
+        if(context!=null){
+            Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
+            s.removeAll(passThroughs);
+            List<T> lst = new LinkedList<T>();
+            for (String n : s) {
+                lst.add(type.cast(context.getBean(n, type)));
+            }    
+            if(context.getParent()!=null){
+                lst.addAll(_doGetBeansOfType(context.getParent(),type));
+            }
+            return lst;
+        }
+        return null;
+        
     }
 
     /**
