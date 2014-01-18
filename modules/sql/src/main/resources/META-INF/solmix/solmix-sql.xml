@@ -10,8 +10,7 @@
         <constructor-arg ref="solmix"/>
         <property name="connectionManager" ref="org.solmix.sql.ConnectionManager" />
    </bean>
-    <bean id="org.solmix.sql.ConnectionManager" class="org.solmix.sql.ConnectionManagerImpl" lazy-init="true">
+   <bean id="org.solmix.sql.ConnectionManager" class="org.solmix.sql.ConnectionManagerImpl" lazy-init="true">
         <constructor-arg ref="solmix"/>
-        
    </bean>
 </beans>

@@ -21,6 +21,7 @@ package org.solmix.web.interceptor;
 import org.solmix.api.call.DSCallWebInterceptor;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.internal.DatasourceCM;
 
 
@@ -48,7 +49,15 @@ public class AbstractRestInterceptor extends DSCallWebInterceptor
         _return.setIsDSResponse(true);
         _return.setStartRow(res.getStartRow());
         _return.setTotalRows(res.getTotalRows());
-        _return.setData(res.getRecordList());
+        Object rawData = res.getRawData();
+        if(rawData!=null){
+            if(DataUtil.isArray(rawData)){
+                _return.setData(res.getRecordList());
+            }else{
+                _return.setData(res.getSingleRecord());
+            }
+        }
+       
         return _return;
         
     }

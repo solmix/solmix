@@ -35,7 +35,6 @@ import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.call.DSCallManager;
 import org.solmix.api.call.DSCallManagerFactory;
 import org.solmix.api.context.SystemContext;
-import org.solmix.api.exception.SlxException;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.SlxContext;
 
@@ -96,7 +95,7 @@ public abstract class AbstractDSCallServlet extends HttpServlet
     /**
      * @return
      */
-    abstract DSCallInterceptor[] configuredInterceptors();
+    protected abstract DSCallInterceptor[] configuredInterceptors();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -118,7 +117,7 @@ public abstract class AbstractDSCallServlet extends HttpServlet
         try {
             DSCall dsc = dsCallManager.getDSCall(SlxContext.getWebContext());
             dsc.run();
-        } catch (SlxException e) {
+        } catch (Exception e) {
             log.error("request Exception: ", e);
         } finally {
             try {

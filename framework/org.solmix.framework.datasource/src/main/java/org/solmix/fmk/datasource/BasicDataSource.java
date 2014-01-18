@@ -1018,8 +1018,21 @@ public class BasicDataSource implements DataSource
         ValidationContext validationContext) {
         if (data == null)
             return null;
-        if(!dropExtraFields&&Map.class.isAssignableFrom(data.getClass()))
-           return Map.class.cast(data);
+        if(!dropExtraFields){
+            if(Map.class.isAssignableFrom(data.getClass()))
+                return Map.class.cast(data);
+            else{
+                Map obj=null;
+                try {
+                    obj = DataUtil.getProperties(data);
+                } catch (Exception e) {
+                    //INGONE;
+                }
+                return obj;
+            }
+                
+        }
+           
         Map result = new LinkedMap();
        
         Map<Object, Object> source = null;

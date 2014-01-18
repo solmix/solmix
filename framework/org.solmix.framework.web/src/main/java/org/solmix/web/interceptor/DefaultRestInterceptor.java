@@ -57,6 +57,7 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
     public static final String PAYLOAD_NAME = "__payload";
     public static final String DATAFORMAT = "dsc_dataFormat";
 
+    public static final String DSC_TRANSPORT = "dsc_transport";
     public static final String XML_PREFIX = "<";
 
     public static final String JSON_PREFIX = "{";
@@ -120,9 +121,9 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
     public Action postInspect(DSCall dsCall, WebContext context) throws SlxException {
 //        Object isRest = context.getAttribute(REST_PARM, Scope.LOCAL);
         HttpServletRequest request= context.getRequest();
-        if (/*isRest == null||*/request.getParameter("dsc_transport")!=null)
+        if (/*isRest == null||*/request.getParameter(DSC_TRANSPORT)!=null)
             return Action.CONTINUE;
-        String dataFormat = getDataformat(context.getRequest());
+        String dataFormat = getTransport(context.getRequest());
         String contentType = new StringBuilder().append("text/").append(dataFormat).append("; charset=").append(charset).toString();
         context.setContentType(contentType);
         if(LOG.isTraceEnabled())
@@ -167,6 +168,18 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
             throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);
         }
         return Action.CANCELLED;
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    private String getTransport(HttpServletRequest request) {
+        String queryString = request.getParameter(DATAFORMAT);
+        if (queryString == null)
+            return "json";
+        else
+            return queryString;
     }
 
     private Boolean isRest(HttpServletRequest request) {

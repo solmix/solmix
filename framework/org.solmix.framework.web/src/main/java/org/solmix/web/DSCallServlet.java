@@ -42,7 +42,7 @@ public class DSCallServlet extends AbstractDSCallServlet
      * @see org.solmix.web.AbstractDSCallServlet#configuredInterceptors()
      */
     @Override
-    DSCallInterceptor[] configuredInterceptors() {
+   protected DSCallInterceptor[] configuredInterceptors() {
         DSCallInterceptor[] re={
             new DownloadInterceptor(), 
             new UploadInterceptor(), 

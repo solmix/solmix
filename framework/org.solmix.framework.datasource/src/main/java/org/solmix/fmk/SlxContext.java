@@ -69,6 +69,12 @@ public final class SlxContext
  
 
     /**
+     * Get the default systemContext,code example:
+     * <code>
+     * final SystemContext sc= SlxContext.getSystemContext();
+     * .....
+     * .....
+     * </code>
      * @return the systemContext
      */
     public static SystemContext getSystemContext() {
@@ -76,6 +82,15 @@ public final class SlxContext
         return   SystemContextFactory.getDefaultSystemContext();
     }
     
+    /**
+     * Get the systemContext of the thread,code example:
+     * <code>
+     * final SystemContext sc= SlxContext.getThreadSystemContext();
+     * .....
+     * .....
+     * </code>
+     * @return
+     */
     public static SystemContext getThreadSystemContext() {
         return   SystemContextFactory.getThreadDefaultSystemContext();
     }
@@ -124,25 +139,6 @@ public final class SlxContext
         localContext.remove();
     }
 
- 
-
-    /**
-     * Get EventManager of this framework .
-     * 
-     * @return
-     */
-   /* public static EventManager getEventManager() {
-        AbstractSystemContext abc = getAbstractSystemContext();
-        if (abc != null) {
-            EventManager ctx = abc.getEventManager();
-            if (ctx == null) {
-                throw new IllegalArgumentException("EventManager is not set.");
-            }
-            return ctx;
-        } else {
-            return null;
-        }
-    }*/
 
     /**
      * Set the context for locale thread.
@@ -186,16 +182,6 @@ public final class SlxContext
         return null;
 
     }
-
-    /**
-     * Get access manager for a resource.this is part of JAAS framework.
-     * 
-     * @throws SlxException
-     */
-    /*
-     * public static AccessManager getAccessManager(String name) throws SlxException { return
-     * getContext().getAccessManager(name); }
-     */
 
     /**
      * Get parameter value as string.

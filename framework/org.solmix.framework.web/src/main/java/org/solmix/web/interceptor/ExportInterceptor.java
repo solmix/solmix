@@ -80,7 +80,7 @@ public class ExportInterceptor extends DSCallWebInterceptor
                 } catch (Exception e1) {
                   throw new SlxException(Tmodule.DSC,Texception.DEFAULT,"collection exportConfiguration error",e1);
                 }
-                // used filter from datasource.if not ,can used res.getContext().getDataList(Map.class);
+                // used filter from datasource.if not ,can used res.getSingleResultList(Map.class);
                 List<Map<Object, Object>> data = res.getRecordList();
                 Map<String, String> fieldMap = new HashMap<String, String>();
                 DataSource ds = res.getDataSource() == null ? req.getDataSource() : res.getDataSource();

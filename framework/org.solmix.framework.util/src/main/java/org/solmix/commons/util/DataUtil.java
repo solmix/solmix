@@ -1267,6 +1267,8 @@ public class DataUtil
             String propertyName = propertyDescriptor.getName();
             if (propsToKeep != null && !propsToKeep.contains(propertyName))
                 continue;
+            if("class".equals(propertyName))
+                continue;
             Method getter = propertyDescriptor.getReadMethod();
             if (getter == null) {
                 String methodName = new StringBuilder().append("is").append(propertyName.substring(0, 1).toUpperCase()).append( propertyName.substring(1)).toString();

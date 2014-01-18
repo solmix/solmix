@@ -79,7 +79,7 @@ public class DataSourceRealm extends AuthorizingRealm
 				@Override
 				public SimpleAuthenticationInfo fetch(DSRequest request) throws SlxException {
 					DSResponse resp=request.execute();
-					return resp.getContext().getData(SimpleAuthenticationInfo.class);
+					return resp.getSingleResult(SimpleAuthenticationInfo.class);
 				}
 				
 			}.withCriteria(new Criteria("USERNAME", userName).add("PASSWORD", pwd).add("HOST", up.getHost()).add("REMEMBER_ME", up.isRememberMe()))

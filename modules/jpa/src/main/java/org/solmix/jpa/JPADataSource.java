@@ -313,9 +313,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
 
     @Override
     public DSResponse executeRemove(DSRequest req) throws SlxException {
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return = new DSResponseImpl(req,Status.STATUS_SUCCESS);
         String pk = data.getPrimaryKey();
         Tfield pkField = data.getField(pk);
         if (pkField == null) {
@@ -341,9 +339,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
 
     @Override
     public DSResponse executeUpdate(DSRequest req) throws SlxException {
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return =  new DSResponseImpl(req,Status.STATUS_SUCCESS);
         String pk = data.getPrimaryKey();
         Tfield pkField = data.getField(pk);
         if (pkField == null) {
@@ -586,9 +582,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     private DSResponse updateEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return = new DSResponseImpl(req,Status.STATUS_SUCCESS);
         Object criteria = req.getContext().getRawValues();
         int batchsize = __requestCX.getBatchSize();
         // batch size.
@@ -630,9 +624,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     private DSResponse removeEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return =  new DSResponseImpl(req,Status.STATUS_SUCCESS);
         Object criteria = req.getContext().getRawCriteria();
         int batchsize = __requestCX.getBatchSize();
         // batch size.
@@ -683,9 +675,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         if (!isEntityClass(entityClass)) {
             throw new SlxException(Tmodule.JPA, Texception.JPA_NO_ENTITY, "JPA DataSource no configured Entity bean");
         }
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return =  new DSResponseImpl(req,Status.STATUS_SUCCESS);
         Map<String, Object> criteria = req.getContext().getCriteria();
         if (criteria != null) {
             if (isAdvancedCriteria(criteria)) {
@@ -833,7 +823,11 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 if (log.isTraceEnabled())
                     log.trace("Query Parameter:[" + value + "]");
             }
+            long _$=System.currentTimeMillis();
             Integer rowCount = Integer.valueOf(Integer.parseInt(queryCount.getSingleResult().toString()));
+            if(log.isTraceEnabled()){
+                getEventWork().createAndFireTimeEvent(System.currentTimeMillis()-_$, "Query Fetch count used time");
+            }
             totalRows = rowCount != null ? rowCount.intValue() : 0;
             query.setFirstResult(start);
             query.setMaxResults(batch);
@@ -862,9 +856,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     private DSResponse addEntity(DSRequest req, JPADataSource[] datasources) throws SlxException {
         JPADataSource __firstDS = datasources[0];
         DSRequestData __requestCX = req.getContext();
-        DSResponse __return = new DSResponseImpl();
-        __return.setStatus(Status.STATUS_SUCCESS);
-        __return.setDataSource(req.getDataSource());
+        DSResponse __return = new DSResponseImpl(req.getDataSource(),Status.STATUS_SUCCESS);
         Object values = req.getContext().getRawValues();
         int batchsize = __requestCX.getBatchSize();
         // batch size.
