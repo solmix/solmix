@@ -33,6 +33,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.cm.ConfigureUnit;
+import org.solmix.api.cm.ConfigureUnitManager;
+import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
@@ -43,13 +46,16 @@ import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.ConnectionManager;
+import org.solmix.sql.SQLDataSource;
 
 public final class ProcedureDataSource
 {
-
+    private static final Logger log = LoggerFactory.getLogger(ProcedureDataSource.class.getName());
+    
     private Connection conn;
 
     public static String INPUT = "in";
@@ -57,11 +63,10 @@ public final class ProcedureDataSource
     public static String OUTPUT = "out";
 
     private ConnectionManager connectionManager;
-    private static final Logger log = LoggerFactory.getLogger(ProcedureDataSource.class.getName());
 
     @SuppressWarnings("unchecked")
     public DSResponse update(DSRequest req, DataSource ds) throws SlxException {
-        DSResponse __resp = new DSResponseImpl();
+        DSResponse __resp = new DSResponseImpl(req);
         DataSourceData data = ds.getContext();
         Map<Object, Object> raws = req.getContext().getValues();
         Eoperation _optType = req.getContext().getOperationType();
@@ -73,14 +78,28 @@ public final class ProcedureDataSource
             sql = DataSourceData.getCustomSQL(_bind).trim();
             ins = DataSourceData.getValuesClause(_bind);
         }
-        Map context = Velocity.getStandardContextMap(req);
+        Map<String,Object> context = Velocity.getStandardContextMap(req);
         String explictSQL = Velocity.evaluateAsString(sql, context);
         //XXX
-        boolean printSQL = true;
-        if (printSQL)
-            log.info(explictSQL);
-
+        
+       
+        ConnectionManager connectionManager=null;
         try {
+            SystemContext sc=SlxContext.getThreadSystemContext();
+            ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+            ConfigureUnit cu = null;
+            boolean printSQL = false;
+            try {
+                cu = cum.getConfigureUnit(SQLDataSource.PID);
+                printSQL = cu.getProperties().getBoolean("printSQL", false);
+            } catch (IOException e) {
+                throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
+            }
+            if (printSQL)
+                log.info(explictSQL);
+            
+            connectionManager= sc.getBean(ConnectionManager.class);
+            
             conn = connectionManager.get(getDbName(data));
             CallableStatement pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);
@@ -133,12 +152,12 @@ public final class ProcedureDataSource
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            log.error("[SQLEXCEPTION]" + e.getLocalizedMessage());
+            log.error("[SQLEXCEPTION] {}" ,e.getLocalizedMessage());
         } catch (IOException e) {
             __resp.setStatus(Status.STATUS_FAILURE);
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("[PROCEDURE-EXCEPTION]" ,e);
         } finally {
             if (conn != null)
                 connectionManager.free(conn);
