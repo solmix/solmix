@@ -1,4 +1,4 @@
-package org.solmix.advanceds.client;
+package org.solmix.sgt.client.advanceds;
 
 
 
@@ -31,11 +31,6 @@ public class HiddenForm  {
 		$wnd.alert(e);
 	}
 }-*/;
-	/*public  void setData(String data){
-		Element e = Document.get().createElement("input");
-		e.setAttribute("value", data);
-		Window.alert(e.toString());
-	}*/
 
 	public native void setData(String data) /*-{
 		try {

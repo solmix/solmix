@@ -5,9 +5,7 @@
 	<inherits name='com.google.gwt.user.User'/>
     <inherits name="com.google.gwt.core.Core"/>
     <inherits name="org.solmix.atmosphere.Client"/>
-    <inherits name="org.solmix.pagebar.PageBar" />
- 	<inherits name="org.solmix.advanceds.AdvanceDS" />
 	<inherits name="com.gwtplatform.mvp.Mvp" />
-	
+	 <script src="sc/extensions/extensions.js"/>
 	<source path="client"/>
 </module>

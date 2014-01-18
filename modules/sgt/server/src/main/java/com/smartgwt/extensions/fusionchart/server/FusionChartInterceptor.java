@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallWebInterceptor;
 import org.solmix.api.context.WebContext;
@@ -53,14 +51,13 @@ public class FusionChartInterceptor extends DSCallWebInterceptor
 
     @Override
     public Action postInspect(DSCall dsCall, WebContext ctx) throws SlxException {
-        HttpServletRequest request = ctx.getRequest();
-        String viewType = request.getParameter("viewType");
-        if ("fchart".equals(viewType)) {
+        List<DSRequest> reqs = dsCall.getRequests();
+        DSResponse resp = dsCall.getResponse(reqs.get(0));
+        if ("fchart".equals(resp.getHandlerName())) {
             String orgEncode = ctx.getResponse().getCharacterEncoding();
             ctx.getResponse().setCharacterEncoding(characterEncoding);
             Writer _out = ctx.getOut();
-            List<DSRequest> reqs = dsCall.getRequests();
-            DSResponse resp = dsCall.getResponse(reqs.get(0));
+            
             try {
                 _out.write(resp.getSingleResult(String.class));
                 _out.flush();

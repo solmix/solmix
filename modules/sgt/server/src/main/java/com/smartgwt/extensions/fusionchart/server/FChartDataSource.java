@@ -61,7 +61,7 @@ public final class FChartDataSource
         Map<String, Object> map = XMLUtil.toMap(object);
         DSResponse response;
         Object data = getData(req, ds);
-        response = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSResponse();
+        response = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSResponse(req);
         response.setRawData(data);
         Map context = Velocity.getStandardContextMap(req);
         context.putAll(map);
@@ -83,7 +83,7 @@ public final class FChartDataSource
             if (returnValue != null)
                 response.setRawData(returnValue);
         }
-
+        response.setHandlerName("fchart");
         return response;
 
     }

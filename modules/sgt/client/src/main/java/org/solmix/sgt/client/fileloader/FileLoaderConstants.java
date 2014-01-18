@@ -1,4 +1,4 @@
-package org.solmix.fileloader.client;
+package org.solmix.sgt.client.fileloader;
 
 public interface FileLoaderConstants {
 	static String NOTE_QUEUED = "noteQueued";

@@ -1,5 +1,5 @@
 
-package org.solmix.advanceds.client;
+package org.solmix.sgt.client.advanceds;
 
 /**
  * Used {@link SlxRPC} instead of it.

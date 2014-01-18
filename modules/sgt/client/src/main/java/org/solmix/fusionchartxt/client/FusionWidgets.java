@@ -19,11 +19,10 @@
 
 package org.solmix.fusionchartxt.client;
 
-import org.solmix.advanceds.client.Roperation;
-import org.solmix.advanceds.client.SlxRPC;
-import org.solmix.advanceds.client.XMLCallBack;
+import org.solmix.sgt.client.advanceds.Roperation;
+import org.solmix.sgt.client.advanceds.SlxRPC;
+import org.solmix.sgt.client.advanceds.XMLCallBack;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Element;
@@ -78,7 +77,7 @@ public class FusionWidgets extends Canvas
     }
     public String getChartRoot(){
         if(chartRoot==null)
-            chartRoot=GWT.getModuleName()+"/widgets/";
+            chartRoot="widgets/";
       return chartRoot ;
     }
   

@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.advanceds.client;
+package org.solmix.sgt.client.advanceds;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.rpc.RPCRequest;

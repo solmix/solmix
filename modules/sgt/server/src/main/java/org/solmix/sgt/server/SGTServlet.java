@@ -21,7 +21,7 @@ package org.solmix.sgt.server;
 
 import java.io.IOException;
 
-import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
@@ -37,6 +38,12 @@ import org.solmix.fmk.SlxContext;
 import org.solmix.web.AbstractDSCallServlet;
 import org.solmix.web.DSCallServlet;
 import org.solmix.web.LoadSchemaServlet;
+import org.solmix.web.interceptor.DefaultRestInterceptor;
+import org.solmix.web.interceptor.DownloadInterceptor;
+import org.solmix.web.interceptor.ExportInterceptor;
+import org.solmix.web.interceptor.UploadInterceptor;
+
+import com.smartgwt.extensions.fusionchart.server.FusionChartInterceptor;
 
 /**
  * 
@@ -51,7 +58,6 @@ public class SGTServlet extends HttpServlet
 
     private volatile AbstractDSCallServlet dsCallService;
 
-    private volatile Servlet cometServlet;
 
     private static final Logger log = LoggerFactory.getLogger(SGTServlet.class);
 
@@ -61,6 +67,31 @@ public class SGTServlet extends HttpServlet
      */
     private static final long serialVersionUID = 1L;
 
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        loadSchemaService = new LoadSchemaServlet();
+        loadSchemaService.init(getServletConfig());
+        dsCallService = new DSCallServlet(){
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected DSCallInterceptor[] configuredInterceptors() {
+                DSCallInterceptor[] re={
+                    new DownloadInterceptor(), 
+                    new UploadInterceptor(), 
+                    new ExportInterceptor(), 
+                    new FusionChartInterceptor(),
+                    new DefaultRestInterceptor()};
+                return  re;
+            }
+        };
+        dsCallService.init(getServletConfig());
+       
+      }
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
@@ -79,33 +110,14 @@ public class SGTServlet extends HttpServlet
             // String viewType = request.getParameter("viewType");
             switch (eType) {
                 case LOAD_SCHEMA:
-                    if (loadSchemaService == null) {
-                        loadSchemaService = new LoadSchemaServlet();
-                        loadSchemaService.init(getServletConfig());
-                    }
                     loadSchemaService.service(request, response);
                     break;
                 default:
-                    if (dsCallService == null) {
-                        dsCallService = new DSCallServlet();
-                        dsCallService.init(getServletConfig());
-                    }
                     dsCallService.service(request, response);
                     break;
 
             }
-        } else if (bean.getTRequest() == RequestType.EVENT) {
-            if (cometServlet == null) {
-                cometServlet = new org.atmosphere.cpr.AtmosphereServlet();
-                cometServlet.init(getServletConfig());
-            }
-            try {
-                // response.setCharacterEncoding("GBK");
-                cometServlet.service(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        } 
 
     }
 

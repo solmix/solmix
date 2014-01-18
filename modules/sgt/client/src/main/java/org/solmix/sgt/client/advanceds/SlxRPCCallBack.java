@@ -17,11 +17,11 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.advanceds.client;
+package org.solmix.sgt.client.advanceds;
 
 
 /**
- * Used {@link org.solmix.advanceds.client.JSCallBack}
+ * Used {@link org.solmix.sgt.client.advanceds.JSCallBack}
  * @author Administrator
  * @version 110035 2013-1-27
  */

@@ -1,4 +1,4 @@
-package org.solmix.fileloader.client;
+package org.solmix.sgt.client.fileloader;
 
 import com.smartgwt.client.widgets.Window;
 

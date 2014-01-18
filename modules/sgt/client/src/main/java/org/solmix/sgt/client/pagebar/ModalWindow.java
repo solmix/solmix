@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.pagebar.client;
+package org.solmix.sgt.client.pagebar;
 
 import com.google.gwt.user.client.Timer;
 import com.smartgwt.client.types.Alignment;

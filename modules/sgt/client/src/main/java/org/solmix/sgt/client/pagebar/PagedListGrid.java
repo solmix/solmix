@@ -17,11 +17,11 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.pagebar.client;
+package org.solmix.sgt.client.pagebar;
 
-import org.solmix.advanceds.client.Roperation;
-import org.solmix.advanceds.client.SlxRPCCallBack;
-import org.solmix.advanceds.client.SlxRPCManager;
+import org.solmix.sgt.client.advanceds.Roperation;
+import org.solmix.sgt.client.advanceds.SlxRPCCallBack;
+import org.solmix.sgt.client.advanceds.SlxRPCManager;
 
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
