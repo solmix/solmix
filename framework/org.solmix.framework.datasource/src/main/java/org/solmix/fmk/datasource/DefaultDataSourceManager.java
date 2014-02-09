@@ -72,7 +72,7 @@ public class DefaultDataSourceManager implements DataSourceManager
 
     }
 
-    public DefaultDataSourceManager(SystemContext sc)
+    public DefaultDataSourceManager(final SystemContext sc)
     {
         setSystemContext(sc);
         providers.add(new BasicDataSource(sc));
@@ -80,7 +80,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     }
 
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if (sc != null) {
             sc.setBean(this, DataSourceManager.class);

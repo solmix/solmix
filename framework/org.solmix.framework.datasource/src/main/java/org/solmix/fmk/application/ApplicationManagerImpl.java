@@ -49,14 +49,14 @@ public class ApplicationManagerImpl implements ApplicationManager
     public ApplicationManagerImpl(){
         this(null);
     }
-    public ApplicationManagerImpl(SystemContext sc){
+    public ApplicationManagerImpl(final SystemContext sc){
         setApplicationManager(sc);
     }
     /**
      * @param sc
      */
     @Resource
-    private void setApplicationManager(SystemContext sc) {
+    private void setApplicationManager(final SystemContext sc) {
        this.sc=sc;
        if(sc!=null){
            sc.setBean(this, ApplicationManager.class);

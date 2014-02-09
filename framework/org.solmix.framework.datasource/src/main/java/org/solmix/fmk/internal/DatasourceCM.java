@@ -61,7 +61,7 @@ public class DatasourceCM
     public static String FRAMEWORK_VERSION = "0.4";
 
     public static ConfigureUnit getConfigureUnit() {
-        SystemContext sc = SlxContext.getThreadSystemContext();
+        final SystemContext sc = SlxContext.getThreadSystemContext();
         ConfigureUnitManager cm = sc.getBean(ConfigureUnitManager.class);
         try {
             return cm.getConfigureUnit(PID);

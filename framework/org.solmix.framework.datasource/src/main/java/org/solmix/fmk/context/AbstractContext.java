@@ -70,7 +70,7 @@ public abstract class AbstractContext implements Context
     /**
      * @param systemContext the systemContext to set
      */
-    public void setSystemContext(SystemContext systemContext) {
+    public void setSystemContext(final SystemContext systemContext) {
         this.systemContext = systemContext;
     }
 

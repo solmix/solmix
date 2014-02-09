@@ -39,7 +39,7 @@ public class ConfiguredFileRepository extends AbstractDSRepository
     private final static Logger log = LoggerFactory.getLogger(ConfiguredFileRepository.class.getName());
 
     private final SystemContext sc;
-    public ConfiguredFileRepository(SystemContext sc){
+    public ConfiguredFileRepository(final SystemContext sc){
         super(BUILDIN_FILE, ObjectType.URL,ObjectFormat.XML);
         this.sc=sc;
     }

@@ -115,7 +115,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
   
 
-    public SQLDataSource(SystemContext sc)
+    public SQLDataSource(final SystemContext sc)
     {
        super(sc);
 

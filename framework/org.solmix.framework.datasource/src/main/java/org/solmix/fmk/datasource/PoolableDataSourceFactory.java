@@ -52,14 +52,14 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
         this(null);
     }
 
-    public PoolableDataSourceFactory(SystemContext sc)
+    public PoolableDataSourceFactory(final SystemContext sc)
     {
         setSystemContext(sc);
        
     }
 
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
     }
 

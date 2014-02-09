@@ -458,7 +458,7 @@ public class SQLTransform
     public static EventWorker createEventWork( ) {
         return createEventWork(SlxContext.getThreadSystemContext());
     }
-    public static EventWorker createEventWork(SystemContext sc) {
+    public static EventWorker createEventWork(final SystemContext sc) {
         EventWorkerFactory factory = EventWorkerFactory.getInstance();
         return factory.createWorker(sc);
     }

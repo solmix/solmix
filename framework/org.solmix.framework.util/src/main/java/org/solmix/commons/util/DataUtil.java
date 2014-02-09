@@ -60,7 +60,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.collections.map.LinkedMap;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.collections.CaseInsensitiveHashMap;
@@ -2667,10 +2666,56 @@ public class DataUtil
         return reversalCopy(target, str2Bcd(v));
     }
 
+    /**
+     * 
+    /**
+     * <p>Removes a substring only if it is at the end of a source string,
+     * otherwise returns the source string.</p>
+     *
+     * <p>A <code>null</code> source string will return <code>null</code>.
+     * An empty ("") source string will return the empty string.
+     * A <code>null</code> search string will return the source string.</p>
+     *
+     * <pre>
+     * DataUtil.removeEnd(null, *)      = null
+     * DataUtil.removeEnd("", *)        = ""
+     * DataUtil.removeEnd(*, null)      = *
+     * DataUtil.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * DataUtil.removeEnd("www.domain.com", ".com")   = "www.domain"
+     * DataUtil.removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * DataUtil.removeEnd("abc", "")    = "abc"
+     * </pre>
+     * @param str
+     * @param remove
+     * @return
+     */
     public static String removeEnd(String str, String remove) {
-        return StringUtils.removeEnd(str, remove);
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+        return str;
     }
-
+    /**
+     * <p>Checks if a String is empty ("") or null.</p>
+     *
+     * <pre>
+     * DataUtil.isEmpty(null)      = true
+     * DataUtil.isEmpty("")        = true
+     * DataUtil.isEmpty(" ")       = false
+     * DataUtil.isEmpty("bob")     = false
+     * DataUtil.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the String.
+     * That functionality is available in isBlank().</p>
+     */
+    public static boolean isEmpty(String str) {
+        return str == null || str.length() == 0;
+    }
     public static String getTemplateValue(String value) {
         return getTemplateValue(value,null);
     }

@@ -65,7 +65,7 @@ public abstract class AbstractDSCallServlet extends HttpServlet
         this(null);
     }
 
-    public AbstractDSCallServlet(SystemContext sc)
+    public AbstractDSCallServlet(final SystemContext sc)
     {
         this.sc = sc;
     }

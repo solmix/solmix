@@ -67,7 +67,7 @@ public class SpringEventManager implements EventManager
     public SpringEventManager(){
         this(null);
     }
-    public SpringEventManager(SystemContext sc){
+    public SpringEventManager(final SystemContext sc){
         setSystemContext(sc);
     }
 
@@ -75,7 +75,7 @@ public class SpringEventManager implements EventManager
      * @param sc2
      */
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc=sc;
         if(sc!=null){
             sc.setBean(this, EventManager.class);

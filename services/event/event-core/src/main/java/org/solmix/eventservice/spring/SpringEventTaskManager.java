@@ -71,7 +71,7 @@ public class SpringEventTaskManager implements EventTaskManager
      * @param topicFilter
      * @param eventFilter
      */
-    public SpringEventTaskManager(SystemContext sc, EventHandlerBlackListImpl blackList, TopicFilter topicFilter,
+    public SpringEventTaskManager(final SystemContext sc, EventHandlerBlackListImpl blackList, TopicFilter topicFilter,
         EventFilter eventFilter)
     {
         this.sc = sc;

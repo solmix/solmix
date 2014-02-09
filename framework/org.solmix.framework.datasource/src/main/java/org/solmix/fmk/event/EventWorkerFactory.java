@@ -40,7 +40,7 @@ public class EventWorkerFactory
     }
 
     
-    public EventWorker createWorker(SystemContext sc){
+    public EventWorker createWorker(final SystemContext sc){
         return new EventWorker(sc);
     }
 }

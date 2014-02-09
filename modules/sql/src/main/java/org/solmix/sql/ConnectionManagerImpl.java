@@ -78,13 +78,13 @@ public class ConnectionManagerImpl implements ConnectionManager
 
     private SystemContext sc;
 
-    public ConnectionManagerImpl(SystemContext sc)
+    public ConnectionManagerImpl(final SystemContext sc)
     {
         setSystemContext(sc);
     }
 
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if(sc!=null)
             sc.setBean(this, ConnectionManager.class);

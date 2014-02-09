@@ -72,11 +72,11 @@ public class PoolManagerFactoryImpl implements PoolManagerFactory
         DEFAULT_CONFIG.put("enabled", "true");
     }
     
-    public PoolManagerFactoryImpl(SystemContext sc){
+    public PoolManagerFactoryImpl(final SystemContext sc){
         setSystemContext(sc);
     }
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if(sc!=null){
             sc.setBean(this, PoolManagerFactory.class);

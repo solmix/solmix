@@ -46,7 +46,7 @@ public class EventWorker
         this(null);
     }
 
-    public EventWorker(SystemContext sc)
+    public EventWorker(final SystemContext sc)
     {
         this.sc = sc;
     }

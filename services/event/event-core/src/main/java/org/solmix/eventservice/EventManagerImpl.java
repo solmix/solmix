@@ -41,7 +41,7 @@ public class EventManagerImpl implements EventManager
     private volatile EventAdmin eventAdmin;
     private SystemContext sc;
     
-    public EventManagerImpl(SystemContext sc){
+    public EventManagerImpl(final SystemContext sc){
         setSystemContext(sc);
     }
 
@@ -49,7 +49,7 @@ public class EventManagerImpl implements EventManager
      * @param sc2
      */
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
       this.sc=sc;
       if(this.sc!=null){
           sc.setBean(this, EventManager.class);

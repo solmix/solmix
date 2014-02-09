@@ -16,7 +16,7 @@ public class Transaction
 
     private boolean isCreated;
 
-    public Transaction(DSCall dsc, SystemContext sc)
+    public Transaction(DSCall dsc, final SystemContext sc)
     {
         if (dsc == null) {
             DSCallManagerFactory factory = sc.getBean(DSCallManagerFactory.class);
@@ -36,7 +36,7 @@ public class Transaction
 
     }
 
-    public Transaction(SystemContext sc) throws SlxException
+    public Transaction(final SystemContext sc) throws SlxException
     {
         this(null, sc);
     }

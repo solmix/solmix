@@ -24,15 +24,40 @@ import java.util.Locale;
 import org.solmix.api.i18n.ResourceBundleManager;
 
 /**
- * 
+ * The framework internal context,Typical use as follow: 
+ * <p>1:
+ * <code>
+ * ...
+ * public XXXXX(final SystemContext sc){
+        setSystemContext(sc);
+    }
+    @Resource
+    public void setSystemContext(final SystemContext sc) {
+        this.sc = sc;
+        if(sc!=null){
+            sc.setBean(this, PoolManagerFactory.class);
+           
+        }
+    } 
+ * ...
+ * </code>
+ * <p>2:
+ * <code>
+ * ...
+ *  final SystemContext sc = SlxContext.getThreadSystemContext();
+ *  sc.getBean(xxx.class);
+ *  ...
+ * </code>
  * @version 110035 2012-9-28
  */
 
 public interface SystemContext extends Context
 {
 
-    public static final String DEFAULT_CONTEXT_ID="solmix";
-    public static final String CONTEXT_PROPERTY_NAME="solmix.context.system.id";
+    public static final String DEFAULT_CONTEXT_ID = "solmix";
+
+    public static final String CONTEXT_PROPERTY_NAME = "solmix.context.system.id";
+
     /**
      * System context not used this method.used default with {@linkplain ResourceBundleManager}
      */
@@ -41,23 +66,25 @@ public interface SystemContext extends Context
     void setLocale(Locale locale);
 
     <T> T getBean(Class<T> beanType);
-    
+
     <T> void setBean(T bean, Class<T> beanType);
-    
+
     boolean hasBeanByName(String name);
-    
+
     /**
      * Return the SystemContext ID
+     * 
      * @return
      */
     String getId();
-    
+
     /**
      * Close this context.
+     * 
      * @param wait
      */
     void close(boolean wait);
-    
+
     /**
      * Open this context for using.
      */

@@ -62,7 +62,6 @@ public final class ProcedureDataSource
 
     public static String OUTPUT = "out";
 
-    private ConnectionManager connectionManager;
 
     @SuppressWarnings("unchecked")
     public DSResponse update(DSRequest req, DataSource ds) throws SlxException {
@@ -81,11 +80,9 @@ public final class ProcedureDataSource
         Map<String,Object> context = Velocity.getStandardContextMap(req);
         String explictSQL = Velocity.evaluateAsString(sql, context);
         //XXX
-        
-       
         ConnectionManager connectionManager=null;
         try {
-            SystemContext sc=SlxContext.getThreadSystemContext();
+            final  SystemContext sc=SlxContext.getThreadSystemContext();
             ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
             ConfigureUnit cu = null;
             boolean printSQL = false;
@@ -97,9 +94,7 @@ public final class ProcedureDataSource
             }
             if (printSQL)
                 log.info(explictSQL);
-            
             connectionManager= sc.getBean(ConnectionManager.class);
-            
             conn = connectionManager.get(getDbName(data));
             CallableStatement pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);

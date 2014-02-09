@@ -123,7 +123,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
      * 
      * @param sc
      */
-    public JPADataSource(SystemContext sc)
+    public JPADataSource(final SystemContext sc)
     {
         setSystemContext(sc);
     }

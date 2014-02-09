@@ -38,11 +38,11 @@ public class DSCallManagerFactoryImpl implements DSCallManagerFactory
     private SystemContext sc;
     public DSCallManagerFactoryImpl(){
     }
-    public DSCallManagerFactoryImpl(SystemContext sc){
+    public DSCallManagerFactoryImpl(final SystemContext sc){
         setSystemContext(sc);
     }
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if(sc!=null){
             sc.setBean(this, DSCallManagerFactoryImpl.class);

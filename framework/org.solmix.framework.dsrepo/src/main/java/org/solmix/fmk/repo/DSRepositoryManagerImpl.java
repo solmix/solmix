@@ -55,14 +55,14 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
         this(null);
     }
 
-    public DSRepositoryManagerImpl(SystemContext sc)
+    public DSRepositoryManagerImpl(final SystemContext sc)
     {
         setSystemContext(sc);
         internal = new LinkedHashMap<String, DSRepository>();
     }
 
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if (sc != null) {
             sc.setBean(this, DSRepositoryManager.class);

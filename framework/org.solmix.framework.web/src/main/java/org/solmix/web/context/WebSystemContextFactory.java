@@ -41,7 +41,7 @@ public class WebSystemContextFactory extends SpringSystemContextFactory
     }
     @Override
     public SystemContext createContext() {
-        SystemContext sc=super.createContext();
+        final SystemContext sc=super.createContext();
         sc.setBean(servletContext, ServletContext.class);
         return sc;
     }

@@ -82,7 +82,7 @@ public class DefaultParser implements ParserHandler
 
     private SystemContext sc;
 
-    public DefaultParser(SystemContext sc)
+    public DefaultParser(final SystemContext sc)
     {
         numParsered = new AtomicLong();
         setSystemContext(sc);
@@ -91,7 +91,7 @@ public class DefaultParser implements ParserHandler
     }
 
     @Resource
-    public void setSystemContext(SystemContext sc) {
+    public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
     }
 

@@ -54,7 +54,7 @@ public class JSParserFactoryImpl implements JSParserFactory
         this(null);
     }
 
-    public JSParserFactoryImpl(SystemContext sc)
+    public JSParserFactoryImpl(final SystemContext sc)
     {
         this.sc = sc;
     }

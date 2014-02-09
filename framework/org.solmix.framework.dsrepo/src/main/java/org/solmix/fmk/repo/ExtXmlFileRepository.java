@@ -74,7 +74,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
     /**
      * @param sc
      */
-    public ExtXmlFileRepository(SystemContext sc)
+    public ExtXmlFileRepository(final SystemContext sc)
     {
         super(EXT_FILE, ObjectType.SLX_FILE,ObjectFormat.XML);
         if (sc != null) {
@@ -132,7 +132,6 @@ public class ExtXmlFileRepository extends AbstractDSRepository
 
             if (log.isTraceEnabled())
                 log.trace("None setting extension configuration file location .used default location:" + defaultLocation);
-            log.warn("Not set datasource file location ,used the system-datasource file location as default");
             Collections.addAll(dsLocations, defaultLocation);
         } else {
             dsLocations = DataUtil.commaSeparatedStringToList(location);
