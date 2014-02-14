@@ -1,5 +1,5 @@
 /*
- * ========THE SOLMIX PROJECT=====================================
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -367,9 +367,8 @@ public class ServiceDataSource
         if (DSResponse.class.isAssignableFrom(returnObjClass)) {
             dsResponse = (DSResponse) returnValue;
         } else {
-            dsResponse = new DSResponseImpl();
+            dsResponse = new DSResponseImpl(request,Status.STATUS_SUCCESS);
             dsResponse.setRawData(returnValue);
-            dsResponse.setStatus(Status.STATUS_SUCCESS);
         }
         return dsResponse;
 
