@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix</groupId>
     <artifactId>framework</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.framework.jaas</groupId>
   <artifactId>org.solmix.framework.jaas</artifactId>

@@ -3,7 +3,7 @@
   <parent>
     <artifactId>solmix</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>modules</artifactId>
@@ -12,5 +12,6 @@
   	<module>sql</module>
   	<module>sgt</module>
   	<module>jpa</module>
+  	<module>jquery</module>
   </modules>
 </project>

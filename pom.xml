@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.solmix</groupId>
 	<artifactId>solmix</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.4.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solmix  Project Pom</name>
 	<licenses>
@@ -16,6 +16,20 @@
 		<name></name>
 		<url></url>
 	</organization>
+	<developers>
+		<developer>
+			<id>solmix.f</id>
+			<name>solmix</name>
+			<email>solmix.f@gmail.com</email>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.org/solmix/solmix</url>
+		<connection>scm:git:git://github.com/solmix/solmix.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/solmix/solmix.git</developerConnection>
+	</scm>
+	<url>https://github.com/solmix/solmix</url>
+	<description>solmix framework </description>
 	<!-- <distributionManagement> Site omitted - each project must provide their 
 		own <repository> <id>releases</id> <url>http://localhost/nexus/content/repositories/releases</url> 
 		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
@@ -86,10 +100,6 @@
 		<apache.shiro.version>1.2.2</apache.shiro.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
-		<!-- <karaf.debug.location>E:\o\solmix3\resource\resource</karaf.debug.location> -->
-		<!-- <karaf.debug.location>E:\workspace\solmix\spring_solmix\WebRoot\WEB-INF\lib</karaf.debug.location> -->
-		<!-- <karaf.debug.location>/home/solmix/karaf</karaf.debug.location> -->
-		<!-- <karaf.debug.location>E:\karaf</karaf.debug.location> -->
 		<karaf.debug.location>/home/solmix/t/karaf2.3.2/apache-karaf-2.3.2</karaf.debug.location>
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
@@ -994,7 +1004,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.0</version>
+					<version>2.4.2</version>
 					<configuration>
 						<useReleaseProfile>false</useReleaseProfile>
 						<preparationGoals>clean install</preparationGoals>
@@ -1120,7 +1130,7 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<!-- NOTE: 2.6.x is generally unusuable due to MJAVADOC-275 -->
-					<version>2.5</version>
+					<version>2.9.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1219,6 +1229,59 @@
 						</fileset>
 					</filesets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<!-- ~ This workaround prevents Maven from executing the 'generate-sources' 
+						phase twice. ~ See http://jira.codehaus.org/browse/MSOURCES-13 ~ and http://blog.peterlynch.ca/2010/05/maven-how-to-prevent-generate-sources.html -->
+					<execution>
+						<id>attach-sources</id>
+						<phase>invalid</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>attach-sources-no-fork</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<detectOfflineLinks>false</detectOfflineLinks>
+					<breakiterator>true</breakiterator>
+					<version>false</version>
+					<author>false</author>
+					<keywords>true</keywords>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<useReleaseProfile>false</useReleaseProfile>
+					<arguments>-P release,sonatype-oss-release,full,no-osgi</arguments>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<allowTimestampedSnapshots>false</allowTimestampedSnapshots>
+					<tagNameFormat>netty-@{project.version}</tagNameFormat>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-api</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 
@@ -1322,11 +1385,10 @@
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 	</profiles>
-	<scm>
-		<url>https://github.org/solmix/solmix</url>
-		<connection>scm:git://github.org/solmix/solmix.git</connection>
-		<developerConnection>scm:git@github.com:solmix/solmix.git</developerConnection>
-	</scm>
-	<url>https://github.com/solmix/solmix</url>
-	<description>solmix framework </description>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 </project>

@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>cms</artifactId>
 		<groupId>org.solmix.cms</groupId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.4.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.solmix.cms.jcr</artifactId>
@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>org.solmix.cms</groupId>
 			<artifactId>org.solmix.cms.api</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.4.1-SNAPSHOT</version>
 		</dependency>
 		<dependency> 
 			<groupId>org.slf4j</groupId>

@@ -1,5 +1,5 @@
 /*
- * SOLMIX PROJECT
+ *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -42,7 +42,7 @@ public class NullEventManager implements EventManager
      */
     @Override
     public void postEvent(IEvent event) {
-        LOG.trace("postEvent():{}", event);
+        LOG.trace("postEvent():\n{}", event);
 
     }
 
@@ -53,7 +53,7 @@ public class NullEventManager implements EventManager
      */
     @Override
     public void sendEvent(IEvent event) {
-        LOG.trace("sendEvent():{}", event);
+        LOG.trace("sendEvent():\n{}", event);
 
     }
 

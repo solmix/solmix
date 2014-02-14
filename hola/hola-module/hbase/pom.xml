@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.hola</groupId>
     <artifactId>hola-module</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4.1-SNAPSHOT</version>
   </parent>
   <artifactId>hbase</artifactId>
   <packaging>pom</packaging>

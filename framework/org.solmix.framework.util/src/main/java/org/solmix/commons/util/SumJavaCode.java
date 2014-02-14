@@ -31,7 +31,7 @@ public class SumJavaCode
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("E:\\o\\solmix4");
+        File f = new File("/home/solmix/t/hibernate-release-4.3.0.Beta5");
         // File f = new File("E:\\o\\e200pro\\src\\com\\ieslab");
         System.out.println(f.getName());
         sjc.treeFile(f);
@@ -89,11 +89,8 @@ public class SumJavaCode
         BufferedReader br = null;
         long begin = normalLines;
         boolean comment = false;
-        if (!(file.getName().endsWith(".jsp") || file.getName().endsWith(".java") || file.getName().endsWith(".xml"))) {
-            return;
-        }
-        if (file.getName().endsWith(".ds.xml") || file.getName().endsWith(".data.xml"))
-            return;
+        String name=file.getName();
+        if ((name.endsWith(".jsp") || name.endsWith(".java") /*|| file.getName().endsWith(".xml")*/)&&name.toUpperCase().indexOf("TEST")==-1) {
         fileCont++;
         try {
             br = new BufferedReader(new FileReader(file));
@@ -133,5 +130,6 @@ public class SumJavaCode
             }
         }
         System.out.println(normalLines - begin + ":" + file.getName());
+    }
     }
 }

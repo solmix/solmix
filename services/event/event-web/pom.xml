@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.solmix.services</groupId>
 		<artifactId>event</artifactId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.4.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>event-web</artifactId>
 	<name>Solmix :: Services :: Event-Web</name>
