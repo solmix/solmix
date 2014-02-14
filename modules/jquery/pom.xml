@@ -6,4 +6,5 @@
     <version>0.4.1-SNAPSHOT</version>
   </parent>
   <artifactId>org.solmix.modules.jquery</artifactId>
+  <groupId>org.solmix.modules</groupId>
 </project>
