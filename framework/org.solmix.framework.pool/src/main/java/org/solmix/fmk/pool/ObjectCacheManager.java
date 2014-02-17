@@ -24,13 +24,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.ObjectCacheFactory;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2011-4-1
  */
 

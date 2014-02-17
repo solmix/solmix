@@ -36,7 +36,7 @@ import org.solmix.commons.collections.DataTypeMap;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 0.0.4
  * @since 0.0.4
  */

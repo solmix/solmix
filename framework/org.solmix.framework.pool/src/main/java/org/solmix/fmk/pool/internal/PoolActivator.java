@@ -34,7 +34,7 @@ import org.solmix.fmk.pool.PoolManagerFactoryImpl;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-4-8
  */
 

@@ -24,12 +24,11 @@ import java.util.Map;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.pool.SlxPoolableObjectFactory;
 import org.solmix.commons.collections.DataTypeMap;
 
 /**
- * 
+ * @author solmix.f@gmail.com
  * @version 110035
  */
 public class SlxObjectPool extends GenericObjectPool

@@ -21,7 +21,7 @@ package org.solmix.fmk.pool;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 0.0.4
  * @since 0.0.1
  */

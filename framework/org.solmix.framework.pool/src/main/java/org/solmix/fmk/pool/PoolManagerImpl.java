@@ -40,6 +40,7 @@ import org.solmix.commons.util.DataUtil;
  * 
  * @version 0.0.4
  * @since 0.0.1
+ * @author solmix.f@gmail.com
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class PoolManagerImpl implements PoolManager
