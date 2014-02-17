@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.io;
 
 import java.util.List;
@@ -24,14 +25,15 @@ import java.util.List;
  * 
  * @version 110035
  */
+@SuppressWarnings("rawtypes")
 public interface IByteCounter
 {
 
-     long getTotalBytes();
+    long getTotalBytes();
 
-     void incrementBy(long l);
+    void incrementBy(long l);
 
-     void setErrors(List list);
+    void setErrors(List list);
 
-     List getErrors();
+    List getErrors();
 }

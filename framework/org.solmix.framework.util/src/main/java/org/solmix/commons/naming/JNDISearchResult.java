@@ -18,8 +18,6 @@
  */
 package org.solmix.commons.naming;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -27,8 +25,6 @@ import org.slf4j.LoggerFactory;
  */
 public class JNDISearchResult
 {
-   private static Logger log = LoggerFactory.getLogger(JNDISearchResult.class.getName());
-
    private final String prefix;
 
    private final String name;

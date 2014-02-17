@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @version 110035
  */
-public class IOUtil
+public final class IOUtil
 {
    public static final Logger log =  LoggerFactory.getLogger(IOUtil.class);
 

@@ -28,7 +28,7 @@ package org.solmix.commons.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleFilter
+public final class SimpleFilter
 {
 
    public static final int AND = 1;
@@ -77,7 +77,8 @@ public class SimpleFilter
       return m_op;
    }
 
-   public String toString()
+   @Override
+public String toString()
    {
       String s = null;
       switch (m_op)

@@ -7,7 +7,7 @@ package org.solmix.commons.util;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年2月10日
  */
-public class Bytes
+public final class Bytes
 {
 
     /**

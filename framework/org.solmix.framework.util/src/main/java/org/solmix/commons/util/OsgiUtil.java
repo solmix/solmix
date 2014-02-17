@@ -28,7 +28,7 @@ import org.osgi.framework.ServiceReference;
  * @version $Id$  2013-11-5
  */
 
-public class OsgiUtil
+public final class OsgiUtil
 {
 
     public static Object getService(BundleContext bundleContext,String serviceName) {

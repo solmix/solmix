@@ -31,12 +31,12 @@ import org.slf4j.LoggerFactory;
  * 
  * @version 110035
  */
-public class DateUtil
+public final class DateUtil
 {
 
-    private static final Logger log = LoggerFactory.getLogger(DataUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataUtil.class);
 
-    private static final long DAY_MS_TIME = 24 * 60 * 60 * 1000;
+    public static final long DAY_MS_TIME = 24 * 60 * 60 * 1000;
 
     public static String simpleDateFormat(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

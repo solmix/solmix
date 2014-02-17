@@ -70,7 +70,7 @@ import org.solmix.commons.io.SlxFile;
  * @version 110043
  */
 @SuppressWarnings("rawtypes")
-public class DataUtil
+public final class DataUtil
 {
 
     public static HashMap defaultTransformers;

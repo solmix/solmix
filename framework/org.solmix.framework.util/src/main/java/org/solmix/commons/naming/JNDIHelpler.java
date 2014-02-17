@@ -44,13 +44,4 @@ public class JNDIHelpler
 
    }
 
-   public static void main(String args[])
-   {
-      try {
-         JNDI a = (JNDI) findService(JNDI.class);
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-   }
-
 }

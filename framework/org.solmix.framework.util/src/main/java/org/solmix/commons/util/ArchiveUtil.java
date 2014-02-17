@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id$ 2013年11月23日
  */
 
-public class ArchiveUtil
+public  final class ArchiveUtil
 {
 
     private static final Logger log = LoggerFactory.getLogger(ArchiveUtil.class);
@@ -78,7 +78,7 @@ public class ArchiveUtil
                     // not escaped, need to voodoo; goes by toURI to escape the path
                     jarUrl = new File(file).toURI().toURL();
                 } else {
-                    jarUrl = new File(file).toURL();
+                    jarUrl = new File(file).toURI().toURL();
                 }
             } else {
                 try {
