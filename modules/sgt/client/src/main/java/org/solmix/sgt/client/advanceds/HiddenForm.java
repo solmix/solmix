@@ -37,8 +37,8 @@ public class HiddenForm  {
 			//var str=data.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 			//$wnd.alert(str);
 		var hiddenForm =$wnd.document.getElementById("__slx_hidden_form");
-//		$wnd.document.getElementById("_transaction").value=data;
-		hiddenForm._transaction.value=data;
+//		$wnd.document.getElementById("__payload").value=data;
+		hiddenForm.__payload.value=data;
 	} catch (e) {
 		$wnd.alert(e);
 	}

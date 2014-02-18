@@ -20,6 +20,7 @@
 package org.solmix.sgt.client.pagebar;
 
 import org.solmix.sgt.client.advanceds.Roperation;
+import org.solmix.sgt.client.advanceds.SlxRPC;
 import org.solmix.sgt.client.advanceds.SlxRPCCallBack;
 import org.solmix.sgt.client.advanceds.SlxRPCManager;
 
@@ -173,9 +174,9 @@ public class PagedListGrid extends ListGrid
 
     private String maskMessage;
 
-    private Canvas maskCanvas;
+    private final Canvas maskCanvas;
 
-    private ListGrid owner;
+    private final ListGrid owner;
 
     public PagedListGrid(Canvas maskCanvas, int pageSize, boolean usePageBar)
     {
@@ -411,7 +412,7 @@ public class PagedListGrid extends ListGrid
 
     public void exportFunction(ExportFormat format) {
         Roperation operation = new Roperation();
-        SlxRPCManager.transform(_request, _criteria, operation);
+        SlxRPC.transform(_request, _criteria, operation);
         operation.setExportResults(true);
         switch (format) {
             case XLS:
@@ -431,7 +432,7 @@ public class PagedListGrid extends ListGrid
         }
         operation.setExportAs(format);
         operation.setExportDisplay(ExportDisplay.DOWNLOAD);
-        SlxRPCManager.send(operation);
+        SlxRPC.send(operation);
     }
 
     private Criteria _criteria;

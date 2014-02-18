@@ -88,7 +88,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
     }
 
     /**
-     * 检查指定路径的文件是否存在，如果存在返回文件路径。
+     * check the file ,if exits return the file.
      * 
      * @param baseName 文件路径
      * @return

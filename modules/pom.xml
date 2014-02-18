@@ -13,5 +13,6 @@
   	<module>sgt</module>
   	<module>jpa</module>
   	<module>jquery</module>
+  	<module>ipc</module>
   </modules>
 </project>
