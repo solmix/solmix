@@ -20,8 +20,8 @@
 package org.solmix.web.interceptor;
 
 import static org.solmix.commons.util.DataUtil.booleanValue;
-import static org.solmix.fmk.util.ServletTools.encodeParameter;
-import static org.solmix.fmk.util.ServletTools.mimeTypeForContext;
+import static org.solmix.web.ServletTools.encodeParameter;
+import static org.solmix.web.ServletTools.mimeTypeForContext;
 
 import java.io.IOException;
 import java.io.InputStream;

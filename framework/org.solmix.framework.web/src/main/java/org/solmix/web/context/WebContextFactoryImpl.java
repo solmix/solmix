@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.context.web;
+package org.solmix.web.context;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

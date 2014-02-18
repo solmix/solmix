@@ -45,7 +45,7 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.ISCJavaScript;
-import org.solmix.fmk.util.ServletTools;
+import org.solmix.web.ServletTools;
 
 /**
  * Interceptor for smartclient server(isomorphic).

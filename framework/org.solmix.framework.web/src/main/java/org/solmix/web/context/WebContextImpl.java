@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.context.web;
+package org.solmix.web.context;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -46,7 +46,7 @@ import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.context.AbstractContext;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
-import org.solmix.fmk.util.ServletTools;
+import org.solmix.web.ServletTools;
 
 /**
  * The method of this type ,can't use local cache to provider result,because every time of new request will be

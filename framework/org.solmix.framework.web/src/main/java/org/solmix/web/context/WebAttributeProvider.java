@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fmk.context.web;
+package org.solmix.web.context;
 
 import java.io.Serializable;
 import java.util.Enumeration;

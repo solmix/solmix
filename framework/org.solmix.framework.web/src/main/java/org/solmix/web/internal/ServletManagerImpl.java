@@ -34,7 +34,7 @@ import org.solmix.api.servlet.ServletManager;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-4-16
  */
 

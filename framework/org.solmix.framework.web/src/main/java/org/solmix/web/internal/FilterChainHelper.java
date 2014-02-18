@@ -27,7 +27,7 @@ import javax.servlet.Filter;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-10-9
  */
 
@@ -156,6 +156,7 @@ public class FilterChainHelper
         /**
          * Note: this class has a natural ordering that is inconsistent with equals.
          */
+        @Override
         public int compareTo(FilterListEntry other) {
             if (this == other || equals(other)) {
                 return 0;
@@ -179,6 +180,7 @@ public class FilterChainHelper
             return 1; // insert after current key
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

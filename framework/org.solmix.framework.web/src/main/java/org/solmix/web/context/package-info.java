@@ -18,4 +18,4 @@
  */
 
 
-package org.solmix.fmk.context.web;
+package org.solmix.web.context;

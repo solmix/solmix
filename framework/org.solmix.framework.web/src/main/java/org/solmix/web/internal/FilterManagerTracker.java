@@ -19,14 +19,13 @@
 
 package org.solmix.web.internal;
 
-import static org.solmix.api.servlet.FilterManager.FILTER_NAME;
-import static org.solmix.api.servlet.FilterManager.FILTER_ORDER;
 import static org.osgi.framework.Constants.SERVICE_ID;
 import static org.osgi.framework.Constants.SERVICE_RANKING;
+import static org.solmix.api.servlet.FilterManager.FILTER_NAME;
+import static org.solmix.api.servlet.FilterManager.FILTER_ORDER;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -39,7 +38,7 @@ import org.solmix.web.internal.helper.SlxFilterConfig;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-10-9
  */
 
@@ -53,7 +52,7 @@ public class FilterManagerTracker extends ServiceTracker<Filter, Filter>
 
     private final FilterChainHelper filterChain;
 
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
     /**
      * @param context

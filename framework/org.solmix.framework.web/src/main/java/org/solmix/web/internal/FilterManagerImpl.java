@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
 import org.solmix.api.servlet.FilterManager;
 
 /**
- * 
+ * @author solmix.f@gmail.com
  * @version 110035 2012-10-9
  */
 

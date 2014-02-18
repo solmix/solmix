@@ -1,5 +1,5 @@
 
-package org.solmix.fmk.context.web;
+package org.solmix.web.context;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.upload.SessionByteCounter;
 import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.upload.UploadItemFactory;
-import org.solmix.fmk.util.ServletTools;
+import org.solmix.web.ServletTools;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class WrappedHttpServletRequest extends HttpServletRequestWrapper

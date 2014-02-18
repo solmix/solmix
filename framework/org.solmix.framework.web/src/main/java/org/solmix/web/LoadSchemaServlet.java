@@ -42,7 +42,7 @@ import org.solmix.fmk.js.ISCJavaScript;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-12-19
  */
 
