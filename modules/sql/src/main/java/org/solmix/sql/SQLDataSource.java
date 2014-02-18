@@ -364,7 +364,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                 long start = System.currentTimeMillis();
                 __return = executeWindowedSelect(req, _datasources, context, statement);
                 long end = System.currentTimeMillis();
-                getEventWork().createAndFireTimeEvent(end - start, "SQL QueryTime");
+                getEventWork().createAndFireTimeEvent(end - start, new StringBuilder().append("SQL QueryTime:").append(statement).toString());
             } else {
                 /*******************************************************************
                  * NOTE:[FETCH] Normal Fetch
