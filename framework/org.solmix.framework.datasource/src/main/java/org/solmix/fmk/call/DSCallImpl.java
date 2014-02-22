@@ -37,6 +37,7 @@ import org.solmix.api.context.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
+import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
@@ -51,6 +52,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.api.types.TransactionPolicy;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.BasicDataSource;
+import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
@@ -216,7 +218,14 @@ public class DSCallImpl implements DSCall
             log.trace("Performing " +requestCount() + " operation(s) ");
         try {
             for (DSRequest req : reqs) {
-                DSResponse res = req.execute();
+                DSResponse res=null;
+                try {
+                    res = req.execute();
+                } catch (SlxException e) {
+                    res = new DSResponseImpl(req);
+                    res.setRawData(e.getMessage());
+                    res.setStatus(Status.STATUS_FAILURE);
+                }
                 if (res != null)
                     responseMap.put(req, res);
             }

@@ -550,11 +550,11 @@ public class DSRequestImpl implements DSRequest
                     }
                 }
             }
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             log.error("execute()", e);
             _dsResponse = new DSResponseImpl(getDataSource(),this);
             _dsResponse.setRawData(e.getMessage());
-            _dsResponse.setStatus(Status.STATUS_FAILURE);
+            _dsResponse.setStatus(Status.STATUS_FAILURE);*/
         } finally {
             if (isFreeOnExecute()) {
                 this.freeResources();

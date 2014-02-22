@@ -538,11 +538,9 @@ public abstract class SQLDriver
             long $_ = System.currentTimeMillis();
             ds.getEventWork().createAndFireTimeEvent(($_ - _$), "SQL modification operation success,return value is" +__return);
         } catch (Exception e) {
-            log.error("SQL exception", e);
-
             if (driver != null)
                 driver.saveGeneratedKeys(s, req);
-            throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e.getMessage());
+            throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
         } finally {
             if (s != null)
                 try {
