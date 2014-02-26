@@ -19,9 +19,9 @@
 
 package org.solmix.sgt.client.pagebar;
 
+import org.solmix.sgt.client.advanceds.JSCallBack;
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
-import org.solmix.sgt.client.advanceds.SlxRPCCallBack;
 import org.solmix.sgt.client.advanceds.SlxRPCManager;
 
 import com.smartgwt.client.data.Criteria;
@@ -411,11 +411,22 @@ public class PagedListGrid extends ListGrid
     }
 
     public void exportFunction(ExportFormat format) {
+        if(pageSize>100000){
+            SC.warn("记录条数大于10万条,请联系管理员!");
+        }
         Roperation operation = new Roperation();
         SlxRPC.transform(_request, _criteria, operation);
+        //export all rows.
+        operation.setStartRow(-1);
+        operation.setEndRow(0);
         operation.setExportResults(true);
+        
         switch (format) {
             case XLS:
+                if(this.pageSize>65534){
+                    SC.warn("记录条数大于65535条,请选择CSV格式导出");
+                    return;
+                }
                 operation.setExportFilename("tmp1.xls");
                 break;
             case XML:
@@ -584,7 +595,7 @@ public class PagedListGrid extends ListGrid
         pagedFetchData(this._criteria, this._callback, this._request, pageNum);
     }
     
-     public void removeSelectedData(SlxRPCCallBack callBack ){
+     public void removeSelectedData(JSCallBack callBack ){
 		ListGridRecord[] records = getSelectedRecords();
 		String dsID = getDataSource().getID();
 		Roperation[] opers;
