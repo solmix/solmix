@@ -121,8 +121,6 @@ public class Velocity
 
     public static final String SESSION = "session";
 
-    private String tmplateDir;
-
     public Velocity()
     {
     }
@@ -155,7 +153,7 @@ public class Velocity
         }
     }
 
-    public static synchronized Object evaluateTemplateFile(String fileName, Map parameters) throws SlxException {
+    public static  Object evaluateTemplateFile(String fileName, Map<?,?> parameters) throws SlxException {
         String path = DatasourceCM.getProperties().getString(DatasourceCM.P_VELOCITY_TEMPLATE_DIR);
         
         try {
@@ -167,27 +165,27 @@ public class Velocity
         
     }
 
-    public static synchronized String evaluateTemplateFileAsString(String fileName, Map parameters) throws SlxException {
+    public static  String evaluateTemplateFileAsString(String fileName, Map<?,?> parameters) throws SlxException {
         Object obj = evaluateTemplateFile(fileName, parameters);
         return obj != null ? obj.toString() : null;
     }
 
-    public static synchronized String evaluateAsString(String template, Map parameters) throws SlxException {
+    public static  String evaluateAsString(String template, Map<?,?> parameters) throws SlxException {
         Object obj = evaluate(template, parameters);
         return obj != null ? obj.toString() : null;
     }
 
-    public static synchronized Object evaluate(String template, Map parameters) throws SlxException {
+    public static  Object evaluate(String template, Map<?,?> parameters) throws SlxException {
         return evaluate(template, parameters, "notProvided", null, false);
     }
 
-    public static synchronized String evaluateAsString(String template, Map parameters, String operationName, DataSource ds, boolean quoteValues)
+    public static  String evaluateAsString(String template, Map<?,?> parameters, String operationName, DataSource ds, boolean quoteValues)
         throws SlxException {
         Object obj = evaluate(template, parameters, operationName, ds, quoteValues);
         return obj != null ? obj.toString() : null;
     }
 
-    public static synchronized Object evaluate(String template, Map parameters, String operationName, DataSource ds, boolean quoteValues)
+    public static  Object evaluate(String template, Map<?,?> parameters, String operationName, DataSource ds, boolean quoteValues)
         throws SlxException {
         StringWriter out = new StringWriter();
         VelocityContext context = new VelocityContext(parameters);
@@ -204,11 +202,11 @@ public class Velocity
             return out.toString();
     }
 
-    public static synchronized Boolean evaluateBooleanExpression(String template, Map parameters) throws Exception {
+    public static  Boolean evaluateBooleanExpression(String template, Map<?,?> parameters) throws Exception {
         return evaluateBooleanExpression(template, parameters, "notProvided", null);
     }
 
-    public static synchronized Boolean evaluateBooleanExpression(String template, Map parameters, String operationName, DataSource ds)
+    public static  Boolean evaluateBooleanExpression(String template, Map<?,?> parameters, String operationName, DataSource ds)
         throws Exception {
         Object obj = evaluate(template, parameters, operationName, ds, true);
         if (obj == null || !(obj instanceof Boolean) && !obj.toString().trim().toLowerCase().equals("true")
@@ -253,8 +251,8 @@ public class Velocity
         } else {
             context = new HashMap<String, Object>();
         }
-        Map criteria = _reqData.getCriteria() == null ? (new HashMap<String, Object>()) : _reqData.getCriteria();
-        Map values = _reqData.getValues() == null ? new HashMap<String, Object>() : _reqData.getValues();
+        Map<String, Object> criteria = _reqData.getCriteria() == null ? (new HashMap<String, Object>()) : _reqData.getCriteria();
+        Map<String, Object> values = _reqData.getValues() == null ? new HashMap<String, Object>() : _reqData.getValues();
         context.put(CRITERIA, criteria);
         context.put(VALUES, values);
         context.put(DSREQUEST, dsReq);
@@ -310,7 +308,7 @@ public class Velocity
         return context;
     }
     
-    public static void evaluateTemplateFile(String vmFileName, Map parameters,String encoding,Writer out) throws SlxException{
+    public static void evaluateTemplateFile(String vmFileName, Map<?,?> parameters,String encoding,Writer out) throws SlxException{
         try {
             VelocityContext context = new VelocityContext(parameters);
             

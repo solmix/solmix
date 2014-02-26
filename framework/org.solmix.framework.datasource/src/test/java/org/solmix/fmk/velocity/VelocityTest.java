@@ -49,10 +49,11 @@ public class VelocityTest
        Assert.assertEquals("20110901", str);
 
     }
+    @Test
     public  void math() throws SlxException {
         Map map  = new HashMap();
         map.put("DateUtil", new DateUtil());
-        String s ="#set($ceria=\"201109\") #set($ceria=\"1\") \n$DateUtil.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
+        String s ="#set($ceria=\"201109\")  \n$DateUtil.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
        String str = Velocity.evaluateAsString(s, map);
        Assert.assertEquals("20110901", str);
 
