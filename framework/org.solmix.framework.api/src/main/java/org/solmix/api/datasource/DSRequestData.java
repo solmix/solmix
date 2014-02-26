@@ -740,7 +740,7 @@ public class DSRequestData implements java.io.Serializable
      * 
      * @return
      */
-    public Map getValues() {
+    public Map<String, Object> getValues() {
         if (getOperationType() == Eoperation.FETCH || getOperationType() == Eoperation.REMOVE)
             return getCriteria();
         Object values = getRawValues();
@@ -748,19 +748,19 @@ public class DSRequestData implements java.io.Serializable
             List<?> l = (List<?>) values;
             if (l.size() == 0)
                 return null;
-            if (l.get(0) instanceof Map) {
+            if (l.get(0) instanceof Map<?,?>) {
                 if (l.size() == 1) {
-                    return (Map) l.get(0);
+                    return (Map<String, Object>) l.get(0);
                 } else {
                     log.warn("getValues() called on dsRequest containing multiple sets of values, returning first in list.");
-                    return (Map) l.get(0);
+                    return (Map<String, Object>) l.get(0);
                 }
             } else {
                 log.debug("getValues() called on dsRequest,and the values is not the List of map.ignore this value.");
                 return null;
             }
         } else if (values instanceof Map<?, ?>) {
-            return (Map) values;
+            return (Map<String, Object>) values;
         } else {
             return null;
         }

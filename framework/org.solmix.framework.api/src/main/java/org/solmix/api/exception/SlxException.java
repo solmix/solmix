@@ -19,16 +19,10 @@
 
 package org.solmix.api.exception;
 
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 
-import javax.servlet.ServletException;
-
-import org.apache.velocity.exception.MethodInvocationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 
@@ -47,31 +41,14 @@ public class SlxException extends Exception
     */
     private static final long serialVersionUID = 1252155663355037115L;
 
-    private static Logger log = LoggerFactory.getLogger(SlxException.class);
-    public static final String ERROR_CODE_PREFIX="ERROR CODE: [";
-    public static final String ERROR_CODE_SUFFIX="]";
+    public static final String ERROR_CODE_PREFIX = "ERROR CODE: [";
+
+    public static final String ERROR_CODE_SUFFIX = "]";
 
     private Tmodule module;
 
-    private String moduleName;
-
-    /**
-     * @return the moduleName
-     */
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    /**
-     * @param moduleName the moduleName to set
-     */
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
 
     private Texception code;
-
-    private Throwable exception;
 
     private String message;
 
@@ -79,36 +56,40 @@ public class SlxException extends Exception
 
     /**
      * SlxException construction.
+     * 
      * @param module Defined the framework module.
      * @param errorNumber Exception number.
      * @param message Error message.
-     * @param e  The cause exception.
+     * @param e The cause exception.
      * @param args exception arguments.
      */
-    public SlxException(Tmodule module, Texception errorNumber, String errorMsg, Throwable e, Object[] args)
+    public SlxException(Tmodule module, Texception errorNumber,
+        String errorMsg, Throwable e, Object[] args)
     {
+        super(e);
         setModule(module);
         setCode(errorNumber);
-        setException(e);
         setArgs(args);
         setMessage(errorMsg);
-        log.trace(getMessage(), e);
     }
 
     /**
-     *  SlxException construction.
+     * SlxException construction.
+     * 
      * @param module Defined the framework module.
      * @param errorNumber Exception number.
      * @param message Error message.
      * @param e The cause exception.
      */
-    public SlxException(Tmodule module, Texception errorNumber, String errorMsg, Throwable e)
+    public SlxException(Tmodule module, Texception errorNumber,
+        String errorMsg, Throwable e)
     {
         this(module, errorNumber, errorMsg, e, null);
     }
 
     /**
-     *  SlxException construction.
+     * SlxException construction.
+     * 
      * @param module Defined the framework module.
      * @param errorNumber Exception number.
      * @param message Error message.
@@ -119,7 +100,8 @@ public class SlxException extends Exception
     }
 
     /**
-     *  SlxException construction.
+     * SlxException construction.
+     * 
      * @param module Defined the framework module.
      * @param errorNumber Exception number.
      * @param e The cause exception.
@@ -151,41 +133,10 @@ public class SlxException extends Exception
 
     }
 
-    /**
-     *  SlxException construction.
-     * @param module Defined the framework module.
-     * @param errorNumber Exception number.
-     * @param message Error message.
-     * @param e The cause exception.
-     * @param args exception arguments.
-     */
-    public SlxException(String moduleName, Texception errorNumber, String message, Throwable e, Object[] args)
-    {
-        setModuleName(moduleName);
-        setCode(errorNumber);
-        setException(e);
-        setArgs(args);
-        setMessage(message);
-        log.trace(getMessage(), e);
-    }
-
-    public SlxException(String moduleName, Texception code, String message, Throwable e)
-    {
-        this(moduleName, code, message, e, null);
-    }
-
-    public SlxException(String moduleName, Texception code, String message)
-    {
-        this(moduleName, code, message, null, null);
-    }
-
-    public SlxException(String moduleName, Texception code, Throwable e)
-    {
-        this(moduleName, code, "", e, null);
-    }
 
     /**
      * Return predefined module name.
+     * 
      * @return the module
      */
     public Tmodule getModule() {
@@ -201,6 +152,7 @@ public class SlxException extends Exception
 
     /**
      * Get Exception error code.
+     * 
      * @return the code
      */
     public Texception getCode() {
@@ -215,20 +167,6 @@ public class SlxException extends Exception
     }
 
     /**
-     * @return the exception
-     */
-    public Throwable getException() {
-        return exception;
-    }
-
-    /**
-     * @param exception the exception to set
-     */
-    public void setException(Throwable exception) {
-        this.exception = exception;
-    }
-
-    /**
      * @return the message
      */
     @Override
@@ -240,8 +178,8 @@ public class SlxException extends Exception
         buffer.append(" in ");
         if (getModule() != null)
             buffer.append(getModule().value());
-        else if (moduleName != null)
-            buffer.append(moduleName);
+        else if (module != null)
+            buffer.append(module.value());
         if (message != null) {
             buffer.append(": ");
             if (args == null)
@@ -251,7 +189,8 @@ public class SlxException extends Exception
                 try {
                     buffer.append(msgFormat.format(args));
                 } catch (Exception e) {
-                    buffer.append("Cannot format message " + message + " with args ");
+                    buffer.append("Cannot format message " + message
+                        + " with args ");
                     for (int i = 0; i < args.length; i++) {
                         if (i != 0)
                             buffer.append(",");
@@ -260,28 +199,30 @@ public class SlxException extends Exception
                 }
             }
         }
-
-        if (exception != null) {
-            buffer.append("\nWrapped Exception: ");
-            Throwable tmp= getRootThrowable(exception);
-            buffer.append(tmp.getMessage());
+        Throwable cause=getCause();
+        if (cause != null) {
+            buffer.append("\n Wrapped Exception: ");
+            if(cause instanceof SlxException)
+                cause = getRootThrowable((SlxException)cause);
+            buffer.append(cause.getMessage());
         }
         return buffer.toString();
     }
+
     /**
      * Return Root exception.
+     * 
      * @param exception
      * @return
      */
-    private Throwable getRootThrowable(Throwable exception) {
-        if (exception instanceof SlxException) {
-            Throwable root = ((SlxException) exception).getException();
-            if (root == null)
-                return exception;
-            else
-                return getRootThrowable(root);
-        } else
+    private Throwable getRootThrowable(SlxException exception) {
+        Throwable root = exception.getCause();
+        if(root==null)
             return exception;
+        else if (root instanceof SlxException)
+            return getRootThrowable((SlxException) root);
+        else
+            return root;
 
     }
 
@@ -289,7 +230,6 @@ public class SlxException extends Exception
         StringBuffer buffer = new StringBuffer(getMessage());
         buffer.append("\n");
         buffer.append(getStackTraceAsString());
-        buffer.append("\n");
         return buffer.toString();
     }
 
@@ -328,54 +268,5 @@ public class SlxException extends Exception
      */
     public void setArgs(Object[] args) {
         this.args = args;
-    }
-
-    @Override
-    public void printStackTrace(PrintWriter s) {
-        Throwable tmp = exception;
-        if (tmp != null) {
-            if (tmp instanceof MethodInvocationException) {
-                (((MethodInvocationException) tmp).getWrappedThrowable()).printStackTrace(s);
-            } else if (tmp instanceof ServletException) {
-                (((ServletException) tmp).getRootCause()).printStackTrace(s);
-            } else {
-                if (tmp.getCause() != null) {
-                    s.print("Root cause: \n");
-                    tmp.getCause().printStackTrace(s);
-                } else {
-                    s.print("Root cause: \n");
-                    tmp.printStackTrace(s);
-                }
-            }
-        }else{
-            if(getMessage()!=null)
-                s.println(new StringBuilder().append("Messages:").append(getMessage()).toString());
-            super.printStackTrace(s); 
-        }
-    }
-
-    @Override
-    public void printStackTrace(PrintStream s) {
-        Throwable tmp = exception;
-        if (tmp != null) {
-            if (tmp instanceof MethodInvocationException) {
-                (((MethodInvocationException) tmp).getWrappedThrowable()).printStackTrace(s);
-            } else if (tmp instanceof ServletException) {
-                (((ServletException) tmp).getRootCause()).printStackTrace(s);
-            } else {
-                if (tmp.getCause() != null) {
-                    s.print("Root cause: \n");
-                    tmp.getCause().printStackTrace(s);
-                } else {
-                    s.print("Root cause: \n");
-                    tmp.printStackTrace(s);
-                }
-            }
-
-        }else{
-            if(getMessage()!=null)
-                s.println(new StringBuilder().append("Messages:").append(getMessage()).toString());
-            super.printStackTrace(s);
-        }
     }
 }
