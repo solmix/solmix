@@ -67,7 +67,7 @@ public final class ProcedureDataSource
     public DSResponse update(DSRequest req, DataSource ds) throws SlxException {
         DSResponse __resp = new DSResponseImpl(req);
         DataSourceData data = ds.getContext();
-        Map<Object, Object> raws = req.getContext().getValues();
+        Map<String, Object> raws = req.getContext().getValues();
         Eoperation _optType = req.getContext().getOperationType();
         String _opID = req.getContext().getOperationId();
         String sql = "";
