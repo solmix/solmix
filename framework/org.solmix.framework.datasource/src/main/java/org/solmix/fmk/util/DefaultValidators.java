@@ -64,7 +64,7 @@ import org.solmix.fmk.call.ServiceObject;
 import org.solmix.fmk.datasource.DataSourceProvider;
 import org.solmix.fmk.datasource.ValidationContext;
 import org.solmix.fmk.datasource.Validator;
-import org.solmix.fmk.interfaces.ValidatorFunc;
+import org.solmix.fmk.datasource.ValidatorFunc;
 import org.solmix.fmk.velocity.Velocity;
 
 /**
