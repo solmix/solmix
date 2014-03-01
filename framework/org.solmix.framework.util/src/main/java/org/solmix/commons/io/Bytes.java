@@ -1,5 +1,5 @@
 
-package org.solmix.commons.util;
+package org.solmix.commons.io;
 
 /**
  * copy from java.nio.Bits

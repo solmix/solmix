@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,10 +16,22 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.fmk.datasource;
+
+import java.util.Map;
+
+import org.solmix.api.criterion.ErrorMessage;
+import org.solmix.api.exception.SlxException;
+
+
 /**
- * 
+ * validator function interface.
  * @author solmix.f@gmail.com
- * @version $Id$  2013-11-2
+ * @version 110035  2011-4-8
  */
 
-package org.solmix.commons.spring;
+public interface ValidatorFunc
+{
+
+   ErrorMessage validate( Validator validatorParams, Object value, String fieldName, Map record, ValidationContext context ) throws SlxException;
+}
