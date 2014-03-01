@@ -37,7 +37,7 @@ public class SqlDSCallTest extends SolmixTestCase
 {
     @Test
     public void fetchTest() throws Throwable{
-        SlxContext.doInSystemContext(new FetchOp<Object>("SYSINIT"){
+       Object o= SlxContext.doInSystemContext(new FetchOp<Object>("SYSINIT"){
 
             @Override
             public Object fetch(DSRequest request) throws SlxException {
@@ -46,6 +46,7 @@ public class SqlDSCallTest extends SolmixTestCase
             }
             
         });
+       System.out.println(o);
         
     }
 

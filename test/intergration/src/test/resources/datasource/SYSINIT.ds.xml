@@ -6,7 +6,7 @@
   		<p:operationBinding operationType="fetch"
   			operationId="getMenu">
   			<p:queryClauses>
-  				<p:customSQL>SELECT menu_id,parent_id,title,icon,url,module FROM MENU</p:customSQL>
+  				<p:customSQL>select MENU_ID,COMMENTS,ICON,TITLE,URL from APP_MENU</p:customSQL>
   			</p:queryClauses>
   		</p:operationBinding>
   	</p:operationBindings>
