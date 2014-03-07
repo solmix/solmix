@@ -341,7 +341,7 @@ public class Reflection
         return invokeMethod(classInstance, methodName, new Object[0]);
     }
 
-    public static Object invokeMethod(Object classInstance, String methodName, Object params[]) throws Exception {
+    public static Object invokeMethod(Object classInstance, String methodName, Object... params) throws Exception {
         try {
             Method method = findMethod(classInstance.getClass().getName(), methodName, lookupTypes(params));
             return method.invoke(classInstance, params);
@@ -359,21 +359,6 @@ public class Reflection
                 throw error;
             }
         }
-    }
-
-    public static Object invokeMethod(Object classInstance, String methodName, Object param1) throws Exception {
-        Object params[] = { param1 };
-        return invokeMethod(classInstance, methodName, params);
-    }
-
-    public static Object invokeMethod(Object classInstance, String methodName, Object param1, Object param2) throws Exception {
-        Object params[] = { param1, param2 };
-        return invokeMethod(classInstance, methodName, params);
-    }
-
-    public static Object invokeMethod(Object classInstance, String methodName, Object param1, Object param2, Object param3) throws Exception {
-        Object params[] = { param1, param2, param3 };
-        return invokeMethod(classInstance, methodName, params);
     }
 
     public static Object adaptArgsAndInvoke(Object instance, Method method, ReflectionArgument requiredArgs[], ReflectionArgument optionalArgs[],

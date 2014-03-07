@@ -32,7 +32,7 @@ import org.solmix.api.context.SystemContext;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-9-28
  */
 
@@ -117,11 +117,11 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+     * @see java.util.Map#put(java.lang.String, java.lang.Object)
      */
     @Override
-    public Object put(Object key, Object value) {
-        this.setAttribute(key.toString(), value, Context.Scope.LOCAL);
+    public Object put(String key, Object value) {
+        this.setAttribute(key, value, Context.Scope.LOCAL);
         return value;
     }
 
@@ -185,9 +185,8 @@ public abstract class AbstractContext implements Context
      * 
      * @see java.util.Map#entrySet()
      */
-    @SuppressWarnings("rawtypes")
     @Override
-    public Set entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return this.getAttributes().entrySet();
     }
 

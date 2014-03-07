@@ -530,8 +530,8 @@ public class DSRequestData implements java.io.Serializable
         if (obj == null)
             return;
         if (outputs == null)
-            outputs = new ArrayList();
-        List addedOutputs = DataUtil.makeListIfSingle(obj);
+            outputs = new ArrayList<String>();
+        List<Object> addedOutputs = DataUtil.makeListIfSingle(obj);
         if (addedOutputs.contains("*")) {
             outputs = null;
             return;
@@ -654,8 +654,8 @@ public class DSRequestData implements java.io.Serializable
      */
     public Map getOldValues() {
         Object values = getRawOldValues();
-        if (values instanceof List) {
-            List l = (List) values;
+        if (values instanceof List<?>) {
+            List<?> l = (List<?>) values;
             if (l.size() == 0)
                 return null;
             if (l.size() == 1) {

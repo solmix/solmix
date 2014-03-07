@@ -1475,8 +1475,8 @@ public final class DataUtil
     }
 
     protected static Object createSetterArgument(Method method, Object value, String fieldName) throws Exception {
-        Class types[] = method.getParameterTypes();
-        Class paramType = types[0];
+        Class<?> types[] = method.getParameterTypes();
+        Class<?> paramType = types[0];
         if (value == null) {
             if (paramType.isPrimitive()) {
                 value = convertType(paramType, "");

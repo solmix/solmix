@@ -20,6 +20,7 @@ package org.solmix.api.event;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleContext;
 import org.solmix.commons.util.DataUtil;
@@ -57,7 +58,7 @@ public class MonitorEventFactory
         return null;
     }
 
-    public TimeMonitorEvent createTimeMonitorEvent(long time,String unit,String msg) {
+    public TimeMonitorEvent createTimeMonitorEvent(long time,TimeUnit unit,String msg) {
         Map<String, Object> properties = new HashMap<String, Object>();
        
         properties.put(TimeMonitorEvent.TOTAL_TIME, time);
@@ -66,7 +67,7 @@ public class MonitorEventFactory
         return createTimeMonitorEvent(properties);
     }
     public TimeMonitorEvent createTimeMonitorEvent(long time,String msg) {
-        return createTimeMonitorEvent(time,ITimeMonitorEvent.UNIT_MILLISECONDS,msg);
+        return createTimeMonitorEvent(time,TimeUnit.MILLISECONDS,msg);
     }
 
     public TimeMonitorEvent createTimeMonitorEvent(Map<String, Object> properties) {
@@ -86,7 +87,7 @@ public class MonitorEventFactory
             properties.put(TimeMonitorEvent.BUNDLE_SYMBOLICNAME, bundleContext.getBundle().getSymbolicName());
         }
         properties.put(TimeMonitorEvent.TIMESTAMP, System.currentTimeMillis());
-        properties.put(TimeMonitorEvent.TIME_UNIT, ITimeMonitorEvent.UNIT_MILLISECONDS);
+        properties.put(TimeMonitorEvent.TIME_UNIT, TimeUnit.MILLISECONDS);
         return properties;
     }
 

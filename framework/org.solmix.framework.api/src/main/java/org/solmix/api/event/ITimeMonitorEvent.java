@@ -38,11 +38,4 @@ public interface ITimeMonitorEvent extends IMonitorEvent
     public static final String MESSAGE =EventConstants.MESSAGE;
     public static final String TOTAL_TIME ="totalTime";
     public static final String TIME_UNIT ="timeUnit";
-    public static final String UNIT_DAYS ="days";
-    public static final String UNIT_HOURS ="hours";
-    public static final String UNIT_MICROSECONDS ="microseconds";
-    public static final String UNIT_MILLISECONDS ="milliseconds";
-    public static final String UNIT_MINUTES ="minutes";
-    public static final String UNIT_NANOSECONDS ="nanoseconds";
-    public static final String UNIT_SECONDS ="seconds";
 }

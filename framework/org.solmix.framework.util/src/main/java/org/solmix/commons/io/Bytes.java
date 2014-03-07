@@ -108,7 +108,7 @@ public final class Bytes
         return (byte) (x >> 0);
     }
 
-    public static String bytesToHexString(byte[] src) {
+    public static String bytesToHexString(byte... src) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (src == null || src.length <= 0) {
             return null;

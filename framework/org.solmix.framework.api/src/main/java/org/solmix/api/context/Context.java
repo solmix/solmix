@@ -30,7 +30,7 @@ import java.util.Map;
  * @version 0.1 2012-9-26
  * @since 0.1
  */
-public interface Context extends Map
+public interface Context extends Map<String,Object>
 {
 
     public enum Scope

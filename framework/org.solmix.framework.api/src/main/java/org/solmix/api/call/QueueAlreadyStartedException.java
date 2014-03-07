@@ -22,8 +22,13 @@ package org.solmix.api.call;
 public class QueueAlreadyStartedException extends Exception
 {
 
-   public QueueAlreadyStartedException( String msg )
-   {
-      super( msg );
-   }
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8889484490756185516L;
+
+    public QueueAlreadyStartedException(String msg)
+    {
+        super(msg);
+    }
 }
