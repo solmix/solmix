@@ -27,8 +27,8 @@ import org.solmix.sgt.client.Action;
 import org.solmix.sgt.client.EviewType;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import com.gwtplatform.mvp.client.proxy.TokenFormatter;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
+import com.gwtplatform.mvp.shared.proxy.TokenFormatter;
 
 /**
  * 
