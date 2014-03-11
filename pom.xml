@@ -44,7 +44,7 @@
 		<!-- <module>samples</module> -->
 		<!-- <module>cms</module> -->
 		<!-- <module>hola</module> -->
-		<module>test</module>
+		<!-- <module>test</module> -->
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
@@ -97,7 +97,7 @@
 		<spring.version>3.2.4.RELEASE</spring.version>
 		<sshd.version>0.5.0</sshd.version>
 		<xbean.version>3.7</xbean.version>
-		<apache.shiro.version>1.2.2</apache.shiro.version>
+		<apache.shiro.version>1.2.3</apache.shiro.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
 		<karaf.debug.location>/home/solmix/t/karaf2.3.2/apache-karaf-2.3.2</karaf.debug.location>
@@ -122,7 +122,7 @@
 		<velocity.version>1.7</velocity.version>
 		<osgi.service.version>3.3.0.v20110513</osgi.service.version>
 		<org.apache.felix.http.version>2.2.0</org.apache.felix.http.version>
-		<slf4j.version>1.6.6</slf4j.version>
+		<slf4j.version>1.7.2</slf4j.version>
 		<mockito-core.version>1.9.0</mockito-core.version>
 		<solmix.bundle.category>solmix</solmix.bundle.category>
 	</properties>
@@ -1096,7 +1096,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>1.0-beta-1</version>
+					<version>1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1189,6 +1189,32 @@
 					<groupId>org.codehaus.modello</groupId>
 					<artifactId>modello-maven-plugin</artifactId>
 					<version>1.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore>
+								            <message>aven-enforcer-plugin (goal "enforce") is ignored by m2e</message>
+								        </ignore>	
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
