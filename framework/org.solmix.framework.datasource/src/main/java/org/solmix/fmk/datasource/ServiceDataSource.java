@@ -31,11 +31,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.RequestContext;
-import org.apache.log4j.MDC;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.call.DSCall;
