@@ -31,7 +31,7 @@ public class SumJavaCode
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("/home/solmix/t/hibernate-release-4.3.0.Beta5");
+        File f = new File("/home/solmix/o/git/hola/hola-osgi/hola-remoteserviceadmin");
         // File f = new File("E:\\o\\e200pro\\src\\com\\ieslab");
         System.out.println(f.getName());
         sjc.treeFile(f);

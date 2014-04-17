@@ -210,6 +210,7 @@ public class DefaultParser implements ParserHandler
             is = url.openStream();
             module = xmlParser.unmarshalDS(is);
         } catch (Exception e1) {
+            throw new SlxException(Tmodule.XML,Texception.XML_JAXB_UNMARSHAL,e1);
         } finally {
             IOUtil.closeQuitely(is);
         }

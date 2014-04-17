@@ -1,6 +1,9 @@
 
 package org.solmix.commons.io;
 
+import java.nio.ByteBuffer;
+import java.util.List;
+
 /**
  * copy from java.nio.Bits
  * 
@@ -107,15 +110,34 @@ public final class Bytes
     public static byte int0(int x) {
         return (byte) (x >> 0);
     }
+    /**
+     * Formate space split Hex string to byte.
+     * @param str
+     * @return
+     */
+    public static byte[] formatStringToByte(String str){
+        if(str==null)return null;
+        str=str.trim();
+       
+        while(str.indexOf("  ")!=-1){
+            str.replace("  ", " ");
+        }
+        String[] bs=str.split(" ");
+        byte[] res = new byte[bs.length];
+        for(int i=0;i<bs.length;i++){
+           res[i]= Short.valueOf(bs[i],16).byteValue();
+        }
+        return res;
+    }
 
-    public static String bytesToHexString(byte... src) {
+    public static String byteToHexString(byte... src) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (src == null || src.length <= 0) {
             return null;
         }
         for (int i = 0; i < src.length; i++) {
             int v = src[i] & 0xFF;
-            String hv = Integer.toHexString(v);
+            String hv = Integer.toHexString(v).toUpperCase();
             if (hv.length() < 2) {
                 stringBuilder.append(0);
             }
@@ -162,5 +184,31 @@ public final class Bytes
         if (neg)
             return -q;
         return q;
+    }
+
+    /**
+     * @param buffers
+     */
+    public static String byteToHexString(List<ByteBuffer> buffers) {
+        StringBuffer sb= new StringBuffer();
+        for(ByteBuffer bf:buffers){
+            bf.rewind();
+            byte[] target= new byte[bf.limit()];
+            bf.get(target);
+            sb.append(byteToHexString(target));
+        }
+        return sb.toString();
+    }
+    public static int  BCDToInt(byte bcd){
+        return (0xff & (bcd>>4))*10 +(0xf & bcd);
+    }
+    public static byte  IntToBCD2(int i){
+        return (byte) ((i/10)<<4|(i%10&0x0f));
+    }
+    public static byte[]  IntToBCD4(int i){
+        byte[] bytes= new byte[2];
+        bytes[0]= (byte) ((i/10)<<4|(i%10&0x0f));
+        bytes[1]= (byte) ((i/1000)<<4|(i/100));
+        return bytes;
     }
 }

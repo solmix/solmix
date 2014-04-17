@@ -20,9 +20,13 @@
 package org.solmix.api.adapter;
 
 /**
- * 
- * @author Administrator
- * @version 110035 2012-4-12
+ * The <code>AdapterManager</code> defines the service interface for a manager
+ * for object adaption. The adapter manager coordinates the registered
+ * {@link AdapterFactory} services on behalf of clients wishing to adapt objects
+ * to other types. One such client is the {@link Adaptable} class, which uses
+ * the implementation of this bundle to adapt "itself".
+ * <p>
+ * This interface is not intended to be implemented by clients.
  */
 
 public interface AdapterManager

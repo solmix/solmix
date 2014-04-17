@@ -21,12 +21,17 @@ package org.solmix.api.adapter;
 
 /**
  * 
- * @author Administrator
+ * @author solmix.f@gmail.com
  * @version 110035 2012-4-12
  */
 
 public interface Adaptable
 {
 
+    /**
+     * @param type the adapter class to look up
+     * @return the instance of given class, or <code>null</code> if this object
+     *         does not have an adapter for given class.
+     */
     <AdapterType> AdapterType adaptTo(Class<AdapterType> type);
 }

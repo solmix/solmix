@@ -34,6 +34,8 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import io.netty.util.concurrent.EventExecutor;
+import io.netty.util.concurrent.EventExecutorGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.io.IOException;
@@ -62,9 +64,9 @@ public class MyNettyServer implements Server
 
     private static final Logger LOG = LoggerFactory.getLogger(MyNettyServer.class.getName());
 
-    private static final int DEFAULT_BOSSES = 2;
+    private static final int DEFAULT_BOSSES = 10;
 
-    private static final int DEFAULT_WORKERS = 3;
+    private static final int DEFAULT_WORKERS = 300;
 
     private final Responder responder;
 
@@ -90,14 +92,14 @@ public class MyNettyServer implements Server
     public MyNettyServer(Responder responder, InetSocketAddress addr,
         Class<? extends ServerChannel> channelClass,
         final EventLoopGroup accepter, final EventLoopGroup connector,
-        ChannelHandler... handlers)
+        final ChannelHandler... handlers)
     {
         this.responder = responder;
         this.connector = connector;
         this.accepter = accepter;
         ServerBootstrap b = new ServerBootstrap();
         b.channel(channelClass);
-        b.group(accepter, accepter);
+        b.group(accepter, connector);
         b.childHandler(new ChannelInitializer<SocketChannel>() {
 
             @Override
@@ -106,13 +108,20 @@ public class MyNettyServer implements Server
                 pipeline.addLast("frameDecoder", new NettyFrameDecoder());
                 pipeline.addLast("frameEncoder", new NettyFrameEncoder());
                 pipeline.addLast("handler", new NettyServerAvroHandler());
+                if (handlers != null & handlers.length > 0)
+                    for (ChannelHandler handler : handlers) {
+                        pipeline.addLast(handler.getClass().getName(), handler);
+                    }
 
             }
-
         });
         serverChannel = b.bind(addr).channel();
         allChannels.add(serverChannel);
 
+    }
+    
+    public boolean isActive(){
+        return serverChannel.isActive();
     }
 
     public MyNettyServer(Responder responder, InetSocketAddress addr)
@@ -205,20 +214,36 @@ public class MyNettyServer implements Server
          *      (io.netty.channel.ChannelHandlerContext, java.lang.Object)
          */
         @Override
-        protected void messageReceived(ChannelHandlerContext ctx,
-            NettyDataPack dataPack) throws Exception {
-            try {
-                List<ByteBuffer> req = dataPack.getDatas();
-                List<ByteBuffer> res = responder.respond(req,
-                    connectionMetadata);
-                // response will be null for oneway messages.
-                if (res != null) {
-                    dataPack.setDatas(res);
-                    ctx.write(dataPack);
-                }
-            } catch (IOException ex) {
-                LOG.warn("unexpect error");
-            }
+        protected void messageReceived(final ChannelHandlerContext ctx,
+           final NettyDataPack dataPack) throws Exception {
+                final List<ByteBuffer> req = dataPack.getDatas();
+                EventExecutor exe= ctx.executor();
+               /* if(exe.inEventLoop()){
+                    List<ByteBuffer> res = responder.respond(req,
+                        connectionMetadata);
+                    // response will be null for oneway messages.
+                    if (res != null) {
+                        dataPack.setDatas(res);
+                        ctx.write(dataPack);
+                    }
+                }*/
+                EventExecutorGroup group=  exe.parent();
+                group.execute(new Runnable(){
+                        @Override
+                        public void run() {
+                            try {
+                                List<ByteBuffer> res = responder.respond(req,
+                                    connectionMetadata);
+                                // response will be null for oneway messages.
+                                if (res != null) {
+                                    dataPack.setDatas(res);
+                                    ctx.write(dataPack);
+                                }
+                            } catch (IOException e) {
+                                LOG.warn("unexpect error");
+                            }
+                        }
+                    });
         }
 
         @Override
@@ -227,7 +252,6 @@ public class MyNettyServer implements Server
             LOG.warn("Unexpected exception from downstream.", cause);
             ctx.close();
             allChannels.remove(ctx.channel());
-            // ctx.fireExceptionCaught(cause);
         }
 
         @Override
