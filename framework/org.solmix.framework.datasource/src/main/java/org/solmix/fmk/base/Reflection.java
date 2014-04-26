@@ -37,13 +37,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
-import org.apache.commons.collections.map.LinkedMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.solmix.api.datasource.DataSource;
-import org.solmix.api.jaxb.Tfield;
-import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.DataSourceProvider;
 
 /**
@@ -105,11 +100,11 @@ public class Reflection
         else
             return ite;
     }
-
+    @Deprecated
     public static Object newInstance(String className) throws Exception {
         return newInstance(classForName(className));
     }
-
+    @Deprecated
     public static Class<?> classForName(String name) throws Exception {
         try {
             return Class.forName(name, true, Thread.currentThread().getContextClassLoader());
@@ -117,7 +112,7 @@ public class Reflection
             return Class.forName(name);
         }
     }
-
+    @Deprecated
     public static <T> T newInstance(Class<T> clazz) throws Exception {
         try {
             return clazz.newInstance();
@@ -158,7 +153,7 @@ public class Reflection
         Object params[] = { param1 };
         return invokeStaticMethod(className, methodName, params);
     }
-
+    @Deprecated
     public static Object invokeStaticMethod(String className, String methodName, Object... params) throws Exception {
         try {
             Method method = findMethod(className, methodName, lookupTypes(params));

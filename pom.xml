@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.solmix</groupId>
 	<artifactId>solmix</artifactId>
-	<version>0.4.1-SNAPSHOT</version>
+	<version>0.5.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solmix  Project Pom</name>
 	<licenses>
@@ -42,9 +42,8 @@
 		<!-- <module>bundles</module> -->
 		<module>assemblies</module>
 		<!-- <module>samples</module> -->
-		<!-- <module>cms</module> -->
-		<!-- <module>hola</module> -->
-		<!-- <module>test</module> -->
+		<module>common/runtime</module>
+		<module>common/util</module>
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>

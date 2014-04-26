@@ -4,3 +4,10 @@
 具体做法 git checkout file 同时恢复多个被删除的文件：
 git ls-files -d | xargs -i git checkout {}
 
+
+新建分支
+git branch  0.4.x-SNAPSHOT
+
+提交分支到远程
+git push origin 0.4.x-SNAPSHOT
+

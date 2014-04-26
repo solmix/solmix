@@ -3,10 +3,10 @@
   <parent>
     <artifactId>solmix</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <artifactId>framework</artifactId>
+  <artifactId>solmix-framework</artifactId>
   <packaging>pom</packaging>
   <name>Solmix :: FrameWork :: Parent Pom</name>
   <modules>
