@@ -35,15 +35,15 @@
 		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
 		</snapshotRepository> </distributionManagement> -->
 	<modules>
-		<module>services</module>
+	<!-- 	<module>services</module>
 		<module>framework</module>
 		<module>modules</module>
 		<module>launch/base</module>
-		<!-- <module>bundles</module> -->
+		<module>bundles</module>
 		<module>assemblies</module>
-		<!-- <module>samples</module> -->
+		<module>samples</module>
 		<module>common/runtime</module>
-		<module>common/util</module>
+		<module>common/util</module> -->
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
@@ -771,27 +771,27 @@
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.engine</artifactId>
+				<artifactId>solmix-framework-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.datasource</artifactId>
+				<artifactId>solmix-framework-datasource</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.util</artifactId>
+				<artifactId>solmix-framework-dsrepo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.solmix.common</groupId>
+				<artifactId>solmix-common-util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.pool</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.api</artifactId>
+				<artifactId>solmix-framework-pool</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -869,11 +869,7 @@
 				<artifactId>geronimo-jta_1.1_spec</artifactId>
 				<version>${jta.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.dsrepo</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+			
 			<dependency>
 				<groupId>org.solmix.shell</groupId>
 				<artifactId>shell</artifactId>

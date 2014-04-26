@@ -10,12 +10,12 @@
   <packaging>pom</packaging>
   <name>Solmix :: FrameWork :: Parent Pom</name>
   <modules>
-	  <module>org.solmix.framework.util</module>
-	  <module>org.solmix.framework.api</module>
-	  <module>org.solmix.framework.dsrepo</module>
-   	  <module>org.solmix.framework.pool</module>
-  	  <module>org.solmix.framework.datasource</module>
-  	  <module>org.solmix.framework.engine</module>
-  	  <module>org.solmix.framework.web</module>
+	  <module>api</module>
+	  <module>dsrepo</module>
+   	  <module>pool</module>
+  	  <module>datasource</module>
+  	  <module>engine</module>
+  	  <module>web</module>
   </modules>
+  <groupId>org.solmix.framework</groupId>
 </project>

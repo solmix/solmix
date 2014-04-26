@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * ========THE SOLMIX PROJECT===================================== * 
+	* This is free software; you can redistribute it and/or modify it under the 
+	terms of the GNU Lesser General Public License as published by the Free Software 
+	Foundation; either version 2.1 of the License, or (at your option) any later 
+	version. This software is distributed in the hope that it will be useful, 
+	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
+	for more details. you may not use this file except in compliance with the 
+	License. You may obtain a copy of the License at http://www.gnu.org/licenses/ 
+	or see the FSF site: http://www.fsf.org. -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
+	
+	<bean id="solmix" class="org.solmix.fmk.context.blueprint.BlueprintSystemContext">
+		<property name="bundleContext" ref="blueprintBundleContext"></property>
+		<property name="blueprintContainer" ref="blueprintContainer"></property>
+	</bean>
+	<bean id="org.solmix.api.datasource.DataSourceManager" class="org.solmix.fmk.datasource.DefaultDataSourceManager">
+		<argument ref="solmix" />
+	</bean>
+	<bean id="org.solmix.api.application.ApplicationManager" class="org.solmix.fmk.application.ApplicationManagerImpl">
+		<argument ref="solmix"/>
+	</bean> 
+	<bean  id="org.solmix.api.i18n.ResourceBundleManager" class="org.solmix.fmk.i18n.ResourceBundleManagerImpl">
+       <argument ref="solmix"/>
+    </bean>
+     <bean id="org.solmix.api.call.DSCallManagerFactory" class="org.solmix.fmk.call.DSCallManagerFactoryImpl">
+        <argument ref="solmix"/>
+    </bean>
+     <service interface="org.solmix.api.datasource.DataSourceManager"	ref="org.solmix.api.datasource.DataSourceManager" />
+     <!-- 
+	<bean class="org.solmix.fmk.event.OsgiEventManager" id="eventManager">
+		<property name="context" ref="blueprintBundleContext" />
+	</bean>
+	<bean class="org.solmix.fmk.util.ServiceUtil" id="serviceUtil" >
+		<property name="context" ref="blueprintBundleContext" />
+	</bean>
+	<reference id="eventAdmin" interface="org.osgi.service.event.EventAdmin">
+		<reference-listener ref="eventManager" bind-method="register_eventAdmin" unbind-method="unregister_eventAdmin" />
+	</reference>
+
+	______________________________________________________
+	                      DataSource Manager             
+	______________________________________________________
+	<bean id="ds_manager"  class="org.solmix.fmk.datasource.DefaultDataSourceManager"	init-method="init" >
+		<property name="poolServiceFactory">
+			<reference interface="org.solmix.api.pool.PoolServiceFactory" />
+		</property>
+		<property name="repoService">
+			<reference interface="org.solmix.api.repo.DSRepositoryManager" />
+		</property>
+
+	</bean>
+    ______________________________________________________
+	                   Bundle Resource Manager           
+	______________________________________________________
+	<bean id="resourceBundle" class="org.solmix.fmk.i18n.ResourceBundleManagerImpl"  />
+	
+	______________________________________________________
+	                   monitor registered datasource     
+	______________________________________________________
+	<reference-list id="dsProvider"	interface="org.solmix.api.datasource.DataSource" availability="optional">
+		<reference-listener ref="ds_manager" bind-method="register"			unbind-method="unregister" />
+	</reference-list>
+	
+	______________________________________________________
+	                     security admins                 
+	______________________________________________________
+	<bean id="security_admin" class="org.solmix.fmk.security.SecurityAdminImpl"></bean>
+	<bean id="rpcManagerFactory" class="org.solmix.fmk.rpc.RPCManagerFactoryImpl"></bean>
+	______________________________________________________
+	                     context tools                   
+	______________________________________________________
+
+	<bean id="single_sys_context" class="org.solmix.fmk.context.SingleSystemContext" scope="singleton"
+		init-method="init">
+		<property name="resourceBundleManager" ref="resourceBundle" />
+		<property name="dataSourceManager" ref="ds_manager" />
+		<property name="securityAdmin" ref="security_admin" />
+		<property name="bundleContext" ref="blueprintBundleContext" />
+		<property name="eventManager" ref="eventManager" />
+		<property name="rpcManagerFactory" ref="rpcManagerFactory" />
+	</bean>
+	
+	
+	<service id="dsmService" interface="org.solmix.api.datasource.DataSourceManager"	ref="ds_manager">
+	</service>
+	
+	<service id="resourceBundleService" ref="resourceBundle">
+		<interfaces>
+			<value>org.solmix.api.i18n.ResourceBundleManager</value>
+			<value>org.osgi.framework.BundleListener</value>
+		</interfaces>
+	</service>
+	______________________________________________________
+	                      RPC Manager                    
+	______________________________________________________
+	
+	<service interface="org.solmix.api.rpc.RPCManagerFactory" ref="rpcManagerFactory">
+	</service>
+	
+	<service id="service_security"
+		interface="org.solmix.api.security.SecurityAdmin" ref="security_admin">
+	</service>
+	<service interface="javax.servlet.Filter">
+		<service-properties>
+			<entry key="filter.pattern" value="/*"/>
+			<entry key="filter.name" value="contextFilter"/>
+		</service-properties>
+		<bean class="org.solmix.fmk.filter.ContextFilter"/>
+	</service> -->
+</blueprint>

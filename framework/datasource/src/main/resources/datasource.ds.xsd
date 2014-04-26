@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/datasource"
+	xmlns:tns="http://www.solmix.org/xmlns/datasource" elementFormDefault="qualified">
+
+    <element name="DataSource" type="tns:datasource"></element>
+
+    <complexType name="datasource">
+
+    	<sequence>
+    		<element name="OperationBindings"></element>
+    	</sequence>
+    	<attribute name="ID" type="string" use="required"></attribute>
+    	<attribute name="constructor" type="string" use="optional"></attribute>
+
+    </complexType>
+
+
+    <complexType name="OperationBindings">
+    	<sequence>
+    		<element name="criteria" >
+    		<complexType>
+    		<sequence></sequence>
+    		</complexType>
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Field">
+    	<attribute name="storeWithHash" type="string"></attribute>
+    </complexType>
+</schema>
