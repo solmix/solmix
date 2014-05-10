@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.support;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import org.solmix.runtime.AbstractContext;
@@ -86,8 +87,18 @@ public class ContextDecorator extends AbstractContext
     }
 
     @Override
-    public void release() {
-        this.ctx.release();
+    public void close() {
+        this.ctx.close();
     }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.Context#getAttributeNames()
+     */
+    @Override
+    public Enumeration<String> getAttributeNames() {
+        return ctx.getAttributeNames();
+    }
+ 
 
 }

@@ -19,6 +19,7 @@
 
 package org.solmix.runtime;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import org.solmix.runtime.Context.Scope;
@@ -40,4 +41,5 @@ public interface AttributeProvider
     Map<String, Object> getAttributes(Scope scope);
 
     void removeAttribute(String name, Scope scope);
+    Enumeration<String> getAttributeNames();
 }

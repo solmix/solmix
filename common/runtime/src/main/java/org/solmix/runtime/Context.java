@@ -19,17 +19,19 @@
 
 package org.solmix.runtime;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
  * 
- * solmix framework context interface.Implementing class should never be accessible directly but only via
- * {@link org.solmix.fmk.context.ContextUtil} static methods which work on a local (Thread) copy of the implementation.
+ * solmix framework context interface.Implementing class should never be
+ * accessible directly but only via {@link org.solmix.fmk.context.ContextUtil}
+ * static methods which work on a local (Thread) copy of the implementation.
  * 
  * @version 0.1 2012-9-26
  * @since 0.1
  */
-public interface Context extends Map<String,Object>
+public interface Context 
 {
 
     public enum Scope
@@ -43,7 +45,8 @@ public interface Context extends Map<String,Object>
          */
         SESSION(2) ,
         /**
-         * Attribute visibility scope, its visible to all sessions of this application.
+         * Attribute visibility scope, its visible to all sessions of this
+         * application.
          */
         SYSTEM(3);
 
@@ -55,14 +58,20 @@ public interface Context extends Map<String,Object>
         }
     }
 
-
     /**
      * Set attribute value, scope of the attribute is defined.
      * 
      * @param name is used as a key
-     * @param scope , highest level of scope from which this attribute is visible
+     * @param scope , highest level of scope from which this attribute is
+     *        visible
      */
     public void setAttribute(String name, Object value, Scope scope);
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setAttribute(String name, Object value);
 
     /**
      * Get attribute value.
@@ -74,8 +83,8 @@ public interface Context extends Map<String,Object>
     public Object getAttribute(String name, Scope scope);
 
     /**
-     * Get attribute value without passing a scope. the scopes are searched from bottom up (request, session,
-     * application)
+     * Get attribute value without passing a scope. the scopes are searched from
+     * bottom up (request, session, application)
      * 
      * @param name to which value is associated to
      * @return attribute value
@@ -97,6 +106,12 @@ public interface Context extends Map<String,Object>
      * @param scope
      */
     public void removeAttribute(String name, Scope scope);
+    
+    /**
+     * Remove the default Scope attribute.
+     * @param name
+     */
+    public void removeAttribute(String name);
 
     /**
      * Get an over all map.
@@ -106,8 +121,11 @@ public interface Context extends Map<String,Object>
     public Map<String, Object> getAttributes();
 
     /**
-     * Release any resource used by this Context (e.g. jcr sessions).
+     * Colse the context and Release any resource used by this Context (e.g. jcr
+     * sessions).
      */
-    public void release();
+    public void close();
+
+    public Enumeration<String> getAttributeNames();
 
 }

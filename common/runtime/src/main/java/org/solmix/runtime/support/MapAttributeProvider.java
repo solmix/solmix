@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.support;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ import org.solmix.runtime.Context.Scope;
 public class MapAttributeProvider implements AttributeProvider
 {
 
-    private final Map<String, Object> map = new Hashtable<String, Object>();
+    private final Hashtable<String, Object> map = new Hashtable<String, Object>();
 
     @Override
     public void setAttribute(String name, Object value, Scope scope) {
@@ -58,5 +59,16 @@ public class MapAttributeProvider implements AttributeProvider
         map.remove(name);
 
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.AttributeProvider#getAttributeNames()
+     */
+    @Override
+    public Enumeration<String> getAttributeNames() {
+        return map.keys();
+    }
+
 
 }

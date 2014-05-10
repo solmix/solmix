@@ -306,7 +306,7 @@ public abstract class SystemContextFactory
      * 
      * @param bus the bus to remove
      */
-    public static void clearDefaultBusForAnyThread(final SystemContext context) {
+    public static void clearDefaultContextForAnyThread(final SystemContext context) {
         synchronized (threadContexts) {
             for (final Iterator<ContextHolder> iterator = threadContexts.values().iterator(); iterator.hasNext();) {
                 ContextHolder item = iterator.next();

@@ -86,4 +86,11 @@ public interface SystemContext extends Context
      * Open this context for using.
      */
     void open();
+    
+    /**
+     * Get the parent system context,if no parent context return <code>null</code>
+     * 
+     * @return
+     */
+//    SystemContext getParent();
 }

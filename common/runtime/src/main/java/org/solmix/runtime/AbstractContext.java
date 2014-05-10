@@ -19,12 +19,10 @@
 
 package org.solmix.runtime;
 
-import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 
@@ -35,7 +33,7 @@ import java.util.Set;
 public abstract class AbstractContext implements Context
 {
 
-    private AttributeProvider attributeProvider;
+    protected AttributeProvider attributeProvider;
 
     private SystemContext systemContext;
 
@@ -68,122 +66,6 @@ public abstract class AbstractContext implements Context
      */
     public void setSystemContext(final SystemContext systemContext) {
         this.systemContext = systemContext;
-    }
-
-    @Override
-    public int size() {
-        return this.getAttributes().size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.getAttributes().isEmpty();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#containsKey(java.lang.Object)
-     */
-    @Override
-    public boolean containsKey(Object key) {
-        return this.getAttributes().containsKey(key);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#containsValue(java.lang.Object)
-     */
-    @Override
-    public boolean containsValue(Object value) {
-        return this.getAttributes().containsValue(value);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#get(java.lang.Object)
-     */
-    @Override
-    public Object get(Object key) {
-        return this.getAttribute(key.toString());
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#put(java.lang.String, java.lang.Object)
-     */
-    @Override
-    public Object put(String key, Object value) {
-        this.setAttribute(key, value, Context.Scope.LOCAL);
-        return value;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#remove(java.lang.Object)
-     */
-    @Override
-    public Object remove(Object key) {
-        Object obj = this.getAttribute(key.toString());
-        this.removeAttribute(key.toString(), Context.Scope.LOCAL);
-        return obj;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#putAll(java.util.Map)
-     */
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void putAll(Map map) {
-        for (Iterator iter = map.entrySet().iterator(); iter.hasNext();) {
-            Entry entry = (Entry) iter.next();
-            this.setAttribute(entry.getKey().toString(), entry.getValue(), Scope.LOCAL);
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#clear()
-     */
-    @Override
-    public void clear() {
-        for (String key : this.getAttributes().keySet()) {
-            this.removeAttribute(key, Context.Scope.LOCAL);
-        }
-
-    }
-
-    @Override
-    public Set<String> keySet() {
-        return this.getAttributes().keySet();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#values()
-     */
-    @Override
-    public Collection<Object> values() {
-        return this.getAttributes().values();
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see java.util.Map#entrySet()
-     */
-    @Override
-    public Set<Entry<String, Object>> entrySet() {
-        return this.getAttributes().entrySet();
     }
 
     /**
@@ -220,10 +102,10 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.api.context.Context#release()
+     * @see org.solmix.runtime.api.context.Context#close()
      */
     @Override
-    public void release() {
+    public void close() {
            attributeProvider=null;
 
     }
@@ -269,5 +151,29 @@ public abstract class AbstractContext implements Context
     public void removeAttribute(String name, Scope scope) {
         this.getAttributeProvider().removeAttribute(name, scope);
 
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.Context#setAttribute(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void setAttribute(String name, Object value) {
+       setAttribute(name, value, Scope.LOCAL);
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.Context#getAttributeNames()
+     */
+    @Override
+    public Enumeration<String> getAttributeNames() {
+        return getAttributeProvider().getAttributeNames();
+    }
+    @Override
+    public void removeAttribute(String name){
+        removeAttribute(name, Scope.LOCAL);
     }
 }

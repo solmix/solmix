@@ -13,8 +13,11 @@
 	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
 	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
 	
-	<bean id="solmix" class="org.solmix.fmk.context.blueprint.BlueprintSystemContext">
+	<bean id="solmix" class="org.solmix.runtime.support.blueprint.BlueprintSystemContext">
 		<property name="bundleContext" ref="blueprintBundleContext"></property>
 		<property name="blueprintContainer" ref="blueprintContainer"></property>
 	</bean>
+	 <service interface="org.solmix.runtime.adapter.AdapterManager">
+	 	<bean class="org.solmix.runtime.adapter.support.AdapterManagerImpl"/>
+	 </service>
 </blueprint>

@@ -29,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.AbstractContext;
+import org.solmix.runtime.AttributeProvider;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.SystemContextFactory;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
@@ -91,7 +92,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#getBean(java.lang.Class)
+     * @see org.solmix.runtime.SystemContext#getBean(java.lang.Class)
      */
     @Override
     public <T> T getBean(Class<T> beanType) {
@@ -165,7 +166,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#setBean(java.lang.Object, java.lang.Class)
+     * @see org.solmix.runtime.SystemContext#setBean(java.lang.Object, java.lang.Class)
      */
     @Override
     public <T> void setBean(T bean, Class<T> beanType) {
@@ -176,7 +177,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#hasBeanByName(java.lang.String)
+     * @see org.solmix.runtime.SystemContext#hasBeanByName(java.lang.String)
      */
     @Override
     public boolean hasBeanByName(String name) {
@@ -198,7 +199,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#getId()
+     * @see org.solmix.runtime.SystemContext#getId()
      */
     @Override
     public String getId() {
@@ -208,7 +209,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#open()
+     * @see org.solmix.runtime.SystemContext#open()
      */
     @Override
     public void open() {
@@ -228,7 +229,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#close(boolean)
+     * @see org.solmix.runtime.SystemContext#close(boolean)
      */
     @Override
     public void close(boolean wait) {
@@ -248,7 +249,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
         if(SystemContextFactory.getDefaultSystemContext(false)==this){
             SystemContextFactory.setDefaultSystemContext(null);
         }
-        SystemContextFactory.clearDefaultBusForAnyThread(this);
+        SystemContextFactory.clearDefaultContextForAnyThread(this);
         
     }
 
@@ -272,19 +273,13 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
  
     @Override
     public void setAttribute(String name, Object value, Scope scope) {
-        if (scope == Scope.SESSION || scope == Scope.LOCAL) {
-            log.warn("you should not set an attribute in the system context in request or session scope. You are setting {}={}", name, value);
-        }
-        super.setAttribute(name, value, scope);
+        super.setAttribute(name, value, Scope.SYSTEM);
 
     }
 
     @Override
     public void removeAttribute(String name, Scope scope) {
-        if (scope == Scope.SESSION || scope == Scope.LOCAL) {
-            log.warn("you should not manipulate an attribute in the system context in request or session scope. You are setting name {}", name);
-        }
-        super.removeAttribute(name, scope);
+        super.removeAttribute(name, Scope.SYSTEM);
 
     }
     /**
@@ -307,5 +302,11 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     protected void destroyBeans() {
         
     }
-
+    @Override
+    public AttributeProvider getAttributeProvider() {
+        if(attributeProvider==null){
+            attributeProvider=new MapAttributeProvider();
+        }
+        return attributeProvider;
+    }
 }

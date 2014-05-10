@@ -32,4 +32,6 @@ public interface AdapterFactory
 
     <AdapterType> AdapterType getAdapter(Object adaptable,
         Class<AdapterType> type);
+    
+    Class<?>[] getAdapterList();
 }

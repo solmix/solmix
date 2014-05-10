@@ -41,7 +41,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContextFactory#createContext()
+     * @see org.solmix.runtime.SystemContextFactory#createContext()
      */
     @Override
     public SystemContext createContext() {
