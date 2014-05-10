@@ -15,7 +15,7 @@
 	<bean id="org.solmix.api.repo.DSRepositoryManager" class="org.solmix.fmk.repo.DSRepositoryManagerImpl">
 		<argument ref="solmix"/>
 	</bean>
-	<reference interface="org.solmix.api.context.SystemContext" id="solmix"/>
+	<reference interface="org.solmix.runtime.SystemContext" id="solmix"/>
 
 
 </blueprint>

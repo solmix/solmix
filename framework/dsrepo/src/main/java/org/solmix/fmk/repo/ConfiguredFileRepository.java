@@ -24,8 +24,8 @@ import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
+import org.solmix.runtime.SystemContext;
 
 
 /**
