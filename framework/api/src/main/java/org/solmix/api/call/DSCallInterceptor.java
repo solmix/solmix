@@ -19,9 +19,9 @@
 
 package org.solmix.api.call;
 
-import org.solmix.api.context.Context;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.runtime.Context;
 
 /**
  * Intercept the dispatch of {@link Context} before they {@link org.solmix.api.datasource.DSRequest#execute() execute}.

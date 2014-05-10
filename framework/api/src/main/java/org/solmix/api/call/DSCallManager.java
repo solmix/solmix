@@ -18,9 +18,9 @@
  */
 package org.solmix.api.call;
 
-import org.solmix.api.context.Context;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.runtime.Context;
 
 
 /**

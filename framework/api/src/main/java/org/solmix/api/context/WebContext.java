@@ -21,6 +21,7 @@ package org.solmix.api.context;
 
 import java.io.Writer;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -30,9 +31,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.solmix.api.exception.SlxException;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
 
 /**
- * This is a web context extends {@link org.solmix.api.context.Context} , {@link org.solmix.api.datasource.DSRequest
+ * This is a web context extends {@link org.solmix.runtime.Context} , {@link org.solmix.api.datasource.DSRequest
  * DataSource Request} from web servlet, must used this interface to access the framework.
  * 
  * @version 110035 2012-9-28
@@ -41,6 +44,10 @@ import org.solmix.api.exception.SlxException;
 public interface WebContext extends Context
 {
 
+    
+    void setLocale(Locale locale);
+    
+    Locale getLocale();
     /**
      * Get a parameter value as string.
      * 
