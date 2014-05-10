@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -43,9 +44,9 @@ import org.solmix.api.serialize.JSParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.fmk.context.AbstractContext;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
+import org.solmix.runtime.AbstractContext;
 import org.solmix.web.ServletTools;
 
 /**
@@ -84,6 +85,7 @@ public class WebContextImpl extends AbstractContext implements WebContext
     public boolean cachingEnabled;
 
     public String contentType;
+    private Locale locale;
 
     /**
      * used with WebContextFactory.
@@ -435,10 +437,31 @@ public class WebContextImpl extends AbstractContext implements WebContext
     }
 
     @Override
-    public void release() {
+    public void close() {
         this.wrappedRequest = null;
         this.response = null;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.api.context.WebContext#setLocale(java.util.Locale)
+     */
+    @Override
+    public void setLocale(Locale locale) {
+        this.locale=locale;
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.api.context.WebContext#getLocale()
+     */
+    @Override
+    public Locale getLocale() {
+        return locale;
     }
 
 }
