@@ -2,23 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modules</artifactId>
-    <groupId>org.solmix</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <groupId>org.solmix.modules</groupId>
+    <version>0.5.1-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.modules</groupId>
-  <artifactId>org.solmix.modules.sql</artifactId>
+  <artifactId>solmix-modules-sql</artifactId>
   <name>Solmix :: Module :: SQL DataSource</name>
   <dependencies>
-  	<dependency>
-  		<groupId>org.solmix.framework</groupId>
-  		<artifactId>org.solmix.framework.datasource</artifactId>
-  	</dependency>
   	 <dependency>
-      <groupId>org.apache.geronimo.modules</groupId>
-      <artifactId>geronimo-transaction</artifactId>
-       <version>1.2-beta</version>
-       <scope>test</scope>
-    </dependency>
+  	 	<groupId>org.solmix.framework</groupId>
+  	 	<artifactId>solmix-framework-datasource</artifactId>
+  	 </dependency>
   </dependencies>
   <build>
 		<plugins>

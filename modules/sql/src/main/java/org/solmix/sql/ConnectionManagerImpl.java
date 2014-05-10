@@ -38,9 +38,6 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.PoolableConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.PoolManager;
 import org.solmix.api.pool.PoolManagerFactory;
@@ -50,6 +47,9 @@ import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.util.ServiceUtil;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.sql.internal.SqlCM;
 
 /**
@@ -92,7 +92,7 @@ public class ConnectionManagerImpl implements ConnectionManager
 
     private synchronized DataTypeMap getSqlConfig() throws SlxException {
         if (thisConfig == null) {
-            ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+            ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
             ConfigureUnit cu = null;
             try {
                 cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);

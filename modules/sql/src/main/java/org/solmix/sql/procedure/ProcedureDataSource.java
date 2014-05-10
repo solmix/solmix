@@ -33,9 +33,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DSResponse.Status;
@@ -49,6 +46,9 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.velocity.Velocity;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.sql.ConnectionManager;
 import org.solmix.sql.SQLDataSource;
 
@@ -83,7 +83,7 @@ public final class ProcedureDataSource
         ConnectionManager connectionManager=null;
         try {
             final  SystemContext sc=SlxContext.getThreadSystemContext();
-            ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+            ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
             ConfigureUnit cu = null;
             boolean printSQL = false;
             try {
