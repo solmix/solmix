@@ -32,16 +32,16 @@ import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.call.DSCallManager;
 import org.solmix.api.call.InterceptorOrder;
 import org.solmix.api.call.InterceptorOrder.PRIORITY;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.Context;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.BasicDataSource;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 
 /**
  * 
@@ -105,7 +105,7 @@ public class DSCallManagerImpl implements DSCallManager
     }
     @SuppressWarnings("unchecked")
     protected void configInterceptor() throws SlxException{
-        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         DataTypeMap frameworkConfig;
         try {

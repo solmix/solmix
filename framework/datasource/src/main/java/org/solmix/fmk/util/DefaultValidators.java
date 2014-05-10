@@ -43,8 +43,6 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.Context;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.datasource.DataSource;
@@ -66,6 +64,8 @@ import org.solmix.fmk.datasource.ValidationContext;
 import org.solmix.fmk.datasource.Validator;
 import org.solmix.fmk.datasource.ValidatorFunc;
 import org.solmix.fmk.velocity.Velocity;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
 
 /**
  * 

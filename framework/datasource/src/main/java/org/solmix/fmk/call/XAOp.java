@@ -4,7 +4,6 @@ package org.solmix.fmk.call;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -13,6 +12,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DsOp;
+import org.solmix.runtime.SystemContext;
 
 /**
  * Used with transaction operations.

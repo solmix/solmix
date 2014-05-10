@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceData;
@@ -39,6 +38,7 @@ import org.solmix.fmk.cache.StructCache;
 import org.solmix.fmk.event.EventWorker;
 import org.solmix.fmk.event.EventWorkerFactory;
 import org.solmix.fmk.internal.DatasourceCM;
+import org.solmix.runtime.SystemContext;
 
 /**
  * Initialize Datasource.all datasource initialized thought {@link #forName(String)}

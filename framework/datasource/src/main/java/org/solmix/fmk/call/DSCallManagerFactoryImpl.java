@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 
 import org.solmix.api.call.DSCallManager;
 import org.solmix.api.call.DSCallManagerFactory;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 
 /**
  * Implements {@link org.solmix.api.call.DataSourceCallFactory}.

@@ -28,10 +28,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
-import org.solmix.api.bean.ConfiguredBeanProvider;
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.Context;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -47,6 +44,9 @@ import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
 
 /**
  * DataSourceManager service implements.
@@ -164,7 +164,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     @Override
     public List<DataSource> getProviders() {
         if (sc != null) {
-            ConfiguredBeanProvider cbp = sc.getBean(org.solmix.api.bean.ConfiguredBeanProvider.class);
+            ConfiguredBeanProvider cbp = sc.getBean(ConfiguredBeanProvider.class);
             Collection<? extends DataSource> cc = cbp.getBeansOfType(DataSource.class);
             for (DataSource c : cc) {
                 if (!providers.contains(c))

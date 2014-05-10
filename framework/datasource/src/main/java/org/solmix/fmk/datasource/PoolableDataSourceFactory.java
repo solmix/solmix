@@ -25,7 +25,6 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
@@ -33,6 +32,7 @@ import org.solmix.api.pool.IPoolableObjectFactory;
 import org.solmix.api.pool.SlxKeyedPoolableObjectFactory;
 import org.solmix.api.repo.DSRepository;
 import org.solmix.commons.io.SlxFile;
+import org.solmix.runtime.SystemContext;
 
 /**
  * 

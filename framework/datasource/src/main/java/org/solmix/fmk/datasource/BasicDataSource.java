@@ -40,9 +40,6 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.datasource.ClientParameter;
 import org.solmix.api.datasource.ConvertDSContextToMap;
@@ -81,6 +78,9 @@ import org.solmix.fmk.js.JSExpression;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.util.DefaultValidators;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.w3c.dom.Element;
 
 /**
@@ -197,7 +197,7 @@ public class BasicDataSource implements DataSource
      * @return
      */
     protected DataTypeMap getConfig() throws SlxException {
-        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(getPID());

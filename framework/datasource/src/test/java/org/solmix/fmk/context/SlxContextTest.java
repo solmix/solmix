@@ -24,11 +24,11 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.solmix.api.call.DSCallManagerFactory;
-import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.i18n.ResourceBundleManager;
 import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.SystemContextFactory;
 
 /**
  * 

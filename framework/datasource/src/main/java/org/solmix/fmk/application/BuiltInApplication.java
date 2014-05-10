@@ -28,7 +28,6 @@ import org.slf4j.MDC;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.application.ApplicationSecurity;
-import org.solmix.api.context.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
@@ -46,6 +45,7 @@ import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.util.DataTools;
+import org.solmix.runtime.Context;
 
 /**
  * @author solmix.f@gmail.com
@@ -533,7 +533,7 @@ public class BuiltInApplication implements Application
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.application.Application#isPermitted(org.solmix.api.datasource.DSRequest, org.solmix.api.context.Context)
+     * @see org.solmix.api.application.Application#isPermitted(org.solmix.api.datasource.DSRequest, org.solmix.runtime.Context)
      */
     @Override
     public boolean isPermitted(DSRequest request, Context context) throws SlxException {

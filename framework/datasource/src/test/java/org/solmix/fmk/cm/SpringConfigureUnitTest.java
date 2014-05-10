@@ -25,10 +25,10 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.cm.ConfigureUnit;
 import org.solmix.commons.util.DataUtil;
-import org.solmix.fmk.cm.spring.SpringConfigureUnitManager;
 import org.solmix.fmk.internal.DatasourceCM;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.support.SpringConfigureUnitManager;
 import org.springframework.core.io.Resource;
 
 

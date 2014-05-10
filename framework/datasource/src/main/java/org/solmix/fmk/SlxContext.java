@@ -25,14 +25,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.Context;
-import org.solmix.api.context.Context.Scope;
-import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.SystemContextFactory;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.fmk.call.Transaction;
-import org.solmix.fmk.context.ContextDecorator;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.Context.Scope;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.SystemContextFactory;
+import org.solmix.runtime.support.ContextDecorator;
 
 /**
  * This class allows obtaining of the current Request without passing the request around the world.
@@ -157,7 +157,7 @@ public final class SlxContext
      * Set the locale for the current context.
      */
     public static void setLocale(Locale locale) {
-        getContext().setLocale(locale);
+        getWebContext().setLocale(locale);
     }
 
     /**
@@ -166,7 +166,7 @@ public final class SlxContext
      * @return
      */
     public static Locale getLocale() {
-        return getContext().getLocale();
+        return getWebContext().getLocale();
     }
 
     /**
@@ -243,7 +243,7 @@ public final class SlxContext
      */
     public static void release() {
         if (hasContext() && !(getContext() instanceof SystemContext)) {
-            getContext().release();
+            getContext().close();
         }
 
     }

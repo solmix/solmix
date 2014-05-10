@@ -23,7 +23,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceManager;
@@ -33,6 +32,7 @@ import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.SystemContext;
 
 
 /**

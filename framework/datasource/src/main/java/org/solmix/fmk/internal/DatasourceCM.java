@@ -21,11 +21,11 @@ package org.solmix.fmk.internal;
 
 import java.io.IOException;
 
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 
 /**
  * 

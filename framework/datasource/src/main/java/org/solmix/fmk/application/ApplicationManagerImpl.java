@@ -28,10 +28,10 @@ import javax.annotation.Resource;
 import org.solmix.api.application.Application;
 import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.application.ApplicationSecurity;
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 
 /**
  * 
@@ -98,7 +98,7 @@ public class ApplicationManagerImpl implements ApplicationManager
 
     protected DataTypeMap getConfig() {
         DataTypeMap appConfig;
-        ConfigureUnitManager cum = sc.getBean(org.solmix.api.cm.ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(SERVICE_PID);
