@@ -26,13 +26,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.solmix.api.cm.ConfigureUnit;
-import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
 import org.solmix.api.pool.IPoolableObjectFactory;
 import org.solmix.api.pool.PoolManager;
 import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.cm.ConfigureUnit;
+import org.solmix.runtime.cm.ConfigureUnitManager;
 
 /**
  * 

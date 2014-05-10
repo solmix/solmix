@@ -15,6 +15,6 @@
 	<bean id="org.solmix.fmk.pool.PoolManagerFactory" class="org.solmix.fmk.pool.PoolManagerFactoryImpl">
 		<argument ref="solmix"/>
 	</bean>
-	<reference interface="org.solmix.api.context.SystemContext" id="solmix"/>
+	<reference interface="org.solmix.runtime.SystemContext" id="solmix"/>
 
 </blueprint>
