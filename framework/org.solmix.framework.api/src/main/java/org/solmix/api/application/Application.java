@@ -19,7 +19,7 @@
 
 package org.solmix.api.application;
 
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
@@ -79,7 +79,7 @@ public interface Application
 
     /**
      * @param request
-     * @param context {@link org.solmix.api.context.Context context}
+     * @param context {@link org.solmix.runtime.Context context}
      * @return
      * @throws SlxException
      */

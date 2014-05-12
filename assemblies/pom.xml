@@ -4,11 +4,14 @@
   <parent>
     <groupId>org.solmix</groupId>
     <artifactId>solmix</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
   </parent>
   <artifactId>assemblies</artifactId>
   <packaging>pom</packaging>
   <modules>
-  <!-- 	<module>launcher</module> -->
+  <module>features</module>
   </modules>
+  <groupId>org.solmix.assemblies</groupId>
+  <name>Solmix :: Assemblies :: Pom Parent</name>
 </project>

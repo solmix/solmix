@@ -30,7 +30,7 @@ import org.solmix.api.application.ApplicationManager;
 import org.solmix.api.application.ApplicationSecurity;
 import org.solmix.api.cm.ConfigureUnit;
 import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.commons.collections.DataTypeMap;
 
 /**

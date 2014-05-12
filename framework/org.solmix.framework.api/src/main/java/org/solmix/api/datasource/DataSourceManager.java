@@ -22,7 +22,7 @@ package org.solmix.api.datasource;
 import java.util.List;
 
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;

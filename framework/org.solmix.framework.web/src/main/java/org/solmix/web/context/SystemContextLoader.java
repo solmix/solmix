@@ -24,7 +24,7 @@ import javax.servlet.ServletContextEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContextFactory;
+import org.solmix.runtime.SystemContextFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.VelocityExpression;
 import org.solmix.api.cm.ConfigureUnit;
 import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.datasource.ClientParameter;
 import org.solmix.api.datasource.ConvertDSContextToMap;

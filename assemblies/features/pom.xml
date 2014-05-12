@@ -22,12 +22,12 @@
 
     <parent>
         <artifactId>assemblies</artifactId>
-        <groupId>org.solmix</groupId>
-        <version>0.4.1-SNAPSHOT</version>
+        <groupId>org.solmix.assemblies</groupId>
+        <version>0.5.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
-    <groupId>org.solmix.assemblies.features</groupId>
-    <artifactId>features</artifactId>
+    <artifactId>solmix-assemblies-features</artifactId>
     <build>
         <resources>
             <resource>
@@ -71,7 +71,7 @@
                 <configuration>
                   <artifacts>
                     <artifact>
-                      <file>target/classes/framework-0.3-features.xml</file>
+                      <file>target/classes/framework-0.5-features.xml</file>
                       <type>xml</type>
                       <classifier>features</classifier>
                     </artifact>
@@ -83,4 +83,5 @@
         </plugins>
     </build>
 
+    <name>Solmix :: Assemblies :: Features</name>
 </project>

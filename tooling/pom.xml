@@ -3,13 +3,13 @@
   <parent>
     <groupId>org.solmix</groupId>
     <artifactId>solmix</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
+    <relativePath>..</relativePath>
   </parent>
   <artifactId>tooling</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>command</module>
-  	<module>shell</module>
   	<module>commands</module>
   </modules>
+  <groupId>org.solmix.tooling</groupId>
 </project>

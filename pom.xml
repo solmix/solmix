@@ -35,15 +35,16 @@
 		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
 		</snapshotRepository> </distributionManagement> -->
 	<modules>
-	<!-- 	<module>services</module>
-		<module>framework</module>
-		<module>modules</module>
-		<module>launch/base</module>
-		<module>bundles</module>
-		<module>assemblies</module>
-		<module>samples</module>
+		<module>common/util</module>
 		<module>common/runtime</module>
-		<module>common/util</module> -->
+		<module>framework</module>
+		<module>services</module>
+		<module>modules</module>
+		<module>bundles</module>
+		<module>assemblies</module> 
+		<module>launch/base</module>
+		<module>test</module>
+		<module>tooling</module>
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
@@ -99,11 +100,11 @@
 		<apache.shiro.version>1.2.3</apache.shiro.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
-		<karaf.debug.location>/home/solmix/t/karaf2.3.2/apache-karaf-2.3.2</karaf.debug.location>
+		<karaf.debug.location>/home/solmix/t/karaf</karaf.debug.location>
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
-		<apache.karaf.version>2.3.3</apache.karaf.version>
+		<apache.karaf.version>3.0.1</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
@@ -124,6 +125,7 @@
 		<slf4j.version>1.7.2</slf4j.version>
 		<mockito-core.version>1.9.0</mockito-core.version>
 		<solmix.bundle.category>solmix</solmix.bundle.category>
+		<solmix.version>0.5.1-SNAPSHOT</solmix.version>
 	</properties>
 	<repositories>
 
@@ -755,64 +757,74 @@
 			<!-- ===================================================================================== -->
 			<dependency>
 				<groupId>org.solmix.launch</groupId>
-				<artifactId>org.solmix.launch.base</artifactId>
+				<artifactId>solmix-launch-base</artifactId>
 				<classifier>web</classifier>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.solmix.modules</groupId>
-				<artifactId>org.solmix.modules.spring</artifactId>
+				<groupId>org.solmix.launch</groupId>
+				<artifactId>solmix-launch-base</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.solmix.launch</groupId>
-				<artifactId>org.solmix.launch.base</artifactId>
+				<groupId>org.solmix.framework</groupId>
+				<artifactId>solmix-framework-engine</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
 				<artifactId>solmix-framework-api</artifactId>
-				<version>${project.version}</version>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
 				<artifactId>solmix-framework-datasource</artifactId>
-				<version>${project.version}</version>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
 				<artifactId>solmix-framework-dsrepo</artifactId>
-				<version>${project.version}</version>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.common</groupId>
 				<artifactId>solmix-common-util</artifactId>
-				<version>${project.version}</version>
+				<version>${solmix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.solmix.common</groupId>
+				<artifactId>solmix-common-runtime</artifactId>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
 				<artifactId>solmix-framework-pool</artifactId>
-				<version>${project.version}</version>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.services</groupId>
-				<artifactId>event-core</artifactId>
-				<version>${project.version}</version>
+				<artifactId>services-event-core</artifactId>
+				<version>${solmix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.solmix.services</groupId>
+				<artifactId>services-event-web</artifactId>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.modules</groupId>
-				<artifactId>org.solmix.modules.sql</artifactId>
-				<version>${project.version}</version>
+				<artifactId>solmix-modules-sql</artifactId>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.web</artifactId>
-				<version>${project.version}</version>
+				<artifactId>solmix-framework-web</artifactId>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.modules</groupId>
-				<artifactId>org.solmix.modules.jpa</artifactId>
-				<version>${project.version}</version>
+				<artifactId>solmix-modules-jpa</artifactId>
+				<version>${solmix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>

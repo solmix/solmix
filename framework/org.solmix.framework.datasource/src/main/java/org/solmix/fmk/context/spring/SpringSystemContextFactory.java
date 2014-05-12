@@ -21,8 +21,8 @@ package org.solmix.fmk.context.spring;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.SystemContextFactory;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.SystemContextFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -41,7 +41,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContextFactory#createContext()
+     * @see org.solmix.runtime.SystemContextFactory#createContext()
      */
     @Override
     public SystemContext createContext() {

@@ -21,7 +21,7 @@ package org.solmix.fmk.context;
 
 import java.util.Map;
 
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 
 /**
  * 

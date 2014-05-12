@@ -3,7 +3,7 @@
   <parent>
     <artifactId>solmix</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>bundles</artifactId>
@@ -46,4 +46,6 @@
 		<module>org.solmix.bundles.poi</module>
 		<module>org.solmix.bundles.dbcp</module>
 	</modules>
+	<version>0.5.0</version>
+	<groupId>org.solmix.bundles</groupId>
 </project>

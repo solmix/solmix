@@ -4,7 +4,8 @@
 	<parent>
 		<groupId>org.solmix.modules</groupId>
 		<artifactId>sgt</artifactId>
-		<version>0.4.1-SNAPSHOT</version>
+		<version>0.5.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
 	<groupId>org.solmix.modules.sgt</groupId>
 	<artifactId>sgt-extensions-shared</artifactId>
@@ -26,4 +27,5 @@
 			<version>2.5.0</version>
 		</dependency>
 	</dependencies>
+	<name>SmartGwt :: Extensions :: Shared</name>
 </project>

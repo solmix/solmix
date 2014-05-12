@@ -26,7 +26,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.repo.DSRepository;
 import org.solmix.api.repo.DSRepositoryManager;

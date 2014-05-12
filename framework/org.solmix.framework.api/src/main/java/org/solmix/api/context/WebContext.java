@@ -32,7 +32,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.solmix.api.exception.SlxException;
 
 /**
- * This is a web context extends {@link org.solmix.api.context.Context} , {@link org.solmix.api.datasource.DSRequest
+ * This is a web context extends {@link org.solmix.runtime.Context} , {@link org.solmix.api.datasource.DSRequest
  * DataSource Request} from web servlet, must used this interface to access the framework.
  * 
  * @version 110035 2012-9-28

@@ -29,7 +29,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.fmk.SlxContext;
 import org.solmix.jpa.EntityManagerFactoryProvider;
 import org.solmix.jpa.test.entity.AuthUser;

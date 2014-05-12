@@ -34,14 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.felix.gogo.commands.Argument;
-import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.ConfigFileInfo;
+import org.apache.karaf.features.Dependency;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.features.Repository;
 import org.apache.karaf.features.Resolver;
+import org.apache.karaf.shell.commands.Argument;
+import org.apache.karaf.shell.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
@@ -110,7 +111,7 @@ public class ArchiveInstallCommand extends OsgiCommandSupport
     }
 
     private void downloadArchive(Feature feature) throws Exception {
-        for (Feature dependency : feature.getDependencies()) {
+        for (Dependency dependency : feature.getDependencies()) {
 //            VersionRange range = "0.0.0".equals(dependency.getVersion()) ? VersionRange.ANY_VERSION : new VersionRange(
 //                dependency.getVersion(), true, true);
             Feature fi = null;

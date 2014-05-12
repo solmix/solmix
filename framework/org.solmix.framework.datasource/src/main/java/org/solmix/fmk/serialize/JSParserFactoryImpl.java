@@ -22,7 +22,7 @@ package org.solmix.fmk.serialize;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
 

@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.solmix.common</groupId>
   <artifactId>solmix-common-util</artifactId>
-  <name>Solmix  Common Utils</name>
+  <name>Solmix :: Common :: Utils</name>
   <build>
 		<plugins>
 			<plugin>
@@ -22,7 +22,7 @@
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package><!--<Import-Bundle>com.springsource.oracle.jdbc;version="10.2.0.2"</Import-Bundle> --><!--<Private-Package>${solmix.osgi.export.pkg}.impl</Private-Package> --><!--<_failok>${solmix.osgi.failok}</_failok> --><!--<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders> -->
 						<Bundle-Activator>org.solmix.commons.osgi.Activator</Bundle-Activator>
-						<DynamicImport-Package>*</DynamicImport-Package>
+						<!-- <DynamicImport-Package>*</DynamicImport-Package> -->
 					</instructions><!--<unpackBundle>false</unpackBundle> -->
 				</configuration>
 			</plugin>

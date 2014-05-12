@@ -21,7 +21,7 @@ package org.solmix.api.context;
 
 import java.util.Map;
 
-import org.solmix.api.context.Context.Scope;
+import org.solmix.runtime.Context.Scope;
 
 /**
  * 

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.solmix.api.bean.ConfiguredBeanProvider;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.springframework.beans.Mergeable;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

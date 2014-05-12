@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.context.spring;
 
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;

@@ -33,7 +33,7 @@ import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.call.DSCallInterceptor.Action;
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;

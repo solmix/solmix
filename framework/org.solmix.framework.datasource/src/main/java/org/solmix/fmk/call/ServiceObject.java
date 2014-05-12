@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserviceStyle;
 import org.solmix.api.jaxb.Tservice;

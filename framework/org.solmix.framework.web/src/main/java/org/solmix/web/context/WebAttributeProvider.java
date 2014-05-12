@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.solmix.api.context.AttributeProvider;
-import org.solmix.api.context.Context.Scope;
+import org.solmix.runtime.Context.Scope;
 
 /**
  * 
@@ -118,7 +118,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.AttributeProvider#getAttributes(org.solmix.api.context.Context.Scope)
+     * @see org.solmix.api.context.AttributeProvider#getAttributes(org.solmix.runtime.Context.Scope)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -165,7 +165,7 @@ public class WebAttributeProvider implements AttributeProvider
      * {@inheritDoc}
      * 
      * @see org.solmix.api.context.AttributeProvider#removeAttribute(java.lang.String,
-     *      org.solmix.api.context.Context.Scope)
+     *      org.solmix.runtime.Context.Scope)
      */
     @Override
     public void removeAttribute(String name, Scope scope) {

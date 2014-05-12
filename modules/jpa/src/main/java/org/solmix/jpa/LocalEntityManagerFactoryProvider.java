@@ -28,7 +28,7 @@ import javax.persistence.spi.PersistenceProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 
 /**
  * 

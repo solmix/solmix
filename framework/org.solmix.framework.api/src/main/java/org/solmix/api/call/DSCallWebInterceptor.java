@@ -19,7 +19,7 @@
 
 package org.solmix.api.call;
 
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.collections.DataTypeMap;
@@ -72,7 +72,7 @@ public class DSCallWebInterceptor implements DSCallInterceptor, InterceptorOrder
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.call.DSCallInterceptor#prepareRequest(org.solmix.api.call.DSCall, org.solmix.api.context.Context)
+     * @see org.solmix.api.call.DSCallInterceptor#prepareRequest(org.solmix.api.call.DSCall, org.solmix.runtime.Context)
      */
     @Override
     public void prepareRequest(DSCall dsCall, Context context) throws SlxException {

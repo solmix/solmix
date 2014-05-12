@@ -23,7 +23,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.datasource.DataSourceManager;

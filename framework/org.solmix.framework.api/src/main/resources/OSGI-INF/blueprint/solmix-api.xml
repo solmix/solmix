@@ -14,11 +14,11 @@
 	<bean id="bar" class="org.solmix.SlxConstants" init-method="init">
 		<property name="context" ref="blueprintBundleContext" />
 	</bean>
-	<reference interface="org.solmix.api.context.SystemContext"
+	<reference interface="org.solmix.runtime.SystemContext"
 		availability="optional">
 		<reference-listener bind-method="register"
 			unbind-method="unregister">
-			<bean class="org.solmix.api.context.SystemContextTracker" />
+			<bean class="org.solmix.runtime.SystemContextTracker" />
 		</reference-listener>
 	</reference>
 

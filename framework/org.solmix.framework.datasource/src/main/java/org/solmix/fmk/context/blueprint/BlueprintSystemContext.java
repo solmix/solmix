@@ -28,7 +28,7 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.solmix.api.bean.BeanConfigurer;
 import org.solmix.api.bean.ConfiguredBeanProvider;
 import org.solmix.api.cm.ConfigureUnitManager;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.fmk.cm.osgi.OsgiConfigureUnitManager;
 import org.solmix.fmk.context.ext.SolmixSystemContext;
 

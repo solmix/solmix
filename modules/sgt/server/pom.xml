@@ -3,25 +3,24 @@
   <parent>
     <groupId>org.solmix.modules</groupId>
     <artifactId>sgt</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.modules.sgt</groupId>
   <artifactId>sgt-extensions-server</artifactId>
   <dependencies>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.datasource</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
 			<artifactId>sgt-extensions-shared</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>org.solmix.framework.web</artifactId>
-			</dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-datasource</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-web</artifactId>
+		</dependency>
   </dependencies>
   <build>
   <plugins>
@@ -64,4 +63,5 @@
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
 	<packaging>bundle</packaging>
+	<name>SmartGwt :: Extensions :: Server</name>
 </project>

@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.solmix.api.context.AttributeProvider;
-import org.solmix.api.context.Context;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
 
 /**
  * 
@@ -193,7 +193,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#setLocale(java.util.Locale)
+     * @see org.solmix.runtime.Context#setLocale(java.util.Locale)
      */
     @Override
     public void setLocale(Locale locale) {
@@ -204,7 +204,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#getLocale()
+     * @see org.solmix.runtime.Context#getLocale()
      */
     @Override
     public Locale getLocale() {
@@ -221,7 +221,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#getAttribute(java.lang.String)
+     * @see org.solmix.runtime.Context#getAttribute(java.lang.String)
      */
     @Override
     public Object getAttribute(String name) {
@@ -238,7 +238,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#getAttributes()
+     * @see org.solmix.runtime.Context#getAttributes()
      */
     @Override
     public Map<String, Object> getAttributes() {
@@ -252,7 +252,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#release()
+     * @see org.solmix.runtime.Context#release()
      */
     @Override
     public void release() {
@@ -263,8 +263,8 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#setAttribute(java.lang.String, java.lang.Object,
-     *      org.solmix.api.context.Context.Scope)
+     * @see org.solmix.runtime.Context#setAttribute(java.lang.String, java.lang.Object,
+     *      org.solmix.runtime.Context.Scope)
      */
     @Override
     public void setAttribute(String name, Object value, Scope scope) {
@@ -275,7 +275,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#getAttribute(java.lang.String, org.solmix.api.context.Context.Scope)
+     * @see org.solmix.runtime.Context#getAttribute(java.lang.String, org.solmix.runtime.Context.Scope)
      */
     @Override
     public Object getAttribute(String name, Scope scope) {
@@ -285,7 +285,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#getAttributes(org.solmix.api.context.Context.Scope)
+     * @see org.solmix.runtime.Context#getAttributes(org.solmix.runtime.Context.Scope)
      */
     @Override
     public Map<String, Object> getAttributes(Scope scope) {
@@ -295,7 +295,7 @@ public abstract class AbstractContext implements Context
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.Context#removeAttribute(java.lang.String, org.solmix.api.context.Context.Scope)
+     * @see org.solmix.runtime.Context#removeAttribute(java.lang.String, org.solmix.runtime.Context.Scope)
      */
     @Override
     public void removeAttribute(String name, Scope scope) {

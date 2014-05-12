@@ -34,7 +34,7 @@ import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.call.DSCallManager;
 import org.solmix.api.call.DSCallManagerFactory;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.SlxContext;
 

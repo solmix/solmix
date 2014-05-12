@@ -2,13 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>modules</artifactId>
-    <groupId>org.solmix</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <groupId>org.solmix.modules</groupId>
+    <version>0.5.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>org.solmix.modules</groupId>
-  <artifactId>org.solmix.modules.jpa</artifactId>
-  <packaging>bundle</packaging>
+  <artifactId>solmix-modules-jpa</artifactId>
   <name>Solmix :: Module :: DataSource :: JPA</name>
   <dependencies>
   	<!-- <dependency>
@@ -59,15 +57,15 @@
 			<optional>true</optional>
 		</dependency>
   	<dependency>
-  		<groupId>org.solmix.framework</groupId>
-  		<artifactId>org.solmix.framework.datasource</artifactId>
-  	</dependency>
-  	<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.3.172</version>
 			<scope>test</scope>
 		</dependency>
+  	<dependency>
+  		<groupId>org.solmix.framework</groupId>
+  		<artifactId>solmix-framework-datasource</artifactId>
+  	</dependency>
   </dependencies>
   <build>
 		<plugins>

@@ -20,7 +20,7 @@
 package org.solmix.fmk.event;
 
 import org.osgi.framework.BundleContext;
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.api.event.EventManager;
 import org.solmix.api.event.IEvent;
 import org.solmix.api.event.IValidationEvent;

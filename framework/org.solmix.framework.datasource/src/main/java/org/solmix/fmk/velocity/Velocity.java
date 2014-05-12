@@ -34,7 +34,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;

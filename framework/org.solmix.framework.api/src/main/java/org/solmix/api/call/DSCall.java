@@ -22,7 +22,7 @@ package org.solmix.api.call;
 import java.util.List;
 import java.util.Map;
 
-import org.solmix.api.context.Context;
+import org.solmix.runtime.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;

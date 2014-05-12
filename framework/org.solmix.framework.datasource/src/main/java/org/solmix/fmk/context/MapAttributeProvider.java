@@ -23,7 +23,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.solmix.api.context.AttributeProvider;
-import org.solmix.api.context.Context.Scope;
+import org.solmix.runtime.Context.Scope;
 
 /**
  * 

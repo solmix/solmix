@@ -21,7 +21,7 @@ package org.solmix.web.context;
 
 import javax.servlet.ServletContext;
 
-import org.solmix.api.context.SystemContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.fmk.context.spring.SpringSystemContextFactory;
 
 /**

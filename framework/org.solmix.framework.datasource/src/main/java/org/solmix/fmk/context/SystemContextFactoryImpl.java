@@ -18,8 +18,8 @@
  */
 package org.solmix.fmk.context;
 
-import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.SystemContextFactory;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.SystemContextFactory;
 
 
 /**
@@ -34,7 +34,7 @@ public class SystemContextFactoryImpl extends SystemContextFactory
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContextFactory#createContext()
+     * @see org.solmix.runtime.SystemContextFactory#createContext()
      */
     @Override
     public SystemContext createContext() {

@@ -30,8 +30,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.bean.ConfiguredBeanProvider;
-import org.solmix.api.context.SystemContext;
-import org.solmix.api.context.SystemContextFactory;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.SystemContextFactory;
 
 /**
  * 
@@ -91,7 +91,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#getBean(java.lang.Class)
+     * @see org.solmix.runtime.SystemContext#getBean(java.lang.Class)
      */
     @Override
     public <T> T getBean(Class<T> beanType) {
@@ -165,7 +165,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#setBean(java.lang.Object, java.lang.Class)
+     * @see org.solmix.runtime.SystemContext#setBean(java.lang.Object, java.lang.Class)
      */
     @Override
     public <T> void setBean(T bean, Class<T> beanType) {
@@ -176,7 +176,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#hasBeanByName(java.lang.String)
+     * @see org.solmix.runtime.SystemContext#hasBeanByName(java.lang.String)
      */
     @Override
     public boolean hasBeanByName(String name) {
@@ -198,7 +198,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#getId()
+     * @see org.solmix.runtime.SystemContext#getId()
      */
     @Override
     public String getId() {
@@ -208,7 +208,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#open()
+     * @see org.solmix.runtime.SystemContext#open()
      */
     @Override
     public void open() {
@@ -228,7 +228,7 @@ public class SystemContextImpl extends AbstractContext implements SystemContext
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.SystemContext#close(boolean)
+     * @see org.solmix.runtime.SystemContext#close(boolean)
      */
     @Override
     public void close(boolean wait) {

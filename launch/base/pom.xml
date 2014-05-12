@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>solmix</artifactId>
 		<groupId>org.solmix</groupId>
-		<version>0.4.1-SNAPSHOT</version>
+		<version>0.5.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<groupId>org.solmix.launch</groupId>
-	<artifactId>org.solmix.launch.base</artifactId>
+	<artifactId>solmix-launch-base</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -154,4 +154,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<name>Solmix :: Launch :: Base</name>
 </project>

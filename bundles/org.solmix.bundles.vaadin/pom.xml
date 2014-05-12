@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>bundles</artifactId>
-    <groupId>org.solmix</groupId>
-    <version>0.4.1-SNAPSHOT</version>
+    <groupId>org.solmix.bundles</groupId>
+    <version>0.5.0</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>org.solmix.bundles.vaadin</groupId>

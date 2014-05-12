@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.solmix</groupId>
+		<groupId>org.solmix.assemblies</groupId>
 		<artifactId>assemblies</artifactId>
-		<version>0.4.1-SNAPSHOT</version>
+		<version>0.5.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
-	<groupId>org.solmix.assemblies</groupId>
-	<artifactId>org.solmix.assemblies.launcher</artifactId>
+	<artifactId>solmix-assemblies-launcher</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -126,12 +126,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.bundles</groupId>
-			<artifactId>org.solmix.bundles.dbcp</artifactId>
-			<version>${commons-dbcp.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<scope>runtime</scope>
@@ -148,7 +142,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.launch</groupId>
-			<artifactId>org.solmix.launch.base</artifactId>
+			<artifactId>solmix-launch-base</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -216,49 +210,54 @@
 			<artifactId>geronimo-jta_1.1_spec</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.services</groupId>
-			<artifactId>event-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.util</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.pool</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.dsrepo</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.datasource</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.engine</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.solmix.modules</groupId>
-			<artifactId>org.solmix.modules.sql</artifactId>
+			<artifactId>solmix-modules-sql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.framework</groupId>
-			<artifactId>org.solmix.framework.web</artifactId>
+			<artifactId>solmix-framework-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-engine</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.solmix.services</groupId>
+			<artifactId>services-event-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.common</groupId>
+			<artifactId>solmix-common-runtime</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.common</groupId>
+			<artifactId>solmix-common-util</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-pool</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-dsrepo</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.framework</groupId>
+			<artifactId>solmix-framework-datasource</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
