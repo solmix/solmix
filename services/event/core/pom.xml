@@ -40,13 +40,21 @@
 			<artifactId>org.apache.aries.blueprint.core</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.solmix.framework</groupId>
 			<artifactId>solmix-framework-api</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.common</groupId>
+			<artifactId>solmix-common-runtime</artifactId>
 		</dependency>
 	</dependencies>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix.eventservice</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.eventservice,org.osgi.service.event</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.eclipse.ecf.core.sharedobject;resolution:=optional,
 			org.solmix.api.event;resolution:=optional,

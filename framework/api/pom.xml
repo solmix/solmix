@@ -105,7 +105,7 @@
 		</pluginManagement>
   </build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix,org.solmix.api*,org.osgi.service.event</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix,org.solmix.api*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.dom4j;resolution:=optional,
 			org.springframework*;resolution:=optional;version="${spring.version}",

@@ -19,7 +19,6 @@
 package org.solmix.runtime.cm.support;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -67,10 +66,6 @@ public class ConfigureUnitImpl implements ConfigureUnit
        
         return internal;
     }
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static Map wrap(Map properties) {
-        return properties == null ? Collections.emptyMap() : Collections.unmodifiableMap( properties );
-  }
   
     @Override
     public void delete() throws IOException {

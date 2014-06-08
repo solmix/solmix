@@ -52,7 +52,7 @@ public class DatasourceCM
 
     public static final String P_SHOW_CLIENT_OUTPUT = "showClientOutput";
 
-    public static final String SLX_VERSION_NUMBER = "0.4-SNAPHOST";
+    public static final String SLX_VERSION_NUMBER = "0.5.1-SNAPHOST";
 
     public static String DEFAULT_PARSER = "default";
 

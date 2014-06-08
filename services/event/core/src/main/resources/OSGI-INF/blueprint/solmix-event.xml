@@ -20,10 +20,10 @@
 		<property name="bundleContext" ref="blueprintBundleContext" />
 	</bean>
 
-	<bean id="org.solmix.api.event.EventManager" class="org.solmix.eventservice.EventManagerImpl">
+	<!-- <bean id="org.solmix.api.event.EventManager" class="org.solmix.eventservice.EventManagerImpl">
 		<argument ref="solmix" />
 		<property name="eventAdmin" ref="eventadmin" />
-	</bean>
+	</bean> -->
 
 	<service interface="org.osgi.service.event.EventAdmin" ref="eventadmin"></service>
 	<service interface="org.osgi.service.cm.ManagedService" ref="eventadmin">

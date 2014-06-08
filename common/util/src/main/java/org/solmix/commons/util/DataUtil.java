@@ -2447,7 +2447,7 @@ public final class DataUtil
      * @param files
      * @return
      */
-    public static boolean isNullOrEmpty(List<?> list) {
+    public static boolean isNullOrEmpty(Collection<?> list) {
         return list == null || list.size() < 1;
     }
 

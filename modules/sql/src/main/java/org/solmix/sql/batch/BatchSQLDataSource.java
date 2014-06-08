@@ -79,6 +79,8 @@ public final class BatchSQLDataSource
         DSResponse __resp = new DSResponseImpl(ds,req);
         DataSourceData data = ds.getContext();
         Connection conn = null;
+        PreparedStatement pstmt=null;
+        ResultSet rs=null;
         try {
             Map context = Velocity.getStandardContextMap(req);
             conn = connectionManager.get(getDbName(data));
@@ -91,8 +93,8 @@ public final class BatchSQLDataSource
             String explictSQL = Velocity.evaluateAsString(sql, context);
 
             conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = pstmt.executeQuery(explictSQL);
+             pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+             rs = pstmt.executeQuery(explictSQL);
             List<String> columns = new ArrayList<String>();
             List<List<Object>> result = SQLTransform.toFormatList(rs, columns);
             int row = result.size();
@@ -117,6 +119,13 @@ public final class BatchSQLDataSource
             throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
 
         } finally {
+            try {
+                if(rs!=null)
+                    rs.close();
+                if(pstmt!=null)
+                    pstmt.close();
+            } catch (SQLException e) {//ignore
+            }
             connectionManager.free(conn);
         }
         return __resp;
@@ -125,6 +134,7 @@ public final class BatchSQLDataSource
     public DSResponse add(DSRequest req, DataSource ds) throws SlxException {
         DSResponse __resp = new DSResponseImpl(ds,req);
         Connection conn = null;
+        PreparedStatement pre=null;
         List data_holder = null;
         String explictSQL = "";
         List<Object> columnNames = null;
@@ -160,7 +170,7 @@ public final class BatchSQLDataSource
 
             conn = connectionManager.get(getDbName(data));
 
-            PreparedStatement pre = conn.prepareStatement(explictSQL);
+             pre = conn.prepareStatement(explictSQL);
             int affectRow = 0;
             boolean first = true;
             for (int i = 0; i < values.size() - 1; i++) {
@@ -239,6 +249,11 @@ public final class BatchSQLDataSource
             __resp.setStatus(Status.STATUS_FAILURE);
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } finally {
+            try {
+                if(pre!=null)
+                    pre.close();
+            } catch (SQLException e) {
+            }
             if (conn != null)
                 connectionManager.free(conn);
 
