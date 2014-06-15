@@ -22,7 +22,6 @@ package org.solmix.sql;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +43,7 @@ import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.util.ServiceUtil;
@@ -120,7 +120,7 @@ public class ConnectionManagerImpl implements ConnectionManager
             if (poolManagerFactory == null) {
                 poolManagerFactory = sc.getBean(PoolManagerFactory.class);
             }
-            manager = poolManagerFactory.createPoolManager("sql", new PoolableSQLConnectionFactory(sc));
+            manager = poolManagerFactory.createPoolManager("sql", new PoolableSQLConnectionFactory(this,sc));
         }
         return manager;
     }
@@ -132,10 +132,7 @@ public class ConnectionManagerImpl implements ConnectionManager
         this.manager = manager;
     }
 
-    @Override
-    public Connection get() throws SlxException {
-        return get(null);
-    }
+
 
     protected static DataSource getInternalDs(String dbName, DataTypeMap dbConfig) throws SlxException {
         Lock l = new ReentrantLock();
@@ -166,123 +163,41 @@ public class ConnectionManagerImpl implements ConnectionManager
 
     }
 
-    protected static Connection getInternalConn(String dbName, EInterfaceType type, DataTypeMap dbConfig) throws SlxException {
-        if (type == null || dbConfig == null)
-            return null;
-        Connection __return = null;
-        try {
-            switch (type) {
-                case JNDIOSGI: {
-                    String filterName = dbConfig.getString("jndiosgi");
-
-                    DataSource ds = lookupDataSource(filterName);
-                    __return = ds.getConnection();
-                    break;
-                }
-                case OSGI: {
-                    String filterName = dbConfig.getString("osgi");
-                    List<DataSource> objs = ServiceUtil.getOSGIServices(DataSource.class, filterName);
-                    DataSource obj = null;
-                    if (objs != null && objs.size() == 1)
-                        obj = objs.get(0);
-                    if (obj != null) {
-                        __return = obj.getConnection();
-                    } else {
-                        throw new SlxException(Tmodule.SQL, Texception.OBJECT_TYPE_NOT_ADAPTED, "can not find a adapter for datasource");
-                    }
-                    break;
-                }
-                case DATASOURCE: {
-
-                    DataSource ds = getInternalDs(dbName, dbConfig);
-                    try {
-
-                        __return = ds.getConnection();
-                    } catch (Exception e) {
-                        throw new SlxException(Tmodule.SQL, Texception.DEFAULT, "can not  initial datasource");
-                    }
-                    break;
-                }
-
-                case DRIVERMANAGER: {
-                    Boolean credentialsSetting = dbConfig.getBoolean("interface.credentialsInURL");
-                    DataTypeMap driverConfig = dbConfig.getSubtree("driver");
-                    String username = driverConfig.getString("username");
-                    String password = driverConfig.getString("password");
-                    String jdbcURL = driverConfig.getString("url");
-                    boolean credentialsInURL = credentialsSetting != null && credentialsSetting.booleanValue();
-                    if (jdbcURL == null)
-                        jdbcURL = (new StringBuilder()).append("jdbc:").append(driverConfig.getString("driverName")).append("://").append(
-                            driverConfig.getString("serverName")).append(":").append(driverConfig.get("portNumber")).append("/").append(
-                            driverConfig.get("databaseName")).append(
-                            credentialsInURL ? (new StringBuilder()).append("?user=").append(username).append("&password=").append(password).toString()
-                                : "").toString();
-                    Class<?> driver = null;
-                    String dmImplementer = dbConfig.getString("driver");
-                    if (log.isDebugEnabled()) {
-                        log.debug((new StringBuilder()).append("Initializing SQL config for '").append(dbName).append("' from system config").append(
-                            " - using DriverManager:  ").append(dmImplementer).toString());
-                    }
-                    try {
-                        driver = Reflection.classForName(dmImplementer);
-                    } catch (Exception e) {
-                        throw new SlxException(Tmodule.SQL, Texception.REFLECTION_EXCEPTION, "can't find class :" + dmImplementer);
-                    }
-                    if (driver != null) {
-                        log.debug((new StringBuilder()).append(dmImplementer).append(" lookup successful").toString());
-                    }
-                    if (!credentialsInURL) {
-                        log.debug("Passing credentials getConnection separately from JDBC URL");
-                        __return = DriverManager.getConnection(jdbcURL, username, password);
-                    } else {
-                        log.debug("Passing JDBC URL only to getConnection");
-                        __return = DriverManager.getConnection(jdbcURL);
-                    }
-
-                    break;
-                }
-                case JNDI: {
-                    String jndi = dbConfig.getString("jndi");
-                    Object dataSource = ServiceUtil.getJNDIService(jndi);
-                    if (dataSource instanceof DataSource) {
-                        __return = ((DataSource) dataSource).getConnection();
-                    } else {
-                        throw new SlxException(Tmodule.SQL, Texception.OBJECT_TYPE_NOT_ADAPTED, "can not find a adapter for datasource");
-                    }
-                    break;
-                }
-                default: {
-                    throw new SlxException(Tmodule.POOL, Texception.NO_SUPPORT, "Unsupported interface type " + type + " for database " + dbName
-                        + " - check your config.");
-                }
-            }
+    protected  Connection getInternalConn(String dbName, DataTypeMap dbConfig) throws SlxException {
+       DataSource ds= getDataSource(dbName, dbConfig);
+       try{
+       if(ds!=null)
+           return ds.getConnection();
+       else
+           throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, "");
+       
         } catch (SQLException e) {
             throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e.getMessage(), e);
         }
-        return __return;
 
     }
 
     @Override
-    public Connection get(String dbName) throws SlxException {
-        if (DataUtil.isNullOrEmpty(dbName))
-            dbName = getSqlConfig().getString(SqlCM.P_DEFAULT_DATABASE, SqlCM.DEFAULT_DATABASE);
+    public Connection getConnection(String dbName) throws SlxException {
+        if (dbName==null)
+            dbName = getDefaultDbName();
         Connection __return = null;
         DataTypeMap dbConfig = getSqlConfig().getSubtree(dbName);
         Boolean usedPool = dbConfig.getBoolean(SQLDataSource.USED_POOL);
         if (usedPool == null || usedPool.booleanValue())
             __return = (Connection) getManager().borrowObject(dbName);
         else {
-            String _interfaceType = dbConfig.getString(SQLDataSource.INTERFACE_TYPE);
-            EInterfaceType type = EInterfaceType.fromValue(_interfaceType);
-            __return = getInternalConn(dbName, type, dbConfig);
+            __return = getInternalConn(dbName,  dbConfig);
         }
         // markAsReferenced(dbName);
         writeOpenConnectionEntry(__return, "get");
         return __return;
     }
 
-
+    protected String getDefaultDbName() throws SlxException {
+        return getSqlConfig().getString(SqlCM.P_DEFAULT_DATABASE,
+            SqlCM.DEFAULT_DATABASE);
+    }
     /**
      * for JNDI lookup datasource in the context.
      * 
@@ -383,7 +298,7 @@ public class ConnectionManagerImpl implements ConnectionManager
      * @throws SlxException
      */
     @Override
-    public void free(Connection conn) throws SlxException {
+    public void freeConnection(Connection conn) throws SlxException {
         try {
             if (conn == null)
                 return;
@@ -402,20 +317,20 @@ public class ConnectionManagerImpl implements ConnectionManager
 
     }
 
-    
 
     @Override
-    public Connection getNew() throws SlxException {
-        return getNew(null);
-    }
-
-    @Override
-    public Connection getNew(String dbName) throws SlxException {
+    public Connection getNewConnection(String dbName) throws SlxException {
         Connection __return;
         if (dbName == null)
             dbName = getSqlConfig().getString(SqlCM.P_DEFAULT_DATABASE, SqlCM.DEFAULT_DATABASE);
         try {
-            __return = (Connection) getManager().borrowNewObject(dbName);
+            DataTypeMap dbConfig = getSqlConfig().getSubtree(dbName);
+            Boolean usedPool = dbConfig.getBoolean(SQLDataSource.USED_POOL);
+            if (usedPool == null || usedPool.booleanValue())
+                __return = (Connection) getManager().borrowObject(dbName);
+            else {
+                __return = getInternalConn(dbName, dbConfig);
+            }
         } catch (Exception e) {
             throw new SlxException(Tmodule.SQL, Texception.POOL_BORROW_OBJECT_FAILD, e);
         }
@@ -433,5 +348,161 @@ public class ConnectionManagerImpl implements ConnectionManager
     @Override
     public PoolManagerFactory getPoolManagerFactory() {
         return poolManagerFactory;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#freeConnection(java.sql.Connection)
+     */
+    @Override
+    public void free(Connection conn) throws SlxException {
+       freeConnection(conn);
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#getConnection()
+     */
+    @Override
+    public Connection get() throws SlxException {
+        return getConnection(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#getConnection(java.lang.String)
+     */
+    @Override
+    public Connection get(String dbName) throws SlxException {
+        return getConnection(dbName);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#getNewConnection(java.lang.String)
+     */
+    @Override
+    public Connection getNew(String dbName) throws SlxException {
+        return getNewConnection(dbName);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#getNewConnection()
+     */
+    @Override
+    public Connection getNew() throws SlxException {
+        return getNewConnection(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.sql.ConnectionManager#getDataSource(java.lang.String)
+     */
+    @Override
+    public DataSource getDataSource(String dbName) throws SlxException {
+        if (dbName==null)
+            dbName = getDefaultDbName();
+        DataTypeMap dbConfig = getSqlConfig().getSubtree(dbName);
+        
+        return getDataSource(dbName,dbConfig);
+    }
+
+    private DataSource getDataSource(String dbName, DataTypeMap dbConfig) throws SlxException {
+        Assert.isNotNull(dbConfig);
+        String _interfaceType = dbConfig.getString(SQLDataSource.INTERFACE_TYPE);
+        EInterfaceType type = EInterfaceType.fromValue(_interfaceType);
+        DataSource __return = null;
+            switch (type) {
+                case JNDIOSGI: {
+                    String filterName = dbConfig.getString("jndiosgi");
+                    __return = lookupDataSource(filterName);
+                    break;
+                }
+                case OSGI: {
+                    String filter = dbConfig.getString("osgi");
+                    List<DataSource> objs = ServiceUtil.getOSGIServices(
+                        DataSource.class, filter);
+                    if (objs != null && objs.size() == 1)
+                        __return = objs.get(0);
+                    if (objs.size() > 1) {
+                        log.warn("found more than one Jdbc DataSource for filter:"
+                            + filter + ",Just select first one");
+                        __return = objs.get(0);
+                    }
+                    break;
+                }
+                case DATASOURCE: {
+
+                    __return = getInternalDs(dbName, dbConfig);
+                    break;
+                }
+
+                case DRIVERMANAGER: {
+                    boolean credentialsInURL = dbConfig.getBoolean(
+                        "interface.credentialsInURL", false);
+                    DataTypeMap driverConfig = dbConfig.getSubtree("driver");
+                    String username = driverConfig.getString("username");
+                    String password = driverConfig.getString("password");
+                    String jdbcURL = driverConfig.getString("url");
+                    if (jdbcURL == null)
+                        jdbcURL = new StringBuilder().append("jdbc:").append(
+                            driverConfig.getString("driverName")).append("://").append(
+                            driverConfig.getString("serverName")).append(":").append(
+                            driverConfig.get("portNumber")).append("/").append(
+                            driverConfig.get("databaseName")).append(
+                            credentialsInURL ? (new StringBuilder()).append(
+                                "?user=").append(username).append("&password=").append(
+                                password).toString()
+                                : "").toString();
+                    Class<?> driver = null;
+                    String dmImplementer = dbConfig.getString("driver");
+                    if (log.isDebugEnabled()) {
+                        log.debug((new StringBuilder()).append(
+                            "Initializing SQL config for '").append(dbName).append(
+                            "' from system config").append(
+                            " - using DriverManager:  ").append(dmImplementer).toString());
+                    }
+                    try {
+                        driver = Reflection.classForName(dmImplementer);
+                    } catch (Exception e) {
+                        throw new SlxException(Tmodule.SQL,
+                            Texception.REFLECTION_EXCEPTION,
+                            "can't find class :" + dmImplementer);
+                    }
+                    if (driver != null) {
+                        log.debug((new StringBuilder()).append(dmImplementer).append(
+                            " lookup successful").toString());
+                    }
+                    __return= new DriverManagerDataSource(jdbcURL, username, password, credentialsInURL);
+                   
+                    break;
+                }
+                case JNDI: {
+                    String jndi = dbConfig.getString("jndi");
+                    Object dataSource = ServiceUtil.getJNDIService(jndi);
+                    if (dataSource instanceof DataSource) {
+                        __return = (DataSource) dataSource;
+                    } else {
+                        throw new SlxException(Tmodule.SQL,
+                            Texception.OBJECT_TYPE_NOT_ADAPTED,
+                            "can not find a adapter for datasource");
+                    }
+                    break;
+                }
+                default: {
+                    throw new SlxException(Tmodule.POOL, Texception.NO_SUPPORT,
+                        "Unsupported interface type " + type + " for database "
+                            + dbName + " - check your config.");
+                }
+            }
+        return __return;
     }
 }

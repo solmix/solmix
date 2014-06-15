@@ -335,7 +335,7 @@ public abstract class SQLDriver
             if (dbName == null)
                 dbName = thisConfig.getString("defaultDatabase", null);
             if (conn == null) {
-                conn = connectionManager.get(dbName);
+                conn = connectionManager.getConnection(dbName);
                 __colseConn = true;
                 if (driver != null && driver.connection == null) {
                     driver.connection = conn;
@@ -372,8 +372,8 @@ public abstract class SQLDriver
             if (__userOrAutoTransaction) {
                 log.info("  - assuming the connection is staled and retrying query.");
                 try {
-                    connectionManager.free(conn);
-                    conn = connectionManager.getNew(dbName);
+                    connectionManager.freeConnection(conn);
+                    conn = connectionManager.getNewConnection(dbName);
                     __currentConn = conn;
                     if (driver != null) {
                         driver.connection = conn;
@@ -440,7 +440,7 @@ public abstract class SQLDriver
      * @throws Exception
      */
     public  int update(String update, List data, String dbName, DSRequest req) throws Exception {
-        return update(update, data, connectionManager.get(dbName), dbName, null, req);
+        return update(update, data, connectionManager.getConnection(dbName), dbName, null, req);
     }
 
     /**
@@ -468,7 +468,7 @@ public abstract class SQLDriver
         // NO set DSCall transaction ,no global transaction
         if (__userOrAutoConn == null) {
             if (conn == null) {
-                conn = connectionManager.get(dbName);
+                conn = connectionManager.getConnection(dbName);
                 if (driver != null)
                     driver.connection = conn;
             }
@@ -486,8 +486,8 @@ public abstract class SQLDriver
             __return = doUpdate(update, data, __currentConn, req, driver);
         } catch (SlxException e) {
             if (__userOrAutoTransaction) {
-                connectionManager.free(conn);
-                conn = connectionManager.getNew(dbName);
+                connectionManager.freeConnection(conn);
+                conn = connectionManager.getNewConnection(dbName);
                 if (driver != null)
                     driver.connection = conn;
                 __return = doUpdate(update, data, conn, req,driver);
@@ -497,7 +497,7 @@ public abstract class SQLDriver
             }
         } finally {
             if (!__userOrAutoTransaction && driver == null)
-                connectionManager.free(conn);
+                connectionManager.freeConnection(conn);
         }
         return __return;
     }
@@ -689,7 +689,7 @@ public abstract class SQLDriver
     public synchronized void freeConnection() {
         if (connection != null) {
             try {
-                connectionManager.free(connection);
+                connectionManager.freeConnection(connection);
             } catch (Exception ignored) {
             }
             connection = null;
@@ -755,7 +755,7 @@ public abstract class SQLDriver
         Connection conn = this.connection;
         boolean __colseConn = false;
         if (conn == null) {
-            conn = connectionManager.get(dbName);
+            conn = connectionManager.getConnection(dbName);
             __colseConn = true;
             if (this.connection == null) {
                 this.connection = conn;
@@ -815,7 +815,7 @@ public abstract class SQLDriver
             throw new SlxException(Tmodule.SQL, Texception.IO_EXCEPTION, e);
         } finally {
             if (__colseConn)
-                connectionManager.free(conn);
+                connectionManager.freeConnection(conn);
         }
 
         return 0;

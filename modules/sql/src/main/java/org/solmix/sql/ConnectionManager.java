@@ -21,6 +21,8 @@ package org.solmix.sql;
 
 import java.sql.Connection;
 
+import javax.sql.DataSource;
+
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.pool.PoolManagerFactory;
 
@@ -33,15 +35,30 @@ import org.solmix.api.pool.PoolManagerFactory;
 public interface ConnectionManager
 {
 
+    @Deprecated
     void free(Connection conn) throws SlxException;
 
+    @Deprecated
     Connection get() throws SlxException;
 
+    @Deprecated
     Connection get(String dbName) throws SlxException;
 
+    @Deprecated
     Connection getNew(String dbName) throws SlxException;
 
+    @Deprecated
     Connection getNew() throws SlxException;
+
+    void freeConnection(Connection conn) throws SlxException;
+
+
+    Connection getConnection(String dbName) throws SlxException;
+
+    Connection getNewConnection(String dbName) throws SlxException;
+
+    
+    DataSource getDataSource(String dbName)throws SlxException;
 
     PoolManagerFactory getPoolManagerFactory();
 

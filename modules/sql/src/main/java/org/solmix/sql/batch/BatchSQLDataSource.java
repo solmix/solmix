@@ -71,7 +71,7 @@ public final class BatchSQLDataSource
     }
 
     public void freeConnection(Connection connection) throws SlxException {
-        connectionManager.free(connection);
+        connectionManager.freeConnection(connection);
 
     }
 
@@ -83,7 +83,7 @@ public final class BatchSQLDataSource
         ResultSet rs=null;
         try {
             Map context = Velocity.getStandardContextMap(req);
-            conn = connectionManager.get(getDbName(data));
+            conn = connectionManager.getConnection(getDbName(data));
             Eoperation _optType = req.getContext().getOperationType();
             String _opID = req.getContext().getOperationId();
             ToperationBinding _bind = data.getOperationBinding(_optType, _opID);
@@ -126,7 +126,7 @@ public final class BatchSQLDataSource
                     pstmt.close();
             } catch (SQLException e) {//ignore
             }
-            connectionManager.free(conn);
+            connectionManager.freeConnection(conn);
         }
         return __resp;
     }
@@ -168,7 +168,7 @@ public final class BatchSQLDataSource
             Map context = Velocity.getStandardContextMap(req);
             explictSQL = Velocity.evaluateAsString(sql, context);
 
-            conn = connectionManager.get(getDbName(data));
+            conn = connectionManager.getConnection(getDbName(data));
 
              pre = conn.prepareStatement(explictSQL);
             int affectRow = 0;
@@ -255,7 +255,7 @@ public final class BatchSQLDataSource
             } catch (SQLException e) {
             }
             if (conn != null)
-                connectionManager.free(conn);
+                connectionManager.freeConnection(conn);
 
         }
         return __resp;

@@ -82,7 +82,7 @@ public class SQLTransaction
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
         Connection conn = (Connection) rpc.getAttribute(connectionKey);
         if (conn == null) {
-            conn = connectionManager.get(dbName);
+            conn = connectionManager.getConnection(dbName);
             try {
                 conn.setAutoCommit(false);
             } catch (SQLException e) {
@@ -184,7 +184,7 @@ public class SQLTransaction
                 dbName).append("'").toString());
         } else {
             log.debug((new StringBuilder()).append("Ending transaction \"").append(connection.hashCode()).append("\"").toString());
-            connectionManager.free(connection);
+            connectionManager.freeConnection(connection);
             rpc.removeAttribute(DBNAME_ATTR);
             rpc.removeAttribute(connectionKey);
             return;

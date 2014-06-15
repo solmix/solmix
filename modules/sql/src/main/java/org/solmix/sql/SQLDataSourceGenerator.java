@@ -191,7 +191,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             data.setTitle("Auto Gernerated " + ID);
             if (connection == null) {
                 freeConnection = true;
-                connection = connectionManager.get(dbName);
+                connection = connectionManager.getConnection(dbName);
             }
             try {
                 fields = this.autoDeriveSchemaOperation != null ? this.getFieldsFromOperation(autoDeriveSchemaOperation) : getFieldsFromTable();
@@ -211,7 +211,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
                 data.setOperationBindings(binds);
             }
             if (freeConnection)
-                connectionManager.free(connection);
+                connectionManager.freeConnection(connection);
             return data;
 
         }
@@ -226,7 +226,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             List<Tfield> fields = null;
             if (connection == null) {
                 freeConnection = true;
-                connection = connectionManager.get(dbName);
+                connection = connectionManager.getConnection(dbName);
             }
             SQLMetaData md = new SQLMetaData(connection, connectionManager);
             String catalog = connection.getCatalog();
@@ -289,7 +289,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
                 }
             } while (true);
             if (freeConnection)
-                connectionManager.free(connection);
+                connectionManager.freeConnection(connection);
             return fields;
         }
 
@@ -298,7 +298,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
             List<Tfield> fields = null;
             if (connection == null) {
                 freeConnection = true;
-                connection = connectionManager.get(dbName);
+                connection = connectionManager.getConnection(dbName);
             }
             String query = operation.getCommand();
             if (query == null)
@@ -354,7 +354,7 @@ public class SQLDataSourceGenerator implements DataSourceGenerator
                 fields.add(dsField);
             }
             if (freeConnection)
-                connectionManager.free(connection);
+                connectionManager.freeConnection(connection);
             return fields;
 
         }

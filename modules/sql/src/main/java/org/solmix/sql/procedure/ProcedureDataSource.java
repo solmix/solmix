@@ -95,7 +95,7 @@ public final class ProcedureDataSource
             if (printSQL)
                 log.info(explictSQL);
             connectionManager= sc.getBean(ConnectionManager.class);
-            conn = connectionManager.get(getDbName(data));
+            conn = connectionManager.getConnection(getDbName(data));
             CallableStatement pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);
             int inputLength = l.size();
@@ -155,7 +155,7 @@ public final class ProcedureDataSource
             log.error("[PROCEDURE-EXCEPTION]" ,e);
         } finally {
             if (conn != null)
-                connectionManager.free(conn);
+                connectionManager.freeConnection(conn);
 
         }
         return __resp;

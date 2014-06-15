@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
-import org.solmix.runtime.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
@@ -68,6 +67,7 @@ import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.fmk.velocity.Velocity;
+import org.solmix.runtime.SystemContext;
 import org.solmix.sql.EscapedValuesMap.Mode;
 import org.solmix.sql.internal.SqlCM;
 
@@ -634,12 +634,12 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             } catch (SQLException e) {
                 if (__userTransaction) {
                     try {
-                        connectionManager.free(__currentConn);
-                        __currentConn = connectionManager.getNew(_driver.getDbName());
+                        connectionManager.freeConnection(__currentConn);
+                        __currentConn = connectionManager.getNewConnection(_driver.getDbName());
                         s = _driver.createFetchStatement(__currentConn);
                         rs = s.executeQuery(query);
                     } catch (SQLException sql1) {
-                        connectionManager.free(__currentConn);
+                        connectionManager.freeConnection(__currentConn);
                         throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, sql1);
                     }
                 } else {
@@ -665,7 +665,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             } catch (Exception ignored) {
             }
             if (!__userTransaction)
-                connectionManager.free(__currentConn);
+                connectionManager.freeConnection(__currentConn);
         }
     }
 
@@ -1344,7 +1344,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
 
     @Override
     public void freeConnection(Connection conn) throws SlxException {
-        connectionManager.free(conn);
+        connectionManager.freeConnection(conn);
     }
 
     /**

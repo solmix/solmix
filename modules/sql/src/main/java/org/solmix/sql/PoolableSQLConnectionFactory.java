@@ -24,8 +24,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp.PoolableConnection;
 import org.apache.commons.pool.ObjectPool;
 import org.slf4j.Logger;
@@ -46,14 +44,13 @@ import org.solmix.runtime.cm.ConfigureUnitManager;
  * 
  * 
  */
-public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Connection>
+public class PoolableSQLConnectionFactory extends
+    SlxPoolableObjectFactory<Connection>
 {
 
     private static Logger log = LoggerFactory.getLogger(PoolableSQLConnectionFactory.class.getName());
 
-    private final boolean autoDeriveConfig;
-
-    private EInterfaceType interfaceType;
+    private final ConnectionManagerImpl connectionManager;
 
     private String serverName;
 
@@ -61,51 +58,24 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
 
     private String pingTest;
 
-    private DataSource ds;
+    private final SystemContext sc;
 
-    private SystemContext sc;
-
-
-    public PoolableSQLConnectionFactory()
+    PoolableSQLConnectionFactory(String serverName, final SystemContext sc,
+        ConnectionManagerImpl connectionManager) throws SlxException
     {
-        autoDeriveConfig = false;
-        interfaceType = EInterfaceType.DATASOURCE;
-    }
-
-    public PoolableSQLConnectionFactory(String serverName,final SystemContext sc) throws SlxException
-    {
-        this(sc);
-       DataTypeMap serconfig= getConfig().getSubtree(serverName);
-       interfaceType = EInterfaceType.DATASOURCE;
-       this.serverName = serverName;
-       this.sqlConfig = serconfig;
-       EInterfaceType _interfaceType = EInterfaceType.fromValue(sqlConfig.getString("interface.type"));
-       if (_interfaceType == null)
-           log.warn((new StringBuilder()).append("sql.").append(serverName).append(".interface.type not set - assuming ").append(
-               this.interfaceType).toString());
-       else
-           this.interfaceType = _interfaceType;
-       if (!sqlConfig.getBoolean("autoDeriveConfig", false)) {
-           pingTest = sqlConfig.getString("pingTest");
-       }
+        this(connectionManager, sc);
+        DataTypeMap serconfig = getConfig().getSubtree(serverName);
+        this.serverName = serverName;
+        init(serverName, serconfig);
     }
 
     /**
      * @param serverName
      * @param subtree
      */
-    public PoolableSQLConnectionFactory(String serverName, DataTypeMap sqlConfig)
-    {
-        autoDeriveConfig = false;
-        interfaceType = EInterfaceType.DATASOURCE;
+    private void init(String serverName, DataTypeMap sqlConfig) {
         this.serverName = serverName;
         this.sqlConfig = sqlConfig;
-        EInterfaceType _interfaceType = EInterfaceType.fromValue(sqlConfig.getString("interface.type"));
-        if (_interfaceType == null)
-            log.warn((new StringBuilder()).append("sql.").append(serverName).append(".interface.type not set - assuming ").append(
-                this.interfaceType).toString());
-        else
-            this.interfaceType = _interfaceType;
         if (!sqlConfig.getBoolean("autoDeriveConfig", false)) {
             pingTest = sqlConfig.getString("pingTest");
         }
@@ -114,27 +84,26 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
     /**
      * @param sc
      */
-    public PoolableSQLConnectionFactory(final SystemContext sc)
+    public PoolableSQLConnectionFactory(
+        final ConnectionManagerImpl connectionManager, final SystemContext sc)
     {
-        autoDeriveConfig = false;
-        interfaceType = EInterfaceType.DATASOURCE;
-        this.sc=sc;
+        this.connectionManager = connectionManager;
+        this.sc = sc;
     }
-    protected DataTypeMap getConfig()  {
+
+    protected DataTypeMap getConfig() {
         ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
-        ConfigureUnit cu=null;
+        ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);
         } catch (IOException e) {
-            //ignore
+            // ignore
         }
         if (cu != null)
             return cu.getProperties();
         else
             return new DataTypeMap();
     }
-
-  
 
     /**
      * {@inheritDoc}
@@ -143,18 +112,8 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
      */
     @Override
     public Connection makeUnpooledObject() throws Exception {
-        switch (interfaceType) {
-            case DATASOURCE: {
-                if (ds == null) {
-                    ds = ConnectionManagerImpl.getInternalDs(serverName, sqlConfig);
-                }
-                return ds.getConnection();
-            }
-            default:
-                return ConnectionManagerImpl.getInternalConn(serverName, interfaceType, sqlConfig);
 
-        }
-
+        return connectionManager.getInternalConn(serverName, sqlConfig);
     }
 
     /**
@@ -165,7 +124,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
     @Override
     public void activateObject(Connection obj) throws Exception {
         numActivateObjectCalls++;
-       
+
     }
 
     /**
@@ -176,7 +135,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
     @Override
     public void destroyObject(Connection arg0) throws Exception {
         numDestroyObjectCalls++;
-       
+
     }
 
     /**
@@ -193,7 +152,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
             return conn;
         } else {
             log.debug("Returning pooled Connection");
-            return new PoolableConnection(conn,(ObjectPool)pool);
+            return new PoolableConnection(conn, (ObjectPool) pool);
         }
     }
 
@@ -216,16 +175,16 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
     public boolean validateObject(Connection obj) {
         Connection conn = obj;
         /**
-         * This method generally cannot be called to determine whether a connection to a database is valid or invalid. A typical client can determine that a connection is invalid by catching any exceptions that might be thrown when an operation is attempted.
+         * This method generally cannot be called to determine whether a
+         * connection to a database is valid or invalid. A typical client can
+         * determine that a connection is invalid by catching any exceptions
+         * that might be thrown when an operation is attempted.
          */
-       /* boolean isClosed = false;
-        try {
-            isClosed = conn.isClosed();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        if (isClosed)
-            return false;*/
+        /*
+         * boolean isClosed = false; try { isClosed = conn.isClosed(); } catch
+         * (SQLException e1) { e1.printStackTrace(); } if (isClosed) return
+         * false;
+         */
         try {
             if (pingTest != null) {
                 Statement s = conn.createStatement();
@@ -238,7 +197,7 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
             } catch (Exception ignored) {
             }
         }
-      
+
         return false;
     }
 
@@ -249,7 +208,8 @@ public class PoolableSQLConnectionFactory extends SlxPoolableObjectFactory<Conne
      */
     @Override
     public IPoolableObjectFactory newInstance(Object key) throws SlxException {
-        return new PoolableSQLConnectionFactory(key.toString(),sc);
+        return new PoolableSQLConnectionFactory(key.toString(), sc,
+            connectionManager);
     }
 
 }
