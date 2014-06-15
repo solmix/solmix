@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Roperation", propOrder = { "appID", "componentId", "dataSource", "operationType", "operationId", "repo", 
-    "outputs", "startRow", "endRow", "sortBy", "criteria", "values", "oldValues", "textMatchStyle", "requestId", "exportResults", "exportAs",
+    "outputs", "startRow", "endRow","totalRow", "sortBy", "criteria", "values", "oldValues", "textMatchStyle", "requestId", "exportResults", "exportAs",
     "exportFilename", "lineBreakStyle", "exportDelimiter", "exportTitleSeparatorChar","exportDatesAsFormattedString", "exportDisplay", "exportHeader", "exportFooter",
     "exportFields" })
 public class Roperation
@@ -66,7 +66,7 @@ public class Roperation
     protected int startRow;
 
     protected int endRow;
-
+    protected int totalRow;
     protected List<String> sortBy;
 
     @XmlJavaTypeAdapter(MapAdapter.class)
@@ -200,6 +200,22 @@ public class Roperation
      */
     public void setStartRow(int value) {
         this.startRow = value;
+    }
+
+    
+    /**
+     * @return the totalRow
+     */
+    public int getTotalRow() {
+        return totalRow;
+    }
+
+    
+    /**
+     * @param totalRow the totalRow to set
+     */
+    public void setTotalRow(int totalRow) {
+        this.totalRow = totalRow;
     }
 
     /**

@@ -240,6 +240,8 @@ public class DSRequestData implements java.io.Serializable
     private Integer endRow;
 
     private Integer startRow;
+    
+    private Integer totalRow;
 
     /**
      * Return this request Operation ID.This used for indicate unique of operation.
@@ -837,4 +839,23 @@ public class DSRequestData implements java.io.Serializable
     public void setStartRow(Integer startRow) {
         this.startRow = startRow;
     }
+
+    
+    /**
+     * @return the totalRow
+     */
+    public Integer getTotalRow() {
+        if(totalRow==null)
+            totalRow  = Roperation == null ? null : Roperation.getTotalRow();
+        return totalRow;
+    }
+
+    
+    /**
+     * @param totalRow the totalRow to set
+     */
+    public void setTotalRow(Integer totalRow) {
+        this.totalRow = totalRow;
+    }
+    
 }

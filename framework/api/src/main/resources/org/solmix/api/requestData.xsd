@@ -163,11 +163,16 @@
     	<xsd:sequence>
     		<xsd:element name="startRow" type="xsd:int" minOccurs="0"></xsd:element>
     		<xsd:element name="endRow" type="xsd:int" minOccurs="0"></xsd:element>
-    		<xsd:element name="sortBy" type="xsd:string" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    		<xsd:element name="totalRow" type="xsd:int" minOccurs="0" maxOccurs="1"></xsd:element>
+    		<xsd:element name="sortBy" type="xsd:string" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</xsd:element>
     		<xsd:element name="criteria" type="Rmap" minOccurs="0"></xsd:element>
     		<xsd:element name="values" type="Rmap" minOccurs="0"></xsd:element>
     		<xsd:element name="oldValues" type="Rmap" minOccurs="0"></xsd:element>
-    		<xsd:element name="textMatchStyle" type="xsd:string" minOccurs="0"></xsd:element>
+    		<xsd:element name="textMatchStyle" type="xsd:string"
+    			minOccurs="0">
+    		</xsd:element>
     	</xsd:sequence>
     </xsd:group>
 
