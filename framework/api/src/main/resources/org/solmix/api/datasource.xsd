@@ -163,6 +163,7 @@ descriptor.DataSource Configuration files using this schema must indicate
 			<xsd:enumeration value="custom"></xsd:enumeration>
 			<xsd:enumeration value="jpa"></xsd:enumeration>
 			<xsd:enumeration value="filesystem"></xsd:enumeration>
+			<xsd:enumeration value="mybatis"></xsd:enumeration>
 		</xsd:restriction>
 	</xsd:simpleType>
 
