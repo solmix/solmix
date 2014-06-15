@@ -39,6 +39,8 @@ public enum EserverType {
     BASIC("basic"),
     @XmlEnumValue("sql")
     SQL("sql"),
+    @XmlEnumValue("mybatis")
+    MYBATIS("mybatis"),
     @XmlEnumValue("custom")
     CUSTOM("custom"),
     @XmlEnumValue("jpa")
