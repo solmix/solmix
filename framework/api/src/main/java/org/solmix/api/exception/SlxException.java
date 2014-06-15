@@ -135,6 +135,15 @@ public class SlxException extends Exception
 
 
     /**
+     * @param string
+     * @param e
+     */
+    public SlxException(String string, Throwable e)
+    {
+        this(Tmodule.BASIC, Texception.DEFAULT, string, e);
+    }
+
+    /**
      * Return predefined module name.
      * 
      * @return the module

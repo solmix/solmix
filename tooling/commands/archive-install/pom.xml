@@ -6,7 +6,7 @@
     <version>0.5.1-SNAPSHOT</version>
   </parent>
   <artifactId>solmix-commands-archive-install</artifactId>
-  <name>Solmix :: Command :: Intall Karaf Archive</name>
+  <name>Solmix :: Command :: Install Karaf Archive</name>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.karaf.shell</groupId>

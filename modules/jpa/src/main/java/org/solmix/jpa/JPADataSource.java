@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
-import org.solmix.runtime.SystemContext;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
@@ -67,6 +66,7 @@ import org.solmix.fmk.datasource.BasicGenerator;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.util.DataTools;
+import org.solmix.runtime.SystemContext;
 
 /**
  * JPA datasource.
@@ -808,7 +808,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             __canPage = false;
             log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
         }
-        if (req.getContext().isPaged() && __canPage) {
+        if (__canPage) {
             int end = req.getContext().getEndRow();
             int start = req.getContext().getStartRow();
             int batch = req.getContext().getBatchSize();

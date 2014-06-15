@@ -19,13 +19,6 @@
 
 package org.solmix.eventservice;
 
-import javax.annotation.Resource;
-
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
-import org.solmix.runtime.SystemContext;
-import org.solmix.api.event.EventManager;
-import org.solmix.api.event.IEvent;
 
 /**
  * <code>EventManager</code> used to hold Osgi Event Admin Service.
@@ -35,19 +28,19 @@ import org.solmix.api.event.IEvent;
  * @since 0.1
  */
 
-public class EventManagerImpl implements EventManager
+public class EventManagerImpl /*implements EventManager*/
 {
 
-    private volatile EventAdmin eventAdmin;
+  /*  private volatile EventAdmin eventAdmin;
     private SystemContext sc;
     
     public EventManagerImpl(final SystemContext sc){
         setSystemContext(sc);
     }
 
-    /**
+    *//**
      * @param sc2
-     */
+     *//*
     @Resource
     public void setSystemContext(final SystemContext sc) {
       this.sc=sc;
@@ -70,7 +63,7 @@ public class EventManagerImpl implements EventManager
         return eventAdmin != null;
     }
 
-    /**
+    *//**
      * Initiate synchronous delivery of an event. This method does not return to the caller until delivery of the event
      * is completed.
      * 
@@ -78,7 +71,7 @@ public class EventManagerImpl implements EventManager
      * 
      * @throws SecurityException If the caller does not have <code>TopicPermission[topic,PUBLISH]</code> for the topic
      *         specified in the event.
-     */
+     *//*
     @Override
     public void sendEvent(IEvent event) {
 
@@ -100,7 +93,7 @@ public class EventManagerImpl implements EventManager
             throw new NullPointerException("EventAdmin Service not reserved!");
     }
 
-    /**
+    *//**
      * Initiate asynchronous delivery of an event. This method returns to the caller before delivery of the event is
      * completed.
      * 
@@ -108,7 +101,7 @@ public class EventManagerImpl implements EventManager
      * 
      * @throws SecurityException If the caller does not have <code>TopicPermission[topic,PUBLISH]</code> for the topic
      *         specified in the event.
-     */
+     *//*
 
     @Override
     public void postEvent(IEvent event) {
@@ -119,14 +112,14 @@ public class EventManagerImpl implements EventManager
 
     }
 
-    /*
+    
      * {@inheritDoc}
      * 
      * @see org.solmix.api.event.EventManager#getProvider()
-     */
+     
     @Override
     public String getProvider() {
         return OSGI;
-    }
+    }*/
 
 }

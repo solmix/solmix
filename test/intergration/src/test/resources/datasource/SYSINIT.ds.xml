@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:module xmlns:p="http://www.solmix.org/xmlns/datasource/v1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.solmix.org/xmlns/datasource/v1.0.1 http://www.solmix.org/xmlns/datasource/v1.0.1 ">
-  <p:DataSource ID="SYSINIT" serverType="sql" dbName="solmix">
+  <p:DataSource ID="SYSINIT" serverType="sql" dbName="mysql">
   <!-- get menu configuration from database. -->
   	<p:operationBindings>
   		<p:operationBinding operationType="fetch"
