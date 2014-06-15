@@ -38,21 +38,35 @@ import org.solmix.commons.collections.DataTypeMap;
 public class MysqlDriver extends SQLDriver
 {
 
- 
-
-    public static SQLDriver instance(String dbName, SQLTable table, DataTypeMap config, SQLDataSource ds) throws SlxException {
+    public static SQLDriver instance(String dbName, SQLTable table,
+        DataTypeMap config, SQLDataSource ds) throws SlxException {
         return new MysqlDriver(dbName, table, config, ds);
     }
 
+    public static SQLDriver instance(String dbName) {
+        return new MysqlDriver(dbName);
+    }
+
     private final boolean supportsSQLLimit;
+
     /**
      * @param dbName
      * @param table
-     * @throws SlxException 
+     * @throws SlxException
      */
-    public MysqlDriver(String dbName, SQLTable table, DataTypeMap config, SQLDataSource ds) throws SlxException
+    public MysqlDriver(String dbName, SQLTable table, DataTypeMap config,
+        SQLDataSource ds) throws SlxException
     {
-        super(dbName, table,config,ds);
+        super(dbName, table, config, ds);
+        supportsSQLLimit = true;
+    }
+
+    /**
+     * @param dbName
+     */
+    public MysqlDriver(String dbName)
+    {
+        super(dbName);
         supportsSQLLimit = true;
     }
 
@@ -69,22 +83,27 @@ public class MysqlDriver extends SQLDriver
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#sqlOutTransform(java.lang.String, java.lang.String, java.lang.String)
+     * @see org.solmix.sql.SQLDriver#sqlOutTransform(java.lang.String,
+     *      java.lang.String, java.lang.String)
      */
     @Override
-    public String sqlOutTransform(String columnName, String remapName, String tableName) throws SlxException {
+    public String sqlOutTransform(String columnName, String remapName,
+        String tableName) throws SlxException {
         String output = escapeColumnName(columnName);
         if (remapName != null && !columnName.equals(remapName))
-            output = (new StringBuilder()).append(output).append(" AS ").append(escapeColumnName(remapName)).toString();
+            output = (new StringBuilder()).append(output).append(" AS ").append(
+                escapeColumnName(remapName)).toString();
         if (tableName != null)
-            output = (new StringBuilder()).append(tableName).append(".").append(output).toString();
+            output = (new StringBuilder()).append(tableName).append(".").append(
+                output).toString();
         return output;
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#getExpressionForSortBy(java.lang.String, java.util.Map)
+     * @see org.solmix.sql.SQLDriver#getExpressionForSortBy(java.lang.String,
+     *      java.util.Map)
      */
     @Override
     protected String getExpressionForSortBy(String s, Map map) {
@@ -95,20 +114,24 @@ public class MysqlDriver extends SQLDriver
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#fetchLastPrimaryKeys(java.util.Map, java.util.List, org.solmix.sql.SQLDataSource,
+     * @see org.solmix.sql.SQLDriver#fetchLastPrimaryKeys(java.util.Map,
+     *      java.util.List, org.solmix.sql.SQLDataSource,
      *      org.solmix.api.datasource.DSRequest)
      */
     @Override
-    public Map fetchLastPrimaryKeys(Map primaryKeysPresent, List list, SQLDataSource ds, DSRequest req) throws SlxException {
+    public Map fetchLastPrimaryKeys(Map primaryKeysPresent, List list,
+        SQLDataSource ds, DSRequest req) throws SlxException {
         if (connection == null && req == null)
-            throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, "no existing db connection exists for last row fetch");
+            throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION,
+                "no existing db connection exists for last row fetch");
         Map primaryKeys = primaryKeysPresent;
         for (Object key : primaryKeys.keySet()) {
             String sequenceName = (String) key;
             String sequence = getCurrentSequenceValue(sequenceName, ds);
             if (sequence != null) {
-                Object obj = getScalarResult((new StringBuilder()).append("SELECT ").append(sequence).append(" FROM DUAL").toString(), connection,
-                    dbName, this, req);
+                Object obj = getScalarResult(
+                    (new StringBuilder()).append("SELECT ").append(sequence).append(
+                        " FROM DUAL").toString(), connection, dbName, this, req);
                 BigDecimal value = new BigDecimal(obj.toString());
                 primaryKeys.put(sequenceName, value.toString());
             }
@@ -122,7 +145,8 @@ public class MysqlDriver extends SQLDriver
      * @return
      * @throws SlxException
      */
-    protected String getCurrentSequenceValue(String columnName, SQLDataSource ds) throws SlxException {
+    protected String getCurrentSequenceValue(String columnName, SQLDataSource ds)
+        throws SlxException {
         String sequenceName = getSequenceName(columnName);
         if (sequenceName == null)
             return null;
@@ -134,11 +158,13 @@ public class MysqlDriver extends SQLDriver
             else
                 schema = (new StringBuilder()).append(schema).append(".").toString();
         }
-        return (new StringBuilder()).append(schema).append(sequenceName).append(".CurrVal").toString();
+        return (new StringBuilder()).append(schema).append(sequenceName).append(
+            ".CurrVal").toString();
     }
 
     protected String getSequenceName(String columnName) throws SlxException {
-        return getSequenceName(columnName, table.getSequences(), table.getName());
+        return getSequenceName(columnName, table.getSequences(),
+            table.getName());
     }
 
     /**
@@ -151,13 +177,15 @@ public class MysqlDriver extends SQLDriver
         if (value == null)
             return null;
         else
-            return (new StringBuilder()).append("'").append(escapeValueUnquoted(value.toString(), false)).append("'").toString();
+            return (new StringBuilder()).append("'").append(
+                escapeValueUnquoted(value.toString(), false)).append("'").toString();
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#escapeValueForFilter(java.lang.Object, java.lang.String)
+     * @see org.solmix.sql.SQLDriver#escapeValueForFilter(java.lang.Object,
+     *      java.lang.String)
      */
     @Override
     public String escapeValueForFilter(Object value, String filterStyle) {
@@ -166,7 +194,8 @@ public class MysqlDriver extends SQLDriver
         String rtn = "'";
         if (!"startsWith".equals(filterStyle))
             rtn = (new StringBuilder()).append(rtn).append("%").toString();
-        return (new StringBuilder()).append(rtn).append(escapeValueUnquoted(value, true)).append("%'").toString();
+        return (new StringBuilder()).append(rtn).append(
+            escapeValueUnquoted(value, true)).append("%'").toString();
 
     }
 
@@ -183,27 +212,34 @@ public class MysqlDriver extends SQLDriver
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#limitQuery(java.lang.String, long, long, java.util.List, java.lang.String)
+     * @see org.solmix.sql.SQLDriver#limitQuery(java.lang.String, long, long,
+     *      java.util.List, java.lang.String)
      */
     @Override
-    public String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns, String orderClause) throws SlxException {
-        throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, "Not supported");
+    public String limitQuery(String query, long startRow, long totalRows,
+        List<String> outputColumns, String orderClause) throws SlxException {
+        throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT,
+            "Not supported");
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#limitQuery(java.lang.String, long, long, java.util.List)
+     * @see org.solmix.sql.SQLDriver#limitQuery(java.lang.String, long, long,
+     *      java.util.List)
      */
     @Override
-    public String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns) throws SlxException {
-         return (new StringBuilder()).append(query).append("limit").append(" "  ).append(startRow).append(", ").append(totalRows).toString();
+    public String limitQuery(String query, long startRow, long totalRows,
+        List<String> outputColumns) throws SlxException {
+        return (new StringBuilder()).append(query).append(" limit ").append(
+            startRow).append(", ").append(totalRows).toString();
     }
 
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#escapeValueUnquoted(java.lang.Object, boolean)
+     * @see org.solmix.sql.SQLDriver#escapeValueUnquoted(java.lang.Object,
+     *      boolean)
      */
     @Override
     protected String escapeValueUnquoted(Object value, boolean escapeForFilter) {
@@ -221,10 +257,12 @@ public class MysqlDriver extends SQLDriver
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.sql.SQLDriver#getNextSequenceValue(java.lang.String, org.solmix.sql.SQLDataSource)
+     * @see org.solmix.sql.SQLDriver#getNextSequenceValue(java.lang.String,
+     *      org.solmix.sql.SQLDataSource)
      */
     @Override
-    public String getNextSequenceValue(String columnName, SQLDataSource dataSource) throws SlxException {
+    public String getNextSequenceValue(String columnName,
+        SQLDataSource dataSource) throws SlxException {
         String sequenceName = getSequenceName(columnName, dataSource);
         if (sequenceName == null)
             return null;
@@ -236,7 +274,8 @@ public class MysqlDriver extends SQLDriver
             else
                 schema = (new StringBuilder()).append(schema).append(".").toString();
         }
-        return (new StringBuilder()).append(schema).append(sequenceName).append(".NextVal").toString();
+        return (new StringBuilder()).append(schema).append(sequenceName).append(
+            ".NextVal").toString();
     }
 
 }

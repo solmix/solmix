@@ -46,6 +46,14 @@ public class HSQLDBDriver extends SQLDriver
         supportsSQLLimit = true;
         init(dbName);
     }
+    public HSQLDBDriver(String dbName)
+    {
+        super(dbName);
+        supportsSQLLimit = true;
+    }
+    public static SQLDriver instance(String dbName) throws SlxException {
+        return new HSQLDBDriver(dbName);
+    }
 
     @Override
     public boolean hasBrokenCursorAPIs() {

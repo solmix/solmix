@@ -69,7 +69,13 @@ public class OracleDriver extends SQLDriver
     public static SQLDriver instance(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
         return new OracleDriver(dbName, table,config,ds);
     }
-
+    public OracleDriver(String dbName)
+    {
+        super(dbName);
+    }
+    public static SQLDriver instance(String dbName) throws SlxException {
+        return new OracleDriver(dbName);
+    }
 
     /**
      * {@inheritDoc}

@@ -72,14 +72,16 @@ public abstract class SQLDriver
     protected SQLTable table;
 
     protected String dbName;
+
     protected String dbType;
 
     protected Connection connection;
-    
-    private final ConnectionManager connectionManager;
-    private final SQLDataSource ds;
 
-    private final boolean useColumnLabelInMetadata;
+    private ConnectionManager connectionManager;
+
+    private SQLDataSource ds;
+
+    private boolean useColumnLabelInMetadata;
 
     public String getDbName() {
         return dbName;
@@ -89,7 +91,7 @@ public abstract class SQLDriver
         this.dbName = dbName;
     }
 
-    protected  DataTypeMap thisConfig;
+    protected DataTypeMap thisConfig;
 
     public static final DataTypeMap buildInDriverImpl;
     static {
@@ -103,38 +105,48 @@ public abstract class SQLDriver
         buildInDriverImpl.put("db2iSeries", "org.solmix.sql.DB2iSeriesDriver");
         buildInDriverImpl.put("hsqldb", "org.solmix.sql.HSQLDBDriver");
         buildInDriverImpl.put("h2db", "org.solmix.sql.H2DBDriver");
-        buildInDriverImpl.put("generic", "orgorg.solmix.sql.H2DBDriver.solmix.sql.GenericDriver");
+        buildInDriverImpl.put("generic",
+            "orgorg.solmix.sql.H2DBDriver.solmix.sql.GenericDriver");
         buildInDriverImpl.put("cache", "org.solmix.sql.CacheDriver");
         buildInDriverImpl.put("::hibernate::", "org.solmix.sql.HibernateDriver");
     }
 
- 
+    public SQLDriver(String dbName)
+    {
+        this.dbName = dbName;
+    }
 
-    public SQLDriver(String dbName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException
+    public SQLDriver(String dbName, SQLTable table, DataTypeMap config,
+        SQLDataSource ds) throws SlxException
     {
         this.connection = null;
         this.dbName = dbName;
         this.table = table;
         this.thisConfig = config;
-        this.dbType=getDBType(config,dbName);
-        this.ds=ds;
-        this.connectionManager=ds.connectionManager;
-        quoteColumnNames = thisConfig.getBoolean(dbType + ".quoteColumnNames", false);
-        useColumnLabelInMetadata = thisConfig.getBoolean(dbType + ".useColumnLabelInMetadata", false);
+        this.dbType = getDBType(config, dbName);
+        this.ds = ds;
+        this.connectionManager = ds.connectionManager;
+        quoteColumnNames = thisConfig.getBoolean(dbType + ".quoteColumnNames",
+            false);
+        useColumnLabelInMetadata = thisConfig.getBoolean(dbType
+            + ".useColumnLabelInMetadata", false);
     }
 
     public static String getDBType(DataTypeMap config, String dbName) {
         String prop_db_key = dbName + ".database.type";
         return config.getString(prop_db_key);
     }
-   
 
-    public static SQLDriver instance(String dbName, String dbType) throws Exception {
-        return (SQLDriver) Reflection.invokeStaticMethod(buildInDriverForDBType(dbType), "instance", dbName);
+    public static SQLDriver instance(String dbName, String dbType)
+        throws Exception {
+        return (SQLDriver) Reflection.invokeStaticMethod(
+            buildInDriverForDBType(dbType), "instance", dbName);
     }
 
-    public static SQLDriver instance(String dbName, String dbType, SQLTable table) throws Exception {
-        return (SQLDriver) Reflection.invokeStaticMethod(buildInDriverForDBType(dbType), "instance", dbName, table);
+    public static SQLDriver instance(String dbName, String dbType,
+        SQLTable table) throws Exception {
+        return (SQLDriver) Reflection.invokeStaticMethod(
+            buildInDriverForDBType(dbType), "instance", dbName, table);
     }
 
     /**
@@ -144,47 +156,57 @@ public abstract class SQLDriver
      * @throws Exception
      * @throws SlxException
      */
-    public static SQLDriver instance(String databaseName, SQLTable table,DataTypeMap config,SQLDataSource ds) throws SlxException {
+    public static SQLDriver instance(String databaseName, SQLTable table,
+        DataTypeMap config, SQLDataSource ds) throws SlxException {
         try {
-            return (SQLDriver) Reflection.invokeStaticMethod(buildInDriverForDBType(getDBType(config,databaseName)), "instance", databaseName, table,config,ds);
+            return (SQLDriver) Reflection.invokeStaticMethod(
+                buildInDriverForDBType(getDBType(config, databaseName)),
+                "instance", databaseName, table, config, ds);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-
-
-    protected static String buildInDriverForDBType(String dbType) throws SlxException {
+    protected static String buildInDriverForDBType(String dbType)
+        throws SlxException {
         String impl = buildInDriverImpl.getString(dbType);
         if (impl == null) {
-            throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, "unable to find implementer for database type" + dbType);
+            throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT,
+                "unable to find implementer for database type" + dbType);
         } else {
             return impl;
         }
     }
 
-    protected String getSequenceName(String columnName, SQLDataSource dataSource) throws SlxException {
-        return getSequenceName(columnName, dataSource.getSequences(), table.getName());
+    protected String getSequenceName(String columnName, SQLDataSource dataSource)
+        throws SlxException {
+        return getSequenceName(columnName, dataSource.getSequences(),
+            table.getName());
     }
 
-    public  String getSequenceName(String columnName, Map sequences, String tableName) throws SlxException {
+    public String getSequenceName(String columnName, Map sequences,
+        String tableName) throws SlxException {
         if (columnName == null || sequences == null || tableName == null)
             return null;
         String sequenceName = (String) sequences.get(columnName);
         if (sequenceName == null)
             return null;
         if (sequenceName.equals("__default")) {
-            sequenceName = (new StringBuilder()).append(tableName).append("_").append(columnName).toString();
+            sequenceName = (new StringBuilder()).append(tableName).append("_").append(
+                columnName).toString();
             int sequenceLength = sequenceName.length();
             if (sequenceLength > 30) {
                 int columnNameLength = columnName.length();
                 if (columnNameLength + 1 > 29)
                     throw new SlxException(
-                        (new StringBuilder()).append("can't create a unique sequence name for column name: '").append(columnName).append(
-                            "' - unable to continue").toString());
-                String truncatedTableName = tableName.substring(0, 29 - columnNameLength);
-                sequenceName = (new StringBuilder()).append(truncatedTableName).append("_").append(columnName).toString();
+                        (new StringBuilder()).append(
+                            "can't create a unique sequence name for column name: '").append(
+                            columnName).append("' - unable to continue").toString());
+                String truncatedTableName = tableName.substring(0,
+                    29 - columnNameLength);
+                sequenceName = (new StringBuilder()).append(truncatedTableName).append(
+                    "_").append(columnName).toString();
             }
         }
         return sequenceName;
@@ -197,11 +219,13 @@ public abstract class SQLDriver
 
     public abstract boolean isSupportsNativeReplace();
 
-    public abstract String sqlOutTransform(String s, String s1, String s2) throws SlxException;
+    public abstract String sqlOutTransform(String s, String s1, String s2)
+        throws SlxException;
 
     protected abstract String getExpressionForSortBy(String s, Map map);
 
-    public abstract Map fetchLastPrimaryKeys(Map map, List list, SQLDataSource sqldatasource, DSRequest dsrequest) throws SlxException;
+    public abstract Map fetchLastPrimaryKeys(Map map, List list,
+        SQLDataSource sqldatasource, DSRequest dsrequest) throws SlxException;
 
     public abstract String escapeValue(Object obj);
 
@@ -222,8 +246,12 @@ public abstract class SQLDriver
     public String escapeColumnName(String columnName, boolean forceQuoteColumn) {
         if (columnName == null)
             return null;
-        if (forceQuoteColumn || quoteColumnNames || table != null && table.quoteColumnNames != null && table.quoteColumnNames.equals("true"))
-            return (new StringBuilder()).append(openQuote()).append(globalPerl.substitute("s'\"'\"\"'g", columnName.toString())).append(closeQuote()).toString();
+        if (forceQuoteColumn || quoteColumnNames || table != null
+            && table.quoteColumnNames != null
+            && table.quoteColumnNames.equals("true"))
+            return (new StringBuilder()).append(openQuote()).append(
+                globalPerl.substitute("s'\"'\"\"'g", columnName.toString())).append(
+                closeQuote()).toString();
         else
             return columnName.toString();
     }
@@ -256,7 +284,8 @@ public abstract class SQLDriver
                     SimpleDateFormat sdf = new SimpleDateFormat(sqlFormat);
                     String formatted = sdf.format(columnValue);
                     if ("text".equals(strategy))
-                        formatted = (new StringBuilder()).append("'").append(formatted).append("'").toString();
+                        formatted = (new StringBuilder()).append("'").append(
+                            formatted).append("'").toString();
                     return formatted;
                 } else if (DataTools.typeIsBoolean(columnValue.toString())) {
                     return columnValue.equals(Boolean.TRUE) ? "'Y'" : "'N'";
@@ -285,25 +314,32 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    public List executeQuery(String query, List dataSources, ToperationBinding opConfig, DSRequest req) throws SlxException {
-        return getTransformedResults(query, connection, dbName, this, dataSources, opConfig, req);
+    public List executeQuery(String query, List dataSources,
+        ToperationBinding opConfig, DSRequest req) throws SlxException {
+        return getTransformedResults(query, connection, dbName, this,
+            dataSources, opConfig, req);
     }
 
-    public  List getTransformedResults(String query, DSRequest req) throws Exception {
+    public List getTransformedResults(String query, DSRequest req)
+        throws Exception {
         return getTransformedResults(query, null, req);
     }
 
-    public  List getTransformedResults(String query, String dbName, DSRequest req) throws Exception {
+    public List getTransformedResults(String query, String dbName, DSRequest req)
+        throws Exception {
         return getTransformedResults(query, null, dbName, null, req);
     }
 
-    protected  List getTransformedResults(String query, Connection conn, String dbName, SQLDriver sqlDriver, DSRequest req) throws SlxException {
+    protected List getTransformedResults(String query, Connection conn,
+        String dbName, SQLDriver sqlDriver, DSRequest req) throws SlxException {
         return getTransformedResults(query, conn, dbName, sqlDriver, null, req);
     }
 
-    protected  List getTransformedResults(String query, Connection conn, String dbName, SQLDriver sqlDriver, List dataSources, DSRequest req)
+    protected List getTransformedResults(String query, Connection conn,
+        String dbName, SQLDriver sqlDriver, List dataSources, DSRequest req)
         throws SlxException {
-        return getTransformedResults(query, conn, dbName, sqlDriver, dataSources, null, req);
+        return getTransformedResults(query, conn, dbName, sqlDriver,
+            dataSources, null, req);
     }
 
     /**
@@ -317,7 +353,8 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    protected  List getTransformedResults(String query, Connection conn, String dbName, SQLDriver driver, List dataSources,
+    protected List getTransformedResults(String query, Connection conn,
+        String dbName, SQLDriver driver, List dataSources,
         ToperationBinding opConfig, DSRequest req) throws SlxException {
         boolean __colseConn = false;
         boolean __userOrAutoTransaction = true;
@@ -353,7 +390,7 @@ public abstract class SQLDriver
         try {
             Boolean printSQL = thisConfig.getBoolean("printSQL", false);
             if (printSQL) {
-                log.debug("Executing SQL query on {} :\n {}",dbName, query);
+                log.debug("Executing SQL query on {} :\n {}", dbName, query);
             }
             if (driver != null) {
                 statement = driver.createFetchStatement(__currentConn);
@@ -363,10 +400,13 @@ public abstract class SQLDriver
             long _$ = System.currentTimeMillis();
             resultSet = statement.executeQuery(query);
             long $_ = System.currentTimeMillis();
-            ds.getEventWork().createAndFireTimeEvent($_ - _$, "SQL Query Time"+ query);
-            __return = SQLTransform.toListOfMapsOrBeans(resultSet, SQLTransform.hasBrokenCursorAPIs(this), dataSources, opConfig);
+            ds.getEventWork().createAndFireTimeEvent($_ - _$,
+                "SQL Query Time" + query);
+            __return = SQLTransform.toListOfMapsOrBeans(resultSet,
+                SQLTransform.hasBrokenCursorAPIs(this), dataSources, opConfig);
         } catch (SQLException e) {
-            String __info = "Execute of select :\n" + query + " on db: [" + dbName + "] throw exception  ErrorCode:[" + e.getErrorCode()
+            String __info = "Execute of select :\n" + query + " on db: ["
+                + dbName + "] throw exception  ErrorCode:[" + e.getErrorCode()
                 + "] Message: " + e.toString();
             log.debug(__info);
             if (__userOrAutoTransaction) {
@@ -382,12 +422,16 @@ public abstract class SQLDriver
                         statement = __currentConn.createStatement();
                     }
                     resultSet = statement.executeQuery(query);
-                    __return = SQLTransform.toListOfMapsOrBeans(resultSet, SQLTransform.hasBrokenCursorAPIs(this), dataSources, opConfig);
+                    __return = SQLTransform.toListOfMapsOrBeans(resultSet,
+                        SQLTransform.hasBrokenCursorAPIs(this), dataSources,
+                        opConfig);
                 } catch (SQLException sql) {
-                    throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
+                    throw new SlxException(Tmodule.SQL,
+                        Texception.SQL_SQLEXCEPTION, e);
                 }
             } else {
-                throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, __info, e);
+                throw new SlxException(Tmodule.SQL,
+                    Texception.SQL_SQLEXCEPTION, __info, e);
             }
 
         } finally {
@@ -421,11 +465,12 @@ public abstract class SQLDriver
         return update(update, null, connection, dbName, this, req);
     }
 
-    public  int update(String update, DSRequest req) throws Exception {
+    public int update(String update, DSRequest req) throws Exception {
         return update(update, null, req);
     }
 
-    public  int update(String update, String dbName, DSRequest req) throws Exception {
+    public int update(String update, String dbName, DSRequest req)
+        throws Exception {
         return update(update, null, dbName, req);
     }
 
@@ -439,8 +484,10 @@ public abstract class SQLDriver
      * @return
      * @throws Exception
      */
-    public  int update(String update, List data, String dbName, DSRequest req) throws Exception {
-        return update(update, data, connectionManager.getConnection(dbName), dbName, null, req);
+    public int update(String update, List data, String dbName, DSRequest req)
+        throws Exception {
+        return update(update, data, connectionManager.getConnection(dbName),
+            dbName, null, req);
     }
 
     /**
@@ -452,7 +499,8 @@ public abstract class SQLDriver
      * @param req datasource request
      * @return success or failed flag
      */
-    public  int update(String update, List data, Connection conn, String dbName, SQLDriver driver, DSRequest req) throws SlxException {
+    public int update(String update, List data, Connection conn, String dbName,
+        SQLDriver driver, DSRequest req) throws SlxException {
         boolean __userOrAutoTransaction = true;
         Connection __currentConn;
         if (dbName == null)
@@ -479,7 +527,9 @@ public abstract class SQLDriver
         }
         Boolean printSQL = thisConfig.getBoolean("printSQL", false);
         if (printSQL) {
-            log.debug((new StringBuilder()).append("Executing SQL update on '").append(dbName).append("'").toString(), update);
+            log.debug(
+                (new StringBuilder()).append("Executing SQL update on '").append(
+                    dbName).append("'").toString(), update);
         }
         int __return = 0;
         try {
@@ -490,10 +540,12 @@ public abstract class SQLDriver
                 conn = connectionManager.getNewConnection(dbName);
                 if (driver != null)
                     driver.connection = conn;
-                __return = doUpdate(update, data, conn, req,driver);
-            }else{
-                String __info = "Execute of select :\n" + update + " on db: [" + dbName + "] throw exception  Message: " + e.getMessage();
-                throw new SlxException(Tmodule.SQL,Texception.SQL_SQLEXCEPTION,__info,e);
+                __return = doUpdate(update, data, conn, req, driver);
+            } else {
+                String __info = "Execute of select :\n" + update + " on db: ["
+                    + dbName + "] throw exception  Message: " + e.getMessage();
+                throw new SlxException(Tmodule.SQL,
+                    Texception.SQL_SQLEXCEPTION, __info, e);
             }
         } finally {
             if (!__userOrAutoTransaction && driver == null)
@@ -502,7 +554,8 @@ public abstract class SQLDriver
         return __return;
     }
 
-    public  int doUpdate(String update, List data, Connection conn, DSRequest req) throws SlxException {
+    public int doUpdate(String update, List data, Connection conn, DSRequest req)
+        throws SlxException {
         return doUpdate(update, data, conn, req, null);
     }
 
@@ -515,13 +568,15 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    private  int doUpdate(String update, List data, Connection conn, DSRequest req, SQLDriver driver) throws SlxException {
+    private int doUpdate(String update, List data, Connection conn,
+        DSRequest req, SQLDriver driver) throws SlxException {
         long _$ = System.currentTimeMillis();
-        PreparedStatement s=null;
+        PreparedStatement s = null;
         int __return = 0;
         try {
             s = driver.getPreparedStatement(conn, update);
-            if (data != null && !DataTools.isRemove(req.getContext().getOperationType())) {
+            if (data != null
+                && !DataTools.isRemove(req.getContext().getOperationType())) {
                 int position = 1;
                 for (Object o : data) {
                     if (o instanceof InputStream) {
@@ -529,14 +584,16 @@ public abstract class SQLDriver
                         s.setBinaryStream(position, is, is.available());
                     } else if (o instanceof StringBuffer) {
                         StringBuffer sb = (StringBuffer) o;
-                        s.setCharacterStream(position, new StringReader(sb.toString()), sb.length());
+                        s.setCharacterStream(position,
+                            new StringReader(sb.toString()), sb.length());
                     }
                     position++;
                 }
             }
             __return = s.executeUpdate();
             long $_ = System.currentTimeMillis();
-            ds.getEventWork().createAndFireTimeEvent(($_ - _$), "SQL modification operation success,return value is" +__return);
+            ds.getEventWork().createAndFireTimeEvent(($_ - _$),
+                "SQL modification operation success,return value is" + __return);
         } catch (Exception e) {
             if (driver != null)
                 driver.saveGeneratedKeys(s, req);
@@ -546,7 +603,8 @@ public abstract class SQLDriver
                 try {
                     s.close();
                 } catch (Exception ignored) {
-                    log.warn("Exception thrown whilst processing InputStream", ignored);
+                    log.warn("Exception thrown whilst processing InputStream",
+                        ignored);
                     return -1;
                 }
         }
@@ -559,7 +617,8 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    protected PreparedStatement getPreparedStatement(Connection conn, String update) throws SlxException {
+    protected PreparedStatement getPreparedStatement(Connection conn,
+        String update) throws SlxException {
         try {
             return conn.prepareStatement(update);
         } catch (SQLException e) {
@@ -568,16 +627,19 @@ public abstract class SQLDriver
     }
 
     /**
-     * support special database,if sub driver used this method would override this.
+     * support special database,if sub driver used this method would override
+     * this.
      * 
      * @param s A object that represents a precompiled SQL statement
      * @param req
      */
-    public void saveGeneratedKeys(PreparedStatement s, DSRequest req) throws SlxException {
+    public void saveGeneratedKeys(PreparedStatement s, DSRequest req)
+        throws SlxException {
 
     }
 
-    public int executeUpdate(String update, List data, DSRequest req) throws SlxException {
+    public int executeUpdate(String update, List data, DSRequest req)
+        throws SlxException {
         return update(update, data, connection, dbName, this, req);
     }
 
@@ -590,24 +652,31 @@ public abstract class SQLDriver
      * @param context Velocity SQL building context.
      * @return
      */
-    public String getRowCountQueryString(String selectClause, String tableClause, String whereClause, String groupClause, String groupWhereClause,
-        Map context) {
+    public String getRowCountQueryString(String selectClause,
+        String tableClause, String whereClause, String groupClause,
+        String groupWhereClause, Map context) {
         String __return = "SELECT COUNT(*) FROM ";
         if (!groupClause.equals("$defaultGroupClause"))
-            __return = (new StringBuilder()).append(__return).append("(SELECT ").append(selectClause).append(" FROM ").toString();
+            __return = (new StringBuilder()).append(__return).append("(SELECT ").append(
+                selectClause).append(" FROM ").toString();
         __return = (new StringBuilder()).append(__return).append(tableClause).toString();
-        if (!whereClause.equals("$defaultWhereClause") || context.get("defaultWhereClause") != null)
-            __return = (new StringBuilder()).append(__return).append(" WHERE ").append(whereClause).toString();
+        if (!whereClause.equals("$defaultWhereClause")
+            || context.get("defaultWhereClause") != null)
+            __return = (new StringBuilder()).append(__return).append(" WHERE ").append(
+                whereClause).toString();
         if (!groupClause.equals("$defaultGroupClause")) {
-            __return = (new StringBuilder()).append(__return).append(" GROUP BY ").append(groupClause).append(") work").toString();
+            __return = (new StringBuilder()).append(__return).append(
+                " GROUP BY ").append(groupClause).append(") work").toString();
             if (!groupWhereClause.equals("$defaultGroupWhereClause"))
-                __return = (new StringBuilder()).append(__return).append(" WHERE ").append(groupWhereClause).toString();
+                __return = (new StringBuilder()).append(__return).append(
+                    " WHERE ").append(groupWhereClause).toString();
         }
         return __return;
     }
 
     public String getRowCountQueryString(String customSql) {
-        return "SELECT COUNT(*) FROM (" + customSql + ")";
+        return new StringBuilder().append("SELECT COUNT(*) FROM (").append(
+            customSql).append(") aliasForPage").toString();
     }
 
     /**
@@ -615,7 +684,8 @@ public abstract class SQLDriver
      * @param req
      * @throws SlxException
      */
-    public Object executeScalar(String query, DSRequest req) throws SlxException {
+    public Object executeScalar(String query, DSRequest req)
+        throws SlxException {
         return getScalarResult(query, connection, dbName, this, req);
 
     }
@@ -629,7 +699,8 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    public  Object getScalarResult(String query, Connection conn, String dbName, SQLDriver sqlDriver, DSRequest req) throws SlxException {
+    public Object getScalarResult(String query, Connection conn, String dbName,
+        SQLDriver sqlDriver, DSRequest req) throws SlxException {
         List list = getTransformedResults(query, conn, dbName, sqlDriver, req);
         if (list == null || list.size() == 0) {
             return null;
@@ -644,7 +715,8 @@ public abstract class SQLDriver
      * @return
      */
     public boolean hasBrokenCursorAPIs() {
-        return thisConfig.getBoolean(dbName + ".database.brokenCursorAPIs", false);
+        return thisConfig.getBoolean(dbName + ".database.brokenCursorAPIs",
+            false);
     }
 
     /**
@@ -657,7 +729,8 @@ public abstract class SQLDriver
     }
 
     /**
-     * support special database,if sub driver used this method would override this.
+     * support special database,if sub driver used this method would override
+     * this.
      * 
      * @return
      */
@@ -666,7 +739,8 @@ public abstract class SQLDriver
     }
 
     /**
-     * support special database,if sub driver used this method would override this.
+     * support special database,if sub driver used this method would override
+     * this.
      * 
      * @return
      */
@@ -674,10 +748,12 @@ public abstract class SQLDriver
         return false;
     }
 
-    public abstract String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns, String orderClause)
+    public abstract String limitQuery(String query, long startRow,
+        long totalRows, List<String> outputColumns, String orderClause)
         throws SlxException;
 
-    public abstract String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns) throws SlxException;
+    public abstract String limitQuery(String query, long startRow,
+        long totalRows, List<String> outputColumns) throws SlxException;
 
     /**
     * 
@@ -729,10 +805,12 @@ public abstract class SQLDriver
      */
     public boolean fieldAssignableInline(Tfield field) {
         String fieldType = field.getType().value();
-        return (!DataTools.isBinary(field)) && !"blob".equals(fieldType) && !"clob".equals(fieldType);
+        return (!DataTools.isBinary(field)) && !"blob".equals(fieldType)
+            && !"clob".equals(fieldType);
     }
 
-    public abstract String getNextSequenceValue(String s, SQLDataSource sqldatasource) throws SlxException;
+    public abstract String getNextSequenceValue(String s,
+        SQLDataSource sqldatasource) throws SlxException;
 
     /**
      * @param field
@@ -749,8 +827,10 @@ public abstract class SQLDriver
      * @param valueSets
      * @param req
      */
-    public int executeBatchUpdate(String statement, List<String> valueMap, List valueSets, DSRequest req) throws SlxException {
-        if (DataUtil.isNullOrEmpty(valueSets) || DataUtil.isNullOrEmpty(valueMap))
+    public int executeBatchUpdate(String statement, List<String> valueMap,
+        List valueSets, DSRequest req) throws SlxException {
+        if (DataUtil.isNullOrEmpty(valueSets)
+            || DataUtil.isNullOrEmpty(valueMap))
             return -1;
         Connection conn = this.connection;
         boolean __colseConn = false;
@@ -794,9 +874,11 @@ public abstract class SQLDriver
                             pre.setBinaryStream(j, is, is.available());
                         } else if (objValue instanceof StringBuffer) {
                             StringBuffer sb = (StringBuffer) objValue;
-                            pre.setCharacterStream(j, new StringReader(sb.toString()), sb.length());
+                            pre.setCharacterStream(j,
+                                new StringReader(sb.toString()), sb.length());
                         } else if (objValue instanceof Date) {
-                            java.sql.Date date = new java.sql.Date(((Date) objValue).getTime());
+                            java.sql.Date date = new java.sql.Date(
+                                ((Date) objValue).getTime());
                             pre.setDate(j, date);
                         } else if (objValue instanceof java.sql.Time) {
                             pre.setTime(j, (java.sql.Time) objValue);
@@ -828,11 +910,15 @@ public abstract class SQLDriver
      * @param types
      * @return
      */
-    private Object adaptValue(String key, Object objValue, Map<String, Tfield> types) {
+    private Object adaptValue(String key, Object objValue,
+        Map<String, Tfield> types) {
         Efield _type = types.get(key) != null ? types.get(key).getType() : null;
         if (_type == Efield.DATE && !(objValue instanceof Date)) {
-            String dateFormat = types.get(key).getDateFormat() != null ? types.get(key).getDateFormat() : "yyyyMMdd";
-            objValue = DateUtil.getDateFromString(objValue.toString(), dateFormat);
+            String dateFormat = types.get(key).getDateFormat() != null ? types.get(
+                key).getDateFormat()
+                : "yyyyMMdd";
+            objValue = DateUtil.getDateFromString(objValue.toString(),
+                dateFormat);
         }
         return objValue;
     }
@@ -844,7 +930,8 @@ public abstract class SQLDriver
      * @return
      * @throws SlxException
      */
-    private Map<String, Tfield> columnValueType(List<String> keys, DSRequest req) throws SlxException {
+    private Map<String, Tfield> columnValueType(List<String> keys, DSRequest req)
+        throws SlxException {
         DataSource _ds = req.getDataSource();
         List<Tfield> list = _ds.getContext().getFields();
         Eoperation __opType = req.getContext().getOperationType();
@@ -852,12 +939,14 @@ public abstract class SQLDriver
         Map<String, Tfield> __return = new HashMap<String, Tfield>();
         for (String key : keys) {
             for (Tfield field : list) {
-                if (field.getCustomInsertExpression() != null && __opType == Eoperation.ADD
+                if (field.getCustomInsertExpression() != null
+                    && __opType == Eoperation.ADD
                     && field.getCustomInsertExpression().equalsIgnoreCase(key)) {
                     found = field;
                     break;
                 }
-                if (field.getCustomUpdateExpression() != null && __opType == Eoperation.UPDATE
+                if (field.getCustomUpdateExpression() != null
+                    && __opType == Eoperation.UPDATE
                     && field.getCustomInsertExpression().equalsIgnoreCase(key)) {
                     found = field;
                     break;
