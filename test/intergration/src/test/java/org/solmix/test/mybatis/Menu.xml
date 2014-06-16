@@ -2,7 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.solmix.test.mybatis.Menu">
-   <select id="getMenu" parameterType="int" resultType="map">
-    select MENU_ID,COMMENTS,ICON,TITLE,URL from APP_MENU 
-  </select>
+	<select id="getMenu" parameterType="int" resultType="map">
+		select MENU_ID,COMMENTS,ICON,TITLE,URL from APP_MENU
+	</select>
+	<insert id="insertMenu" parameterType="map">
+		insert into APP_MENU(MENU_ID, COMMENTS, ICON, TITLE, URL)
+		values (
+		#{id},
+		#{comments},
+		'default.png',
+		#{title, jdbcType=VARCHAR},
+		#{url, jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateMenu" parameterType="map">
+		update APP_MENU  set URL=#{url, jdbcType=VARCHAR}
+		where MENU_ID=#{id}
+	</update>
+	<delete id="deleteMenu" parameterType="map">
+		DELETE from APP_MENU where MENU_ID=#{id}
+	</delete>
 </mapper>

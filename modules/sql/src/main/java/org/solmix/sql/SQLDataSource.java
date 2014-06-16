@@ -626,7 +626,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             try {
                 __currentConn = _firstDS.getTransactionalConnection(req);
                 if (__currentConn == null) {
-                    __currentConn = connectionManager.get(_driver.getDbName());
+                    __currentConn = connectionManager.getConnection(_driver.getDbName());
                     __userTransaction = false;
                 }
                 s = _driver.createFetchStatement(__currentConn);
@@ -1643,13 +1643,13 @@ protected String getPID(){
      * @see org.solmix.api.call.DSCallCompleteCallback#onFailure(org.solmix.api.call.DSCall, boolean)
      */
     @Override
-    public void onFailure(DSCall rpcmanager, boolean isFailed) throws SlxException {
+    public void onFailure(DSCall dsc, boolean isFailed) throws SlxException {
         if (isFailed)
-            SQLTransaction.rollbackTransaction(rpcmanager, driver.getDbName(),connectionManager);
+            SQLTransaction.rollbackTransaction(dsc, driver.getDbName(),connectionManager);
         else
-            SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
+            SQLTransaction.commitTransaction(dsc, driver.getDbName(),connectionManager);
 
-        SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
+        SQLTransaction.endTransaction(dsc, driver.getDbName(),connectionManager);
     }
 
     /**
@@ -1658,9 +1658,9 @@ protected String getPID(){
      * @see org.solmix.api.call.DSCallCompleteCallback#onSuccess(org.solmix.api.call.DSCall)
      */
     @Override
-    public void onSuccess(DSCall rpcmanager) throws SlxException {
-        SQLTransaction.commitTransaction(rpcmanager, driver.getDbName(),connectionManager);
-        SQLTransaction.endTransaction(rpcmanager, driver.getDbName(),connectionManager);
+    public void onSuccess(DSCall dsc) throws SlxException {
+        SQLTransaction.commitTransaction(dsc, driver.getDbName(),connectionManager);
+        SQLTransaction.endTransaction(dsc, driver.getDbName(),connectionManager);
 
     }
 

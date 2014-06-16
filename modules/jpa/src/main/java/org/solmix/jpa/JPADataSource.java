@@ -59,6 +59,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
+import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.datasource.BasicDataSource;
@@ -82,7 +83,6 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
 
     public static final String SERVICE_PID = "org.solmix.modules.jpa";
 
-
     String entityName = null;
 
     Class<?> entityClass = null;
@@ -100,6 +100,8 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     private Object transaction;
 
     private EntityManagerFactoryProvider entityManagerFactoryProvider;
+
+    private String persistenceUnit;
 
     private enum QueryType
     {
@@ -155,6 +157,10 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     @Override
     public void init(DataSourceData data) throws SlxException {
         super.init(data);
+        persistenceUnit = data.getTdataSource() == null ? null : data.getTdataSource().getPersistenceUnit();
+        if (persistenceUnit == null)
+            persistenceUnit = getConfig().getString(JpaCM.P_DEFAULT_UNIT, "default");
+        Assert.isNotNull(persistenceUnit, "Jpa persistenceUnit must be configured");
         String entityBean = getContext().getTdataSource().getBean();
         if (entityBean != null) {
             try {
@@ -172,9 +178,6 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     }
 
     protected EntityManagerFactory getEmf(DataSourceData data) throws SlxException {
-        String persistenceUnit = data.getTdataSource() == null ? null : data.getTdataSource().getPersistenceUnit();
-        if (persistenceUnit == null)
-            persistenceUnit = getConfig().getString(JpaCM.P_DEFAULT_UNIT, "default");
 
         DataTypeMap pconfig = getConfig().getSubtree(new StringBuilder().append(JpaCM.P_UNIT_PREFIX).append(persistenceUnit).toString());
         if (pconfig.isEmpty()) {
@@ -373,7 +376,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
      */
     @Override
     public String getTransactionObjectKey() throws SlxException {
-        return "_slx_jpa_entityManager_key";
+        return (new StringBuilder()).append(JPATransaction.ENTITYMANAGER_ATTR_KEY).append("_").append(persistenceUnit).toString();
     }
 
    

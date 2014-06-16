@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<solmix xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.solmix.org/xmlns/datasource/v1.0.1 http://www.solmix.org/xmlns/datasource/v1.0.1 ">
-  <DataSource ID="mybatis" serverType="mybatis" dbName="solmix" >
-  	<operationBindings>
-  		<operationBinding operationType="fetch" operationId="fetch">
-  			<queryClauses>
-  				<customQL>org.solmix.test.mybatis.Menu.getMenu</customQL></queryClauses></operationBinding>
-  	</operationBindings></DataSource>
+<solmix xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.solmix.org/xmlns/datasource/v1.0.1 http://www.solmix.org/xmlns/datasource/v1.0.1 ">
+	<DataSource ID="mybatis" serverType="mybatis" dbName="solmix">
+		<operationBindings>
+			<operationBinding operationType="fetch" operationId="fetch">
+				<queryClauses>
+					<customQL>org.solmix.test.mybatis.Menu.getMenu</customQL>
+				</queryClauses>
+			</operationBinding>
+			<operationBinding operationType="add" operationId="add">
+				<queryClauses>
+					<customQL>org.solmix.test.mybatis.Menu.insertMenu</customQL>
+				</queryClauses>
+			</operationBinding>
+			<operationBinding operationType="update" operationId="update">
+				<queryClauses>
+					<customQL>org.solmix.test.mybatis.Menu.updateMenu</customQL>
+				</queryClauses>
+			</operationBinding>
+			<operationBinding operationType="remove" operationId="remove">
+				<queryClauses>
+					<customQL>org.solmix.test.mybatis.Menu.deleteMenu</customQL>
+				</queryClauses>
+			</operationBinding>
+		</operationBindings>
+	</DataSource>
 </solmix>

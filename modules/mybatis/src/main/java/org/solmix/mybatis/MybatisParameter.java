@@ -50,8 +50,6 @@ public class MybatisParameter
         this.sqlDriver=sqlDriver;
         this.canPage=canPage;
     }
-
-    
     
     /**
      * @return the canPage

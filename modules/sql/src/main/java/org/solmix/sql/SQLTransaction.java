@@ -51,142 +51,172 @@ public class SQLTransaction
 
     private static boolean autoEndTransactions;
 
-    public static boolean startTransaction(DSCall rpc) throws SlxException {
+    public static boolean startTransaction(DSCall dsc) throws SlxException {
         String dbName = null;
-        List dsReqs = rpc.getRequests();
-        ConnectionManager connectionManager=null;
+        List<DSRequest> dsReqs = dsc.getRequests();
+        ConnectionManager connectionManager = null;
         for (Object req : dsReqs) {
             if (req instanceof DSRequest) {
                 DSRequest dsReq = (DSRequest) req;
                 DataSource ds = dsReq.getDataSource();
                 if (ds instanceof SQLDataSource) {
                     dbName = ((SQLDataSource) ds).getDriver().dbName;
-                    connectionManager=((SQLDataSource) ds).connectionManager;
+                    connectionManager = ((SQLDataSource) ds).connectionManager;
                     break;
                 }
             }
         }
         if (dbName == null)
             dbName = SqlCM.DEFAULT_DATABASE;
-        rpc.setAttribute(DBNAME_ATTR, dbName);
-        return startTransaction(rpc, dbName,connectionManager);
+        dsc.setAttribute(DBNAME_ATTR, dbName);
+        return startTransaction(dsc, dbName, connectionManager);
 
     }
 
     /**
-     * @param rpc
+     * @param dsc
      * @param dbName
      * @throws SlxException
      */
-    public static boolean startTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static boolean startTransaction(DSCall dsc, String dbName,
+        ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection conn = (Connection) rpc.getAttribute(connectionKey);
+        Connection conn = (Connection) dsc.getAttribute(connectionKey);
         if (conn == null) {
             conn = connectionManager.getConnection(dbName);
             try {
                 conn.setAutoCommit(false);
             } catch (SQLException e) {
-                throw new SlxException(Tmodule.SQL, Texception.SQL_SQLEXCEPTION, e);
+                throw new SlxException(Tmodule.SQL,
+                    Texception.SQL_SQLEXCEPTION, e);
             }
-            rpc.setAttribute(DBNAME_ATTR, dbName);
-            rpc.setAttribute(connectionKey, conn);
-            log.debug("Started new transaction [ " + conn.hashCode() + " ]");
+            dsc.setAttribute(DBNAME_ATTR, dbName);
+            dsc.setAttribute(connectionKey, conn);
+            if (log.isTraceEnabled())
+                log.trace("Started new transaction [ " + conn.hashCode() + " ]");
             return true;
         } else {
-            log.debug((new StringBuilder()).append("startTransaction called but transaction \"").append(conn.hashCode()).append(
-                "\" was already active - ignoring the startTransaction request").toString());
+            if (log.isTraceEnabled())
+                log.trace((new StringBuilder()).append(
+                    "startTransaction called but transaction \"").append(
+                    conn.hashCode()).append(
+                    "\" was already active - ignoring the startTransaction request").toString());
             return true;
         }
 
     }
 
-    public static Connection getConnection(DSCall rpc) throws SlxException {
-        List dsReqs = rpc.getRequests();
-        for (Iterator i = dsReqs.iterator(); i.hasNext();) {
+    public static Connection getConnection(DSCall dsc) throws SlxException {
+        List<DSRequest> dsReqs = dsc.getRequests();
+        for (Iterator<DSRequest> i = dsReqs.iterator(); i.hasNext();) {
             Object req = i.next();
             if (req instanceof DSRequest) {
                 DSRequest dsReq = (DSRequest) req;
                 DataSource ds = dsReq.getDataSource();
                 if (ds instanceof SQLDataSource) {
                     String dbName = ((SQLDataSource) ds).getDriver().dbName;
-                    rpc.setAttribute("_isc_default_dbName", dbName);
-                    return getConnection(rpc, dbName);
+                    dsc.setAttribute(DBNAME_ATTR, dbName);
+                    return getConnection(dsc, dbName);
                 }
             }
         }
 
-        throw new SlxException("Could not find a DSRequest for a SQLDataSource in getConnection");
+        throw new SlxException(
+            "Could not find a DSRequest for a SQLDataSource in getConnection");
     }
 
     /**
-     * @param rpc
+     * @param dsc
      * @param dbName
      * @return
      */
-    private static Connection getConnection(DSCall rpc, String dbName) {
+    private static Connection getConnection(DSCall dsc, String dbName) {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getAttribute(connectionKey);
+        Connection connection = (Connection) dsc.getAttribute(connectionKey);
         return connection;
     }
 
-    public static void rollbackTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
-        rollbackTransaction(rpc, dbName,connectionManager);
+    public static void rollbackTransaction(DSCall dsc,
+        ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) dsc.getAttribute(DBNAME_ATTR);
+        rollbackTransaction(dsc, dbName, connectionManager);
     }
 
-    public static void rollbackTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void rollbackTransaction(DSCall dsc, String dbName,
+        ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getAttribute(connectionKey);
+        Connection connection = (Connection) dsc.getAttribute(connectionKey);
         if (connection == null)
-            throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
-                dbName).append("'").toString());
-        log.debug((new StringBuilder()).append("Rolling back transaction \"").append(connection.hashCode()).append("\"").toString());
+            throw new SlxException(
+                Tmodule.SQL,
+                Texception.SQL_NO_CONNECTION,
+                (new StringBuilder()).append("No current connection for '").append(
+                    dbName).append("'").toString());
+        if(log.isTraceEnabled())
+        log.trace((new StringBuilder()).append("Rolling back transaction \"").append(
+            connection.hashCode()).append("\"").toString());
         try {
             connection.rollback();
         } catch (SQLException e) {
-            throw new SlxException(Tmodule.SQL, Texception.SQL_ROLLBACK_EXCEPTION, e);
+            throw new SlxException(Tmodule.SQL,
+                Texception.SQL_ROLLBACK_EXCEPTION, e);
         }
         if (autoEndTransactions)
-            endTransaction(rpc, dbName,connectionManager);
+            endTransaction(dsc, dbName, connectionManager);
     }
 
-    public static void commitTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
-        commitTransaction(rpc, dbName,connectionManager);
+    public static void commitTransaction(DSCall dsc,
+        ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) dsc.getAttribute(DBNAME_ATTR);
+        commitTransaction(dsc, dbName, connectionManager);
     }
 
-    public static void commitTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void commitTransaction(DSCall dsc, String dbName,
+        ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getAttribute(connectionKey);
+        Connection connection = (Connection) dsc.getAttribute(connectionKey);
         if (connection == null)
-            throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
-                dbName).append("'").toString());
-        log.debug((new StringBuilder()).append("Committing transaction \"").append(connection.hashCode()).append("\"").toString());
+            throw new SlxException(
+                Tmodule.SQL,
+                Texception.SQL_NO_CONNECTION,
+                (new StringBuilder()).append("No current connection for '").append(
+                    dbName).append("'").toString());
+        if(log.isTraceEnabled())
+            log.trace((new StringBuilder()).append("Committing transaction \"").append(
+            connection.hashCode()).append("\"").toString());
         try {
             connection.commit();
         } catch (SQLException e) {
-            throw new SlxException(Tmodule.SQL, Texception.SQL_COMMIT_EXCEPTION, e);
+            throw new SlxException(Tmodule.SQL,
+                Texception.SQL_COMMIT_EXCEPTION, e);
         }
         if (autoEndTransactions)
-            endTransaction(rpc, dbName,connectionManager);
+            endTransaction(dsc, dbName, connectionManager);
     }
 
-    public static void endTransaction(DSCall rpc,ConnectionManager connectionManager) throws SlxException {
-        String dbName = (String) rpc.getAttribute(DBNAME_ATTR);
-        endTransaction(rpc, dbName,connectionManager);
+    public static void endTransaction(DSCall dsc,
+        ConnectionManager connectionManager) throws SlxException {
+        String dbName = (String) dsc.getAttribute(DBNAME_ATTR);
+        endTransaction(dsc, dbName, connectionManager);
     }
 
-    public static void endTransaction(DSCall rpc, String dbName,ConnectionManager connectionManager) throws SlxException {
+    public static void endTransaction(DSCall dsc, String dbName,
+        ConnectionManager connectionManager) throws SlxException {
         String connectionKey = CONNECTION_ATTR_KEY + "_" + dbName;
-        Connection connection = (Connection) rpc.getAttribute(connectionKey);
+        Connection connection = (Connection) dsc.getAttribute(connectionKey);
         if (connection == null) {
-            throw new SlxException(Tmodule.SQL, Texception.SQL_NO_CONNECTION, (new StringBuilder()).append("No current connection for '").append(
-                dbName).append("'").toString());
+            throw new SlxException(
+                Tmodule.SQL,
+                Texception.SQL_NO_CONNECTION,
+                (new StringBuilder()).append("No current connection for '").append(
+                    dbName).append("'").toString());
         } else {
-            log.debug((new StringBuilder()).append("Ending transaction \"").append(connection.hashCode()).append("\"").toString());
+            if(log.isTraceEnabled())
+                log.trace((new StringBuilder()).append("Ending transaction \"").append(
+                    connection.hashCode()).append("\"").toString());
             connectionManager.freeConnection(connection);
-            rpc.removeAttribute(DBNAME_ATTR);
-            rpc.removeAttribute(connectionKey);
+            dsc.removeAttribute(DBNAME_ATTR);
+            dsc.removeAttribute(connectionKey);
             return;
         }
     }

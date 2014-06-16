@@ -75,6 +75,7 @@ public enum Tmodule implements ValueEnum
      * Error code :5500~5999
      */
     SQL("sql") ,
+    MYBATIS("mybatis"),
     /**
      * JPA module.
      * Error code :6000-6500

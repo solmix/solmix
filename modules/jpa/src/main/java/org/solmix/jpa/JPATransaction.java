@@ -33,8 +33,7 @@ import javax.persistence.PersistenceException;
 public class JPATransaction
 {
     
- 
-
+ public static final String ENTITYMANAGER_ATTR_KEY = "_slx_jpa_entityManager_key";
     /**
      * @return
      */

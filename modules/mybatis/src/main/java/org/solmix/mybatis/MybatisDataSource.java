@@ -20,7 +20,9 @@
 package org.solmix.mybatis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
@@ -71,7 +73,9 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
 
     private SQLDriver sqlDriver;
 
-    private String dbName;
+    private String environment;
+
+    private SqlSessionFactory sqlSessionFactory;
 
     public MybatisDataSource(final SystemContext sc)
     {
@@ -85,8 +89,9 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
      */
     @Override
     public void onSuccess(DSCall call) throws SlxException {
-        // TODO Auto-generated method stub
-
+        MybatisTransaction.commitTransaction(call, environment,
+            sqlSessionFactory);
+        MybatisTransaction.endTransaction(call, environment, sqlSessionFactory);
     }
 
     /**
@@ -96,8 +101,15 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
      *      boolean)
      */
     @Override
-    public void onFailure(DSCall call, boolean flag) throws SlxException {
-        // TODO Auto-generated method stub
+    public void onFailure(DSCall call, boolean isFailed) throws SlxException {
+        if (isFailed) {
+            MybatisTransaction.rollbackTransaction(call, environment,
+                sqlSessionFactory);
+        } else {
+            MybatisTransaction.commitTransaction(call, environment,
+                sqlSessionFactory);
+        }
+        MybatisTransaction.endTransaction(call, environment, sqlSessionFactory);
 
     }
 
@@ -115,6 +127,9 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
     @Override
     public void init(DataSourceData data) throws SlxException {
         super.init(data);
+        environment = data.getTdataSource() == null ? null
+            : data.getTdataSource().getDbName();
+        Assert.isNotNull(environment, "mybatis environment must be configured");
     }
 
     @Override
@@ -151,13 +166,16 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
     }
 
     /**
-     * @param req
-     * @param dsObject
-     * @return
+     * Execute Mybatis support datasource operation.
+     * 
+     * @param req Datasource Request
+     * @param dsObject Datasource
+     * @return response DataSource request response.
      * @throws SlxException
      */
     private DSResponse executeMybatisDataSource(DSRequest req, Object dsObject)
         throws SlxException {
+        // adapte datasource
         MybatisDataSource mybatis;
         if (dsObject instanceof MybatisDataSource) {
             mybatis = (MybatisDataSource) dsObject;
@@ -169,6 +187,8 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
                 Texception.DS_DSCONFIG_ERROR,
                 "in the app operation config, datasource must be set to a string or MybatisDataSource ");
         }
+        // initial mybatis sqlsession.
+        boolean __userTransaction = false;
         if (req.getDSCall() != null && this.shouldAutoJoinTransaction(req)) {
             Object obj = this.getTransactionObject(req);
             if (!(obj instanceof SqlSession)) {
@@ -181,40 +201,70 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
                 session = (SqlSession) obj;
             }
             if (session == null) {
-                SqlSession sqlSession = getSqlSession(false);
                 if (shouldAutoStartTransaction(req, false)) {
-                    session = sqlSession;
-                    req.getDSCall().setAttribute(getTransactionObjectKey(),
-                        sqlSession);
-                    req.getDSCall().registerCallback(this);
-                } else {
-                    session = sqlSession;
+                    __userTransaction = true;
+                    MybatisTransaction.startTransaction(req.getDSCall(),
+                        environment, getSqlSessionFactory());
+                    session = (SqlSession) getTransactionObject(req);
+                    if (req != null && req.getDSCall() != null)
+                        req.getDSCall().registerCallback(this);
                 }
             }
             req.setJoinTransaction(true);
         } else {
             session = getSqlSession(true);
         }
+        // dispatch operation by operation type.
         DSRequestData __requestCX = req.getContext();
         Eoperation _req = __requestCX.getOperationType();
         DSResponse __return = null;
-        switch (_req) {
-            case ADD:
-                __return = executeAdd(req, mybatis);
-                break;
-            case FETCH:
-                __return = executefetch(req, mybatis);
-                break;
-            case REMOVE:
-                __return = executeRemove(req, mybatis);
-                break;
-            case UPDATE:
-                __return = executeUpdate(req, mybatis);
-                break;
-            default:
-                break;
+        try {
+            switch (_req) {
+                case ADD:
+                    __return = executeAdd(req, mybatis);
+                    break;
+                case FETCH:
+                    __return = executefetch(req, mybatis);
+                    break;
+                case REMOVE:
+                    __return = executeRemove(req, mybatis);
+                    break;
+                case UPDATE:
+                    __return = executeUpdate(req, mybatis);
+                    break;
+                default:
+                    break;
 
+            }
+        } finally {
+            if (!__userTransaction) {
+                session.close();
+            }
         }
+        return __return;
+    }
+
+    @Override
+    public String getTransactionObjectKey() throws SlxException {
+        return MybatisTransaction.getTransactionKey(environment);
+    }
+
+    /**
+     * @param req
+     * @param mybatis
+     * @return
+     * @throws SlxException 
+     */
+    private DSResponse executeUpdate(DSRequest req, MybatisDataSource mybatis) throws SlxException {
+        DSResponse __return = new DSResponseImpl(req.getDataSource(),
+            Status.STATUS_SUCCESS);
+        String statement = getMybatisStatement(req);
+        Map<String, Object> parameter = new HashMap<String, Object>();
+        DataUtil.mapMerge(req.getContext().getCriteria(), parameter);
+        DataUtil.mapMerge(req.getContext().getValues(), parameter);
+        int result = session.update(statement, parameter);
+        __return.setAffectedRows(new Long(result));
+        __return.setRawData(result);
         return __return;
     }
 
@@ -222,20 +272,48 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
      * @param req
      * @param mybatis
      * @return
+     * @throws SlxException 
      */
-    private DSResponse executeUpdate(DSRequest req, MybatisDataSource mybatis) {
-        // TODO Auto-generated method stub
-        return null;
+    private DSResponse executeRemove(DSRequest req, MybatisDataSource mybatis) throws SlxException {
+        DSResponse __return = new DSResponseImpl(req.getDataSource(),
+            Status.STATUS_SUCCESS);
+        String statement = getMybatisStatement(req);
+        int result = session.delete(statement, req.getContext().getCriteria());
+        __return.setAffectedRows(new Long(result));
+        __return.setRawData(result);
+        return __return;
     }
-
     /**
+     * Mybatis NOT SUPPORT SHOW THE AFFECTED ROW.Tdatasource.simpleReturn=true.
+     * 
      * @param req
      * @param mybatis
      * @return
+     * @throws SlxException
      */
-    private DSResponse executeRemove(DSRequest req, MybatisDataSource mybatis) {
-        // TODO Auto-generated method stub
-        return null;
+    private DSResponse executeAdd(DSRequest req, MybatisDataSource mybatis)
+        throws SlxException {
+        DSResponse __return = new DSResponseImpl(req.getDataSource(),
+            Status.STATUS_SUCCESS);
+        String statement = getMybatisStatement(req);
+        int result = session.update(statement, req.getContext().getCriteria());
+        __return.setAffectedRows(new Long(result));
+        __return.setRawData(result);
+        return __return;
+    }
+
+
+    private String getMybatisStatement(DSRequest req) throws SlxException {
+        ToperationBinding __bind = getContext().getOperationBinding(req);
+        String mybatisStatement = null;
+        if (__bind != null && __bind.getQueryClauses() != null) {
+            mybatisStatement = __bind.getQueryClauses().getCustomQL();
+        }
+        if (mybatisStatement == null) {
+            throw new SlxException(Tmodule.MYBATIS, Texception.OBJECT_IS_NULL,
+                "configure error:mybatis statement is null");
+        }
+        return mybatisStatement;
     }
 
     /**
@@ -246,17 +324,10 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
     private DSResponse executefetch(DSRequest req, MybatisDataSource mybatis)
         throws SlxException {
         DSRequestData reqData = req.getContext();
-        final DSResponse __return = new DSResponseImpl(req,
-            Status.STATUS_SUCCESS);
+        DSResponse __return = new DSResponseImpl(req, Status.STATUS_SUCCESS);
         // reqData.getRawCriteria();
         ToperationBinding __bind = getContext().getOperationBinding(req);
-        String mybatisStatement = null;
-        if (__bind != null && __bind.getQueryClauses() != null) {
-            mybatisStatement = __bind.getQueryClauses().getCustomQL();
-        }
-        if (mybatisStatement == null) {
-            throw new SlxException("configure error:mybatis statement is null");
-        }
+        String mybatisStatement = getMybatisStatement(req);
         // Control Page.
         int totalRows = -1;
         boolean __canPage = true;
@@ -267,10 +338,11 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
             log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
         }
 
+        // initial SqlDriver for limit & count sql
         if (sqlDriver == null) {
             try {
-                sqlDriver = SQLDriver.instance(dbName,
-                    getSqlSessionFactoryProvider().getDbType(dbName));
+                sqlDriver = SQLDriver.instance(environment,
+                    getSqlSessionFactoryProvider().getDbType(environment));
             } catch (Exception e) {
                 throw new SlxException(Tmodule.SQL,
                     Texception.SQL_SQLEXCEPTION, "Can't instance SQLDriver", e);
@@ -279,6 +351,7 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         MybatisParameter parameter = new MybatisParameter(req, __return,
             reqData.getRawCriteria(), sqlDriver, __canPage);
         final List<Object> results = new ArrayList<Object>();
+        // log start time
         long _$ = System.currentTimeMillis();
         session.select(mybatisStatement, parameter, new ResultHandler() {
 
@@ -287,9 +360,11 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
                 results.add(context.getResultObject());
             }
         });
+        // fire time event.
         getEventWork().createAndFireTimeEvent(
             (System.currentTimeMillis() - _$),
             "SQL window query,Query total rows: " + results.size());
+        // prcess result and prepare to return.
         Integer startRow = 0;
         Integer endRow = 0;
         if (totalRows != 0L) {
@@ -303,33 +378,17 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         return __return;
     }
 
-    /**
-     * @param req
-     * @param mybatis
-     * @return
-     * @throws SlxException
-     */
-    private DSResponse executeAdd(DSRequest req, MybatisDataSource mybatis)
-        throws SlxException {
-        DSRequestData __requestCX = req.getContext();
-        DSResponse __return = new DSResponseImpl(req.getDataSource(),
-            Status.STATUS_SUCCESS);
-
-        return null;
-    }
-
+   
     /**
      * @param atuoCommit
      * @return
      * @throws SlxException
      */
     private SqlSession getSqlSession(boolean atuoCommit) throws SlxException {
-        dbName = data.getTdataSource() == null ? null
-            : data.getTdataSource().getDbName();
 
         SqlSessionFactoryProvider provider = getSqlSessionFactoryProvider();
         Assert.isNotNull(provider);
-        SqlSessionFactory factory = provider.createSqlSessionFactory(dbName);
+        SqlSessionFactory factory = provider.createSqlSessionFactory(environment);
         return factory.openSession(atuoCommit);
     }
 
@@ -363,6 +422,13 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         return sqlSessionFactoryProvider;
     }
 
+    private SqlSessionFactory getSqlSessionFactory() throws SlxException {
+        if (sqlSessionFactory == null)
+            sqlSessionFactory = getSqlSessionFactoryProvider().createSqlSessionFactory(
+                environment);
+        return sqlSessionFactory;
+    }
+
     /**
      * @param sqlSessionFactoryProvider the sqlSessionFactoryProvider to set
      */
@@ -371,6 +437,11 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         this.sqlSessionFactoryProvider = sqlSessionFactoryProvider;
     }
 
+    /**
+     * Factory method for instance new mybatis datasource. {@inheritDoc}
+     * 
+     * @see org.solmix.fmk.datasource.BasicDataSource#instance(org.solmix.api.datasource.DataSourceData)
+     */
     @Override
     public DataSource instance(DataSourceData data) throws SlxException {
         MybatisDataSource ds = new MybatisDataSource(sc);

@@ -11,8 +11,10 @@
   <modules>
   	<module>sql</module>
   	<module>sgt</module>
+  	<module>mybatis</module>
   	<module>jpa</module>
   	<module>jquery</module>
+  	
   </modules>
   <groupId>org.solmix.modules</groupId>
 </project>
