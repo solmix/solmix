@@ -390,7 +390,7 @@ public abstract class SQLDriver
         try {
             Boolean printSQL = thisConfig.getBoolean("printSQL", false);
             if (printSQL) {
-                log.debug("Executing SQL query on {} :\n {}", dbName, query);
+                log.info("Executing SQL query on {} :\n {}", dbName, query);
             }
             if (driver != null) {
                 statement = driver.createFetchStatement(__currentConn);
@@ -527,9 +527,7 @@ public abstract class SQLDriver
         }
         Boolean printSQL = thisConfig.getBoolean("printSQL", false);
         if (printSQL) {
-            log.debug(
-                (new StringBuilder()).append("Executing SQL update on '").append(
-                    dbName).append("'").toString(), update);
+            log.info("Executing SQL update on {} :\n {}", dbName, update);
         }
         int __return = 0;
         try {

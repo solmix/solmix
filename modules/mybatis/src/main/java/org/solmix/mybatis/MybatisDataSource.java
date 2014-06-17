@@ -253,9 +253,10 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
      * @param req
      * @param mybatis
      * @return
-     * @throws SlxException 
+     * @throws SlxException
      */
-    private DSResponse executeUpdate(DSRequest req, MybatisDataSource mybatis) throws SlxException {
+    private DSResponse executeUpdate(DSRequest req, MybatisDataSource mybatis)
+        throws SlxException {
         DSResponse __return = new DSResponseImpl(req.getDataSource(),
             Status.STATUS_SUCCESS);
         String statement = getMybatisStatement(req);
@@ -272,9 +273,10 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
      * @param req
      * @param mybatis
      * @return
-     * @throws SlxException 
+     * @throws SlxException
      */
-    private DSResponse executeRemove(DSRequest req, MybatisDataSource mybatis) throws SlxException {
+    private DSResponse executeRemove(DSRequest req, MybatisDataSource mybatis)
+        throws SlxException {
         DSResponse __return = new DSResponseImpl(req.getDataSource(),
             Status.STATUS_SUCCESS);
         String statement = getMybatisStatement(req);
@@ -283,6 +285,7 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         __return.setRawData(result);
         return __return;
     }
+
     /**
      * Mybatis NOT SUPPORT SHOW THE AFFECTED ROW.Tdatasource.simpleReturn=true.
      * 
@@ -301,7 +304,6 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         __return.setRawData(result);
         return __return;
     }
-
 
     private String getMybatisStatement(DSRequest req) throws SlxException {
         ToperationBinding __bind = getContext().getOperationBinding(req);
@@ -331,25 +333,36 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         // Control Page.
         int totalRows = -1;
         boolean __canPage = true;
-        if (!reqData.isPaged()
-            && getConfig().getBoolean("customSQLReturnsAllRows", false)
+        if (!reqData.isPaged()) {
+            __canPage = false;
+        } else if (getConfig().getBoolean("customReturnsAllRows", false)
             && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))) {
             __canPage = false;
-            log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
+            if (log.isDebugEnabled())
+                log.debug("Paging disabled for full custom queries.  "
+                    + "Fetching all rows.Set sql.customReturnsAllRows:"
+                    + " false in config to change this behavior");
         }
 
-        // initial SqlDriver for limit & count sql
-        if (sqlDriver == null) {
-            try {
-                sqlDriver = SQLDriver.instance(environment,
-                    getSqlSessionFactoryProvider().getDbType(environment));
-            } catch (Exception e) {
-                throw new SlxException(Tmodule.SQL,
-                    Texception.SQL_SQLEXCEPTION, "Can't instance SQLDriver", e);
+        Object parameter = null;
+        if (__canPage) {
+
+            // initial SqlDriver for limit & count sql
+            if (sqlDriver == null) {
+                try {
+                    sqlDriver = SQLDriver.instance(environment,
+                        getSqlSessionFactoryProvider().getDbType(environment));
+                } catch (Exception e) {
+                    throw new SlxException(Tmodule.SQL,
+                        Texception.SQL_SQLEXCEPTION,
+                        "Can't instance SQLDriver", e);
+                }
             }
+            parameter = new MybatisParameter(req, __return,
+                reqData.getRawCriteria(), sqlDriver, __canPage);
+        } else {
+            parameter = req.getContext().getRawCriteria();
         }
-        MybatisParameter parameter = new MybatisParameter(req, __return,
-            reqData.getRawCriteria(), sqlDriver, __canPage);
         final List<Object> results = new ArrayList<Object>();
         // log start time
         long _$ = System.currentTimeMillis();
@@ -378,7 +391,6 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         return __return;
     }
 
-   
     /**
      * @param atuoCommit
      * @return

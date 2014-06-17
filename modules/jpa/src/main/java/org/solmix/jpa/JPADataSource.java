@@ -806,10 +806,15 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             __bind = getContext().getOperationBinding(req);
         } catch (NullPointerException e) {
         }
-        if (!req.getContext().isPaged() && getConfig().getBoolean("customSQLReturnsAllRows", false)
-            && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))) {
+        if (!req.getContext().isPaged() ){
             __canPage = false;
-            log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
+        }else if(getConfig().getBoolean("customReturnsAllRows", false)
+            &&DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
+            __canPage = false;
+            if(log.isTraceEnabled())
+                log.trace("Paging disabled for full custom queries.  "
+                    + "Fetching all rows.Set sql.customReturnsAllRows: "
+                    + "false in config to change this behavior");
         }
         if (__canPage) {
             int end = req.getContext().getEndRow();

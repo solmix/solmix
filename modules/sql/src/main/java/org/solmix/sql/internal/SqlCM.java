@@ -28,7 +28,7 @@ package org.solmix.sql.internal;
 public class SqlCM
 {
     public static final String P_DEFAULT_DATABASE="defaultDatabase";
-    public static final String P_CUSTOM_SQL_RETURNS_ALLROWS="customSQLReturnsAllRows";
+    public static final String P_CUSTOM_SQL_RETURNS_ALLROWS="customReturnsAllRows";
     public static final String P_PRINT_SQL = "printSQL";
     public static final String DEFAULT_DATABASE = "HSQL";
     public static final String P_DRIVER_PREFIX = "driver";

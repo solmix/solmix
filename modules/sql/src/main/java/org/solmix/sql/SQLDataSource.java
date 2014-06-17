@@ -352,10 +352,15 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
          *******************************************************************/
         if ((DataTools.isFetch(_opType))) {
             boolean __canPage = true;
-            if (!__requestCX.isPaged()
-                || (this.config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false) && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind)))) {
+            if (!__requestCX.isPaged()){
                 __canPage = false;
-                log.debug("Paging disabled for full custom queries.  Fetching all rows.Set sql.customSQLReturnsAllRows: false in config to change this behavior");
+            }else if(config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false)
+                && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
+                __canPage = false;
+                if(log.isTraceEnabled())
+                    log.trace("Paging disabled for full custom queries.  "
+                        + "Fetching all rows.Set sql.customReturnsAllRows: "
+                        + "false in config to change this behavior");
             }
             /*******************************************************************
              * NOTE:[FETCH] Windows Fetch
