@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.LoggerFactory;
-
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.exception.SlxException;

@@ -411,7 +411,8 @@ public class ConnectionManagerImpl implements ConnectionManager
         if (dbName==null)
             dbName = getDefaultDbName();
         DataTypeMap dbConfig = getSqlConfig().getSubtree(dbName);
-        
+        if(dbConfig==null||dbConfig.isEmpty())
+            throw new SlxException(Tmodule.SQL,Texception.NO_FOUND,"No found configure for jdbc datasource name:"+dbName+ " config");
         return getDataSource(dbName,dbConfig);
     }
 

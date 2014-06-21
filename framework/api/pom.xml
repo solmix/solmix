@@ -165,11 +165,14 @@
 		<dependency>
 			<groupId>org.solmix.common</groupId>
 			<artifactId>solmix-common-util</artifactId>
-			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.common</groupId>
 			<artifactId>solmix-common-runtime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.services</groupId>
+			<artifactId>services-event-api</artifactId>
 			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

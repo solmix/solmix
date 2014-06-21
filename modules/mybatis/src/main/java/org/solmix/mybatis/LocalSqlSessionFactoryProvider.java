@@ -150,7 +150,7 @@ public class LocalSqlSessionFactoryProvider implements
      * @return
      * @throws SlxException
      */
-    private SqlSessionFactoryHolder createSessionForDb(String environment,
+    private synchronized SqlSessionFactoryHolder createSessionForDb(String environment,
         Map<String, Object> properties) throws SlxException {
         DataTypeMap config = getConfig();
         DataTypeMap dbConfig = config.getSubtree(environment);

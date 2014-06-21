@@ -7,7 +7,7 @@
     <relativePath>..</relativePath>
   </parent>
   <artifactId>org.solmix.bundles.jackson</artifactId>
-  <version>1.9.8</version>
+  <version>1.9.9</version>
  <properties>
     <pkgVersion>1.9.8</pkgVersion>
     <pkgArtifactId>jackson</pkgArtifactId>

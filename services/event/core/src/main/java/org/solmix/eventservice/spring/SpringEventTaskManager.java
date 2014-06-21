@@ -35,7 +35,7 @@ import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.event.EventTopic;
+import org.solmix.event.EventTopic;
 import org.solmix.eventservice.EventFilter;
 import org.solmix.eventservice.EventTask;
 import org.solmix.eventservice.EventTaskManager;

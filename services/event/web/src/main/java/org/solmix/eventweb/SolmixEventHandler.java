@@ -33,10 +33,10 @@ import org.atmosphere.handler.AbstractReflectorAtmosphereHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.SystemContext;
-import org.solmix.api.event.EventManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.commons.util.IOUtil;
+import org.solmix.event.EventManager;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 

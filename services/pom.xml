@@ -10,7 +10,9 @@
   <packaging>pom</packaging>
   <modules>
   	<!-- <module>log</module> -->
-  <module>event/core</module>
+   <module>event/core</module>
+   <module>event/api</module>
+   <module>event/web</module>
 <!--   <module>security</module> -->
   </modules>
   <groupId>org.solmix.services</groupId>

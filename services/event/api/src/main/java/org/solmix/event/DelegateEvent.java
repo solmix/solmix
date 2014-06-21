@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.api.event;
+package org.solmix.event;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import org.osgi.service.event.Event;
 
 
 /**
- * Delegate Osgi {@link org.osgi.service.event.Event Event} to {@link org.solmix.api.event.IEvent IEvent}
+ * Delegate Osgi {@link org.osgi.service.event.Event Event} to {@link org.solmix.event.IEvent IEvent}
  * @author solmix.f@gmail.com
  * @version $Id$  2013-10-14
  */
@@ -42,7 +42,7 @@ public class DelegateEvent implements IEvent
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperties()
+     * @see org.solmix.event.IEvent#getProperties()
      */
     @Override
     public Map<String, Object> getProperties() {
@@ -56,7 +56,7 @@ public class DelegateEvent implements IEvent
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperty(java.lang.String)
+     * @see org.solmix.event.IEvent#getProperty(java.lang.String)
      */
     @Override
     public Object getProperty(String name) {
@@ -66,7 +66,7 @@ public class DelegateEvent implements IEvent
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getTopic()
+     * @see org.solmix.event.IEvent#getTopic()
      */
     @Override
     public String getTopic() {

@@ -20,6 +20,7 @@ package org.solmix.api.event;
 
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.criterion.ValidationEventLocator;
+import org.solmix.event.IEvent;
 
 
 /**

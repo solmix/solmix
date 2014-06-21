@@ -21,7 +21,7 @@ package org.solmix.eventweb;
 
 import java.util.Map;
 
-import org.solmix.api.event.IEvent;
+import org.solmix.event.IEvent;
 
 /**
  * 
@@ -66,7 +66,7 @@ public class DelegateClientEvent implements IEvent, java.io.Serializable
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperties()
+     * @see org.solmix.event.IEvent#getProperties()
      */
     @Override
     public Map<String, Object> getProperties() {
@@ -76,7 +76,7 @@ public class DelegateClientEvent implements IEvent, java.io.Serializable
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperty(java.lang.String)
+     * @see org.solmix.event.IEvent#getProperty(java.lang.String)
      */
     @Override
     public Object getProperty(String name) {
@@ -86,7 +86,7 @@ public class DelegateClientEvent implements IEvent, java.io.Serializable
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getTopic()
+     * @see org.solmix.event.IEvent#getTopic()
      */
     @Override
     public String getTopic() {

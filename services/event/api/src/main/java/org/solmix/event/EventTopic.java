@@ -16,27 +16,24 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.event;
 
-package org.solmix.api.event;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-11-30
- * @since 0.1
+ * @author solmix.f@gmail.com
+ * @version $Id$  2013-9-23
  */
 
-public interface EventManager
+@Target( { ElementType.TYPE} )
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EventTopic
 {
-
-    final String OSGI = "osgi";
-
-    final String SPRING = "spring";
-
-    void postEvent(IEvent event);
-
-    void sendEvent(IEvent event);
-
-    String getProvider();
+   String value();
+   String[] values() default {};
 }

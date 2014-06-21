@@ -19,6 +19,8 @@
 
 package org.solmix.api.event;
 
+import org.solmix.event.IEvent;
+
 /**
  * 
  * @author solmix.f@gmail.com

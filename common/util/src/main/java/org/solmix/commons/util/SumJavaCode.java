@@ -35,18 +35,14 @@ public class SumJavaCode
         // File f = new File("E:\\o\\e200pro\\src\\com\\ieslab");
         System.out.println(f.getName());
         sjc.treeFile(f);
-        System.out.println("文件数目");
-        System.out.println("空行");
-        System.out.println("注释行");
-        System.out.println("代码行");
-        System.out.println(fileCont);
-        System.out.println(whiteLines);
-        System.out.println(commentLines);
-        System.out.println(normalLines);
+        System.out.println("文件数目:"+fileCont+" 总代码行数:"+(whiteLines+commentLines+normalLines));
+        System.out.println("空行:"+whiteLines);
+        System.out.println("注释行:"+commentLines);
+        System.out.println("代码行:"+normalLines);
         // System.out.println(System.getProperty("file.separator"));
-        for (String pack : packList) {
-            // System.out.println(pack);
-        }
+       /* for (String pack : packList) {
+             System.out.println(pack);
+        }*/
     }
 
     /**

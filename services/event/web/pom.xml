@@ -7,7 +7,7 @@
 		<version>0.5.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
-	<name>Solmix :: Services :: Event-Web</name>
+	<name>Solmix :: Services :: Event-Service-Web</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.atmosphere</groupId>

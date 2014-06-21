@@ -27,9 +27,9 @@ import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.cpr.DefaultBroadcasterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.api.event.AbstractEventHandler;
-import org.solmix.api.event.EventTopic;
-import org.solmix.api.event.IEvent;
+import org.solmix.event.AbstractEventHandler;
+import org.solmix.event.EventTopic;
+import org.solmix.event.IEvent;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class InternalEventHandler extends AbstractEventHandler
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.AbstractEventHandler#handleIEvent(org.solmix.api.event.IEvent)
+     * @see org.solmix.event.AbstractEventHandler#handleIEvent(org.solmix.event.IEvent)
      */
     @Override
     protected void handleIEvent(IEvent event) {

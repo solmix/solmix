@@ -117,7 +117,7 @@
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<commons-codec.version>1.6</commons-codec.version>
 		<commons-lang.version>2.5</commons-lang.version>
-		<jackson.version>1.9.8</jackson.version>
+		<jackson.version>1.9.9</jackson.version>
 		<poi.version>3.9</poi.version>
 		<velocity.version>1.7</velocity.version>
 		<osgi.service.version>3.3.0.v20110513</osgi.service.version>

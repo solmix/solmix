@@ -23,8 +23,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.solmix.SlxConstants;
-import org.solmix.api.event.EventManager;
-import org.solmix.api.event.IEvent;
+import org.solmix.event.EventManager;
+import org.solmix.event.IEvent;
 
 /**
  * <code>EventManager</code> used to hold Osgi Event Admin Service.

@@ -25,6 +25,7 @@ import java.util.Map;
 import org.solmix.SlxConstants;
 import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.criterion.ValidationEventLocator;
+import org.solmix.event.IEvent;
 
 /**
  * 
@@ -198,7 +199,7 @@ public abstract class AbstractValidationEvent implements IValidationEvent, java.
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperties()
+     * @see org.solmix.event.IEvent#getProperties()
      */
     @Override
     public Map<String, Object> getProperties() {
@@ -238,7 +239,7 @@ public abstract class AbstractValidationEvent implements IValidationEvent, java.
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getProperty(java.lang.String)
+     * @see org.solmix.event.IEvent#getProperty(java.lang.String)
      */
     @Override
     public Object getProperty(String name) {
@@ -248,7 +249,7 @@ public abstract class AbstractValidationEvent implements IValidationEvent, java.
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.IEvent#getTopic()
+     * @see org.solmix.event.IEvent#getTopic()
      */
     @Override
     public String getTopic() {

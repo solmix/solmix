@@ -52,6 +52,11 @@
 			<groupId>org.solmix.common</groupId>
 			<artifactId>solmix-common-runtime</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.solmix.services</groupId>
+			<artifactId>services-event-api</artifactId>
+			<version>0.5.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.eventservice,org.osgi.service.event</solmix.osgi.export.pkg>
@@ -62,7 +67,7 @@
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
 	<packaging>bundle</packaging>
-	<name>Solmix :: Services :: Event-Core/OSGI-Event</name>
+	<name>Solmix :: Services :: Event-Service-Core</name>
 	<build>
 		<plugins>
 			<plugin>
