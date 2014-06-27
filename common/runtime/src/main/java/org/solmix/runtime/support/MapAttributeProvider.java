@@ -23,7 +23,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.solmix.runtime.AttributeProvider;
 import org.solmix.runtime.Context.Scope;
 
 
@@ -63,7 +62,7 @@ public class MapAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.AttributeProvider#getAttributeNames()
+     * @see org.solmix.runtime.support.AttributeProvider#getAttributeNames()
      */
     @Override
     public Enumeration<String> getAttributeNames() {

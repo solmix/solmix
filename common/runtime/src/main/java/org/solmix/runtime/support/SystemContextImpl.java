@@ -28,8 +28,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.AbstractContext;
-import org.solmix.runtime.AttributeProvider;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.SystemContextFactory;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;

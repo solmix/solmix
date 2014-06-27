@@ -46,7 +46,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
-import org.solmix.runtime.AbstractContext;
+import org.solmix.runtime.support.AbstractContext;
 import org.solmix.web.ServletTools;
 
 /**

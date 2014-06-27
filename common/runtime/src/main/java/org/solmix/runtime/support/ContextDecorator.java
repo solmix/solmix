@@ -22,7 +22,6 @@ package org.solmix.runtime.support;
 import java.util.Enumeration;
 import java.util.Map;
 
-import org.solmix.runtime.AbstractContext;
 import org.solmix.runtime.Context;
 
 

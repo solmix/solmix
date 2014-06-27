@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,30 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
-package org.solmix.runtime;
-
-import java.util.Enumeration;
-import java.util.Map;
-
-import org.solmix.runtime.Context.Scope;
+package org.solmix.runtime.event;
 
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-9-28
+ * @author solmix.f@gmail.com
+ * @version $Id$  2014年5月19日
  */
 
-public interface AttributeProvider
+public interface EventProcessor
 {
+    
+    boolean process(Event event);
 
-    void setAttribute(String name, Object value, Scope scope);
-
-    Object getAttribute(String name, Scope scope);
-
-    Map<String, Object> getAttributes(Scope scope);
-
-    void removeAttribute(String name, Scope scope);
-    Enumeration<String> getAttributeNames();
 }

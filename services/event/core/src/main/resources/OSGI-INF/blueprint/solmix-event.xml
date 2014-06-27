@@ -20,7 +20,7 @@
 		<property name="bundleContext" ref="blueprintBundleContext" />
 	</bean>
 
-	<!-- <bean id="org.solmix.api.event.EventManager" class="org.solmix.eventservice.EventManagerImpl">
+	<!-- <bean id="org.solmix.event.EventManager" class="org.solmix.eventservice.EventManagerImpl">
 		<argument ref="solmix" />
 		<property name="eventAdmin" ref="eventadmin" />
 	</bean> -->

@@ -17,12 +17,16 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime;
+package org.solmix.runtime.support;
 
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import org.solmix.runtime.Context;
+import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.Context.Scope;
 
 /**
  * 

@@ -16,18 +16,14 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
 
+package org.solmix.runtime.event;
 
 /**
- * 
- * @author solmix.f@gmail.com
- * @version $Id$  2014年5月19日
+ * Event interface.
  */
 
-public interface EventProcessor
+public interface Event
 {
-    
-    boolean process(Event event);
-
+    // NO METHOD
 }

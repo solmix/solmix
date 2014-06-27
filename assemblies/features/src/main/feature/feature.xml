@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="solmix-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
+ <feature name="solmix-runtime" description="Solmix Runtime" version="${project.version}" >
+    	<bundle start-level="60">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.oro/${bundles.oro.version}</bundle>
+        <bundle start-level="60">mvn:commons-codec/commons-codec/1.6</bundle>
+        <bundle start-level="60">mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
+        <bundle start-level="60">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
+        <bundle start-level="60">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
+    </feature>
+    
+	<feature name="solmix-framework" description="Solmix Framework" version="${project.version}" resolver="(obr)">
+    	<feature version="${project.version}">solmix-runtime</feature>
+    	<bundle start-level="60">mvn:org.apache.geronimo.specs/geronimo-servlet_2.5_spec/${geronimo.servlet.version}</bundle>
+    	<bundle start-level="60">mvn:org.apache.velocity/velocity/${velocity.version}</bundle>
+    	<bundle start-level="60">mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>
+    	<bundle start-level="60">mvn:commons-pool/commons-pool/${commons-pool.version}</bundle>
+    	<bundle start-level="60">mvn:commons-beanutils/commons-beanutils/${commons-beanutils.version}</bundle>
+    	<bundle start-level="60">mvn:org.solmix.bundles/org.solmix.bundles.jackson/${jackson.version}</bundle>
+    	<bundle start-level="60">mvn:org.solmix.bundles/org.solmix.bundles.jxpath/${commons-jxpath.version}</bundle>
+    	<bundle start-level="80">mvn:org.solmix.framework/solmix-framework-api/${project.version}</bundle>
+    	<bundle start-level="80">mvn:org.solmix.framework/solmix-framework-pool/${project.version}</bundle>
+    	<bundle start-level="80">mvn:org.solmix.framework/solmix-framework-dsrepo/${project.version}</bundle>
+    	<bundle start-level="80">mvn:org.solmix.framework/solmix-framework-datasource/${project.version}</bundle>
+    	<bundle start-level="60">mvn:org.apache.shiro/shiro-core/${apache.shiro.version}</bundle>
+    	
+    	<!-- <bundle start-level="60">mvn:commons-io/commons-io/2.4</bundle>
+	    	<bundle start-level="60">mvn:commons-fileupload/commons-fileupload/1.3</bundle>
+	    	<bundle start-level="60">mvn:org.solmix.bundles/org.solmix.bundles.poi/3.9</bundle>
+     	-->
+    </feature>
+    
+    <feature name="solmix-modules-jdbc" description="Solmix Modules Jdbc" version="${project.version}" >
+    	<feature version="${project.version}">solmix-framework</feature>
+    	<bundle start-level="60">mvn:org.solmix.bundles/org.solmix.bundles.dbcp/${commons-dbcp.version}</bundle>
+        <bundle start-level="60">mvn:org.solmix.modules/solmix-modules-sql/${project.version}</bundle>
+    </feature>
+    
+    <feature name="solmix-services-event" description="Solmix Event Services " version="${project.version}" resolver="(obr)">
+    	<feature version="${project.version}">solmix-framework</feature>
+       <bundle start-level='30'>mvn:org.solmix.services/services-event-core/${project.version}</bundle>
+    </feature>
+</features>

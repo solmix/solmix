@@ -29,8 +29,8 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.AttributeProvider;
 import org.solmix.runtime.Context.Scope;
+import org.solmix.runtime.support.AttributeProvider;
 
 /**
  * 
@@ -117,7 +117,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.AttributeProvider#getAttributes(org.solmix.runtime.Context.Scope)
+     * @see org.org.solmix.runtime.support.AttributeProvider#getAttributes(org.solmix.runtime.Context.Scope)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -163,7 +163,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.context.AttributeProvider#removeAttribute(java.lang.String,
+     * @see org.org.solmix.runtime.support.AttributeProvider#removeAttribute(java.lang.String,
      *      org.solmix.runtime.Context.Scope)
      */
     @Override
@@ -190,7 +190,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.AttributeProvider#getAttributeNames()
+     * @see org.solmix.runtime.support.AttributeProvider#getAttributeNames()
      */
     @Override
     public Enumeration<String> getAttributeNames() {

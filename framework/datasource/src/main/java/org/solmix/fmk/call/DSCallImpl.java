@@ -33,7 +33,6 @@ import org.solmix.api.call.DSCall;
 import org.solmix.api.call.DSCallCompleteCallback;
 import org.solmix.api.call.DSCallInterceptor;
 import org.solmix.api.call.DSCallInterceptor.Action;
-import org.solmix.runtime.Context;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DSResponse;
@@ -57,6 +56,7 @@ import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 import org.solmix.fmk.velocity.Velocity;
+import org.solmix.runtime.Context;
 
 /**
  * complex relationship at this class,ant simple configuration at data class {@link org.solmix.api.data.DSCManagerData
@@ -225,6 +225,7 @@ public class DSCallImpl implements DSCall
                     res = new DSResponseImpl(req);
                     res.setRawData(e.getMessage());
                     res.setStatus(Status.STATUS_FAILURE);
+                    log.error("DSRequest execute Failed:",e);
                 }
                 if (res != null)
                     responseMap.put(req, res);
