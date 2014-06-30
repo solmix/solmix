@@ -19,6 +19,7 @@
 package org.solmix.runtime.cm.support;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class ConfigureUnitImpl implements ConfigureUnit
     
     private  Properties properties;
     private final String pid;
-    private DataTypeMap internal;
+    private Map<String,Object> internal;
     
     private final SpringConfigureUnitManager manager;
     
@@ -52,19 +53,23 @@ public class ConfigureUnitImpl implements ConfigureUnit
  
     @Override
     public DataTypeMap getProperties() {
+        return new DataTypeMap(Collections.unmodifiableMap(getProperties0()));
+    }
+    
+    private Map<String,Object> getProperties0(){
         if(internal==null){
-          Map<String,Object> prop= new HashMap<String,Object>();
-            if (properties != null) {
-                Enumeration<Object> en = properties.keys();
-                while (en.hasMoreElements()) {
-                    Object key = en.nextElement();
-                    prop.put(key.toString(), properties.get(key));
-                }
-            }
-            internal =new DataTypeMap(prop);
-        }
-       
-        return internal;
+            Map<String,Object> prop= new HashMap<String,Object>();
+              if (properties != null) {
+                  Enumeration<Object> en = properties.keys();
+                  while (en.hasMoreElements()) {
+                      Object key = en.nextElement();
+                      prop.put(key.toString(), properties.get(key));
+                  }
+              }
+              internal =prop;
+          }
+         
+          return internal;
     }
   
     @Override
@@ -77,7 +82,7 @@ public class ConfigureUnitImpl implements ConfigureUnit
     public void update() throws IOException {
       //XXX
       //manager.update(this,properties);
-       throw new java.lang.RuntimeException("this implemention not support update()");
+       throw new java.lang.UnsupportedOperationException("this implemention not support update()");
 
     }
 
@@ -88,7 +93,7 @@ public class ConfigureUnitImpl implements ConfigureUnit
             Enumeration<String> en = properties.keys();
             while (en.hasMoreElements()) {
                 String key = en.nextElement();
-                getProperties().put(key, properties.get(key));
+                getProperties0().put(key, properties.get(key));
             }
         }
 

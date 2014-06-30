@@ -351,20 +351,22 @@ public class ServiceDataSource
             }
         }
         request.setRequestStarted(true);
-        Object returnValue;
+        Object returnValue=null;
         try {
 
             returnValue = Reflection.adaptArgsAndInvoke(srvObjInstance, method, requireArgs, optionalArgs, _ds);
         } catch (Exception e) {
-            throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, e.getCause());
+            dsResponse = new DSResponseImpl(request,Status.STATUS_FAILURE);
+            dsResponse.setRawData(e.getMessage());
+            return dsResponse;
+//            throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, e.getCause());
         }
         if (sqlConnection != null && !connectionIstransactional) {
             ((ISQLDataSource) _ds).freeConnection(sqlConnection);
         }
         if (returnValue == null)
             return null;
-        Class<?> returnObjClass = returnValue.getClass();
-        if (DSResponse.class.isAssignableFrom(returnObjClass)) {
+        if (returnValue!=null&&DSResponse.class.isAssignableFrom(returnValue.getClass())) {
             dsResponse = (DSResponse) returnValue;
         } else {
             dsResponse = new DSResponseImpl(request,Status.STATUS_SUCCESS);

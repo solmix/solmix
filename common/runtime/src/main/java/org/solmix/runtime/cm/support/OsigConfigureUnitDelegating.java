@@ -20,8 +20,11 @@
 package org.solmix.runtime.cm.support;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.osgi.service.cm.Configuration;
 import org.solmix.commons.collections.DataTypeMap;
@@ -46,7 +49,7 @@ public class OsigConfigureUnitDelegating implements ConfigureUnit
     @Override
     public DataTypeMap getProperties() {
 
-        DataTypeMap config = new DataTypeMap();
+        Map<String, Object> config = new HashMap<String, Object>();
         Dictionary<String, Object> properties = configure.getProperties();
         if (properties != null) {
             Enumeration<String> en = properties.keys();
@@ -55,7 +58,7 @@ public class OsigConfigureUnitDelegating implements ConfigureUnit
                 config.put(key, properties.get(key));
             }
         }
-        return config;
+        return new DataTypeMap(Collections.unmodifiableMap(config));
     }
 
     /**
