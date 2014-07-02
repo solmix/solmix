@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.osgi.service.event.Event;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 
 /**
@@ -46,7 +48,9 @@ public class OsgiEventDecode
        ObjectMapper mapper = new ObjectMapper();
        
         try {
-           String strValue= mapper.writeValueAsString(e);
+            ObjectWriter writer=   mapper.writerWithDefaultPrettyPrinter();
+            
+           String strValue=writer.writeValueAsString(e);
             System.out.println(strValue);
         } catch (JsonGenerationException e1) {
             // TODO Auto-generated catch block

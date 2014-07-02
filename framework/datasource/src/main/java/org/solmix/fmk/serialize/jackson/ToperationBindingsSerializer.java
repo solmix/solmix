@@ -21,14 +21,14 @@ package org.solmix.fmk.serialize.jackson;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
-
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
 import org.solmix.commons.util.DataUtil;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 
 /**

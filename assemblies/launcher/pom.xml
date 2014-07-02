@@ -191,9 +191,8 @@
 			<artifactId>org.apache.servicemix.bundles.oro</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.solmix.bundles</groupId>
-			<artifactId>org.solmix.bundles.jackson</artifactId>
-			<version>${jackson.version}</version>
+			 <groupId>com.fasterxml.jackson.dataformat</groupId>
+  				<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.bundles</groupId>

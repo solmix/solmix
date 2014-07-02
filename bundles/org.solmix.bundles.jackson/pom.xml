@@ -7,21 +7,21 @@
     <relativePath>..</relativePath>
   </parent>
   <artifactId>org.solmix.bundles.jackson</artifactId>
-  <version>1.9.9</version>
+  <version>2.4.0</version>
  <properties>
     <pkgVersion>1.9.8</pkgVersion>
     <pkgArtifactId>jackson</pkgArtifactId>
-    <solmix.osgi.export>!org.codehaus.jackson.map.ext,org.codehaus.jackson*;version="1.9.8"</solmix.osgi.export>
+    <solmix.osgi.export>!com.fasterxml.jackson.map.ext,com.fasterxml.jackson*;version="2.4.0"</solmix.osgi.export>
     <pkgGroupId>jackson</pkgGroupId>
-    <solmix.osgi.import.pkg>!org.codehaus.jackson*,!org.joda.time*,*</solmix.osgi.import.pkg>
-    <solmix.osgi.private.pkg>org.codehaus.jackson.map.ext</solmix.osgi.private.pkg>
+    <solmix.osgi.import.pkg>!com.fasterxml.jackson*,!org.joda.time*,*</solmix.osgi.import.pkg>
+    <solmix.osgi.private.pkg>com.fasterxml.jackson.map.ext</solmix.osgi.private.pkg>
     <solmix.osgi.failok>true</solmix.osgi.failok>
     <solmix.category>codehaus</solmix.category>
   </properties>
    <dependencies>
   	<dependency>
-  		<groupId>org.codehaus.jackson</groupId>
-  		<artifactId>jackson-xc</artifactId>
+  		<groupId>com.fasterxml.jackson.dataformat</groupId>
+  				<artifactId>jackson-dataformat-xml</artifactId>
   	</dependency>
   </dependencies> 
    <build>

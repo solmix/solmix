@@ -23,8 +23,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.codehaus.jackson.annotate.JacksonAnnotation;
-
 
 /**
  * 
@@ -33,7 +31,7 @@ import org.codehaus.jackson.annotate.JacksonAnnotation;
  */
 @Target( { ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@JacksonAnnotation
+@com.fasterxml.jackson.annotation.JacksonAnnotation
 public @interface CustomDateFormat {
 
    public String format() default "yyyy-MM-dd";

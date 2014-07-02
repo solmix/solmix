@@ -280,7 +280,7 @@ public class ServiceDataSource
         Connection sqlConnection = null;
         if (haveExplicitBinding)
             methodArguments = srvConfig.getMethodArguments();
-        Map valuesOrCriteria = request.getContext().getValues() == null ? request.getContext().getCriteria() : request.getContext().getValues();
+        Map<String,Object> valuesOrCriteria = request.getContext().getValues() == null ? request.getContext().getCriteria() : request.getContext().getValues();
 
         // making method require arguments.
         if (methodArguments != null) {

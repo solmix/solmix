@@ -46,6 +46,7 @@ import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.commons.util.DataUtil;
 import org.solmix.commons.util.IOUtil;
 import org.solmix.fmk.SlxContext;
+import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -134,7 +135,8 @@ public class RestRequestParser
                                 }
                                 if (operation.getDataSource() == null)
                                     operation.setDataSource(cf.getDataSourceName());
-                                DSRequest dsr = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(operation, SlxContext.getWebContext());
+                                DSRequest dsr = new DSRequestImpl(operation,
+                                    SlxContext.getWebContext());
                                 dsr.getContext().setIsClientRequest(true);
                                 dsr.setFreeOnExecute(freeOnExecute);
                                 dsr.setCanJoinTransaction(!freeOnExecute);

@@ -40,6 +40,10 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
 import org.solmix.commons.util.IOUtil;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 /**
  * @author solmix.f@gmail.com
  * @since 0.0.1
@@ -200,7 +204,16 @@ public class JaxbXMLParserImpl implements XMLParser
 
     @Override
     public void toXML(Writer out, Object object) throws SlxException {
-        // TODO Auto-generated method stub
+        XmlMapper xml = new XmlMapper();
+        try {
+            xml.writeValue(out, object);
+        } catch (JsonGenerationException e) {
+            throw new SlxException(Tmodule.XML,Texception.XML_CREATE_DOCUMENT,e);
+        } catch (JsonMappingException e) {
+            throw new SlxException(Tmodule.XML,Texception.XML_CREATE_DOCUMENT,e);
+        } catch (IOException e) {
+            throw new SlxException(Tmodule.XML,Texception.XML_CREATE_DOCUMENT,e);
+        }
         
     }
 

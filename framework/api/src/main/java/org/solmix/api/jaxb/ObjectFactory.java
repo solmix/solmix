@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-import org.codehaus.jackson.map.Module;
+import com.fasterxml.jackson.databind.Module;
+
 
 
 /**

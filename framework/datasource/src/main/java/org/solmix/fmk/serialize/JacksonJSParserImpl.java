@@ -24,15 +24,15 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.AnnotationIntrospector;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-import org.codehaus.jackson.map.module.SimpleModule;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
+//import org.codehaus.jackson.JsonGenerationException;
+//import org.codehaus.jackson.Version;
+//import org.codehaus.jackson.map.AnnotationIntrospector;
+//import org.codehaus.jackson.map.JsonMappingException;
+//import org.codehaus.jackson.map.ObjectMapper;
+//import org.codehaus.jackson.map.SerializationConfig;
+//import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+//import org.codehaus.jackson.map.module.SimpleModule;
+//import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.exception.SlxException;
@@ -52,6 +52,17 @@ import org.solmix.fmk.serialize.jackson.ToperationBindingSerializer;
 import org.solmix.fmk.serialize.jackson.ToperationBindingsSerializer;
 import org.solmix.fmk.serialize.jackson.TvalidatorsSerializer;
 import org.solmix.fmk.serialize.jackson.TvalueMapSerializer;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 /**
  * @author solmix.f@gmail.com
@@ -169,8 +180,8 @@ public class JacksonJSParserImpl implements JSParser
             long _s = System.currentTimeMillis();
             iscMapper = new ObjectMapper();
             AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
-            iscMapper.getSerializationConfig().setAnnotationIntrospector(introspector);
-            iscMapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
+            iscMapper.getSerializationConfig().withAppendedAnnotationIntrospector(introspector);
+            iscMapper.getSerializationConfig().withSerializationInclusion(JsonInclude.Include.NON_NULL);
             iscMapper = customConfig(iscMapper, true);
             long s_ = System.currentTimeMillis();
             if (log.isDebugEnabled()) {
@@ -184,8 +195,8 @@ public class JacksonJSParserImpl implements JSParser
     public synchronized ObjectMapper initMapper(boolean restart) {
         if (mapper == null || restart) {
             mapper = new ObjectMapper();
-            mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
-            mapper = customConfig(mapper, true);
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL) ;
+            mapper = customConfig(mapper, false);
         }
         return mapper;
     }
@@ -207,14 +218,12 @@ public class JacksonJSParserImpl implements JSParser
     }
 
     private synchronized ObjectMapper customConfig(ObjectMapper mapper, boolean isIsc) {
-        if (prettyPrint)
-            mapper.defaultPrettyPrintingWriter();
-        if (omitNullValues) {
-            mapper.getSerializationConfig().withSerializationInclusion(Inclusion.NON_NULL);
-        }
+//        if (prettyPrint)
+//            mapper.writerWithDefaultPrettyPrinter();
+       
 
         if (isIsc) {
-            SimpleModule module = new SimpleModule("SolmixJS", new Version(0, 1, 0, "alpha"));
+            SimpleModule module = new SimpleModule("SolmixJS", new Version(0, 1, 0, "alpha","org.solmix.framework","solmix-framework-datasource"));
             module.addSerializer(org.solmix.api.jaxb.TdataSource.class, new TdataSourceSerializer());
             module.addSerializer(java.util.Date.class, new ContextualDateSerializer("new Date(", ")"));
             module.addSerializer(org.solmix.fmk.util.SLXDate.class, new ContextualDateSerializer("Date.parseServerDate(", ")", true));
@@ -227,12 +236,13 @@ public class JacksonJSParserImpl implements JSParser
             module.addSerializer(org.solmix.api.jaxb.ToperationBinding.class, new ToperationBindingSerializer());
             mapper.registerModule(module);
         }
-        mapper.getSerializationConfig().set(SerializationConfig.Feature.INDENT_OUTPUT, true);
-        // avoid exception when can not found the compare serialiazation.
-        mapper.getSerializationConfig().set(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.getJsonFactory().configure(org.codehaus.jackson.JsonGenerator.Feature.QUOTE_FIELD_NAMES, true);
-        mapper.getJsonFactory().configure(org.codehaus.jackson.JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-        // mapper.getJsonFactory().configure(org.codehaus.jackson.JsonGenerator.Feature, false);
+        mapper.getSerializationConfig().with(SerializationFeature.INDENT_OUTPUT);
+        mapper.getSerializationConfig().with(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        mapper.getSerializationConfig().without(SerializationFeature.WRITE_NULL_MAP_VALUES);
+         mapper.getFactory().enable(Feature.AUTO_CLOSE_TARGET);
+        if (omitNullValues) {
+          mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL) ;
+        }
         return mapper;
 
     }

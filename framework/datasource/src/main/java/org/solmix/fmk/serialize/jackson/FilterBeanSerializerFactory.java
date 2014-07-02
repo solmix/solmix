@@ -23,15 +23,23 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.jackson.map.AnnotationIntrospector;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.introspect.AnnotatedClass;
-import org.codehaus.jackson.map.introspect.BasicBeanDescription;
-import org.codehaus.jackson.map.ser.BeanPropertyWriter;
-import org.codehaus.jackson.map.ser.BeanSerializerFactory;
-import org.codehaus.jackson.map.util.ArrayBuilders;
-
+//import org.codehaus.jackson.map.AnnotationIntrospector;
+//import org.codehaus.jackson.map.SerializationConfig;
+//import org.codehaus.jackson.map.introspect.AnnotatedClass;
+//import org.codehaus.jackson.map.introspect.BasicBeanDescription;
+//import org.codehaus.jackson.map.ser.BeanPropertyWriter;
+//import org.codehaus.jackson.map.ser.BeanSerializerFactory;
+//import org.codehaus.jackson.map.util.ArrayBuilders;
 import org.solmix.commons.util.DataUtil;
+
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.cfg.SerializerFactoryConfig;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
+import com.fasterxml.jackson.databind.introspect.BasicBeanDescription;
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import com.fasterxml.jackson.databind.ser.BeanSerializerFactory;
+import com.fasterxml.jackson.databind.util.ArrayBuilders;
 
 /**
  * @author solmix.f@gmail.com
@@ -42,9 +50,14 @@ public class FilterBeanSerializerFactory extends BeanSerializerFactory
 {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -3470138389144231980L;
+
+    /**
      * @param config
      */
-    protected FilterBeanSerializerFactory(Config config)
+    protected FilterBeanSerializerFactory(SerializerFactoryConfig config)
     {
         super(config);
     }
@@ -69,7 +82,7 @@ public class FilterBeanSerializerFactory extends BeanSerializerFactory
     /**
      * Override for filter some special Bean properties
      */
-    @Override
+//    @Override
     protected List<BeanPropertyWriter> filterBeanProperties(SerializationConfig config, BasicBeanDescription beanDesc, List<BeanPropertyWriter> props) {
         AnnotationIntrospector intr = config.getAnnotationIntrospector();
         AnnotatedClass ac = beanDesc.getClassInfo();

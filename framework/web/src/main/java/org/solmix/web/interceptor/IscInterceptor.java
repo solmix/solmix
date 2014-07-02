@@ -229,13 +229,6 @@ public class IscInterceptor extends AbstractRestInterceptor
             return queryString.indexOf("isc_xhr=1") != -1 || queryString.indexOf("xmlHttp=true") != -1;
     }
 
-    public static String getDataformat(HttpServletRequest request) {
-        String queryString = request.getParameter("isc_dataFormat");
-        if (queryString == null)
-            return "json";
-        else
-            return queryString;
-    }
 
     /**
      * Write document form client as a JavaScript

@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.ResponseData;
 import org.solmix.commons.util.DataUtil;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author solmix.f@gmail.com
@@ -37,7 +37,6 @@ import org.solmix.commons.util.DataUtil;
  * @version 110035 2010-12-19 solmix-api
  */
 @ResponseData
-@JsonIgnoreProperties({ "exportFields", "isExport", "dropExtraFields", "affectedRows", "requestConnectionClose" })
 public class DSResponseData
 {
 
