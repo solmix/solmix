@@ -347,6 +347,7 @@ public class ServiceDataSource
             } else {
                 optionalArgs = new ReflectionArgument[] { 
                     new ReflectionArgument(Context.class, null, false, false),
+                    new ReflectionArgument(HttpServletRequest.class, null, false, false),
                     new ReflectionArgument(HttpServletResponse.class, null, false, false),
                     new ReflectionArgument(ServletContext.class, null, false, false), 
                     new ReflectionArgument(HttpSession.class, null, false, false),
