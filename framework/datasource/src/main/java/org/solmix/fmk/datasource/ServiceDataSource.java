@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.RequestContext;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
@@ -332,20 +332,29 @@ public class ServiceDataSource
             }
 
             if (context != null && context instanceof WebContext) {
-                optionalArgs = new ReflectionArgument[] { new ReflectionArgument(Context.class, context, false, false),
-                    new ReflectionArgument(HttpServletResponse.class, ((WebContext) context).getRequest(), false, false),
+                optionalArgs = new ReflectionArgument[] { 
+                    new ReflectionArgument(WebContext.class, context, false, false),
+                    new ReflectionArgument(HttpServletRequest.class, ((WebContext) context).getRequest(), false, false),
+                    new ReflectionArgument(HttpServletResponse.class, ((WebContext) context).getResponse(), false, false),
                     new ReflectionArgument(ServletContext.class, ((WebContext) context).getServletContext(), false, false),
-                    new ReflectionArgument(HttpSession.class, session, false, false), new ReflectionArgument(DSCall.class, dsc, false, false),
-                    new ReflectionArgument(DSRequest.class, request, false, false), new ReflectionArgument(DataSource.class, _ds, false, false),
-                    new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
+                    new ReflectionArgument(HttpSession.class, session, false, false),
+                    new ReflectionArgument(DSCall.class, dsc, false, false),
+                    new ReflectionArgument(DSRequest.class, request, false, false), 
+                    new ReflectionArgument(DataSource.class, _ds, false, false),
+                    new ReflectionArgument(Connection.class, sqlConnection, false, false),
+                    new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };
             } else {
-                optionalArgs = new ReflectionArgument[] { new ReflectionArgument(RequestContext.class, null, false, false),
+                optionalArgs = new ReflectionArgument[] { 
+                    new ReflectionArgument(Context.class, null, false, false),
                     new ReflectionArgument(HttpServletResponse.class, null, false, false),
-                    new ReflectionArgument(ServletContext.class, null, false, false), new ReflectionArgument(HttpSession.class, null, false, false),
-                    new ReflectionArgument(DSCall.class, dsc, false, false), new ReflectionArgument(DSRequest.class, request, false, false),
+                    new ReflectionArgument(ServletContext.class, null, false, false), 
+                    new ReflectionArgument(HttpSession.class, null, false, false),
+                    new ReflectionArgument(DSCall.class, dsc, false, false), 
+                    new ReflectionArgument(DSRequest.class, request, false, false),
                     new ReflectionArgument(DataSource.class, _ds, false, false),
-                    new ReflectionArgument(Connection.class, sqlConnection, false, false), new ReflectionArgument(Logger.class, log, false, false),
+                    new ReflectionArgument(Connection.class, sqlConnection, false, false), 
+                    new ReflectionArgument(Logger.class, log, false, false),
                     new ReflectionArgument(Map.class, valuesOrCriteria, false, true) };
 
             }
@@ -357,6 +366,7 @@ public class ServiceDataSource
             returnValue = Reflection.adaptArgsAndInvoke(srvObjInstance, method, requireArgs, optionalArgs, _ds);
         } catch (Exception e) {
             dsResponse = new DSResponseImpl(request,Status.STATUS_FAILURE);
+            log.error("Reflect exception:",e);
             dsResponse.setRawData(e.getMessage());
             return dsResponse;
 //            throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, e.getCause());

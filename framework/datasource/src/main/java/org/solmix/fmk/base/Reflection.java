@@ -372,7 +372,7 @@ public class Reflection
         if (requiredArgs == null)
             requiredArgs = new ReflectionArgument[0];
         if(log.isTraceEnabled())
-        log.trace((new StringBuilder()).append("adaptArgsAndInvoke:\n\n ").append(method.getName()).append("\n\nrequiredArgs: ").append(
+            log.trace((new StringBuilder()).append("adaptArgsAndInvoke: ").append(method.getName()).append("\n\nrequiredArgs: ").append(
             typesAsString(requiredArgs)).append(" optionalArgs: ").append(typesAsString(optionalArgs)).toString());
         int requiredArgIndex = 0;
         List<Class<?>> parameterTypes = Arrays.asList(method.getParameterTypes());
@@ -447,7 +447,7 @@ public class Reflection
             if (assignedOptionalArg)
                 continue;
             String errorString = (new StringBuilder()).append("Unable to assign a required or optional argument to slot #").append(i + 1).append(
-                " taking type: ").append(paramType.getName()).append(" of method:\n\n").append(method.toString()).append("\n\n").append(
+                " taking type: ").append(paramType.getName()).append(" of method:").append(method.toString()).append("").append(
                 "No remaining optional arguments match this type").toString();
             if (reqArg != null)
                 errorString = (new StringBuilder()).append(errorString).append(".  The next required argument passed by the client was of type: ").append(
@@ -458,7 +458,7 @@ public class Reflection
             if (optionalArgs.length == 0)
                 errorString = (new StringBuilder()).append(errorString).append(
                     "  Note that no optional arguments were available for this assignment, likely because your method definition in your .app.xml file specifies explicit methodArguments.  Please check to make sure this methodArguments declaration matches your method signature.").toString();
-            errorString = (new StringBuilder()).append(errorString).append("\n\n").toString();
+            errorString = (new StringBuilder()).append(errorString).append("").toString();
             throw new Exception(errorString);
         }
 
@@ -466,7 +466,7 @@ public class Reflection
         if (log.isTraceEnabled()) {
             log.trace((new StringBuilder()).append("method takes: ").append(parameterTypes.size()).append(" args.  I've assembled: ").append(
                 methodArgs.size()).append(" args").toString());
-            log.trace((new StringBuilder()).append("invoking method:\n").append(getFormattedMethodSignature(method)).append("\n\nwith arg types: ").append(
+            log.trace((new StringBuilder()).append("invoking method:").append(getFormattedMethodSignature(method)).append(" with arg types: ").append(
                 getFormattedParamTypes(args)).toString());
         }
         return method.invoke(instance, args);
