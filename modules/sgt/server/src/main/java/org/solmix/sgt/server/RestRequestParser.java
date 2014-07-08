@@ -43,8 +43,8 @@ import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.serialize.XMLParserFactory;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
@@ -104,7 +104,7 @@ public class RestRequestParser
                 String queryStr = request.getParameter("_transaction");
                 if (queryStr == null) {
                     StringWriter out = new StringWriter();
-                    IOUtil.copyCharacterStreams(request.getReader(), out);
+                    IOUtils.copyCharacterStreams(request.getReader(), out);
                     queryStr =out.toString();
                 }
                 if (queryStr == null || queryStr.length() == 0) {
@@ -156,7 +156,7 @@ public class RestRequestParser
     public static ConfigBean getDataSourceFromURL(HttpServletRequest request) {
 
         String reqPath = request.getRequestURI();
-        if (DataUtil.isNullOrEmpty(reqPath)) {
+        if (DataUtils.isNullOrEmpty(reqPath)) {
             reqPath = request.getRequestURI();
         }
         String type = null;
