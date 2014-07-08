@@ -25,7 +25,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.export.ExportManager;
 import org.solmix.api.export.IExport;
 import org.solmix.api.jaxb.EexportAs;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * @author solmix.f@gmail.com
@@ -65,7 +65,7 @@ public IExport getExport(String formatName) throws SlxException {
 @Override
 public IExport getExport(EexportAs type,Map<String,Object> context) throws SlxException {
     IExport export= getExport(type);
-    if(export!=null&&DataUtil.isNotNullAndEmpty(context)){
+    if(export!=null&&DataUtils.isNotNullAndEmpty(context)){
         export.setContext(context);
     }
     return export;

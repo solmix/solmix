@@ -32,8 +32,8 @@ import java.util.Map;
 import org.apache.oro.text.perl.Perl5Util;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.export.IExport;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.DateUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.DateUtils;
 
 /**
  * @author solmix.f@gmail.com
@@ -143,7 +143,7 @@ protected Map<String, String> getColumnNames(List<Map<Object, Object>> rows) {
 
 public String getDelimitedValues(Collection<Map<Object, Object>> rows, Collection<String> columns, String delimiter,
     String quoteChar) {
-    return getDelimitedValues(rows, DataUtil.listToStringArray(columns), delimiter, quoteChar);
+    return getDelimitedValues(rows, DataUtils.listToStringArray(columns), delimiter, quoteChar);
 }
 
 protected String getDelimitedValues(Collection<Map<Object, Object>> rows, String columns[], String delimiter,
@@ -157,7 +157,7 @@ protected String getDelimitedValues(Collection<Map<Object, Object>> rows, String
             if (value == null)
                 _stringValue = "";
             else if (value instanceof Date)
-                _stringValue = DateUtil.simpleDateFormat((Date) value);
+                _stringValue = DateUtils.simpleDateFormat((Date) value);
             else
                 _stringValue = value.toString();
             if (quoteChar != null) {

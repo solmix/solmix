@@ -70,7 +70,7 @@ public class SlxKeyedObjectPool extends GenericKeyedObjectPool
             log.error((new StringBuilder()).append("Ignoring unknown value: ").append(whenExhaustedAction).append(" for whenExhaustedAction.").append(
                 " Valid values are: grow, block, fail.").toString());
         try {
-            // this is a fussy configuration process.we can use DataUtil.setProperties() method to simple this process.
+            // this is a fussy configuration process.we can use DataUtils.setProperties() method to simple this process.
             // but when I checked the commons-pool sources found this config bean is not the standard java bean ,so
             // reflect
             // value failed.the latest source is used standard java bean .

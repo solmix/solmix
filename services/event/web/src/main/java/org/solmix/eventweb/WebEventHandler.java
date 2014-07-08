@@ -24,9 +24,9 @@ import org.atmosphere.cpr.DefaultBroadcasterFactory;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.event.AbstractEventHandler;
-import org.solmix.event.EventTopic;
-import org.solmix.event.IEvent;
+import org.solmix.runtime.event.AbstractEventHandler;
+import org.solmix.runtime.event.EventTopic;
+import org.solmix.runtime.event.IEvent;
 
 
 /**
@@ -42,7 +42,7 @@ public class WebEventHandler extends AbstractEventHandler implements EventHandle
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.event.AbstractEventHandler#handleIEvent(org.solmix.event.IEvent)
+     * @see org.solmix.runtime.event.AbstractEventHandler#handleIEvent(org.solmix.runtime.event.IEvent)
      */
     @Override
     protected void handleIEvent(IEvent event) {

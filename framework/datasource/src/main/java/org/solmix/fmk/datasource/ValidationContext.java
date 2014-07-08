@@ -30,7 +30,7 @@ import org.solmix.api.datasource.DSRequestData;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.ErrorReport;
 import org.solmix.fmk.velocity.DataSourcesHandler;
 import org.solmix.fmk.velocity.Util;
@@ -261,7 +261,7 @@ public class ValidationContext extends HashMap
             report.put("recordPath", recordPath);
             errors.put(recordPath, report);
         }
-        DataUtil.putCombinedList(report, fieldName, newErrors);
+        DataUtils.putCombinedList(report, fieldName, newErrors);
     }
 
     /**
@@ -450,7 +450,7 @@ public class ValidationContext extends HashMap
     public void addToTemplateContext(Map<String, Object> keyValues) {
         if (templateContext == null)
             initTemplateContext();
-        templateContext = DataUtil.mapMerge(keyValues, templateContext);
+        templateContext = DataUtils.mapMerge(keyValues, templateContext);
 
     }
 

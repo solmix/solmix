@@ -47,8 +47,8 @@ import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.event.EventWorker;
 import org.solmix.fmk.event.EventWorkerFactory;
@@ -155,7 +155,7 @@ public class DefaultParser implements ParserHandler
         } else {
             repos = manager.getRepositories();
         }
-        String explicitName = DataUtil.isNullOrEmpty(suffix) ? dsName : dsName + "." + suffix.toLowerCase().trim();
+        String explicitName = DataUtils.isNullOrEmpty(suffix) ? dsName : dsName + "." + suffix.toLowerCase().trim();
         for (DSRepository repo : repos) {
             DataSourceData loaded = loadFromRepo(repo, explicitName, dsName, request);
             if (loaded != null)
@@ -212,7 +212,7 @@ public class DefaultParser implements ParserHandler
         } catch (Exception e1) {
             throw new SlxException(Tmodule.XML,Texception.XML_JAXB_UNMARSHAL,e1);
         } finally {
-            IOUtil.closeQuitely(is);
+            IOUtils.closeQuitely(is);
         }
         if(module==null)
             return null;
@@ -297,7 +297,7 @@ public class DefaultParser implements ParserHandler
          * auto generating datasource schema.
          *********************************************************/
         /*
-         * if (DataUtil.booleanValue(data.getTdataSource().isAutoDeriveSchema())) autoGenerateSchema();
+         * if (DataUtils.booleanValue(data.getTdataSource().isAutoDeriveSchema())) autoGenerateSchema();
          */
         customerValidation(data, request);
         return data;

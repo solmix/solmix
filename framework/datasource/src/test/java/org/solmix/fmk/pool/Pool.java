@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 
 /**
@@ -55,10 +55,10 @@ public class Pool
 //        }
         System.out.println("vaule:'01'".indexOf(":")!=-1?"vaule:'01'".substring(0,"vaule:'01'".indexOf(":")+1):"");
         String a ="csm$C_CUST";
-        List<String> b = DataUtil.simpleSplit(a, "$");
+        List<String> b = DataUtils.simpleSplit(a, "$");
         System.out.println(b.get(0)+"-----"+b.get(1));
         Map map = new HashMap();
-        DataUtil.makeList(Pool.class);
+        DataUtils.makeList(Pool.class);
 //        System.out.println(a.indexOf("$"));
     }
 

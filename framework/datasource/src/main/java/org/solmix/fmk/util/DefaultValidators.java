@@ -54,7 +54,7 @@ import org.solmix.api.jaxb.Tvalidator;
 import org.solmix.api.jaxb.Tvalue;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
@@ -251,7 +251,7 @@ public class DefaultValidators
             if (value == null || value.equals(""))
                 return null;
             try {
-                double num = DataUtil.asDouble(value);
+                double num = DataUtils.asDouble(value);
                 context.setResultingValue(new Double(num));
             } catch (NumberFormatException e) {
                 return new ErrorMessage(DefaultValidators.getErrorString(validatorParams, "%validator_notADecimal"));
@@ -272,7 +272,7 @@ public class DefaultValidators
             throws SlxException {
             if (value == null || value.equals(""))
                 return null;
-            if (DataUtil.isIdentifier((String) value))
+            if (DataUtils.isIdentifier((String) value))
                 return null;
             else
                 return new ErrorMessage(DefaultValidators.getErrorString(validatorParams, "%validator_notAnIdentifier"));
@@ -862,7 +862,7 @@ public class DefaultValidators
         public Object callServerObject(Validator validator, Object value, String fieldName, Map record, ValidationContext context)
             throws SlxException {
             Tservice srvConfig = validator.getService();
-            // Map srvMapConf = DataUtil.getMapFromBean( srvConfig );
+            // Map srvMapConf = DataUtils.getMapFromBean( srvConfig );
             Context requestContext = context.getRequestContext();
             DataSource ds = context.getCurrentDataSource();
             String contextString = (new StringBuilder()).append("'serverCustom' validator for field ").append(fieldName).append(" on DataSource ").append(
@@ -927,7 +927,7 @@ public class DefaultValidators
 
     private static final Map<String, ValidatorFunc> validatorFunctions = Collections.synchronizedMap(new HashMap<String, ValidatorFunc>());
 
-    private static final List clientOnlyValidators = DataUtil.makeList("requiredIf");
+    private static final List clientOnlyValidators = DataUtils.makeList("requiredIf");
 
     static final Map<String, ValidatorFunc> defaultValidators;
     static {

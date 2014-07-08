@@ -34,7 +34,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.springframework.core.io.Resource;
@@ -201,7 +201,7 @@ public class SpringConfigureUnitManager implements ConfigureUnitManager
                 Object key = en.nextElement();
                 Object value = properties.get(key);
                 if (value != null) {
-                    value = DataUtil.getTemplateValue(value.toString());
+                    value = DataUtils.getTemplateValue(value.toString());
                 }
                 properties.put(key, value);
             }

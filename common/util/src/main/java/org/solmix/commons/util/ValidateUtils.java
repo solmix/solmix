@@ -22,7 +22,7 @@ package org.solmix.commons.util;
  * 
  * @version 110035
  */
-public final class ValidateUtil
+public final class ValidateUtils
 {
    static public void assertTrue(String message, boolean condition) {
       if (!condition)

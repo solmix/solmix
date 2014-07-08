@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.solmix.api.data.DSResponseData;
 import org.solmix.api.datasource.ResponseData;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * @author solmix.f@gmail.com
@@ -66,7 +66,7 @@ public class ResponseDataAnnotation
 
          }
       }
-      Map map = DataUtil.annotationFilter( data, ResponseData.class );
+      Map map = DataUtils.annotationFilter( data, ResponseData.class );
       System.out.println(map);
    }
 }

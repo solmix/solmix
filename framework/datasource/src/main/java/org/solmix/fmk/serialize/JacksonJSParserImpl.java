@@ -42,7 +42,7 @@ import org.solmix.api.jaxb.Tsolmix;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.serialize.jackson.ContextualDateSerializer;
 import org.solmix.fmk.serialize.jackson.ModuleSerializer;
 import org.solmix.fmk.serialize.jackson.ResponseStatusSerializer;
@@ -131,7 +131,7 @@ public class JacksonJSParserImpl implements JSParser
         try {
             if (log.isTraceEnabled()) {
                 StringWriter record = new StringWriter();
-                IOUtil.copyCharacterStreams(src, record);
+                IOUtils.copyCharacterStreams(src, record);
                 log.trace("transform json: " + record.toString() + " to javaObject <" + valueType.getName() + ">");
                 return mapper.readValue(record.toString(), valueType);
             }

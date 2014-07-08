@@ -20,8 +20,8 @@ package org.solmix.fmk.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.event.EventManager;
-import org.solmix.event.IEvent;
+import org.solmix.runtime.event.EventManager;
+import org.solmix.runtime.event.IEvent;
 
 
 /**
@@ -38,7 +38,7 @@ public class NullEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.event.EventManager#postEvent(org.solmix.event.IEvent)
+     * @see org.solmix.runtime.event.EventManager#postEvent(org.solmix.runtime.event.IEvent)
      */
     @Override
     public void postEvent(IEvent event) {
@@ -49,7 +49,7 @@ public class NullEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.event.EventManager#sendEvent(org.solmix.event.IEvent)
+     * @see org.solmix.runtime.event.EventManager#sendEvent(org.solmix.runtime.event.IEvent)
      */
     @Override
     public void sendEvent(IEvent event) {
@@ -60,7 +60,7 @@ public class NullEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.event.EventManager#getProvider()
+     * @see org.solmix.runtime.event.EventManager#getProvider()
      */
     @Override
     public String getProvider() {

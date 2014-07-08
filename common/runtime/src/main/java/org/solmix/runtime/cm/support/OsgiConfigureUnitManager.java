@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.solmix.commons.util.OsgiUtil;
+import org.solmix.commons.util.OsgiUtils;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 
@@ -50,7 +50,7 @@ public class OsgiConfigureUnitManager implements ConfigureUnitManager
 
     protected ConfigurationAdmin getConfigurationAdmin() {
         if (admin == null) {
-            admin = OsgiUtil.getService(context, ConfigurationAdmin.class);
+            admin = OsgiUtils.getService(context, ConfigurationAdmin.class);
         }
         if (admin == null)
             throw new java.lang.RuntimeException("Can't find osgi configurationadmin service");

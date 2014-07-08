@@ -27,7 +27,7 @@ import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Tservice;
 import org.solmix.api.jaxb.Tvalidator;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.velocity.Velocity;
 
 /**
@@ -83,7 +83,7 @@ public class Validator< K, V > extends HashMap< K ,V >
    {
       errorVariables = new HashMap< K ,V >();
       standard = false;
-      DataUtil.mapMerge( fieldData, this );
+      DataUtils.mapMerge( fieldData, this );
    }
 
    public String getExpression()
@@ -117,12 +117,12 @@ public class Validator< K, V > extends HashMap< K ,V >
    }
    public boolean getBoolean( String key )
    {
-      return DataUtil.getBoolean( this, key );
+      return DataUtils.getBoolean( this, key );
    }
 
    public Long getCount()
    {
-      Long _return = DataUtil.getLong( this, "count" );
+      Long _return = DataUtils.getLong( this, "count" );
       if ( _return == null && standard )
          _return = tvalidator.getCount();
       return _return;
@@ -194,7 +194,7 @@ public class Validator< K, V > extends HashMap< K ,V >
 
    public Double getMaxAsDouble()
    {
-      Double _return = DataUtil.getDouble( this, "max" );
+      Double _return = DataUtils.getDouble( this, "max" );
       if ( _return == null && standard )
          _return = tvalidator.getMax();
       return _return;
@@ -202,7 +202,7 @@ public class Validator< K, V > extends HashMap< K ,V >
 
    public Double getMinAsDouble()
    {
-      Double _return = DataUtil.getDouble( this, "min" );
+      Double _return = DataUtils.getDouble( this, "min" );
       if ( _return == null && standard )
          _return = tvalidator.getMin();
       return _return;
@@ -224,7 +224,7 @@ public class Validator< K, V > extends HashMap< K ,V >
    }
    public Double getPrecision()
    {
-      Double _return = DataUtil.getDouble( this, "precision" );
+      Double _return = DataUtils.getDouble( this, "precision" );
       if ( _return == null && standard )
          _return = tvalidator.getPrecision();
       return _return;

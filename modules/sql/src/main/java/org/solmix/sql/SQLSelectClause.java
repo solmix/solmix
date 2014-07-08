@@ -34,7 +34,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class SQLSelectClause
 
     public SQLSelectClause(SQLDataSource dataSource)
     {
-        this(DataUtil.makeList(dataSource));
+        this(DataUtils.makeList(dataSource));
     }
 
     public SQLSelectClause(List<SQLDataSource> dataSources)
@@ -86,7 +86,7 @@ public class SQLSelectClause
 
     public SQLSelectClause(DSRequest request, SQLDataSource ds, boolean qualifyColumnNames)
     {
-        this(request, DataUtil.makeList(ds), qualifyColumnNames);
+        this(request, DataUtils.makeList(ds), qualifyColumnNames);
     }
 
     public SQLSelectClause(DSRequest request, List<SQLDataSource> dataSources, boolean qualifyColumnNames)
@@ -94,7 +94,7 @@ public class SQLSelectClause
         this(dataSources);
         List<String> outputColumns = computeOutputColumns(request);
         if (outputColumns != null)
-            remapTable = DataUtil.subsetMap(remapTable, outputColumns);
+            remapTable = DataUtils.subsetMap(remapTable, outputColumns);
         this.qualifyColumnNames = qualifyColumnNames;
     }
 
@@ -235,7 +235,7 @@ public class SQLSelectClause
      */
     private String customSQLExpression(SQLDriver driver, String columnName, String rsName, String tableName, Tfield field, boolean qualifyColumnNames) {
         String custom = field.getCustomSelectExpression();
-        if (DataUtil.isNullOrEmpty(custom) && custom.substring(0, 1).equals("$")) {
+        if (DataUtils.isNullOrEmpty(custom) && custom.substring(0, 1).equals("$")) {
             if (custom.substring(0, custom.indexOf(":")).equalsIgnoreCase("$value"))
                 custom = custom.substring(custom.indexOf(":") + 1);
         } else {

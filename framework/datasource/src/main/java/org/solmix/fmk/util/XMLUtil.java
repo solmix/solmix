@@ -44,7 +44,7 @@ import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.serialize.XMLParserFactoryImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,7 +117,7 @@ public class XMLUtil
             Node child = children.item(i);
             if (child instanceof Element) {
                 Element childElement = (Element) child;
-                DataUtil.putMultiple(elementChildren, childElement.getTagName(), childElement);
+                DataUtils.putMultiple(elementChildren, childElement.getTagName(), childElement);
             }
         }
 
@@ -129,7 +129,7 @@ public class XMLUtil
     }
 
     public static List<Element> getElementChildren(Element element, String tagName) {
-        return getElementChildren(element, DataUtil.buildMap(tagName, new Object()));
+        return getElementChildren(element, DataUtils.buildMap(tagName, new Object()));
     }
 
     public static List<Element> getElementChildren(Element element, Map tags) {
@@ -183,7 +183,7 @@ public class XMLUtil
             File dir = new File(absolutePath);
             if (!dir.exists() && !dir.isDirectory())
                 dir.mkdirs();
-            absolutePath = DataUtil.isNullOrEmpty(fileName) ? absolutePath : absolutePath + fileName;
+            absolutePath = DataUtils.isNullOrEmpty(fileName) ? absolutePath : absolutePath + fileName;
         } else {
             absolutePath = fileName;
         }

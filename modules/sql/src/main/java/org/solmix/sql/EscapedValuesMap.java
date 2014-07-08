@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 
 /**
@@ -58,7 +58,7 @@ public class EscapedValuesMap extends HashMap
 
    public EscapedValuesMap(Map m, SQLDataSource ds, Mode mode)
    {
-      this(m, DataUtil.makeList(ds), mode);
+      this(m, DataUtils.makeList(ds), mode);
    }
 
    public EscapedValuesMap(Map m, List<SQLDataSource> dataSources, Mode mode)

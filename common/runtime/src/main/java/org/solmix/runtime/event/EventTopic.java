@@ -16,27 +16,24 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.commons.util;
+package org.solmix.runtime.event;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-11-5
+ * @version $Id$  2013-9-23
  */
 
-public final class OsgiUtil
+@Target( { ElementType.TYPE} )
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EventTopic
 {
-
-    public static Object getService(BundleContext bundleContext,String serviceName) {
-        ServiceReference<?> ref = bundleContext.getServiceReference(serviceName);
-        return ref == null ? null : bundleContext.getService(ref);
-    }
-    public static <S> S getService(BundleContext bundleContext,Class<S> clz) {
-        ServiceReference<S> ref = bundleContext.getServiceReference(clz);
-        return ref == null ? null : bundleContext.getService(ref);
-    }
+   String value();
+   String[] values() default {};
 }

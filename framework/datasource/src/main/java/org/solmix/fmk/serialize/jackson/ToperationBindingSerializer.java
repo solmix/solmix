@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -61,7 +61,7 @@ public class ToperationBindingSerializer extends JsonSerializer<ToperationBindin
         String[] filter = { "class", "service", "selectClause", "otherAttributes", "valuesClause", "tableClause",
             "whereClause", "groupClause", "orderCaluse", "groupWhereClause" };
         try {
-            fields = DataUtil.getPropertyDescriptors(data);
+            fields = DataUtils.getPropertyDescriptors(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,7 +71,7 @@ public class ToperationBindingSerializer extends JsonSerializer<ToperationBindin
         List<String> list = new ArrayList<String>(fieldNames);
         Collections.sort(list, comparator);
         for (String fieldName : list) {
-            if (DataUtil.contains(filter, fieldName))
+            if (DataUtils.contains(filter, fieldName))
                 continue;
             PropertyDescriptor des = fields.get(fieldName);
             Class<?> type = des.getPropertyType();

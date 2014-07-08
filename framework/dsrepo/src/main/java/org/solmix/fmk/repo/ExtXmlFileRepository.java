@@ -31,7 +31,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 
@@ -95,10 +95,10 @@ public class ExtXmlFileRepository extends AbstractDSRepository
      * @throws IOException
      */
     public SlxFile XMLOrJSFile(String baseDir, String dsName) throws SlxException {
-        if (DataUtil.isNullOrEmpty(baseDir))
+        if (DataUtils.isNullOrEmpty(baseDir))
             return null;
         String absolutePath = baseDir.endsWith("/") ? baseDir : baseDir + "/";
-        absolutePath = DataUtil.isNullOrEmpty(dsName) ? absolutePath : absolutePath + "/" + dsName;
+        absolutePath = DataUtils.isNullOrEmpty(dsName) ? absolutePath : absolutePath + "/" + dsName;
 
         String xmlName = (new StringBuilder()).append(absolutePath).append(".xml").toString();
         try {
@@ -123,7 +123,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
     public Object load(String dsName) throws SlxException {
         SlxFile dsFile = null;
         List<String> dsLocations = new ArrayList<String>();
-        if (DataUtil.isNullOrEmpty(location)) {
+        if (DataUtils.isNullOrEmpty(location)) {
             String base = System.getProperty("solmix.base");
             if (base == null) {
                 base = System.getProperty("karaf.base");
@@ -134,7 +134,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
                 log.trace("None setting extension configuration file location .used default location:" + defaultLocation);
             Collections.addAll(dsLocations, defaultLocation);
         } else {
-            dsLocations = DataUtil.commaSeparatedStringToList(location);
+            dsLocations = DataUtils.commaSeparatedStringToList(location);
         }
         for (String dsLocation : dsLocations) {
             dsFile = XMLOrJSFile(dsLocation,dsName);

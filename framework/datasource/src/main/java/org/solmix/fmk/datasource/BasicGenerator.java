@@ -39,7 +39,7 @@ import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.ClassLoaderUtil;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
 
@@ -144,7 +144,7 @@ public class BasicGenerator implements DataSourceGenerator
             valueMap = new TvalueMap();
             for (Object i : constants) {
                 String proName = i.toString();
-                String value = DataUtil.deriveTileFromName(proName);
+                String value = DataUtils.deriveTileFromName(proName);
                 Tvalue tv = new Tvalue();
                 tv.setId(proName);
                 tv.setName(value);
@@ -172,7 +172,7 @@ public class BasicGenerator implements DataSourceGenerator
             valueMap = new TvalueMap();
             for (Object i : constants) {
                 String proName = i.toString();
-                String value = DataUtil.deriveTileFromName(proName);
+                String value = DataUtils.deriveTileFromName(proName);
                 Tvalue tv = new Tvalue();
                 tv.setId(proName);
                 tv.setName(value);
@@ -229,7 +229,7 @@ public class BasicGenerator implements DataSourceGenerator
         data.getOtherAttributes().put(new QName("generatedBy"), core_version);
         data.getOtherAttributes().put(new QName("beanClassName"), clz.getName());
         try {
-            Map<String, PropertyDescriptor> propDes = DataUtil.getPropertyDescriptors(clz);
+            Map<String, PropertyDescriptor> propDes = DataUtils.getPropertyDescriptors(clz);
             if (propDes.isEmpty())
                 return null;
             Tfields fields = new Tfields();

@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.event;
+package org.solmix.runtime.event;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;

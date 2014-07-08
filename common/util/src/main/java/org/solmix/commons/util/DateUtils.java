@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
  * 
  * @version 110035
  */
-public final class DateUtil
+public final class DateUtils
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataUtils.class);
 
     public static final long DAY_MS_TIME = 24 * 60 * 60 * 1000;
 
@@ -123,12 +123,12 @@ public final class DateUtil
     }
 
     public static void main(String args[]) {
-        System.out.println(DateUtil.getFirstDayofMouth("201105", "yyyyMM", "yyyyMMdd"));
+        System.out.println(DateUtils.getFirstDayofMouth("201105", "yyyyMM", "yyyyMMdd"));
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         String textDate = "2013-04-01T02:27:05";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(DateUtil.getCurrentDateStr("yyyy-MM-dd HH:mm:ss"));
+        System.out.println(DateUtils.getCurrentDateStr("yyyy-MM-dd HH:mm:ss"));
         System.out.println(new Date());
         try {
             System.out.println(sdf.parse(textDate));

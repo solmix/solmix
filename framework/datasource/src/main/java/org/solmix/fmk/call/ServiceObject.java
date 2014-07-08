@@ -33,7 +33,7 @@ import org.solmix.api.jaxb.EserviceStyle;
 import org.solmix.api.jaxb.Tservice;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
 import org.solmix.fmk.util.ServiceUtil;
@@ -122,7 +122,7 @@ public class ServiceObject
                 serverObjectInterface = srvConfig.getInterface();
                 serverObjectFilter = srvConfig.getFilter();
                 Object[] objects = ServiceUtil.getOSGIServices(serverObjectInterface, serverObjectFilter);
-                if (DataUtil.isNotNullAndEmpty(objects))
+                if (DataUtils.isNotNullAndEmpty(objects))
                     serverObjectInstance = objects[0];
             }
                 break;

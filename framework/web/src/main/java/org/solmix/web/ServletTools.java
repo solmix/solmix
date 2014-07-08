@@ -47,7 +47,7 @@ import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * @author solmix.f@gmail.com
@@ -82,9 +82,9 @@ public class ServletTools
             if (queryString.startsWith("?"))
                 queryString = queryString.substring(1);
             URLCodec urlCodec = new URLCodec("UTF-8");
-            List<String> paramPairs = DataUtil.simpleSplit(queryString, "&");
+            List<String> paramPairs = DataUtils.simpleSplit(queryString, "&");
             for (String str : paramPairs) {
-                List<String> keyVale = DataUtil.simpleSplit(str, "=");
+                List<String> keyVale = DataUtils.simpleSplit(str, "=");
 
                 try {
                     params.put(urlCodec.decode(keyVale.get(0)), urlCodec.decode(keyVale.get(1)));
@@ -104,7 +104,7 @@ public class ServletTools
      * @throws Exception
      */
     public static String mimeTypeForContext(WebContext context) throws Exception {
-        return DataUtil.mimeTypeForFileName(context.getRequestPath());
+        return DataUtils.mimeTypeForFileName(context.getRequestPath());
     }
 
     public static Map<String, Object> paramsToMap(ServletRequest request) {
@@ -277,23 +277,23 @@ public class ServletTools
 
     public static boolean browserIsNav4(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        return userAgent != null && DataUtil.contains(userAgent, "Mozilla/4") && !DataUtil.contains(userAgent, "MSIE")
-            && !DataUtil.contains(userAgent, "Opera");
+        return userAgent != null && DataUtils.contains(userAgent, "Mozilla/4") && !DataUtils.contains(userAgent, "MSIE")
+            && !DataUtils.contains(userAgent, "Opera");
     }
 
     public static boolean browserIsMSIE(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        return userAgent != null && DataUtil.contains(userAgent, "MSIE");
+        return userAgent != null && DataUtils.contains(userAgent, "MSIE");
     }
 
     public static boolean browserIsMoz(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        return userAgent != null && DataUtil.contains(userAgent, "Gecko/");
+        return userAgent != null && DataUtils.contains(userAgent, "Gecko/");
     }
 
     public static boolean browserIsSafari(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-        return userAgent != null && DataUtil.contains(userAgent, "Safari");
+        return userAgent != null && DataUtils.contains(userAgent, "Safari");
     }
 
     /**
@@ -416,13 +416,13 @@ public class ServletTools
     public static boolean compressionWorksForMimeType(WebContext context, String mimeType) {
         if (mimeType == null)
             return false;
-        if (DataUtil.contains(mimeType, "zip"))
+        if (DataUtils.contains(mimeType, "zip"))
             return false;
-        if (DataUtil.contains(mimeType, "css")
+        if (DataUtils.contains(mimeType, "css")
             && (browserIsNav4(context.getRequest()) || browserIsMSIE(context.getRequest())
                 && IEBrowserVersion(context.getRequest()).floatValue() <= 5.5D))
             return false;
-        if (!DataUtil.contains(mimeType, "javascript"))
+        if (!DataUtils.contains(mimeType, "javascript"))
             return true;
         if (browserIsNav4(context.getRequest()))
             return false;

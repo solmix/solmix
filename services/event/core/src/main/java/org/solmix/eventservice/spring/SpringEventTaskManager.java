@@ -35,13 +35,13 @@ import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.event.EventTopic;
 import org.solmix.eventservice.EventFilter;
 import org.solmix.eventservice.EventTask;
 import org.solmix.eventservice.EventTaskManager;
 import org.solmix.eventservice.TopicFilter;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.event.EventTopic;
 
 /**
  * 

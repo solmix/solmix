@@ -22,7 +22,7 @@ package org.solmix.api.event;
 import java.util.Map;
 
 import org.osgi.service.event.Event;
-import org.solmix.event.IEvent;
+import org.solmix.runtime.event.IEvent;
 
 /**
  * 
@@ -53,7 +53,7 @@ public class TimeMonitorEvent extends Event implements ITimeMonitorEvent, java.i
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.event.IEvent#getProperties()
+     * @see org.solmix.runtime.event.IEvent#getProperties()
      */
     @Override
     public Map<String, Object> getProperties() {

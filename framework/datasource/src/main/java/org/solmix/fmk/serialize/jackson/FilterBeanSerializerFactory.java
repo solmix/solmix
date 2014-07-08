@@ -30,7 +30,7 @@ import java.util.List;
 //import org.codehaus.jackson.map.ser.BeanPropertyWriter;
 //import org.codehaus.jackson.map.ser.BeanSerializerFactory;
 //import org.codehaus.jackson.map.util.ArrayBuilders;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.SerializationConfig;
@@ -72,7 +72,7 @@ public class FilterBeanSerializerFactory extends BeanSerializerFactory
             return;
         if (filterProperty.length == 1 && filterProperty[0].equals(""))
             return;
-        ONLY_SERVER_PORP = DataUtil.arrayAdd(ONLY_SERVER_PORP, filterProperty);
+        ONLY_SERVER_PORP = DataUtils.arrayAdd(ONLY_SERVER_PORP, filterProperty);
     }
 
     private String[] ONLY_SERVER_PORP = { "__autoConstruct" };
@@ -88,7 +88,7 @@ public class FilterBeanSerializerFactory extends BeanSerializerFactory
         AnnotatedClass ac = beanDesc.getClassInfo();
         String[] ignored = intr.findPropertiesToIgnore(ac);
         if (ignored != null)
-            DataUtil.arrayAdd(ignored, ONLY_SERVER_PORP);
+            DataUtils.arrayAdd(ignored, ONLY_SERVER_PORP);
         else
             ignored = ONLY_SERVER_PORP;
         if (ignored != null && ignored.length > 0) {

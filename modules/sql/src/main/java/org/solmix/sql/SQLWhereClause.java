@@ -19,7 +19,7 @@
 
 package org.solmix.sql;
 
-import static org.solmix.commons.util.DataUtil.booleanValue;
+import static org.solmix.commons.util.DataUtils.booleanValue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -42,7 +42,7 @@ import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.DataTools;
 
 /**
@@ -120,7 +120,7 @@ public class SQLWhereClause
 
     public SQLWhereClause(Object whereStructure, SQLDataSource ds) throws SlxException
     {
-        this(whereStructure, DataUtil.makeList(ds));
+        this(whereStructure, DataUtils.makeList(ds));
     }
 
     /**
@@ -144,7 +144,7 @@ public class SQLWhereClause
         field2ColumnMap = SQLDataSource.getField2ColumnMap(dataSources, primaryKeysOnly);
         if (primaryKeysOnly && (whereStructure instanceof Map)) {
             Map m = new HashMap((Map) whereStructure);
-            whereStructure = DataUtil.subsetMap((Map) whereStructure, new ArrayList(field2ColumnMap.keySet()));
+            whereStructure = DataUtils.subsetMap((Map) whereStructure, new ArrayList(field2ColumnMap.keySet()));
             if (((Map) whereStructure).isEmpty()) {
                 if(log.isDebugEnabled())
                 log.debug((new StringBuilder()).append("primaryKeysOnly forced removal of all criteria.  criteria was: ").append(
@@ -154,7 +154,7 @@ public class SQLWhereClause
         }
         List constraints = (List) req.getContext().getConstraints();
         if (constraints != null)
-            field2ColumnMap = DataUtil.subsetMap(field2ColumnMap, constraints);
+            field2ColumnMap = DataUtils.subsetMap(field2ColumnMap, constraints);
     }
 
     /**
@@ -264,7 +264,7 @@ public class SQLWhereClause
                     List values = (List) value;
                     List __exp = new ArrayList();
                     for (Iterator i = values.iterator(); i.hasNext();) {
-                        __exp.add(DataUtil.buildMap(((Entry) condition).getKey(), i.next()));
+                        __exp.add(DataUtils.buildMap(((Entry) condition).getKey(), i.next()));
                     }
                     return buildCompoundExpression(__exp.iterator(), "OR", driver);
                 } else {
@@ -275,7 +275,7 @@ public class SQLWhereClause
             } else if (condition instanceof List) {
                 return buildCompoundExpression(((List) condition).iterator(), "OR", driver);
             } else {
-                throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtil.getNoSupportString(condition));
+                throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtils.getNoSupportString(condition));
             }
         } else {
 
@@ -299,7 +299,7 @@ public class SQLWhereClause
                     return buildAdvancedExpression(fieldName, operator, value, start, end, driver);
                 }
             } else {
-                throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtil.getNoSupportString(condition));
+                throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtils.getNoSupportString(condition));
             }
         }
     }
@@ -444,7 +444,7 @@ public class SQLWhereClause
                 clause.append(subClause);
             }
         }
-        if (DataUtil.isNullOrEmpty(clause))
+        if (DataUtils.isNullOrEmpty(clause))
             return null;
         if (operator.equals("not"))
             return (new StringBuilder()).append("NOT(").append(clause.toString()).append(")").toString();

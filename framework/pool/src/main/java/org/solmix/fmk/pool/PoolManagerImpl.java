@@ -33,7 +33,7 @@ import org.solmix.api.pool.SlxPoolableObjectFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * {@link org.solmix.api.pool.PoolService PoolService} implement.
@@ -210,7 +210,7 @@ public class PoolManagerImpl implements PoolManager
         if (factory instanceof SlxPoolableObjectFactory)
             iscFactory = (SlxPoolableObjectFactory) factory;
         if (mergConfig.getBoolean("enabled", false) && (iscFactory == null || !iscFactory.poolDisabled)) {
-            enablePool = DataUtil.asBoolean(mergConfig.remove("enabled"));
+            enablePool = DataUtils.asBoolean(mergConfig.remove("enabled"));
             Object pool;
             if (factory instanceof SlxKeyedPoolableObjectFactory)
                 pool = new SlxKeyedObjectPool((SlxKeyedPoolableObjectFactory) factory, mergConfig);

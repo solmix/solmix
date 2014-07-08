@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 
 /**
@@ -49,8 +49,8 @@ public class DownLoadFileTest
             if (!f.exists())
                 f.createNewFile();
             FileOutputStream fs = new FileOutputStream(f);
-            IOUtil.copyStreams(is, fs);
-            IOUtil.closeQuitely(is);
+            IOUtils.copyStreams(is, fs);
+            IOUtils.closeQuitely(is);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

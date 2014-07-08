@@ -41,7 +41,7 @@ import org.solmix.api.jaxb.Tvalue;
 import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.BasicGenerator;
 import org.solmix.fmk.internal.DatasourceCM;
 
@@ -91,7 +91,7 @@ public class JPADataSourceGenerator extends BasicGenerator implements DataSource
          *********************************************/
         Entity e = clz.getAnnotation(Entity.class);
         String ID = e.name();
-        if (DataUtil.isNullOrEmpty(ID))
+        if (DataUtils.isNullOrEmpty(ID))
             ID = super.deriveID(clz, parentID);
         else {
             ID = new StringBuilder().append(ID).append(DERIVE_KEY).append(parentID).toString();
@@ -104,7 +104,7 @@ public class JPADataSourceGenerator extends BasicGenerator implements DataSource
         data.setFields(fields);
         try {
             Field[] declaredFields = clz.getDeclaredFields();
-            Map<String, PropertyDescriptor> propDes= DataUtil.getPropertyDescriptors(clz);
+            Map<String, PropertyDescriptor> propDes= DataUtils.getPropertyDescriptors(clz);
             for (Field field : declaredFields) {
                 int modifier = field.getModifiers();
                 String propertyName = field.getName();
@@ -118,7 +118,7 @@ public class JPADataSourceGenerator extends BasicGenerator implements DataSource
                     valueMap = new TvalueMap();
                     for (Object i : constants) {
                         String proName = i.toString();
-                        String value = DataUtil.deriveTileFromName(proName);
+                        String value = DataUtils.deriveTileFromName(proName);
                         Tvalue tv = new Tvalue();
                         tv.setId(proName);
                         tv.setName(value);

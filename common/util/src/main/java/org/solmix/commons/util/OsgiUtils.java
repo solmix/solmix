@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 The Solmix Project
+ *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,23 +16,27 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.commons.util;
 
-package org.solmix.event;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
-import java.util.Map;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version 110035 2011-10-4
+ * @version $Id$  2013-11-5
  */
 
-public interface IEvent
+public final class OsgiUtils
 {
 
-    Map<String, Object> getProperties();
-
-    Object getProperty(String name);
-
-    String getTopic();
+    public static Object getService(BundleContext bundleContext,String serviceName) {
+        ServiceReference<?> ref = bundleContext.getServiceReference(serviceName);
+        return ref == null ? null : bundleContext.getService(ref);
+    }
+    public static <S> S getService(BundleContext bundleContext,Class<S> clz) {
+        ServiceReference<S> ref = bundleContext.getServiceReference(clz);
+        return ref == null ? null : bundleContext.getService(ref);
+    }
 }

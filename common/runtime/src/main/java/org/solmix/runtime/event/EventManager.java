@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.event;
+package org.solmix.runtime.event;
 
 
 /**

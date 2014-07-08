@@ -36,7 +36,7 @@ public class DataUtilTest
 
     @Test
     public void getPropertyDescriptorsTest() throws Exception {
-        Map map = DataUtil.getPropertyDescriptors(Bean1.class);
+        Map map = DataUtils.getPropertyDescriptors(Bean1.class);
 
         Assert.assertNotNull(map.get("b"));
     }
@@ -52,9 +52,9 @@ public class DataUtilTest
         testValues.put("justFloat", "");
         testValues.put("boolObj", "");
         testValues.put("justBool", "");
-        DataUtil.setProperties(testValues, bean);
+        DataUtils.setProperties(testValues, bean);
         // Assert.assertEquals(123, bean.getIntObj().intValue());
-        Map map = DataUtil.getPropertyDescriptors(bean.getClass());
+        Map map = DataUtils.getPropertyDescriptors(bean.getClass());
         for (Object o : map.keySet()) {
             System.out.println(o.toString() + "===" + map.get(o));
         }
@@ -65,7 +65,7 @@ public class DataUtilTest
         testValues.put("justFloat", null);
         testValues.put("boolObj", null);
         testValues.put("justBool", null);
-        DataUtil.setProperties(testValues, bean);
+        DataUtils.setProperties(testValues, bean);
         Assert.assertNull(bean.getIntObj());
     }
 
@@ -73,7 +73,7 @@ public class DataUtilTest
     public void arrayAddTest() {
         String[] str = { "13", "123" };
         String[] str2 = { "13", "123" };
-        String[] str3 = DataUtil.arrayAdd(str, str2);
+        String[] str3 = DataUtils.arrayAdd(str, str2);
         Assert.assertEquals("123", str3[3]);
         for (String s : str3)
             System.out.println(s);
@@ -85,10 +85,10 @@ public class DataUtilTest
         Boolean b = Boolean.TRUE;
         Boolean str3;
         try {
-            str3 = DataUtil.convertType(Boolean.class, b);
+            str3 = DataUtils.convertType(Boolean.class, b);
             Assert.assertEquals(Boolean.TRUE, str3);
             Integer i = 4;
-            Object d = DataUtil.castValue(i, Double.class);
+            Object d = DataUtils.castValue(i, Double.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class DataUtilTest
         b1.setA11(true);
         Bean11 b2 = new Bean11();
         try {
-            DataUtil.beanMerge(b1, b2, false);
+            DataUtils.beanMerge(b1, b2, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,10 +116,10 @@ public class DataUtilTest
     public void makeListIfSingleTest() {
         String[] sa= {"11","xx","#@"};
         String abc="abcd";
-       List<?> s= DataUtil.makeListIfSingle(abc);
+       List<?> s= DataUtils.makeListIfSingle(abc);
         Assert.assertEquals(1, s.size());
         Assert.assertEquals(abc, s.get(0));
-        List<?> aa= DataUtil.makeListIfSingle(sa);
+        List<?> aa= DataUtils.makeListIfSingle(sa);
         Assert.assertEquals(3, aa.size());
         Assert.assertEquals("11", aa.get(0));
     }

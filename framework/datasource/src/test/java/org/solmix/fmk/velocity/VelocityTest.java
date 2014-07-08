@@ -24,7 +24,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.api.exception.SlxException;
-import org.solmix.commons.util.DateUtil;
+import org.solmix.commons.util.DateUtils;
 
 
 /**
@@ -43,8 +43,8 @@ public class VelocityTest
     @Test
     public  void main() throws SlxException {
         Map map  = new HashMap();
-        map.put("DateUtil", new DateUtil());
-        String s ="#set($ceria=\"201109\") \n$DateUtil.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
+        map.put("DateUtils", new DateUtils());
+        String s ="#set($ceria=\"201109\") \n$DateUtils.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
        String str = Velocity.evaluateAsString(s, map);
        Assert.assertEquals("20110901", str);
 
@@ -52,8 +52,8 @@ public class VelocityTest
     @Test
     public  void math() throws SlxException {
         Map map  = new HashMap();
-        map.put("DateUtil", new DateUtil());
-        String s ="#set($ceria=\"201109\")  \n$DateUtil.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
+        map.put("DateUtils", new DateUtils());
+        String s ="#set($ceria=\"201109\")  \n$DateUtils.getFirstDayofMouth($ceria,\"yyyyMM\",\"yyyyMMdd\")";
        String str = Velocity.evaluateAsString(s, map);
        Assert.assertEquals("20110901", str);
 

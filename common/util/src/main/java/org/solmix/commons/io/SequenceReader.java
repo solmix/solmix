@@ -18,14 +18,14 @@
  */
 package org.solmix.commons.io;
 
-import static org.solmix.commons.util.DataUtil.buildList;
+import static org.solmix.commons.util.DataUtils.buildList;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
 
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 /**
  * @version 110035
@@ -94,7 +94,7 @@ public class SequenceReader extends Reader
       if (currentReader != null)
          currentReader.close();
       if (readers.hasNext())
-         currentReader = IOUtil.makeReader(readers.next());
+         currentReader = IOUtils.makeReader(readers.next());
       else
          currentReader = null;
    }

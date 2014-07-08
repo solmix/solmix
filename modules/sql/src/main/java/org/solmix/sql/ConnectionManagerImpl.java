@@ -44,7 +44,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.util.ServiceUtil;
 import org.solmix.runtime.SystemContext;
@@ -145,7 +145,7 @@ public class ConnectionManagerImpl implements ConnectionManager
                     log.debug("Initializing sql config for [" + dbName + "] from system config -using DataSource: " + impl);
                 ds = (DataSource) Reflection.newInstance(impl);
                 DataTypeMap driverConfig = dbConfig.getSubtree("driver");
-                DataUtil.setProperties(driverConfig, ds);
+                DataUtils.setProperties(driverConfig, ds);
                 if (ds != null && dbConfig.getBoolean("log.enabled", false))
                     ds.setLogWriter(new PrintWriter(System.out));
             }

@@ -70,14 +70,14 @@ import org.solmix.commons.io.SlxFile;
  * @version 110043
  */
 @SuppressWarnings("rawtypes")
-public final class DataUtil
+public final class DataUtils
 {
 
     public static HashMap defaultTransformers;
 
     public static final Object EMPTY_ARRAY[] = new Object[0];
 
-    private static final Logger log = LoggerFactory.getLogger(DataUtil.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DataUtils.class.getName());
 
 //    private static Perl5Util globalPerl = new Perl5Util();
 
@@ -2671,13 +2671,13 @@ public final class DataUtil
      * A <code>null</code> search string will return the source string.</p>
      *
      * <pre>
-     * DataUtil.removeEnd(null, *)      = null
-     * DataUtil.removeEnd("", *)        = ""
-     * DataUtil.removeEnd(*, null)      = *
-     * DataUtil.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
-     * DataUtil.removeEnd("www.domain.com", ".com")   = "www.domain"
-     * DataUtil.removeEnd("www.domain.com", "domain") = "www.domain.com"
-     * DataUtil.removeEnd("abc", "")    = "abc"
+     * DataUtils.removeEnd(null, *)      = null
+     * DataUtils.removeEnd("", *)        = ""
+     * DataUtils.removeEnd(*, null)      = *
+     * DataUtils.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * DataUtils.removeEnd("www.domain.com", ".com")   = "www.domain"
+     * DataUtils.removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * DataUtils.removeEnd("abc", "")    = "abc"
      * </pre>
      * @param str
      * @param remove
@@ -2696,11 +2696,11 @@ public final class DataUtil
      * <p>Checks if a String is empty ("") or null.</p>
      *
      * <pre>
-     * DataUtil.isEmpty(null)      = true
-     * DataUtil.isEmpty("")        = true
-     * DataUtil.isEmpty(" ")       = false
-     * DataUtil.isEmpty("bob")     = false
-     * DataUtil.isEmpty("  bob  ") = false
+     * DataUtils.isEmpty(null)      = true
+     * DataUtils.isEmpty("")        = true
+     * DataUtils.isEmpty(" ")       = false
+     * DataUtils.isEmpty("bob")     = false
+     * DataUtils.isEmpty("  bob  ") = false
      * </pre>
      *
      * <p>NOTE: This method changed in Lang version 2.0.

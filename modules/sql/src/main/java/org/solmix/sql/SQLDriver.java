@@ -49,8 +49,8 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.DateUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.DateUtils;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.util.DataTools;
 
@@ -705,7 +705,7 @@ public abstract class SQLDriver
         } else {
             //
             Map map = (Map) list.get(0);
-            return map.get(DataUtil.getSingle(map));
+            return map.get(DataUtils.getSingle(map));
         }
     }
 
@@ -827,8 +827,8 @@ public abstract class SQLDriver
      */
     public int executeBatchUpdate(String statement, List<String> valueMap,
         List valueSets, DSRequest req) throws SlxException {
-        if (DataUtil.isNullOrEmpty(valueSets)
-            || DataUtil.isNullOrEmpty(valueMap))
+        if (DataUtils.isNullOrEmpty(valueSets)
+            || DataUtils.isNullOrEmpty(valueMap))
             return -1;
         Connection conn = this.connection;
         boolean __colseConn = false;
@@ -915,7 +915,7 @@ public abstract class SQLDriver
             String dateFormat = types.get(key).getDateFormat() != null ? types.get(
                 key).getDateFormat()
                 : "yyyyMMdd";
-            objValue = DateUtil.getDateFromString(objValue.toString(),
+            objValue = DateUtils.getDateFromString(objValue.toString(),
                 dateFormat);
         }
         return objValue;

@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
  * @version $Id$ 2013年11月23日
  */
 
-public  final class ArchiveUtil
+public  final class ArchiveUtils
 {
 
-    private static final Logger log = LoggerFactory.getLogger(ArchiveUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ArchiveUtils.class);
 
     /**
      * Get the JAR URL of the JAR containing the given entry Method used in a non managed environment

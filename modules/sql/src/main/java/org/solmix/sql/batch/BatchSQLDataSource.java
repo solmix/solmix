@@ -44,7 +44,7 @@ import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.velocity.Velocity;
 import org.solmix.sql.ConnectionManager;
@@ -154,7 +154,7 @@ public final class BatchSQLDataSource
             }
             int[] pos = null;
             if (ins != null) {
-                List<String> na = DataUtil.simpleSplit(ins, ",");
+                List<String> na = DataUtils.simpleSplit(ins, ",");
                 pos = new int[na.size()];
                 for (int i = 0; i < na.size(); i++) {
                     for (int j = 0; j < columnNames.size(); j++) {

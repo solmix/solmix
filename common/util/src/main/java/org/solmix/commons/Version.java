@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 public class Version
 {
@@ -34,7 +34,7 @@ public class Version
             } catch (IOException e) {
                 // ignore
             } finally {
-                IOUtil.closeQuitely(is);
+                IOUtils.closeQuitely(is);
             }
         }
 

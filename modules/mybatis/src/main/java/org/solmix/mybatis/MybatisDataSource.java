@@ -45,7 +45,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
@@ -261,8 +261,8 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
             Status.STATUS_SUCCESS);
         String statement = getMybatisStatement(req);
         Map<String, Object> parameter = new HashMap<String, Object>();
-        DataUtil.mapMerge(req.getContext().getCriteria(), parameter);
-        DataUtil.mapMerge(req.getContext().getValues(), parameter);
+        DataUtils.mapMerge(req.getContext().getCriteria(), parameter);
+        DataUtils.mapMerge(req.getContext().getValues(), parameter);
         int result = session.update(statement, parameter);
         __return.setAffectedRows(new Long(result));
         __return.setRawData(result);
@@ -336,7 +336,7 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         if (!reqData.isPaged()) {
             __canPage = false;
         } else if (getConfig().getBoolean("customReturnsAllRows", false)
-            && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))) {
+            && DataUtils.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))) {
             __canPage = false;
             if (log.isDebugEnabled())
                 log.debug("Paging disabled for full custom queries.  "

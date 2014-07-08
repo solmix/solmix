@@ -19,7 +19,7 @@
 
 package org.solmix.commons.util;
 
-import static org.solmix.commons.util.DataUtil.removeEnd;
+import static org.solmix.commons.util.DataUtils.removeEnd;
 
 import java.util.regex.Pattern;
 

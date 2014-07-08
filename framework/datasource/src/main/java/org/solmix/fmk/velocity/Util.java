@@ -18,8 +18,8 @@
  */
 package org.solmix.fmk.velocity;
 
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.DateUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.DateUtils;
 import org.solmix.fmk.util.DataTools;
 
 
@@ -32,11 +32,11 @@ import org.solmix.fmk.util.DataTools;
 public class Util 
 {
 
-    public static DateUtil date(){
-        return new DateUtil();
+    public static DateUtils date(){
+        return new DateUtils();
     }
-    public static DataUtil data(){
-        return new DataUtil();
+    public static DataUtils data(){
+        return new DataUtils();
     }
     public static DataTools tools(){
         return new DataTools();

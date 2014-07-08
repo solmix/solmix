@@ -36,8 +36,8 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.commons.util.ClassLoaderUtil;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.util.XMLUtil;
 import org.solmix.runtime.SystemContext;
 import org.w3c.dom.Document;
@@ -74,8 +74,8 @@ public class FileSystemDataSource extends BasicDataSource
     @Override
     public DSResponse executeFetch(DSRequest req) throws SlxException {
         ToperationBinding opBind = this.getContext().getOperationBinding(req);
-        String url =  (String) DataUtil.getProperty("dataURL", opBind, getContext().getTdataSource());
-        String xpath=(String) DataUtil.getProperty("recordXPath", opBind, getContext().getTdataSource());
+        String url =  (String) DataUtils.getProperty("dataURL", opBind, getContext().getTdataSource());
+        String xpath=(String) DataUtils.getProperty("recordXPath", opBind, getContext().getTdataSource());
         DSResponse res = new DSResponseImpl(this,req);
         Object value = getDataFromFile(sc.getBean(ClassLoader.class),url);
         if(xpath!=null){
@@ -102,7 +102,7 @@ public class FileSystemDataSource extends BasicDataSource
             log.error("Parse xml failed:", e);
         } finally {
             if (is != null)
-                IOUtil.closeQuitely(is);
+                IOUtils.closeQuitely(is);
         }
         return null;
     }

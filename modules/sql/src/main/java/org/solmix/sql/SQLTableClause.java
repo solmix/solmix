@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.solmix.api.exception.SlxException;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * 
@@ -59,7 +59,7 @@ public class SQLTableClause
 
     public SQLTableClause(SQLDataSource ds)
     {
-        this(DataUtil.makeList(ds));
+        this(DataUtils.makeList(ds));
     }
 
     public SQLTableClause(List<SQLDataSource> dataSources)
@@ -81,7 +81,7 @@ public class SQLTableClause
                 _buf.append(shema).append(ds.getDriver().getQualifiedSchemaSeparator());
             }
             _buf.append(ds.getTable().getName());
-            if (DataUtil.isNotNullAndEmpty(relatedTables))
+            if (DataUtils.isNotNullAndEmpty(relatedTables))
                 for (String table : relatedTables)
                     _buf.append("," + table);
             if (i.hasNext())

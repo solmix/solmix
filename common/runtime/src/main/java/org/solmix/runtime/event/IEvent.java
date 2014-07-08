@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,24 +16,23 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.solmix.runtime.event;
 
+import java.util.Map;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-9-23
+ * @version 110035 2011-10-4
  */
 
-@Target( { ElementType.TYPE} )
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventTopic
+public interface IEvent
 {
-   String value();
-   String[] values() default {};
+
+    Map<String, Object> getProperties();
+
+    Object getProperty(String name);
+
+    String getTopic();
 }

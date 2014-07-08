@@ -43,8 +43,8 @@ import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.event.EventWorker;
@@ -154,7 +154,7 @@ public class SQLTransform
                 SQLDriver driver = ((SQLDataSource) firstDS).getDriver();
                 _useColumnLabel = driver.useColumnLabelInMetadata();
             }
-            _beanClassName = (String) DataUtil.getProperty("bean", opConfig, firstDS.getContext().getTdataSource());
+            _beanClassName = (String) DataUtils.getProperty("bean", opConfig, firstDS.getContext().getTdataSource());
         }
         if (dataSources != null) {
             int count = _rsmd.getColumnCount();
@@ -186,12 +186,12 @@ public class SQLTransform
             if (i >= rowNum && rowNum != -1L)
                 break;
             Map map = toAttributeMap(resultSet, dataSources, _rsmd, _useColumnLabel, _caseInsensitiveMap, _outputs);
-            if (DataUtil.isNullOrEmpty(_beanClassName))
+            if (DataUtils.isNullOrEmpty(_beanClassName))
                 __return.add(map);
             else {
                 try {
                     Object bean = Reflection.newInstance(_beanClassName);
-                    DataUtil.setProperties(map, bean);
+                    DataUtils.setProperties(map, bean);
                     __return.add(bean);
                 } catch (Exception e) {
                     throw new SlxException(Tmodule.DATASOURCE, Texception.CAN_NOT_INSTANCE, e);
@@ -254,7 +254,7 @@ public class SQLTransform
                         Reader read = resultSet.getCharacterStream(colCursor);
                         StringWriter sw = new StringWriter();
                         try {
-                            IOUtil.copyCharacterStreams(read, sw);
+                            IOUtils.copyCharacterStreams(read, sw);
                         } catch (Exception e) {
                             throw new SQLException(e.getMessage());
                         }
@@ -275,8 +275,8 @@ public class SQLTransform
                     } else if (field.getType() == Efield.DATE || field.getType() == Efield.DATETIME) {
                         String sqlType = field.getSqlStorageStrategy();
                         String dateFormat = field.getDateFormat();
-                        if ("number".equals(sqlType) || "text".equals(sqlType) || DataUtil.isNotNullAndEmpty(dateFormat)) {
-                            if (DataUtil.isNullOrEmpty(dateFormat))
+                        if ("number".equals(sqlType) || "text".equals(sqlType) || DataUtils.isNotNullAndEmpty(dateFormat)) {
+                            if (DataUtils.isNullOrEmpty(dateFormat))
                                 dateFormat = "yyyyMMdd";
                             SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
                             try {
@@ -446,7 +446,7 @@ public class SQLTransform
                     continue;
                 }
                 T obj = Reflection.newInstance(clz);
-                DataUtil.setProperties(data, obj, false);
+                DataUtils.setProperties(data, obj, false);
                 _return.add(obj);
             }
         } catch (Exception e) {

@@ -19,7 +19,7 @@
 
 package org.solmix.fmk.datasource;
 
-import static org.solmix.commons.util.DataUtil.makeListIfSingle;
+import static org.solmix.commons.util.DataUtils.makeListIfSingle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.exception.SlxException;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * @author solmix.f@gmail.com
@@ -336,7 +336,7 @@ public class DSResponseImpl implements DSResponse
             }
         }else {
             try {
-                _return.add(DataUtil.convertType(type, rawData));
+                _return.add(DataUtils.convertType(type, rawData));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -373,7 +373,7 @@ public class DSResponseImpl implements DSResponse
             try {
                 if (Map.class.isAssignableFrom(data.getClass())) {
                     Object instance = type.newInstance();
-                    DataUtil.setProperties(Map.class.cast(data), instance, false);
+                    DataUtils.setProperties(Map.class.cast(data), instance, false);
                     return (T) instance;
                 } else if (List.class.isAssignableFrom(data.getClass())) {
                     List<Object> datas = List.class.cast(data);
@@ -385,7 +385,7 @@ public class DSResponseImpl implements DSResponse
                             _return = type.cast(one);
                         } else if (Map.class.isAssignableFrom(one.getClass())) {
                             _return = type.newInstance();
-                            DataUtil.setProperties((Map<?, ?>) one, _return, false);
+                            DataUtils.setProperties((Map<?, ?>) one, _return, false);
                         }
                         if (size > 1) {
                             log.warn("The data is more than one map or bean, used the first one and drop other " + (datas.size() - 1) + "(s)");
@@ -398,7 +398,7 @@ public class DSResponseImpl implements DSResponse
                     }
 
                 } else {
-                    return  DataUtil.convertType(type, data);
+                    return  DataUtils.convertType(type, data);
                 }
             } catch (Exception ee) {
                 log.debug((new StringBuilder()).append("Tried to convert inbound nested Map to: ").append(type.getName()).append(

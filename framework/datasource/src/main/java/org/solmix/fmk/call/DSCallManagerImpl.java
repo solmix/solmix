@@ -36,7 +36,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.runtime.Context;
 import org.solmix.runtime.SystemContext;
@@ -118,8 +118,8 @@ public class DSCallManagerImpl implements DSCallManager
         else
             frameworkConfig= new DataTypeMap();
         Map<Object,Object> merged= new HashMap<Object,Object>();
-        DataUtil.mapMerge(frameworkConfig, merged);
-        DataUtil.mapMerge(config, merged);
+        DataUtils.mapMerge(frameworkConfig, merged);
+        DataUtils.mapMerge(config, merged);
         DataTypeMap interceptorConfig=new DataTypeMap(Collections.unmodifiableMap(merged));
         for(DSCallInterceptor i:interceptors){
             i.configure(interceptorConfig);

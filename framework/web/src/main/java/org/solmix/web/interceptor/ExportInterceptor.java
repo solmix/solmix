@@ -50,7 +50,7 @@ import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.export.ExportManagerImpl;
 
 /**
@@ -211,7 +211,7 @@ public class ExportInterceptor extends DSCallWebInterceptor
             if (l != null) {
                 List<String> fields = new ArrayList<String>();
 
-                fields.addAll(DataUtil.simpleSplit(l, ","));
+                fields.addAll(DataUtils.simpleSplit(l, ","));
                 reqconfig.setExportFields(fields);
             }
         }
@@ -238,13 +238,13 @@ public class ExportInterceptor extends DSCallWebInterceptor
                 if (l != null) {
                     List<String> fields = new ArrayList<String>();
 
-                    fields.addAll(DataUtil.simpleSplit(l, ","));
+                    fields.addAll(DataUtils.simpleSplit(l, ","));
                     bindconfig.setExportFields(fields);
                 }
 
             }
         }
-        DataUtil.copyProperties(reqconfig, bindconfig);
+        DataUtils.copyProperties(reqconfig, bindconfig);
         return bindconfig;
     }
 

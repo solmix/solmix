@@ -38,7 +38,7 @@ import org.solmix.api.serialize.XMLParser;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -96,7 +96,7 @@ public class JaxbXMLParserImpl implements XMLParser
         } catch (IOException e) {
             throw new SlxException(Tmodule.XML, Texception.DS_DSFILE_NOT_FOUND, "load ds config file failed", e);
         } finally {
-            IOUtil.closeQuitely(is);
+            IOUtils.closeQuitely(is);
         }
     }
 
@@ -115,7 +115,7 @@ public class JaxbXMLParserImpl implements XMLParser
         } catch (IOException e) {
             throw new SlxException(Tmodule.XML, Texception.DS_DSFILE_NOT_FOUND, "load ds config file failed", e);
         } finally {
-            IOUtil.closeQuitely(is);
+            IOUtils.closeQuitely(is);
         }
     }
 

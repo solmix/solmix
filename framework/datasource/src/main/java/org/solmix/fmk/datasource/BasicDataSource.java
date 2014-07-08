@@ -68,7 +68,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.api.types.TransactionPolicy;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.ValidationContext.Vtype;
 import org.solmix.fmk.event.EventWorker;
@@ -188,7 +188,7 @@ public class BasicDataSource implements DataSource
         if (log.isTraceEnabled())
             log.trace((new StringBuilder()).append("Creating instance of DataSource '").append(data.getName()).append("'").toString());
         // If dataSource used as other build in datasource ,will not contain a TdataSouece.
-        if (data.getTdataSource() != null && DataUtil.isNotEqual(data.getTdataSource().getServerType(), EserverType.CUSTOM)) {
+        if (data.getTdataSource() != null && DataUtils.isNotEqual(data.getTdataSource().getServerType(), EserverType.CUSTOM)) {
             autoFitDS(this).buildDS(this).validateDS(this);
         }
     }
@@ -794,9 +794,9 @@ public class BasicDataSource implements DataSource
                     if (value instanceof JSExpression)
                         return;
                     if (field.isMultiple() != null && field.isMultiple())
-                        value = DataUtil.makeListIfSingle(value);
+                        value = DataUtils.makeListIfSingle(value);
                     // if (field.getUniqueProperty() != null) {
-                    // value=DataUtil.indexOnProperty(DataUtil.makeListIfSingle(value), field.getUniqueProperty());
+                    // value=DataUtils.indexOnProperty(DataUtils.makeListIfSingle(value), field.getUniqueProperty());
                     // }
                 }
             }
@@ -898,7 +898,7 @@ public class BasicDataSource implements DataSource
         Object typeValidators = null;
         if (baseType != null)
             typeValidators = baseType.getValidators();
-        List<Object> allValidators = DataUtil.makeListIfSingle(DataUtil.combineAsLists(typeValidators, fieldValidators));
+        List<Object> allValidators = DataUtils.makeListIfSingle(DataUtils.combineAsLists(typeValidators, fieldValidators));
         if (allValidators == null)
             allValidators = new ArrayList<Object>();
         boolean _foundvm = false;
@@ -915,7 +915,7 @@ public class BasicDataSource implements DataSource
                     if (log.isDebugEnabled())
                         log.debug((new StringBuilder()).append("for field: ").append(_fieldName).append(
                             " adding automatically generated isOneOf validator with values: ").append(DataTools.prettyPrint(list)).toString());
-                    allValidators.add(0, DataUtil.buildMap("type", "isOneOf", "valueMapList", list));
+                    allValidators.add(0, DataUtils.buildMap("type", "isOneOf", "valueMapList", list));
                 }
             }
         if (LoggerFactory.getLogger(SlxLog.VALIDATION_LOGNAME).isDebugEnabled())
@@ -994,7 +994,7 @@ public class BasicDataSource implements DataSource
         TdataSource tds= getContext().getTdataSource();
         boolean dropExtra=true;
         if(tds!=null)
-            dropExtra=DataUtil.booleanValue( tds.isDropExtraFields());
+            dropExtra=DataUtils.booleanValue( tds.isDropExtraFields());
         return getProperties(data, dropExtra, true);
     }
 
@@ -1024,7 +1024,7 @@ public class BasicDataSource implements DataSource
             else{
                 Map obj=null;
                 try {
-                    obj = DataUtil.getProperties(data);
+                    obj = DataUtils.getProperties(data);
                 } catch (Exception e) {
                     //INGONE;
                 }
@@ -1045,7 +1045,7 @@ public class BasicDataSource implements DataSource
         if (__f == null)
             return Collections.emptyMap();
         for (Tfield field : __f) {
-            if (dropIgnoreFields && DataUtil.booleanValue(field.isIgnore()))
+            if (dropIgnoreFields && DataUtils.booleanValue(field.isIgnore()))
                 continue;
             if (dropExtraFields && field.getType() == Efield.UNKNOWN)
                 continue;
@@ -1067,7 +1067,7 @@ public class BasicDataSource implements DataSource
             }
         } else {
             try {
-                result = DataUtil.getProperties(data, outProperties);
+                result = DataUtils.getProperties(data, outProperties);
             } catch (Exception e) {
                 result = null;
                 log.warn("transform bean object to map failed .caused by" + e.getMessage());
@@ -1112,7 +1112,7 @@ public class BasicDataSource implements DataSource
     protected BasicDataSource _autoGenerateSchema(BasicDataSource ds) throws SlxException {
         DataSourceData data = ds.getContext();
         // auto generate schema.
-        if (DataUtil.booleanValue(data.getTdataSource().isAutoDeriveSchema())) {
+        if (DataUtils.booleanValue(data.getTdataSource().isAutoDeriveSchema())) {
             DataSourceGenerator gen = getDataSourceGenerator();
             DataSource autoSchema = null;
             if (gen == null) {
@@ -1137,7 +1137,7 @@ public class BasicDataSource implements DataSource
 
     protected BasicDataSource _autoGetSuperDS(BasicDataSource ds) throws SlxException {
         String _superName = ds.getContext().getTdataSource().getInheritsFrom();
-        if (DataUtil.isNotNullAndEmpty(_superName)) {
+        if (DataUtils.isNotNullAndEmpty(_superName)) {
 
             DataSource _super = DefaultDataSourceManager.getDataSource(_superName);
             if (_super != null) {
@@ -1160,7 +1160,7 @@ public class BasicDataSource implements DataSource
      */
     protected BasicDataSource _buildSuperDS(BasicDataSource ds) throws SlxException {
         DataSourceData context = ds.getContext();
-        boolean autoDerive = DataUtil.booleanValue(ds.getContext().getTdataSource().isAutoDeriveSchema());
+        boolean autoDerive = DataUtils.booleanValue(ds.getContext().getTdataSource().isAutoDeriveSchema());
         Object schema = ds.getContext().getAutoDeriveSchema();
         // pro process datasource
         if (autoDerive && schema != null) {
@@ -1190,7 +1190,7 @@ public class BasicDataSource implements DataSource
         DataSourceData data = ds.getContext();
         /** requires */
         Tsecurity sec = data.getTdataSource().getSecurity();
-        if (data.getRequires() == null && sec != null && DataUtil.isNotNullAndEmpty(sec.getRequires())) {
+        if (data.getRequires() == null && sec != null && DataUtils.isNotNullAndEmpty(sec.getRequires())) {
 
             String value = sec.getRequires();
             data.setRequires(new VelocityExpression(value));
@@ -1203,7 +1203,7 @@ public class BasicDataSource implements DataSource
         DataSourceData data = ds.getContext();
         Tsecurity sec = data.getTdataSource().getSecurity();
         /** requireRols */
-        if (data.getRequiresRoles() == null && sec != null && DataUtil.isNotNullAndEmpty(sec.getRequireRoles())) {
+        if (data.getRequiresRoles() == null && sec != null && DataUtils.isNotNullAndEmpty(sec.getRequireRoles())) {
             List<String> equiresRoles = null;
 
             String req[] = sec.getRequireRoles().split(";");
@@ -1220,7 +1220,7 @@ public class BasicDataSource implements DataSource
          * Requires Roles.
          ****************************************************************/
         List<String> _sRequireRoles = _superDS.getContext().getRequiresRoles();
-        if (DataUtil.isNotNullAndEmpty(_sRequireRoles))
+        if (DataUtils.isNotNullAndEmpty(_sRequireRoles))
             ds.getContext().getRequiresRoles().addAll(_sRequireRoles);
         return ds;
 
@@ -1239,18 +1239,18 @@ public class BasicDataSource implements DataSource
         Map<String, Tfield> mapFields = new LinkedHashMap<String, Tfield>();
         Map<String, Tfield> _fields = ds.getContext().getMapFields();
         Map<String, Tfield> _sfields = _superDS.getContext().getMapFields();
-        if (DataUtil.booleanValue(ds.getContext().getTdataSource().isShowLocalFieldsOnly())) {
+        if (DataUtils.booleanValue(ds.getContext().getTdataSource().isShowLocalFieldsOnly())) {
             mapFields = _fields;
         } else {
-            if (DataUtil.booleanValue(ds.getContext().getTdataSource().isUseParentFieldOrder())) {
-                DataUtil.mapMerge(_sfields, mapFields);
-                DataUtil.mapMerge(_fields, mapFields);
+            if (DataUtils.booleanValue(ds.getContext().getTdataSource().isUseParentFieldOrder())) {
+                DataUtils.mapMerge(_sfields, mapFields);
+                DataUtils.mapMerge(_fields, mapFields);
             } else {
-                DataUtil.mapMerge(_fields, mapFields);
-                DataUtil.mapMerge(_sfields, mapFields);
+                DataUtils.mapMerge(_fields, mapFields);
+                DataUtils.mapMerge(_sfields, mapFields);
             }
         }
-        if (DataUtil.isNullOrEmpty(mapFields))
+        if (DataUtils.isNullOrEmpty(mapFields))
             throw new SlxException(Tmodule.DATASOURCE, Texception.DS_DSCONFIG_ERROR, "ds config file must have a filed at last");
         ds.getContext().setMapFields(mapFields);
         return ds;
@@ -1277,15 +1277,15 @@ public class BasicDataSource implements DataSource
             }
         }
         /** Native2DSFieldMap */
-        ds.getContext().setNative2DSFieldMap(DataUtil.reverseMap(ds.getContext().getDs2NativeFieldMap()));
+        ds.getContext().setNative2DSFieldMap(DataUtils.reverseMap(ds.getContext().getDs2NativeFieldMap()));
         return ds;
     }
 
     protected DataSource _buildFields(DataSource ds) throws SlxException {
         DataSourceData _tmp = ds.getContext();
         /** fields */
-        if (DataUtil.isNullOrEmpty(_tmp.getMapFields()) && _tmp.getTdataSource().getFields() != null
-            && DataUtil.isNotNullAndEmpty(_tmp.getTdataSource().getFields().getField())) {
+        if (DataUtils.isNullOrEmpty(_tmp.getMapFields()) && _tmp.getTdataSource().getFields() != null
+            && DataUtils.isNotNullAndEmpty(_tmp.getTdataSource().getFields().getField())) {
             Map<String, Tfield> _tmpFields = new LinkedHashMap<String, Tfield>();
 
             List<Tfield> fields = _tmp.getTdataSource().getFields().getField();
@@ -1366,7 +1366,7 @@ public class BasicDataSource implements DataSource
 
         Map<String, PropertyDescriptor> properties = null;
         try {
-            properties = DataUtil.getPropertyDescriptors(tds);
+            properties = DataUtils.getPropertyDescriptors(tds);
         } catch (Exception e) {
             // just ignore it.
             return null;

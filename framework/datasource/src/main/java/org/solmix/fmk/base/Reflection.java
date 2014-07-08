@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.datasource.DataSource;
 import org.solmix.api.jaxb.Tfield;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.DataSourceProvider;
 
 /**
@@ -462,7 +462,7 @@ public class Reflection
             throw new Exception(errorString);
         }
 
-        Object args[] = DataUtil.listToArray(methodArgs);
+        Object args[] = DataUtils.listToArray(methodArgs);
         if (log.isTraceEnabled()) {
             log.trace((new StringBuilder()).append("method takes: ").append(parameterTypes.size()).append(" args.  I've assembled: ").append(
                 methodArgs.size()).append(" args").toString());
@@ -671,9 +671,9 @@ public class Reflection
             try {
                 Object translatedValue;
                 if (javaClass != null)
-                    translatedValue = DataUtil.convertType(javaClass, argValue);
+                    translatedValue = DataUtils.convertType(javaClass, argValue);
                 else
-                    translatedValue = DataUtil.convertType(targetType, argValue);
+                    translatedValue = DataUtils.convertType(targetType, argValue);
                 return translatedValue;
             } catch (IllegalArgumentException iae) {
                 throw iae;
@@ -704,7 +704,7 @@ public class Reflection
         }
         Map map = (Map) argValue;
         Map newArgMap = (Map) argValue.getClass().newInstance();
-        Map props = DataUtil.getPropertyDescriptors(beanInstance);
+        Map props = DataUtils.getPropertyDescriptors(beanInstance);
         Object key;
         Object newArgValue;
         for (Iterator i = map.keySet().iterator(); i.hasNext(); newArgMap.put(key, newArgValue)) {
@@ -797,7 +797,7 @@ public class Reflection
         // return DataTools.setProperties(newArgMap, beanInstance, dataSource);
         if (arg.isAllowTypeConversion()) {
             log.trace("trying convertType");
-            return DataUtil.convertType(targetType, argValue);
+            return DataUtils.convertType(targetType, argValue);
         } else {
             throw new Exception((new StringBuilder()).append(argTypeName).append(" not adaptable to: ").append(targetTypeName).toString());
         }

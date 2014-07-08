@@ -19,9 +19,9 @@
 
 package org.solmix.commons.collections;
 
-import static org.solmix.commons.util.DataUtil.commaSeparatedStringToList;
-import static org.solmix.commons.util.DataUtil.getSubtreePrefixed;
-import static org.solmix.commons.util.DataUtil.listToArray;
+import static org.solmix.commons.util.DataUtils.commaSeparatedStringToList;
+import static org.solmix.commons.util.DataUtils.getSubtreePrefixed;
+import static org.solmix.commons.util.DataUtils.listToArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;

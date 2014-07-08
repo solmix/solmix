@@ -39,7 +39,7 @@ import org.solmix.api.jaxb.TdataSource;
 import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * This class used as a datasource context bean,cache ds static configuration , dynamical configuration and runtime
@@ -688,7 +688,7 @@ public class DataSourceData implements Serializable
      */
     public boolean isValidateRecords() {
         if (tdataSource != null)
-            return DataUtil.booleanValue(tdataSource.isValidateRecords());
+            return DataUtils.booleanValue(tdataSource.isValidateRecords());
         else
             return false;
     }
@@ -699,7 +699,7 @@ public class DataSourceData implements Serializable
         if (this.getSuperDS() != null) {
             fieldMap = getSuperDS().getContext().getExpandedDs2NativeFieldMap();
         }
-        DataUtil.mapMerge(ds2NativeFieldMap, fieldMap);
+        DataUtils.mapMerge(ds2NativeFieldMap, fieldMap);
         return fieldMap;
     }
 

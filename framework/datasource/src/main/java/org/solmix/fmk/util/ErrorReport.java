@@ -28,7 +28,7 @@ import org.solmix.api.criterion.ErrorMessage;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.exception.SlxException;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.ValidationContext;
 
 /**
@@ -54,14 +54,14 @@ public class ErrorReport extends LinkedMap implements Serializable
    private void addError( String fieldName, IValidationEvent event )
    {
 
-      DataUtil.putMultiple( this, fieldName, event );
+      DataUtils.putMultiple( this, fieldName, event );
 
    }
 
    public void addError( String fieldName, ErrorMessage error )
    {
 
-      DataUtil.putMultiple( this, fieldName, error );
+      DataUtils.putMultiple( this, fieldName, error );
 
    }
 
@@ -93,7 +93,7 @@ public class ErrorReport extends LinkedMap implements Serializable
          if ( event == null )
             put( fieldName, vevent );
          else
-            DataUtil.putCombinedList( this, fieldName, vevent );
+            DataUtils.putCombinedList( this, fieldName, vevent );
       }
 
    }
@@ -105,7 +105,7 @@ public class ErrorReport extends LinkedMap implements Serializable
     */
    public List getErrors( String fieldName )
    {
-      return DataUtil.makeListIfSingle( get( fieldName ) );
+      return DataUtils.makeListIfSingle( get( fieldName ) );
    }
 
 }

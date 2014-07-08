@@ -33,7 +33,7 @@ import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.DataTools;
 import org.solmix.sql.internal.SqlCM;
 
@@ -284,7 +284,7 @@ public class OracleDriver extends SQLDriver
     @Override
     public String limitQuery(String query, long startRow, long totalRows, List<String> outputColumns) throws SlxException {
     	StringBuilder out = new StringBuilder();
-        if (DataUtil.isNotNullAndEmpty(outputColumns)) {
+        if (DataUtils.isNotNullAndEmpty(outputColumns)) {
             for (int i = 0; i < outputColumns.size(); i++) {
             	out.append( outputColumns.get(i));
                 if (i < outputColumns.size() - 1)

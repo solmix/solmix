@@ -19,7 +19,7 @@
 
 package org.solmix.api.event;
 
-import org.solmix.event.IEvent;
+import org.solmix.runtime.event.IEvent;
 
 /**
  * 

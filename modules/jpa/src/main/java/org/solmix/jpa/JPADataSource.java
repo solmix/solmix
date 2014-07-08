@@ -19,7 +19,7 @@
 
 package org.solmix.jpa;
 
-import static org.solmix.commons.util.DataUtil.isNotNullAndEmpty;
+import static org.solmix.commons.util.DataUtils.isNotNullAndEmpty;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -60,7 +60,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.BasicGenerator;
@@ -167,7 +167,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 entityClass = BasicGenerator.loadClass(entityBean);
                 Entity e = entityClass.getAnnotation(Entity.class);
                 entityName = e == null ? null : e.name();
-                if (DataUtil.isNullOrEmpty(entityName))
+                if (DataUtils.isNullOrEmpty(entityName))
                     entityName = entityClass.getName().substring(entityClass.getName().lastIndexOf(".") + 1);
                 entityName=new StringBuilder().append('_').append(entityName).toString();
             } catch (Exception e) {
@@ -257,7 +257,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 return validationFailure;
             }
             //when used FetchType.LAZY,the transaction must be commit after data send to client.
-            if(DataUtil.booleanValue(req.getContext().getIsClientRequest())&&DataTools.isFetch(_opType)){
+            if(DataUtils.booleanValue(req.getContext().getIsClientRequest())&&DataTools.isFetch(_opType)){
                 req.setFreeOnExecute(false);
             }
             // if DSRequest not have a DataSource with it,use this by default.
@@ -329,7 +329,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             pk = xPath.replace('/', '.');
         Object p = null;
         try {
-            p = DataUtil.castValue(id, DataUtil.getPropertyType(entityClass, pk));
+            p = DataUtils.castValue(id, DataUtils.getPropertyType(entityClass, pk));
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }
@@ -355,13 +355,13 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             pk = xPath.replace('/', '.');
         Object p = null;
         try {
-            p = DataUtil.castValue(id, DataUtil.getPropertyType(entityClass, pk));
+            p = DataUtils.castValue(id, DataUtils.getPropertyType(entityClass, pk));
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }
         Object record = entityManager.find(entityClass, p);
         try {
-            DataUtil.setProperties(req.getContext().getValues(), record);
+            DataUtils.setProperties(req.getContext().getValues(), record);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -510,7 +510,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             datasources = new JPADataSource[1];
             datasources[0] = (JPADataSource) dsObject;
         } else if ((dsObject instanceof String)) {
-            datasources = getDataSources(DataUtil.makeListIfSingle(dsObject));
+            datasources = getDataSources(DataUtils.makeListIfSingle(dsObject));
         } else if (dsObject instanceof List<?>) {
             datasources = getDataSources((List<?>) dsObject);
         } else {
@@ -591,7 +591,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         // batch size.
         batchsize = batchsize < 100 ? 100 : batchsize;
         if (isEntityPresent(criteria)) {
-            List<?> records = DataUtil.makeListIfSingle(criteria);
+            List<?> records = DataUtils.makeListIfSingle(criteria);
             Object result = updateBean(batchsize, records);
             __return.setRawData(result);
             return __return;
@@ -608,7 +608,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             for (Object o : records) {
                 Object bean = instance(entityClass);
                 try {
-                    DataUtil.setProperties((Map<?,?>) o, bean, false);
+                    DataUtils.setProperties((Map<?,?>) o, bean, false);
                 } catch (Exception e) {
                     String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
                     throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
@@ -633,7 +633,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         // batch size.
         batchsize = batchsize < 100 ? 100 : batchsize;
         if (isEntityPresent(criteria)) {
-            List<?> records = DataUtil.makeListIfSingle(criteria);
+            List<?> records = DataUtils.makeListIfSingle(criteria);
             Object result = removeBean(batchsize, records);
             __return.setRawData(result);
             return __return;
@@ -655,7 +655,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             for (Object o : records) {
                 Object bean = instance(entityClass);
                 try {
-                    DataUtil.setProperties((Map<?,?>) o, bean, false);
+                    DataUtils.setProperties((Map<?,?>) o, bean, false);
                 } catch (Exception e) {
                     String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
                     throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
@@ -707,20 +707,20 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                                 if (!isNotNullAndEmpty(whereClause))
                                     whereClause.append(" AND ");
                                 whereClause.append("(");
-                                Class<?> ftype = DataUtil.getPropertyType(entityClass, fieldName);
+                                Class<?> ftype = DataUtils.getPropertyType(entityClass, fieldName);
                                 for (int i = 0; i < valueList.size(); i++) {
                                     Object v = valueList.get(i);
                                     if (!whereClause.toString().endsWith("("))
                                         whereClause.append(" or ");
                                     String pName = fieldName + i;
                                     whereClause.append(entityName).append(".").append(fieldName).append(" = :").append(pName);
-                                    parameters.put(pName, DataUtil.castValue(v, ftype));
+                                    parameters.put(pName, DataUtils.castValue(v, ftype));
                                 }
                                 whereClause.append(")");
                             }
 
                         } else {
-                            if (DataUtil.isNotNullAndEmpty(whereClause))
+                            if (DataUtils.isNotNullAndEmpty(whereClause))
                                 whereClause.append(" AND ");
                             if (_ft == Efield.TEXT || _ft == Efield.IMAGE || _ft == Efield.PASSWORD || _ft == Efield.LINK) {
                                 String matchStyle = null;
@@ -742,7 +742,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                                 }
                             } else {
                                 whereClause.append(entityName).append(".").append(fieldName).append(" = :").append(fieldName);
-                                parameters.put(fieldName, DataUtil.castValue(value, DataUtil.getPropertyType(entityClass, fieldName)));
+                                parameters.put(fieldName, DataUtils.castValue(value, DataUtils.getPropertyType(entityClass, fieldName)));
                             }// END field?
                         }
 
@@ -780,11 +780,11 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         StringBuffer jpaCountQ = new StringBuffer().append("SELECT COUNT (").append(
             data.getPrimaryKey() == null ? entityName : entityName + "." + data.getPrimaryKey()).append(") FROM ").append(
             useQualifiedClassName ? entityClass.getName() : entityClass.getSimpleName()).append(" ").append(entityName);
-        if (DataUtil.isNotNullAndEmpty(whereClause)) {
+        if (DataUtils.isNotNullAndEmpty(whereClause)) {
             jpaQuery.append(" WHERE ").append(whereClause);
             jpaCountQ.append(" WHERE ").append(whereClause);
         }
-        if (DataUtil.isNotNullAndEmpty(orderClause)) {
+        if (DataUtils.isNotNullAndEmpty(orderClause)) {
             jpaQuery.append(" ORDER BY ").append(orderClause);
         }
         if (log.isTraceEnabled())
@@ -809,7 +809,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         if (!req.getContext().isPaged() ){
             __canPage = false;
         }else if(getConfig().getBoolean("customReturnsAllRows", false)
-            &&DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
+            &&DataUtils.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
             __canPage = false;
             if(log.isTraceEnabled())
                 log.trace("Paging disabled for full custom queries.  "
@@ -871,7 +871,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         batchsize = batchsize < 100 ? 100 : batchsize;
         // java entity bean values.
         if (isEntityPresent(values)) {
-            List<?> records = DataUtil.makeListIfSingle(values);
+            List<?> records = DataUtils.makeListIfSingle(values);
             Object result = persistBean(batchsize, records);
             __return.setRawData(result);
             return __return;
@@ -888,7 +888,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
             for (Object o : records) {
                 Object bean = instance(entityClass);
                 try {
-                    DataUtil.setProperties((Map<?,?>) o, bean, false);
+                    DataUtils.setProperties((Map<?,?>) o, bean, false);
                 } catch (Exception e) {
                     String __msg = "invoke bean class:[" + bean.getClass().getName() + "] exception";
                     throw new SlxException(Tmodule.JPA, Texception.INVOKE_EXCEPTION, __msg);
@@ -935,7 +935,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
         for (Object o : records) {
             Object attached = findAttachedBean(o);
             try {
-                DataUtil.setProperties(DataUtil.getProperties(o, true), attached);
+                DataUtils.setProperties(DataUtils.getProperties(o, true), attached);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -979,7 +979,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
     private Object findAttachedBean(Object o) throws SlxException {
         try {
             Field[] declaredFields = o.getClass().getDeclaredFields();
-            Map<String, PropertyDescriptor> propDes = DataUtil.getPropertyDescriptors(o.getClass());
+            Map<String, PropertyDescriptor> propDes = DataUtils.getPropertyDescriptors(o.getClass());
             Object id = null;
             for (Field field : declaredFields) {
                 int modifier = field.getModifiers();
@@ -987,7 +987,7 @@ public class JPADataSource extends BasicDataSource implements DataSource, DSCall
                 if (Modifier.isStatic(modifier))
                     continue;
                 if (field.getAnnotation(Id.class) != null) {
-                    id = DataUtil.getProperty(propertyName, o);
+                    id = DataUtils.getProperty(propertyName, o);
                     break;
                 } else {// AccessType=PROPERTY
                     PropertyDescriptor propDesc = propDes.get(propertyName);

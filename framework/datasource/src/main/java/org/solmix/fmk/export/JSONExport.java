@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.MapperUtil;
 
 /**
@@ -59,8 +59,8 @@ public void exportResultSet(List<Map<Object, Object>> rows, Map<String, String> 
         return;
     }
     
-    if(DataUtil.isNotNullAndEmpty(columnMap)){
-    rows = DataUtil.remapRows(rows, columnMap, false);
+    if(DataUtils.isNotNullAndEmpty(columnMap)){
+    rows = DataUtils.remapRows(rows, columnMap, false);
     }
     if (rows.size() <= 0) {
         log.debug("Empty result set after column remap");

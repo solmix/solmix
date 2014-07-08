@@ -46,13 +46,12 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.sql.ConnectionManager;
 import org.solmix.sql.SQLDataSource;
-import org.springframework.core.NestedIOException;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
@@ -161,7 +160,7 @@ public class LocalSqlSessionFactoryProvider implements
             String mapperScan = dbConfig.getString("mybatis.mapper.scan.base");
             Configuration configuration;
             XMLConfigBuilder xmlConfigBuilder = null;
-            if (DataUtil.isNotNullAndEmpty(configLocation)) {
+            if (DataUtils.isNotNullAndEmpty(configLocation)) {
                 InputStream inputStream = Resources.getResourceAsStream(configLocation);
                 xmlConfigBuilder = new XMLConfigBuilder(inputStream, null,
                     createPropertiesFromMap(properties));
@@ -210,7 +209,7 @@ public class LocalSqlSessionFactoryProvider implements
                             configuration.getSqlFragments());
                         xmlMapperBuilder.parse();
                     } catch (Exception e) {
-                        throw new NestedIOException(
+                        throw new IOException(
                             "Failed to parse mapping resource: '"
                                 + mapperLocation + "'", e);
                     } finally {

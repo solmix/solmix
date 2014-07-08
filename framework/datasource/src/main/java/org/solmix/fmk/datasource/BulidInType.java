@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.solmix.api.datasource.IType;
 import org.solmix.api.exception.SlxException;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.DefaultValidators;
 import org.solmix.fmk.util.ErrorReport;
 
@@ -49,7 +49,7 @@ public class BulidInType implements IType
    public BulidInType( String name, Object validators )
    {
       this.name = name;
-      this.validators = DataUtil.makeListIfSingle( validators );
+      this.validators = DataUtils.makeListIfSingle( validators );
    }
 
    /**

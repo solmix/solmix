@@ -50,9 +50,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @version 110035
  */
-public final class IOUtil
+public final class IOUtils
 {
-   public static final Logger log =  LoggerFactory.getLogger(IOUtil.class);
+   public static final Logger log =  LoggerFactory.getLogger(IOUtils.class);
 
    public static final int DEFAULT_BUFFER_SIZE = 4096;
 
@@ -74,7 +74,7 @@ public final class IOUtil
    /**
     * constructed function
     */
-   public IOUtil()
+   public IOUtils()
    {
    }
 
@@ -186,7 +186,7 @@ public final class IOUtil
    public static Reader makeReader(Object source)
    {
      if(source instanceof Reader){
-        ValidateUtil.assertNotNull("parse null source", source);
+        ValidateUtils.assertNotNull("parse null source", source);
          return (Reader)source;
      }
      if(source instanceof InputStream)
@@ -204,31 +204,31 @@ public final class IOUtil
    }
    public static Reader makeReader(InputStream source)
    {
-      ValidateUtil.assertNotNull("parse null source", source);
+      ValidateUtils.assertNotNull("parse null source", source);
       return new InputStreamReader(source);
    }
 
    public static Reader makeReader(String source)
    {
-      ValidateUtil.assertNotNull("parse null source", source);
+      ValidateUtils.assertNotNull("parse null source", source);
       return new StringReader(source);
    }
 
    public static Reader makeReader(StringBuffer source)
    {
-      ValidateUtil.assertNotNull("parse null source", source);
+      ValidateUtils.assertNotNull("parse null source", source);
       return new StringReader(source.toString());
    }
 
    public static Reader makeReader(char[] source)
    {
-      ValidateUtil.assertNotNull("parse null source", source);
+      ValidateUtils.assertNotNull("parse null source", source);
       return new CharArrayReader(source);
    }
 
    public static Reader makeReader(byte[] source)
    {
-      ValidateUtil.assertNotNull("parse null source", source);
+      ValidateUtils.assertNotNull("parse null source", source);
       return new InputStreamReader(new ByteArrayInputStream(source));
    }
 
@@ -250,7 +250,7 @@ public final class IOUtil
           if(is!=null)
               is.close();
       } catch (Exception ignored) {
-          LoggerFactory.getLogger(IOUtil.class).error("Problem closing a source or destination.", ignored);
+          LoggerFactory.getLogger(IOUtils.class).error("Problem closing a source or destination.", ignored);
       }
    }
    public static void closeQuitely(Closeable closeable)
@@ -259,7 +259,7 @@ public final class IOUtil
           if(closeable!=null)
               closeable.close();
       } catch (Exception ignored) {
-          LoggerFactory.getLogger(IOUtil.class).error("Problem closing a source or destination.", ignored);
+          LoggerFactory.getLogger(IOUtils.class).error("Problem closing a source or destination.", ignored);
       }
    }
    public static void closeQuitely(OutputStream os)
@@ -267,12 +267,12 @@ public final class IOUtil
       try {
          os.flush();
       } catch (Exception ignored) {
-    	  LoggerFactory.getLogger(IOUtil.class).error("Problem flush a source or destination.", ignored);
+    	  LoggerFactory.getLogger(IOUtils.class).error("Problem flush a source or destination.", ignored);
       }
       try {
          os.close();
       } catch (Exception ignored) {
-          LoggerFactory.getLogger(IOUtil.class).error("Problem flush a source or destination.", ignored);
+          LoggerFactory.getLogger(IOUtils.class).error("Problem flush a source or destination.", ignored);
       }
    }
    public static byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {

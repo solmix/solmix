@@ -30,7 +30,7 @@ import org.solmix.api.application.Application;
 import org.solmix.api.event.IValidationEvent;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -179,7 +179,7 @@ public class DSRequestData implements java.io.Serializable
             if (rawCriteria instanceof Map) {
                 ((Map<Object,Object>) rawCriteria).put(key, value);
             } else {
-                rawCriteria = DataUtil.makeListIfSingle(rawCriteria);
+                rawCriteria = DataUtils.makeListIfSingle(rawCriteria);
                 Map<Object,Object> _tmp = new HashMap<Object,Object>();
                 _tmp.put(key, value);
                 ((List<Object>) rawCriteria).add(_tmp);
@@ -504,12 +504,12 @@ public class DSRequestData implements java.io.Serializable
             return;
         if (constraints == null)
             constraints = new ArrayList<Object>();
-        List newConstraints = DataUtil.makeListIfSingle(obj);
+        List newConstraints = DataUtils.makeListIfSingle(obj);
         if (newConstraints.contains("*")) {
             constraints = null;
             return;
         } else {
-            DataUtil.addDisjunctionToSet((List) constraints, newConstraints);
+            DataUtils.addDisjunctionToSet((List) constraints, newConstraints);
             return;
         }
     }
@@ -533,12 +533,12 @@ public class DSRequestData implements java.io.Serializable
             return;
         if (outputs == null)
             outputs = new ArrayList<String>();
-        List<Object> addedOutputs = DataUtil.makeListIfSingle(obj);
+        List<Object> addedOutputs = DataUtils.makeListIfSingle(obj);
         if (addedOutputs.contains("*")) {
             outputs = null;
             return;
         } else {
-            DataUtil.addDisjunctionToSet(outputs, addedOutputs);
+            DataUtils.addDisjunctionToSet(outputs, addedOutputs);
             return;
         }
     }
@@ -678,7 +678,7 @@ public class DSRequestData implements java.io.Serializable
      * @return
      */
     public List getOldValueSets() {
-        return DataUtil.makeListIfSingle(getRawOldValues());
+        return DataUtils.makeListIfSingle(getRawOldValues());
     }
 
     /**
@@ -714,7 +714,7 @@ public class DSRequestData implements java.io.Serializable
             return (Map<String, Object>) criteria;
         }else{
             try {
-                return DataUtil.getProperties(criteria, true);
+                return DataUtils.getProperties(criteria, true);
             } catch (Exception e) { }
             return null;
         }
@@ -729,7 +729,7 @@ public class DSRequestData implements java.io.Serializable
         if (getOperationType().equals(Eoperation.ADD)) {
             return getValueSets();
         }
-        return DataUtil.makeListIfSingle(getRawCriteria());
+        return DataUtils.makeListIfSingle(getRawCriteria());
     }
 
     /**
@@ -777,7 +777,7 @@ public class DSRequestData implements java.io.Serializable
         if (getOperationType() == Eoperation.FETCH || getOperationType() == Eoperation.REMOVE) {
             return getCriteriaSets();
         } else {
-            return DataUtil.makeListIfSingle(getRawValues());
+            return DataUtils.makeListIfSingle(getRawValues());
         }
     }
 
@@ -803,7 +803,7 @@ public class DSRequestData implements java.io.Serializable
     }
 
     public List<?> getSortByFields() {
-        return DataUtil.makeListIfSingle(rawSortBy);
+        return DataUtils.makeListIfSingle(rawSortBy);
     }
 
     /**

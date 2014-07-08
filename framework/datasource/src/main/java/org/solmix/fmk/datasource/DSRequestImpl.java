@@ -47,7 +47,7 @@ import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.SlxFile;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.upload.UploadItem;
@@ -198,9 +198,9 @@ public class DSRequestImpl implements DSRequest
         }
         // Application
         if (!data.getAppID().equals("builtinApplication")) {
-            // List<String> qualifiedUserTypes = DataUtil.makeList("*");
+            // List<String> qualifiedUserTypes = DataUtils.makeList("*");
             // try {
-            // DataUtil.addAll(qualifiedUserTypes, app.userIsOfTypes());
+            // DataUtils.addAll(qualifiedUserTypes, app.userIsOfTypes());
             // } catch (Exception e) {
             // log.error("Can't look up app users", e);
             // }
@@ -208,7 +208,7 @@ public class DSRequestImpl implements DSRequest
 
         if (data.getOutputs() == null) {
             if (operation.getOutputs() != null)
-                data.setOutputs(DataUtil.commaSeparatedStringToList(operation.getOutputs()));
+                data.setOutputs(DataUtils.commaSeparatedStringToList(operation.getOutputs()));
         }
         if (data.getSortBy() == null && operation.getSortBy() != null && operation.getSortBy().size() > 1)
             data.setRawSortBy(operation.getSortBy());
@@ -439,8 +439,8 @@ public class DSRequestImpl implements DSRequest
                             ErrorReport errorReport = new ErrorReport();
                             errors.add(errorReport);
                             String __errorString = (new StringBuilder()).append("Size of '").append(shortFilename).append("' (").append(
-                                DataUtil.formatFileSize(fileSize)).append(") exceeded maximum allowed file size of ").append(
-                                DataUtil.formatFileSize(maxSize)).toString().toString();
+                                DataUtils.formatFileSize(fileSize)).append(") exceeded maximum allowed file size of ").append(
+                                DataUtils.formatFileSize(maxSize)).toString().toString();
                             log.debug(__errorString);
                             errorReport.addError(fieldName, __errorString);
                         }
@@ -457,7 +457,7 @@ public class DSRequestImpl implements DSRequest
                 }
             }// end loop values
         }
-        data.setValues(DataUtil.mapMerge(_addFields, _values));
+        data.setValues(DataUtils.mapMerge(_addFields, _values));
 
     }
 
@@ -610,7 +610,7 @@ public class DSRequestImpl implements DSRequest
                 String value = (String) data.getValues().get(field.getName());
                 if (value != null)
                     try {
-                        value = DataUtil.hashValue(value, field.getStoreWithHash());
+                        value = DataUtils.hashValue(value, field.getStoreWithHash());
                     } catch (Exception e) {
                         throw new SlxException(Tmodule.DATASOURCE, Texception.NO_SUCH_ALGORITHM, "hash fields with no such algorithm.", e);
                     }

@@ -42,7 +42,7 @@ import org.solmix.api.jaxb.Tfield;
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.ValidationEventFactory;
 import org.solmix.fmk.event.EventWorker;
@@ -66,11 +66,11 @@ public class DataTools
 
             String _tmp = ISCJavaScript.jsParser.toJavaScript(obj);
             if (!ISCJavaScript.jsParser.isPrettyPrint())
-                return DataUtil.prettyPrint(_tmp);
+                return DataUtils.prettyPrint(_tmp);
             else
                 return _tmp;
         } catch (Exception e) {
-            return (new StringBuilder()).append("Exception during DataTools.prettyPrint:\n").append(DataUtil.getStackTrace(e)).toString();
+            return (new StringBuilder()).append("Exception during DataTools.prettyPrint:\n").append(DataUtils.getStackTrace(e)).toString();
         }
     }
 
@@ -173,7 +173,7 @@ public class DataTools
             // }
             // Map attributes = XMLUtil.attributesToMap((Element) xmlObj);
             List<Element> eleList = XMLUtil.getElementChildren(ele);
-            if (DataUtil.isNotNullAndEmpty(eleList)) {
+            if (DataUtils.isNotNullAndEmpty(eleList)) {
                 if (_type.equalsIgnoreCase("List") || _type.equalsIgnoreCase("array")) {
                     List<Object> list = new ArrayList<Object>();
                     for (Element e : eleList) {
@@ -196,17 +196,17 @@ public class DataTools
                         if (name == null)
                             name = e.getNodeName();
                         map.put(name, XMLtoRecord(e));
-                        DataUtil.putMultiple(map, name, XMLtoRecord(e));
+                        DataUtils.putMultiple(map, name, XMLtoRecord(e));
                     }
                     return map;
                 }
 
             }
             return null;
-            // return DataUtil.mapMerge(attributes, _return);
+            // return DataUtils.mapMerge(attributes, _return);
 
         } else {
-            throw new SlxException(Tmodule.XML, Texception.NO_SUPPORT, DataUtil.getNoSupportString(xmlObj));
+            throw new SlxException(Tmodule.XML, Texception.NO_SUPPORT, DataUtils.getNoSupportString(xmlObj));
         }
 
     }
@@ -214,7 +214,7 @@ public class DataTools
     public static String getXMLType(Element ele) {
         String xsitype = ele.getAttribute("xsi:type");
         String _type = null;
-        if (DataUtil.isNotNullAndEmpty(xsitype) && xsitype.length() >= 4)
+        if (DataUtils.isNotNullAndEmpty(xsitype) && xsitype.length() >= 4)
             _type = xsitype.substring(4);
         return _type;
     }

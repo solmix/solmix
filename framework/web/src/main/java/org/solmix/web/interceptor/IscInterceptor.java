@@ -41,7 +41,7 @@ import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.fmk.js.ISCJavaScript;
@@ -84,7 +84,7 @@ public class IscInterceptor extends AbstractRestInterceptor
         String rawTransactionData = queryParamsMap.get(PAYLOAD_NAME);
         if (rawTransactionData == null)
             rawTransactionData = request.getParameter(PAYLOAD_NAME);
-        if (DataUtil.isNullOrEmpty(rawTransactionData)) {
+        if (DataUtils.isNullOrEmpty(rawTransactionData)) {
             Writer out = context.getOut();
             ServletTools.sendHTMLStart(out);
             LOG.warn("Detected zero-length IDA transaction, asking client to retry.");
@@ -125,7 +125,7 @@ public class IscInterceptor extends AbstractRestInterceptor
             throw new SlxException(Tmodule.SERVLET, Texception.SERVLET_REQ_TRANSACTION_IS_NULL,
                 "Invalid request transaction : transaction data is null");
         String _jscallback = transactionData.getJscallback();
-        if (DataUtil.isNotNullAndEmpty(_jscallback))
+        if (DataUtils.isNotNullAndEmpty(_jscallback))
             dsCall.setAttribute(JS_CALLBACK, _jscallback);
         List<Roperation> operations = transactionData.getOperations().getElem();
         if (LOG.isDebugEnabled())

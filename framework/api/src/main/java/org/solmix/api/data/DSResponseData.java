@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.datasource.DSResponse.Status;
 import org.solmix.api.datasource.ResponseData;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -223,7 +223,7 @@ public class DSResponseData
             try {
                 if (data instanceof Map<?, ?>) {
                     Object instance = type.newInstance();
-                    DataUtil.setProperties((Map<?, ?>) data, instance, false);
+                    DataUtils.setProperties((Map<?, ?>) data, instance, false);
                     return (T) instance;
                 } else if (data instanceof List<?>) {
                     List<Object> datas = (List<Object>) data;
@@ -235,7 +235,7 @@ public class DSResponseData
                             _return= (T) one;
                         }else if(one instanceof Map<?, ?>){
                             _return = type.newInstance();
-                            DataUtil.setProperties((Map<?, ?>)one, _return, false);
+                            DataUtils.setProperties((Map<?, ?>)one, _return, false);
                         }
                         if(size>1){
                             log.warn("The data is more than one map or bean, used the first one and drop other " + (datas.size() - 1) + "(s)");
@@ -248,7 +248,7 @@ public class DSResponseData
                     }
                    
                 } else {
-                    return (T) DataUtil.castValue(data, type);
+                    return (T) DataUtils.castValue(data, type);
                 }
             } catch (Exception ee) {
                 log.debug((new StringBuilder()).append("Tried to convert inbound nested Map to: ").append(type.getName()).append(
@@ -270,7 +270,7 @@ public class DSResponseData
             }
         }else {
             try {
-                _return.add(DataUtil.convertType(type, data));
+                _return.add(DataUtils.convertType(type, data));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }

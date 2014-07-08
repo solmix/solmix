@@ -52,7 +52,7 @@ import org.solmix.api.jaxb.Tservice;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.base.ReflectionArgument;
@@ -284,7 +284,7 @@ public class ServiceDataSource
 
         // making method require arguments.
         if (methodArguments != null) {
-            List<String> methodArgList = DataUtil.simpleSplit(methodArguments, ",");
+            List<String> methodArgList = DataUtils.simpleSplit(methodArguments, ",");
             requireArgs = new ReflectionArgument[methodArgList.size()];
             VelocityEngine vgen = getVelocityEngine();
             VelocityContext vContext = new VelocityContext();

@@ -59,7 +59,7 @@ import org.solmix.api.jaxb.request.Roperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSRequestImpl;
 import org.solmix.fmk.datasource.DSResponseImpl;
@@ -250,7 +250,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         }
         List<SQLDataSource> _datasources;
         if ((dsObject instanceof String) || (dsObject instanceof SQLDataSource)) {
-            _datasources = getDataSources(DataUtil.makeListIfSingle(dsObject));
+            _datasources = getDataSources(DataUtils.makeListIfSingle(dsObject));
         } else if (dsObject instanceof List<?>) {
             _datasources = getDataSources((List<?>) dsObject);
         } else {
@@ -317,11 +317,11 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
          * Whether to qualify columnNames with table,first find in the operationBinding config,if not found then find in
          * dataSource config.
          ******************************************************************************/
-        Boolean qualifyColumnNames = (Boolean) DataUtil.getProperty("qualifyColumnNames", __bind, _firstDS.getContext().getTdataSource());
+        Boolean qualifyColumnNames = (Boolean) DataUtils.getProperty("qualifyColumnNames", __bind, _firstDS.getContext().getTdataSource());
         if (qualifyColumnNames == null) {
             qualifyColumnNames = autoQualifyColumnNames(_datasources);
         }
-        boolean __qualifyColumnNames = DataUtil.booleanValue(qualifyColumnNames);
+        boolean __qualifyColumnNames = DataUtils.booleanValue(qualifyColumnNames);
         /*****************************************************************************
          * Prepare for generate sql statement.
          ******************************************************************************/
@@ -345,7 +345,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         String statement = generateSQLStatement(req, context);
 
         __return = new DSResponseImpl(_firstDS, req);
-        if (DataUtil.isNullOrEmpty(statement))
+        if (DataUtils.isNullOrEmpty(statement))
             __return.setStatus(Status.STATUS_SUCCESS);
         /*******************************************************************
          * NOTE:[FETCH]
@@ -355,7 +355,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (!__requestCX.isPaged()){
                 __canPage = false;
             }else if(config.getBoolean(SqlCM.P_CUSTOM_SQL_RETURNS_ALLROWS, false)
-                && DataUtil.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
+                && DataUtils.isNotNullAndEmpty(DataSourceData.getCustomSQL(__bind))){
                 __canPage = false;
                 if(log.isTraceEnabled())
                     log.trace("Paging disabled for full custom queries.  "
@@ -442,7 +442,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                         }
                         _firstDS.setLastPrimaryKeysData(storeValues);
                         __return.setRawData(
-                            DataUtil.makeListIfSingle(DataTools.isRemove(_opType) ? ((Object) (_firstDS.getLastPrimaryKeys(req)))
+                            DataUtils.makeListIfSingle(DataTools.isRemove(_opType) ? ((Object) (_firstDS.getLastPrimaryKeys(req)))
                                 : _firstDS.getLastRow(req, __qualifyColumnNames)));
                     }
                 } else {
@@ -465,7 +465,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             List<Tfield> fields = ds.getContext().getFields();
             if (fields != null) {
                 for (Tfield field : fields) {
-                    if (DataUtil.isNotNullAndEmpty(field.getForeignKey())) {
+                    if (DataUtils.isNotNullAndEmpty(field.getForeignKey())) {
                         __return = Boolean.TRUE;
                         break;
                     }
@@ -505,7 +505,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         boolean _useRowCount = false;
         TqueryClauses clauses = __bind != null ? __bind.getQueryClauses() : null;
         // default use row count;not customSQL used;
-        if (DataUtil.isNotNullAndEmpty(getCustomSQLClause(__opID, clauses, __opType, null)))
+        if (DataUtils.isNotNullAndEmpty(getCustomSQLClause(__opID, clauses, __opType, null)))
             _useRowCount = true;
 
         long _$ = System.currentTimeMillis();
@@ -573,14 +573,14 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (!_driver.supportsSQLLimit() /* || __bind.isUseSQLLimit() */) {
                 Map<String, String> remap = new HashMap<String, String>();
                 for (SQLDataSource ds : dataSources) {
-                    remap = DataUtil.orderedMapUnion(remap, ds.getContext().getDs2NativeFieldMap());
+                    remap = DataUtils.orderedMapUnion(remap, ds.getContext().getDs2NativeFieldMap());
                 }
                 List contraints = (List) req.getContext().getConstraints();
                 if (contraints != null)
-                    remap = DataUtil.subsetMap(remap, contraints);
+                    remap = DataUtils.subsetMap(remap, contraints);
                 List<String> outputs = req.getContext().getOutputs();
                 if (outputs != null)
-                    remap = DataUtil.subsetMap(remap, outputs);
+                    remap = DataUtils.subsetMap(remap, outputs);
                 if (_driver.limitRequiresSQLOrderClause()) {
                     if (orderClause == null || orderClause.equals("")) {
                         List<String> pkList = _firstDS.getContext().getPrimaryKeys();
@@ -593,15 +593,15 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
                             Iterator<String> i = remap.keySet().iterator();
                             if (i.hasNext())
                                 orderClause = i.next();
-                            orderClause = DataUtil.enumToList(remap.values().iterator()).get(0);
+                            orderClause = DataUtils.enumToList(remap.values().iterator()).get(0);
                             log.debug((new StringBuilder()).append("Using first field as default sorter: ").append(orderClause).toString());
                         }
                     }
                     query = _driver.limitQuery(query, req.getContext().getStartRow(), req.getContext().getBatchSize(),
-                        DataUtil.enumToList(remap.values().iterator()), orderClause);
+                        DataUtils.enumToList(remap.values().iterator()), orderClause);
                 } else {
                     query = _driver.limitQuery(query, req.getContext().getStartRow(), req.getContext().getBatchSize(),
-                        DataUtil.enumToList(remap.values().iterator()));
+                        DataUtils.enumToList(remap.values().iterator()));
                 }// END ?LIMITSQL
 
                 queryWindowSelect(req, dataSources, query, __return, __bind);
@@ -710,7 +710,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (ds == null)
             return executeNativeQuery(statement, (List) null, opConfig, req);
         else
-            return executeNativeQuery(statement, DataUtil.makeList(ds), opConfig, req);
+            return executeNativeQuery(statement, DataUtils.makeList(ds), opConfig, req);
     }
 
     /**
@@ -798,7 +798,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         // else if (DataTools.isCustomer(__opType))
         // statement = "";
         else
-            throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtil.getNoSupportString(__opType));
+            throw new SlxException(Tmodule.SQL, Texception.NO_SUPPORT, DataUtils.getNoSupportString(__opType));
 
         return Velocity.evaluateAsString(statement, context, __opType.value(), ds, true);
     }
@@ -982,7 +982,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
         if (lastPrimaryKeysData == null)
             throw new SlxException(Tmodule.SQL, Texception.SQL_DATASOURCE_CACHE_EXCEPTION,
                 "getLastPrimaryKeys() called before valid insert/replace/update operation has been performed");
-        Map submittedPrimaryKeys = DataUtil.subsetMap(lastPrimaryKeysData, data.getPrimaryKeys());
+        Map submittedPrimaryKeys = DataUtils.subsetMap(lastPrimaryKeysData, data.getPrimaryKeys());
         if (submittedPrimaryKeys == null)
             return null;
         Iterator i = submittedPrimaryKeys.keySet().iterator();
@@ -993,7 +993,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (submittedPrimaryKeys.get(keyName) == null)
                 submittedPrimaryKeys.remove(keyName);
         } while (true);
-        List sequencesNotPresent = DataUtil.setDisjunction(data.getPrimaryKeys(), DataUtil.keysAsList(submittedPrimaryKeys));
+        List sequencesNotPresent = DataUtils.setDisjunction(data.getPrimaryKeys(), DataUtils.keysAsList(submittedPrimaryKeys));
         if (sequencesNotPresent.isEmpty())
             return lastPrimaryKeys = submittedPrimaryKeys;
         else
@@ -1004,10 +1004,10 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      * @param storeValues
      */
     private void setLastPrimaryKeysData(Map storeValues) {
-        if (DataUtil.isNullOrEmpty(data.getPrimaryKeys()))
+        if (DataUtils.isNullOrEmpty(data.getPrimaryKeys()))
             lastPrimaryKeysData = storeValues;
         else
-            lastPrimaryKeysData = DataUtil.subsetMap(storeValues, data.getPrimaryKeys());
+            lastPrimaryKeysData = DataUtils.subsetMap(storeValues, data.getPrimaryKeys());
 
     }
 
@@ -1045,7 +1045,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             // for operation cache.
         }
         // used to primary key is auto generated by sequence.
-        if (DataUtil.isNullOrEmpty(primaryKeys)) {
+        if (DataUtils.isNullOrEmpty(primaryKeys)) {
             primaryKeys = req.getContext().getCriteria();
         }
         String lastRowQuery = new StringBuffer().append("SELECT ").append((new SQLSelectClause(req, this, qualifyColumnNames)).getSQLString()).append(
@@ -1068,7 +1068,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
      */
     private static List getUploadedFileStreams(DSRequest req) {
         List _files = req.getContext().getUploadedFiles();
-        if (DataUtil.isNullOrEmpty(_files))
+        if (DataUtils.isNullOrEmpty(_files))
             return null;
         List __return = new ArrayList();
         for (Object o : _files) {
@@ -1149,7 +1149,7 @@ public final class SQLDataSource extends BasicDataSource implements ISQLDataSour
             if (singleRemap == null)
                 continue;
             if (primaryKeysOnly)
-                singleRemap = DataUtil.subsetMap(singleRemap, ds.getContext().getPrimaryKeys());
+                singleRemap = DataUtils.subsetMap(singleRemap, ds.getContext().getPrimaryKeys());
             for (Object column : singleRemap.keySet()) {
                 if (!_column2TableMap.containsKey(column)) {
                     _column2TableMap.put(column, ds.getTable().getName());
@@ -1465,8 +1465,8 @@ protected String getPID(){
         for (SQLDataSource ds : dataSources) {
             Map singleRemap = ds.getContext().getExpandedDs2NativeFieldMap();
             if (primaryKeysOnly)
-                singleRemap = DataUtil.subsetMap(singleRemap, ds.getContext().getPrimaryKeys());
-            _combineRemap = DataUtil.orderedMapUnion(_combineRemap, singleRemap);
+                singleRemap = DataUtils.subsetMap(singleRemap, ds.getContext().getPrimaryKeys());
+            _combineRemap = DataUtils.orderedMapUnion(_combineRemap, singleRemap);
         }
 
         return _combineRemap;
@@ -1481,7 +1481,7 @@ protected String getPID(){
 
         Map valueMaps = new HashMap();
         for (SQLDataSource ds : dataSources) {
-            valueMaps = DataUtil.orderedMapUnion(valueMaps, ds.getContext().getValueMaps(sortBy));
+            valueMaps = DataUtils.orderedMapUnion(valueMaps, ds.getContext().getValueMaps(sortBy));
         }
         return valueMaps;
     }
@@ -1493,7 +1493,7 @@ protected String getPID(){
         Map seq = new HashMap();
         if (getContext().getSuperDS() != null)
             seq = ((SQLDataSource) getContext().getSuperDS()).getSequences();
-        DataUtil.mapMerge(getTable().getSequences(), seq);
+        DataUtils.mapMerge(getTable().getSequences(), seq);
         return seq;
     }
 
@@ -1574,10 +1574,10 @@ protected String getPID(){
                 return driver.sqlInTransform(value, __f);
             else
                 return driver.escapeValueForFilter(value.toString().toLowerCase(), null);
-        if (DataUtil.typeIsNumeric(_columnType)) {
+        if (DataUtils.typeIsNumeric(_columnType)) {
             if (value instanceof String)
                 try {
-                    if (DataUtil.typeIsDecimal(_columnType))
+                    if (DataUtils.typeIsDecimal(_columnType))
                         value = (new BigDecimal((String) value)).toString();
                     else
                         value = (new BigInteger((String) value)).toString();

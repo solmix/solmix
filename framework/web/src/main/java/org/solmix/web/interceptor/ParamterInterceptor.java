@@ -29,7 +29,7 @@ import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.request.Roperation;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.datasource.DSRequestImpl;
 
@@ -67,8 +67,7 @@ public class ParamterInterceptor extends AbstractRestInterceptor
             operation.setDataSource(cf.getDataSourceName());
             operation.setOperationType(cf.getOperationType());
             if (cf.getValues() != null)
-                ;
-            operation.setValues(cf.getValues());
+                operation.setValues(cf.getValues());
             if (cf.getCriteria() != null)
                 operation.setCriteria(cf.getCriteria());
             DSRequest dsr = new DSRequestImpl(operation,
@@ -85,7 +84,7 @@ public class ParamterInterceptor extends AbstractRestInterceptor
     public static ConfigBean getDataSourceFromURL(HttpServletRequest request) {
 
         String reqPath = request.getRequestURI();
-        if (DataUtil.isNullOrEmpty(reqPath)) {
+        if (DataUtils.isNullOrEmpty(reqPath)) {
             reqPath = request.getRequestURI();
         }
         String type = null;

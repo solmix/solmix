@@ -36,7 +36,7 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.js.ISCJavaScript;
 
@@ -111,7 +111,7 @@ public class LoadSchemaServlet extends HttpServlet
             }
         } catch (Throwable e) {
             log.error("Exception while attempting to load a DataSource", e);
-            throw new ServletException(DataUtil.getStackTrace(e));
+            throw new ServletException(DataUtils.getStackTrace(e));
         } finally {
             response.flushBuffer();
         }

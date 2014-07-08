@@ -67,7 +67,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix.runtime*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.runtime*,org.osgi.service.event*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.springframework*;resolution:=optional;version="${spring.version}",*
 		</solmix.osgi.import.pkg>

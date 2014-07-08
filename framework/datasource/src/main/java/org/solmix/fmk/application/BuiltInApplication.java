@@ -41,7 +41,7 @@ import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.util.DataTools;
@@ -325,12 +325,12 @@ public class BuiltInApplication implements Application
         /**
          * Validation request.
          */
-        if (DataUtil.booleanValue(request.getContext().getIsClientRequest()) && (_operationType == Eoperation.REMOVE || _operationType == Eoperation.UPDATE)) {
+        if (DataUtils.booleanValue(request.getContext().getIsClientRequest()) && (_operationType == Eoperation.REMOVE || _operationType == Eoperation.UPDATE)) {
             Boolean allowMultiUpdate = Boolean.FALSE;
             ToperationBinding _opBinding = _ds.getContext().getOperationBinding(_operationType, request.getContext().getOperationId());
             if (_opBinding != null)
                 allowMultiUpdate = _opBinding.isAllowMultiUpdate();
-            if (DataUtil.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) && DataUtil.asBoolean(allowMultiUpdate)) {
+            if (DataUtils.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) && DataUtils.asBoolean(allowMultiUpdate)) {
                 String __info = (new StringBuilder()).append(operationType).append(" operation received ").append("from client for DataSource '").append(
                     _ds.getName()).append("', ").append("operationId '").append(request.getContext().getOperation()).append("'. This ").append(
                     "is not allowed because the DataSource has no ").append("primaryKey.  Either declare a primaryKey or ").append(
@@ -371,10 +371,10 @@ public class BuiltInApplication implements Application
                 List<String> bRols;
                 if (binRoles == null || binRoles.length() == 0)
                     bRols = null;
-                bRols = DataUtil.simpleSplit(binRoles, ";");
-                if (DataUtil.isNullOrEmpty(roles) && DataUtil.isNullOrEmpty(bRols))
+                bRols = DataUtils.simpleSplit(binRoles, ";");
+                if (DataUtils.isNullOrEmpty(roles) && DataUtils.isNullOrEmpty(bRols))
                     return true;
-                if (DataUtil.isNotNullAndEmpty(bRols)) {
+                if (DataUtils.isNotNullAndEmpty(bRols)) {
                     return haveRoles(subject, bRols);
                 } else {
                     return haveRoles(subject, roles);
@@ -497,7 +497,7 @@ public class BuiltInApplication implements Application
             ToperationBinding _opBinding = _ds.getContext().getOperationBinding(_operationType, request.getContext().getOperationId());
             if (_opBinding != null)
                 allowMultiUpdate = _opBinding.isAllowMultiUpdate();
-            if (DataUtil.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) && DataUtil.asBoolean(allowMultiUpdate)) {
+            if (DataUtils.isNullOrEmpty(_ds.getContext().getPrimaryKeys()) && DataUtils.asBoolean(allowMultiUpdate)) {
                 String __info = (new StringBuilder()).append(operationType).append(" operation received ").append("from client for DataSource '").append(
                     _ds.getName()).append("', ").append("operationId '").append(request.getContext().getOperation()).append("'. This ").append(
                     "is not allowed because the DataSource has no ").append("primaryKey.  Either declare a primaryKey or ").append(

@@ -32,7 +32,7 @@ import org.solmix.api.datasource.DataSourceManager;
 import org.solmix.api.datasource.ParserHandler;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.cache.StructCache;
 import org.solmix.fmk.event.EventWorker;
@@ -123,7 +123,7 @@ public class DataSourceProvider
         EserverType _dsType = data.getServerType();
         if (_dsType == null) {
             String tableName = data.getTdataSource().getTableName();
-            if (DataUtil.isNotNullAndEmpty(tableName))
+            if (DataUtils.isNotNullAndEmpty(tableName))
                 _dsType = EserverType.SQL;
         }
         // no set, default is basic

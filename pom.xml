@@ -58,6 +58,7 @@
 		<depends-maven-plugin.version>1.0</depends-maven-plugin.version>
 		<easymock.version>3.1</easymock.version>
 		<equinox.version>3.8.0.v20120529-1548</equinox.version>
+		<mybatis.version>3.2.5</mybatis.version>
 		<felix.bundlerepository.version>1.6.4</felix.bundlerepository.version>
 		<felix.configadmin.version>1.6.0</felix.configadmin.version>
 		<felix.fileinstall.version>3.2.6</felix.fileinstall.version>
@@ -581,6 +582,11 @@
 				<artifactId>osgi</artifactId>
 				<version>${equinox.version}</version>
 			</dependency>
+			<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>
@@ -1424,4 +1430,8 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
+	<issueManagement>
+		<url>https://github.com/solmix/solmix/issues</url>
+		<system>github issue</system>
+	</issueManagement>
 </project>

@@ -27,8 +27,8 @@ import java.util.zip.ZipEntry;
 import org.solmix.api.repo.NamedInputStream;
 import org.solmix.api.repo.archive.ArchiveDescriptor;
 import org.solmix.api.repo.archive.ArchiveDescriptorFactory;
-import org.solmix.commons.util.DataUtil;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.util.IOUtils;
 
 /**
  * 
@@ -53,7 +53,7 @@ public abstract class AbstractArchiveDescriptor implements ArchiveDescriptor
     }
 
     private static String normalizeEntryBasePrefix(String entryBasePrefix) {
-        if (DataUtil.isNullOrEmpty(entryBasePrefix) || entryBasePrefix.length() == 1) {
+        if (DataUtils.isNullOrEmpty(entryBasePrefix) || entryBasePrefix.length() == 1) {
             return null;
         }
 
@@ -89,7 +89,7 @@ public abstract class AbstractArchiveDescriptor implements ArchiveDescriptor
     protected NamedInputStream buildByteBasedInputStream(final String name, InputStream inputStream) throws IOException {
         // because of how jar InputStreams work we need to extract the bytes immediately. However, we
         // do delay the creation of the ByteArrayInputStreams until needed
-        byte[] bytes = IOUtil.getBytesFromInputStream(inputStream);
+        byte[] bytes = IOUtils.getBytesFromInputStream(inputStream);
         return new NamedByteArrayInputStream(name, bytes);
 
     }

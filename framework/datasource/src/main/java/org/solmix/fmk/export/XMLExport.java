@@ -34,7 +34,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.export.IExport;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.util.MapperUtil;
 
 /**
@@ -74,7 +74,7 @@ public void exportResultSet(List<Map<Object, Object>> rows, Map<String, String> 
         pw = (PrintWriter) out;
     else
         pw = new PrintWriter(out);
-    rows = DataUtil.remapRows(rows, columnMap, false);
+    rows = DataUtils.remapRows(rows, columnMap, false);
     try {
        String tagName= context.get(IExport.XML_TAG_NAME)==null?null:context.get(IExport.XML_TAG_NAME).toString();
        out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

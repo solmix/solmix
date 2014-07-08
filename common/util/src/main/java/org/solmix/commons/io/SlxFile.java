@@ -18,8 +18,8 @@
  */
 package org.solmix.commons.io;
 
-import static org.solmix.commons.util.DataUtil.caseSensitiveFileExists;
-import static org.solmix.commons.util.DataUtil.isURI;
+import static org.solmix.commons.util.DataUtils.caseSensitiveFileExists;
+import static org.solmix.commons.util.DataUtils.isURI;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +44,7 @@ import org.apache.oro.text.GlobCompiler;
 import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 
 
@@ -249,7 +249,7 @@ public class SlxFile
    public String getAsString() throws IOException
    {
       StringWriter sw = new StringWriter();
-      IOUtil.copyCharacterStreams(getReader(), sw);
+      IOUtils.copyCharacterStreams(getReader(), sw);
       return sw.toString();
    }
 

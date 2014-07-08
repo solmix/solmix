@@ -24,8 +24,8 @@ import java.net.URL;
 
 import org.solmix.api.repo.archive.ArchiveDescriptor;
 import org.solmix.api.repo.archive.ArchiveDescriptorFactory;
-import org.solmix.commons.util.ArchiveUtil;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.ArchiveUtils;
+import org.solmix.commons.util.DataUtils;
 
 
 /**
@@ -54,7 +54,7 @@ public class ArchiveDescriptorFactoryImpl implements ArchiveDescriptorFactory
         if ( "jar".equals( protocol ) ) {
               return new JarProtocolArchiveDescriptor( this, url, entry );
         }
-        else if ( DataUtil.isNullOrEmpty( protocol )
+        else if ( DataUtils.isNullOrEmpty( protocol )
                     || "file".equals( protocol )
                     || "vfszip".equals( protocol )
                     || "vfsfile".equals( protocol ) ) {
@@ -104,6 +104,6 @@ public class ArchiveDescriptorFactoryImpl implements ArchiveDescriptorFactory
      */
     @Override
     public URL getJarURLFromURLEntry(URL url, String entry) throws IllegalArgumentException {
-        return ArchiveUtil.getJarURLFromURLEntry(url, entry);
+        return ArchiveUtils.getJarURLFromURLEntry(url, entry);
     }
 }

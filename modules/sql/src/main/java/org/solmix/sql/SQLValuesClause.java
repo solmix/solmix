@@ -33,7 +33,7 @@ import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.jaxb.Tfield;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.velocity.Velocity;
 
 /**
@@ -74,7 +74,7 @@ public class SQLValuesClause
       this.dataSource = dataSource;
       field2ColumnMap = dataSource.getContext().getExpandedDs2NativeFieldMap();
 //      if (Assert.isNotNullAndEmpty(constraints) )
-//         values = DataUtil.subsetMap(values, constraints);
+//         values = DataUtils.subsetMap(values, constraints);
       this.values = filterValid(values);
    }
 
@@ -111,7 +111,7 @@ public class SQLValuesClause
       StringBuffer _valueList = new StringBuffer();
       Map sequences = dataSource.getSequences();
       SQLDriver driver = dataSource.getDriver();
-//      values = DataUtil.divideMap(values, new ArrayList(sequences.keySet()));
+//      values = DataUtils.divideMap(values, new ArrayList(sequences.keySet()));
       if (values == null)
          values = new HashMap();
       for (Object key : values.keySet())
@@ -231,7 +231,7 @@ private void addToReturnValue(String value){
       List primaryKeys = dataSource.getTable().getPrimaryKeys();
       if (primaryKeys != null)
       {
-         Map newValues = DataUtil.divideMap(values, primaryKeys);
+         Map newValues = DataUtils.divideMap(values, primaryKeys);
          if (newValues != null)
             values = newValues;
       }

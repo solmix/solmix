@@ -25,7 +25,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.internal.DatasourceCM;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.support.SpringConfigureUnitManager;
@@ -61,7 +61,7 @@ public class SpringConfigureUnitTest
     }
     @Test
     public void test3() throws IOException {
-      Assert.assertEquals("/home/solmix/o",  DataUtil.getTemplateValue("${solmix.base}")); 
+      Assert.assertEquals("/home/solmix/o",  DataUtils.getTemplateValue("${solmix.base}")); 
     }
     @Test
     public void test4() throws IOException {

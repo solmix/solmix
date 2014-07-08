@@ -19,7 +19,7 @@
 
 package org.solmix.web.interceptor;
 
-import static org.solmix.commons.util.DataUtil.booleanValue;
+import static org.solmix.commons.util.DataUtils.booleanValue;
 import static org.solmix.web.ServletTools.encodeParameter;
 import static org.solmix.web.ServletTools.mimeTypeForContext;
 
@@ -41,7 +41,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.Eoperation;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 /**
  * 
@@ -86,7 +86,7 @@ public class DownloadInterceptor extends DSCallWebInterceptor
                 context.getResponse().setContentLength((int) contentLength);
                 try {
                     OutputStream os = context.getResponse().getOutputStream();
-                    IOUtil.copyStreams(is, os);
+                    IOUtils.copyStreams(is, os);
                     os.flush();
                 } catch (IOException e) {
                     throw new SlxException(Tmodule.BASIC, Texception.IO_EXCEPTION, e);

@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.BundleContext;
 import org.solmix.SlxConstants;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 /**
  * 
@@ -170,7 +170,7 @@ public class StaticResourceServlet extends HttpServlet
         try {
             os = res.getOutputStream();
             is = url.openStream();
-            IOUtil.copyStreams(is, os);
+            IOUtils.copyStreams(is, os);
         } finally {
             if (is != null) {
                 is.close();

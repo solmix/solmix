@@ -29,8 +29,6 @@ import org.osgi.service.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.collections.DataTypeMap;
-import org.solmix.event.EventManager;
-import org.solmix.event.IEvent;
 import org.solmix.eventservice.Cache;
 import org.solmix.eventservice.EventAdminImpl;
 import org.solmix.eventservice.EventFilter;
@@ -42,6 +40,8 @@ import org.solmix.eventservice.util.LeastRecentlyUsedCacheMap;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
+import org.solmix.runtime.event.EventManager;
+import org.solmix.runtime.event.IEvent;
 
 /**
  * 
@@ -87,7 +87,7 @@ public class SpringEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.EventManager#postEvent(org.solmix.api.event.IEvent)
+     * @see org.solmix.runtime.event.api.event.EventManager#postEvent(org.solmix.runtime.event.api.event.IEvent)
      */
     @Override
     public void postEvent(IEvent event) {
@@ -122,7 +122,7 @@ public class SpringEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.EventManager#sendEvent(org.solmix.api.event.IEvent)
+     * @see org.solmix.runtime.event.api.event.EventManager#sendEvent(org.solmix.runtime.event.api.event.IEvent)
      */
     @Override
     public void sendEvent(IEvent event) {
@@ -141,7 +141,7 @@ public class SpringEventManager implements EventManager
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.event.EventManager#getProvider()
+     * @see org.solmix.runtime.event.api.event.EventManager#getProvider()
      */
     @Override
     public String getProvider() {

@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.solmix.api.security.AccessManager;
 import org.solmix.api.security.Permission;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * 
@@ -50,7 +50,7 @@ public class AccessManagerImpl implements AccessManager
      */
     @Override
     public boolean isGranted(String path, long permissions) {
-        if (DataUtil.isNullOrEmpty(path))
+        if (DataUtils.isNullOrEmpty(path))
             path = "/";//$NON-NLS-1$
         long currentPermission = getPermissions(path);
         boolean granted = (currentPermission & permissions) == permissions;

@@ -49,7 +49,7 @@ import org.solmix.api.serialize.XMLParserFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.api.types.TransactionPolicy;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.datasource.BasicDataSource;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
@@ -248,7 +248,7 @@ public class DSCallImpl implements DSCall
                 else
                     onSuccess();
             } catch (Exception e) {
-                log.warn(DataUtil.getStackTrace(e));
+                log.warn(DataUtils.getStackTrace(e));
             }
             // post inspect
             for (DSCallInterceptor i : interceptors) {

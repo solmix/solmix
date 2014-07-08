@@ -22,7 +22,7 @@ import org.solmix.api.exception.SlxException;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
 import org.solmix.commons.io.IByteCounter;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.upload.SessionByteCounter;
 import org.solmix.fmk.upload.UploadItem;
 import org.solmix.fmk.upload.UploadItemFactory;
@@ -79,7 +79,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
 
     public Map getParams() throws SlxException {
         if (allParams == null)
-            allParams = DataUtil.mapUnion(getFileParams(), getStringParams());
+            allParams = DataUtils.mapUnion(getFileParams(), getStringParams());
         return allParams;
     }
 
@@ -225,7 +225,7 @@ public class WrappedHttpServletRequest extends HttpServletRequestWrapper
         if (params == null)
             return null;
         if (params instanceof List)
-            return DataUtil.listToStringArray((List) params);
+            return DataUtils.listToStringArray((List) params);
         try {
             String result[] = { params.toString() };
             return result;

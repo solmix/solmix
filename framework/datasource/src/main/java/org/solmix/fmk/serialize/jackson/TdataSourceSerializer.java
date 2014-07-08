@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.solmix.api.jaxb.TdataSource;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -65,7 +65,7 @@ public class TdataSourceSerializer extends JsonSerializer<TdataSource>
         jgen.writeRaw("isc.DataSource.create(");
 
         try {
-            fields = DataUtil.getPropertyDescriptors(data);
+            fields = DataUtils.getPropertyDescriptors(data);
         } catch (Exception e) {
             // just ignore it.
         }

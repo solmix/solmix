@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.SlxConstants;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 /**
  * 
@@ -121,7 +121,7 @@ public class ServiceUtil
         if (context != null) {
             List<AdapterType> res;
             try {
-                if (DataUtil.isNotNullAndEmpty(filter)) {
+                if (DataUtils.isNotNullAndEmpty(filter)) {
                     Collection<ServiceReference<AdapterType>> ref = context.getServiceReferences(clazz, filter);
                     if (ref != null) {
                         res = new ArrayList<AdapterType>();
@@ -163,7 +163,7 @@ public class ServiceUtil
         if (context != null) {
             Object[] res;
             try {
-                if (DataUtil.isNotNullAndEmpty(filter)) {
+                if (DataUtils.isNotNullAndEmpty(filter)) {
                     ServiceReference<?>[] ref = context.getServiceReferences(interfaceName, filter);
                     if (ref != null) {
                         res = new Object[ref.length];

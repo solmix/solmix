@@ -11,7 +11,11 @@
  <properties>
     <pkgVersion>1.9.8</pkgVersion>
     <pkgArtifactId>jackson</pkgArtifactId>
-    <solmix.osgi.export>!com.fasterxml.jackson.map.ext,com.fasterxml.jackson*;version="2.4.0"</solmix.osgi.export>
+    <solmix.osgi.export>
+    !com.fasterxml.jackson.map.ext,
+    com.fasterxml.jackson*;version="2.4.0",
+    org.codehaus.stax2*;version="3.1.4"
+    </solmix.osgi.export>
     <pkgGroupId>jackson</pkgGroupId>
     <solmix.osgi.import.pkg>!com.fasterxml.jackson*,!org.joda.time*,*</solmix.osgi.import.pkg>
     <solmix.osgi.private.pkg>com.fasterxml.jackson.map.ext</solmix.osgi.private.pkg>

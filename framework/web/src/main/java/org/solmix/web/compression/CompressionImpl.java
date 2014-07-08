@@ -26,7 +26,7 @@ import java.util.zip.GZIPOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.api.interfaces.Compression;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 /**
  * 
@@ -109,7 +109,7 @@ public class CompressionImpl implements Compression
    public ByteArrayOutputStream compressStream(InputStream inputstream, boolean flag) throws Exception
    {
       ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-      IOUtil.copyStreams(inputstream, bytearrayoutputstream);
+      IOUtils.copyStreams(inputstream, bytearrayoutputstream);
       return compressBuffer(bytearrayoutputstream, flag);
 
    }

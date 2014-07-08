@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.framework.BundleContext;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 
 /**
@@ -73,7 +73,7 @@ public class MonitorEventFactory
     public TimeMonitorEvent createTimeMonitorEvent(Map<String, Object> properties) {
         TimeMonitorEvent event;
         if(properties!=null){
-        DataUtil.mapMerge(defaultProperties(), properties);
+        DataUtils.mapMerge(defaultProperties(), properties);
         event = new TimeMonitorEvent(properties);
         }else{
             event = new TimeMonitorEvent(defaultProperties());

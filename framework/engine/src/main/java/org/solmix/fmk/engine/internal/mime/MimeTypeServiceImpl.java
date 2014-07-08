@@ -156,7 +156,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener
     // }
     //
     // // register configuration properties
-    // // String[] configTypes = OsgiUtil.toStringArray(context.getProperties().get(PROP_MIME_TYPES));
+    // // String[] configTypes = OsgiUtils.toStringArray(context.getProperties().get(PROP_MIME_TYPES));
     // // if (configTypes != null) {
     // // for (String configType : configTypes) {
     // // registerMimeType(configType);

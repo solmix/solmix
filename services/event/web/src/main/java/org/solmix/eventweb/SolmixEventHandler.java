@@ -33,10 +33,10 @@ import org.atmosphere.handler.AbstractReflectorAtmosphereHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.event.EventManager;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.serialize.JSParser;
-import org.solmix.commons.util.IOUtil;
-import org.solmix.event.EventManager;
+import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 
@@ -120,7 +120,7 @@ public class SolmixEventHandler extends AbstractReflectorAtmosphereHandler imple
 
         StringWriter out = new StringWriter();
         try {
-            IOUtil.copyCharacterStreams(r.getRequest().getReader(), out);
+            IOUtils.copyCharacterStreams(r.getRequest().getReader(), out);
         } catch (IOException e) {
             logger.error("Can't read data from request", e);
         }

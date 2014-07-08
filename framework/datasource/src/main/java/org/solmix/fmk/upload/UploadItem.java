@@ -16,7 +16,7 @@ import org.apache.commons.fileupload.FileItemHeaders;
 
 import org.solmix.commons.io.ByteCountingOutputStream;
 import org.solmix.commons.io.IByteCounter;
-import org.solmix.commons.util.IOUtil;
+import org.solmix.commons.util.IOUtils;
 
 public class UploadItem implements FileItem
 {
@@ -116,7 +116,7 @@ public class UploadItem implements FileItem
 
     @Override
     public void write(File file) throws Exception {
-        IOUtil.copyStreams(getInputStream(), new FileOutputStream(file));
+        IOUtils.copyStreams(getInputStream(), new FileOutputStream(file));
     }
 
     public void setTotalSize(long size) {

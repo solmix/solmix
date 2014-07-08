@@ -29,7 +29,7 @@ import java.util.Map;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.serialize.JSParser;
 import org.solmix.api.serialize.JSParserFactory;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.serialize.JSParserFactoryImpl;
 
 /**
@@ -44,11 +44,11 @@ public class MapperUtil
     private static JSParser jsParser;
 
     public static void records2XML(String tagName, List<?> list, Writer out) throws Exception {
-        if (DataUtil.isNullOrEmpty(list))
+        if (DataUtils.isNullOrEmpty(list))
             return;
         for (Object l : list) {
             Map<?, ?> data=(Map<?, ?>)l;
-            if (DataUtil.isNullOrEmpty(tagName)) {
+            if (DataUtils.isNullOrEmpty(tagName)) {
                 tagName = "Object";
             }
             out.write("<" + tagName + ">\n");
@@ -67,9 +67,9 @@ public class MapperUtil
 
                     out.write("<" + key + ">" + strValue + "</" + key + ">\n");
                 } else if (value instanceof Map<?, ?>) {
-                    records2XML(null, DataUtil.makeListIfSingle(value), out);
+                    records2XML(null, DataUtils.makeListIfSingle(value), out);
                 } else {
-                    Map<String, Object> map = DataUtil.getProperties(value);
+                    Map<String, Object> map = DataUtils.getProperties(value);
                     records2XML(null, map, out);
                 }
             }
@@ -142,7 +142,7 @@ public class MapperUtil
     }
 
     public static void records2XML(String tagName, Map<?, ?> obj, Writer out) throws Exception {
-        List list = DataUtil.makeListIfSingle(obj);
+        List list = DataUtils.makeListIfSingle(obj);
         records2XML(tagName, list, out);
     }
 

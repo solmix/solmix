@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.solmix.api.jaxb.ToperationBinding;
 import org.solmix.api.jaxb.ToperationBindings;
-import org.solmix.commons.util.DataUtil;
+import org.solmix.commons.util.DataUtils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,13 +51,13 @@ public class ToperationBindingsSerializer extends JsonSerializer<ToperationBindi
    public void serialize(ToperationBindings value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException
    {
       List<ToperationBinding> binds = value.getOperationBinding();
-      if (DataUtil.isNotNullAndEmpty(binds))
+      if (DataUtils.isNotNullAndEmpty(binds))
       {
          jgen.writeStartArray();
          for (ToperationBinding bind : binds)
          {
             /*
-             * try { Map<String, PropertyDescriptor> props = DataUtil.getPropertyDescriptors(bind); for (String field :
+             * try { Map<String, PropertyDescriptor> props = DataUtils.getPropertyDescriptors(bind); for (String field :
              * props.keySet()) { jgen.writeStartObject(); if(filt(field)){ PropertyDescriptor pd = props.get(field);
              * Method method= pd.getReadMethod(); if ( method != null ){ Object fieldValue = method.invoke(bind); if
              * (fieldValue != null) { jgen.writeFieldName(field); jgen.writeObject(fieldValue); } } } } } catch
