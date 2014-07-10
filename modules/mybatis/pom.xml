@@ -60,7 +60,9 @@
 	</build>
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.mybatis*</solmix.osgi.export.pkg>
-		<solmix.osgi.import.pkg>*</solmix.osgi.import.pkg>
+		<solmix.osgi.import.pkg>
+		org.springframework*;resolution:=optional;version="${spring.version}",
+		*</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
 	<packaging>bundle</packaging>
