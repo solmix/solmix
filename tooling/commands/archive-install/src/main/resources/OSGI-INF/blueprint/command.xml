@@ -21,12 +21,12 @@
 
     <command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.1.0">
         <command>
-            <action class="org.solmix.command.karaf.ArchiveInstallCommand"/>
+            <action class="org.solmix.command.karaf.FeatureDowndloadCommand"/>
         </command>
-       <!--  <command name="features/listUrl">
-            <action class="org.apache.karaf.features.command.ListUrlCommand"/>
+        <command>
+            <action class="org.solmix.command.karaf.UrlDownloadCommand"/>
         </command>
-        <command name="features/listRepositories">
+        <!-- <command name="features/listRepositories">
             <action class="org.apache.karaf.features.command.ListRepositoriesCommand"/>
         </command>
         <command name="features/removeUrl">
