@@ -128,8 +128,8 @@ public class OsgiSqlSessionFactoryProvider extends  AbstractSqlSessionFactoryPro
             filter = filter.substring(prefixEnd);
         }
         if (filter.indexOf("/") != -1) {
-            int last = filter.lastIndexOf("/");
-            path = filter.substring(filter.lastIndexOf("/"));
+            int last = filter.lastIndexOf("/")+1;
+            path = filter.substring(0,last);
             pattern = filter.substring(last, filter.length());
             if (path.indexOf("**") != -1) {
                 path = filter.substring(filter.lastIndexOf("**"));

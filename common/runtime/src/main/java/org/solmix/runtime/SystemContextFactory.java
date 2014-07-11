@@ -39,7 +39,7 @@ import org.solmix.commons.util.ClassLoaderUtil;
 public abstract class SystemContextFactory
 {
 
-    public static final String DEFAULT_FACTORY = "org.solmix.fmk.context.SystemContextFactoryImpl";
+    public static final String DEFAULT_FACTORY = "org.solmix.runtime.support.SystemContextFactoryImpl";
 
     public static final String FACTORY_PROPERTY_NAME = "org.solmix.runtime.context.factory";
 
