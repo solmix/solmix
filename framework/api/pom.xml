@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.framework</groupId>
     <artifactId>solmix-framework</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
   </parent>
   <artifactId>solmix-framework-api</artifactId>
    <name>Solmix :: FrameWork :: API</name>

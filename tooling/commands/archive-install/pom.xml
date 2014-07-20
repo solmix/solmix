@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.commands</groupId>
     <artifactId>commands</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
   </parent>
   <artifactId>solmix-commands-archive-install</artifactId>
   <name>Solmix :: Command :: Install Karaf Archive</name>
