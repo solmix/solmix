@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.modules</groupId>
     <artifactId>sgt</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>org.solmix.modules.sgt</groupId>
@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>com.smartgwt</groupId>
 			<artifactId>smartgwt</artifactId>
-			<version>4.0</version>
+			<version>4.1p</version>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.modules.sgt</groupId>
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-dev</artifactId>
-			<version>2.5.0</version>
+			<version>2.6.1</version>
 			<scope>provided</scope>
 		</dependency>
 	<!-- 	<dependency>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>2.5.0</version>
+			<version>2.6.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gwtplatform</groupId>
@@ -50,12 +50,12 @@
 		<dependency>
     <groupId>com.google.gwt.inject</groupId>
     <artifactId>gin</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
 </dependency>
 		<dependency>
 			<groupId>com.smartgwt</groupId>
 			<artifactId>smartgwt-skins</artifactId>
-			<version>4.0</version>
+			<version>4.1p</version>
 		</dependency>
 </dependencies>
 	<build>

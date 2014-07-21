@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.modules</groupId>
     <artifactId>modules</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>sgt</artifactId>
