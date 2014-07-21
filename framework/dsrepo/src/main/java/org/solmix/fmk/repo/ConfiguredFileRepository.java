@@ -19,6 +19,7 @@
 package org.solmix.fmk.repo;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -40,7 +41,7 @@ public class ConfiguredFileRepository extends AbstractDSRepository
 
     private final SystemContext sc;
     public ConfiguredFileRepository(final SystemContext sc){
-        super(BUILDIN_FILE, ObjectType.URL,ObjectFormat.XML);
+        super(BUILDIN_FILE, ObjectType.STREAM,ObjectFormat.XML);
         this.sc=sc;
     }
    
@@ -68,13 +69,13 @@ public class ConfiguredFileRepository extends AbstractDSRepository
     private Object loadFrom(ClassLoader loader,String path){
         try {
             Enumeration<URL> urls= loader.getResources(path);
-            URL find=null ;
+            InputStream find=null ;
             while(urls.hasMoreElements()){
                 URL tmp=urls.nextElement();
                 if(find==null){
-                    find= tmp;
+                    find= loader.getResourceAsStream(path);
                     if(log.isTraceEnabled())
-                        log.trace("used url "+find.getPath()+" for datasource "+path);
+                        log.trace("used url "+tmp.getPath()+" for datasource "+path);
                 } else{
                     if(log.isWarnEnabled())
                         log.warn("find other resource for datasource :"+path);
