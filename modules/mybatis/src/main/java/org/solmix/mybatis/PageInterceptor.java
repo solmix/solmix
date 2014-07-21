@@ -63,7 +63,7 @@ public class PageInterceptor implements Interceptor
         if (parameter instanceof MybatisParameter) {
             MybatisParameter p = (MybatisParameter) parameter;
             if (p.isCanPage()) {
-            	BoundSql boundSql = statement.getBoundSql(parameter);
+            	BoundSql boundSql = statement.getBoundSql(p.getCriteria());
                 String originalSql = boundSql.getSql().trim();
                 SQLDriver sqlDriver = p.getSqlDriver();
                int total= p.getRequest().getContext().getTotalRow();
