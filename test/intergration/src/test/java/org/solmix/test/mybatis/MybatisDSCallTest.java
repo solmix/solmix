@@ -69,7 +69,7 @@ public class MybatisDSCallTest extends SolmixTestCase
                  return res.getRawData();
              }
              
-         }.withValues(new Criteria("id", 100)
+         }.withValues(new Criteria("id", 10000)
          .add("title", "啥子菜单")
          .add("url", "/fetch/mybatis/mybatis")
          .add("comments", "赌博阿道夫是范德萨")));
@@ -101,7 +101,7 @@ public class MybatisDSCallTest extends SolmixTestCase
                  return res.getRawData();
              }
              
-         }.withCriteria(new Criteria("id", 100)));
+         }.withCriteria(new Criteria("id", 10000)));
          
      }
 }
