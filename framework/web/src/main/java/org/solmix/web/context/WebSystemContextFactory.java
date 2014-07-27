@@ -22,7 +22,7 @@ package org.solmix.web.context;
 import javax.servlet.ServletContext;
 
 import org.solmix.runtime.SystemContext;
-import org.solmix.runtime.support.spring.SpringSystemContextFactory;
+import org.solmix.runtime.support.spring.SpringContainerFactory;
 
 
 /**
@@ -31,7 +31,7 @@ import org.solmix.runtime.support.spring.SpringSystemContextFactory;
  * @version $Id$ 2013-11-12
  */
 
-public class WebSystemContextFactory extends SpringSystemContextFactory
+public class WebSystemContextFactory extends SpringContainerFactory
 {
 
     private final ServletContext servletContext;

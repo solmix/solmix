@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd">
            
-	<bean id="solmix" class="org.solmix.runtime.support.spring.SpringSystemContext" />
+	<bean id="solmix" class="org.solmix.runtime.support.spring.SpringContainer" />
 	<bean id="org.solmix.runtime.adapter.AdapterManager" class="org.solmix.runtime.adapter.support.AdapterManagerImpl" lazy-init="true">
 		<constructor-arg ref="solmix" />
 	</bean>

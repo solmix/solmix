@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.adapter.AdapterManager;
 
 
@@ -34,16 +34,16 @@ import org.solmix.runtime.adapter.AdapterManager;
  * @version $Id$  2014年5月8日
  */
 
-public class OsgiSystemContextTest
+public class OsgiContainerTest
 {
     private IMocksControl control;
-    private SystemContext sc;
+    private Container sc;
     private BundleContext bundleContext;
     private Bundle bundle;
     @Before
     public void setup(){
         control=EasyMock.createNiceControl();
-        sc=control.createMock(SystemContext.class);
+        sc=control.createMock(Container.class);
         AdapterManager adm=control.createMock(AdapterManager.class);
         EasyMock.expect(sc.getBean(AdapterManager.class)).andReturn(adm).anyTimes();
         

@@ -44,10 +44,6 @@
 			<!--===========end ===========-->
 			<!--provied osgi bundles=-->
 		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.oro</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
@@ -59,10 +55,6 @@
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-servlet_2.5_spec</artifactId>
 		</dependency> -->
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-		</dependency>
 		<!-- ===========end ============-->
 		  	<dependency>
 		  		<groupId>org.slf4j</groupId>

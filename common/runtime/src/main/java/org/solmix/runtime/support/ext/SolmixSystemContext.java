@@ -22,7 +22,7 @@ package org.solmix.runtime.support.ext;
 import java.util.Map;
 
 import org.solmix.runtime.bean.BeanConfigurer;
-import org.solmix.runtime.support.SystemContextImpl;
+import org.solmix.runtime.extension.ExtensionContainer;
 
 
 /**
@@ -31,7 +31,7 @@ import org.solmix.runtime.support.SystemContextImpl;
  * @version $Id$ 2013-11-7
  */
 
-public class SolmixSystemContext extends SystemContextImpl
+public class SolmixSystemContext extends ExtensionContainer
 {
 
     public SolmixSystemContext()
@@ -47,7 +47,7 @@ public class SolmixSystemContext extends SystemContextImpl
     public SolmixSystemContext(Map<Class<?>, Object> beans, ClassLoader extensionClassLoader)
     {
         super(beans);
-        BeanConfigurer configurer = (BeanConfigurer) super.beans.get(BeanConfigurer.class);
+        BeanConfigurer configurer = (BeanConfigurer) super.extensions.get(BeanConfigurer.class);
         if (null == configurer) {
             configurer = new BeanConfigurer() {
 
@@ -62,7 +62,7 @@ public class SolmixSystemContext extends SystemContextImpl
                 }
 
             };
-            super.beans.put(BeanConfigurer.class, configurer);
+            super.extensions.put(BeanConfigurer.class, configurer);
         }
     }
 

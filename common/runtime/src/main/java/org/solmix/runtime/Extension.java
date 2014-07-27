@@ -18,16 +18,22 @@
  */
 package org.solmix.runtime;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月20日
  */
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface Extension {
 
-public interface PluginActivator
-{
-
-    void setContainer(Container context);
-    
+    String name() default "";
 }

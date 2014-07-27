@@ -16,18 +16,36 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.resource;
+
+import java.io.InputStream;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月26日
  */
 
-public interface PluginActivator
+public class ResourceResolverAdaptor implements ResourceResolver
 {
 
-    void setContainer(Container context);
-    
+
+    @Override
+    public <T> T resolve(String resourceName, Class<T> resourceType, String implementor) {
+        return resolve(new StringBuilder().append(resourceName).append("@").append(implementor).toString(),resourceType);
+    }
+
+
+    @Override
+    public <T> T resolve(String resourceName, Class<T> resourceType) {
+        return null;
+    }
+
+
+    @Override
+    public InputStream getAsStream(String name) {
+        return null;
+    }
+
 }

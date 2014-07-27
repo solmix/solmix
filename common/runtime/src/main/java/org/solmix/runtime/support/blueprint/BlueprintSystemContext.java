@@ -25,7 +25,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
-import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnitManager;
@@ -61,8 +61,8 @@ public class BlueprintSystemContext extends SolmixSystemContext
         super.setBean(bundleContext, BundleContext.class);
         super.setBean(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
         Dictionary<String, Object > properties= new Hashtable<String,Object>();
-        properties.put(CONTEXT_PROPERTY_NAME, getId());
-        bundleContext.registerService(SystemContext.class, this, properties);
+        properties.put(CONTAINER_PROPERTY_NAME, getId());
+        bundleContext.registerService(Container.class, this, properties);
     }
     
     /**
@@ -78,7 +78,7 @@ public class BlueprintSystemContext extends SolmixSystemContext
     @Override
     public String getId() {
         if (id == null) {
-            id =/* bundleContext.getBundle().getSymbolicName() + "-"  +*/ DEFAULT_CONTEXT_ID +"-"+ Integer.toString(this.hashCode());
+            id =/* bundleContext.getBundle().getSymbolicName() + "-"  +*/ DEFAULT_CONTAINER_ID +"-"+ Integer.toString(this.hashCode());
         }
         return id;
     }

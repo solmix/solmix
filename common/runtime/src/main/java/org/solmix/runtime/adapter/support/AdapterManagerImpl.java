@@ -32,8 +32,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.PluginActivator;
-import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.adapter.AdapterFactory;
 import org.solmix.runtime.adapter.AdapterManager;
 
@@ -50,16 +50,16 @@ public class AdapterManagerImpl implements AdapterManager, PluginActivator
 
     private Map<Class<?>, Class<?>[]> classSearchCache;
     final Map<String,List<AdapterFactory>> factories;
-    private SystemContext systemContext;
+    private Container systemContext;
     protected  final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
 
     public AdapterManagerImpl(){
         factories=new HashMap<String,List<AdapterFactory>>();
     }
-    public AdapterManagerImpl(final SystemContext systemContext)
+    public AdapterManagerImpl(final Container systemContext)
     {
         this();
-        setSystemContext(systemContext);
+        setContainer(systemContext);
     }
 
     /**
@@ -244,15 +244,15 @@ public class AdapterManagerImpl implements AdapterManager, PluginActivator
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.PluginActivator#setSystemContext(org.solmix.runtime.SystemContext)
+     * @see org.solmix.runtime.PluginActivator#setContainer(org.solmix.runtime.Container)
      */
     @Override
-    public void setSystemContext(SystemContext context) {
+    public void setContainer(Container context) {
         this.systemContext=context;
        context.setBean(this,AdapterManager.class);
     }
 
-   protected SystemContext getSystemContext(){
+   protected Container getContainer(){
         return systemContext;
     }
 }

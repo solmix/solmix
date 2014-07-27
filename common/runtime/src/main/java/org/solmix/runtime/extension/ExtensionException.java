@@ -16,18 +16,38 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.extension;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月27日
  */
 
-public interface PluginActivator
+public class ExtensionException extends RuntimeException
 {
 
-    void setContainer(Container context);
-    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6782089782072994243L;
+    public ExtensionException(String msg) {
+        super(msg);
+    }
+
+    /**
+     * Constructs a <code>ExtensionException</code> with the detail message and cause
+     * provided.
+     */
+    public ExtensionException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
+
+    /**
+     * Constructs an <code>ExtensionException</code> with the provided cause.
+     */
+    public ExtensionException(Throwable cause) {
+        super(cause);
+    }
 }

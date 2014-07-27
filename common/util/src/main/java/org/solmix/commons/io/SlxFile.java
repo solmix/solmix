@@ -34,14 +34,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.VFS;
-import org.apache.oro.text.GlobCompiler;
-import org.apache.oro.text.perl.Perl5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.IOUtils;
@@ -384,39 +381,6 @@ public class SlxFile
       return results;
    }
 
-   public static List find(String basePath, boolean recurse, String glob)
-   {
-      String regex = GlobCompiler.globToPerl5(glob.toCharArray(), 0);
-      regex = (new StringBuilder()).append("^").append(regex).append("(\\/)?$").toString();
-      return ffind(basePath, recurse, regex);
-   }
-
-   public static List ffind(String basePath, boolean recurse, String regex)
-   {
-      if (basePath == null)
-         return null;
-      List filesAtBasePath = list(basePath);
-      if (filesAtBasePath == null)
-         return null;
-      if (!regex.startsWith("/") || !regex.endsWith("/"))
-         regex = (new StringBuilder()).append("/").append(regex).append("/").toString();
-      List matchingFiles = new ArrayList();
-      Perl5Util perl5 = new Perl5Util();
-      Iterator i = filesAtBasePath.iterator();
-      do {
-         if (!i.hasNext())
-            break;
-         String path = (String) i.next();
-         if (recurse && isDirectory(path)) {
-            List matchingFilesInDir = ffind(path, true, regex);
-            if (matchingFilesInDir != null)
-               matchingFiles.addAll(matchingFilesInDir);
-         }
-         if (perl5.match(regex, path))
-            matchingFiles.add(path);
-      } while (true);
-      return matchingFiles;
-   }
 
    public boolean isDirectory() throws IOException
    {

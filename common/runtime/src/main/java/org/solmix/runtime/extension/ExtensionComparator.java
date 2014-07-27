@@ -16,18 +16,33 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
 
+package org.solmix.runtime.extension;
+
+import java.util.Comparator;
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$ 2014年7月27日
  */
 
-public interface PluginActivator
+public class ExtensionComparator implements Comparator<ExtensionInfo>
 {
 
-    void setContainer(Container context);
-    
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public int compare(ExtensionInfo o1, ExtensionInfo o2) {
+        if ((o1.getName().equals(o2.getName()))
+            && ((o1.extensionType == null && o2.extensionType == null) 
+                || o1.extensionType.equals(o2.extensionType))) {
+            return 0;
+        }
+        return -1;
+    }
+
 }

@@ -183,6 +183,7 @@ public class DefaultParser implements ParserHandler
                 data= parseFromSlxFile(SlxFile.class.cast(obj), dsName);
                 break;
             case STREAM:
+            	data= parseFromStream(InputStream.class.cast(obj), dsName);
                 break;
             case URL:
                 data= parseFromURL(URL.class.cast(obj), dsName);
@@ -197,7 +198,42 @@ public class DefaultParser implements ParserHandler
         return data;
     }
 
-    /**
+    private DataSourceData parseFromStream(InputStream is, String dsName) throws SlxException {
+    	DataSourceData data = null;
+        Tsolmix module=null;
+        try {
+            module = xmlParser.unmarshalDS(is);
+        } catch (Exception e1) {
+            throw new SlxException(Tmodule.XML,Texception.XML_JAXB_UNMARSHAL,e1);
+        } finally {
+            IOUtils.closeQuitely(is);
+        }
+        if(module==null)
+            return null;
+        TdataSource td = module.getDataSource();
+        numParsered.incrementAndGet();
+        String ID = td.getID();
+        /************************************
+         * construct explicable ID with group name.
+         ************************************/
+        if (ID != null && !ID.equals(dsName)) {
+            td.setID(dsName);
+            /************************************
+             * find real name.
+             ************************************/
+            String realName = dsName.substring(dsName.lastIndexOf(GROUP_SEP) + 1);
+            if (!realName.equals(ID)) {
+                String info = (new StringBuilder()).append("dsName case sensitivity mismatch - looking for: ").append(dsName).append(", but got: ").append(
+                    ID).toString();
+                getThreadEventWork().createAndFireDSValidateEvent(Level.WARNING, info, new IllegalArgumentException());
+            }
+
+        }
+            // new datasource data.
+        return new DataSourceData(td);
+	}
+
+	/**
      * @param cast
      * @return
      * @throws SlxException 

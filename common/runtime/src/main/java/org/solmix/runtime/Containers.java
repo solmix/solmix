@@ -20,14 +20,12 @@ package org.solmix.runtime;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月20日
  */
 
-public interface PluginActivator
+public class Containers
 {
 
-    void setContainer(Container context);
-    
 }

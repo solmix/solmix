@@ -30,9 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.bean.ConfiguredBeanProvider.BeanLoaderListener;
 import org.springframework.beans.Mergeable;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -65,7 +64,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
      * @param applicationContext
      * @param systemContext
      */
-    public SpringBeanProvider(ApplicationContext applicationContext, SystemContext system)
+    public SpringBeanProvider(ApplicationContext applicationContext, Container system)
     {
         this.context = applicationContext;
         if (system != null) {

@@ -23,9 +23,8 @@ import static org.junit.Assert.assertSame;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.solmix.runtime.Context.Scope;
-import org.solmix.runtime.support.SystemContextImpl;
-import org.solmix.runtime.support.SystemContextImpl.ContextStatus;
+import org.solmix.runtime.extension.ExtensionContainer;
+import org.solmix.runtime.extension.ExtensionContainer.ContainerStatus;
 
 
 /**
@@ -34,32 +33,32 @@ import org.solmix.runtime.support.SystemContextImpl.ContextStatus;
  * @version $Id$  2014年5月8日
  */
 
-public class SystemContextImplTest
+public class ContainerImplTest
 {
 
     @Test
     public void testThreadSame() {
-        SystemContextFactory.setDefaultSystemContext(null);
-        SystemContextFactory.setThreadDefaultSystemContext(null);
-        SystemContext context = SystemContextFactory.newInstance().createContext();
-        SystemContext context2=SystemContextFactory.getThreadDefaultSystemContext(false);
+        ContainerFactory.setDefaultContainer(null);
+        ContainerFactory.setThreadDefaultContainer(null);
+        Container context = ContainerFactory.newInstance().createContainer();
+        Container context2=ContainerFactory.getThreadDefaultContainer(false);
         assertSame(context, context2);
         Assert.assertTrue(context.hasBeanByName("solmix"));
         context.close(true);
     }
     @Test
     public void testClassExtension() {
-        SystemContextImpl context=new SystemContextImpl();
-        String solmix="Solmix SystemContext";
+        ExtensionContainer context=new ExtensionContainer();
+        String solmix="Solmix Container";
         context.setBean(solmix, String.class);
         assertSame(solmix, context.getBean(String.class));
         context.close(true);
     }
     @Test
     public void testContextID() {
-        SystemContextImpl context=new SystemContextImpl();
+        ExtensionContainer context=new ExtensionContainer();
         String id= context.getId();
-        Assert.assertEquals(SystemContext.DEFAULT_CONTEXT_ID+Math.abs(context.hashCode()), id);
+        Assert.assertEquals(Container.DEFAULT_CONTAINER_ID+Math.abs(context.hashCode()), id);
         context.setId("test-context");
         Assert.assertEquals("test-context", context.getId());
         context.close(true);
@@ -67,7 +66,7 @@ public class SystemContextImplTest
     
     @Test
     public void testOpen() {
-        final SystemContextImpl context = new SystemContextImpl();
+        final ExtensionContainer context = new ExtensionContainer();
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -85,12 +84,12 @@ public class SystemContextImplTest
         } catch (InterruptedException ex) {
             // ignore
         }
-        assertEquals(ContextStatus.OPENING, context.getStatus());
+        assertEquals(ContainerStatus.CREATED, context.getStatus());
     }
     
     @Test
     public void testClose() {
-        final SystemContextImpl context = new SystemContextImpl();
+        final ExtensionContainer context = new ExtensionContainer();
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -109,15 +108,14 @@ public class SystemContextImplTest
         } catch (InterruptedException ex) {
             // ignore
         }
-        assertEquals(ContextStatus.CLOSED, context.getStatus());
+        assertEquals(ContainerStatus.CLOSED, context.getStatus());
     }
     @Test
     public void testProperty() {
-        final SystemContextImpl context = new SystemContextImpl();
+        final ExtensionContainer context = new ExtensionContainer();
         Integer level=new Integer(100);
-        context.setAttribute("test-prop", level);
-        Assert.assertEquals(new Integer(100), context.getAttribute("test-prop"));
-        context.removeAttribute("test-prop", Scope.LOCAL);
-        Assert.assertNull(context.getAttribute("test-prop"));
+        context.setProperty("test-prop", level);
+        Assert.assertEquals(new Integer(100), context.getProperty("test-prop"));
+        Assert.assertNull(context.getProperty("test-prop"));
     }
 }

@@ -16,35 +16,40 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.spring;
+package org.solmix.runtime.resource;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
-import org.solmix.runtime.SystemContext;
-import org.solmix.runtime.SystemContextFactory;
-import org.solmix.runtime.support.spring.SpringSystemContextFactory;
+import java.io.InputStream;
+import java.util.Map;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年5月8日
+ * @version $Id$  2014年7月27日
  */
 
-public class SpringSystemContextFactoryTest
+public class PropertiesResolver extends ResourceResolverAdaptor
 {
-
-    @Test
-    public void test() {
-        SpringSystemContextFactory ssc=new SpringSystemContextFactory();
-        SystemContext sc=ssc.createContext();
-        Assert.assertNotNull(sc);
-        Assert.assertNotNull("adaptermanager must be not ull", sc.getBean(org.solmix.runtime.adapter.AdapterManager.class));
+ private final Map<String, Object> properties; 
+    
+    public PropertiesResolver(Map<String, Object> p) {
+        properties = p;
     }
 
-    @After
-    public void tearDown() {
-        SystemContextFactory.setDefaultSystemContext(null);
+    @Override
+    public InputStream getAsStream(String name) {
+        return null;
     }
+
+    @Override
+    public <T> T resolve(String resourceName, Class<T> resourceType) {
+        Object obj = properties.get(resourceName);
+        if (null != obj) {
+            return resourceType.cast(properties.get(resourceName));
+        }
+        return null;
+        
+        
+    }    
+
 }

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="solmix-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
  <feature name="solmix-runtime" description="Solmix Runtime" version="${project.version}" >
-    	<bundle start-level="60">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.oro/${bundles.oro.version}</bundle>
-        <bundle start-level="60">mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
-        <bundle start-level="60">mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
         <bundle start-level="60">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
         <bundle start-level="60">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
     </feature>

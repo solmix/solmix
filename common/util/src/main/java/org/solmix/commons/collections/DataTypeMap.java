@@ -24,12 +24,12 @@ import static org.solmix.commons.util.DataUtils.getSubtreePrefixed;
 import static org.solmix.commons.util.DataUtils.listToArray;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
-
-import org.apache.commons.collections.map.AbstractMapDecorator;
 
 /**
  * Provides a base datatype decorator that enables additional functionality to be added to a Map via decoration.
@@ -45,15 +45,17 @@ import org.apache.commons.collections.map.AbstractMapDecorator;
  * @author solmix.f@gmail.com
  * @since 0.0.1
  */
-public class DataTypeMap extends AbstractMapDecorator
+@SuppressWarnings({"rawtypes","unchecked"})
+public class DataTypeMap implements Map
 {
-
+    
+    protected transient Map map;
     /**
      * Constructor only used in deserialization, do not use otherwise.
      */
     public DataTypeMap()
     {
-        super(new HashMap<Object,Object>());
+        this(new HashMap<String,Object>());
     }
 
     /**
@@ -63,7 +65,10 @@ public class DataTypeMap extends AbstractMapDecorator
      */
     public DataTypeMap(Map<?,?> map)
     {
-        super(map);
+        if (map == null) {
+            throw new IllegalArgumentException("Map must not be null");
+        }
+        this.map = map;
     }
 
     /**
@@ -429,6 +434,89 @@ public class DataTypeMap extends AbstractMapDecorator
             return (Double) value;
         else
             return new Double(value.toString().trim());
+    }
+
+    protected Map getMap() {
+        return map;
+    }
+
+    //-----------------------------------------------------------------------
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return map.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return map.containsValue(value);
+    }
+
+    @Override
+    public Set entrySet() {
+        return map.entrySet();
+    }
+
+    @Override
+    public Object get(Object key) {
+        return map.get(key);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+
+    @Override
+    public Set keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Object put(Object key, Object value) {
+        return map.put(key, value);
+    }
+
+    @Override
+    public void putAll(Map mapToCopy) {
+        map.putAll(mapToCopy);
+    }
+
+    @Override
+    public Object remove(Object key) {
+        return map.remove(key);
+    }
+
+    @Override
+    public int size() {
+        return map.size();
+    }
+
+    @Override
+    public Collection values() {
+        return map.values();
+    }
+   
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+        return map.equals(object);
+    }
+
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return map.toString();
     }
 
 }

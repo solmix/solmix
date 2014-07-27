@@ -19,7 +19,7 @@
 
 package org.solmix.runtime.support.spring;
 
-import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.Container;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -34,24 +34,24 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
  * @version $Id$ 2013-11-4
  */
 
-public class SystemContextPostProcessor implements BeanFactoryPostProcessor
+public class ContainerPostProcessor implements BeanFactoryPostProcessor
 {
 
-    private SystemContext context;
+    private Container context;
 
     private String contextName;
 
-    public SystemContextPostProcessor()
+    public ContainerPostProcessor()
     {
 
     }
 
-    public SystemContextPostProcessor(SystemContext context)
+    public ContainerPostProcessor(Container context)
     {
         this.context = context;
     }
 
-    public SystemContextPostProcessor(String name)
+    public ContainerPostProcessor(String name)
     {
         this.contextName = name;
     }
@@ -65,11 +65,11 @@ public class SystemContextPostProcessor implements BeanFactoryPostProcessor
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         Object inject = context;
         if(inject==null){
-            inject = getContextByName(SystemContext.DEFAULT_CONTEXT_ID, beanFactory, true, null);
+            inject = getContextByName(Container.DEFAULT_CONTAINER_ID, beanFactory, true, null);
         }else{
-            if (!beanFactory.containsBeanDefinition(SystemContext.DEFAULT_CONTEXT_ID)
-                && !beanFactory.containsSingleton(SystemContext.DEFAULT_CONTEXT_ID)) {
-                beanFactory.registerSingleton(SystemContext.DEFAULT_CONTEXT_ID, context);
+            if (!beanFactory.containsBeanDefinition(Container.DEFAULT_CONTAINER_ID)
+                && !beanFactory.containsSingleton(Container.DEFAULT_CONTAINER_ID)) {
+                beanFactory.registerSingleton(Container.DEFAULT_CONTAINER_ID, context);
             }
         }
         for (String beanName : beanFactory.getBeanDefinitionNames()) {
@@ -87,9 +87,9 @@ public class SystemContextPostProcessor implements BeanFactoryPostProcessor
      * @return
      */
     private Object getContextByName(String name, ConfigurableListableBeanFactory factory, boolean create, String cn) {
-        if (!factory.containsBeanDefinition(name) && (create || SystemContext.DEFAULT_CONTEXT_ID.equals(name))) {
+        if (!factory.containsBeanDefinition(name) && (create || Container.DEFAULT_CONTAINER_ID.equals(name))) {
             DefaultListableBeanFactory df = (DefaultListableBeanFactory)factory;
-            RootBeanDefinition rbd = new RootBeanDefinition(SpringSystemContext.class);
+            RootBeanDefinition rbd = new RootBeanDefinition(SpringContainer.class);
             if (cn != null) {
                 rbd.setAttribute("busConfig", new RuntimeBeanReference(cn));
             }

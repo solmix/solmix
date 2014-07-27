@@ -19,9 +19,13 @@
 
 package org.solmix.commons.util;
 
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -249,7 +253,55 @@ public class Reflection
 
         return result;
     }
-   
+
+    /**
+     * @param targetClass
+     * @return
+     */
+    public static  Field[] getDeclaredFields(final Class<? extends Object> cls) {
+        return AccessController.doPrivileged(new PrivilegedAction<Field[]>() {
+            @Override
+            public Field[] run() {
+                return cls.getDeclaredFields();
+            }
+        });
+    }
+
+    /**
+     * @param targetClass
+     * @return
+     */
+    public static Method[]  getDeclaredMethods(final Class<? extends Object> cls) {
+        return AccessController.doPrivileged(new PrivilegedAction<Method[]>() {
+            @Override
+            public Method[] run() {
+                return cls.getDeclaredMethods();
+            }
+        });
+    }
+
+    /**
+     * @param <T>
+     * @param method
+     */
+    public static <T extends AccessibleObject> T setAccessible(final T o) {
+        return AccessController.doPrivileged(new PrivilegedAction<T>() {
+            @Override
+            public T run() {
+                o.setAccessible(true);
+                return o;
+            }
+        });
+    }
+    public static <T extends AccessibleObject> T setAccessible(final T o, final boolean b) {
+        return AccessController.doPrivileged(new PrivilegedAction<T>() {
+            @Override
+            public T run() {
+                o.setAccessible(b);
+                return o;
+            }
+        });
+    }
 }
 
 class MethodEntry

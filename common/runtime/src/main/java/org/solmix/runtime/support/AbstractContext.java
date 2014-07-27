@@ -24,9 +24,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.solmix.runtime.Container;
 import org.solmix.runtime.Context;
-import org.solmix.runtime.SystemContext;
-import org.solmix.runtime.Context.Scope;
 
 /**
  * 
@@ -39,7 +38,7 @@ public abstract class AbstractContext implements Context
 
     protected AttributeProvider attributeProvider;
 
-    private SystemContext systemContext;
+    private Container systemContext;
 
     protected Locale locale;
 
@@ -61,14 +60,14 @@ public abstract class AbstractContext implements Context
     /**
      * @return the systemContext
      */
-    public SystemContext getSystemContext() {
+    public Container getContainer() {
         return systemContext;
     }
 
     /**
      * @param systemContext the systemContext to set
      */
-    public void setSystemContext(final SystemContext systemContext) {
+    public void setContainer(final Container systemContext) {
         this.systemContext = systemContext;
     }
 

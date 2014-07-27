@@ -16,18 +16,16 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.extension;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月20日
  */
 
-public interface PluginActivator
+public interface ExtensionLoader<T>
 {
-
-    void setContainer(Container context);
-    
+    T getDefaultExtension();
 }

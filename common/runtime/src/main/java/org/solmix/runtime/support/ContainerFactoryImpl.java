@@ -16,29 +16,29 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.support;
 
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-11-12
+ * @version $Id$  2013-11-4
  */
 
-public class SystemContextTracker
+public class ContainerFactoryImpl extends ContainerFactory
 {
-    public void register(SystemContext sc) {
-        if(sc!=null){
-            SystemContextFactory.possiblySetDefaultSystemContext(sc);
-        }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.ContainerFactory#createContainer()
+     */
+    @Override
+    public Container createContainer() {
+        return null;
     }
 
-    public void unregister(SystemContext sc) {
-       if(SystemContextFactory.getDefaultSystemContext()==sc){
-           SystemContextFactory.setDefaultSystemContext(null);
-           SystemContextFactory.setThreadDefaultSystemContext(null);
-       }
-    }
 }

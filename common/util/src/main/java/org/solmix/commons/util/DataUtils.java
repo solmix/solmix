@@ -55,11 +55,11 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.collections.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.collections.CaseInsensitiveHashMap;
@@ -380,7 +380,7 @@ public final class DataUtils
     public static Map makeIndex(Collection objects, String propertyName) {
         if (objects == null)
             return null;
-        Map index = new LinkedMap();
+        Map index = new LinkedHashMap();
         for (Object object : objects) {
             if (object instanceof Map) {
                 Map propertyMap = (Map) object;

@@ -36,28 +36,28 @@ import org.solmix.commons.util.ClassLoaderUtil;
  * @version $Id$ 2013-11-2
  */
 
-public abstract class SystemContextFactory
+public abstract class ContainerFactory
 {
 
-    public static final String DEFAULT_FACTORY = "org.solmix.runtime.support.SystemContextFactoryImpl";
+    public static final String DEFAULT_FACTORY = "org.solmix.runtime.support.ContainerFactoryImpl";
 
-    public static final String FACTORY_PROPERTY_NAME = "org.solmix.runtime.context.factory";
+    public static final String FACTORY_PROPERTY_NAME = "org.solmix.runtime.ContainerFactory";
 
-    protected static SystemContext defaultContext;
+    protected static Container defaultContainer;
 
-    protected static final Logger log = LoggerFactory.getLogger(SystemContextFactory.class);
+    protected static final Logger log = LoggerFactory.getLogger(ContainerFactory.class);
 
-    protected static ThreadLocal<ContextHolder> threadContext = new ThreadLocal<ContextHolder>();
+    protected static ThreadLocal<ContainerHolder> threadContainer = new ThreadLocal<ContainerHolder>();
 
-    protected static Map<Thread, ContextHolder> threadContexts = new WeakHashMap<Thread, ContextHolder>();
+    protected static Map<Thread, ContainerHolder> threadContainers = new WeakHashMap<Thread, ContainerHolder>();
 
     /**
      * Returns the default system context, creating it if necessary.
      * 
      * @return the default system context.
      */
-    public static synchronized SystemContext getDefaultSystemContext() {
-        return getDefaultSystemContext(true);
+    public static synchronized Container getDefaultContainer() {
+        return getDefaultContainer(true);
     }
 
     /**
@@ -66,65 +66,65 @@ public abstract class SystemContextFactory
      * @param b
      * @return
      */
-    public static synchronized SystemContext getDefaultSystemContext(boolean createIfNeeded) {
-        if (defaultContext == null && createIfNeeded) {
-            defaultContext = newInstance().createContext();
+    public static synchronized Container getDefaultContainer(boolean createIfNeeded) {
+        if (defaultContainer == null && createIfNeeded) {
+            defaultContainer = newInstance().createContainer();
         }
-        if (defaultContext == null) {
+        if (defaultContainer == null) {
             // never set up.
             return null;
         } else {
-            return defaultContext;
+            return defaultContainer;
         }
     }
     /**
      * Sets the default bus if a default context is not already set.
      *
      * @param context the default context.
-     * @return true if the SystemContext was not set and is now set
+     * @return true if the Container was not set and is now set
      */
-    public static synchronized boolean possiblySetDefaultSystemContext(SystemContext context) {
-        ContextHolder h = getThreadContextHolder(false);
+    public static synchronized boolean possiblySetDefaultContainer(Container context) {
+        ContainerHolder h = getThreadContainerHolder(false);
         if (h.context == null) {
            h.context=context;
         }
-        if (defaultContext == null) {
-            defaultContext = context;
+        if (defaultContainer == null) {
+            defaultContainer = context;
             return true;
         }
         return false;
     }
     /**
-     * Create a new SystemContextFactory the class of {@link SystemContextFactory} is determined by looking for the
+     * Create a new ContainerFactory the class of {@link ContainerFactory} is determined by looking for the
      * system property:org.solmix.context.system.fatory or by searching the classpath for:
      * META-INF/services/org.solmix.context.system.fatory
      * 
      * @return
      */
-    public static SystemContextFactory newInstance() {
+    public static ContainerFactory newInstance() {
         return newInstance(null);
     }
 
-    public static SystemContextFactory newInstance(String className) {
-        SystemContextFactory instance = null;
+    public static ContainerFactory newInstance(String className) {
+        ContainerFactory instance = null;
         if (className == null) {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             className = getFactoryClass(loader);
-            if (className == null && loader != SystemContextFactory.class.getClassLoader()) {
-                className = getFactoryClass(SystemContextFactory.class.getClassLoader());
+            if (className == null && loader != ContainerFactory.class.getClassLoader()) {
+                className = getFactoryClass(ContainerFactory.class.getClassLoader());
             }
         }
         if (className == null) {
-            className = SystemContextFactory.DEFAULT_FACTORY;
+            className = ContainerFactory.DEFAULT_FACTORY;
         }
 
-        Class<? extends SystemContextFactory> factoryClass;
+        Class<? extends ContainerFactory> factoryClass;
         try {
-            factoryClass = ClassLoaderUtil.loadClass(className, SystemContextFactory.class).asSubclass(SystemContextFactory.class);
+            factoryClass = ClassLoaderUtil.loadClass(className, ContainerFactory.class).asSubclass(ContainerFactory.class);
 
             instance = factoryClass.newInstance();
         } catch (Exception ex) {
-            log.error("SystemContext instance exception", ex);
+            log.error("Container instance exception", ex);
             throw new RuntimeException(ex);
         }
         return instance;
@@ -144,7 +144,7 @@ public abstract class SystemContextFactory
 
         try {
             // next, check for the services stuff in the jar file
-            String serviceId = "META-INF/services/" + SystemContextFactory.FACTORY_PROPERTY_NAME;
+            String serviceId = "META-INF/services/" + ContainerFactory.FACTORY_PROPERTY_NAME;
             InputStream is = null;
 
             if (classLoader == null) {
@@ -184,132 +184,132 @@ public abstract class SystemContextFactory
         return factoryClass;
     }
 
-    public static synchronized void setDefaultSystemContext(SystemContext context) {
-        defaultContext = context;
-        ContextHolder h = getThreadContextHolder(false);
+    public static synchronized void setDefaultContainer(Container context) {
+        defaultContainer = context;
+        ContainerHolder h = getThreadContainerHolder(false);
         h.context = context;
         if (context == null) {
             h.stale = true;
-            threadContext.remove();
+            threadContainer.remove();
         }
 
     }
 
-    public static void setThreadDefaultSystemContext(SystemContext context) {
+    public static void setThreadDefaultContainer(Container context) {
         if (context == null) {
-            ContextHolder h = threadContext.get();
+            ContainerHolder h = threadContainer.get();
             if (h == null) {
                 Thread cur = Thread.currentThread();
-                synchronized (threadContexts) {
-                    h = threadContexts.get(cur);
+                synchronized (threadContainers) {
+                    h = threadContainers.get(cur);
                 }
             }
             if (h != null) {
                 h.context = null;
                 h.stale = true;
-                threadContext.remove();
+                threadContainer.remove();
             }
         } else {
-            ContextHolder h = getThreadContextHolder(true);
+            ContainerHolder h = getThreadContainerHolder(true);
             h.context = context;
         }
     }
 
-    public static SystemContext getThreadDefaultSystemContext() {
-        return getThreadDefaultSystemContext(true);
+    public static Container getThreadDefaultContainer() {
+        return getThreadDefaultContainer(true);
     }
 
-    public static SystemContext getThreadDefaultSystemContext(boolean createIfNeeded) {
+    public static Container getThreadDefaultContainer(boolean createIfNeeded) {
         if (createIfNeeded) {
-            ContextHolder h = getThreadContextHolder(false);
+            ContainerHolder h = getThreadContainerHolder(false);
             if (h.context == null) {
-                h.context = createThreadContext();
+                h.context = createThreadContainer();
             }
             return h.context;
         }
-        ContextHolder h = threadContext.get();
+        ContainerHolder h = threadContainer.get();
         if (h == null || h.stale) {
             Thread cur = Thread.currentThread();
-            synchronized (threadContexts) {
-                h = threadContexts.get(cur);
+            synchronized (threadContainers) {
+                h = threadContainers.get(cur);
             }
         }
         return h == null || h.stale ? null : h.context;
 
     }
 
-    private static synchronized SystemContext createThreadContext() {
-        ContextHolder h = getThreadContextHolder(false);
+    private static synchronized Container createThreadContainer() {
+        ContainerHolder h = getThreadContainerHolder(false);
         if (h.context == null) {
-            h.context = getDefaultSystemContext(true);
+            h.context = getDefaultContainer(true);
         }
         return h.context;
     }
 
-    private static ContextHolder getThreadContextHolder(boolean set) {
-        ContextHolder h = threadContext.get();
+    private static ContainerHolder getThreadContainerHolder(boolean set) {
+        ContainerHolder h = threadContainer.get();
         if (h == null || h.stale) {
             Thread cur = Thread.currentThread();
-            synchronized (threadContexts) {
-                h = threadContexts.get(cur);
+            synchronized (threadContainers) {
+                h = threadContainers.get(cur);
             }
             if (h == null || h.stale) {
-                h = new ContextHolder();
+                h = new ContainerHolder();
 
-                synchronized (threadContexts) {
-                    threadContexts.put(cur, h);
+                synchronized (threadContainers) {
+                    threadContainers.put(cur, h);
                 }
             }
             if (set) {
-                threadContext.set(h);
+                threadContainer.set(h);
             }
         }
         return h;
     }
 
     /**
-     * Sets the default SystemContext for the thread.
+     * Sets the default Container for the thread.
      * 
      * @param context the new thread default context
      * @return the old thread default system context or null
      */
-    public static SystemContext getAndSetThreadDefaultSystemContext(SystemContext context) {
+    public static Container getAndSetThreadDefaultContainer(Container context) {
         if (context == null) {
-            ContextHolder h = threadContext.get();
+            ContainerHolder h = threadContainer.get();
             if (h == null) {
                 Thread cur = Thread.currentThread();
-                synchronized (threadContexts) {
-                    h = threadContexts.get(cur);
+                synchronized (threadContainers) {
+                    h = threadContainers.get(cur);
                 }
             }
             if (h != null) {
-                SystemContext orig = h.context;
+                Container orig = h.context;
                 h.context = null;
                 h.stale = true;
-                threadContext.remove();
+                threadContainer.remove();
                 return orig;
             }
             return null;
         }
-        ContextHolder b = getThreadContextHolder(true);
-        SystemContext old = b.context;
+        ContainerHolder b = getThreadContainerHolder(true);
+        Container old = b.context;
         b.context = context;
         return old;
     }
 
     /**
-     * Removes a SystemContext from being a thread default context for any thread.
+     * Removes a Container from being a thread default context for any thread.
      * <p>
      * This is typically done when a system context has ended its lifecycle (i.e.: a call to
-     * {@link SystemContext#shutdown(boolean)} was invoked) and it wants to remove any reference to itself for any
+     * {@link Container#shutdown(boolean)} was invoked) and it wants to remove any reference to itself for any
      * thread.
      * 
      * @param bus the bus to remove
      */
-    public static void clearDefaultContextForAnyThread(final SystemContext context) {
-        synchronized (threadContexts) {
-            for (final Iterator<ContextHolder> iterator = threadContexts.values().iterator(); iterator.hasNext();) {
-                ContextHolder item = iterator.next();
+    public static void clearDefaultContainerForAnyThread(final Container context) {
+        synchronized (threadContainers) {
+            for (final Iterator<ContainerHolder> iterator = threadContainers.values().iterator(); iterator.hasNext();) {
+                ContainerHolder item = iterator.next();
                 if (context == null || item == null || item.context == null || item.stale || context.equals(item.context)) {
                     if (item != null) {
                         item.context = null;
@@ -324,17 +324,17 @@ public abstract class SystemContextFactory
         }
     }
 
-    protected void initializeContext(SystemContext context) {
+    protected void initializeContainer(Container context) {
 
     }
 
-    public abstract SystemContext createContext();
+    public abstract Container createContainer();
 
-    static class ContextHolder
+    static class ContainerHolder
     {
 
         volatile boolean stale;
 
-        SystemContext context;
+        Container context;
     }
 }

@@ -21,9 +21,10 @@ package org.solmix.runtime.support.spring;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import org.solmix.runtime.SystemContext;
-import org.solmix.runtime.SystemContextFactory;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.Resource;
@@ -35,16 +36,17 @@ import org.springframework.core.io.Resource;
  * @version $Id$  2013-11-3
  */
 
-public class SpringSystemContextFactory extends SystemContextFactory
+public class SpringContainerFactory extends ContainerFactory
 {
     private  ApplicationContext parent;
+    private NamespaceHandlerResolver resolver;
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.SystemContextFactory#createContext()
+     * @see org.solmix.runtime.ContainerFactory#createContext()
      */
     @Override
-    public SystemContext createContext() {
+    public Container createContainer() {
         return createContext((String)null);
     }
 
@@ -52,7 +54,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
      * @param string
      * @return
      */
-    public SystemContext createContext(String configFile) {
+    public Container createContext(String configFile) {
         return createContext(configFile,defaultContextNotExists());
     }
     /**
@@ -60,7 +62,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
      * @param defaultContextNotExists
      * @return
      */
-    public SystemContext createContext(String configFile, boolean includeDefaults) {
+    public Container createContext(String configFile, boolean includeDefaults) {
         if (configFile == null) {
             return createContext((String[])null, includeDefaults);
         }
@@ -72,7 +74,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
      * @param includeDefaults
      * @return
      */
-    public SystemContext createContext(String[] cfgFiles, boolean includeDefaults) {
+    public Container createContext(String[] cfgFiles, boolean includeDefaults) {
         try {
             final Resource r = SystemApplicationContext.findResource(SystemApplicationContext.DEFAULT_CFG_FILE);
             boolean exists = true;
@@ -85,7 +87,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
                     });
             }
             if (parent == null && includeDefaults&&(r==null||!exists)) {
-                return new org.solmix.runtime.support.SystemContextFactoryImpl().createContext();
+                return new org.solmix.runtime.support.ContainerFactoryImpl().createContainer();
             }
             ConfigurableApplicationContext cac = createApplicationContext(cfgFiles, includeDefaults, parent);
             return completeCreating(cac);
@@ -100,14 +102,14 @@ public class SpringSystemContextFactory extends SystemContextFactory
      * @param cac
      * @return
      */
-    private SystemContext completeCreating(ConfigurableApplicationContext spring) {
-        SystemContext system=(SystemContext)spring.getBean(SystemContext.DEFAULT_CONTEXT_ID);
+    private Container completeCreating(ConfigurableApplicationContext spring) {
+        Container system=(Container)spring.getBean(Container.DEFAULT_CONTAINER_ID);
         system.setBean(spring, ApplicationContext.class);
-        possiblySetDefaultSystemContext(system);
-        initializeContext(system);
-        if (system instanceof SpringSystemContext && defaultContextNotExists()) {
-            ((SpringSystemContext)system).setCloseContext(true);
-        }
+        possiblySetDefaultContainer(system);
+        initializeContainer(system);
+//        if (system instanceof SpringContainer && defaultContextNotExists()) {
+//            ((SpringContainer)system).setCloseContext(true);
+//        }
         return system;
     }
 
@@ -138,7 +140,7 @@ public class SpringSystemContextFactory extends SystemContextFactory
 
     private boolean defaultContextNotExists() {
         if (null != parent) {
-            return !parent.containsBean(SystemContext.DEFAULT_CONTEXT_ID);
+            return !parent.containsBean(Container.DEFAULT_CONTAINER_ID);
         }
         return true;
     }

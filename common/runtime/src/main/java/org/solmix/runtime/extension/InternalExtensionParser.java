@@ -16,18 +16,46 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.extension;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年7月27日
  */
 
-public interface PluginActivator
+public class InternalExtensionParser
 {
+ private static Pattern colonPattern = Pattern.compile(":");
+    
+    final ClassLoader loader;
+    
+    public InternalExtensionParser(ClassLoader loader) {
+        this.loader = loader;
+    }
 
-    void setContainer(Container context);
+    /**
+     * @param nextElement
+     * @return
+     */
+    public List<ExtensionInfo> getExtensions(URL nextElement) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param is
+     * @return
+     */
+    public List<ExtensionInfo> getExtensions(InputStream is) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

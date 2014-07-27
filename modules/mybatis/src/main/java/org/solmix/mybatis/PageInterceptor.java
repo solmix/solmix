@@ -60,12 +60,10 @@ public class PageInterceptor implements Interceptor
         Object[] args = invocation.getArgs();
         MappedStatement statement = (MappedStatement) args[0];
         Object parameter = args[1];
-        BoundSql boundSql = statement.getBoundSql(parameter);
-
-        Object parameterObject = boundSql.getParameterObject();
-        if (parameterObject instanceof MybatisParameter) {
-            MybatisParameter p = (MybatisParameter) parameterObject;
+        if (parameter instanceof MybatisParameter) {
+            MybatisParameter p = (MybatisParameter) parameter;
             if (p.isCanPage()) {
+            	BoundSql boundSql = statement.getBoundSql(p.getCriteria());
                 String originalSql = boundSql.getSql().trim();
                 SQLDriver sqlDriver = p.getSqlDriver();
                int total= p.getRequest().getContext().getTotalRow();

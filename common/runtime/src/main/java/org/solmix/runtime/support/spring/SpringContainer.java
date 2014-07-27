@@ -39,14 +39,14 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @version $Id$ 2013-11-4
  */
 
-public class SpringSystemContext extends SolmixSystemContext implements ApplicationContextAware
+public class SpringContainer extends SolmixSystemContext implements ApplicationContextAware
 {
 
     private AbstractApplicationContext applicationContext;
 
     private boolean closeContext;
 
-    public SpringSystemContext()
+    public SpringContainer()
     {
 
     }
@@ -64,7 +64,7 @@ public class SpringSystemContext extends SolmixSystemContext implements Applicat
 
             @Override
             public void onApplicationEvent(ApplicationEvent event) {
-                SpringSystemContext.this.onApplicationEvent(event);
+                SpringContainer.this.onApplicationEvent(event);
             }
         };
         this.applicationContext.addApplicationListener(listener);
@@ -84,7 +84,7 @@ public class SpringSystemContext extends SolmixSystemContext implements Applicat
             setBean(new SpringBeanProvider(applicationContext, this), ConfiguredBeanProvider.class);
         }
         setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
-        if (getStatus() != ContextStatus.OPENING) {
+        if (getStatus() != ContainerStatus.CREATED) {
             initialize();
         }
     }
@@ -107,7 +107,7 @@ public class SpringSystemContext extends SolmixSystemContext implements Applicat
         }
         if (doIt) {
             if (event instanceof ContextRefreshedEvent) {
-                if (getStatus() != ContextStatus.OPENING) {
+                if (getStatus() != ContainerStatus.CREATED) {
                     initialize();
                 }
             } else if (event instanceof ContextClosedEvent) {

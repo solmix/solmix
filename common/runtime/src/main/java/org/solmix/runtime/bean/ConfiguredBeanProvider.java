@@ -31,7 +31,7 @@ import java.util.List;
 public interface ConfiguredBeanProvider
 {
     /**
-     * Gets the names of all the configured beans of the specific type.  Does
+     * Gets the names of all the configured extensions of the specific type.  Does
      * not cause them to be loaded.
      * @param type
      * @return List of all the bean names for the given type
@@ -48,20 +48,20 @@ public interface ConfiguredBeanProvider
     <T> T getBeanOfType(String name, Class<T> type);
     
     /**
-     * Gets all the configured beans of the specific types.  Causes them
+     * Gets all the configured extensions of the specific types.  Causes them
      * all to be loaded. 
      * @param type
-     * @return The collection of all the configured beans of the given type
+     * @return The collection of all the configured extensions of the given type
      */
     <T> Collection<? extends T> getBeansOfType(Class<T> type);
 
     
     /**
-     * Iterates through the beans of the given type, calling the listener
+     * Iterates through the extensions of the given type, calling the listener
      * to determine if it should be loaded or not. 
      * @param type
      * @param listener
-     * @return true if beans of the type were loaded
+     * @return true if extensions of the type were loaded
      */
     <T> boolean loadBeansOfType(Class<T> type, BeanLoaderListener<T> listener);
     
@@ -77,7 +77,7 @@ public interface ConfiguredBeanProvider
 
         /**
          * Return true if the bean that was loaded meets the requirements at
-         * which point, the loader will stop loading additional beans of the
+         * which point, the loader will stop loading additional extensions of the
          * given type
          * @param name
          * @param bean

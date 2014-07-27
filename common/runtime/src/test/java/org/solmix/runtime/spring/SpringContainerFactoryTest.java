@@ -16,18 +16,35 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
+package org.solmix.runtime.spring;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
+import org.solmix.runtime.support.spring.SpringContainerFactory;
 
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin context.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年4月30日
+ * @version $Id$  2014年5月8日
  */
 
-public interface PluginActivator
+public class SpringContainerFactoryTest
 {
 
-    void setContainer(Container context);
-    
+    @Test
+    public void test() {
+        SpringContainerFactory ssc=new SpringContainerFactory();
+        Container sc=ssc.createContainer();
+        Assert.assertNotNull(sc);
+        Assert.assertNotNull("adaptermanager must be not ull", sc.getBean(org.solmix.runtime.adapter.AdapterManager.class));
+    }
+
+    @After
+    public void tearDown() {
+        ContainerFactory.setDefaultContainer(null);
+    }
 }
