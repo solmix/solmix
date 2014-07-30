@@ -28,7 +28,7 @@ import java.util.WeakHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.commons.util.ClassLoaderUtil;
+import org.solmix.commons.util.ClassLoaderUtils;
 
 /**
  * 
@@ -97,7 +97,7 @@ public abstract class ContainerFactory
     /**
      * Create a new ContainerFactory the class of {@link ContainerFactory} is determined by looking for the
      * system property:org.solmix.context.system.fatory or by searching the classpath for:
-     * META-INF/services/org.solmix.context.system.fatory
+     * META-INF/services/org.solmix.runtime.ContainerFactory
      * 
      * @return
      */
@@ -120,7 +120,7 @@ public abstract class ContainerFactory
 
         Class<? extends ContainerFactory> factoryClass;
         try {
-            factoryClass = ClassLoaderUtil.loadClass(className, ContainerFactory.class).asSubclass(ContainerFactory.class);
+            factoryClass = ClassLoaderUtils.loadClass(className, ContainerFactory.class).asSubclass(ContainerFactory.class);
 
             instance = factoryClass.newInstance();
         } catch (Exception ex) {

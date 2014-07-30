@@ -27,7 +27,7 @@ import java.net.URL;
  * @version $Id$  2013-11-3
  */
 
-public class ClassLoaderUtil
+public class ClassLoaderUtils
 {
     
     public static URL getResource(ClassLoader loader,String resourceName, Class<?> callingClass) {
@@ -47,7 +47,7 @@ public class ClassLoaderUtil
      * using the following methods (in order):
      * <ul>
      * <li>From Thread.currentThread().getContextClassLoader()
-     * <li>From ClassLoaderUtil.class.getClassLoader()
+     * <li>From ClassLoaderUtils.class.getClassLoader()
      * <li>callingClass.getClassLoader()
      * </ul>
      * 
@@ -62,7 +62,7 @@ public class ClassLoaderUtil
                 .getResource(resourceName.substring(1));
         }
 
-        ClassLoader cluClassloader = ClassLoaderUtil.class.getClassLoader();
+        ClassLoader cluClassloader = ClassLoaderUtils.class.getClassLoader();
         if (cluClassloader == null) {
             cluClassloader = ClassLoader.getSystemClassLoader();
         }
@@ -96,7 +96,7 @@ public class ClassLoaderUtil
      * <ul>
      * <li>From Thread.currentThread().getContextClassLoader()
      * <li>Using the basic Class.forName()
-     * <li>From ClassLoaderUtil.class.getClassLoader()
+     * <li>From ClassLoaderUtils.class.getClassLoader()
      * <li>From the callingClass.getClassLoader()
      * </ul>
      * 
@@ -137,8 +137,8 @@ public class ClassLoaderUtil
             return Class.forName(className);
         } catch (ClassNotFoundException ex) {
             try {
-                if (ClassLoaderUtil.class.getClassLoader() != null) {
-                    return ClassLoaderUtil.class.getClassLoader().loadClass(className);
+                if (ClassLoaderUtils.class.getClassLoader() != null) {
+                    return ClassLoaderUtils.class.getClassLoader().loadClass(className);
                 }
             } catch (ClassNotFoundException exc) {
                 if (callingClass != null && callingClass.getClassLoader() != null) {

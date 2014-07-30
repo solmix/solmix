@@ -21,9 +21,8 @@ package org.solmix.runtime.support.spring;
 
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.cm.ConfigureUnitManager;
-import org.solmix.runtime.cm.support.SpringConfigureUnitManager;
-import org.solmix.runtime.support.ext.SolmixSystemContext;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.support.ext.ContainerAdaptor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -39,7 +38,7 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @version $Id$ 2013-11-4
  */
 
-public class SpringContainer extends SolmixSystemContext implements ApplicationContextAware
+public class SpringContainer extends ContainerAdaptor implements ApplicationContextAware
 {
 
     private AbstractApplicationContext applicationContext;
@@ -83,7 +82,10 @@ public class SpringContainer extends SolmixSystemContext implements ApplicationC
         if (!(provider instanceof SpringBeanProvider)) {
             setBean(new SpringBeanProvider(applicationContext, this), ConfiguredBeanProvider.class);
         }
-        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
+//        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
+        ResourceManager m = getBean(ResourceManager.class);
+        m.addResourceResolver(new SpringResourceResolver(applicationContext));
+        
         if (getStatus() != ContainerStatus.CREATED) {
             initialize();
         }
@@ -123,6 +125,22 @@ public class SpringContainer extends SolmixSystemContext implements ApplicationC
             applicationContext.close();
         }
         super.destroyBeans();
+    }
+    @Override
+    public String getId() {
+        if (id == null) {
+            try {
+                Class<?> clsbc = Class.forName("org.osgi.framework.BundleContext");
+                Class<?> clsb = Class.forName("org.osgi.framework.Bundle");
+                Object o = getBean(clsbc);
+                Object o2 = clsbc.getMethod("getBundle").invoke(o);
+                String s = (String)clsb.getMethod("getSymbolicName").invoke(o2);
+                id = s + "-" + DEFAULT_CONTAINER_ID + Integer.toString(this.hashCode());
+            } catch (Throwable t) {
+                id = super.getId();
+            }
+        }
+        return id;
     }
 
     /**

@@ -23,6 +23,7 @@ import java.security.PrivilegedAction;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
+import org.solmix.runtime.support.ContainerFactoryImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
 import org.springframework.context.ApplicationContext;
@@ -40,33 +41,44 @@ public class SpringContainerFactory extends ContainerFactory
 {
     private  ApplicationContext parent;
     private NamespaceHandlerResolver resolver;
+    public SpringContainerFactory() {
+        this.parent = null;
+    }
+    public SpringContainerFactory(ApplicationContext context) {
+        this.parent = context;
+    }
+  
+    public SpringContainerFactory(NamespaceHandlerResolver r) {
+        parent = null;
+        this.resolver = r;
+    }
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.ContainerFactory#createContext()
+     * @see org.solmix.runtime.ContainerFactory#createContainer()
      */
     @Override
     public Container createContainer() {
-        return createContext((String)null);
+        return createContainer((String)null);
     }
 
     /**
      * @param string
      * @return
      */
-    public Container createContext(String configFile) {
-        return createContext(configFile,defaultContextNotExists());
+    public Container createContainer(String configFile) {
+        return createContainer(configFile,defaultContextNotExists());
     }
     /**
      * @param configFile
      * @param defaultContextNotExists
      * @return
      */
-    public Container createContext(String configFile, boolean includeDefaults) {
+    public Container createContainer(String configFile, boolean includeDefaults) {
         if (configFile == null) {
-            return createContext((String[])null, includeDefaults);
+            return createContainer((String[])null, includeDefaults);
         }
-        return createContext(new String[] {configFile}, includeDefaults);
+        return createContainer(new String[] {configFile}, includeDefaults);
     }
 
     /**
@@ -74,9 +86,9 @@ public class SpringContainerFactory extends ContainerFactory
      * @param includeDefaults
      * @return
      */
-    public Container createContext(String[] cfgFiles, boolean includeDefaults) {
+    public Container createContainer(String[] cfgFiles, boolean includeDefaults) {
         try {
-            final Resource r = SystemApplicationContext.findResource(SystemApplicationContext.DEFAULT_CFG_FILE);
+            final Resource r = ContainerApplicationContext.findResource(ContainerApplicationContext.DEFAULT_CFG_FILE);
             boolean exists = true;
             if (r != null) {
                 exists = AccessController .doPrivileged(new PrivilegedAction<Boolean>() {
@@ -87,7 +99,7 @@ public class SpringContainerFactory extends ContainerFactory
                     });
             }
             if (parent == null && includeDefaults&&(r==null||!exists)) {
-                return new org.solmix.runtime.support.ContainerFactoryImpl().createContainer();
+                return new ContainerFactoryImpl().createContainer();
             }
             ConfigurableApplicationContext cac = createApplicationContext(cfgFiles, includeDefaults, parent);
             return completeCreating(cac);
@@ -107,9 +119,9 @@ public class SpringContainerFactory extends ContainerFactory
         system.setBean(spring, ApplicationContext.class);
         possiblySetDefaultContainer(system);
         initializeContainer(system);
-//        if (system instanceof SpringContainer && defaultContextNotExists()) {
-//            ((SpringContainer)system).setCloseContext(true);
-//        }
+        if (system instanceof SpringContainer && defaultContextNotExists()) {
+            ((SpringContainer)system).setCloseContext(true);
+        }
         return system;
     }
 
@@ -121,14 +133,14 @@ public class SpringContainerFactory extends ContainerFactory
      */
     private ConfigurableApplicationContext createApplicationContext(String[] cfgFiles, boolean includeDefaults, ApplicationContext parent) {
         try {  
-        return new SystemApplicationContext(cfgFiles,parent,includeDefaults);
+        return new ContainerApplicationContext(cfgFiles,parent,includeDefaults);
         } catch (BeansException ex) {
             ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-            if (contextLoader != SystemApplicationContext.class.getClassLoader()) {
+            if (contextLoader != ContainerApplicationContext.class.getClassLoader()) {
                 Thread.currentThread().setContextClassLoader(
-                    SystemApplicationContext.class.getClassLoader());
+                    ContainerApplicationContext.class.getClassLoader());
                 try {
-                    return new SystemApplicationContext(cfgFiles, parent,includeDefaults );        
+                    return new ContainerApplicationContext(cfgFiles, parent,includeDefaults ,resolver);        
                 } finally {
                     Thread.currentThread().setContextClassLoader(contextLoader);
                 }

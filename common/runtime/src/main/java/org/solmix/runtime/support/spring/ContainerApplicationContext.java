@@ -36,8 +36,15 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.commons.util.ClassLoaderUtil;
+import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.runtime.bean.BeanConfigurer;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.BeansDtdResolver;
+import org.springframework.beans.factory.xml.DefaultNamespaceHandlerResolver;
+import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
+import org.springframework.beans.factory.xml.PluggableSchemaResolver;
+import org.springframework.beans.factory.xml.ResourceEntityResolver;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -53,25 +60,36 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  * @version $Id$ 2013-11-3
  */
 
-public class SystemApplicationContext extends ClassPathXmlApplicationContext
+public class ContainerApplicationContext extends ClassPathXmlApplicationContext
 {
 
-    public static final String DEFAULT_CFG_FILE = "META-INF/solmix/__internal__solmix.xml";
+    public static final String DEFAULT_CFG_FILE = "META-INF/solmix/solmix.xml";
 
     public static final String DEFAULT_EXT_CFG_FILE = "classpath*:META-INF/solmix/solmix.modules";
 
-    private static final Logger log = LoggerFactory.getLogger(SystemApplicationContext.class);
+    private static final Logger log = LoggerFactory.getLogger(ContainerApplicationContext.class);
 
     private String[] cfgFiles;
 
     private URL[] cfgURLs;
-
+    
+    private NamespaceHandlerResolver nshResolver;
+    
     private final boolean includeDefault;
-
-    public SystemApplicationContext(String[] cfgFiles, ApplicationContext parent, boolean includeDefault)
+    
+    public ContainerApplicationContext(String[] cfgFiles, 
+                                        ApplicationContext parent,
+                                        boolean includeDefault){
+        this(cfgFiles,parent,includeDefault,null);
+    }
+    public ContainerApplicationContext(String[] cfgFiles, 
+                                        ApplicationContext parent,
+                                        boolean includeDefault,
+                                        NamespaceHandlerResolver nshResolver)
     {
         super(new String[0], false, parent);
         this.cfgFiles = cfgFiles;
+        this.nshResolver=nshResolver;
         this.includeDefault = includeDefault;
         try {
             AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
@@ -185,7 +203,7 @@ public class SystemApplicationContext extends ClassPathXmlApplicationContext
                         //ignore
                     }
                     //try loading it our way
-                    URL url = ClassLoaderUtil.getResource(cfgFile, SystemApplicationContext.class);
+                    URL url = ClassLoaderUtils.getResource(cfgFile, ContainerApplicationContext.class);
                     if (url != null) {
                         cpr = new UrlResource(url);
                         if (cpr.exists()) {
@@ -203,5 +221,59 @@ public class SystemApplicationContext extends ClassPathXmlApplicationContext
             //cannot read the user config file
             return null;
         }
+    }
+    @Override
+    protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
+        // Spring always creates a new one of these, which takes a fair amount
+        // of time on startup (nearly 1/2 second) as it gets created for every
+        // spring context on the classpath
+        if (nshResolver == null) {
+            nshResolver = new DefaultNamespaceHandlerResolver();
+        }
+        reader.setNamespaceHandlerResolver(nshResolver);
+        
+        String mode = getSpringValidationMode();
+        if (null != mode) {
+            reader.setValidationModeName(mode);
+        }
+        reader.setNamespaceAware(true); 
+        
+        setEntityResolvers(reader);        
+    }
+    static String getSpringValidationMode() {
+        return AccessController.doPrivileged(new PrivilegedAction<String>() {
+            @Override
+            public String run() {
+                String mode =System.getProperty("org.apache.cxf.spring.validation.mode");
+                if (mode == null) {
+                    mode =System.getProperty("spring.validation.mode");
+                }
+                return mode;
+            }
+        });
+    }
+        
+    
+    void setEntityResolvers(XmlBeanDefinitionReader reader) {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        reader.setEntityResolver(new ContainerEntityResolver(cl, new BeansDtdResolver(),
+            new PluggableSchemaResolver(cl)));
+    }
+    @Override
+    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException {
+            // Create a new XmlBeanDefinitionReader for the given BeanFactory.
+        XmlBeanDefinitionReader beanDefinitionReader = 
+            new XmlBeanDefinitionReader(beanFactory);
+        beanDefinitionReader.setNamespaceHandlerResolver(nshResolver);
+        
+        // Configure the bean definition reader with this context's
+        // resource loading environment.
+        beanDefinitionReader.setResourceLoader(this);
+        beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
+
+        // Allow a subclass to provide custom initialization of the reader,
+        // then proceed with actually loading the bean definitions.
+        initBeanDefinitionReader(beanDefinitionReader);
+        loadBeanDefinitions(beanDefinitionReader);
     }
 }

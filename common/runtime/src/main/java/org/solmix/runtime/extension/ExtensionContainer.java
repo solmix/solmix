@@ -290,6 +290,8 @@ public class ExtensionContainer implements Container
      * 
      */
     protected void doInitializeInternal() {
+        extensionManager.initialize();
+//        init features
         
     }
 

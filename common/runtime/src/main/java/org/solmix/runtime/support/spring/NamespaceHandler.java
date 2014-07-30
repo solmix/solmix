@@ -16,36 +16,29 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource;
+package org.solmix.runtime.support.spring;
 
-import java.io.InputStream;
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月26日
+ * @version $Id$  2014年7月29日
  */
 
-public class ResourceResolverAdaptor implements ResourceResolver
+public class NamespaceHandler extends NamespaceHandlerSupport
 {
 
-
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.springframework.beans.factory.xml.NamespaceHandler#init()
+     */
     @Override
-    public <T> T resolve(String resourceName, Class<T> resourceType, String implementor) {
-        return resolve(resourceName,resourceType);
-    }
+    public void init() {
+        // TODO Auto-generated method stub
 
-
-    @Override
-    public <T> T resolve(String resourceName, Class<T> resourceType) {
-        return null;
-    }
-
-
-    @Override
-    public InputStream getAsStream(String name) {
-        return null;
     }
 
 }

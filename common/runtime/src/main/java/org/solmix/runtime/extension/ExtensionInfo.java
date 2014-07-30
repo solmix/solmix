@@ -28,6 +28,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.Extension;
 
 /**
  * 
@@ -82,6 +83,21 @@ public class ExtensionInfo
     }
 
     /**
+     * @param loader
+     */
+    public ExtensionInfo(ClassLoader loader)
+    {
+        classloader = loader;
+    }
+
+    /**
+     * 
+     */
+    public ExtensionInfo()
+    {
+    }
+
+    /**
      * @return
      */
     public String getName() {
@@ -104,6 +120,18 @@ public class ExtensionInfo
     }
 
     public void setClassname(String i) {
+        _setClassname(i);
+        try{
+        Class<?> clazz=getClassObject(classloader);
+        Extension e= clazz.getAnnotation(Extension.class);
+        if(e!=null)
+            extensionType= e.name();
+        }catch(Exception e){
+            //ignore exception.
+        }
+        _setClassname(i);
+    }
+    private void _setClassname(String i){
         clazz = null;
         notFound = false;
         className = i;
@@ -324,6 +352,13 @@ public class ExtensionInfo
             }
         }
         return obj;
+    }
+
+    public void setOptional(boolean b) {
+        optional = b;
+    }
+    public boolean isOptional() {
+        return optional;
     }
 
 }

@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.osgi.framework.Bundle;
@@ -32,6 +34,7 @@ import org.osgi.framework.SynchronousBundleListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.extension.ExtensionException;
 import org.solmix.runtime.extension.ExtensionInfo;
 import org.solmix.runtime.extension.ExtensionRegistry;
 import org.solmix.runtime.extension.InternalExtensionParser;
@@ -46,6 +49,8 @@ import org.solmix.runtime.extension.InternalExtensionParser;
 public class ExtensionBundleListener implements SynchronousBundleListener
 {
     private static final Logger LOG = LoggerFactory.getLogger(ExtensionBundleListener.class);
+    private final ConcurrentMap<Long, List<OSGiExtension>> extensions 
+    = new ConcurrentHashMap<Long, List<OSGiExtension>>(16, 0.75f, 4);
 
     private final long id;
     public ExtensionBundleListener(long bundleId) {
@@ -98,7 +103,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
                 list = preList;
             }
         }
-        for (Extension ext : orig) {
+        for (ExtensionInfo ext : orig) {
             list.add(new OSGiExtension(ext, bundle));
         }
         ExtensionRegistry.addExtensions(list);
@@ -130,9 +135,10 @@ public class ExtensionBundleListener implements SynchronousBundleListener
             serviceObject = o;
             obj = o;
         }
+        @Override
         public Object load(ClassLoader cl, Container b) {
             if (interfaceName == null && bundle.getBundleContext() != null) {
-                ServiceReference ref = bundle.getBundleContext().getServiceReference(className);
+                ServiceReference<?> ref = bundle.getBundleContext().getServiceReference(className);
                 if (ref != null && ref.getBundle().getBundleId() == bundle.getBundleId()) {
                     Object o = bundle.getBundleContext().getService(ref);
                     serviceObject = o;
@@ -142,6 +148,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
             }
             return super.load(cl, b);
         }
+        @Override
         protected Class<?> tryClass(String name, ClassLoader cl) {
             Class<?> c = null;
             Throwable origExc = null;
@@ -155,9 +162,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
                     return super.tryClass(name, cl);
                 } catch (ExtensionException ee) {
                     if (origExc != null) {
-                        throw new ExtensionException(new Message("PROBLEM_LOADING_EXTENSION_CLASS",
-                                                                 Extension.LOG, name),
-                                                     origExc);
+                        throw new ExtensionException("PROBLEM_LOADING_EXTENSION_CLASS",origExc);
                     } else {
                         throw ee;
                     }
@@ -166,7 +171,8 @@ public class ExtensionBundleListener implements SynchronousBundleListener
             return c;
         }
 
-        public Extension cloneNoObject() {
+        @Override
+        public OSGiExtension cloneNoObject() {
             OSGiExtension ext = new OSGiExtension(this, bundle);
             ext.obj = serviceObject;
             return ext;

@@ -57,7 +57,7 @@ public class Reflection
     }
 
     public static Class<?> classForName(String name) throws Exception {
-        return ClassLoaderUtil.loadClass(name, Reflection.class);
+        return ClassLoaderUtils.loadClass(name, Reflection.class);
     }
     /**
      * Instance of given clazz.

@@ -38,7 +38,7 @@ import org.solmix.api.jaxb.Tvalue;
 import org.solmix.api.jaxb.TvalueMap;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
-import org.solmix.commons.util.ClassLoaderUtil;
+import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.SlxContext;
 import org.solmix.fmk.internal.DatasourceCM;
@@ -263,7 +263,7 @@ public class BasicGenerator implements DataSourceGenerator
     public static Class<?> loadClass(String className) throws SlxException {
         Class<?> clz = null;
         try {
-            clz = ClassLoaderUtil.loadClass(className,BasicGenerator.class);
+            clz = ClassLoaderUtils.loadClass(className,BasicGenerator.class);
             if (clz == null) {
                 ClassLoader loader = SlxContext.getThreadSystemContext().getBean(ClassLoader.class);
                 clz = loader.loadClass(className);

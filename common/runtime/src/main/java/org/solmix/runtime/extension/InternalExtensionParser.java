@@ -18,10 +18,17 @@
  */
 package org.solmix.runtime.extension;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -33,7 +40,8 @@ import java.util.regex.Pattern;
 public class InternalExtensionParser
 {
  private static Pattern colonPattern = Pattern.compile(":");
-    
+ private static final Logger LOG = LoggerFactory.getLogger(InternalExtensionParser.class);
+
     final ClassLoader loader;
     
     public InternalExtensionParser(ClassLoader loader) {
@@ -44,18 +52,69 @@ public class InternalExtensionParser
      * @param nextElement
      * @return
      */
-    public List<ExtensionInfo> getExtensions(URL nextElement) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<ExtensionInfo> getExtensions(URL url) {
+        InputStream is = null;
+        try {
+            String name = url.getFile();
+            name=name.substring(name.lastIndexOf("/")+1);
+            is = url.openStream();
+            return getExtensions(is,name);
+        } catch (Exception e) {
+            LOG.warn(e.getMessage(), e);
+            return new ArrayList<ExtensionInfo>();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    // Ignore
+                }
+            }
+        }
     }
 
     /**
      * @param is
      * @return
+     * @throws IOException 
      */
-    public List<ExtensionInfo> getExtensions(InputStream is) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<ExtensionInfo> getExtensions(InputStream is,String inf) throws IOException {
+        List<ExtensionInfo> extensions = new ArrayList<ExtensionInfo>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        String line = reader.readLine();
+        while (line != null) {
+            final ExtensionInfo extension = getExtensionFromTextLine(line,inf);
+            if (extension != null) {
+                extensions.add(extension);
+            }
+            line = reader.readLine();
+        }
+        return extensions;
+    }
+
+    /**
+     * @param line
+     * @return
+     */
+    private ExtensionInfo getExtensionFromTextLine(String line,String inf) {
+        line = line.trim();
+        if (line.length() == 0 || line.charAt(0) == '#') {
+            return null;
+        }
+        final ExtensionInfo ext = new ExtensionInfo(loader);
+        String[] parts = colonPattern.split(line, 0);
+        ext.setClassname(parts[0]);
+        if (ext.getClassname() == null) {
+            return null;
+        }
+        ext.setInterfaceName(inf);
+        if (parts.length >= 1) {
+            ext.setDeferred(Boolean.parseBoolean(parts[1]));
+        }
+        if (parts.length >= 2) {
+            ext.setOptional(Boolean.parseBoolean(parts[2]));
+        }
+        return  ext;
     }
     
 }

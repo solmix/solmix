@@ -28,6 +28,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.Extension;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ObjectTypeResolver;
@@ -124,6 +126,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
         while (urls.hasMoreElements()) {
             final URL url = urls.nextElement();
             InputStream is;
+            String inf=url.getFile();
             try {
                 is = AccessController.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
 
@@ -136,7 +139,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 throw (IOException) pae.getException();
             }
             try {
-                List<ExtensionInfo> exts = new InternalExtensionParser(loader).getExtensions(is);
+                List<ExtensionInfo> exts = new InternalExtensionParser(loader).getExtensions(is,inf);
                 for (ExtensionInfo e : exts) {
                     if (loader != l) {
                         e.classloader = l;
@@ -162,8 +165,16 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public List<String> getBeanNamesOfType(Class<?> type) {
-        // TODO Auto-generated method stub
-        return null;
+        List<String> ret = new LinkedList<String>();
+        for (ExtensionInfo ex : all) {
+            synchronized (ex) {
+                Class<?> cls = ex.getClassObject(loader);
+                if (cls != null && type.isAssignableFrom(cls)) {
+                    ret.add(ex.getName());
+                }
+            }            
+        }
+        return ret;
     }
 
     /**
@@ -190,14 +201,14 @@ public class ExtensionManagerImpl implements ExtensionManager,
     /**
      * @param info
      */
-    final void loadAndRegister(ExtensionInfo e) {
-        synchronized (e) {
+    final void loadAndRegister(ExtensionInfo info) {
+        synchronized (info) {
             Class<?> cls = null;
-            if (null != e.getInterfaceName()
-                && !"".equals(e.getInterfaceName())) {
-                cls = e.loadInterface(loader);
+            if (null != info.getInterfaceName()
+                && !"".equals(info.getInterfaceName())) {
+                cls = info.loadInterface(loader);
             } else {
-                cls = e.getClassObject(loader);
+                cls = info.getClassObject(loader);
             }
 
             if (null != activated && null != cls
@@ -205,7 +216,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 return;
             }
 
-            Object obj = e.load(loader, container);
+            Object obj = info.load(loader, container);
             if (obj == null) {
                 return;
             }
@@ -228,7 +239,6 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 activated.putObject(cls, obj);
             }
         }
-
     }
 
     private ExtensionInfo findOne(String name) {
@@ -245,8 +255,12 @@ public class ExtensionManagerImpl implements ExtensionManager,
             }
         }
         if (more != null) {
-            // TODO used annotation default value as default
-            return more.get(0);
+            Class<?> inf=more.get(0).loadInterface(loader);
+           String defaultExtension= inf.getAnnotation(Extension.class).name();
+            for(ExtensionInfo info : more){
+                if(info.getExtensionType().equals(defaultExtension))
+                    return info;
+            }
         }
         return null;
 
@@ -259,8 +273,19 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public <T> Collection<? extends T> getBeansOfType(Class<T> type) {
-        // TODO Auto-generated method stub
-        return null;
+        List<T> ret = new LinkedList<T>();
+        for(ExtensionInfo info : all){
+            synchronized (info) {
+                Class<?> cls = info.getClassObject(loader);
+                if (cls != null && type.isAssignableFrom(cls)) {
+                    if (info.getLoadedObject() == null) {
+                        loadAndRegister(info);
+                    }
+                    ret.add(type.cast(info.getLoadedObject()));
+                }
+            }
+        }
+        return ret;
     }
 
     /**
@@ -272,8 +297,24 @@ public class ExtensionManagerImpl implements ExtensionManager,
     @Override
     public <T> boolean loadBeansOfType(Class<T> type,
         BeanLoaderListener<T> listener) {
-        // TODO Auto-generated method stub
-        return false;
+        boolean loaded = false;
+        for (ExtensionInfo ex : all) {
+            synchronized (ex) {
+                Class<?> cls = ex.getClassObject(loader);
+                if (cls != null 
+                    && type.isAssignableFrom(cls)
+                    && listener.loadBean(ex.getName(), cls.asSubclass(type))) {
+                    if (ex.getLoadedObject() == null) {
+                        loadAndRegister(ex);
+                    }
+                    if (listener.beanLoaded(ex.getName(), type.cast(ex.getLoadedObject()))) {
+                        return true;
+                    }
+                    loaded = true;
+                }
+            }
+        }
+        return loaded;
     }
 
     /**
@@ -283,7 +324,13 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public boolean hasBeanOfName(String name) {
-        // TODO Auto-generated method stub
+        if(name==null)
+            return false;
+        for(ExtensionInfo info:all){
+            if(name.equals(info.getName())){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -294,7 +341,11 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public void activateAll() {
-        // TODO Auto-generated method stub
+        for(ExtensionInfo info :all){
+            if(info.getLoadedObject()==null){
+                loadAndRegister(info);
+            }
+        }
 
     }
 
@@ -305,8 +356,16 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public <T> void activateAllByType(Class<T> type) {
-        // TODO Auto-generated method stub
-
+        for(ExtensionInfo info :all){
+            if(info.getLoadedObject()==null){
+                synchronized (info) {
+                    Class<?> cls = info.getClassObject(loader);
+                    if (cls != null && type.isAssignableFrom(cls)) {
+                        loadAndRegister(info);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -316,8 +375,46 @@ public class ExtensionManagerImpl implements ExtensionManager,
      *      java.lang.Class)
      */
     @Override
-    public <T> T getExtension(String ns, Class<T> type) {
-        // TODO Auto-generated method stub
+    public <T> T getExtension(String name, Class<T> type) {
+        if (name == null) {
+            return null;
+        }
+        ExtensionInfo info= findOne(name);
+        if(info!=null){
+            synchronized (info) {
+                Class<?> cls = info.getClassObject(loader);
+                
+                if (cls != null && type.isAssignableFrom(info.getClassObject(loader))) {
+                    if (info.getLoadedObject() == null) {
+                        loadAndRegister(info);
+                    }
+                    return type.cast(info.getLoadedObject());
+                }
+            }
+        }
         return null;
+    } 
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.extension.ExtensionManager#initialize()
+     */
+    @Override
+    public void initialize() {
+       for(ExtensionInfo info:all){
+           if(!info.isDeferred()&&info.getLoadedObject()==null){
+               loadAndRegister(info);
+           }
+       }
+    }
+    public void removeBeansOfNames(List<String> names) {
+        for (String s : names) {
+            for(ExtensionInfo info:all){
+                if(s.equals(info.getName())){
+                    all.remove(info);
+                }
+            }
+        }
     }
 }

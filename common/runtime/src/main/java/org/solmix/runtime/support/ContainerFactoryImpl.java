@@ -18,8 +18,12 @@
  */
 package org.solmix.runtime.support;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
+import org.solmix.runtime.extension.ExtensionContainer;
 
 
 /**
@@ -38,7 +42,16 @@ public class ContainerFactoryImpl extends ContainerFactory
      */
     @Override
     public Container createContainer() {
-        return null;
+        return createContainer(new HashMap<Class<?>, Object>());
     }
-
+    public Container createContainer(Map<Class<?>, Object> e) {
+        return createContainer(e, new HashMap<String, Object>());
+    }
+    public Container createContainer(Map<Class<?>, Object> e, Map<String, Object> properties) {
+        ExtensionContainer container = new ExtensionContainer(e, properties);
+        possiblySetDefaultContainer(container);
+        initializeContainer(container);
+        container.initialize();
+        return container;
+    }
 }

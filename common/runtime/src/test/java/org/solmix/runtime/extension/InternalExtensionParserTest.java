@@ -18,23 +18,35 @@
  */
 package org.solmix.runtime.extension;
 
+import java.net.URL;
+import java.util.List;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月26日
+ * @version $Id$  2014年7月28日
  */
 
-public interface ExtensionManager
+public class InternalExtensionParserTest
 {
- void activateAll();
-    
-    <T> void activateAllByType(Class<T> type);
-    
-    <T> T getExtension(String ns, Class<T> type);
 
-    /**
-     * init before used
-     */
-    void initialize();
+    @Test
+    public void test(){
+      URL url=  this.getClass().getResource("java.util.List");
+      List<ExtensionInfo> extensions= new InternalExtensionParser(null).getExtensions(url);
+      Assert.assertEquals("Unexpected number of Extension elements.", 2, extensions.size());
+      
+      ExtensionInfo e1=extensions.get(0);
+      Assert.assertTrue(e1.isDeferred());
+      Assert.assertTrue(e1.isOptional());
+      Assert.assertNull(e1.getExtensionType());
+      ExtensionInfo e2=extensions.get(1);
+      Assert.assertEquals("java.util.LinkedList", e2.getClassname());
+      Assert.assertEquals("java.util.List", e2.getInterfaceName());
+    }
 }

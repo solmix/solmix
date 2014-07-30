@@ -30,7 +30,7 @@ import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.runtime.cm.support.OsgiConfigureUnitManager;
-import org.solmix.runtime.support.ext.SolmixSystemContext;
+import org.solmix.runtime.support.ext.ContainerAdaptor;
 
 
 /**
@@ -39,7 +39,7 @@ import org.solmix.runtime.support.ext.SolmixSystemContext;
  * @version $Id$  2013-11-5
  */
 
-public class BlueprintSystemContext extends SolmixSystemContext
+public class BlueprintSystemContext extends ContainerAdaptor
 {
     BundleContext bundleContext;
     BlueprintContainer blueprintContainer;

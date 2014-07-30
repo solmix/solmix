@@ -31,23 +31,23 @@ import org.solmix.runtime.extension.ExtensionContainer;
  * @version $Id$ 2013-11-7
  */
 
-public class SolmixSystemContext extends ExtensionContainer
+public class ContainerAdaptor extends ExtensionContainer
 {
 
-    public SolmixSystemContext()
+    public ContainerAdaptor()
     {
         this(null);
     }
 
-    public SolmixSystemContext(Map<Class<?>, Object> beans)
+    public ContainerAdaptor(Map<Class<?>, Object> beans)
     {
         this(beans, Thread.currentThread().getContextClassLoader());
     }
 
-    public SolmixSystemContext(Map<Class<?>, Object> beans, ClassLoader extensionClassLoader)
+    public ContainerAdaptor(Map<Class<?>, Object> beans, ClassLoader extensionClassLoader)
     {
         super(beans);
-        BeanConfigurer configurer = (BeanConfigurer) super.extensions.get(BeanConfigurer.class);
+        BeanConfigurer configurer = (BeanConfigurer) super.extensions.getObject(BeanConfigurer.class);
         if (null == configurer) {
             configurer = new BeanConfigurer() {
 
@@ -62,7 +62,7 @@ public class SolmixSystemContext extends ExtensionContainer
                 }
 
             };
-            super.extensions.put(BeanConfigurer.class, configurer);
+            super.extensions.putObject(BeanConfigurer.class, configurer);
         }
     }
 

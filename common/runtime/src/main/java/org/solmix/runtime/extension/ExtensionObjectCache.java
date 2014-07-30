@@ -80,11 +80,15 @@ public class ExtensionObjectCache
            return o;
        }
     }
+    public Object getObjects(Class<?> clazz){
+        Object o= cache.get(clazz);
+        return o;
+     }
     private boolean isExtension(Class<?> clazz){
         return clazz.isAnnotationPresent(Extension.class);
     }
 
-    private class ExtensionEntry{
+    static class ExtensionEntry{
         Map<String, Object>  cache = new ConcurrentHashMap<String, Object>(4, 0.75f, 2);
         ExtensionEntry(String name,Object o){
             cache.put(name, o);

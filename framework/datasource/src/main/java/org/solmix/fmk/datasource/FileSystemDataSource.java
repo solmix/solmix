@@ -35,7 +35,7 @@ import org.solmix.api.datasource.DataSourceData;
 import org.solmix.api.exception.SlxException;
 import org.solmix.api.jaxb.EserverType;
 import org.solmix.api.jaxb.ToperationBinding;
-import org.solmix.commons.util.ClassLoaderUtil;
+import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.DataUtils;
 import org.solmix.commons.util.IOUtils;
 import org.solmix.fmk.util.XMLUtil;
@@ -93,7 +93,7 @@ public class FileSystemDataSource extends BasicDataSource
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = dbf.newDocumentBuilder();
-            URL url = ClassLoaderUtil.getResource(loader, resourceName, FileSystemDataSource.class);
+            URL url = ClassLoaderUtils.getResource(loader, resourceName, FileSystemDataSource.class);
             is = url.openStream();
             Document doc = builder.parse(is);
             Element e = doc.getDocumentElement();
