@@ -6,6 +6,6 @@
     <inherits name="com.google.gwt.core.Core"/>
     <inherits name="org.solmix.atmosphere.Client"/>
 	<inherits name="com.gwtplatform.mvp.Mvp" />
-	 <script src="sc/extensions/extensions.js"/>
+	 <!-- <script src="sc/extensions/extensions.js"/> -->
 	<source path="client"/>
 </module>

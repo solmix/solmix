@@ -30,7 +30,7 @@ import com.smartgwt.client.widgets.Canvas;
  * @version 110035 2012-12-6
  */
 
-public class FusionChart extends Canvas
+public class FreeChart extends Canvas
 {
     
    
@@ -41,7 +41,7 @@ public class FusionChart extends Canvas
     private String renderId="slx_fC_0";
     private static String chartRoot;
 
-    public FusionChart() {
+    public FreeChart() {
         swfId = "fcId_" + count;
         renderId="slx_fC_"+count;
         setID(renderId);

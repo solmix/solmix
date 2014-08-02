@@ -3,7 +3,6 @@
 <module>
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.smartgwt.SmartGwtNoSmartClient"/>
-	<inherits name="com.smartgwt.PluginBridgesWidgets"/>
 	<source path="client"/>
 	<source path="shared"/>
 </module>

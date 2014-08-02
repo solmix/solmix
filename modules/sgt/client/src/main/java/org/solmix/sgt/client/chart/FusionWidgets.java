@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.fusionchartxt.client;
+package org.solmix.sgt.client.chart;
 
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
@@ -100,24 +100,12 @@ public class FusionWidgets extends Canvas
         return "<div id='"+renderId+"'   style='margin-right:30px;float:left;vertical-align:center;' >" +
         		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";
     }
-   public void getFusionChart(final String data, final String chartType,final int width,final int height){
-	    Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
+  
 
-			@Override
-			public boolean execute() {
-				if(isCanUpdate()){
-					_getFusionChart(data,chartType,width,height);
-					return false;
-				}
-				return true;
-			}
-       }, 100);
-   }
-
-    public native void _getFusionChart(String data, String chartType, int width, int height) /*-{
-        var chartId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartId()();
-        var renderId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getRenderId()();
-        var chartRoot=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartRoot()();
+    public native void _getFusionWidgets(String data, String chartType, int width, int height) /*-{
+        var chartId=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartId()();
+        var renderId=this.@org.solmix.sgt.client.chart.FusionWidgets::getRenderId()();
+        var chartRoot=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartRoot()();
         var chartPath=chartRoot+chartType+".swf";
         try {
            var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
@@ -128,23 +116,11 @@ public class FusionWidgets extends Canvas
          alert(e);
         }  
     }-*/;
-    public void getFusionChart(final String data, final String chartType,final String width,final String height){
-    	 Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
-
- 			@Override
- 			public boolean execute() {
- 				if(isCanUpdate()){
- 					_getFusionChart(data,chartType,width,height);
- 					return false;
- 				}
- 				return true;
- 			}
-        }, 100);
-    }
-    public native void _getFusionChart(String data, String chartType, String width, String height) /*-{
-        var chartId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartId()();
-        var renderId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getRenderId()();
-        var chartRoot=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartRoot()();
+   
+    public native void _getFusionWidgets(String data, String chartType, String width, String height) /*-{
+        var chartId=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartId()();
+        var renderId=this.@org.solmix.sgt.client.chart.FusionWidgets::getRenderId()();
+        var chartRoot=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartRoot()();
         var chartPath=chartRoot+chartType+".swf";
         try {
             var chart = new $wnd.FusionCharts(chartPath, chartId, width, height,"0","1");
@@ -166,7 +142,7 @@ public class FusionWidgets extends Canvas
 
   public native void resizeActiveChart(int width, int height) /*-{
         try {
-        var chartId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartId()();
+        var chartId=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartId()();
         var chart = $wnd.FusionCharts(chartId);
         // resizeTo() does not exist in FusionCharts free version
         if (chart.resizeTo != null) chart.resizeTo(width, height);
@@ -181,7 +157,7 @@ public class FusionWidgets extends Canvas
      */
     public native void removeChart() /*-{
           try {
-          var chartId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartId()();
+          var chartId=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartId()();
           var chart = $wnd.FusionCharts(chartId);
           // dispose() does not exist in FusionCharts free version
           if (chart.dispose != null) chart.dispose();
@@ -204,7 +180,7 @@ public class FusionWidgets extends Canvas
   }
     public void _getFusionWidgets(String data, String chartType) {
     	
-        getFusionChart(data, chartType, getInnerWidth(), getInnerHeight());
+        _getFusionWidgets(data, chartType, getInnerWidth(), getInnerHeight());
   }
     public void getFusionMap(String data, String chartType) {
         getFusionMap(data, chartType, getInnerWidth(), getInnerHeight());
@@ -213,9 +189,9 @@ public class FusionWidgets extends Canvas
 public native void getFusionMap(String data, String chartType, int width, int height) /*-{
   if ($wnd.FusionCharts.setCurrentRenderer != null) {
         $wnd.FusionCharts.setCurrentRenderer('javascript');
-        var chartId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartId()();
-        var renderId=this.@org.solmix.fusionchartxt.client.FusionWidgets::getRenderId()();
-        var chartRoot=this.@org.solmix.fusionchartxt.client.FusionWidgets::getChartRoot()();
+        var chartId=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartId()();
+        var renderId=this.@org.solmix.sgt.client.chart.FusionWidgets::getRenderId()();
+        var chartRoot=this.@org.solmix.sgt.client.chart.FusionWidgets::getChartRoot()();
         var chartPath=chartRoot+chartType+".swf";
         var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
             chart.setXMLData(data);
@@ -224,7 +200,7 @@ public native void getFusionMap(String data, String chartType, int width, int he
   }-*/;
 	@Override
 	protected native void onInit()/*-{
-	    this.@org.solmix.fusionchartxt.client.FusionWidgets::onInitialize()();
+	    this.@org.solmix.sgt.client.chart.FusionWidgets::onInitialize()();
 	    
 	    // Handle redraw case
 	    var self = this.@com.smartgwt.client.widgets.BaseWidget::getOrCreateJsObj()();

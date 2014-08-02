@@ -96,6 +96,7 @@ public class FusionChartX extends Canvas
   
    @Override
     public String getInnerHTML() {
+      String inner= super.getInnerHTML();
 //	   return "<div id='"+renderId+"'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()'>" +
         return "<div id='"+renderId+"'   style='margin-right:30px;float:left;vertical-align:center;' >" +
         		"<img src=\"images/loading.gif\" width=\"16\" height=\"16\" style=\"margin-right:8px;float:left;vertical-align:top;\"/>正在加载图像...<br/></div>";

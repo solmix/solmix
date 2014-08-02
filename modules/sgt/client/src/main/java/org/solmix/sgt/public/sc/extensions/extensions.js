@@ -68,7 +68,7 @@ isc.B.push(isc.A.transformRequest=function isc_AdvanceDataSource_transformReques
 		_a.exportHeader=_1.exportHeader;
 		if(_1.exportFooter)
 		_a.exportFooter=_1.exportFooter; */
-		_a.dataSource=this.getID().replace("$","/");
+		_a.dataSource=this.getID();
 		if(_1.operationType!=null)
 			_a.operationType=_1.operationType;
 		if(this.repo)
