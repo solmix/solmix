@@ -58,21 +58,21 @@ public class SlxContextTest
     @Test
     public void getRPCManagerFactory() {
         SystemContext sc= SlxContext.getSystemContext();
-        DSCallManagerFactory dsm=sc.getBean(DSCallManagerFactory.class);
+        DSCallManagerFactory dsm=sc.getExtension(DSCallManagerFactory.class);
         Assert.assertNotNull(dsm);
         sc.close(true);
     }
     @Test
     public void getDastaSourceManager() {
         SystemContext sc= SlxContext.getSystemContext();
-        DataSourceManager dsm=sc.getBean(DataSourceManager.class);
+        DataSourceManager dsm=sc.getExtension(DataSourceManager.class);
         Assert.assertNotNull(dsm);
         sc.close(true);
     }
     @Test
     public void getResourceBundleManager() {
         SystemContext sc= SlxContext.getSystemContext();
-        ResourceBundleManager dsm=sc.getBean(ResourceBundleManager.class);
+        ResourceBundleManager dsm=sc.getExtension(ResourceBundleManager.class);
         Assert.assertNotNull(dsm);
         sc.close(true);
     }

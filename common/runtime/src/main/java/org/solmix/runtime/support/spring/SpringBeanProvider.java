@@ -68,7 +68,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
     {
         this.context = applicationContext;
         if (system != null) {
-            original = system.getBean(ConfiguredBeanProvider.class);
+            original = system.getExtension(ConfiguredBeanProvider.class);
         }
     }
 

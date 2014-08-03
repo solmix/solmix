@@ -36,25 +36,25 @@ public interface Container
     public static final String CONTAINER_PROPERTY_NAME = "solmix.Container.system.id";
     
     /**
-     * Get the Bean instance of <code>class</code> manager by this system
+     * Get the extension instance of <code>class</code> manager by this system
      * Container
      * 
      * @param beanType
      * @return the bean instance
      */
-    <T> T getBean(Class<T> beanType);
+    <T> T getExtension(Class<T> extensionType);
     
 
-    <T> void setBean(T bean, Class<T> beanType);
+    <T> void setExtension(T extension, Class<T> extensionType);
     
-    <T> ExtensionLoader<T> getExtensionLoader(Class<T> beanType);
+    <T> ExtensionLoader<T> getExtensionLoader(Class<T> extensionType);
     /**
      * Indicate this system Container have the bean name.
      * 
      * @param name the bean name
      * @return
      */
-    boolean hasBeanByName(String name);
+    boolean hasExtensionByName(String name);
 
     /**
      * Return the SystemContext ID

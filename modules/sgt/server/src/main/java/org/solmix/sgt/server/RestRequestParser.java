@@ -82,7 +82,7 @@ public class RestRequestParser
         String viewType = request.getParameter("viewType");
         if ("fchart".equals(viewType)) {
             ConfigBean cf = getDataSourceFromURL(request);
-            DSRequest dsrequest = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class).createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
+            DSRequest dsrequest = SlxContext.getThreadSystemContext().getExtension(DataSourceManager.class).createDSRequest(cf.getDataSourceName(), Eoperation.FETCH);
             if (cf.getOperationId() == null)
                 dsrequest.getContext().setOperation(cf.getDataSourceName() + "_" + cf.getOperationType());
             else

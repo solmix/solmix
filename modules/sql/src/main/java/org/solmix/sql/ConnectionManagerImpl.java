@@ -87,12 +87,12 @@ public class ConnectionManagerImpl implements ConnectionManager
     public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if(sc!=null)
-            sc.setBean(this, ConnectionManager.class);
+            sc.setExtension(this, ConnectionManager.class);
     }
 
     private synchronized DataTypeMap getSqlConfig() throws SlxException {
         if (thisConfig == null) {
-            ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
             ConfigureUnit cu = null;
             try {
                 cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);
@@ -118,7 +118,7 @@ public class ConnectionManagerImpl implements ConnectionManager
     public synchronized PoolManager getManager() {
         if (manager == null) {
             if (poolManagerFactory == null) {
-                poolManagerFactory = sc.getBean(PoolManagerFactory.class);
+                poolManagerFactory = sc.getExtension(PoolManagerFactory.class);
             }
             manager = poolManagerFactory.createPoolManager("sql", new PoolableSQLConnectionFactory(this,sc));
         }

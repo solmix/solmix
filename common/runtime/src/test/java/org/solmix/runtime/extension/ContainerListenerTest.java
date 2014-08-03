@@ -18,39 +18,38 @@
  */
 package org.solmix.runtime.extension;
 
-import org.junit.Assert;
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerFactory;
-import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.service.InjectTestService;
+import org.solmix.runtime.ContainerListener;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月3日
+ * @version $Id$  2014年8月4日
  */
 
-public class InjectResourceTest
+public class ContainerListenerTest
 {
 
     @Test
-    public void testInject() {
+    public void test() throws InterruptedException {
         Container c = ContainerFactory.newInstance().createContainer();
-        for(int i=0;i<100000;i++){
-        InjectTestService its= c.getExtension(InjectTestService.class);
-        Assert.assertNotNull(its.getContainer());
+       String create= c.getProperty(ContainerListenerImpl.class.getName()).toString();
+       Assert.assertEquals(ContainerListenerImpl.CREATED, create);
+       c.addListener(new ContainerListener() {
+        
+        @Override
+        public void handleEvent(ContainerEvent event) {
+            if(event.getType()== ContainerEvent.PRECLOSE)
+               Assert.assertEquals(ContainerListenerImpl.PRECLOSE,  event.getContainer().getProperty(ContainerListenerImpl.class.getName()));
         }
-    }
-    @Test
-    public void testtime() {
-        Container c = ContainerFactory.newInstance().createContainer();
-        ConfiguredBeanProvider its= c.getExtension(ConfiguredBeanProvider.class);
-        for(int i=0;i<100000;i++){
-            its.getBeanOfType(InjectTestService.class.getName(), InjectTestService.class);
-            
-        }
+    });
+       c.close();
     }
 
 }

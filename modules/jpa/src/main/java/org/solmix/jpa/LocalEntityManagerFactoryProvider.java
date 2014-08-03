@@ -58,7 +58,7 @@ public class LocalEntityManagerFactoryProvider implements EntityManagerFactoryPr
     public void setSystemContext(final SystemContext systemcontext) {
         this.sc=systemcontext;
         if(sc!=null){
-            sc.setBean(this, EntityManagerFactoryProvider.class);
+            sc.setExtension(this, EntityManagerFactoryProvider.class);
         }
         
     }

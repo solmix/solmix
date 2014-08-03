@@ -40,7 +40,7 @@ public class JPADataSourceBuilder
     
     private final  DataSourceManager manager;
     public JPADataSourceBuilder(){
-        manager=SlxContext.getSystemContext().getBean(DataSourceManager.class);
+        manager=SlxContext.getSystemContext().getExtension(DataSourceManager.class);
     }
     public DataSource build(DataSourceData data) throws SlxException{
         return manager.generateDataSource(data);

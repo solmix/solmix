@@ -77,17 +77,17 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
             }
             ac = ac.getParent();
         }
-        setBean(applicationContext.getClassLoader(), ClassLoader.class);
-        setBean(new SpringConfigurer(applicationContext), BeanConfigurer.class);
+        setExtension(applicationContext.getClassLoader(), ClassLoader.class);
+        setExtension(new SpringConfigurer(applicationContext), BeanConfigurer.class);
         //
-        setBean(applicationContext, ApplicationContext.class);
+        setExtension(applicationContext, ApplicationContext.class);
 //        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
-        ResourceManager m = getBean(ResourceManager.class);
+        ResourceManager m = getExtension(ResourceManager.class);
         m.addResourceResolver(new SpringResourceResolver(applicationContext));
         //at last add the spring bean provider.
-        ConfiguredBeanProvider provider = getBean(ConfiguredBeanProvider.class);
+        ConfiguredBeanProvider provider = getExtension(ConfiguredBeanProvider.class);
         if (!(provider instanceof SpringBeanProvider)) {
-            setBean(new SpringBeanProvider(applicationContext, this), ConfiguredBeanProvider.class);
+            setExtension(new SpringBeanProvider(applicationContext, this), ConfiguredBeanProvider.class);
         }
         if (getStatus() != ContainerStatus.CREATED) {
             initialize();
@@ -139,7 +139,7 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
             try {
                 Class<?> clsbc = Class.forName("org.osgi.framework.BundleContext");
                 Class<?> clsb = Class.forName("org.osgi.framework.Bundle");
-                Object o = getBean(clsbc);
+                Object o = getExtension(clsbc);
                 Object o2 = clsbc.getMethod("getBundle").invoke(o);
                 String s = (String)clsb.getMethod("getSymbolicName").invoke(o2);
                 id = s + "-" + DEFAULT_CONTAINER_ID + Integer.toString(this.hashCode());

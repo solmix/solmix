@@ -131,7 +131,7 @@ public class ServiceDataSource
         } else {
             sc = SlxContext.getThreadSystemContext();
         }
-        ApplicationManager am = sc.getBean(ApplicationManager.class);
+        ApplicationManager am = sc.getExtension(ApplicationManager.class);
         if (am != null)
             app = am.findByID(appID);
         return execute(dsRequest, rpc, requestContext, app);

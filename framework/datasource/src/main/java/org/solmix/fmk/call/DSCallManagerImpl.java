@@ -105,7 +105,7 @@ public class DSCallManagerImpl implements DSCallManager
     }
     @SuppressWarnings("unchecked")
     protected void configInterceptor() throws SlxException{
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         DataTypeMap frameworkConfig;
         try {

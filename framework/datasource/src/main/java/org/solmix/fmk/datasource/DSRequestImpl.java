@@ -266,7 +266,7 @@ public class DSRequestImpl implements DSRequest
             } else {
                 sc = SlxContext.getThreadSystemContext();
             }
-            ApplicationManager am = sc.getBean(ApplicationManager.class);
+            ApplicationManager am = sc.getExtension(ApplicationManager.class);
             if (am != null)
                 app = am.findByID(data.getAppID());
         }

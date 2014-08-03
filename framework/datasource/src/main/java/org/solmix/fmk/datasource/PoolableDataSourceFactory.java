@@ -171,7 +171,7 @@ public class PoolableDataSourceFactory extends SlxKeyedPoolableObjectFactory
                 return false;
             long lastTimeStamp = 0;
             try {
-                DSRepository repo = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class).getRepository(id);
+                DSRepository repo = sc.getExtension(org.solmix.api.repo.DSRepositoryManager.class).getRepository(id);
                 String dsName = key == null ? null : key.toString() + "." + DefaultParser.DEFAULT_REPO_SUFFIX;
 
                 Object configFile = repo.load(dsName);

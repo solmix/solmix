@@ -47,7 +47,7 @@ public class BasicGeneratorTest
     @Before
     public void init(){
         SystemContext sc=  SlxContext.getThreadSystemContext();
-         dsm=sc.getBean(DataSourceManager.class);
+         dsm=sc.getExtension(DataSourceManager.class);
     }
 
     @Test

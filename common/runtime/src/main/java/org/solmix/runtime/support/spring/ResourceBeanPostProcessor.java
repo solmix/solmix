@@ -75,7 +75,7 @@ public class ResourceBeanPostProcessor implements
                 resourceManager.addResourceResolver(new SpringResourceResolver(context));
             } else if (bean instanceof Container) {
                 Container b = (Container)bean;
-                ResourceManager m = b.getBean(ResourceManager.class);
+                ResourceManager m = b.getExtension(ResourceManager.class);
                 if (m != null) {
                     resourceManager = m;
                     if (!(b instanceof SpringContainer)) {
@@ -93,7 +93,7 @@ public class ResourceBeanPostProcessor implements
                 }
                 if (m == null) {
                     b = (Container)context.getBean("cxf");
-                    m = b.getBean(ResourceManager.class);
+                    m = b.getExtension(ResourceManager.class);
                 }
                 if (m != null) {
                     resourceManager = m;

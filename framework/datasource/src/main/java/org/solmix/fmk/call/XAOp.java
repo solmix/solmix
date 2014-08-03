@@ -131,6 +131,6 @@ public abstract class XAOp
 
     private DataSourceManager getDataSourceManager() {
         SystemContext sc = SlxContext.getThreadSystemContext();
-        return sc.getBean(DataSourceManager.class);
+        return sc.getExtension(DataSourceManager.class);
     }
 }

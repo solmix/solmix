@@ -197,7 +197,7 @@ public class BasicDataSource implements DataSource
      * @return
      */
     protected DataTypeMap getConfig() throws SlxException {
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(getPID());

@@ -78,7 +78,7 @@ public class SpringEventManager implements EventManager
     public void setSystemContext(final SystemContext sc) {
         this.sc=sc;
         if(sc!=null){
-            sc.setBean(this, EventManager.class);
+            sc.setExtension(this, EventManager.class);
         }
         
     }
@@ -169,7 +169,7 @@ public class SpringEventManager implements EventManager
     public void start() {
         setUp();
         if(sc!=null){
-            ConfigureUnitManager cum=  sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnitManager cum=  sc.getExtension(ConfigureUnitManager.class);
         }
         DataTypeMap properties= getConfig();
         Hashtable config = new Hashtable();
@@ -180,7 +180,7 @@ public class SpringEventManager implements EventManager
 
     }
     protected DataTypeMap getConfig() {
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu=null;
         try {
             cu = cum.getConfigureUnit(SERVICE_PID);

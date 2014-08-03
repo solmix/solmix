@@ -77,7 +77,7 @@ public class FileSystemDataSource extends BasicDataSource
         String url =  (String) DataUtils.getProperty("dataURL", opBind, getContext().getTdataSource());
         String xpath=(String) DataUtils.getProperty("recordXPath", opBind, getContext().getTdataSource());
         DSResponse res = new DSResponseImpl(this,req);
-        Object value = getDataFromFile(sc.getBean(ClassLoader.class),url);
+        Object value = getDataFromFile(sc.getExtension(ClassLoader.class),url);
         if(xpath!=null){
             JXPathContext context = JXPathContext.newContext(value);
             res.setRawData(context.getValue(xpath));

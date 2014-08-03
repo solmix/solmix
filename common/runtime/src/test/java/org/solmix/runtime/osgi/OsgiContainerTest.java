@@ -45,12 +45,12 @@ public class OsgiContainerTest
         control=EasyMock.createNiceControl();
         sc=control.createMock(Container.class);
         AdapterManager adm=control.createMock(AdapterManager.class);
-        EasyMock.expect(sc.getBean(AdapterManager.class)).andReturn(adm).anyTimes();
+        EasyMock.expect(sc.getExtension(AdapterManager.class)).andReturn(adm).anyTimes();
         
         bundleContext = control.createMock(BundleContext.class);
         bundle = control.createMock(Bundle.class);
         BundleContext app = control.createMock(BundleContext.class);
-        EasyMock.expect(sc.getBean(BundleContext.class)).andReturn(app).anyTimes();
+        EasyMock.expect(sc.getExtension(BundleContext.class)).andReturn(app).anyTimes();
         EasyMock.expect(app.getBundle()).andReturn(bundle).anyTimes();
     }
     @Test

@@ -79,7 +79,7 @@ public abstract class AbstractDSCallServlet extends HttpServlet
         else
             characterEncoding = "UTF-8";
         SystemContext sc = SlxContext.getThreadSystemContext();
-        DSCallManagerFactory dmf = sc.getBean(DSCallManagerFactory.class);
+        DSCallManagerFactory dmf = sc.getExtension(DSCallManagerFactory.class);
         dsCallManager = dmf.createDSCallManager();
         @SuppressWarnings("rawtypes")
         Enumeration em = config.getInitParameterNames();

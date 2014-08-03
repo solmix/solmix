@@ -62,7 +62,7 @@ public class DatasourceCM
 
     public static ConfigureUnit getConfigureUnit() {
         final SystemContext sc = SlxContext.getThreadSystemContext();
-        ConfigureUnitManager cm = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cm = sc.getExtension(ConfigureUnitManager.class);
         try {
             return cm.getConfigureUnit(PID);
         } catch (IOException e) {

@@ -119,7 +119,7 @@ public class SpringEventTaskManager implements EventTaskManager
      */
     private void getHandlersFromSpring() {
         if(sc!=null){
-            ConfiguredBeanProvider provider=   sc.getBean(ConfiguredBeanProvider.class);
+            ConfiguredBeanProvider provider=   sc.getExtension(ConfiguredBeanProvider.class);
             Collection< ? extends EventHandler> handlers=  provider.getBeansOfType(EventHandler.class);
             for(EventHandler handler:handlers){
                 EventTopic t = handler.getClass().getAnnotation(EventTopic.class);

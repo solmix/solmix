@@ -44,13 +44,13 @@ public class SpringContainerFactoryTest
     public void test() {
         SpringContainerFactory ssc=new SpringContainerFactory();
         Container sc=ssc.createContainer();
-        ConfiguredBeanProvider provider=  sc.getBean(ConfiguredBeanProvider.class);
-      List l=  provider.getBeanOfType("java.util.List", List.class);
+        ConfiguredBeanProvider provider=  sc.getExtension(ConfiguredBeanProvider.class);
+      List<?> l=  provider.getBeanOfType("java.util.LinkedList", List.class);
       Assert.assertNotNull(l);
-        ExtensionManager em=  sc.getBean(ExtensionManager.class);
+        ExtensionManager em=  sc.getExtension(ExtensionManager.class);
         Assert.assertNotNull(em);
         Assert.assertNotNull(sc);
-        Assert.assertNotNull("adaptermanager must be not ull", sc.getBean(org.solmix.runtime.adapter.AdapterManager.class));
+        Assert.assertNotNull("adaptermanager must be not ull", sc.getExtension(org.solmix.runtime.adapter.AdapterManager.class));
     }
 
     @After

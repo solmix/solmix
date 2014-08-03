@@ -65,7 +65,7 @@ public class DSRepositoryManagerImpl implements DSRepositoryManager
     public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if (sc != null) {
-            sc.setBean(this, DSRepositoryManager.class);
+            sc.setExtension(this, DSRepositoryManager.class);
         }
     }
 

@@ -82,7 +82,7 @@ public class LoadSchemaServlet extends HttpServlet
         // List<DataSource> dsToFree = new ArrayList<DataSource>();
         response.setCharacterEncoding(characterEncoding);
         if (dsmService == null)
-            dsmService =SlxContext.getThreadSystemContext().getBean(DataSourceManager.class);
+            dsmService =SlxContext.getThreadSystemContext().getExtension(DataSourceManager.class);
         try {
             String ids = request.getParameter("dataSource");
             String multipleIDs[] = ids.split(",");

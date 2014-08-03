@@ -265,7 +265,7 @@ public class BasicGenerator implements DataSourceGenerator
         try {
             clz = ClassLoaderUtils.loadClass(className,BasicGenerator.class);
             if (clz == null) {
-                ClassLoader loader = SlxContext.getThreadSystemContext().getBean(ClassLoader.class);
+                ClassLoader loader = SlxContext.getThreadSystemContext().getExtension(ClassLoader.class);
                 clz = loader.loadClass(className);
             }
         } catch (ClassNotFoundException e) {

@@ -27,5 +27,5 @@ package org.solmix.runtime.extension;
 
 public interface ExtensionLoader<T>
 {
-    T getDefaultExtension();
+    T getDefault();
 }

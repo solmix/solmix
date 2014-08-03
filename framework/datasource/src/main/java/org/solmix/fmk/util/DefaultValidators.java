@@ -1105,7 +1105,7 @@ public class DefaultValidators
         Object msg = context.get(Constants.MESSAGE_TOOL_IN_CONTEXT);
         if (msg == null) {
             final  SystemContext sc = SlxContext.getThreadSystemContext();
-            ResourceBundleManager rbm= sc.getBean(ResourceBundleManager.class);
+            ResourceBundleManager rbm= sc.getExtension(ResourceBundleManager.class);
             // VirtualManager.getVirtual(context.getRequestContext());
             _msgTool = new MessageTools(rbm.getResourceBundle(SlxContext.getLocale()));
             context.put(Constants.MESSAGE_TOOL_IN_CONTEXT, _msgTool);

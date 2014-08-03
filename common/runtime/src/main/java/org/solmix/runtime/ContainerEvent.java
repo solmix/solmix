@@ -29,17 +29,18 @@ import org.solmix.runtime.event.Event;
  * @version $Id$  2014年7月27日
  */
 
-public abstract class ContainerEvent extends EventObject implements Event
+public  class ContainerEvent extends EventObject implements Event
 {
+
     private final int type;
+
     private final Container container;
+
     public final static int CREATED = 0x00000001;
 
-    public final static int INITED = 0x00000002;
+    public final static int PRECLOSE = 0x00000002;
 
-    public final static int CLOSING = 0x00000003;
-    
-    public final static int CLOSED = 0x00000004;
+    public final static int POSTCLOSE = 0x00000003;
 
     /**
      * @param source

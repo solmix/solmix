@@ -83,7 +83,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if (sc != null) {
-            sc.setBean(this, DataSourceManager.class);
+            sc.setExtension(this, DataSourceManager.class);
         }
     }
 
@@ -92,7 +92,7 @@ public class DefaultDataSourceManager implements DataSourceManager
      */
     public synchronized PoolManagerFactory getPoolManagerFactory() {
         if (poolManagerFactory == null && sc != null) {
-            poolManagerFactory = sc.getBean(PoolManagerFactory.class);
+            poolManagerFactory = sc.getExtension(PoolManagerFactory.class);
         }
         return poolManagerFactory;
     }
@@ -106,7 +106,7 @@ public class DefaultDataSourceManager implements DataSourceManager
 
     public static void freeDataSource(DataSource ds) {
         SystemContext sc = SlxContext.getThreadSystemContext();
-        sc.getBean(DataSourceManager.class).free(ds);
+        sc.getExtension(DataSourceManager.class).free(ds);
 
     }
 
@@ -164,7 +164,7 @@ public class DefaultDataSourceManager implements DataSourceManager
     @Override
     public List<DataSource> getProviders() {
         if (sc != null) {
-            ConfiguredBeanProvider cbp = sc.getBean(ConfiguredBeanProvider.class);
+            ConfiguredBeanProvider cbp = sc.getExtension(ConfiguredBeanProvider.class);
             Collection<? extends DataSource> cc = cbp.getBeansOfType(DataSource.class);
             for (DataSource c : cc) {
                 if (!providers.contains(c))
@@ -196,7 +196,7 @@ public class DefaultDataSourceManager implements DataSourceManager
 
     public static DataSource getDataSource(String name, DSRequest request) throws SlxException {
         SystemContext sc = SlxContext.getThreadSystemContext();
-        return sc.getBean(DataSourceManager.class).get(name, request);
+        return sc.getExtension(DataSourceManager.class).get(name, request);
     }
 
     /**

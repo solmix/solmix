@@ -92,7 +92,7 @@ public class PoolableSQLConnectionFactory extends
     }
 
     protected DataTypeMap getConfig() {
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);

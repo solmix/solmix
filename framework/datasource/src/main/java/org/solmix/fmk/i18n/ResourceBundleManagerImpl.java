@@ -73,7 +73,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
     public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if (sc != null) {
-            sc.setBean(this, ResourceBundleManager.class);
+            sc.setExtension(this, ResourceBundleManager.class);
         }
     }
 
@@ -81,7 +81,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager
     {
         setSystemContext(sc);
         if (bundleContext == null && sc != null) {
-            BundleContext scBundleContext = sc.getBean(BundleContext.class);
+            BundleContext scBundleContext = sc.getExtension(BundleContext.class);
             this.bundleContext = scBundleContext;
         } else {
             this.bundleContext = bundleContext;

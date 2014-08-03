@@ -188,7 +188,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
         ExtensionInfo info =all.get(name);
         if (info != null) {
-            if (info.getLoadedObject() != null) {
+            if (info.getLoadedObject() == null) {
                 loadAndRegister(info);
             }
             return type.cast(info.getLoadedObject());

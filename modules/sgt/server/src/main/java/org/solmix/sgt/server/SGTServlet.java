@@ -128,7 +128,7 @@ public class SGTServlet extends HttpServlet
 
     private void preLoading() {
         try {
-            DataSourceManager dsm = SlxContext.getThreadSystemContext().getBean(DataSourceManager.class);
+            DataSourceManager dsm = SlxContext.getThreadSystemContext().getExtension(DataSourceManager.class);
             DataSource ds = dsm.get("init");
             dsm.free(ds);
         } catch (SlxException e) {

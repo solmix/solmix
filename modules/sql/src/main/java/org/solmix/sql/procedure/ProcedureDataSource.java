@@ -83,7 +83,7 @@ public final class ProcedureDataSource
         ConnectionManager connectionManager=null;
         try {
             final  SystemContext sc=SlxContext.getThreadSystemContext();
-            ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
             ConfigureUnit cu = null;
             boolean printSQL = false;
             try {
@@ -94,7 +94,7 @@ public final class ProcedureDataSource
             }
             if (printSQL)
                 log.info(explictSQL);
-            connectionManager= sc.getBean(ConnectionManager.class);
+            connectionManager= sc.getExtension(ConnectionManager.class);
             conn = connectionManager.getConnection(getDbName(data));
             CallableStatement pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);

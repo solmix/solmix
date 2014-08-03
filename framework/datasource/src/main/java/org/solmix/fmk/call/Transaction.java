@@ -19,7 +19,7 @@ public class Transaction
     public Transaction(DSCall dsc, final SystemContext sc)
     {
         if (dsc == null) {
-            DSCallManagerFactory factory = sc.getBean(DSCallManagerFactory.class);
+            DSCallManagerFactory factory = sc.getExtension(DSCallManagerFactory.class);
             if (factory != null) {
                 try {
                     DSCallManager manager = factory.createSimpleDSCallManager();

@@ -62,7 +62,7 @@ public class EntityManagerFactoryProviderTest
 
     @Test
     public void nativeUsedEM() {
-        EntityManagerFactoryProvider provider = sc.getBean(EntityManagerFactoryProvider.class);
+        EntityManagerFactoryProvider provider = sc.getExtension(EntityManagerFactoryProvider.class);
         EntityManagerFactory emf= provider.createEntityManagerFactory("h2");
         EntityManager em= emf.createEntityManager();
         EntityTransaction tx= em.getTransaction();
@@ -86,7 +86,7 @@ public class EntityManagerFactoryProviderTest
     }
     @Test
     public void nativeUsedEM2() {
-        EntityManagerFactoryProvider provider = sc.getBean(EntityManagerFactoryProvider.class);
+        EntityManagerFactoryProvider provider = sc.getExtension(EntityManagerFactoryProvider.class);
         EntityManagerFactory emf= provider.createEntityManagerFactory("h2");
         EntityManager em= emf.createEntityManager();
         Assert.assertNotNull(em);

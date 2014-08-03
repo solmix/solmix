@@ -132,7 +132,7 @@ public class SolmixEventHandler extends AbstractReflectorAtmosphereHandler imple
                 event = new DelegateClientEvent(data);
                 event.setBroadcasterID(r.getBroadcaster().getID());
                 SystemContext sc = SlxContext.getThreadSystemContext();
-                EventManager em = sc.getBean(EventManager.class);
+                EventManager em = sc.getExtension(EventManager.class);
                 em.postEvent(event);
             }
         } catch (SlxException e) {

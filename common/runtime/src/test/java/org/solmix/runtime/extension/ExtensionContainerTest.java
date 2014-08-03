@@ -46,9 +46,9 @@ public class ExtensionContainerTest extends Assert
     public void testGetBean() {
         ContainerFactory container=  ContainerFactory.newInstance(ContainerFactoryImpl.class.getName());
          Container c=  container.createContainer();
-         ConfiguredBeanProvider provider=  c.getBean(ConfiguredBeanProvider.class);
+         ConfiguredBeanProvider provider=  c.getExtension(ConfiguredBeanProvider.class);
          DateTimeService pdm= provider.getBeanOfType(DateTimeService.class.getName(), DateTimeService.class);
-         DateTimeService  tm=c.getBean(DateTimeService.class);
+         DateTimeService  tm=c.getExtension(DateTimeService.class);
          assertSame("他们两个是同一个",pdm, tm);
          Collection<? extends TimeService>  cl=provider.getBeansOfType(TimeService.class);
          assertEquals("总共找到了两个服务", 2,cl.size());
@@ -58,8 +58,8 @@ public class ExtensionContainerTest extends Assert
          List<String> tnames=provider.getBeanNamesOfType(TimeService.class);
          assertEquals("应该找到TimeService的连个实现类", 2,tnames.size());
          Assert.assertNotNull(tm);
-         Assert.assertNotNull(c.getBean(TimeService.class));
-         AdapterManager adm= c.getBean(AdapterManager.class);
+         Assert.assertNotNull(c.getExtension(TimeService.class));
+         AdapterManager adm= c.getExtension(AdapterManager.class);
          Assert.assertNotNull(adm);
         tm.getCurrentTime();
     }
@@ -78,8 +78,8 @@ public class ExtensionContainerTest extends Assert
     public void testClassExtension() {
         ExtensionContainer context=new ExtensionContainer();
         String solmix="Solmix Container";
-        context.setBean(solmix, String.class);
-        assertSame(solmix, context.getBean(String.class));
+        context.setExtension(solmix, String.class);
+        assertSame(solmix, context.getExtension(String.class));
         context.close(true);
     }
     @Test

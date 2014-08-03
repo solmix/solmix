@@ -59,7 +59,7 @@ public class ApplicationManagerImpl implements ApplicationManager
     private void setApplicationManager(final SystemContext sc) {
        this.sc=sc;
        if(sc!=null){
-           sc.setBean(this, ApplicationManager.class);
+           sc.setExtension(this, ApplicationManager.class);
        }
         
     }
@@ -91,14 +91,14 @@ public class ApplicationManagerImpl implements ApplicationManager
     }
     protected ApplicationSecurity findApplicationSecurity(){
         if(sc!=null){
-           return sc.getBean(ApplicationSecurity.class);
+           return sc.getExtension(ApplicationSecurity.class);
         }
         return null;
     }
 
     protected DataTypeMap getConfig() {
         DataTypeMap appConfig;
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(SERVICE_PID);

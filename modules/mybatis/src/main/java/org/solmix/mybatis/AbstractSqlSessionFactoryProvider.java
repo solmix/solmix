@@ -75,14 +75,14 @@ public abstract class AbstractSqlSessionFactoryProvider implements SqlSessionFac
     public void setSystemContext(final SystemContext systemcontext) {
         this.sc = systemcontext;
         if (sc != null) {
-            sc.setBean(this, SqlSessionFactoryProvider.class);
+            sc.setExtension(this, SqlSessionFactoryProvider.class);
         }
 
     }
 
 
     protected DataTypeMap getConfig() throws SlxException {
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(MybatisDataSource.SERVICE_PID);
@@ -119,7 +119,7 @@ public abstract class AbstractSqlSessionFactoryProvider implements SqlSessionFac
     }
     
     public String getDatabaseType(String dbName){
-        ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
+        ConfigureUnitManager cum = sc.getExtension(ConfigureUnitManager.class);
         ConfigureUnit cu = null;
         try {
             cu = cum.getConfigureUnit(SQLDataSource.SERVICE_PID);
@@ -231,7 +231,7 @@ public abstract class AbstractSqlSessionFactoryProvider implements SqlSessionFac
    
 
     protected ConnectionManager getConnectionManager(SystemContext sc) {
-        return sc.getBean(ConnectionManager.class);
+        return sc.getExtension(ConnectionManager.class);
 
     }
 

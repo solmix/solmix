@@ -133,7 +133,7 @@ public class DataSourceProvider
             _dsType = EserverType.BASIC;
         }
 
-        List<DataSource> dsList = sc.getBean(DataSourceManager.class).getProviders();
+        List<DataSource> dsList = sc.getExtension(DataSourceManager.class).getProviders();
         for (DataSource provider : dsList) {
             if (provider.getServerType().equals(_dsType.value())) {
                 _datasource = provider.instance(data);

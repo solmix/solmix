@@ -78,7 +78,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
     {
         super(EXT_FILE, ObjectType.SLX_FILE,ObjectFormat.XML);
         if (sc != null) {
-            ConfigureUnitManager cm = sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnitManager cm = sc.getExtension(ConfigureUnitManager.class);
             try {
                 DataTypeMap config = cm.getConfigureUnit(DSRepositoryManagerImpl.PID).getProperties();
                 location = config.getString("repo.ext.location");

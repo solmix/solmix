@@ -43,7 +43,7 @@ public class WebSystemContextFactory extends SpringContainerFactory
     @Override
     public SystemContext createContext() {
         final SystemContext sc=super.createContext();
-        sc.setBean(servletContext, ServletContext.class);
+        sc.setExtension(servletContext, ServletContext.class);
         return sc;
     }
 }

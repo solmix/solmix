@@ -79,13 +79,13 @@ public class PoolManagerFactoryImpl implements PoolManagerFactory
     public void setSystemContext(final SystemContext sc) {
         this.sc = sc;
         if(sc!=null){
-            sc.setBean(this, PoolManagerFactory.class);
+            sc.setExtension(this, PoolManagerFactory.class);
            
         }
     } 
     private synchronized DataTypeMap  getConfig(){
         if(configProperties==null&&sc!=null){
-            ConfigureUnitManager cum= sc.getBean(ConfigureUnitManager.class);
+            ConfigureUnitManager cum= sc.getExtension(ConfigureUnitManager.class);
             ConfigureUnit cu=null;
             try {
                 cu = cum.getConfigureUnit(SERVICE_PID);

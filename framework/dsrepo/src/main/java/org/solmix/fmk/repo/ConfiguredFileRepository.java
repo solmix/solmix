@@ -61,7 +61,7 @@ public class ConfiguredFileRepository extends AbstractDSRepository
         String path = new StringBuilder().append(DEFAULT_DS_FILES).append(ds).append(".xml").toString();
         Object _return = loadFrom(Thread.currentThread().getContextClassLoader(),path);
         if(_return==null){
-            _return=loadFrom(sc.getBean(ClassLoader.class),path);
+            _return=loadFrom(sc.getExtension(ClassLoader.class),path);
         }
        
         return _return;

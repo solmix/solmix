@@ -57,9 +57,9 @@ public class BlueprintSystemContext extends ContainerAdaptor
                                                            this.getClass().getClassLoader());
                 }
             });
-        super.setBean(bundleClassLoader, ClassLoader.class);
-        super.setBean(bundleContext, BundleContext.class);
-        super.setBean(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
+        super.setExtension(bundleClassLoader, ClassLoader.class);
+        super.setExtension(bundleContext, BundleContext.class);
+        super.setExtension(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
         Dictionary<String, Object > properties= new Hashtable<String,Object>();
         properties.put(CONTAINER_PROPERTY_NAME, getId());
         bundleContext.registerService(Container.class, this, properties);
@@ -70,8 +70,8 @@ public class BlueprintSystemContext extends ContainerAdaptor
      */
     public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
         this.blueprintContainer = blueprintContainer;
-        setBean(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
-        setBean(new BlueprintBeanProvider(getBean(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
+        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
+        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
             ConfiguredBeanProvider.class);
         
     }

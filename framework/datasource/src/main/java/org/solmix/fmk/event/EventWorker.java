@@ -53,7 +53,7 @@ public class EventWorker
 
     public EventManager getEventManager() {
         if (sc != null) {
-            EventManager em = sc.getBean(EventManager.class);
+            EventManager em = sc.getExtension(EventManager.class);
             if (em != null)
                 return em;
         }
@@ -64,9 +64,9 @@ public class EventWorker
     public final IEvent createTimeMonitorEvent(long time, String msg) {
         MonitorEventFactory factory;
         boolean destory = false;
-        if (sc != null && sc.getBean(BundleContext.class) != null) {
+        if (sc != null && sc.getExtension(BundleContext.class) != null) {
             destory = true;
-            factory = MonitorEventFactory.getInstance(sc.getBean(BundleContext.class));
+            factory = MonitorEventFactory.getInstance(sc.getExtension(BundleContext.class));
         } else {
             factory = MonitorEventFactory.getDefault();
         }

@@ -249,7 +249,7 @@ public class AdapterManagerImpl implements AdapterManager, ContainerExtension
     @Override
     public void setContainer(Container container) {
         this.container=container;
-        container.setBean(this,AdapterManager.class);
+        container.setExtension(this,AdapterManager.class);
     }
 
    protected Container getContainer(){

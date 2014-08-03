@@ -76,7 +76,7 @@ public abstract class DsOp<D> implements Op<D, SlxException>
 
     protected DataSourceManager getDataSourceManager() {
         SystemContext sc = SlxContext.getThreadSystemContext();
-        return sc.getBean(DataSourceManager.class);
+        return sc.getExtension(DataSourceManager.class);
     }
 
     public abstract D exe(DSRequest request) throws SlxException;

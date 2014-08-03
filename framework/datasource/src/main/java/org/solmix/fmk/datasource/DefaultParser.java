@@ -147,7 +147,7 @@ public class DefaultParser implements ParserHandler
     @Override
     public Object parser(String repoName, String dsName, String suffix, DSRequest request) throws SlxException {
 
-        DSRepositoryManager manager = sc.getBean(org.solmix.api.repo.DSRepositoryManager.class);
+        DSRepositoryManager manager = sc.getExtension(org.solmix.api.repo.DSRepositoryManager.class);
         DSRepository[] repos = null;
         if (repoName != null) {
             repos = new DSRepository[1];

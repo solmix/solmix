@@ -116,7 +116,7 @@ public class SpringContainerFactory extends ContainerFactory
      */
     private Container completeCreating(ConfigurableApplicationContext spring) {
         Container system=(Container)spring.getBean(Container.DEFAULT_CONTAINER_ID);
-        system.setBean(spring, ApplicationContext.class);
+        system.setExtension(spring, ApplicationContext.class);
         possiblySetDefaultContainer(system);
         initializeContainer(system);
         if (system instanceof SpringContainer && defaultContextNotExists()) {

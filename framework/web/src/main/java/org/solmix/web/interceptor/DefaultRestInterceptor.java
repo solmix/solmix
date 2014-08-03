@@ -107,7 +107,7 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
                     if (operations != null) {
                         boolean freeOnExecute = operations.size() <= 1;
                         for (Roperation operation : operations) {
-                            DSRequest dsr = SlxContext.getThreadSystemContext().getBean(
+                            DSRequest dsr = SlxContext.getThreadSystemContext().getExtension(
                                 DataSourceManager.class).createDSRequest(
                                 operation, SlxContext.getWebContext());
                             dsr.getContext().setIsClientRequest(true);

@@ -42,7 +42,7 @@ public class ConnectionManagetTest extends SolmixTestCase
     @Test
     public void testConnectionPool() {
         SystemContext sc=  SlxContext.getSystemContext();
-        ConnectionManager cm= sc.getBean(ConnectionManager.class);
+        ConnectionManager cm= sc.getExtension(ConnectionManager.class);
         try {
             String dbName=this.getClass().getSimpleName();
             Connection conn= cm.getConnection(dbName);

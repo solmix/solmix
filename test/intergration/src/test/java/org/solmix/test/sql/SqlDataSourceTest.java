@@ -44,7 +44,7 @@ public class SqlDataSourceTest extends SolmixTestCase
     @Test
     public void getSqlDataSource() {
         SystemContext sc=SlxContext.getSystemContext();
-        DataSourceManager dsm= sc.getBean(DataSourceManager.class);
+        DataSourceManager dsm= sc.getExtension(DataSourceManager.class);
        List<DataSource> dss=dsm.getProviders();
        for(DataSource ds:dss){
            if(ds.getServerType().equals("sql")){
@@ -58,12 +58,12 @@ public class SqlDataSourceTest extends SolmixTestCase
     @Test
     public void assertConnectionManagerIsSame(){
         SystemContext sc=SlxContext.getSystemContext();
-        DataSourceManager dsm= sc.getBean(DataSourceManager.class);
+        DataSourceManager dsm= sc.getExtension(DataSourceManager.class);
        List<DataSource> dss=dsm.getProviders();
        for(DataSource ds:dss){
            if(ds.getServerType().equals("sql")){
               SQLDataSource sds = (SQLDataSource)ds;
-              ConnectionManager original= sc.getBean(ConnectionManager.class);
+              ConnectionManager original= sc.getExtension(ConnectionManager.class);
               Assert.assertSame(sds.getConnectionManager(), original);
            }
        }

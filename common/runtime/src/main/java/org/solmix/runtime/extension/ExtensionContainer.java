@@ -94,13 +94,13 @@ public class ExtensionContainer implements Container
         Map<String, Object> properties, ClassLoader extensionClassLoader)
     {
         if (beans == null) {
-            extensions = new ConcurrentHashMap(16, 0.75f, 4);
+            extensions = new ConcurrentHashMap<Class<?>, Object>(16, 0.75f, 4);
         } else {
-            extensions = new ConcurrentHashMap(beans);
+            extensions = new ConcurrentHashMap<Class<?>, Object>(beans);
         }
         missingBeans = new CopyOnWriteArraySet<Class<?>>();
 
-        status = ContainerStatus.CREATING;
+        setStatus( ContainerStatus.CREATING);
         ContainerFactory.possiblySetDefaultContainer(this);
         if (null == properties) {
             properties = new HashMap<String, Object>();
@@ -115,20 +115,21 @@ public class ExtensionContainer implements Container
         rm.addResourceResolver(defaultContainer);
         rm.addResourceResolver(new ObjectTypeResolver(this));
         rm.addResourceResolver(new ResourceResolver() {
-            
+
             @Override
             public <T> T resolve(String resourceName, Class<T> resourceType) {
-                if(extensionManager!=null){
-                    T t=extensionManager.getExtension(resourceName, resourceType);
-                    if(t==null){
-                        t=getBean(resourceType);
+                if (extensionManager != null) {
+                    T t = extensionManager.getExtension(resourceName,
+                        resourceType);
+                    if (t == null) {
+                        t = getExtension(resourceType);
                     }
                     return t;
                 }
-                   
+
                 return null;
             }
-            
+
             @Override
             public InputStream getAsStream(String name) {
                 return null;
@@ -163,10 +164,10 @@ public class ExtensionContainer implements Container
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.Container#getBean(java.lang.Class)
+     * @see org.solmix.runtime.Container#getExtension(java.lang.Class)
      */
     @Override
-    public <T> T getBean(Class<T> beanType) {
+    public <T> T getExtension(Class<T> beanType) {
         Object obj = extensions.get(beanType);
         if (obj == null) {
             if (missingBeans.contains(beanType)) {
@@ -202,7 +203,7 @@ public class ExtensionContainer implements Container
         ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
         if (provider == null) {
             provider=extensionManager;
-            this.setBean(provider, ConfiguredBeanProvider.class);
+            this.setExtension(provider, ConfiguredBeanProvider.class);
         }
         return provider;
     }
@@ -210,10 +211,10 @@ public class ExtensionContainer implements Container
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.Container#setBean(java.lang.Object, java.lang.Class)
+     * @see org.solmix.runtime.Container#setExtension(java.lang.Object, java.lang.Class)
      */
     @Override
-    public <T> void setBean(T bean, Class<T> beanType) {
+    public <T> void setExtension(T bean, Class<T> beanType) {
         extensions.put(beanType, bean);
         missingBeans.remove(beanType);
     }
@@ -221,10 +222,10 @@ public class ExtensionContainer implements Container
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.Container#hasBeanByName(java.lang.String)
+     * @see org.solmix.runtime.Container#hasExtensionByName(java.lang.String)
      */
     @Override
-    public boolean hasBeanByName(String name) {
+    public boolean hasExtensionByName(String name) {
         for (Class<?> c : extensions.keySet()) {
             if (name.equals(c.getName())) {
                 return true;
@@ -258,7 +259,7 @@ public class ExtensionContainer implements Container
     @Override
     public void open() {
         synchronized (this) {
-            status = ContainerStatus.CREATED;
+            setStatus(ContainerStatus.CREATED);
             while (status == ContainerStatus.CREATED) {
                 try {
                     wait();
@@ -274,20 +275,10 @@ public class ExtensionContainer implements Container
 
     public void initialize() {
         setStatus(ContainerStatus.INITIALIZING);
-        //XXX
-       /* Collection<? extends ContainerCreationListener> ls = getExtension(ConfiguredBeanProvider.class)
-            .getBeansOfType(ContainerCreationListener.class);
-        for (ContainerCreationListener l : ls) {
-            l.busCreated(this);
-        }*/
-        
         doInitializeInternal();
-        
-       /* BusLifeCycleManager lifeCycleManager = this.getExtension(BusLifeCycleManager.class);
-        if (null != lifeCycleManager) {
-            lifeCycleManager.initComplete();
-        } */   
         setStatus(ContainerStatus.CREATED);
+        if(log.isDebugEnabled())
+            log.debug("Container Created success for ID:"+getId());
     }
    
     /**
@@ -304,6 +295,24 @@ public class ExtensionContainer implements Container
      */
     public void setStatus(ContainerStatus status) {
         this.status = status;
+        int type=ContainerEvent.CREATED;
+        switch (status) {
+            case CLOSED:
+                type=ContainerEvent.POSTCLOSE;
+                break;
+            case CLOSING:
+                type=ContainerEvent.PRECLOSE;
+                break;
+            case CREATED:
+                type=ContainerEvent.CREATED;
+                break;
+            case CREATING:
+               return;
+            case INITIALIZING:
+               return;
+        }
+        ContainerEvent event=new ContainerEvent(type,this,this);
+        fireContainerEvent(event);
     }
 
     /**
@@ -348,19 +357,36 @@ public class ExtensionContainer implements Container
         synchronized (containerListeners) {
               containerListeners.remove(l);
         }
+        
+       
   }
+    private  boolean firstFireContainerListener=true;
+
     protected void fireContainerEvent(ContainerEvent event) {
         List<ContainerListener> toNotify = null;
+
         // Copy array
         synchronized (containerListeners) {
-              toNotify = new ArrayList<ContainerListener>(containerListeners);
+            if (firstFireContainerListener) {
+                firstFireContainerListener=false;
+                ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
+                if (provider == null) {
+                    provider = createBeanProvider();
+                }
+                if (provider != null) {
+                    Collection<? extends ContainerListener> listeners = provider.getBeansOfType(ContainerListener.class);
+                    if (listeners != null)
+                        containerListeners.addAll(listeners);
+                }
+            }
+            toNotify = new ArrayList<ContainerListener>(containerListeners);
         }
         // Notify all in toNotify
         for (Iterator<ContainerListener> i = toNotify.iterator(); i.hasNext();) {
-              ContainerListener l = i.next();
-              l.handleEvent(event);
+            ContainerListener l = i.next();
+            l.handleEvent(event);
         }
-  }
+    }
     /**
      * {@inheritDoc}
      * 
@@ -381,15 +407,15 @@ public class ExtensionContainer implements Container
             return ;
         }
         synchronized(this){
-            status=ContainerStatus.CLOSING;
+            setStatus(ContainerStatus.CLOSING);
         }
-        //XXX preClose()
         destroyBeans();
         synchronized(this){
-            status=ContainerStatus.CLOSED;
+            setStatus(ContainerStatus.CLOSED);
             notifyAll();
         }
-        //XXX postClose()
+        if(log.isDebugEnabled())
+            log.debug("Container Closed for ID:"+getId());
         if(ContainerFactory.getDefaultContainer(false)==this){
             ContainerFactory.setDefaultContainer(null);
         }

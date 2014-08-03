@@ -36,7 +36,7 @@ public class ManagerServiceTest extends Assert
     @Test
     public void getDsRepositoryManager(){
         final  SystemContext sc= SlxContext.getSystemContext();
-        DataSourceManager dsm=sc.getBean(DataSourceManager.class);
+        DataSourceManager dsm=sc.getExtension(DataSourceManager.class);
         Assert.assertNotNull(dsm);
         sc.close(true);
         
