@@ -47,7 +47,7 @@ public class ContainerAdaptor extends ExtensionContainer
     public ContainerAdaptor(Map<Class<?>, Object> beans, ClassLoader extensionClassLoader)
     {
         super(beans);
-        BeanConfigurer configurer = (BeanConfigurer) super.extensions.getObject(BeanConfigurer.class);
+        BeanConfigurer configurer = (BeanConfigurer) super.extensions.get(BeanConfigurer.class);
         if (null == configurer) {
             configurer = new BeanConfigurer() {
 
@@ -62,7 +62,7 @@ public class ContainerAdaptor extends ExtensionContainer
                 }
 
             };
-            super.extensions.putObject(BeanConfigurer.class, configurer);
+            super.extensions.put(BeanConfigurer.class, configurer);
         }
     }
 

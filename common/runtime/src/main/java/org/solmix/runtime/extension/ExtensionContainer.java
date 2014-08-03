@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.extension;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,17 +53,22 @@ import org.solmix.runtime.resource.SinglePropertyResolver;
 public class ExtensionContainer implements Container
 {
    private static final Logger log = LoggerFactory.getLogger(ExtensionContainer.class);
+  
    private final List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
-   public static enum ContainerStatus
+   
+ /**
+ * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
+ */
+    public static enum ContainerStatus
     {
         CREATING , INITIALIZING , CREATED , CLOSING , CLOSED;
 
     }
 
-    protected final ExtensionObjectCache extensions;
+    protected final Map<Class<?>, Object> extensions;
 
     protected final Set<Class<?>> missingBeans;
-    private final ExtensionManager extensionManager;
+    private final ExtensionManagerImpl extensionManager;
     protected String id;
 
     private ContainerStatus status;
@@ -88,9 +94,9 @@ public class ExtensionContainer implements Container
         Map<String, Object> properties, ClassLoader extensionClassLoader)
     {
         if (beans == null) {
-            extensions = new ExtensionObjectCache(16, 0.75f, 4);
+            extensions = new ConcurrentHashMap(16, 0.75f, 4);
         } else {
-            extensions = new ExtensionObjectCache(beans);
+            extensions = new ConcurrentHashMap(beans);
         }
         missingBeans = new CopyOnWriteArraySet<Class<?>>();
 
@@ -105,18 +111,43 @@ public class ExtensionContainer implements Container
         ResourceResolver propertiesResolver = new PropertiesResolver(properties);
         rm.addResourceResolver(propertiesResolver);
         
-        ResourceResolver busResolver = new SinglePropertyResolver(DEFAULT_CONTAINER_ID, this);
-        rm.addResourceResolver(busResolver);
+        ResourceResolver defaultContainer = new SinglePropertyResolver(DEFAULT_CONTAINER_ID, this);
+        rm.addResourceResolver(defaultContainer);
         rm.addResourceResolver(new ObjectTypeResolver(this));
-        
+        rm.addResourceResolver(new ResourceResolver() {
+            
+            @Override
+            public <T> T resolve(String resourceName, Class<T> resourceType) {
+                if(extensionManager!=null){
+                    T t=extensionManager.getExtension(resourceName, resourceType);
+                    if(t==null){
+                        t=getBean(resourceType);
+                    }
+                    return t;
+                }
+                   
+                return null;
+            }
+            
+            @Override
+            public InputStream getAsStream(String name) {
+                return null;
+            }
+        });
+        extensions.put(ResourceManager.class,rm);
         
         extensionManager= new ExtensionManagerImpl(new String[0],
             extensionClassLoader,
             extensions,
             rm, 
             this);
+        setStatus(ContainerStatus.INITIALIZING);
+        extensionManager.load(new String[]{ExtensionManager.EXTENSION_LOCATION});
+        extensionManager.activateAllByType(ResourceResolver.class);
+        extensions.put(ExtensionManager.class, extensionManager);
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -136,13 +167,13 @@ public class ExtensionContainer implements Container
      */
     @Override
     public <T> T getBean(Class<T> beanType) {
-        Object obj = extensions.getObject(beanType);
+        Object obj = extensions.get(beanType);
         if (obj == null) {
             if (missingBeans.contains(beanType)) {
                 // missing extensions,return null
                 return null;
             }
-            ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.getObject(ConfiguredBeanProvider.class);
+            ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
             if (provider == null) {
                 provider = createBeanProvider();
             }
@@ -150,10 +181,10 @@ public class ExtensionContainer implements Container
                 Collection<?> objs = provider.getBeansOfType(beanType);
                 if (objs != null) {
                     for (Object o : objs) {
-                        extensions.putObject(beanType, o);
+                        extensions.put(beanType, o);
                     }
                 }
-                obj = extensions.getObject(beanType);
+                obj = extensions.get(beanType);
             }
         }
         if (obj != null) {
@@ -168,36 +199,9 @@ public class ExtensionContainer implements Container
      * @return
      */
     protected synchronized ConfiguredBeanProvider createBeanProvider() {
-        ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.getObject(ConfiguredBeanProvider.class);
+        ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
         if (provider == null) {
-            provider = new ConfiguredBeanProvider() {
-
-                @Override
-                public List<String> getBeanNamesOfType(Class<?> type) {
-                    return null;
-                }
-
-                @Override
-                public <T> T getBeanOfType(String name, Class<T> type) {
-                    return null;
-                }
-
-                @Override
-                public <T> Collection<? extends T> getBeansOfType(Class<T> type) {
-                    return null;
-                }
-
-                @Override
-                public <T> boolean loadBeansOfType(Class<T> type, BeanLoaderListener<T> listener) {
-                    return false;
-                }
-
-                @Override
-                public boolean hasBeanOfName(String name) {
-                    return false;
-                }
-
-            };
+            provider=extensionManager;
             this.setBean(provider, ConfiguredBeanProvider.class);
         }
         return provider;
@@ -210,7 +214,7 @@ public class ExtensionContainer implements Container
      */
     @Override
     public <T> void setBean(T bean, Class<T> beanType) {
-        extensions.putObject(beanType, bean);
+        extensions.put(beanType, bean);
         missingBeans.remove(beanType);
     }
 
@@ -226,7 +230,7 @@ public class ExtensionContainer implements Container
                 return true;
             }
         }
-        ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.getObject(ConfiguredBeanProvider.class);
+        ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
         if (provider == null) {
             provider = createBeanProvider();
         }

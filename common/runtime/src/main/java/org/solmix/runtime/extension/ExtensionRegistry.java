@@ -18,11 +18,11 @@
  */
 package org.solmix.runtime.extension;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 /**
@@ -33,14 +33,13 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 public class ExtensionRegistry
 {
-    private static Set<ExtensionInfo> extensions   = new ConcurrentSkipListSet<ExtensionInfo>(new ExtensionComparator());
+    private static  ConcurrentMap<String, ExtensionInfo> extensions 
+    = new ConcurrentHashMap<String, ExtensionInfo>(16, 0.75f, 4);
    
-    public static Set<ExtensionInfo> getRegisteredExtensions() {
-        Set<ExtensionInfo> exts = new HashSet<ExtensionInfo>(extensions.size());
-        Iterator<ExtensionInfo> it= extensions.iterator();
-        while(it.hasNext()){
-            ExtensionInfo info= it.next();
-            exts.add(info.cloneNoObject());
+    public static Map<String,ExtensionInfo> getRegisteredExtensions() {
+        Map<String, ExtensionInfo> exts = new HashMap<String, ExtensionInfo>(extensions.size());
+        for (Map.Entry<String, ExtensionInfo> ext : extensions.entrySet()) {
+            exts.put(ext.getKey(), ext.getValue().cloneNoObject());
         }
         return exts;
     }
@@ -52,8 +51,7 @@ public class ExtensionRegistry
 
     public static void addExtensions(List<? extends ExtensionInfo> list) {
         for (ExtensionInfo e : list) {
-            if(!extensions.contains(e))
-                extensions.add(e);
+            extensions.putIfAbsent(e.getName(), e);
         }
     }
 

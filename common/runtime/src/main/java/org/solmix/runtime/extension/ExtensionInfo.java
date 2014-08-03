@@ -28,7 +28,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
-import org.solmix.runtime.Extension;
 
 /**
  * 
@@ -42,8 +41,6 @@ public class ExtensionInfo
     private static final Logger LOG = LoggerFactory.getLogger(ExtensionInfo.class);
 
     protected String className;
-
-    protected String extensionType;
 
     protected ClassLoader classloader;
 
@@ -101,7 +98,8 @@ public class ExtensionInfo
      * @return
      */
     public String getName() {
-        return interfaceName==null?className:interfaceName;
+       /* return StringUtils.isEmpty(interfaceName) ? className : interfaceName;*/
+        return className;
     }
 
     /**
@@ -120,15 +118,6 @@ public class ExtensionInfo
     }
 
     public void setClassname(String i) {
-        _setClassname(i);
-        try{
-        Class<?> clazz=getClassObject(classloader);
-        Extension e= clazz.getAnnotation(Extension.class);
-        if(e!=null)
-            extensionType= e.name();
-        }catch(Exception e){
-            //ignore exception.
-        }
         _setClassname(i);
     }
     private void _setClassname(String i){
@@ -162,20 +151,6 @@ public class ExtensionInfo
         args = a;
     }
 
-    /**
-     * @return the extensionType
-     */
-    public String getExtensionType() {
-        return extensionType;
-    }
-
-    /**
-     * @param extensionType the extensionType to set
-     */
-    public void setExtensionType(String extensionType) {
-        this.extensionType = extensionType;
-    }
-
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
@@ -185,10 +160,7 @@ public class ExtensionInfo
         buf.append(interfaceName);
         buf.append(", interface: ");
         buf.append(interfaceName);
-        if (extensionType != null) {
-            buf.append(", extensionType: ");
-            buf.append(extensionType);
-        }
+      
         buf.append(deferred ? "true" : "false");
         buf.append(", namespaces: (");
         int n = 0;
@@ -280,21 +252,21 @@ public class ExtensionInfo
                 return null;
             }
             try {
-                //if there is a Bus constructor, use it.
+                //if there is a container constructor, use it.
                 if (container != null && args == null) {
                     Constructor<?> con = cls.getConstructor(Container.class);
                     obj = con.newInstance(container);
                     return obj;
                 } else if (container != null && args != null) {
                     Constructor<?> con;
-                    boolean noBus = false;
+                    boolean noc = false;
                     try {
                         con = cls.getConstructor(Container.class, Object[].class);
                     } catch (Exception ex) {
                         con = cls.getConstructor(Object[].class);
-                        noBus = true;
+                        noc = true;
                     }
-                    if (noBus) {
+                    if (noc) {
                         obj = con.newInstance(args);
                     } else {
                         obj = con.newInstance(container, args);

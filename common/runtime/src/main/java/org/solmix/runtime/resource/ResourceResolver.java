@@ -29,7 +29,7 @@ import java.io.InputStream;
 
 public interface ResourceResolver
 {
-    <T> T resolve(String resourceName, Class<T> resourceType,String implementor);
+//    <T> T resolve(String resourceName, Class<T> resourceType,String implementor);
     <T> T resolve(String resourceName, Class<T> resourceType);
     InputStream getAsStream(String name);
 }

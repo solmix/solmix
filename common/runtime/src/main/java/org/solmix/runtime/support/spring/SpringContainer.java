@@ -19,6 +19,8 @@
 
 package org.solmix.runtime.support.spring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ResourceManager;
@@ -41,6 +43,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 public class SpringContainer extends ContainerAdaptor implements ApplicationContextAware
 {
 
+    private final static Logger LOG = LoggerFactory.getLogger(SpringContainer.class);
     private AbstractApplicationContext applicationContext;
 
     private boolean closeContext;
@@ -78,18 +81,22 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
         setBean(new SpringConfigurer(applicationContext), BeanConfigurer.class);
         //
         setBean(applicationContext, ApplicationContext.class);
+//        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
+        ResourceManager m = getBean(ResourceManager.class);
+        m.addResourceResolver(new SpringResourceResolver(applicationContext));
+        //at last add the spring bean provider.
         ConfiguredBeanProvider provider = getBean(ConfiguredBeanProvider.class);
         if (!(provider instanceof SpringBeanProvider)) {
             setBean(new SpringBeanProvider(applicationContext, this), ConfiguredBeanProvider.class);
         }
-//        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
-        ResourceManager m = getBean(ResourceManager.class);
-        m.addResourceResolver(new SpringResourceResolver(applicationContext));
-        
         if (getStatus() != ContainerStatus.CREATED) {
             initialize();
         }
     }
+
+    /**
+     * @param em
+     */
 
     /**
      * @param event

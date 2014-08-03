@@ -27,7 +27,9 @@ package org.solmix.runtime.extension;
 
 public interface ExtensionManager
 {
- void activateAll();
+    public static final String EXTENSION_LOCATION= "META-INF/solmix/extensions";
+    
+    void activateAll();
     
     <T> void activateAllByType(Class<T> type);
     

@@ -93,6 +93,15 @@ public class InternalExtensionParser
     }
 
     /**
+     * META-INF/solmix/extensions
+     * #comments
+     * class:interface:deferend:optional
+     * 
+     * Just like:
+     * class
+     * class:interface
+     * class::deferend:optional
+     * class:::optional
      * @param line
      * @return
      */
@@ -107,12 +116,18 @@ public class InternalExtensionParser
         if (ext.getClassname() == null) {
             return null;
         }
-        ext.setInterfaceName(inf);
-        if (parts.length >= 1) {
-            ext.setDeferred(Boolean.parseBoolean(parts[1]));
-        }
         if (parts.length >= 2) {
-            ext.setOptional(Boolean.parseBoolean(parts[2]));
+            String interfaceName = parts[1];
+            if (interfaceName != null && "".equals(interfaceName)) {
+                interfaceName = null;
+            }
+            ext.setInterfaceName(interfaceName);
+        }
+        if (parts.length >= 3) {
+            ext.setDeferred(Boolean.parseBoolean(parts[2]));
+        }
+        if (parts.length >= 4) {
+            ext.setOptional(Boolean.parseBoolean(parts[3]));
         }
         return  ext;
     }

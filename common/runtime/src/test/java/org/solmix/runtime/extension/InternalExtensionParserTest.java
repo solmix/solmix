@@ -19,6 +19,7 @@
 package org.solmix.runtime.extension;
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -44,9 +45,9 @@ public class InternalExtensionParserTest
       ExtensionInfo e1=extensions.get(0);
       Assert.assertTrue(e1.isDeferred());
       Assert.assertTrue(e1.isOptional());
-      Assert.assertNull(e1.getExtensionType());
       ExtensionInfo e2=extensions.get(1);
       Assert.assertEquals("java.util.LinkedList", e2.getClassname());
       Assert.assertEquals("java.util.List", e2.getInterfaceName());
+      Assert.assertTrue(LinkedList.class==e2.getClassObject(Thread.currentThread().getContextClassLoader()));
     }
 }

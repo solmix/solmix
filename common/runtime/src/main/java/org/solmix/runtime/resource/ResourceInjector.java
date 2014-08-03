@@ -326,6 +326,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor
             if (field.getType().isAssignableFrom(resource.getClass())) {
                 Reflection.setAccessible(field);
 //                field.set(ClassHelper.getRealObject(getTarget()), resource);
+                field.set(getTarget(), resource);
             }
         } catch (Exception e) { 
             e.printStackTrace();

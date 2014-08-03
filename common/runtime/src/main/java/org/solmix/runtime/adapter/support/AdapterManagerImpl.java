@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.runtime.Container;
-import org.solmix.runtime.PluginActivator;
+import org.solmix.runtime.ContainerExtension;
 import org.solmix.runtime.adapter.AdapterFactory;
 import org.solmix.runtime.adapter.AdapterManager;
 
@@ -43,14 +43,14 @@ import org.solmix.runtime.adapter.AdapterManager;
  * @version $Id$ 2014年4月24日
  */
 
-public class AdapterManagerImpl implements AdapterManager, PluginActivator
+public class AdapterManagerImpl implements AdapterManager, ContainerExtension
 {
 
     private Map<String, Map<String, AdapterFactory>> factoryCache;
 
     private Map<Class<?>, Class<?>[]> classSearchCache;
     final Map<String,List<AdapterFactory>> factories;
-    private Container systemContext;
+    private Container container;
     protected  final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
 
     public AdapterManagerImpl(){
@@ -244,15 +244,15 @@ public class AdapterManagerImpl implements AdapterManager, PluginActivator
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.PluginActivator#setContainer(org.solmix.runtime.Container)
+     * @see org.solmix.runtime.ContainerExtension#setContainer(org.solmix.runtime.Container)
      */
     @Override
-    public void setContainer(Container context) {
-        this.systemContext=context;
-       context.setBean(this,AdapterManager.class);
+    public void setContainer(Container container) {
+        this.container=container;
+        container.setBean(this,AdapterManager.class);
     }
 
    protected Container getContainer(){
-        return systemContext;
+        return container;
     }
 }

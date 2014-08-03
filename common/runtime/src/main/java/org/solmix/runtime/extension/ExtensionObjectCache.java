@@ -44,7 +44,7 @@ public class ExtensionObjectCache
     public ExtensionObjectCache(int initialCapacity, float loadFactor,
         int concurrencyLevel)
     {
-        cache = new ConcurrentHashMap<>(initialCapacity, loadFactor,
+        cache = new ConcurrentHashMap<Class<?>, Object>(initialCapacity, loadFactor,
             concurrencyLevel);
     }
     
@@ -53,7 +53,7 @@ public class ExtensionObjectCache
      */
     public ExtensionObjectCache(Map<Class<?>, Object> extensions)
     {
-        this.cache=extensions;
+        this.cache=new  ConcurrentHashMap<Class<?>, Object>(extensions);
     }
 
     public void putObject(Class<?> clazz,Object o){

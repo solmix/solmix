@@ -88,7 +88,7 @@ public class SpringContainerFactory extends ContainerFactory
      */
     public Container createContainer(String[] cfgFiles, boolean includeDefaults) {
         try {
-            final Resource r = ContainerApplicationContext.findResource(ContainerApplicationContext.DEFAULT_CFG_FILE);
+            final Resource r = ContainerApplicationContext.findResource(ContainerApplicationContext.DEFAULT_USER_CFG_FILE);
             boolean exists = true;
             if (r != null) {
                 exists = AccessController .doPrivileged(new PrivilegedAction<Boolean>() {

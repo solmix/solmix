@@ -18,11 +18,16 @@
  */
 package org.solmix.runtime.spring;
 
+
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.extension.ExtensionManager;
 import org.solmix.runtime.support.spring.SpringContainerFactory;
 
 
@@ -39,6 +44,11 @@ public class SpringContainerFactoryTest
     public void test() {
         SpringContainerFactory ssc=new SpringContainerFactory();
         Container sc=ssc.createContainer();
+        ConfiguredBeanProvider provider=  sc.getBean(ConfiguredBeanProvider.class);
+      List l=  provider.getBeanOfType("java.util.List", List.class);
+      Assert.assertNotNull(l);
+        ExtensionManager em=  sc.getBean(ExtensionManager.class);
+        Assert.assertNotNull(em);
         Assert.assertNotNull(sc);
         Assert.assertNotNull("adaptermanager must be not ull", sc.getBean(org.solmix.runtime.adapter.AdapterManager.class));
     }

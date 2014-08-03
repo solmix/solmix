@@ -106,16 +106,5 @@ public class SpringResourceResolver extends ResourceResolverAdaptor implements R
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;        
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.resource.ResourceResolver#resolve(java.lang.String, java.lang.Class, java.lang.String)
-     */
-    @Override
-    public <T> T resolve(String resourceName, Class<T> resourceType,
-        String implementor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

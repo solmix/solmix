@@ -63,7 +63,7 @@ public interface Container
      */
     String getId();
 
-
+    void setId(String containerID);
     /**
      * Open this Container for using.
      */
