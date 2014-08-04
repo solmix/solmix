@@ -87,7 +87,7 @@ public class MybatisDSCallTest extends SolmixTestCase
                  return res.getRawData();
              }
              
-         }.withValues(new Criteria("url", "/fetch/mybatis/mybatis/menu")).withCriteria(new Criteria("id", 100)));
+         }.withValues(new Criteria("url", "/fetch/mybatis/mybatis/menu")).withCriteria(new Criteria("id", 10000)));
      }
     @Test
     public void addRemove() throws Throwable{

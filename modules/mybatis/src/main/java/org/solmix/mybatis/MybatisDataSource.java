@@ -308,6 +308,11 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
     private String getMybatisStatement(DSRequest req) throws SlxException {
         ToperationBinding __bind = getContext().getOperationBinding(req);
         String mybatisStatement = null;
+        if(__bind==null){
+            throw new SlxException(Tmodule.MYBATIS, Texception.OBJECT_IS_NULL,
+                "Can't found OperationBind: [type="+req.getContext().getOperationType()
+                +",id="+req.getContext().getOperationId()+"] in datasource: ["+req.getDataSourceName()+"]");
+        }
         if (__bind != null && __bind.getQueryClauses() != null) {
             mybatisStatement = __bind.getQueryClauses().getCustomQL();
         }

@@ -180,20 +180,26 @@ public class DSCallImpl implements DSCall
         if (criterias == null && values == null)
             return;
         Map<String, Object> params = Velocity.getStandardContextMap(dsReq);
+        Map<String, Object> c = dsReq.getContext().getCriteria();
         for (TfieldNameValue criteria : criterias) {
             String fieldName = criteria.getFieldName();
             String value = criteria.getValue();
             if (fieldName != null && value != null) {
-                Object evaluation = Velocity.evaluate(value, params);
-                dsReq.getContext().addToCriteria(fieldName, evaluation);
+                if (c.get(fieldName) == null) {
+                    Object evaluation = Velocity.evaluate(value, params);
+                    dsReq.getContext().addToCriteria(fieldName, evaluation);
+                }
             }
         }
+        Map<String, Object> vs = dsReq.getContext().getValues();
         for (TfieldNameValue v : values) {
             String fieldName = v.getFieldName();
             String value = v.getValue();
             if (fieldName != null && value != null) {
-                Object evaluation = Velocity.evaluate(value, params);
-                dsReq.getContext().addToCriteria(fieldName, evaluation);
+                if (vs.get(fieldName) == null) {
+                    Object evaluation = Velocity.evaluate(value, params);
+                    dsReq.getContext().addToCriteria(fieldName, evaluation);
+                }
             }
         }
     }

@@ -107,6 +107,7 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
                     if (operations != null) {
                         boolean freeOnExecute = operations.size() <= 1;
                         for (Roperation operation : operations) {
+                            operation.setDataSource(operation.getDataSource().replace('$', '/'));
                             DSRequest dsr = SlxContext.getThreadSystemContext().getBean(
                                 DataSourceManager.class).createDSRequest(
                                 operation, SlxContext.getWebContext());
@@ -157,7 +158,7 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
             else
                 restContainer.put("responses", orderedResponseList);
             if (JSON.equalsIgnoreCase(dataFormat)) {
-                dsCall.getJSParser().toJSON(_out, restContainer);
+                dsCall.getJSParser().toJavaScript(_out, restContainer);
             } else if (XML.equalsIgnoreCase(dataFormat)) {
                 dsCall.getXMLParser().toXML(_out, restContainer);
             }

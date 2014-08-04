@@ -81,6 +81,7 @@ public final class ProcedureDataSource
         String explictSQL = Velocity.evaluateAsString(sql, context);
         //XXX
         ConnectionManager connectionManager=null;
+        CallableStatement pre=null;
         try {
             final  SystemContext sc=SlxContext.getThreadSystemContext();
             ConfigureUnitManager cum = sc.getBean(ConfigureUnitManager.class);
@@ -96,7 +97,7 @@ public final class ProcedureDataSource
                 log.info(explictSQL);
             connectionManager= sc.getBean(ConnectionManager.class);
             conn = connectionManager.getConnection(getDbName(data));
-            CallableStatement pre = conn.prepareCall(explictSQL);
+             pre = conn.prepareCall(explictSQL);
             List l = (List) raws.get(INPUT);
             int inputLength = l.size();
             for (int j = 1; j <= inputLength; j++) {
@@ -154,6 +155,10 @@ public final class ProcedureDataSource
         } catch (Exception e) {
             log.error("[PROCEDURE-EXCEPTION]" ,e);
         } finally {
+            if(pre!=null)
+                try {
+                    pre.close();
+                } catch (SQLException e) { }
             if (conn != null)
                 connectionManager.freeConnection(conn);
 

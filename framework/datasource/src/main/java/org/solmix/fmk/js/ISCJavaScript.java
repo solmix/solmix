@@ -76,6 +76,7 @@ public class ISCJavaScript
             return;
         TdataSource data = ds.getContext().getTdataSource();
         String superDsName = data.getInheritsFrom();
+        data.setID(data.getID().replace('/', '$'));
         try {
             _iscStartJS(out, dsType);
             jsParser.toJavaScript(out, ds.toClientValueMap());
@@ -135,7 +136,7 @@ public class ISCJavaScript
     }
 
     protected void _iscEndJS(Writer out) throws IOException {
-        out.write(")\r\n");
+        out.write(");\r\n");
     }
 
     private Map<String, ?> toMap(TdataSource tds) {

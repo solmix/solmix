@@ -88,7 +88,9 @@ public class LoadSchemaServlet extends HttpServlet
             String multipleIDs[] = ids.split(",");
             for (String id : multipleIDs) {
                 DataSource ds = null;
+                Writer out=null ;
                 try {
+                    id=id.replace('$', '/');
                     ds = dsmService.get(id);
                     if (ds == null)
                         throw new SlxException(Tmodule.SERVLET, Texception.DS_LOAD_NOT_LOADING, (new StringBuilder()).append(
@@ -97,16 +99,21 @@ public class LoadSchemaServlet extends HttpServlet
                     response.setContentType("text/javascript");
 //                    SlxContext.getWebContext().setNoCacheHeaders();
                     //TODO
-                    Writer writer = response.getWriter();
-                    ISCJavaScript.get().toDataSource(writer, ds, "AdvanceDataSource");
+                     out = new StringWriter();
+                    ISCJavaScript.get().toDataSource(out, ds, "AdvanceDataSource");
                     if(log.isTraceEnabled()){
-                        Writer out = new StringWriter();
-                        ISCJavaScript.get().toDataSource(out, ds, "AdvanceDataSource");
                         log.trace(out.toString());
                     }
+                    Writer writer = response.getWriter();
+                    writer.write(out.toString());
+                    writer.flush();
+                    
                 } finally {
+                    if(out!=null)
+                        out.close();
                     if (ds != null)
                         dsmService.free(ds);
+                  
                 }
             }
         } catch (Throwable e) {
