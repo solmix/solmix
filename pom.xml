@@ -80,7 +80,6 @@
 		<jansi.version>1.4</jansi.version>
 		<jline.version>2.5</jline.version>
 		<jsw.version>3.2.3</jsw.version>
-		<log4j.version>1.2.17</log4j.version>
 		<maven.version>3.0.3</maven.version>
 		<mina.version>2.0.3</mina.version>
 		<osgi.version>4.3.0</osgi.version>
@@ -127,6 +126,7 @@
 		<mockito-core.version>1.9.0</mockito-core.version>
 		<solmix.bundle.category>solmix</solmix.bundle.category>
 		<solmix.version>0.6.1-SNAPSHOT</solmix.version>
+		<logback.version>1.1.2</logback.version>
 	</properties>
 	<repositories>
 
@@ -411,11 +411,6 @@
 				<version>${asm.bundle.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.sonatype.jline</groupId>
 				<artifactId>jline</artifactId>
 				<version>${jline.version}</version>
@@ -471,16 +466,6 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>log4j-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.ops4j.pax.logging</groupId>
 				<artifactId>pax-logging-api</artifactId>
 				<version>${pax.logging.version}</version>
@@ -495,6 +480,16 @@
 						<artifactId>log4j</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+			<dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-core</artifactId>
+			    <version>${logback.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-classic</artifactId>
+			    <version>${logback.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ops4j.pax.url</groupId>

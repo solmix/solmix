@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,29 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.commons.log;
+package org.solmix.runtime.service.provider1;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
+import org.solmix.runtime.Extension;
+
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-5-27
+ * @version $Id$  2014年8月6日
  */
-
-public class MdcTest
+@Extension(name="provider1")
+public interface IProvider1
 {
-   
-public static final Logger log = LoggerFactory.getLogger(MdcTest.class);    
-@Test   
-public void test(){
-//        org.slf4j.MDC.put("requestContext", "AAAA");
-        log.info("----------");
-        
-        MDC.remove("requestContext");
-    }
+    String sayHello();
 
 }

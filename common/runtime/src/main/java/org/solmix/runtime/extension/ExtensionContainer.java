@@ -441,7 +441,7 @@ public class ExtensionContainer implements Container
             throw new IllegalArgumentException("Extension Type:["
                 + type.getName() + "] is not a interface!");
         }
-        if (type.isAnnotationPresent(Extension.class)) {
+        if (!type.isAnnotationPresent(Extension.class)) {
             throw new IllegalArgumentException("Extension Type:["
                 + type.getName() + "] ,without @"
                 + Extension.class.getSimpleName() + " Annotation!");
