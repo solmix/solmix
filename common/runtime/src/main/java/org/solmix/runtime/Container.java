@@ -37,17 +37,26 @@ public interface Container
     
     /**
      * Get the extension instance of <code>class</code> manager by this system
-     * Container
+     * Container<p>
+     * <li>The type can be a class or interface
      * 
-     * @param beanType
-     * @return the bean instance
+     * @param type
+     * @return the extension instance
      */
-    <T> T getExtension(Class<T> extensionType);
+    <T> T getExtension(Class<T> type);
     
 
-    <T> void setExtension(T extension, Class<T> extensionType);
+    <T> void setExtension(T instance, Class<T> type);
     
-    <T> ExtensionLoader<T> getExtensionLoader(Class<T> extensionType);
+    /**
+     * The inteface <code>type</code> have more than one extension,used this method
+     * <p>
+     * <li>type must be a interface
+     * <li>type must be annotated by {@link Extension}
+     * @param type
+     * @return
+     */
+    <T> ExtensionLoader<T> getExtensionLoader(Class<T> type);
     /**
      * Indicate this system Container have the bean name.
      * 
@@ -63,6 +72,11 @@ public interface Container
      */
     String getId();
 
+    /**
+     * Setting ID for this container.
+     * 
+     * @param containerID
+     */
     void setId(String containerID);
     /**
      * Open this Container for using.

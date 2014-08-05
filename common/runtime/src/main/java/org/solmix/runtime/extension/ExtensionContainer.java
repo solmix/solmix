@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.ContainerListener;
+import org.solmix.runtime.Extension;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ObjectTypeResolver;
 import org.solmix.runtime.resource.PropertiesResolver;
@@ -56,6 +58,8 @@ public class ExtensionContainer implements Container
   
    private final List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
    
+   private  final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
+
  /**
  * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
  */
@@ -428,10 +432,26 @@ public class ExtensionContainer implements Container
      * 
      * @see org.solmix.runtime.Container#getExtensionLoader(java.lang.Class)
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T> ExtensionLoader<T> getExtensionLoader(Class<T> beanType) {
-        // TODO Auto-generated method stub
-        return null;
+    public <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
+        if (type == null)
+            throw new IllegalArgumentException("Extension Type is null!");
+        if (!type.isInterface()) {
+            throw new IllegalArgumentException("Extension Type:["
+                + type.getName() + "] is not a interface!");
+        }
+        if (type.isAnnotationPresent(Extension.class)) {
+            throw new IllegalArgumentException("Extension Type:["
+                + type.getName() + "] ,without @"
+                + Extension.class.getSimpleName() + " Annotation!");
+        }
+        ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
+        if (loader == null) {
+            EXTENSION_LOADERS.putIfAbsent(type, new DefaultExtensionLoader<T>(type,extensionManager));
+            loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
+        }
+        return loader;
     }
-    
+
 }

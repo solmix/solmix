@@ -27,9 +27,11 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -385,6 +387,15 @@ public class ExtensionManagerImpl implements ExtensionManager,
            }
        }
     }
+   Set<ExtensionInfo> getExtensionInfos(Class<?> type){
+       Set<ExtensionInfo> set= new HashSet<ExtensionInfo>();
+       for(ExtensionInfo info:all.values()){
+           if(type.isAssignableFrom(info.getClassObject(loader))){
+               set.add(info);
+           }
+       }
+       return set;
+   }
     public void removeBeansOfNames(List<String> names) {
         for (String s : names) {
             for(ExtensionInfo info:all.values()){
@@ -393,5 +404,15 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 }
             }
         }
+    }
+
+    /**
+     * @param info
+     */
+     void createExtension(ExtensionInfo info) {
+       if(info.getLoadedObject()==null){
+           loadAndRegister(info);
+       }
+        
     }
 }

@@ -18,6 +18,8 @@
  */
 package org.solmix.runtime.extension;
 
+import java.util.Set;
+
 
 /**
  * 
@@ -28,4 +30,18 @@ package org.solmix.runtime.extension;
 public interface ExtensionLoader<T>
 {
     T getDefault();
+    
+    String getDefaultName();
+    
+    T getExtension(String name);
+    
+    String getExtensionName(Class<?> clazz);
+    
+    String getExtensionName(T t);
+    
+    boolean hasExtension(String name);
+    
+    Set<String> getLoadedExtensions();
+    
+    void addExtension(String name,Class<T> clazz);
 }
