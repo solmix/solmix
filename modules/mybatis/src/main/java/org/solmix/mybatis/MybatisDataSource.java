@@ -190,8 +190,9 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         // initial mybatis sqlsession.
         boolean __userTransaction = false;
         if (req.getDSCall() != null && this.shouldAutoJoinTransaction(req)) {
+            __userTransaction = true;
             Object obj = this.getTransactionObject(req);
-            if (!(obj instanceof SqlSession)) {
+            if (obj!=null&&!(obj instanceof SqlSession)) {
                 if (log.isWarnEnabled())
                     log.warn("Mybatis DataSource transaction  should be a org.apache.ibatis.session.SqlSession instance,but is"
                         + obj.getClass().getName()
@@ -202,7 +203,6 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
             }
             if (session == null) {
                 if (shouldAutoStartTransaction(req, false)) {
-                    __userTransaction = true;
                     MybatisTransaction.startTransaction(req.getDSCall(),
                         environment, getSqlSessionFactory());
                     session = (SqlSession) getTransactionObject(req);
@@ -280,7 +280,7 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         DSResponse __return = new DSResponseImpl(req.getDataSource(),
             Status.STATUS_SUCCESS);
         String statement = getMybatisStatement(req);
-        int result = session.delete(statement, req.getContext().getCriteria());
+        int result = session.delete(statement, req.getContext().getRawCriteria());
         __return.setAffectedRows(new Long(result));
         __return.setRawData(result);
         return __return;
@@ -299,7 +299,8 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         DSResponse __return = new DSResponseImpl(req.getDataSource(),
             Status.STATUS_SUCCESS);
         String statement = getMybatisStatement(req);
-        int result = session.update(statement, req.getContext().getCriteria());
+        Object value=req.getContext().getRawValues();
+        int result = session.update(statement, value==null?req.getContext().getRawCriteria():value);
         __return.setAffectedRows(new Long(result));
         __return.setRawData(result);
         return __return;

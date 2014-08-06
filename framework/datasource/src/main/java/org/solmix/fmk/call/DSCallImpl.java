@@ -100,7 +100,7 @@ public class DSCallImpl implements DSCall
         INIT , BEGIN , SUCCESS , FAILED , END;
     }
 
-    private STATUS status = STATUS.INIT;
+    private  STATUS status = STATUS.INIT;
 
     public DSCallImpl(DSCallInterceptor... callInterceptors)
     {
@@ -341,14 +341,14 @@ public class DSCallImpl implements DSCall
         DSResponse t = null;
         try {
             t = op.exe();
-        } catch (SlxException e) {
+        } catch (Exception e) {
             try {
                 transactionFailed(op.getRequest(), t);
             } catch (Exception e1) {
                 throw new SlxException(Tmodule.DSC, Texception.TRANSACTION_ROLLBACK_FAILTURE, "transaction rollback failure with rollback Exception:"
-                    + e1.getMessage() + " with Root Exception:" + e.getFullMessage());
+                    + e1.getMessage() + " with Root Exception:" + e.getMessage());
             }
-            throw e;
+            throw wrapperException(e);
         }
         boolean _transactionFailure = isXAFailure(op.getRequest(), t);
         if (_transactionFailure) {
@@ -356,6 +356,12 @@ public class DSCallImpl implements DSCall
             throw new SlxException(Tmodule.DSC, Texception.TRANSACTION_BREAKEN, "transaction breaken because of one request failure.");
         }
         return t;
+    }
+
+    private SlxException wrapperException(Exception e) {
+        if(e instanceof SlxException)
+            return (SlxException)e;
+        return new SlxException(Tmodule.DSC, Texception.TRANSACTION_EXCEPTION,e);
     }
 
     private boolean isXAFailure(DSRequest req, DSResponse res) throws SlxException {
@@ -462,14 +468,14 @@ public class DSCallImpl implements DSCall
         DSResponse res = null;
         try {
             res = request.execute();
-        } catch (SlxException e) {
+        } catch (Exception e) {
             try {
                 transactionFailed(request, res);
             } catch (Exception e1) {
                 throw new SlxException(Tmodule.DSC, Texception.TRANSACTION_ROLLBACK_FAILTURE, "transaction rollback failure with rollback Exception:"
-                    + e1.getMessage() + " with Root Exception:" + e.getFullMessage());
+                    + e1.getMessage() + " with Root Exception:" + e.getMessage());
             }
-            throw e;
+            throw wrapperException(e);
         }
         boolean _transactionFailure = isXAFailure(request, res);
         if (_transactionFailure) {

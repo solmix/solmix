@@ -183,7 +183,7 @@ public class BuiltInApplication implements Application
                     .toString());
             }
         } else {
-            if (log.isTraceEnabled()) {
+            if (log.isDebugEnabled()) {
                 MDC.put(
                     SlxLog.LOG_CONTEXT,
                     (new StringBuilder())
@@ -232,7 +232,7 @@ public class BuiltInApplication implements Application
             // if ( !result.getContext().statusIsError() )
             dsresponse = result;
         } finally {
-            if (log.isTraceEnabled()) {
+            if (log.isDebugEnabled()) {
                 MDC.remove(SlxLog.LOG_CONTEXT);
             }
             freeDataSources();
