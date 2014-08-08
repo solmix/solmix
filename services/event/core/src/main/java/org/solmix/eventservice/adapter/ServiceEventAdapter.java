@@ -39,7 +39,6 @@ public class ServiceEventAdapter implements ServiceListener, EventAdapter
      */
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -50,7 +49,6 @@ public class ServiceEventAdapter implements ServiceListener, EventAdapter
      */
     @Override
     public void serviceChanged(ServiceEvent event) {
-        // TODO Auto-generated method stub
 
     }
 

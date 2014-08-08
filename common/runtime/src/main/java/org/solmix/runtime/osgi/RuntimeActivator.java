@@ -50,9 +50,19 @@ public class RuntimeActivator implements BundleActivator
         bundleListener.registerExistingBundles(context);
         
         extensions = new ArrayList<ExtensionInfo>();
-        
+        extensions.add(createBunleListenerExtensionInfo(context));
         
         ExtensionRegistry.addExtensions(extensions);
+    }
+
+    /**
+     * @param context
+     * @return
+     */
+    private ExtensionInfo createBunleListenerExtensionInfo(BundleContext context) {
+        ExtensionInfo containerListener=new ExtensionInfo(BundleContainerListener.class);
+        containerListener.setArgs(new Object[]{context});
+        return containerListener;
     }
 
     /**
@@ -62,8 +72,9 @@ public class RuntimeActivator implements BundleActivator
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-        // TODO Auto-generated method stub
-
+        context.removeBundleListener(bundleListener);
+        bundleListener.close();
+        ExtensionRegistry.removeExtensions(extensions);
     }
 
 }

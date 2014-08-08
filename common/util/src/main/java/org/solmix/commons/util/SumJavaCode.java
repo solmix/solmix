@@ -31,7 +31,7 @@ public class SumJavaCode
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("/home/solmix/o/git/hola");
+        File f = new File("/home/solmix/o/git/solmix");
         // File f = new File("E:\\o\\e200pro\\src\\com\\ieslab");
         System.out.println(f.getName());
         sjc.treeFile(f);
@@ -56,9 +56,6 @@ public class SumJavaCode
         // int count = 0;
         // int sum = 0;
         for (File child : childs) {
-            if (child.getCanonicalPath().equals("M:\\workspace\\platform\\core\\trunk\\bundles")) {
-                continue;
-            }
             if (child.isDirectory()) {
                 treeFile(child);
                 if (child.listFiles().length > 0) {

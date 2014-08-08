@@ -1,0 +1,2 @@
+org.solmix.runtime.adapter.support.AdapterManagerImpl:org.solmix.runtime.adapter.AdapterManager
+org.solmix.runtime.support.ext.ContainerResourceManager:org.solmix.runtime.resource.ResourceManager:true

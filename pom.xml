@@ -30,10 +30,17 @@
 	</scm>
 	<url>https://github.com/solmix/solmix</url>
 	<description>solmix framework </description>
-	<!-- <distributionManagement> Site omitted - each project must provide their 
-		own <repository> <id>releases</id> <url>http://localhost/nexus/content/repositories/releases</url> 
-		</repository> <snapshotRepository> <id>snapshots</id> <url>http://localhost/nexus/content/repositories/snapshot</url> 
-		</snapshotRepository> </distributionManagement> -->
+	<!-- <distributionManagement> 
+	Site omitted - each project must provide their own 
+			<repository>
+				 <id>releases</id> 
+				 <url>http://localhost/nexus/content/repositories/releases</url> 
+			</repository> 
+			<snapshotRepository> 
+				<id>snapshots</id> 
+				<url>http://localhost/nexus/content/repositories/snapshot</url> 
+			</snapshotRepository> 
+		</distributionManagement> -->
 	<modules>
 		<module>common/util</module>
 		<module>common/runtime</module>
@@ -55,7 +62,7 @@
 		<junit.bundle.version>4.7_2</junit.bundle.version>
 		<jta.version>1.1.1</jta.version>
 		<geronimo.servlet.version>1.2</geronimo.servlet.version>
-		<depends-maven-plugin.version>1.0</depends-maven-plugin.version>
+		<depends.maven.plugin.version>1.2</depends.maven.plugin.version>
 		<easymock.version>3.1</easymock.version>
 		<equinox.version>3.8.0.v20120529-1548</equinox.version>
 		<mybatis.version>3.2.5</mybatis.version>
@@ -84,8 +91,7 @@
 		<mina.version>2.0.3</mina.version>
 		<osgi.version>4.3.0</osgi.version>
 		<osgi.core.version>4.3.0</osgi.core.version>
-		<pax.exam.version>3.0.3</pax.exam.version>
-		<pax.exam.version2>2.0.0-RC5</pax.exam.version2>
+		<pax.exam.version>4.1.0</pax.exam.version>
 		<pax.logging.version>1.7.0</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
 		<pax.url.version>1.3.6</pax.url.version>
@@ -100,7 +106,6 @@
 		<apache.shiro.version>1.2.3</apache.shiro.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
-		<karaf.debug.location>/home/solmix/t/karaf</karaf.debug.location>
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
@@ -539,9 +544,8 @@
 			<dependency>
 				<groupId>org.ops4j.pax.exam</groupId>
 				<artifactId>pax-exam-junit4</artifactId>
-				<version>${pax.exam.version2}</version>
-			</dependency><!-- <dependency> <groupId>org.ops4j.pax.exam</groupId> <artifactId>pax-exam</artifactId> 
-				<version>${pax.exam.version}</version> </dependency> -->
+				<version>${pax.exam.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.ops4j.pax.exam</groupId>
 				<artifactId>pax-exam-junit</artifactId>
@@ -1086,8 +1090,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
+						<source>1.6</source>
+						<target>1.6</target>
 						<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
 				</plugin>
@@ -1227,7 +1231,7 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
@@ -1263,7 +1267,7 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<executions>

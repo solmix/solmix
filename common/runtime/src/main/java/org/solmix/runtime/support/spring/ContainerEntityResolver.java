@@ -70,7 +70,7 @@ public class ContainerEntityResolver extends DelegatingEntityResolver
         InputSource source = super.resolveEntity(publicId, systemId);
         if (null == source && null != systemId) {
             // try the schema and dtd resolver in turn, ignoring the suffix in publicId
-            LOG.info( "Attempting to resolve systemId {0}", systemId);
+            LOG.info( "Attempting to resolve systemId {}", systemId);
             source = schemaResolver.resolveEntity(publicId, systemId);                
             if (null == source) {
                 source = dtdResolver.resolveEntity(publicId, systemId); 

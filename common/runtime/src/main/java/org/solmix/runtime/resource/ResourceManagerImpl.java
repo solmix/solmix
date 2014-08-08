@@ -41,7 +41,7 @@ public class ResourceManagerImpl implements ResourceManager
 
     protected final List<ResourceResolver> registeredResolvers    = new CopyOnWriteArrayList<ResourceResolver>();
 
-    private boolean firstCalled;
+    protected boolean firstCalled;
     
     
     public ResourceManagerImpl(){

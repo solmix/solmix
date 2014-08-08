@@ -95,6 +95,16 @@ public class ExtensionInfo
     }
 
     /**
+     * @param class1
+     */
+    public ExtensionInfo(Class<?> clazz)
+    {
+        this.clazz = clazz;
+        className = clazz.getName();
+        classloader = clazz.getClassLoader();
+    }
+
+    /**
      * @return
      */
     public String getName() {

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,21 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.event;
 
-package org.solmix.runtime.bean;
-
+import org.osgi.service.event.Event;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2013-11-5
+ * @version $Id$  2014年8月7日
  */
 
-public interface BeanConfigurable
+public interface EventService
 {
+    void postEvent(Event event);
 
-    /**
-     * As PID
-     * @return
-     */
-    String getBeanName();
+    void sendEvent(Event event);
 }

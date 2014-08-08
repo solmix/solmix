@@ -16,16 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.bean.spring;
 
+package org.solmix.runtime.bean;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013年11月4日
+ * @version $Id$ 2013-11-5
  */
 
-public enum WiringType
+public interface Configurable
 {
 
+    /**
+     * As PID
+     * @return
+     */
+    String getConfigueName();
 }

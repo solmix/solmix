@@ -92,7 +92,7 @@ public class ResourceBeanPostProcessor implements
                     //ignore - no resource manager
                 }
                 if (m == null) {
-                    b = (Container)context.getBean("cxf");
+                    b = (Container)context.getBean("solmix");
                     m = b.getExtension(ResourceManager.class);
                 }
                 if (m != null) {
@@ -176,6 +176,6 @@ public class ResourceBeanPostProcessor implements
 
     }
     private boolean injectable(Object bean, String beanId) {
-        return !"cxf".equals(beanId) && ResourceInjector.processable(bean.getClass(), bean);
+        return !"solmix".equals(beanId) && ResourceInjector.processable(bean.getClass(), bean);
     }
 }

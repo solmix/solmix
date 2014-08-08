@@ -29,6 +29,8 @@ import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.extension.ExtensionContainer.ContainerStatus;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.resource.ResourceManagerImpl;
 import org.solmix.runtime.service.DateTimeService;
 import org.solmix.runtime.service.TimeService;
 import org.solmix.runtime.support.ContainerFactoryImpl;
@@ -59,6 +61,7 @@ public class ExtensionContainerTest extends Assert
          assertEquals("应该找到TimeService的连个实现类", 2,tnames.size());
          Assert.assertNotNull(tm);
          Assert.assertNotNull(c.getExtension(TimeService.class));
+         Assert.assertNotNull(c.getExtension(ResourceManager.class).getClass().getName(),ResourceManagerImpl.class.getName());
          AdapterManager adm= c.getExtension(AdapterManager.class);
          Assert.assertNotNull(adm);
         tm.getCurrentTime();
@@ -86,7 +89,7 @@ public class ExtensionContainerTest extends Assert
     public void testContextID() {
         ExtensionContainer context=new ExtensionContainer();
         String id= context.getId();
-        Assert.assertEquals(Container.DEFAULT_CONTAINER_ID+Math.abs(context.hashCode()), id);
+        Assert.assertEquals(Container.DEFAULT_CONTAINER_ID+"-"+Math.abs(context.hashCode()), id);
         context.setId("test-context");
         Assert.assertEquals("test-context", context.getId());
         context.close(true);

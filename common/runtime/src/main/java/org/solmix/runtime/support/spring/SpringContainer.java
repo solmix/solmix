@@ -19,8 +19,6 @@
 
 package org.solmix.runtime.support.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ResourceManager;
@@ -43,7 +41,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 public class SpringContainer extends ContainerAdaptor implements ApplicationContextAware
 {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SpringContainer.class);
+//    private final static Logger LOG = LoggerFactory.getLogger(SpringContainer.class);
     private AbstractApplicationContext applicationContext;
 
     private boolean closeContext;

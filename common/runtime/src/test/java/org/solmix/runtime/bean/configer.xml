@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+           
+	 <bean name="*7" abstract="true" class="org.solmix.runtime.bean.ConfiguredBean">
+        <property name="stringAttr" value="StarHallo"/>
+    </bean>
+	 <bean id="config7" lazy-init="true">
+        <property name="booleanAttr" value="false"/>
+        <property name="integerAttr" value="10"/>
+    </bean>
+     <bean id="config" name="configName" lazy-init="true">
+        <property name="stringAttr" value="hallo"/>
+        <property name="booleanAttr" value="false"/>
+        <property name="integerAttr" value="10"/>
+        <property name="intAttr" value="12"/>
+        <property name="longAttr" value="13"/>
+        <property name="shortAttr" value="14"/>
+        <property name="decimalAttr" value="15"/>
+        <property name="floatAttr" value="16"/>
+        <property name="doubleAttr" value="17"/>
+        <property name="byteAttr" value="18"/>
+        <property name="base64BinaryAttr" value="abcd"/>
+        <property name="hexBinaryAttr" value="bbbb"/>
+        <property name="unsignedIntAttr" value="19"/>
+        <property name="unsignedShortAttr" value="20"/>
+        <property name="unsignedByteAttr" value="21"/>
+    </bean>
+</beans>

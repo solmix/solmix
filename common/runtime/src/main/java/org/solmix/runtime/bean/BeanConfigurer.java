@@ -30,10 +30,12 @@ public interface BeanConfigurer
 {
 
     String USER_CFG_FILE_PROPERTY_NAME = "solmix.cfg.file";
+    
     String USER_CFG_FILE = "solmix.xml";
 
     /**
      * set up the Bean's value by using Dependency Injection from the application context
+     * 
      * @param beanInstance the instance of the bean which needs to be configured
      */
     void configureBean(Object beanInstance);
@@ -41,6 +43,7 @@ public interface BeanConfigurer
     /**
      * set up the Bean's value by using Dependency Injection from the application context
      * with a proper name. You can use * as the prefix of wildcard name.
+     * 
      * @param name the name of the bean which needs to be configured
      * @param beanInstance the instance of bean which need to be configured
      */

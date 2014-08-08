@@ -54,9 +54,9 @@ import org.solmix.runtime.resource.SinglePropertyResolver;
 
 public class ExtensionContainer implements Container
 {
-   private static final Logger log = LoggerFactory.getLogger(ExtensionContainer.class);
+   private static final Logger LOG = LoggerFactory.getLogger(ExtensionContainer.class);
   
-   private final List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
+   private final  List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
    
    private  final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
 
@@ -252,7 +252,7 @@ public class ExtensionContainer implements Container
      */
     @Override
     public String getId() {
-        return id == null ? DEFAULT_CONTAINER_ID + Integer.toString(Math.abs(this.hashCode())) : id;
+        return id == null ? DEFAULT_CONTAINER_ID +"-"+ Integer.toString(Math.abs(this.hashCode())) : id;
     }
 
     /**
@@ -281,8 +281,8 @@ public class ExtensionContainer implements Container
         setStatus(ContainerStatus.INITIALIZING);
         doInitializeInternal();
         setStatus(ContainerStatus.CREATED);
-        if(log.isDebugEnabled())
-            log.debug("Container Created success for ID:"+getId());
+        if(LOG.isDebugEnabled())
+            LOG.debug("Container Created success for ID:"+getId());
     }
    
     /**
@@ -371,8 +371,11 @@ public class ExtensionContainer implements Container
 
         // Copy array
         synchronized (containerListeners) {
-            if (firstFireContainerListener) {
+            //if not set ,call default.
+            if (firstFireContainerListener&&containerListeners.size()==0) {
                 firstFireContainerListener=false;
+                if(LOG.isTraceEnabled())
+                    LOG.trace("NO found containerListener,try to load default ContainerListener!");
                 ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
                 if (provider == null) {
                     provider = createBeanProvider();
@@ -418,8 +421,8 @@ public class ExtensionContainer implements Container
             setStatus(ContainerStatus.CLOSED);
             notifyAll();
         }
-        if(log.isDebugEnabled())
-            log.debug("Container Closed for ID:"+getId());
+        if(LOG.isDebugEnabled())
+            LOG.debug("Container Closed for ID:"+getId());
         if(ContainerFactory.getDefaultContainer(false)==this){
             ContainerFactory.setDefaultContainer(null);
         }
@@ -452,6 +455,28 @@ public class ExtensionContainer implements Container
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         }
         return loader;
+    }
+
+    
+    /**
+     * @return the containerListeners
+     */
+    @Override
+    public List<ContainerListener> getContainerListeners() {
+        return containerListeners;
+    }
+
+    
+    /**
+     * @param containerListeners the containerListeners to set
+     */
+    @Override
+    public void setContainerListeners(List<ContainerListener> containerListeners) {
+        if(containerListeners!=null&&containerListeners.size()>0)
+        synchronized (this.containerListeners) {
+            this.containerListeners.clear();
+            this.containerListeners.addAll(containerListeners);
+        }
     }
 
 }

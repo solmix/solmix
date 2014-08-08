@@ -139,7 +139,6 @@ public class ResourceInjector extends AbstractAnnotationVisitor
     }
 
 
-    // Implementation of org.apache.cxf.common.annotation.AnnotationVisitor
 
     @Override
     public final void visitClass(final Class<?> clz, final Annotation annotation) {

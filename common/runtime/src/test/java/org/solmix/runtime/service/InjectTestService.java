@@ -35,11 +35,14 @@ public class InjectTestService
     @Resource
     private AdapterManager adm;
     private TimeService timeService;
-    private final Container c;
+    private  Container c;
     public  InjectTestService(Container c){
         this.c=c;
     }
 
+    public void setContainer(Container c){
+        this.c=c;
+    }
     public Container getContainer(){
         return c;
     }

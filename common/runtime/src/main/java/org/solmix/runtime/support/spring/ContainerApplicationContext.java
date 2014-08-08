@@ -76,7 +76,11 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
     private NamespaceHandlerResolver nshResolver;
     
     private final boolean includeDefault;
-    
+    public ContainerApplicationContext(String cfgFile, 
+        ApplicationContext parent,
+        boolean includeDefault){
+        this(new String[]{cfgFile}, parent,includeDefault);
+    }
     public ContainerApplicationContext(String[] cfgFiles, 
                                         ApplicationContext parent,
                                         boolean includeDefault){
@@ -107,6 +111,14 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
         }
     }
 
+    /**
+     * @param string
+     * @param b
+     */
+    public ContainerApplicationContext(String cfgFile, boolean includeDefault)
+    {
+        this(cfgFile,null,includeDefault);
+    }
     @Override
     protected Resource[] getConfigResources() {
         List<Resource> resources = new ArrayList<Resource>();
@@ -149,10 +161,10 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
             final Resource f = findResource(cfgFile);
             if (f!=null&&f.exists()) {
                 resources.add(f);
-                log.info("Used configed file {0}",cfgFile);
+                log.info("Used configed file {}",cfgFile);
             }else{
                 if(!usingDefault){
-                    log.warn("Can't find configure file {0}",cfgFile);
+                    log.warn("Can't find configure file {}",cfgFile);
                     throw new ApplicationContextException("Can't find configure file");
                 }
             }
@@ -163,7 +175,7 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
                 if(ur.exists()){
                     resources.add(ur);
                 }else{
-                    log.warn("Can't find configure file {0}",u.getPath());
+                    log.warn("Can't find configure file {}",u.getPath());
                 }
             }
         }
@@ -244,7 +256,7 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
         return AccessController.doPrivileged(new PrivilegedAction<String>() {
             @Override
             public String run() {
-                String mode =System.getProperty("org.apache.cxf.spring.validation.mode");
+                String mode =System.getProperty("solmix.spring.validation.mode");
                 if (mode == null) {
                     mode =System.getProperty("spring.validation.mode");
                 }

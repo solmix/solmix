@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import org.junit.Assert;
@@ -25,11 +26,10 @@ import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.service.InjectTestService;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月3日
+ * @version $Id$ 2014年8月3日
  */
 
 public class InjectResourceTest
@@ -38,19 +38,20 @@ public class InjectResourceTest
     @Test
     public void testInject() {
         Container c = ContainerFactory.newInstance().createContainer();
-        for(int i=0;i<100000;i++){
-        InjectTestService its= c.getExtension(InjectTestService.class);
-        Assert.assertNotNull(its.getContainer());
+        for (int i = 0; i < 100000; i++) {
+            InjectTestService its = c.getExtension(InjectTestService.class);
+            Assert.assertNotNull(its.getContainer());
         }
     }
+
     @Test
     public void testtime() {
         Container c = ContainerFactory.newInstance().createContainer();
-        ConfiguredBeanProvider its= c.getExtension(ConfiguredBeanProvider.class);
-        for(int i=0;i<100000;i++){
-            its.getBeanOfType(InjectTestService.class.getName(), InjectTestService.class);
-            
-        }
+        ConfiguredBeanProvider its = c.getExtension(ConfiguredBeanProvider.class);
+        InjectTestService inject = its.getBeanOfType(
+            InjectTestService.class.getName(), InjectTestService.class);
+        Assert.assertNotNull(inject.getAdapterManager());
+        Assert.assertNotNull(inject.getTimeService());
     }
 
 }

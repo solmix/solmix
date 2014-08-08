@@ -50,6 +50,11 @@
 			<artifactId>logback-classic</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -63,7 +68,8 @@
 						<Bundle-Category>solmix</Bundle-Category>
 						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
 						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
-						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
+						<!-- <DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package> -->
+						<Bundle-Activator>org.solmix.runtime.osgi.RuntimeActivator</Bundle-Activator>
 						<_failok>false</_failok>
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
 					</instructions>
@@ -74,7 +80,8 @@
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.runtime*,org.osgi.service.event*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
-			org.springframework*;resolution:=optional;version="${spring.version}",*
+			org.springframework*;resolution:=optional;version="${spring.version}",
+			org.apache.aries*;version="[1.0,2)";resolution:=optional,*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

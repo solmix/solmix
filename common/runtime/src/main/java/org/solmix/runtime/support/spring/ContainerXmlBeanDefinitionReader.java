@@ -69,7 +69,7 @@ public class ContainerXmlBeanDefinitionReader extends XmlBeanDefinitionReader
         super(beanFactory);
         tunedDocumentLoader = new TunedDocumentLoader();
         this.setDocumentLoader(tunedDocumentLoader);
-        noFastinfoset = System.getProperty("org.apache.cxf.nofastinfoset") != null 
+        noFastinfoset = System.getProperty("org.solmix.fastinfo") != null 
             || !TunedDocumentLoader.hasFastInfoSet();
     }
 
@@ -82,7 +82,7 @@ public class ContainerXmlBeanDefinitionReader extends XmlBeanDefinitionReader
         boolean suppressValidation = false;
         try {
             URL url = resource.getURL();
-            if (url.getFile().contains("META-INF/cxf/")) {
+            if (url.getFile().contains("META-INF/solmix/")) {
                 suppressValidation = true;
             }
         } catch (IOException e) {

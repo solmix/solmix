@@ -19,7 +19,6 @@
 
 package org.solmix.runtime.support.spring;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,8 +32,8 @@ import java.util.regex.PatternSyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.bean.BeanConfigurable;
 import org.solmix.runtime.bean.BeanConfigurer;
+import org.solmix.runtime.bean.Configurable;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -129,6 +128,7 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
         if (null == bn) {
             return;
         }
+        //configure bean with * pattern style.
         if (checkWildcards) {
             configureWithWildCard(bn, beanInstance);
         }
@@ -158,15 +158,15 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
                 ((AbstractBeanFactory)beanFactory).getMergedBeanDefinition(bn);
             }
             super.configureBean(beanInstance);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Successfully performed injection.");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Successfully performed injection,used beanName:{}",beanName);
             }
         } catch (NoSuchBeanDefinitionException ex) {
             // users often wonder why the settings in their configuration files seem
             // to have no effect - the most common cause is that they have been using
             // incorrect bean ids
             if (LOG.isDebugEnabled()) {
-                LOG.debug("No matching bean {0}",beanName);
+                LOG.debug("No matching bean {}",beanName);
             }
         }
     }
@@ -192,16 +192,18 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
         }
     }
     protected String getBeanName(Object beanInstance) {
-        if (beanInstance instanceof BeanConfigurable) {
-            return ((BeanConfigurable)beanInstance).getBeanName();
+        if (beanInstance instanceof Configurable) {
+            return ((Configurable)beanInstance).getConfigueName();
+        }else{//only used interface Configurable powered.
+            return null;
         }
-        String beanName = null;
+        /*String beanName = null;
         Method m = null;
         try {
-            m = beanInstance.getClass().getDeclaredMethod("getBeanName", (Class[])null);
+            m = beanInstance.getClass().getDeclaredMethod("getConfigureName", (Class[])null);
         } catch (NoSuchMethodException ex) {
             try {
-                m = beanInstance.getClass().getMethod("getBeanName", (Class[])null);
+                m = beanInstance.getClass().getMethod("getConfigureName", (Class[])null);
             } catch (NoSuchMethodException e) {
                 //ignore
             }
@@ -215,10 +217,10 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
         }
         
         if (null == beanName) {
-            LOG.warn("Could not determining bean name {0}",beanInstance.getClass().getName());
+            LOG.warn("Could not determining bean name {}",beanInstance.getClass().getName());
         }
       
-        return beanName;
+        return beanName;*/
     }
     /**
      * {@inheritDoc}
@@ -285,7 +287,7 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
                                 //not a valid patter, we'll ignore
                             }
                         } else {
-                            LOG.warn("Wildcars with not class {0}",n); 
+                            LOG.warn("Wildcars with not class {}",n); 
                         }
                     }
                 }

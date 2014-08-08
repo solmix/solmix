@@ -35,8 +35,8 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
-import org.solmix.runtime.bean.BeanConfigurable;
 import org.solmix.runtime.bean.BeanConfigurer;
+import org.solmix.runtime.bean.Configurable;
 
 /**
  * 
@@ -154,7 +154,7 @@ public class BlueprintConfigurer implements BeanConfigurer
                 throw new RuntimeException(t);
             }
         }catch(Exception e){
-            LOG.warn("Can't configured object {0}",bname);
+            LOG.warn("Can't configured object {}",bname);
         }
     }
 
@@ -181,16 +181,18 @@ public class BlueprintConfigurer implements BeanConfigurer
     }
 
     protected String getBeanName(Object beanInstance) {
-        if (beanInstance instanceof BeanConfigurable) {
-            return ((BeanConfigurable)beanInstance).getBeanName();
+        if (beanInstance instanceof Configurable) {
+            return ((Configurable)beanInstance).getConfigueName();
+        }else{
+            return null;
         }
-        String beanName = null;
+        /*String beanName = null;
         Method m = null;
         try {
-            m = beanInstance.getClass().getDeclaredMethod("getBeanName", (Class[])null);
+            m = beanInstance.getClass().getDeclaredMethod("getConfigureName", (Class[])null);
         } catch (NoSuchMethodException ex) {
             try {
-                m = beanInstance.getClass().getMethod("getBeanName", (Class[])null);
+                m = beanInstance.getClass().getMethod("getConfigureName", (Class[])null);
             } catch (NoSuchMethodException e) {
                 //ignore
             }
@@ -204,10 +206,10 @@ public class BlueprintConfigurer implements BeanConfigurer
         }
         
         if (null == beanName) {
-            LOG.warn("Could not determining bean name {0}",beanInstance.getClass().getName());
+            LOG.warn("Could not determining bean name {}",beanInstance.getClass().getName());
         }
       
-        return beanName;
+        return beanName;*/
     }
 
     /**

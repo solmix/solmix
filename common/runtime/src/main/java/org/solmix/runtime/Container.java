@@ -18,6 +18,7 @@
  */
 package org.solmix.runtime;
 
+import java.util.List;
 import java.util.Map;
 
 import org.solmix.runtime.extension.ExtensionLoader;
@@ -108,6 +109,9 @@ public interface Container
      
      void removeListener(ContainerListener listener);
      
+     void setContainerListeners(List<ContainerListener> listeners);
+     
+     List<ContainerListener> getContainerListeners();
      /**
       * Close this Container.
       * 

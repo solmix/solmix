@@ -19,7 +19,6 @@
 
 package org.solmix.runtime.event;
 
-
 /**
  * 
  * @author Administrator
