@@ -155,5 +155,4 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
         this.closeContext = b;
 
     }
-
 }

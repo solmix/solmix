@@ -182,6 +182,12 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
     public Set<String> getLoadedExtensions() {
         return Collections.unmodifiableSet(new TreeSet<String>(cached.keySet()));
     }
+    
+    public void addExtension(String name,ExtensionInfo info){
+        synchronized (cachedLock) {
+            cached.put(name, info);
+        }
+    }
 
     /**
      * {@inheritDoc}

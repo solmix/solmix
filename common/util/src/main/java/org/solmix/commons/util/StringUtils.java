@@ -1,6 +1,8 @@
 
 package org.solmix.commons.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -391,7 +393,21 @@ public final class StringUtils
         }
         return buf == null ? camelName : buf.toString();
     }
-
+    public static String toString(Throwable e) {
+        StringWriter w = new StringWriter();
+          PrintWriter p = new PrintWriter(w);
+          p.print(e.getClass().getName());
+          if (e.getMessage() != null) {
+              p.print(": " + e.getMessage());
+          }
+          p.println();
+          try {
+              e.printStackTrace(p);
+              return w.toString();
+          } finally {
+              p.close();
+          }
+      }
     private StringUtils()
     {
     }

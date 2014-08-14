@@ -85,10 +85,10 @@ public class DataUtilTest
         Boolean b = Boolean.TRUE;
         Boolean str3;
         try {
-            str3 = DataUtils.convertType(Boolean.class, b);
+            str3 = TransformUtils.transformType(Boolean.class, b);
             Assert.assertEquals(Boolean.TRUE, str3);
             Integer i = 4;
-            Object d = DataUtils.castValue(i, Double.class);
+            Object d = TransformUtils.transformValue(i, Double.class);
 
         } catch (Exception e) {
             e.printStackTrace();

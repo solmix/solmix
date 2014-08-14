@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.aries.blueprint.ExtendedBeanMetadata;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
@@ -37,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.extension.ExtensionManagerImpl;
 
 /**
  * 
@@ -60,6 +62,10 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
         this.bundleContext = bundleContext;
         this.blueprintContainer = blueprintContainer;
         this.original = original;
+        if(original instanceof ExtensionManagerImpl){
+            List<String> names = new ArrayList<String>(blueprintContainer.getComponentIds());
+            ((ExtensionManagerImpl)original).removeBeansOfNames(names);
+        }
 
     }
 
@@ -75,10 +81,9 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
         Class<?> cls = null;
         if (cmd instanceof BeanMetadata) {
             BeanMetadata bm = (BeanMetadata) cmd;
-            // XXX for aries
-            /*
-             * if (bm instanceof ExtendedBeanMetadata) { cls = ((ExtendedBeanMetadata)bm).getRuntimeClass(); }
-             */
+            if (bm instanceof ExtendedBeanMetadata) {
+                cls = ((ExtendedBeanMetadata)bm).getRuntimeClass();
+            } 
             if (cls == null) {
                 try {
                     Method m = Reflection.findMethod(container.getClass().getName(), "loadClass", String.class);

@@ -23,34 +23,22 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.security.MessageDigest;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -73,7 +61,6 @@ import org.solmix.commons.io.SlxFile;
 public final class DataUtils
 {
 
-    public static HashMap defaultTransformers;
 
     public static final Object EMPTY_ARRAY[] = new Object[0];
 
@@ -789,12 +776,13 @@ public final class DataUtils
      * @param source
      * @param targer
      * @param nullMode when true merge null value of target,else merge all.
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
+     * @throws Exception 
      */
-    public static void beanMerge(Object source, Object target, boolean nullMode) throws IllegalArgumentException, IllegalAccessException,
-        InvocationTargetException {
+    public static void beanMerge(Object source, Object target, boolean nullMode) throws Exception {
+        if(source==null)
+            throw new IllegalArgumentException("source is null");
+        if(target==null)
+            throw new IllegalArgumentException("target is null");
         Field[] _sf = source.getClass().getDeclaredFields();
         Field[] _tf = target.getClass().getDeclaredFields();
         Map<String, Object> _samefield = new HashMap<String, Object>();
@@ -802,44 +790,7 @@ public final class DataUtils
             for (Field tf : _tf)
                 if (sf.getName() == tf.getName() && sf.getType().equals(tf.getType()))
                     _samefield.put(tf.getName(), tf.getType());
-        Method[] _sm = source.getClass().getDeclaredMethods();
-        Method[] _tm = target.getClass().getDeclaredMethods();
-
-        for (String str : _samefield.keySet()) {
-            String __autoGetMethodName = null;
-            String __autoSetMethodName = "set" + str.substring(0, 1).toUpperCase() + str.substring(1);
-            if (_samefield.get(str).toString().equals("boolean"))
-                __autoGetMethodName = "is" + str.substring(0, 1).toUpperCase() + str.substring(1);
-            else
-                __autoGetMethodName = "get" + str.substring(0, 1).toUpperCase() + str.substring(1);
-            for (Method m : _sm)
-                if (m.getName().equals(__autoGetMethodName)) {
-                    Object sValue = m.invoke(source);
-
-                    if (sValue == null)
-                        break;
-                    for (Method sm : _tm) {
-
-                        if (sm.getName().equals(__autoSetMethodName)) {
-                            // System.out.print(__autoSetMethodName);
-                            Object tValue = null;
-                            if (nullMode) {
-                                for (Method sgm : _tm) {
-                                    if (sgm.getName().equals(__autoGetMethodName))
-                                        tValue = sgm.invoke(__autoGetMethodName);
-                                    if (tValue == null) {
-                                        sm.invoke(source, sValue);
-                                    }
-                                }
-                            } else {
-                                sm.invoke(target, sValue);
-                            }
-                        }
-                    }
-                }
-
-        }
-        System.out.print("over");
+       setProperties( getProperties(source, _samefield.keySet(), true),target);
     }
 
     /**
@@ -1269,9 +1220,16 @@ public final class DataUtils
             if("class".equals(propertyName))
                 continue;
             Method getter = propertyDescriptor.getReadMethod();
-            if (getter == null) {
-                String methodName = new StringBuilder().append("is").append(propertyName.substring(0, 1).toUpperCase()).append( propertyName.substring(1)).toString();
-                getter = bean.getClass().getMethod(methodName, new Class[0]);
+            if (getter == null 
+                && propertyDescriptor.getPropertyType()!=null&&
+                Boolean.class.isAssignableFrom(propertyDescriptor.getPropertyType().getClass())) {
+                String methodName = new StringBuilder().append("is")
+                    .append(propertyName.substring(0, 1).toUpperCase())
+                    .append( propertyName.substring(1)).toString();
+                try {
+                    getter = bean.getClass().getMethod(methodName, new Class[0]);
+                } catch (Exception e) {//Ignore method nofound.
+                }
             }
             if (getter == null || !Modifier.isPublic(getter.getModifiers()))
                 continue;
@@ -1479,353 +1437,17 @@ public final class DataUtils
         Class<?> paramType = types[0];
         if (value == null) {
             if (paramType.isPrimitive()) {
-                value = convertType(paramType, "");
+                value = TransformUtils.transformType(paramType, "");
             }
         } else if (!paramType.isAssignableFrom(value.getClass())) {
             if (paramType == String.class)
                 return value.toString();
-            value = convertType(paramType, value);
+            value = TransformUtils.transformType(paramType, value);
         }
         return value;
     }
 
-    public static Object castValue(Object value, Class targetType) {
-        if (value == null)
-            return null;
-        Class valueClass = value.getClass();
-        if (Boolean.TYPE.equals(targetType))
-            targetType = java.lang.Boolean.class;
-        if (Byte.TYPE.equals(targetType))
-            targetType = java.lang.Byte.class;
-        if (Short.TYPE.equals(targetType))
-            targetType = java.lang.Short.class;
-        if (Integer.TYPE.equals(targetType))
-            targetType = java.lang.Integer.class;
-        if (Long.TYPE.equals(targetType))
-            targetType = java.lang.Long.class;
-        if (Float.TYPE.equals(targetType))
-            targetType = java.lang.Float.class;
-        if (Double.TYPE.equals(targetType))
-            targetType = java.lang.Double.class;
-        if (Character.TYPE.equals(targetType))
-            targetType = java.lang.Character.class;
-        if (targetType.isInstance(value))
-            return value;
-        if (java.lang.Boolean.class.equals(targetType)) {
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return n.signum() != 0 ? Boolean.TRUE : Boolean.FALSE;
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                if (c == 'T' || c == 't' || c == 'Y' || c == 'y')
-                    return Boolean.TRUE;
-                else
-                    return Boolean.FALSE;
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                String s = value.toString();
-                if ("t".equalsIgnoreCase(s) || "y".equalsIgnoreCase(s) || "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s))
-                    return Boolean.TRUE;
-                else
-                    return Boolean.FALSE;
-            }
-        } else if (java.lang.Byte.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Byte.valueOf((byte) (Boolean.TRUE.equals(value) ? 1 : 0));
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Byte.valueOf(n.byteValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Byte.valueOf((byte) c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Byte.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-        } else if (java.lang.Short.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Short.valueOf((short) (Boolean.TRUE.equals(value) ? 1 : 0));
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Short.valueOf(n.shortValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Short.valueOf((short) c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Short.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-        } else if (java.lang.Integer.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Integer.valueOf(Boolean.TRUE.equals(value) ? 1 : 0);
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Integer.valueOf(n.intValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Integer.valueOf(c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Integer.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-        } else if (java.lang.Long.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Long.valueOf(Boolean.TRUE.equals(value) ? 1 : 0);
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Long.valueOf(n.longValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Long.valueOf(c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Long.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-            if (java.util.Date.class.isAssignableFrom(valueClass))
-                return Long.valueOf(((Date) value).getTime());
-        } else if (java.lang.Float.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Float.valueOf(Boolean.TRUE.equals(value) ? 1 : 0);
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Float.valueOf(n.floatValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Float.valueOf(c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Float.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-            if (java.util.Date.class.isAssignableFrom(valueClass))
-                return Float.valueOf(((Date) value).getTime());
-        } else if (java.lang.Double.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Double.valueOf(Boolean.TRUE.equals(value) ? 1 : 0);
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Double.valueOf(n.doubleValue());
-            }
-            if (java.lang.Character.class.isAssignableFrom(valueClass)) {
-                char c = ((Character) value).charValue();
-                return Double.valueOf(c);
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass))
-                try {
-                    return Double.valueOf(value.toString());
-                } catch (NumberFormatException ex) {
-                    throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                        valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                }
-            if (java.util.Date.class.isAssignableFrom(valueClass))
-                return Double.valueOf(((Date) value).getTime());
-        } else if (java.lang.Character.class.equals(targetType)) {
-            if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                return Character.valueOf(Boolean.TRUE.equals(value) ? 't' : 'f');
-            if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                BigDecimal n = new BigDecimal(((Number) value).toString());
-                return Character.valueOf((char) n.intValue());
-            }
-            if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                if ("".equals(value.toString()))
-                    return Character.valueOf('\0');
-                value.toString().charAt(0);
-            }
-        } else if (targetType.isEnum()) {
-            return transformEnum(value, targetType);
-        } else {
-            if (java.lang.String.class.isAssignableFrom(targetType))
-                return value.toString();
-            if (java.math.BigInteger.class.isAssignableFrom(targetType)) {
-                if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                    return Boolean.TRUE.equals(value) ? BigInteger.ONE : BigInteger.ZERO;
-                if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                    BigDecimal n = new BigDecimal(((Number) value).toString());
-                    return n.toBigInteger();
-                }
-                if (java.lang.Character.class.isAssignableFrom(valueClass))
-                    return BigInteger.valueOf(((Character) value).charValue());
-                if (java.lang.String.class.isAssignableFrom(valueClass))
-                    try {
-                        return new BigInteger(value.toString());
-                    } catch (NumberFormatException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                if (java.util.Date.class.isAssignableFrom(valueClass))
-                    return BigInteger.valueOf(((Date) value).getTime());
-            } else if (java.math.BigDecimal.class.isAssignableFrom(targetType)) {
-                if (java.lang.Boolean.class.isAssignableFrom(valueClass))
-                    return Boolean.TRUE.equals(value) ? BigDecimal.ONE : BigDecimal.ZERO;
-                if (java.lang.Number.class.isAssignableFrom(valueClass))
-                    return new BigDecimal(((Number) value).toString());
-                if (java.lang.Character.class.isAssignableFrom(valueClass))
-                    return BigDecimal.valueOf(((Character) value).charValue());
-                if (java.lang.String.class.isAssignableFrom(valueClass))
-                    try {
-                        return new BigDecimal(value.toString());
-                    } catch (NumberFormatException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                if (java.util.Date.class.isAssignableFrom(valueClass))
-                    return BigDecimal.valueOf(((Date) value).getTime());
-            } else if (java.sql.Date.class.isAssignableFrom(targetType)) {
-                if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                    BigDecimal n = new BigDecimal(((Number) value).toString());
-                    return new java.sql.Date(n.longValue());
-                }
-                if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                    DateFormat df = DateFormat.getDateInstance();
-                    try {
-                        java.util.Date d = df.parse(value.toString());
-                        return new java.sql.Date(d.getTime());
-                    } catch (ParseException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                }
-                if (java.util.Date.class.isAssignableFrom(valueClass))
-                    return new java.sql.Date(((Date) value).getTime());
-                if (java.sql.Time.class.isAssignableFrom(valueClass))
-                    return new java.sql.Date(((Time) value).getTime());
-                if (java.sql.Timestamp.class.isAssignableFrom(valueClass))
-                    return new java.sql.Date(((Timestamp) value).getTime());
-            } else if (java.sql.Time.class.isAssignableFrom(targetType)) {
-                if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                    BigDecimal n = new BigDecimal(((Number) value).toString());
-                    return new Time(n.longValue());
-                }
-                if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                    DateFormat df = DateFormat.getTimeInstance();
-                    try {
-                        Date d = df.parse(value.toString());
-                        return new Time(d.getTime());
-                    } catch (ParseException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                }
-                if (java.util.Date.class.isAssignableFrom(valueClass))
-                    return new Time(((Date) value).getTime());
-                if (java.sql.Date.class.isAssignableFrom(valueClass))
-                    return new Time(((java.sql.Date) value).getTime());
-                if (java.sql.Timestamp.class.isAssignableFrom(valueClass))
-                    return new Time(((Timestamp) value).getTime());
-            } else if (java.sql.Timestamp.class.isAssignableFrom(targetType)) {
-                if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                    BigDecimal n = new BigDecimal(((Number) value).toString());
-                    return new Timestamp(n.longValue());
-                }
-                if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                    DateFormat df = DateFormat.getDateTimeInstance();
-                    try {
-                        Date d = df.parse(value.toString());
-                        return new Timestamp(d.getTime());
-                    } catch (ParseException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                }
-                if (java.util.Date.class.isAssignableFrom(valueClass))
-                    return new Timestamp(((Date) value).getTime());
-                if (java.sql.Date.class.isAssignableFrom(valueClass))
-                    return new Timestamp(((java.sql.Date) value).getTime());
-                if (java.sql.Time.class.isAssignableFrom(valueClass))
-                    return new Timestamp(((Time) value).getTime());
-            } else if (java.util.Date.class.isAssignableFrom(targetType)) {
-                if (java.lang.Number.class.isAssignableFrom(valueClass)) {
-                    BigDecimal n = new BigDecimal(((Number) value).toString());
-                    return new Date(n.longValue());
-                }
-                if (java.lang.String.class.isAssignableFrom(valueClass)) {
-                    DateFormat df = DateFormat.getDateTimeInstance();
-                    try {
-                        return df.parse(value.toString());
-                    } catch (ParseException ex) {
-                        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-                            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-                    }
-                }
-            }
-        }
-        throw new ClassCastException((new StringBuilder()).append("Value '").append(value.toString()).append("' of type '").append(
-            valueClass.toString()).append("' can not be casted to type '").append(targetType.toString()).append("'.").toString());
-    }
-
-    /**
-     * convert the value to target Type.
-     * 
-     * @param targetType
-     * @param value
-     * @return
-     * @throws NoSuchMethodException
-     * @throws SecurityException
-     * @throws Exception
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T convertType(Class<T> targetType, Object value) throws Exception {
-        if (targetType == null)
-            return null;
-        if (value == null)
-            return null;
-        if (targetType.isInstance(value))
-            return (T) value;
-        if ((value instanceof String) && "".equals(value) && Number.class.isAssignableFrom(targetType))
-            return null;
-
-        Transformer transformer = (Transformer) defaultTransformers.get(targetType);
-        if (transformer != null)
-            return (T) transformer.transform(value);
-        if (targetType.isEnum())
-            return (T) transformEnum(value, targetType);
-        if ((value instanceof Map) && !targetType.isPrimitive() && !targetType.isInterface() && !targetType.isArray()) {
-            Object instance = targetType.newInstance();
-            try {
-                setProperties((Map) value, instance);
-                return (T) instance;
-            } catch (Exception ee) {
-                log.debug((new StringBuilder()).append("Tried to convert inbound nested Map to: ").append(targetType.getName()).append(
-                    " but DataTools.setProperties() on instantiated class failed").append(" with the following error: ").append(ee.getMessage()).toString());
-            }
-        }
-        if (!targetType.isPrimitive() && !targetType.isEnum()) {
-            Class<?> types[] = { value.getClass() };
-            Constructor<?> constructor = targetType.getConstructor(types);
-            Object arguments[] = { value };
-            return (T) constructor.newInstance(arguments);
-        }
-        if (!targetType.isPrimitive() && (targetType.isInterface() || Modifier.isAbstract(targetType.getModifiers())))
-            log.warn((new StringBuilder()).append("Impossible to convert to target type ").append(targetType.getName()).append(
-                " - it is not a concrete class").toString());
-        throw new IllegalArgumentException((new StringBuilder()).append("Can't convert value of type ").append(value.getClass().getName()).append(
-            " to target type ").append(targetType.getName()).toString());
-    }
+  
 
     /**
      * @param <T>
@@ -1896,200 +1518,6 @@ public final class DataUtils
             return extension;
         }
     }
-
-    public static interface Transformer
-    {
-
-        public abstract Object transform(Object obj) throws Exception;
-    }
-
-    static {
-        defaultTransformers = new HashMap();
-        Transformer boolTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                return Boolean.valueOf(input.toString());
-            }
-
-        };
-        defaultTransformers.put(Boolean.TYPE, boolTransform);
-        Transformer charTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Character('\0');
-                else
-                    return new Character(value.charAt(0));
-            }
-
-        };
-        defaultTransformers.put(Character.TYPE, charTransform);
-        defaultTransformers.put(Character.class, charTransform);
-        Transformer byteTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Byte((byte) 0);
-                else
-                    return Byte.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Byte.TYPE, byteTransform);
-        defaultTransformers.put(Byte.class, byteTransform);
-        Transformer shortTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Short((short) 0);
-                else
-                    return Short.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Short.TYPE, shortTransform);
-        defaultTransformers.put(Short.class, shortTransform);
-        Transformer intTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString().trim();
-                if ("".equals(value))
-                    return new Integer(0);
-                else
-                    return Integer.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Integer.TYPE, intTransform);
-        defaultTransformers.put(Integer.class, intTransform);
-        Transformer longTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Long(0L);
-                else
-                    return Long.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Long.TYPE, longTransform);
-        defaultTransformers.put(Long.class, longTransform);
-        Transformer floatTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Float(0.0F);
-                else
-                    return Float.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Float.TYPE, floatTransform);
-        defaultTransformers.put(Float.class, floatTransform);
-        Transformer doubleTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new Double(0.0D);
-                else
-                    return Double.valueOf(value);
-            }
-
-        };
-        defaultTransformers.put(Double.TYPE, doubleTransform);
-        defaultTransformers.put(Double.class, doubleTransform);
-        Transformer bigDecimalTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return new BigDecimal(0);
-                else
-                    return new BigDecimal(value);
-            }
-
-        };
-        defaultTransformers.put(BigDecimal.class, bigDecimalTransform);
-        Transformer bigIntegerTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                String value = input.toString();
-                if ("".equals(value))
-                    return BigInteger.ZERO;
-                else
-                    return new BigInteger(value);
-            }
-
-        };
-        defaultTransformers.put(BigInteger.class, bigIntegerTransform);
-        Transformer javaSqlDateTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                if (input instanceof java.util.Date) {
-                    Calendar c = Calendar.getInstance();
-                    c.setTime((java.util.Date) input);
-                    c.set(11, 0);
-                    c.set(12, 0);
-                    c.set(13, 0);
-                    c.set(14, 0);
-                    return new Date(c.getTime().getTime());
-                } else {
-                    throw new Exception((new StringBuilder()).append("Can't covert type: ").append(input.getClass().getName()).append(
-                        " to java.sql.Date").toString());
-                }
-            }
-
-        };
-        defaultTransformers.put(Date.class, javaSqlDateTransform);
-        Transformer javaSqlTimeTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                if (input instanceof java.util.Date) {
-                    Calendar c = Calendar.getInstance();
-                    c.setTime((java.util.Date) input);
-                    c.set(1970, 0, 1);
-                    return new Time(c.getTime().getTime());
-                } else {
-                    throw new Exception((new StringBuilder()).append("Can't covert type: ").append(input.getClass().getName()).append(
-                        " to java.sql.Time").toString());
-                }
-            }
-
-        };
-        defaultTransformers.put(Time.class, javaSqlTimeTransform);
-        Transformer javaSqlTimestampTransform = new Transformer() {
-
-            @Override
-            public Object transform(Object input) throws Exception {
-                if (input instanceof java.util.Date)
-                    return new Timestamp(((java.util.Date) input).getTime());
-                else
-                    throw new Exception((new StringBuilder()).append("Can't covert type: ").append(input.getClass().getName()).append(
-                        " to java.sql.Timestamp").toString());
-            }
-
-        };
-        defaultTransformers.put(Timestamp.class, javaSqlTimestampTransform);
-    }
-
     /**
      * 将原始路径转化为绝对路径
      * 
@@ -2101,10 +1529,6 @@ public final class DataUtils
             return path;
         }
         return path;
-        /*
-         * else { Config config = Config.getGlobal(); return (new
-         * StringBuilder()).append(config.getPath("webRoot")).append('/').append(path).toString(); }
-         */
     }
 
     public static boolean pathIsRelative(String path) {
@@ -2190,25 +1614,12 @@ public final class DataUtils
                 String property = f.getName();
                 PropertyDescriptor pd = properties.get(property);
                 Method method = pd.getReadMethod();
-                /*
-                 * String __autoGetMethodName = null;
-                 * 
-                 * __autoGetMethodName = "get" + str.substring(0, 1).toUpperCase() + str.substring(1); Method method =
-                 * null; try { method = bean.getClass().getDeclaredMethod(__autoGetMethodName);
-                 * 
-                 * } catch (NoSuchMethodException e) { String __autoIsMethodName = "is" + str.substring(0,
-                 * 1).toUpperCase() + str.substring(1); try { method =
-                 * bean.getClass().getDeclaredMethod(__autoGetMethodName); } catch (NoSuchMethodException e1) {
-                 * log.info("No such Method :" + __autoIsMethodName + "or" + __autoGetMethodName + "at class:" +
-                 * bean.getClass()); } }
-                 */
                 if (method != null)
                     try {
                         Object value = method.invoke(bean);
                         if (value != null)
                             res.put(property, value);
                     } catch (InvocationTargetException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
             }
@@ -2497,12 +1908,9 @@ public final class DataUtils
      * @param expect
      * @return
      */
-   
-
     public static <T> boolean isNotEqual(T actual, T expect) {
         return actual == null ? (expect == null ? false : true) : !actual.equals(expect);
     }
-
     /**
      * If not equal return true.else return false. used {@link #isNotEqual(Object, Object)}
      * 
@@ -2511,124 +1919,11 @@ public final class DataUtils
      * @param expect
      * @return
      */
-
-
     public static boolean booleanValue(String booleanValue) {
         if ("true".equalsIgnoreCase(booleanValue))
             return true;
         else
             return false;
-    }
-
-    public static byte[] hexStringToByte(String hex) {
-        // return hex.getBytes();
-        int len = (hex.length() / 2);
-        byte[] result = new byte[len];
-        char[] achar = hex.toCharArray();
-        for (int i = 0; i < len; i++) {
-            int pos = i * 2;
-            result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
-        }
-        return result;
-    }
-
-    private static byte toByte(char c) {
-        byte b = (byte) "0123456789ABCDEF".indexOf(c);
-        return b;
-    }
-
-    public static final String bytesToHexString(byte[] bArray) {
-        StringBuffer sb = new StringBuffer(bArray.length);
-        String sTemp;
-        for (int i = 0; i < bArray.length; i++) {
-            sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
-                sb.append(0);
-            sb.append(sTemp.toUpperCase());
-        }
-        return sb.toString();
-    }
-
-    public static final Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-        ObjectInputStream oi = new ObjectInputStream(in);
-        Object o = oi.readObject();
-        oi.close();
-        return o;
-    }
-
-    public static final byte[] objectToBytes(Serializable s) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream ot = new ObjectOutputStream(out);
-        ot.writeObject(s);
-        ot.flush();
-        ot.close();
-        return out.toByteArray();
-    }
-
-    public static final String objectToHexString(Serializable s) throws IOException {
-        return bytesToHexString(objectToBytes(s));
-    }
-
-    public static final Object hexStringToObject(String hex) throws IOException, ClassNotFoundException {
-        return bytesToObject(hexStringToByte(hex));
-    }
-
-    /**
-     * BCD to Integer String
-     * 
-     * @param bytes
-     * @return
-     */
-    public static String bcd2Str(byte[] bytes) {
-        StringBuffer temp = new StringBuffer(bytes.length * 2);
-        for (int i = 0; i < bytes.length; i++) {
-            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
-            temp.append((byte) (bytes[i] & 0x0f));
-        }
-        return temp.toString().substring(0, 1).equalsIgnoreCase("0") ? temp.toString().substring(1) : temp.toString();
-    }
-
-    /**
-     * Integer String to BCD
-     * 
-     * @param asc
-     * @return
-     */
-    public static byte[] str2Bcd(String asc) {
-        int len = asc.length();
-        int mod = len % 2;
-        if (mod != 0) {
-            asc = "0" + asc;
-            len = asc.length();
-        }
-        byte abt[] = new byte[len];
-        if (len >= 2) {
-            len = len / 2;
-        }
-        byte bbt[] = new byte[len];
-        abt = asc.getBytes();
-        int j, k;
-        for (int p = 0; p < asc.length() / 2; p++) {
-            if ((abt[2 * p] >= '0') && (abt[2 * p] <= '9')) {
-                j = abt[2 * p] - '0';
-            } else if ((abt[2 * p] >= 'a') && (abt[2 * p] <= 'z')) {
-                j = abt[2 * p] - 'a' + 0x0a;
-            } else {
-                j = abt[2 * p] - 'A' + 0x0a;
-            }
-            if ((abt[2 * p + 1] >= '0') && (abt[2 * p + 1] <= '9')) {
-                k = abt[2 * p + 1] - '0';
-            } else if ((abt[2 * p + 1] >= 'a') && (abt[2 * p + 1] <= 'z')) {
-                k = abt[2 * p + 1] - 'a' + 0x0a;
-            } else {
-                k = abt[2 * p + 1] - 'A' + 0x0a;
-            }
-            int a = (j << 4) + k;
-            byte b = (byte) a;
-            bbt[p] = b;
-        }
-        return bbt;
     }
 
     public static byte[] reversal(byte[] value) {
@@ -2650,14 +1945,6 @@ public final class DataUtils
             target[i] = source[len - i - 1];
         }
         return target;
-    }
-
-    public static byte[] toBcdBits(String v) {
-        return reversal(str2Bcd(v));
-    }
-
-    public static byte[] toBcdBitsCopy(byte[] target, String v) {
-        return reversalCopy(target, str2Bcd(v));
     }
 
     /**
@@ -2771,6 +2058,11 @@ public final class DataUtils
             return true;
         return false;
     }
+    
+    /**
+     * @param pairs
+     * @return
+     */
     public static Map<String, String> toStringMap(String... pairs) {
         Map<String, String> parameters = new HashMap<String, String>();
         if (pairs.length > 0) {

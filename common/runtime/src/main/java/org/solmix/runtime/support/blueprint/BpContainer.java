@@ -39,7 +39,7 @@ import org.solmix.runtime.support.ext.ContainerAdaptor;
  * @version $Id$  2013-11-5
  */
 
-public class BlueprintSystemContext extends ContainerAdaptor
+public class BpContainer extends ContainerAdaptor
 {
     BundleContext bundleContext;
     BlueprintContainer blueprintContainer;

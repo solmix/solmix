@@ -36,11 +36,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.VFS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.IOUtils;
 
 
@@ -52,8 +47,6 @@ import org.solmix.commons.util.IOUtils;
  */
 public class SlxFile
 {
-   private static final Logger log = LoggerFactory.getLogger(SlxFile.class.getName());
-
    String canonicalPath;
 
    String filename;
@@ -62,7 +55,7 @@ public class SlxFile
 
    File file;
 
-   org.apache.commons.vfs.FileObject fileObject;
+//   org.apache.commons.vfs.FileObject fileObject;
 
    /**
     * constructed function
@@ -89,10 +82,10 @@ public class SlxFile
     * 
     * @param fileObject
     */
-   public SlxFile(FileObject fileObject)
+  /* public SlxFile(FileObject fileObject)
    {
       this.fileObject = fileObject;
-   }
+   }*/
 
    /**
     * constructed function
@@ -102,25 +95,25 @@ public class SlxFile
    public SlxFile(String filename) throws IOException
    {
       this.filename = filename;
-      if (filename.startsWith("ram://") || filename.startsWith("res://"))
+      /*if (filename.startsWith("ram://") || filename.startsWith("res://"))
          fileObject = VFS.getManager().resolveFile(filename);
-      else {
+      else {*/
          if (filename.startsWith("file:"))
             filename = filename.substring("file:".length());
             if (isURI(filename))
             url = new URL(filename);
          else
             file = new File(canonicalizePath(filename));
-      }
+//      }
    }
 
    public boolean delete() throws IOException
    {
       if (file != null)
          return file.delete();
-      if (fileObject != null)
+     /* if (fileObject != null)
          return fileObject.delete();
-      else
+      else*/
          throw new IOException((new StringBuilder()).append("delete() operation not supported for filename: ").append(
             filename).toString());
    }
@@ -130,9 +123,9 @@ public class SlxFile
       if (file != null) {
             return caseSensitiveFileExists(filename, file);
       }
-      if (fileObject != null) {
+      /*if (fileObject != null) {
          return fileObject.exists();
-      }
+      }*/
       if (url == null)
          return false;
       InputStream is = this.getInputStream();
@@ -142,11 +135,11 @@ public class SlxFile
       return false;
    }
 
-   public String getParent() throws FileSystemException
+   public String getParent() /*throws FileSystemException*/
    {
-      if (fileObject != null)
+     /* if (fileObject != null)
          return fileObject.getParent().getName().getURI();
-      else
+      else*/
          return (new File(filename)).getParent();
 
    }
@@ -161,9 +154,9 @@ public class SlxFile
              if(filename != null)
                  return filename;
              canonicalPath = url.toExternalForm();
-         } else {
+         } /*else {
             canonicalPath = fileObject.getURL().toExternalForm();
-         }
+         }*/
       }
          return canonicalPath;
    }
@@ -173,8 +166,8 @@ public class SlxFile
    {
       if (file != null)
          return file.canRead();
-      if (fileObject != null)
-         return fileObject.isReadable();
+     /* if (fileObject != null)
+         return fileObject.isReadable();*/
       return url != null;
 
    }
@@ -183,9 +176,9 @@ public class SlxFile
    {
       if (file != null)
          return file.canWrite();
-      if (fileObject != null)
+      /*if (fileObject != null)
          return fileObject.isWriteable();
-      else
+      else*/
          return false;
    }
 
@@ -193,14 +186,14 @@ public class SlxFile
    {
       if (file != null)
          return file.mkdir();
-      if (fileObject != null) {
+      /*if (fileObject != null) {
          try {
             fileObject.createFolder();
             return true;
          } catch (Exception e) {
             return false;
          }
-      }
+      }*/
       throw new IOException((new StringBuilder()).append("mkdir() not supported for filename: ").append(filename)
          .toString());
 
@@ -210,14 +203,14 @@ public class SlxFile
    {
       if (file != null)
          return file.mkdirs();
-      if (fileObject != null) {
+    /*  if (fileObject != null) {
          try {
             fileObject.createFolder();
             return true;
          } catch (Exception e) {
             return false;
          }
-      }
+      }*/
       throw new IOException((new StringBuilder()).append("mkdir() not supported for filename: ").append(filename)
          .toString());
    }
@@ -232,9 +225,9 @@ public class SlxFile
    {
       if (file != null)
          return file;
-      if (fileObject != null)
+     /* if (fileObject != null)
          return fileObject;
-      else
+      else*/
          return url;
    }
 
@@ -254,9 +247,9 @@ public class SlxFile
    {
       if (file != null)
          return new FileInputStream(file);
-      if (fileObject != null)
+      /*if (fileObject != null)
          return fileObject.getContent().getInputStream();
-      else
+      else*/
          return url.openConnection().getInputStream();
 
    }
@@ -265,9 +258,9 @@ public class SlxFile
    {
       if (file != null)
          return new FileOutputStream(file);
-      if (fileObject != null)
+     /* if (fileObject != null)
          return fileObject.getContent().getOutputStream();
-      else
+      else*/
          throw new IOException((new StringBuilder()).append("getOutputStream not supported for filename: ").append(
             filename).toString());
    }
@@ -283,9 +276,9 @@ public class SlxFile
          return 0L;
       if (file != null)
          return file.length();
-      if (fileObject != null)
+     /* if (fileObject != null)
          return fileObject.getContent().getSize();
-      else
+      else*/
          return url.openConnection().getContentLength();
    }
 
@@ -293,7 +286,7 @@ public class SlxFile
    {
       if (file != null)
          return file.lastModified();
-      if (fileObject != null) {
+     /* if (fileObject != null) {
          if (exists()) {
             long lastModified = fileObject.getContent().getLastModifiedTime();
             lastModified = (long) Math.floor(lastModified / 1000L) * 1000L;
@@ -301,9 +294,9 @@ public class SlxFile
          } else {
             return 0L;
          }
-      } else {
+      } else {*/
          return url.openConnection().getLastModified();
-      }
+//      }
    }
 
 
@@ -386,9 +379,9 @@ public class SlxFile
    {
       if (file != null)
          return file.isDirectory();
-      if (fileObject != null)
+      /*if (fileObject != null)
          return fileObject.getType().hasChildren();
-      else
+      else*/
          return filename.endsWith("/");
    }
 

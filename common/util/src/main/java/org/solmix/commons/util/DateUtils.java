@@ -133,7 +133,6 @@ public final class DateUtils
         try {
             System.out.println(sdf.parse(textDate));
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

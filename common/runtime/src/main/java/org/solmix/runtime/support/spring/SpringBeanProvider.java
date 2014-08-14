@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.extension.ExtensionManagerImpl;
 import org.springframework.beans.Mergeable;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -69,6 +70,16 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         this.context = applicationContext;
         if (system != null) {
             original = system.getExtension(ConfiguredBeanProvider.class);
+            if(original instanceof ExtensionManagerImpl){
+                List<String> names = new ArrayList<String>();
+                for (String s : context.getBeanDefinitionNames()) {
+                    names.add(s);
+                    for (String s2 : context.getAliases(s)) {
+                        names.add(s2);
+                    }
+                }
+                ((ExtensionManagerImpl)original).removeBeansOfNames(names);
+            }
         }
     }
 
