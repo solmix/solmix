@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.Containers;
+import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.monitor.support.MonitorServiceImpl;
 
 /**
@@ -67,5 +68,13 @@ public class MonitorServiceTest
         MonitorInfo last =   ms.getMonitorInfo();
         System.out.println("memery used:"+(last.getUsedMemory()-old.getUsedMemory()));
         System.out.println(System.currentTimeMillis()-b);
+    }
+    @Test
+    public void testDiffer() throws InterruptedException {
+        Container one=    ContainerFactory.newInstance().createContainer();
+        AdapterManager a1=   one.getExtension(AdapterManager.class);
+        Container other=    ContainerFactory.newInstance().createContainer();
+        AdapterManager a2=   other.getExtension(AdapterManager.class);
+        Assert.assertTrue(a1.hashCode()!= a2.hashCode());
     }
 }
