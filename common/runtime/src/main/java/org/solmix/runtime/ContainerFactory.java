@@ -49,19 +49,19 @@ public abstract class ContainerFactory
 
     protected static ThreadLocal<ContainerHolder> threadContainer = new ThreadLocal<ContainerHolder>();
 
-    protected static Map<Thread, ContainerHolder> threadContainers = new WeakHashMap<Thread, ContainerHolder>();
+    protected static Map<Thread, ContainerHolder> threadContainers = new WeakHashMap<Thread, ContainerHolder>(8);
 
     /**
-     * Returns the default system context, creating it if necessary.
+     * Returns the default system container, creating it if necessary.
      * 
-     * @return the default system context.
+     * @return the default system container.
      */
     public static synchronized Container getDefaultContainer() {
         return getDefaultContainer(true);
     }
 
     /**
-     * Return the default system context.
+     * Return the default system container.
      * 
      * @param b
      * @return
@@ -78,25 +78,25 @@ public abstract class ContainerFactory
         }
     }
     /**
-     * Sets the default bus if a default context is not already set.
+     * Sets the default bus if a default container is not already set.
      *
-     * @param context the default context.
+     * @param container the default container.
      * @return true if the Container was not set and is now set
      */
-    public static synchronized boolean possiblySetDefaultContainer(Container context) {
+    public static synchronized boolean possiblySetDefaultContainer(Container container) {
         ContainerHolder h = getThreadContainerHolder(false);
-        if (h.context == null) {
-           h.context=context;
+        if (h.container == null) {
+           h.container=container;
         }
         if (defaultContainer == null) {
-            defaultContainer = context;
+            defaultContainer = container;
             return true;
         }
         return false;
     }
     /**
      * Create a new ContainerFactory the class of {@link ContainerFactory} is determined by looking for the
-     * system property:org.solmix.context.system.fatory or by searching the classpath for:
+     * system property:org.solmix.container.system.fatory or by searching the classpath for:
      * META-INF/services/org.solmix.runtime.ContainerFactory
      * 
      * @return
@@ -179,24 +179,24 @@ public abstract class ContainerFactory
             }
 
         } catch (Exception ex) {
-            log.error("Failed found system context factory class", ex);
+            log.error("Failed found system container factory class", ex);
         }
         return factoryClass;
     }
 
-    public static synchronized void setDefaultContainer(Container context) {
-        defaultContainer = context;
+    public static synchronized void setDefaultContainer(Container container) {
+        defaultContainer = container;
         ContainerHolder h = getThreadContainerHolder(false);
-        h.context = context;
-        if (context == null) {
+        h.container = container;
+        if (container == null) {
             h.stale = true;
             threadContainer.remove();
         }
 
     }
 
-    public static void setThreadDefaultContainer(Container context) {
-        if (context == null) {
+    public static void setThreadDefaultContainer(Container container) {
+        if (container == null) {
             ContainerHolder h = threadContainer.get();
             if (h == null) {
                 Thread cur = Thread.currentThread();
@@ -205,13 +205,13 @@ public abstract class ContainerFactory
                 }
             }
             if (h != null) {
-                h.context = null;
+                h.container = null;
                 h.stale = true;
                 threadContainer.remove();
             }
         } else {
             ContainerHolder h = getThreadContainerHolder(true);
-            h.context = context;
+            h.container = container;
         }
     }
 
@@ -222,10 +222,10 @@ public abstract class ContainerFactory
     public static Container getThreadDefaultContainer(boolean createIfNeeded) {
         if (createIfNeeded) {
             ContainerHolder h = getThreadContainerHolder(false);
-            if (h.context == null) {
-                h.context = createThreadContainer();
+            if (h.container == null) {
+                h.container = createThreadContainer();
             }
-            return h.context;
+            return h.container;
         }
         ContainerHolder h = threadContainer.get();
         if (h == null || h.stale) {
@@ -234,16 +234,16 @@ public abstract class ContainerFactory
                 h = threadContainers.get(cur);
             }
         }
-        return h == null || h.stale ? null : h.context;
+        return h == null || h.stale ? null : h.container;
 
     }
 
     private static synchronized Container createThreadContainer() {
         ContainerHolder h = getThreadContainerHolder(false);
-        if (h.context == null) {
-            h.context = getDefaultContainer(true);
+        if (h.container == null) {
+            h.container = getDefaultContainer(true);
         }
-        return h.context;
+        return h.container;
     }
 
     private static ContainerHolder getThreadContainerHolder(boolean set) {
@@ -270,11 +270,11 @@ public abstract class ContainerFactory
     /**
      * Sets the default Container for the thread.
      * 
-     * @param context the new thread default context
-     * @return the old thread default system context or null
+     * @param container the new thread default container
+     * @return the old thread default system container or null
      */
-    public static Container getAndSetThreadDefaultContainer(Container context) {
-        if (context == null) {
+    public static Container getAndSetThreadDefaultContainer(Container container) {
+        if (container == null) {
             ContainerHolder h = threadContainer.get();
             if (h == null) {
                 Thread cur = Thread.currentThread();
@@ -283,8 +283,8 @@ public abstract class ContainerFactory
                 }
             }
             if (h != null) {
-                Container orig = h.context;
-                h.context = null;
+                Container orig = h.container;
+                h.container = null;
                 h.stale = true;
                 threadContainer.remove();
                 return orig;
@@ -292,27 +292,27 @@ public abstract class ContainerFactory
             return null;
         }
         ContainerHolder b = getThreadContainerHolder(true);
-        Container old = b.context;
-        b.context = context;
+        Container old = b.container;
+        b.container = container;
         return old;
     }
 
     /**
-     * Removes a Container from being a thread default context for any thread.
+     * Removes a Container from being a thread default container for any thread.
      * <p>
-     * This is typically done when a system context has ended its lifecycle (i.e.: a call to
+     * This is typically done when a system container has ended its lifecycle (i.e.: a call to
      * {@link Container#shutdown(boolean)} was invoked) and it wants to remove any reference to itself for any
      * thread.
      * 
      * @param bus the bus to remove
      */
-    public static void clearDefaultContainerForAnyThread(final Container context) {
+    public static void clearDefaultContainerForAnyThread(final Container container) {
         synchronized (threadContainers) {
             for (final Iterator<ContainerHolder> iterator = threadContainers.values().iterator(); iterator.hasNext();) {
                 ContainerHolder item = iterator.next();
-                if (context == null || item == null || item.context == null || item.stale || context.equals(item.context)) {
+                if (container == null || item == null || item.container == null || item.stale || container.equals(item.container)) {
                     if (item != null) {
-                        item.context = null;
+                        item.container = null;
                         // mark as stale so if a thread asks again, it will create a new one
                         item.stale = true;
                     }
@@ -324,7 +324,7 @@ public abstract class ContainerFactory
         }
     }
 
-    protected void initializeContainer(Container context) {
+    protected void initializeContainer(Container container) {
 
     }
 
@@ -335,6 +335,6 @@ public abstract class ContainerFactory
 
         volatile boolean stale;
 
-        Container context;
+        Container container;
     }
 }

@@ -65,4 +65,11 @@ public class Containers
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type){
         return get().getExtensionLoader(type);
     }
+
+    /**
+     * @param object
+     */
+    public static void set(Container container) {
+        ContainerFactory.setThreadDefaultContainer(container);
+    }
 }
