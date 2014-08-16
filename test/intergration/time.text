@@ -1,0 +1,31 @@
+=============================2014-7-25 23:07:40=============================
+context初始化solmix8180602=1282
+context获取10000次=2
+获取DataSourceManager=90
+获取DataSource=1036
+获取DataSource10000次=6420
+Map 10000次=1
+=============================2014-7-25 23:10:50=============================
+context初始化solmix8180602=761
+context获取10000次=2
+获取DataSourceManager=43
+获取UnPooledDataSource10000次=14985
+获取DataSource=9
+获取DataSource10000次=6743
+Map 10000次=1
+=============================2014-7-25 23:12:40=============================
+context初始化solmix534353=760
+context获取10000次=2
+获取DataSourceManager=67
+获取UnPooledDataSource10000次=7084
+获取DataSource=5
+获取DataSource10000次=1029
+Map 10000次=2
+=============================2014-7-25 23:13:17=============================
+context初始化solmix534353=744
+context获取10000次=2
+获取DataSourceManager=51
+获取UnPooledDataSource10000次=7295
+获取DataSource=6
+获取DataSource10000次=551
+Map 10000次=1
