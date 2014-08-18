@@ -180,10 +180,12 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
      */
     @Override
     public Set<String> getLoadedExtensions() {
+        getExtensionInfos();
         return Collections.unmodifiableSet(new TreeSet<String>(cached.keySet()));
     }
     
     public void addExtension(String name,ExtensionInfo info){
+        getExtensionInfos();
         synchronized (cachedLock) {
             cached.put(name, info);
         }

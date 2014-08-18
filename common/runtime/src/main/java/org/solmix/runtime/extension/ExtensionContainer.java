@@ -184,9 +184,27 @@ public class ExtensionContainer implements Container
             }
             if (provider != null) {
                 Collection<?> objs = provider.getBeansOfType(beanType);
-                if (objs != null) {
+                if (objs == null || objs.isEmpty()) {
+                } else if (objs != null && objs.size() == 1) {
                     for (Object o : objs) {
                         extensions.put(beanType, o);
+                    }
+                } else {
+                    if (beanType.isInterface()
+                    && beanType.isAnnotationPresent(Extension.class)) {
+                        if(LOG.isDebugEnabled()){
+                            LOG.debug("found more than one instance for "+beanType.getName()+
+                                ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
+                        }
+                    extensions.put(beanType,
+                        getExtensionLoader(beanType).getDefault());
+                    }else{
+                        if(LOG.isWarnEnabled()){
+                            LOG.warn("found "+objs.size()+" instance for "+beanType.getName());
+                        }
+                        for (Object o : objs) {
+                            extensions.put(beanType, o);
+                        }
                     }
                 }
                 obj = extensions.get(beanType);

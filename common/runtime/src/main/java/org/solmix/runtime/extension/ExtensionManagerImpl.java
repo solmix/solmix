@@ -203,7 +203,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     final void loadAndRegister(ExtensionInfo info) {
         if(LOG.isTraceEnabled()){
-            LOG.trace("Loading and initial Extension->"+info.getName());
+            LOG.trace("Loading and initial Extension: "+info.getName());
         }
         synchronized (info) {
             Class<?> cls = null;

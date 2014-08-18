@@ -133,10 +133,9 @@ public class ResourceManagerImpl implements ResourceManager
         if (resolvers == null) {
             resolvers = registeredResolvers;
         }
-        
-        if (LOG.isDebugEnabled()) { 
-            LOG.debug("resolving resource <" + name + ">" + (asStream ? " as stream "  
-                                                            : " type <" + type + ">"));
+        if (LOG.isTraceEnabled()) { 
+            LOG.trace("resolving resource [" + name + "]" + (asStream ? " as stream "  
+                                                            : " type [" + type + "]"));
         }
 
         T ret = null; 
