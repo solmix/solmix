@@ -305,7 +305,7 @@ public class DSRequestData implements java.io.Serializable
 
     /**
      * Indicate this is a request from client,not from internal,for usually,the request along with a
-     * {@link org.solmix.runtime.Context}
+     * {@link org.solmix.ds.context.Context}
      * 
      * @return the isClientRequest
      */
@@ -315,7 +315,7 @@ public class DSRequestData implements java.io.Serializable
 
     /**
      * Indicate this is a request from client,not from internal,for usually,the request along with a
-     * {@link org.solmix.runtime.Context}
+     * {@link org.solmix.ds.context.Context}
      * 
      * @param isClientRequest the isClientRequest to set
      */

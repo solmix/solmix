@@ -29,8 +29,8 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.Context.Scope;
-import org.solmix.runtime.support.AttributeProvider;
+import org.solmix.ds.context.Context.Scope;
+import org.solmix.ds.context.support.AttributeProvider;
 
 /**
  * 
@@ -117,7 +117,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.org.solmix.runtime.support.AttributeProvider#getAttributes(org.solmix.runtime.Context.Scope)
+     * @see org.solmix.ds.context.support.org.solmix.runtime.support.AttributeProvider#getAttributes(org.solmix.ds.context.Context.Scope)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -163,8 +163,8 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.org.solmix.runtime.support.AttributeProvider#removeAttribute(java.lang.String,
-     *      org.solmix.runtime.Context.Scope)
+     * @see org.solmix.ds.context.support.org.solmix.runtime.support.AttributeProvider#removeAttribute(java.lang.String,
+     *      org.solmix.ds.context.Context.Scope)
      */
     @Override
     public void removeAttribute(String name, Scope scope) {
@@ -190,7 +190,7 @@ public class WebAttributeProvider implements AttributeProvider
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.support.AttributeProvider#getAttributeNames()
+     * @see org.solmix.ds.context.support.AttributeProvider#getAttributeNames()
      */
     @Override
     public Enumeration<String> getAttributeNames() {

@@ -42,10 +42,10 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.logs.SlxLog;
 import org.solmix.commons.util.DataUtils;
+import org.solmix.ds.context.Context;
 import org.solmix.fmk.datasource.DSResponseImpl;
 import org.solmix.fmk.datasource.DefaultDataSourceManager;
 import org.solmix.fmk.util.DataTools;
-import org.solmix.runtime.Context;
 
 /**
  * @author solmix.f@gmail.com
@@ -533,7 +533,7 @@ public class BuiltInApplication implements Application
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.api.application.Application#isPermitted(org.solmix.api.datasource.DSRequest, org.solmix.runtime.Context)
+     * @see org.solmix.api.application.Application#isPermitted(org.solmix.api.datasource.DSRequest, org.solmix.ds.context.Context)
      */
     @Override
     public boolean isPermitted(DSRequest request, Context context) throws SlxException {

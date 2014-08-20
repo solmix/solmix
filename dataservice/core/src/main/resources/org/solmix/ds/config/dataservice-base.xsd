@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/dataservice/v1.0.0"
+	elementFormDefault="qualified" attributeFormDefault="qualified"
+	version="1.0.0" xmlns:Q1="http://www.solmix.org/xmlns/dataservice/v1.0.0">
+
+
+</schema>
+    <xsd:element name="solmix">
+    <xsd:complexType>
+    	<xsd:sequence>
+    		<xsd:element name="dataservice" minOccurs="1" maxOccurs="unbounded">
+    		<xsd:complexType>
+    			<xsd:sequence>
+    				<xsd:element name="description" type="xsd:string"
+    					minOccurs="0" maxOccurs="1">
+    					<xsd:annotation>
+    						<xsd:documentation>
+    							数据服务用途描述
+    						</xsd:documentation>
+    					</xsd:annotation>
+    				</xsd:element>
+    				<xsd:element name="fields">
+    					<xsd:complexType>
+    						<xsd:sequence>
+    							<xsd:element name="field" minOccurs="1"
+    								maxOccurs="unbounded">
+    								<xsd:complexType>
+    									<xsd:sequence>
+    										<xsd:element name="valueMap"
+    											minOccurs="0" maxOccurs="1">
+    											<xsd:complexType>
+    												<xsd:sequence>
+    													<xsd:element
+    														name="value">
+    														<xsd:complexType>
+    															<xsd:attribute
+    																name="id" type="xsd:string">
+    															</xsd:attribute>
+    															<xsd:attribute
+    																name="name" type="xsd:string">
+    															</xsd:attribute>
+    														</xsd:complexType>
+    													</xsd:element>
+    												</xsd:sequence>
+    												<xsd:attribute
+    													name="operation" type="xsd:string">
+    												</xsd:attribute>
+    											</xsd:complexType>
+    										</xsd:element>
+    										<xsd:element
+    											name="validators">
+    											<xsd:complexType>
+    												<xsd:sequence>
+    													<xsd:element
+    														name="validator" minOccurs="1"
+    														maxOccurs="unbounded">
+    														<xsd:complexType>
+
+    															<xsd:sequence>
+    																<xsd:element
+    																	name="service" type="Q1:serviceType">
+    																</xsd:element>
+    															</xsd:sequence>
+    															<xsd:attribute
+    																name="type" type="xsd:string">
+    															</xsd:attribute>
+    															<xsd:attribute
+    																name="max" type="xsd:string">
+    															</xsd:attribute>
+    														</xsd:complexType>
+    													</xsd:element>
+    												</xsd:sequence>
+    											</xsd:complexType>
+    										</xsd:element>
+    									</xsd:sequence>
+    									<xsd:attribute name="name"
+    										type="xsd:string" use="required" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												字段名称,必须在一个Fields中唯一
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute name="type"
+    										form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												字段类型
+    											</xsd:documentation>
+    										</xsd:annotation>
+    										<xsd:simpleType>
+    											<xsd:restriction
+    												base="xsd:string">
+    												<xsd:enumeration
+    													value="text">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="boolean">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="integer">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="float">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="date">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="time">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="datetime">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="enum">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="intEnum">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="sequence">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="link">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="image">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="binary">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="imageFile">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="any">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="modifier">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="modifierTimestamp">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="creatorTimestamp">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="creator">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="password">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="custom">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="ntext">
+    												</xsd:enumeration>
+    												<xsd:enumeration
+    													value="unknown">
+    												</xsd:enumeration>
+    											</xsd:restriction>
+    										</xsd:simpleType>
+    									</xsd:attribute>
+    									<xsd:attribute name="title"
+    										type="xsd:string" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												标题
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute name="hidden"
+    										type="xsd:boolean" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												是否隐藏
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute name="canEdit"
+    										type="xsd:boolean" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												高级属性
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute name="canExport"
+    										type="xsd:boolean" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												高级属性
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute name="canFilter"
+    										type="xsd:boolean" form="unqualified">
+    										<xsd:annotation>
+    											<xsd:documentation>
+    												高级属性
+    											</xsd:documentation>
+    										</xsd:annotation>
+    									</xsd:attribute>
+    									<xsd:attribute
+    										name="exportTitle" type="xsd:string" form="unqualified">
+    									</xsd:attribute>
+    									<xsd:attribute name="rootValue"
+    										type="xsd:string" form="unqualified">
+    									</xsd:attribute>
+    									<xsd:anyAttribute></xsd:anyAttribute>
+    								</xsd:complexType>
+    							</xsd:element>
+    						</xsd:sequence>
+    					</xsd:complexType>
+    				</xsd:element>
+    				<xsd:element name="operations">
+    					<xsd:complexType>
+    						<xsd:sequence>
+    							<xsd:element name="fetch" minOccurs="0"
+    								maxOccurs="unbounded" type="Q1:operationType">
+
+    							</xsd:element>
+    							<xsd:element name="add"
+    								type="Q1:operationType" minOccurs="0"
+    								maxOccurs="unbounded">
+    							</xsd:element>
+    							<xsd:element name="remove"
+    								type="Q1:operationType" minOccurs="0"
+    								maxOccurs="unbounded">
+    							</xsd:element>
+    							<xsd:element name="update"
+    								type="Q1:operationType" minOccurs="0"
+    								maxOccurs="unbounded">
+    							</xsd:element>
+    							<xsd:element name="custom"
+    								type="Q1:operationType" minOccurs="0"
+    								maxOccurs="unbounded">
+    							</xsd:element>
+    						</xsd:sequence>
+
+    					</xsd:complexType>
+    				</xsd:element>
+    				<xsd:element name="cache" type="Q1:cacheType"></xsd:element>
+    				<xsd:element name="security"
+    					type="Q1:securityType">
+    				</xsd:element>
+    				<xsd:element name="service" type="Q1:serviceType"></xsd:element>
+    			</xsd:sequence>
+    			<xsd:attribute name="namespace" type="xsd:string"
+    				use="required">
+    				<xsd:annotation>
+    					<xsd:documentation>
+    						该数据服务的全局唯一命名空间
+    					</xsd:documentation>
+    				</xsd:annotation>
+    			</xsd:attribute>
+    			<xsd:attribute name="type" type="xsd:string"
+    				use="required">
+    				<xsd:annotation>
+    					<xsd:documentation>服务服务类型</xsd:documentation>
+    				</xsd:annotation>
+    			</xsd:attribute>
+    			<xsd:attribute name="dataProtocol" type="xsd:string"></xsd:attribute>
+    			<xsd:attribute name="dataFormat" type="xsd:string"></xsd:attribute>
+    			<xsd:attribute name="autoJoinTransactions" type="xsd:boolean"></xsd:attribute>
+    		</xsd:complexType>
+    		</xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="version" type="Q1:versionType"></xsd:attribute>
+    </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="versionType">
+    	<xsd:restriction base="xsd:token"></xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:attributeGroup name="sqlFieldAttr"></xsd:attributeGroup>
+
+    <xsd:complexType name="cacheType"></xsd:complexType>
+
+    <xsd:complexType name="securityType"></xsd:complexType>
+
+    <xsd:complexType name="serviceType">
+    	<xsd:attribute name="lookup" form="unqualified">
+    		<xsd:simpleType>
+    			<xsd:restriction base="xsd:string">
+    				<xsd:enumeration value="new"></xsd:enumeration>
+    				<xsd:enumeration value="jndi"></xsd:enumeration>
+    			</xsd:restriction>
+    		</xsd:simpleType>
+    	</xsd:attribute>
+    	<xsd:attribute name="interface" type="xsd:string"
+    		form="unqualified">
+    	</xsd:attribute>
+    	<xsd:attribute name="class" type="xsd:string" form="unqualified"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="scriptType"></xsd:complexType>
+
+    <xsd:complexType name="operationType">
+
+    	<xsd:sequence>
+    		<xsd:element name="service" type="Q1:serviceType"></xsd:element>
+    		<xsd:element name="security" type="Q1:securityType"></xsd:element>
+    		<xsd:element name="script" type="Q1:scriptType"></xsd:element>
+    		<xsd:element name="cache" type="Q1:cacheType"></xsd:element>
+    		<xsd:element name="subs" >
+    		<xsd:complexType>
+    			<xsd:sequence>
+    				<xsd:element name="fetch" type="Q1:operationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    				<xsd:element name="update"
+    					type="Q1:operationType" minOccurs="0" maxOccurs="unbounded">
+    				</xsd:element>
+    				<xsd:element name="add" type="Q1:operationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    				<xsd:element name="remove"
+    					type="Q1:operationType" minOccurs="0" maxOccurs="unbounded">
+    				</xsd:element>
+    				<xsd:element name="custom"
+    					type="Q1:operationType" minOccurs="0" maxOccurs="unbounded">
+    				</xsd:element>
+    				<xsd:element name="ref" minOccurs="0" maxOccurs="unbounded">
+    				<xsd:complexType>
+    					<xsd:attribute name="id"
+    						type="xsd:string">
+    					</xsd:attribute>
+    				</xsd:complexType>
+    				</xsd:element>
+    			</xsd:sequence>
+    		</xsd:complexType>
+    		</xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="id" type="xsd:string" use="required" form="unqualified"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="subsType"></xsd:complexType>

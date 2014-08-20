@@ -31,11 +31,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.solmix.api.exception.SlxException;
-import org.solmix.runtime.Context;
+import org.solmix.ds.context.Context;
 import org.solmix.runtime.SystemContext;
 
 /**
- * This is a web context extends {@link org.solmix.runtime.Context} , {@link org.solmix.api.datasource.DSRequest
+ * This is a web context extends {@link org.solmix.ds.context.Context} , {@link org.solmix.api.datasource.DSRequest
  * DataSource Request} from web servlet, must used this interface to access the framework.
  * 
  * @version 110035 2012-9-28

@@ -31,10 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.context.WebContextFactory;
 import org.solmix.api.exception.SlxException;
+import org.solmix.ds.context.Context;
 import org.solmix.fmk.SlxContext;
 import org.solmix.web.context.WebContextFactoryImpl;
 

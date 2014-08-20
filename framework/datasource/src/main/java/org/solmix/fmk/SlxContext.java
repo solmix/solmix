@@ -27,12 +27,12 @@ import org.slf4j.LoggerFactory;
 import org.solmix.api.call.DSCall;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.exception.SlxException;
+import org.solmix.ds.context.Context;
+import org.solmix.ds.context.Context.Scope;
+import org.solmix.ds.context.support.ContextDecorator;
 import org.solmix.fmk.call.Transaction;
-import org.solmix.runtime.Context;
-import org.solmix.runtime.Context.Scope;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.SystemContextFactory;
-import org.solmix.runtime.support.ContextDecorator;
 
 /**
  * This class allows obtaining of the current Request without passing the request around the world.

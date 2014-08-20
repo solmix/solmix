@@ -43,8 +43,8 @@ import org.solmix.api.pool.PoolManager;
 import org.solmix.api.pool.PoolManagerFactory;
 import org.solmix.api.types.Texception;
 import org.solmix.api.types.Tmodule;
+import org.solmix.ds.context.Context;
 import org.solmix.fmk.SlxContext;
-import org.solmix.runtime.Context;
 import org.solmix.runtime.SystemContext;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 
