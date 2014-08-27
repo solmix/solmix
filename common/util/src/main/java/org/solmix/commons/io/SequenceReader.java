@@ -33,7 +33,7 @@ import org.solmix.commons.util.IOUtils;
 public class SequenceReader extends Reader
 {
 
-   public SequenceReader(List readerList)
+   public SequenceReader(List<?> readerList)
    {
       readers = null;
       currentReader = null;
@@ -56,7 +56,8 @@ public class SequenceReader extends Reader
    }
 
 
-   public int read() throws IOException
+   @Override
+public int read() throws IOException
    {
       if (currentReader == null)
          return -1;
@@ -69,7 +70,8 @@ public class SequenceReader extends Reader
       }
    }
 
-   public int read(char buffer[], int offset, int length) throws IOException
+   @Override
+public int read(char buffer[], int offset, int length) throws IOException
    {
       if (currentReader == null)
          return -1;
@@ -82,7 +84,8 @@ public class SequenceReader extends Reader
       }
    }
 
-   public void close() throws IOException
+   @Override
+public void close() throws IOException
    {
       do
          nextReader();
@@ -99,7 +102,7 @@ public class SequenceReader extends Reader
          currentReader = null;
    }
 
-   private Iterator readers;
+   private Iterator<?> readers;
 
    private Reader currentReader;
 }
