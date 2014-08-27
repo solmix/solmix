@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://www.solmix.org/xmlns/ds/base/v1.0.0"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/ds/base/v1.0.0"
+<xsd:schema xmlns="http://www.solmix.org/xmlns/datasource/v1.0.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.solmix.org/xmlns/dataservice/v1.0.0"
 	elementFormDefault="qualified" attributeFormDefault="qualified"
-	version="1.0.0" xmlns:Q1="http://www.solmix.org/xmlns/ds/base/v1.0.0">
+	version="1.0.0" xmlns:Q1="http://www.solmix.org/xmlns/dataservice/v1.0.0">
 
 
 </schema>
@@ -257,7 +257,7 @@
     					</xsd:documentation>
     				</xsd:annotation>
     			</xsd:attribute>
-    			<xsd:attribute name="serverType" type="xsd:string"
+    			<xsd:attribute name="type" type="xsd:string"
     				use="required">
     				<xsd:annotation>
     					<xsd:documentation>服务服务类型</xsd:documentation>
@@ -265,14 +265,7 @@
     			</xsd:attribute>
     			<xsd:attribute name="dataProtocol" type="xsd:string"></xsd:attribute>
     			<xsd:attribute name="dataFormat" type="xsd:string"></xsd:attribute>
-    			<xsd:attribute name="autoJoinTransactions"
-    				type="xsd:boolean">
-    			</xsd:attribute>
-    			<xsd:attribute name="validation" type="xsd:boolean" default="true"></xsd:attribute>
-    			<xsd:attribute name="check" type="xsd:boolean" default="false" form="unqualified">
-    				<xsd:annotation>
-    					<xsd:documentation>验证执行结果</xsd:documentation>
-    				</xsd:annotation></xsd:attribute>
+    			<xsd:attribute name="autoJoinTransactions" type="xsd:boolean"></xsd:attribute>
     		</xsd:complexType>
     		</xsd:element>
     	</xsd:sequence>

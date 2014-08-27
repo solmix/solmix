@@ -25,7 +25,7 @@ package org.solmix.ds.config;
  * @version $Id$  2014年8月20日
  */
 
-public class Tfields extends ConfigType
+public class TFields extends ConfigType
 {
 
 }
