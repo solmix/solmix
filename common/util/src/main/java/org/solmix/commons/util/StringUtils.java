@@ -14,11 +14,6 @@ import java.util.regex.Pattern;
 
 import org.solmix.commons.Constants;
 
-/**
- * StringUtils
- * 
- * @author qian.lei
- */
 
 public final class StringUtils
 {
