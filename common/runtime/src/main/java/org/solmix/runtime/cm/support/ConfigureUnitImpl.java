@@ -43,7 +43,7 @@ public class ConfigureUnitImpl implements ConfigureUnit
     private final String pid;
     private Map<String,Object> internal;
     
-    private final SpringConfigureUnitManager manager;
+     final SpringConfigureUnitManager manager;
     
     public ConfigureUnitImpl(String pid,Properties prop,SpringConfigureUnitManager manager){
         this.properties=prop;

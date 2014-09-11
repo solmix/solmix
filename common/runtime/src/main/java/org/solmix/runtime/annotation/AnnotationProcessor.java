@@ -23,8 +23,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
 
 
@@ -36,8 +34,6 @@ import org.solmix.commons.util.Reflection;
 
 public class AnnotationProcessor
 {
-    private static final Logger LOG= LoggerFactory.getLogger(AnnotationProcessor.class);
-
     private final Object target; 
     private List<Class<? extends Annotation>> annotationTypes; 
     

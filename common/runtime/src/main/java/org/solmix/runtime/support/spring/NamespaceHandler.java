@@ -37,8 +37,7 @@ public class NamespaceHandler extends NamespaceHandlerSupport
      */
     @Override
     public void init() {
-        // TODO Auto-generated method stub
-
+        registerBeanDefinitionParser("container",  new ContainerDefinitionParser());
     }
 
 }

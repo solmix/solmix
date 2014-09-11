@@ -37,14 +37,14 @@ public class AbstractBeanDefinitionParser extends
     AbstractSingleBeanDefinitionParser
 {
 
-    public static final String WIRE_CONTAINER_ATTRIBUTE = AbstractBeanDefinitionParser.class.getName()
-        + ".wireBus";
+    public static final String WIRE_CONTAINER_ATTRIBUTE = 
+        AbstractBeanDefinitionParser.class.getName()+ ".wireBus";
 
-    public static final String WIRE_CONTAINER_NAME = AbstractBeanDefinitionParser.class.getName()
-        + ".wireBusName";
+    public static final String WIRE_CONTAINER_NAME = 
+        AbstractBeanDefinitionParser.class.getName()+ ".wireBusName";
 
-    public static final String WIRE_CONTAINER_CREATE = AbstractBeanDefinitionParser.class.getName()
-        + ".wireBusCreate";
+    public static final String WIRE_CONTAINER_CREATE = 
+        AbstractBeanDefinitionParser.class.getName()+ ".wireBusCreate";
 
     public static final String WIRE_CONTAINER_HANDLER = ContainerPostProcessor.class.getName();
 
@@ -102,7 +102,7 @@ public class AbstractBeanDefinitionParser extends
                 bean.addDependsOn(val);
             } else if ("name".equals(name)) {
                 processNameAttribute(element, ctx, bean, val);
-            } else if ("bus".equals(name)) {
+            } else if ("container".equals(name)) {
                 setBus = processBusAttribute(element, ctx, bean, val);
             } else if (!"id".equals(name) && isAttribute(pre, name)) {
                 mapAttribute(bean, element, name, val);
@@ -128,11 +128,7 @@ public class AbstractBeanDefinitionParser extends
         }
 
         if (val != null && val.trim().length() > 0) {
-            if (val.startsWith("#") && !val.startsWith("#{")) {
-                bean.addPropertyReference(propertyName, val.substring(1));
-            } else {
                 bean.addPropertyValue(propertyName, val);
-            }
         }
     }
 
@@ -140,7 +136,7 @@ public class AbstractBeanDefinitionParser extends
         BeanDefinitionBuilder bean, String val) {
         if (val != null && val.trim().length() > 0) {
             if (ctx.getRegistry().containsBeanDefinition(val)) {
-                bean.addPropertyReference("bus", val);
+                bean.addPropertyReference("container", val);
             } else {
                 addBusWiringAttribute(bean, true, val, ctx);
             }
@@ -173,9 +169,6 @@ public class AbstractBeanDefinitionParser extends
         boolean type, String containerName, ParserContext ctx) {
         bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_ATTRIBUTE, type);
         if (containerName != null && containerName.trim().length() > 0) {
-            if (containerName.charAt(0) == '#') {
-                containerName = containerName.substring(1);
-            }
             bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_NAME,
                 containerName);
         }

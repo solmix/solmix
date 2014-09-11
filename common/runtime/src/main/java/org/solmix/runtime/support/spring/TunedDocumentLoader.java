@@ -26,7 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.sax.SAXSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +101,7 @@ public class TunedDocumentLoader extends DefaultDocumentLoader
             XMLReader reader = parser.getXMLReader();
             reader.setEntityResolver(entityResolver);
             reader.setErrorHandler(errorHandler);
-            SAXSource saxSource = new SAXSource(reader, inputSource);
+//            SAXSource saxSource = new SAXSource(reader, inputSource);
 //            W3CDOMStreamWriter writer = new W3CDOMStreaXMLStreamWriterImplmWriter();
 //            StaxUtils.copy(saxSource, writer);
 //            return writer.getDocument();

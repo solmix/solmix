@@ -25,6 +25,7 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.service.InjectTestService;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * 
@@ -50,5 +51,12 @@ public class SpringContainerTest
             AdapterManager.class);
         Assert.assertNotNull(apm);
     }
-
+    @Test
+    public void testSchema(){
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/org/solmix/runtime/support/spring/container.xml");
+        Container c=  context.getBean("solmix1",Container.class);
+        Assert.assertNotNull(c);
+        Container c1=  context.getBean("solmix",Container.class);
+        Assert.assertNotNull(c1);
+    }
 }

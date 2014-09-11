@@ -19,11 +19,18 @@
 
 package org.solmix.runtime.support.spring;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.solmix.runtime.Container;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.ConstructorArgumentValues;
+import org.springframework.beans.factory.config.ConstructorArgumentValues.ValueHolder;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -37,66 +44,96 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 public class ContainerPostProcessor implements BeanFactoryPostProcessor
 {
 
-    private Container context;
+    private Container container;
 
-    private String contextName;
+     String name;
 
     public ContainerPostProcessor()
     {
 
     }
 
-    public ContainerPostProcessor(Container context)
+    public ContainerPostProcessor(Container container)
     {
-        this.context = context;
+        this.container = container;
     }
 
     public ContainerPostProcessor(String name)
     {
-        this.contextName = name;
+        this.name = name;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.springframework.beans.factory.config.BeanFactoryPostProcessor#postProcessBeanFactory(org.springframework.beans.factory.config.ConfigurableListableBeanFactory)
-     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        Object inject = context;
+        Object inject = container;
         if(inject==null){
-            inject = getContextByName(Container.DEFAULT_CONTAINER_ID, beanFactory, true, null);
+            inject = getContainerByName(Container.DEFAULT_CONTAINER_ID, beanFactory, true, null);
         }else{
             if (!beanFactory.containsBeanDefinition(Container.DEFAULT_CONTAINER_ID)
                 && !beanFactory.containsSingleton(Container.DEFAULT_CONTAINER_ID)) {
-                beanFactory.registerSingleton(Container.DEFAULT_CONTAINER_ID, context);
+                beanFactory.registerSingleton(Container.DEFAULT_CONTAINER_ID, container);
             }
         }
         for (String beanName : beanFactory.getBeanDefinitionNames()) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
-            
+          Object p=  beanDefinition.getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_ATTRIBUTE);
+           if(p==null)
+               continue;
+           String name = (String)beanDefinition.getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_NAME);
+           String create = (String)beanDefinition
+               .getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_CREATE);
+           Object inj = inject;
+           if (name != null) {
+               if (container != null) {
+                   continue;
+               }
+               inj = getContainerByName(name, beanFactory, create != null, create);
+           }
+           beanDefinition.removeAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_NAME);
+           beanDefinition.removeAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_ATTRIBUTE);
+           beanDefinition.removeAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_CREATE);
+           if (create == null) {
+               if (Boolean.valueOf(p.toString())) {
+                   beanDefinition.getPropertyValues()
+                       .addPropertyValue("container", inj);
+               } else  {
+                   ConstructorArgumentValues constructorArgs = beanDefinition.getConstructorArgumentValues();
+                   insertConstructorArg(constructorArgs, inj);
+               }
+           }
         }//end loop bean.
 
     }
 
-    /**
-     * @param name
-     * @param factory
-     * @param b
-     * @param object
-     * @return
-     */
-    private Object getContextByName(String name, ConfigurableListableBeanFactory factory, boolean create, String cn) {
+    private void insertConstructorArg(
+        ConstructorArgumentValues constructorArgs, Object valueToInsert) {
+        List<ValueHolder> genericArgs = new ArrayList<ValueHolder>(
+            (constructorArgs.getGenericArgumentValues()));
+        Map<Integer, ValueHolder> indexedArgs = new HashMap<Integer, ValueHolder>(
+            constructorArgs.getIndexedArgumentValues());
+
+        constructorArgs.clear();
+        for (ValueHolder genericValue : genericArgs) {
+            constructorArgs.addGenericArgumentValue(genericValue);
+        }
+        for (Map.Entry<Integer, ValueHolder> entry : indexedArgs.entrySet()) {
+            constructorArgs.addIndexedArgumentValue(entry.getKey() + 1,
+                entry.getValue());
+        }
+        constructorArgs.addIndexedArgumentValue(0, valueToInsert);
+    }
+    
+    private Object getContainerByName(String name, ConfigurableListableBeanFactory factory, boolean create, String cn) {
         if (!factory.containsBeanDefinition(name) && (create || Container.DEFAULT_CONTAINER_ID.equals(name))) {
             DefaultListableBeanFactory df = (DefaultListableBeanFactory)factory;
             RootBeanDefinition rbd = new RootBeanDefinition(SpringContainer.class);
             if (cn != null) {
-                rbd.setAttribute("busConfig", new RuntimeBeanReference(cn));
+                rbd.setAttribute("config", new RuntimeBeanReference(cn));
             }
             df.registerBeanDefinition(name, rbd);
         } else if (cn != null) {
             BeanDefinition bd = factory.getBeanDefinition(name);
-            bd.getPropertyValues().addPropertyValue("busConfig", new RuntimeBeanReference(cn));
+            bd.getPropertyValues().addPropertyValue("config", new RuntimeBeanReference(cn));
         }
         return new RuntimeBeanReference(name);
     }

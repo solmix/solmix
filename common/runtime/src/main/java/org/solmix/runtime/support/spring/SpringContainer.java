@@ -50,6 +50,10 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
     {
 
     }
+    
+    public void setConfig(ContainerDefinitionParser.ContainerType config){
+        config.setContainer(this);
+    }
 
     /**
      * {@inheritDoc}
