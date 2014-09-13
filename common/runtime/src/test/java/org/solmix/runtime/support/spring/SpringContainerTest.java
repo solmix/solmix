@@ -53,10 +53,18 @@ public class SpringContainerTest
     }
     @Test
     public void testSchema(){
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/org/solmix/runtime/support/spring/container.xml");
-        Container c=  context.getBean("solmix1",Container.class);
-        Assert.assertNotNull(c);
-        Container c1=  context.getBean("solmix",Container.class);
-        Assert.assertNotNull(c1);
+        ClassPathXmlApplicationContext context =null;
+        try {
+            context = new ClassPathXmlApplicationContext("/org/solmix/runtime/support/spring/container.xml");
+            Container c=  context.getBean("solmix1",Container.class);
+            Assert.assertNotNull(c);
+            Container c1=  context.getBean("solmix",Container.class);
+            Assert.assertNotSame(c, c1);
+            Assert.assertNotNull(c1);
+        } finally{
+            if(context!=null)
+            context.close();
+        }
+        
     }
 }
