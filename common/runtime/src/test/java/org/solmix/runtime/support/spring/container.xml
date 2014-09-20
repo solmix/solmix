@@ -10,6 +10,10 @@
            http://www.solmix.org/schema/rt
            http://www.solmix.org/schema/rt/rt.xsd">
            
-	<rt:container name="solmix1"></rt:container>
+	<rt:container name="solmix1">
+	<rt:properties>
+		<entry key="key" value="value"/>
+	</rt:properties>
+	</rt:container>
 	<rt:container/>
 </beans>

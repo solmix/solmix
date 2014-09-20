@@ -57,6 +57,8 @@ public class SpringContainerTest
         try {
             context = new ClassPathXmlApplicationContext("/org/solmix/runtime/support/spring/container.xml");
             Container c=  context.getBean("solmix1",Container.class);
+           String v= c.getProperty("key").toString();
+           Assert.assertEquals("value", v);
             Assert.assertNotNull(c);
             Container c1=  context.getBean("solmix",Container.class);
             Assert.assertNotSame(c, c1);
