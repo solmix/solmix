@@ -1,0 +1,10 @@
+#类名:接口名:是否延迟加载:是否可选
+org.solmix.runtime.service.DateTimeService:org.solmix.runtime.service.TimeService
+org.solmix.runtime.service.SystemTimeService:org.solmix.runtime.service.TimeService:true
+java.util.LinkedList:java.util.List:true:false
+org.solmix.runtime.service.InjectTestService
+org.solmix.runtime.extension.ContainerListenerImpl:org.solmix.runtime.ContainerListener
+org.solmix.runtime.service.provider1.Provider12:org.solmix.runtime.service.provider1.IProvider1:true:false
+org.solmix.runtime.service.provider1.Provider11:org.solmix.runtime.service.provider1.IProvider1:true:false
+
+#COMMENT

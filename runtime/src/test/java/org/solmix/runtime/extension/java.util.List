@@ -1,0 +1,2 @@
+java.util.ArrayList:java.util.List:true:true
+java.util.LinkedList:java.util.List:false:false

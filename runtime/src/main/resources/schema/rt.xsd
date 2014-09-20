@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:beans="http://www.springframework.org/schema/beans"
+ targetNamespace="http://www.solmix.org/schema/rt" xmlns="http://www.solmix.org/schema/rt" 
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+ <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"/>
+    <xsd:element name="container">
+    <xsd:complexType>
+    	<xsd:sequence>
+    		<xsd:element name="listeners" type="xsd:anyType"
+    			minOccurs="0">
+    		</xsd:element>
+    		<xsd:element name="properties" type="beans:mapType"
+    			minOccurs="0">
+    		</xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
+    	<xsd:attribute name="name" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
