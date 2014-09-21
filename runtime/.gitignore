@@ -1,1 +1,15 @@
-/target
+.clover/
+target/
+.project
+.classpath
+.settings/
+.idea/
+.patch
+*.iml
+*.ipr
+*.iws
+.DS_Store
+reports/
+.directory
+atlassian-ide-plugin.xml
+/TempWmicBatchFile.bat
