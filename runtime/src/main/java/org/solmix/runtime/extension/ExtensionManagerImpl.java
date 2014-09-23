@@ -415,4 +415,17 @@ public class ExtensionManagerImpl implements ExtensionManager,
        }
         
     }
+
+	/**
+	 * 
+	 */
+	public void destroyBeans() {
+		for(ExtensionInfo ex:all.values()){
+			if(ex.getLoadedObject()!=null){
+				ResourceInjector inject= new ResourceInjector(resourceManager);
+				inject.destroy(ex.getLoadedObject());
+			}
+		}
+		
+	}
 }

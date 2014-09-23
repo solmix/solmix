@@ -68,6 +68,20 @@ public class ExtensionContainer implements Container
         CREATING , INITIALIZING , CREATED , CLOSING , CLOSED;
 
     }
+    //JVM shutdown hooker
+    static{
+    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				LOG.info("Run JVM shutdown hook!");
+				Container[] containers=ContainerFactory.getContainers();
+				for(Container container:containers){
+					container.close();
+				}
+			}
+		},"SLX-Shutdown-Thread"));
+    }
 
     protected final Map<Class<?>, Object> extensions;
 
@@ -341,7 +355,7 @@ public class ExtensionContainer implements Container
      * 
      */
     protected void destroyBeans() {
-        
+    	extensionManager.destroyBeans();
     }
 
     @Override
@@ -428,7 +442,7 @@ public class ExtensionContainer implements Container
      */
     @Override
     public void close(boolean wait) {
-        if(status==ContainerStatus.CLOSING){
+        if(status==ContainerStatus.CLOSING || status==ContainerStatus.CLOSED){
             return ;
         }
         synchronized(this){

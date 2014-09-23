@@ -22,7 +22,9 @@ package org.solmix.runtime;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -58,6 +60,15 @@ public abstract class ContainerFactory
      */
     public static synchronized Container getDefaultContainer() {
         return getDefaultContainer(true);
+    }
+    
+    public static Container[] getContainers(){
+    	List<Container> all= new ArrayList<Container>();
+    	for(ContainerHolder holder:threadContainers.values()){
+    		if(!holder.stale)
+    			all.add(holder.container);
+    	}
+    	return all.toArray(new Container[]{});
     }
 
     /**
@@ -192,7 +203,6 @@ public abstract class ContainerFactory
             h.stale = true;
             threadContainer.remove();
         }
-
     }
 
     public static void setThreadDefaultContainer(Container container) {
