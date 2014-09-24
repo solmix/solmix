@@ -159,13 +159,14 @@ public class SlxRPC
         send(op);
     }
     public static void bind(final String datasourceName, final DataBoundComponent component, final Function callback) {
-        DataSource ds = DataSource.get(datasourceName);
+        final  String dsName=datasourceName.replace("/", "$");
+        DataSource ds = DataSource.get(dsName);
         if (ds == null) {
-            DataSource.load(datasourceName, new Function() {
+            DataSource.load(dsName, new Function() {
 
                 @Override
                 public void execute() {
-                    DataSource _ds = DataSource.get(datasourceName);
+                    DataSource _ds = DataSource.get(dsName);
                     component.setDataSource(_ds);
                     if (callback != null)
                         callback.execute();

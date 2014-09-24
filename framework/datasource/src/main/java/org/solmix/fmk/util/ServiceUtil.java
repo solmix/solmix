@@ -104,8 +104,7 @@ public class ServiceUtil
             InitialContext ic = new InitialContext();
             return ic.lookup(jndi);
         } catch (NamingException e) {
-            log.error("ServiceUtilities:getJNDIService() -- NamingException on JNDI service lookup" + jndi, e);
-            e.printStackTrace();
+            log.error("ServiceUtilities:getJNDIService() -- NamingException on JNDI service lookup " + jndi, e);
             return null;
         }
     }

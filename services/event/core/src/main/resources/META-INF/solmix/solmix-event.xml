@@ -6,7 +6,7 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd">
-   <bean id="org.solmix.api.event.EventManager" 	class="org.solmix.eventservice.spring.SpringEventManager"
+   <bean id="org.solmix.runtime.event.EventManager" 	class="org.solmix.eventservice.spring.SpringEventManager"
    	lazy-init="true" init-method="start" destroy-method="stop">
    	<constructor-arg ref="solmix" />
    </bean>
