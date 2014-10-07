@@ -45,11 +45,10 @@ import java.util.StringTokenizer;
  * @author solmix.f@gmail.com
  * @since 0.0.1
  */
-@SuppressWarnings({"rawtypes","unchecked"})
-public class DataTypeMap implements Map
+public class DataTypeMap implements Map<String,Object>
 {
     
-    protected transient Map map;
+    protected transient Map<String,Object> map;
     /**
      * Constructor only used in deserialization, do not use otherwise.
      */
@@ -63,7 +62,7 @@ public class DataTypeMap implements Map
      * 
      * @param map
      */
-    public DataTypeMap(Map<?,?> map)
+    public DataTypeMap(Map<String,Object> map)
     {
         if (map == null) {
             throw new IllegalArgumentException("Map must not be null");
@@ -140,12 +139,13 @@ public class DataTypeMap implements Map
      * @param defaultValue
      * @return if value is null return default value.
      */
-    public DataTypeMap getMap(Object key, Map<?, ?> defaultValue) {
+    @SuppressWarnings("unchecked")
+    public DataTypeMap getMap(Object key, Map<String,Object> defaultValue) {
         Object value = get(key);
         if (value instanceof DataTypeMap)
             return (DataTypeMap) value;
         if (value instanceof Map<?, ?>)
-            return new DataTypeMap((Map<?, ?>) value);
+            return new DataTypeMap((Map<String,Object>) value);
         if (value == null) {
             if (defaultValue != null) {
                 if (defaultValue instanceof DataTypeMap)
@@ -156,7 +156,7 @@ public class DataTypeMap implements Map
                 return null;
             }
         } else {
-            return new DataTypeMap((Map<?, ?>) value);
+            return new DataTypeMap((Map<String,Object>) value);
         }
     }
 
@@ -436,7 +436,7 @@ public class DataTypeMap implements Map
             return new Double(value.toString().trim());
     }
 
-    protected Map getMap() {
+    protected Map<String,Object> getMap() {
         return map;
     }
 
@@ -457,7 +457,7 @@ public class DataTypeMap implements Map
     }
 
     @Override
-    public Set entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return map.entrySet();
     }
 
@@ -472,17 +472,17 @@ public class DataTypeMap implements Map
     }
 
     @Override
-    public Set keySet() {
+    public Set<String> keySet() {
         return map.keySet();
     }
 
     @Override
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         return map.put(key, value);
     }
 
     @Override
-    public void putAll(Map mapToCopy) {
+    public void putAll(Map<? extends String, ? extends Object> mapToCopy) {
         map.putAll(mapToCopy);
     }
 
@@ -497,7 +497,7 @@ public class DataTypeMap implements Map
     }
 
     @Override
-    public Collection values() {
+    public Collection<Object> values() {
         return map.values();
     }
    

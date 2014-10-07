@@ -18,6 +18,8 @@
  */
 package org.solmix.runtime.service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import org.solmix.runtime.Container;
@@ -50,7 +52,14 @@ public class InjectTestService
     public AdapterManager getAdapterManager(){
         return adm;
     }
-
+    @PreDestroy
+    public void close(){
+        System.out.println("close!!!!!!");
+    }
+    @PostConstruct
+    public void setup(){
+        System.out.println("setUp!!!!!!");
+    }
     
     /**
      * @return the timeService

@@ -31,7 +31,7 @@ public class SumJavaCode
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("/home/solmix/o/git/solmix");
+        File f = new File("/home/solmix/o/git/hola");
         System.out.println(f.getName());
         sjc.treeFile(f);
         System.out.println("文件数目:"+fileCont+" 总代码行数:"+(whiteLines+commentLines+normalLines));
@@ -82,7 +82,7 @@ public class SumJavaCode
         long begin = normalLines;
         boolean comment = false;
         String name=file.getName();
-        if ((name.endsWith(".java") || name.endsWith(".jsp") || file.getName().endsWith(".xml"))&&name.toUpperCase().indexOf("TEST")==-1) {
+        if ((name.endsWith(".java") || name.endsWith(".jsp") || file.getName().endsWith(".xml"))&&name.toUpperCase().indexOf("TEST")==-1&&file.getAbsolutePath().indexOf("target")==-1) {
 //            if ( name.endsWith(".java") &&name.toUpperCase().indexOf("TEST")==-1) {
         fileCont++;
         try {

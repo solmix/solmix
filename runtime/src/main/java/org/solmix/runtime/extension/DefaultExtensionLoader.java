@@ -122,7 +122,7 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
     @Override
     public T getExtension(String name) {
         if (name == null || name.length() == 0)
-            throw new IllegalArgumentException("Extension name is null");
+            throw new IllegalArgumentException("name is null for type:"+type.getName());
         ExtensionInfo info = getExtensionInfos().get(name);
         if (info != null) {
             if (info.getLoadedObject() == null) {
