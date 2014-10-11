@@ -16,23 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor;
-
-import org.solmix.runtime.exchange.Message;
-
+package org.solmix.runtime.exchange;
 
 
 /**
- * 消息拦截器
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月4日
+ * @version $Id$  2014年10月10日
  */
 
-public interface Interceptor<T extends Message>
+public class PipelineException extends Exception
 {
 
-    void handleMessage(T message) throws InterceptorException;
-    
-    void handleFault(T message);
+    private static final long serialVersionUID = -1141665168454997096L;
+
 }

@@ -16,23 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor;
+package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.exchange.Message;
-
+import java.util.Map;
 
 
 /**
- * 消息拦截器
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月4日
+ * @version $Id$  2014年10月10日
  */
 
-public interface Interceptor<T extends Message>
+public interface StringTypeMap extends Map<String, Object>
 {
 
-    void handleMessage(T message) throws InterceptorException;
+    <T> T get(Class<T> key);
     
-    void handleFault(T message);
+    <T> void put(Class<T> key, T value);
 }

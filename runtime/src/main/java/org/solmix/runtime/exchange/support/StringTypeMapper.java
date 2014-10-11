@@ -16,16 +16,42 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.message;
+package org.solmix.runtime.exchange.support;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.solmix.runtime.exchange.StringTypeMap;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月4日
+ * @version $Id$  2014年10月10日
  */
 
-public interface Message
+public class StringTypeMapper extends HashMap<String, Object> implements  StringTypeMap
 {
 
+    public StringTypeMapper(){
+        
+    }
+    public StringTypeMapper(Map<String,Object> map){
+        super(map);
+    }
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get(Class<T> key) {
+        return (T)get(key.getName());
+    }
+
+    @Override
+    public <T> void put(Class<T> key, T value) {
+        put(key.getName(), value);
+    }
 }
