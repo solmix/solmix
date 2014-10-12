@@ -25,6 +25,25 @@ import org.solmix.runtime.exchange.Message;
 /**
  * 消息拦截器
  * 
+ * <pre>
+ *       +----------------------------------------------+----------+   
+ *       |          |        Interceptor     1          |          |    
+ *       +----------+-----------------------------------+----------+ 
+ *                  |                                  /|\
+ *             handleMessae()                     handleException()
+ *                 \|/                                  |
+ *       +----------------------------------------------+----------+   
+ *       |          |        Interceptor     2                     |    
+ *       +----------+-----------------------------------+----------+ 
+ *                                    |                 |
+ *                  |                 |               发生异常              
+ *                  |                 |----------------------------+       .                                             
+ *                 \|/                |    
+ *       +----------------------------------------------+----------+   
+ *       |          |        Interceptor     N                     |    
+ *       +----------+-----------------------------------+----------+ 
+ *                                             
+ * </pre>
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月4日
  */
@@ -32,7 +51,18 @@ import org.solmix.runtime.exchange.Message;
 public interface Interceptor<T extends Message>
 {
 
+    /**
+     * 处理拦截的消息
+     * 
+     * @param message
+     * @throws InterceptorException
+     */
     void handleMessage(T message) throws InterceptorException;
     
-    void handleFault(T message);
+    /**
+     * 回退处理异常
+     * 
+     * @param message
+     */
+    void handleException(T message);
 }
