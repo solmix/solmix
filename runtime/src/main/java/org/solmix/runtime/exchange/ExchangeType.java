@@ -18,22 +18,17 @@
  */
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
-
 
 /**
- * C/S消息交互模式
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月14日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public enum ExchangeType
 {
-
-    void destroy();
-    
-    Container getContainer();
-    
-    Endpoint getEndpoint();
+    RUNTIME_FAULT,
+    LOGICAL_RUNTIME_FAULT,
+    CHECKED_APPLICATION_FAULT,
+    UNCHECKED_APPLICATION_FAULT,
 }

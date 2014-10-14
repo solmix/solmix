@@ -16,17 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor;
+package org.solmix.runtime.exchange;
+
+import java.util.Map;
+
+import org.solmix.runtime.interceptor.InterceptorProvider;
 
 
 /**
+ * 负责接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月4日
+ * @version $Id$  2014年10月11日
  */
 
-public class InterceptorException extends RuntimeException
+public interface Endpoint extends InterceptorProvider,Map<String,Object>
 {
-    private static final long serialVersionUID = -5827567513650349753L;
 
 }

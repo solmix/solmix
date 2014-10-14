@@ -16,24 +16,22 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
-
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
+package org.solmix.runtime.interceptor;
 
 
 /**
- * C/S消息交互模式
+ * 消息传递中出现的异常.
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月13日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public class Fault extends RuntimeException
 {
 
-    void destroy();
-    
-    Container getContainer();
-    
-    Endpoint getEndpoint();
+    private static final long serialVersionUID = 5729880847366668130L;
+
+    public Fault(String message,Throwable t){
+        super(message,t);
+    }
 }

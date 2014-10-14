@@ -18,6 +18,10 @@
  */
 package org.solmix.runtime.interceptor;
 
+import java.util.List;
+
+import org.solmix.runtime.exchange.Message;
+
 
 /**
  * 
@@ -27,5 +31,9 @@ package org.solmix.runtime.interceptor;
 
 public interface InterceptorProvider
 {
+    List<Interceptor<? extends Message>> getInInterceptors();
+    List<Interceptor<? extends Message>> getOutInterceptors();
+    List<Interceptor<? extends Message>> getInFaultInterceptors();
+    List<Interceptor<? extends Message>> getOutFaultInterceptors();
 
 }

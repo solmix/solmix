@@ -16,21 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
-
-import java.util.Map;
-
-import org.solmix.runtime.interceptor.InterceptorProvider;
+package org.solmix.runtime.interceptor;
 
 
 /**
- * 消息收发器.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月14日
  */
 
-public interface Transceiver extends InterceptorProvider,Map<String,Object>
+public enum FaultType
 {
-
+    RUNTIME_FAULT,
+    LOGICAL_RUNTIME_FAULT,
+    CHECKED_APPLICATION_FAULT,
+    UNCHECKED_APPLICATION_FAULT,
 }

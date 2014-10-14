@@ -57,12 +57,12 @@ public interface Interceptor<T extends Message>
      * @param message
      * @throws InterceptorException
      */
-    void handleMessage(T message) throws InterceptorException;
+    void handleMessage(T message) throws Fault;
     
     /**
      * 回退处理异常
      * 
      * @param message
      */
-    void handleException(T message);
+    void handleFault(T message);
 }

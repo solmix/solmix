@@ -16,17 +16,17 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.component;
+package org.solmix.runtime.exchange;
 
 
 /**
- * 组件模型
- * 
+ * 消息处理
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月10日
+ * @version $Id$  2014年10月13日
  */
 
-public interface Component
+public interface Processor
 {
 
+    void process(Message message) throws ExchangeException;
 }

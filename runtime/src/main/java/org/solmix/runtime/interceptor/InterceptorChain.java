@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.ListIterator;
 
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Processor;
 
 
 /**
@@ -97,5 +98,9 @@ public interface InterceptorChain extends Iterable<Interceptor<? extends Message
      * 重置状态,包括State和迭代器状态
      */
     void reset();
+    
+    Processor getFaultProcessor();
+    
+    void setFaultProcessor(Processor processor);
     
 }

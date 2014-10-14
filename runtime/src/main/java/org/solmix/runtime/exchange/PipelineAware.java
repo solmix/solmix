@@ -18,22 +18,18 @@
  */
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
-
 
 /**
- * C/S消息交互模式
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月13日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public interface PipelineAware
 {
+    
+    Pipeline getPipeline();
+    
+    void setPipeline(Pipeline pipeline);
 
-    void destroy();
-    
-    Container getContainer();
-    
-    Endpoint getEndpoint();
 }

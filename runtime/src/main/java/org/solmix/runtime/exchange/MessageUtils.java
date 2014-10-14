@@ -18,22 +18,27 @@
  */
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
-
+ import static org.solmix.commons.util.DataUtils.asBoolean;
 
 /**
- * C/S消息交互模式
+ * 消息工具类
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月13日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public class MessageUtils
 {
 
-    void destroy();
+    public static boolean getBoolean(Message message, String key,boolean df) {
+        if(message==null)
+            return df;
+        Object v=message.get(key);
+        if(v==null)
+        return df;
+        return asBoolean(v);
+    }
     
-    Container getContainer();
-    
-    Endpoint getEndpoint();
+    public static boolean getBoolean(Message message, String key) {
+        return getBoolean(message, key,false);
+    }
 }

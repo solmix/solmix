@@ -18,6 +18,7 @@
  */
 package org.solmix.runtime.interceptor.phase;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,12 +32,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.annotation.ThreadSafe;
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.MessageUtils;
+import org.solmix.runtime.exchange.Processor;
+import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.FaultType;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
 
 
 /**
  * 分阶拦截链,分截拦截器可在链中按不同阶段遍历执行.
+ * 
+ * @author solmix.f@gmail.com
+ * @version $Id$  2014年10月12日
+ */
+/**
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月12日
@@ -49,20 +59,33 @@ public class PhaseInterceptorChain implements InterceptorChain
     
     /** 缓存当前消息  */
     private static final ThreadLocal<Message> CURRENT_MESSAGE = new ThreadLocal<Message>();
+
+    private static final String PREVIOUS_MESSAGE =  "_slx."+PhaseInterceptorChain.class.getName() + ".previous";;
     /**分阶队列*/
     private final Phase phases[];
+    
     /**阶段名称对应序号*/
     private final Map<String, Integer> nameMap;
+    
     /** 拦截链状态   */
     private  State state;
+    
     /** 拦截器迭代器   */
     private PhaseIterator iterator;
     
     /**  heads[phase]为该阶段拦截器的第一个节点 heads[phase] 和tails[phase]直接的节点为该阶段(phase)所有的拦截器*/
-    private Holder heads[];
+    private final Holder heads[];
+    
     /** tails[phase]为该阶段拦截器的最后一个节点    */
-    private Holder tails[];
-    private boolean hasAfters[];
+    private final Holder tails[];
+    
+    private final boolean hasAfters[];
+    
+    private boolean faultOccurred;
+    private boolean chainReleased;
+
+    private Processor faultProcessor;
+    
     /** 分阶段构建拦截器 */
     public PhaseInterceptorChain(SortedSet<Phase> ps) {
         state = State.EXECUTING;
@@ -80,19 +103,48 @@ public class PhaseInterceptorChain implements InterceptorChain
             ++idx;
         }
     }
-    private PhaseInterceptorChain(PhaseInterceptorChain other){
-      //only used for clone
+    /**克隆*/
+    private PhaseInterceptorChain(PhaseInterceptorChain src){
         state = State.EXECUTING;
         
         //immutable, just repoint
-        nameMap = other.nameMap;
-        phases = other.phases;
+        nameMap = src.nameMap;
+        phases = src.phases;
+        
+        int length = phases.length;
+        hasAfters = new boolean[length];
+        System.arraycopy(src.hasAfters, 0, hasAfters, 0, length);
+        
+        heads = new Holder[length];
+        tails = new Holder[length];
+        
+        Holder last = null;
+        for (int x = 0; x < length; x++) {
+            Holder ih = src.heads[x];
+            while (ih != null
+                && ih.phaseIdx == x) {
+                Holder ih2 = new Holder(ih);
+                ih2.prev = last;
+                if (last != null) {
+                    last.next = ih2;
+                }
+                if (heads[x] == null) {
+                    heads[x] = ih2;
+                }
+                tails[x] = ih2;
+                last = ih2;
+                ih = ih.next;
+            }
+        }
+    }
+    public PhaseInterceptorChain cloneChain() {
+        return new PhaseInterceptorChain(this);
     }
     public static Message getCurrentMessage() {
         return CURRENT_MESSAGE.get();
     }
     
-    public static boolean setCurrentMessage(PhaseInterceptorChain chain, Message m) {
+/*    public static boolean setCurrentMessage(PhaseInterceptorChain chain, Message m) {
         if (getCurrentMessage() == m) { 
             return false;
         }
@@ -109,11 +161,28 @@ public class PhaseInterceptorChain implements InterceptorChain
         }
         return false;
         
+    }*/
+    
+    public synchronized void releaseAndAcquireChain() {
+        while (!chainReleased) {
+            try {
+                this.wait();
+            } catch (InterruptedException ex) {
+                // ignore
+            }
+        }
+        chainReleased = false;
+    }
+    public synchronized void abort() {
+        this.state = InterceptorChain.State.ABORTED;
+    }
+    public synchronized void releaseChain() {
+        this.chainReleased = true;
+        this.notifyAll();
     }
     @Override
     public Iterator<Interceptor<? extends Message>> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return listIterator();
     }
     
     @Override
@@ -148,7 +217,7 @@ public class PhaseInterceptorChain implements InterceptorChain
     /**根据分阶不同插入拦截器*/
     private void insert(Integer phase,PhaseInterceptor<? extends Message> pi, boolean force) {
         Holder ih = new Holder(pi, phase);
-        if (heads[phase] == null) {//该阶段还未设置任何拦截器
+        if (heads[phase] == null) {//还未设置任何拦截器
             heads[phase] = ih;
             tails[phase] = ih;
             hasAfters[phase] = !pi.getAfter().isEmpty();
@@ -184,7 +253,7 @@ public class PhaseInterceptorChain implements InterceptorChain
                     heads[idx].prev = ih;
                 }
             }
-        }else{//该阶段已经设置了拦截器
+        }else{//已经设置了拦截器
             Set<String> before = pi.getBefore();
             Set<String> after = pi.getAfter();
             //此拦截器需要插入这个节点的前面,如果为null,说明此拦截器不在任何节点的前面,则为最后一个节点.
@@ -287,41 +356,177 @@ public class PhaseInterceptorChain implements InterceptorChain
      */
     @Override
     public void remove(Interceptor<? extends Message> i) {
-        // TODO Auto-generated method stub
-
+        PhaseIterator it = new PhaseIterator(heads);
+        while (it.hasNext()) {
+            Holder holder = it.nextHolder();
+            if (holder.interceptor == i) {
+                remove(holder);
+                return;
+            }
+        }
     }
 
     /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.InterceptorChain#doIntercept(org.solmix.runtime.exchange.Message)
+     * @param holder
      */
+    private void remove(Holder i) {
+        if (i.prev != null) {
+            i.prev.next = i.next;
+        }
+        if (i.next != null) {
+            i.next.prev = i.prev;
+        }
+        int ph = i.phaseIdx;
+        if (heads[ph] == i) {
+            if (i.next != null
+                && i.next.phaseIdx == ph) {
+                heads[ph] = i.next;
+            } else {
+                heads[ph] = null;
+                tails[ph] = null;
+            }
+        }
+        if (tails[ph] == i) {
+            if (i.prev != null
+                && i.prev.phaseIdx == ph) {
+                tails[ph] = i.prev;
+            } else {
+                heads[ph] = null;
+                tails[ph] = null;
+            }
+        }
+    }
+   
     @Override
     public boolean doIntercept(Message message) {
-        // TODO Auto-generated method stub
-        return false;
+        updateIterator();
+
+        Message oldMessage = CURRENT_MESSAGE.get();
+        try {
+            CURRENT_MESSAGE.set(message);
+            if (oldMessage != null 
+                && !message.containsKey(PREVIOUS_MESSAGE)
+                && message != oldMessage
+                && message.getExchange() != oldMessage.getExchange()) {
+                message.put(PREVIOUS_MESSAGE, new WeakReference<Message>(oldMessage));
+            }
+            while (state == State.EXECUTING && iterator.hasNext()) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    Interceptor<Message> currentInterceptor =(Interceptor<Message>) iterator.next();
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Invoking handleMessage on interceptor " + currentInterceptor);
+                    }
+                    currentInterceptor.handleMessage(message);
+                    
+                } catch (RuntimeException ex) {
+                    
+                    if (!faultOccurred) {
+                        faultOccurred = true;
+                        message.setContent(Exception.class, ex);
+                        handleException(message);
+                        Exception ex2 = message.getContent(Exception.class);
+                        if (ex2 == null) {
+                            ex2 = ex;
+                        }
+                        defaultLogging(message,ex2,"");
+                        boolean isOneWay = false;
+                        if (message.getExchange() != null) {
+                            if (message.getContent(Exception.class) != null) {
+                                message.getExchange().put(Exception.class, ex2);
+                            }
+                            isOneWay = message.getExchange().isOneWay() 
+                                && MessageUtils.getBoolean(message, Message.ONEWAY);
+                        }
+                       
+                        if (faultProcessor != null && !isOneWay) {
+                            message.getExchange().setOneWay(false);
+                            faultProcessor.process(message);
+                        }
+                    }
+                    state = State.ABORTED;
+                } 
+            }
+            if (state == State.EXECUTING) {
+                state = State.COMPLETE;
+            }
+            return state == State.COMPLETE;
+        } finally {
+            CURRENT_MESSAGE.set(oldMessage);
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.InterceptorChain#doInterceptAfter(org.solmix.runtime.exchange.Message, java.lang.String)
-     */
+   
+    private void defaultLogging(Message message, Exception ex,
+        String description) {
+        FaultType type = message.get(FaultType.class);
+        if (type == FaultType.CHECKED_APPLICATION_FAULT) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Application " + description
+                    + "has thrown exception, unwinding now", ex);
+            } else if (LOG.isInfoEnabled()) {
+                Throwable t = ex;
+                if (ex instanceof Fault && ex.getCause() != null) {
+                    t = ex.getCause();
+                }
+                LOG.info("Application " + description
+                    + "has thrown exception, unwinding now: "
+                    + t.getClass().getName() + ": " + ex.getMessage());
+            }
+        } else if (LOG.isWarnEnabled()) {
+            if (type == FaultType.UNCHECKED_APPLICATION_FAULT) {
+                LOG.warn("Application " + description
+                    + "has thrown exception, unwinding now", ex);
+            } else {
+                LOG.warn("Interceptor for " + description
+                    + "has thrown exception, unwinding now", ex);
+            }
+        }
+    }
+    /**释放消息*/
+    public void handleException(Message message) {
+        while (iterator.hasPrevious()) {
+            @SuppressWarnings("unchecked")
+            Interceptor<Message> currentInterceptor = (Interceptor<Message>)iterator.previous();
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Invoking handleException on interceptor " + currentInterceptor);
+            }
+            try {
+                currentInterceptor.handleFault(message);
+            } catch (RuntimeException e) {
+                LOG.warn( "Exception in handleFault on interceptor " + currentInterceptor, e);
+                throw e;
+            } catch (Exception e) {
+                LOG.warn( "Exception in handleFault on interceptor " + currentInterceptor, e);
+                throw new RuntimeException(e);
+            }
+        }
+    }
     @Override
     public boolean doInterceptAfter(Message message, String inteceptorId) {
-        // TODO Auto-generated method stub
-        return false;
+        updateIterator();
+        while (state == State.EXECUTING && iterator.hasNext()) {
+            PhaseInterceptor<? extends Message> currentInterceptor 
+                = (PhaseInterceptor<? extends Message>)iterator.next();
+            if (currentInterceptor.getId().equals(inteceptorId)) {
+                break;
+            }
+        }
+        return doIntercept(message);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.InterceptorChain#doInterceptAt(org.solmix.runtime.exchange.Message, java.lang.String)
-     */
     @Override
     public boolean doInterceptAt(Message message, String inteceptorId) {
-        // TODO Auto-generated method stub
-        return false;
+        updateIterator();
+        while (state == State.EXECUTING && iterator.hasNext()) {
+            PhaseInterceptor<? extends Message> currentInterceptor 
+                = (PhaseInterceptor<? extends Message>)iterator.next();
+            if (currentInterceptor.getId().equals(inteceptorId)) {
+                iterator.previous();
+                break;
+            }
+        }
+        return doIntercept(message);
     }
 
     /**
@@ -331,8 +536,7 @@ public class PhaseInterceptorChain implements InterceptorChain
      */
     @Override
     public ListIterator<Interceptor<? extends Message>> listIterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new PhaseIterator(heads);
     }
 
     @Override
@@ -382,11 +586,14 @@ public class PhaseInterceptorChain implements InterceptorChain
         }
         return chain.toString();
     }
+    
+    /**初始化迭代器*/
     private void updateIterator() {
         if (iterator == null) {
             iterator = new PhaseIterator(heads);
-            outputChainToLog(false);
-            //System.out.println(toString());
+           if(LOG.isTraceEnabled()){
+               LOG.trace(toString("created "));
+           }
         }
     }
     
@@ -402,11 +609,27 @@ public class PhaseInterceptorChain implements InterceptorChain
             first = findFirst();
         }
         /**
-         * 
+         * @return
          */
+        public Holder nextHolder() {
+            if (prev == null) {
+                if (first == null) {
+                    throw new NoSuchElementException();
+                }
+                prev = first;
+            } else {
+                if (prev.next == null) {
+                    throw new NoSuchElementException();
+                }
+                prev = prev.next;
+            }
+            return prev;
+        }
+        
+        /**重置状态*/
         public void reset() {
-            // TODO Auto-generated method stub
-            
+            prev = null;
+            first = findFirst();
         }
         /** 起始位置*/
         private Holder findFirst() {
@@ -442,81 +665,47 @@ public class PhaseInterceptorChain implements InterceptorChain
             return prev.interceptor;
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#hasPrevious()
-         */
         @Override
         public boolean hasPrevious() {
-            // TODO Auto-generated method stub
-            return false;
+            return prev != null;
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#previous()
-         */
+      
         @Override
         public Interceptor<? extends Message> previous() {
-            // TODO Auto-generated method stub
-            return null;
+            if (prev == null) {
+                throw new NoSuchElementException();
+            }
+            Holder tmp = prev;
+            prev = prev.prev;
+            return tmp.interceptor;
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#nextIndex()
-         */
         @Override
         public int nextIndex() {
-            // TODO Auto-generated method stub
-            return 0;
+            throw new UnsupportedOperationException();
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#previousIndex()
-         */
+       
         @Override
         public int previousIndex() {
-            // TODO Auto-generated method stub
-            return 0;
+            throw new UnsupportedOperationException();
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#remove()
-         */
         @Override
         public void remove() {
-            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException();
             
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#set(java.lang.Object)
-         */
         @Override
         public void set(Interceptor<? extends Message> e) {
-            // TODO Auto-generated method stub
-            
+            throw new UnsupportedOperationException();
         }
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @see java.util.ListIterator#add(java.lang.Object)
-         */
         @Override
         public void add(Interceptor<? extends Message> e) {
-            // TODO Auto-generated method stub
-            
+            throw new UnsupportedOperationException();
         }
         
     }
@@ -534,5 +723,20 @@ public class PhaseInterceptorChain implements InterceptorChain
             interceptor = p.interceptor;
             phaseIdx = p.phaseIdx;
         }
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.interceptor.InterceptorChain#getFaultProcessor()
+     */
+    @Override
+    public Processor getFaultProcessor() {
+        return faultProcessor;
+    }
+  
+    @Override
+    public void setFaultProcessor(Processor processor) {
+        this.faultProcessor=processor;
+        
     }
 }

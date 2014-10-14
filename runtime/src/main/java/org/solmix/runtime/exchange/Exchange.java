@@ -62,24 +62,24 @@ public interface Exchange extends StringTypeMap
      * 
      * @return
      */
-    Message getInException();
+    Message getInFault();
     
     /**
      * 设置输入异常
      * @param m
      */
-    void setInException(Message m);
+    void setInFault(Message m);
 
     /**
      * 返回输出异常
      * @return
      */
-    Message getOutException();
+    Message getOutFault();
     /**
      * 设置输出异常
      * @param m
      */
-    void setOutException(Message m);
+    void setOutFault(Message m);
     
     /**
      * 返回关联的传输管道
@@ -101,5 +101,5 @@ public interface Exchange extends StringTypeMap
     
     Container getContainer();
     
-    Transceiver getTransceiver();
+    Endpoint getEndpoint();
 }

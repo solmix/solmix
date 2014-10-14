@@ -35,6 +35,10 @@ import org.solmix.runtime.interceptor.InterceptorChain;
 
 public interface Message extends StringTypeMap
 {
+    String  ONEWAY            = Message.class.getName() + ".ONEWAY";;
+
+    String ATTACHMENTS        = Message.class.getName() + ".ATTACHMENTS";
+
     /**
      * 返回消息ID
      * @return
