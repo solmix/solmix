@@ -85,6 +85,8 @@ public class PhaseInterceptorChain implements InterceptorChain
     private boolean chainReleased;
 
     private Processor faultProcessor;
+
+    private Message pausedMessage;
     
     /** 分阶段构建拦截器 */
     public PhaseInterceptorChain(SortedSet<Phase> ps) {
@@ -738,5 +740,33 @@ public class PhaseInterceptorChain implements InterceptorChain
     public void setFaultProcessor(Processor processor) {
         this.faultProcessor=processor;
         
+    }
+    @Override
+    public synchronized void pause() {
+        state = State.PAUSED;
+        pausedMessage = CURRENT_MESSAGE.get();
+    }
+    @Override
+    public synchronized void unpause() {
+        if (state == State.PAUSED || state == State.SUSPENDED) {
+            state = State.EXECUTING;
+            pausedMessage = null;
+        }
+    }
+    
+    @Override
+    public synchronized void suspend() {
+        state = State.SUSPENDED;
+        pausedMessage = CURRENT_MESSAGE.get();
+    }
+
+    @Override
+    public synchronized void resume() {
+        if (state == State.PAUSED || state == State.SUSPENDED) {
+            state = State.EXECUTING;
+            Message m = pausedMessage;
+            pausedMessage = null;
+            doIntercept(m);
+        }
     }
 }

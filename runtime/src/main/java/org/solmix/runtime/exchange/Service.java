@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.interceptor.InterceptorProvider;
 
 
 /**
@@ -30,7 +31,7 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
  * @version $Id$  2014年10月12日
  */
 
-public interface Service
+public interface Service extends Map<String,Object>,InterceptorProvider
 {
     Invoker getInvoker();
     

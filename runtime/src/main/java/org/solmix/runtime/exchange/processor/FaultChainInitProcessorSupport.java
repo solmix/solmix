@@ -44,16 +44,17 @@ import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
  * @version $Id$  2014年10月18日
  */
 
-public abstract class AbstractFaultChainIniProcessor implements Processor
+public abstract class FaultChainInitProcessorSupport implements Processor
 {
 
-    private static final Logger LOG= LoggerFactory.getLogger(AbstractFaultChainIniProcessor.class);
+    private static final Logger LOG= LoggerFactory.getLogger(FaultChainInitProcessorSupport.class);
     private final Container container;
-    
+    protected final String phasePolicy;
     private ClassLoader loader;
     
-    public AbstractFaultChainIniProcessor(Container c){
+    public FaultChainInitProcessorSupport(Container c, String phasePolicy){
         this.container=c;
+        this.phasePolicy = phasePolicy;
         if(container!=null){
             loader=container.getExtension(ClassLoader.class); 
         }
@@ -94,12 +95,13 @@ public abstract class AbstractFaultChainIniProcessor implements Processor
                 exchange.setIn(null);
                 exchange.setInFault(faultMessage);
             }
-            // setup chain
             PhaseInterceptorChain chain = new PhaseInterceptorChain(getPhases());
+            //初始化链
             initializeInterceptors(faultMessage.getExchange(), chain);
             
             faultMessage.setInterceptorChain(chain);
             try {
+                //流转
                 chain.doIntercept(faultMessage);
             } catch (Exception exc) {
                 LOG.error("Error occurred during error handling, give up!", exc);
@@ -122,7 +124,7 @@ public abstract class AbstractFaultChainIniProcessor implements Processor
         return container;
     }
 
-    private void initializeInterceptors(Exchange exchange,
+    protected void initializeInterceptors(Exchange exchange,
         PhaseInterceptorChain chain) {
     }
 

@@ -37,7 +37,33 @@ public interface Message extends StringTypeMap
 {
     String  ONEWAY            = Message.class.getName() + ".ONEWAY";;
 
+    /** 附件key,值类型:Map<String, DataHandler>   */
     String ATTACHMENTS        = Message.class.getName() + ".ATTACHMENTS";
+
+    /**
+     * 在消息中存放拦截器的key,用于对每个不同的消息做添加自定义拦截器.
+     */
+    /**输入拦截器key,值类型: Collection<Interceptor<? extends Message>>  */
+    String IN_INTERCEPTORS = Message.class.getName() + ".IN_INTERCEPTORS";
+    
+    /**输出拦截器key,值类型: Collection<Interceptor<? extends Message>> */
+    String OUT_INTERCEPTORS = Message.class.getName() + ".OUT_INTERCEPTORS";
+    
+    /**输入错误拦截器key,值类型: Collection<Interceptor<? extends Message>> */
+    String FAULT_IN_INTERCEPTORS = Message.class.getName() + ".FAULT_IN_INTERCEPTORS";
+    
+    /**输出错误拦截器key,值类型: Collection<Interceptor<? extends Message>> */
+    String FAULT_OUT_INTERCEPTORS = Message.class.getName() + ".FAULT_OUT_INTERCEPTORS";
+    
+    /**
+     *拦截器提供者,值类型:Collection<InterceptorProvider> 
+     */
+    String INTERCEPTOR_PROVIDERS = Message.class.getName() + ".INTERCEPTOR_PROVIDER";
+
+    /**存储invocation参数的key,值类型Map<String,Object>    */
+    String INVOCATION_CONTEXT =  Message.class.getName() + ".INVOCATION_CONTEXT";;
+    
+
 
     /**
      * 返回消息ID

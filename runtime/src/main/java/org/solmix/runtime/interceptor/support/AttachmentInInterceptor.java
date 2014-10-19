@@ -16,25 +16,39 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.interceptor.support;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
+import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
 
 
 /**
- * C/S消息交互模式
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月20日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public class AttachmentInInterceptor extends PhaseInterceptorSupport<Message>
 {
-    String REQUEST_CONTEXT = "RequestContext";
-    String RESPONSE_CONTEXT = "ResponseContext";
-    void destroy();
-    
-    Container getContainer();
-    
-    Endpoint getEndpoint();
+
+    /** 
+     * 
+     */
+    public AttachmentInInterceptor()
+    {
+        super(Phase.RECEIVE);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
+     */
+    @Override
+    public void handleMessage(Message message) throws Fault {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

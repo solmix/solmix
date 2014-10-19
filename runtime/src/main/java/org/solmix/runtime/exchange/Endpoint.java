@@ -45,4 +45,15 @@ public interface Endpoint extends InterceptorProvider,Map<String,Object>
     void addCleanupHook(Closeable c);
     List<Closeable> getCleanupHooks();
 
+    /**
+     * @return
+     */
+    Processor getOutFaultProcessor();
+    
+    void setOutFaultProcessor(Processor p);
+    
+  Processor getInFaultProcessor();
+    
+    void setInFaultProcessor(Processor p);
+
 }

@@ -54,7 +54,12 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
        this.container=exchange.container;
     }
    
-   @Override
+   /**  */
+    public DefaultExchange()
+    {
+    }
+
+@Override
    public <T> void put(Class<T> key, T value) {
        super.put(key, value);
        if (key == Container.class) {

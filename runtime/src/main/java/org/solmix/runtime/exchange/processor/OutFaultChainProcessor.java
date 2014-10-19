@@ -18,10 +18,18 @@
  */
 package org.solmix.runtime.exchange.processor;
 
+import java.util.Collection;
 import java.util.SortedSet;
 
 import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.Client;
+import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.Exchange;
+import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.interceptor.Interceptor;
+import org.solmix.runtime.interceptor.InterceptorProvider;
 import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 
@@ -31,22 +39,47 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
  * @version $Id$  2014年10月19日
  */
 
-public class OutFaultChainProcessor extends AbstractFaultChainIniProcessor
+public class OutFaultChainProcessor extends FaultChainInitProcessorSupport
 {
-    private final String phasePolicy;
 
     public OutFaultChainProcessor(Container c,String phasePolicy)
     {
-        super(c);
-        this.phasePolicy=phasePolicy;
+        super(c,phasePolicy);
     }
+    @Override
+    protected void initializeInterceptors(Exchange ex, PhaseInterceptorChain chain) {
+        Endpoint e = ex.get(Endpoint.class);
+        Client c = ex.get(Client.class);
+        if (c != null) {
+            chain.add(c.getOutFaultInterceptors());
+        }
+        chain.add(e.getService().getOutFaultInterceptors());
+        chain.add(e.getOutFaultInterceptors());
+        chain.add(e.getBinding().getOutFaultInterceptors());
+       
+        addToChain(chain, ex.getIn());
+        addToChain(chain, ex.getOutFault());
+    }
+    @SuppressWarnings("unchecked")
+    private void addToChain(PhaseInterceptorChain chain, Message m) {
 
+        Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
+        if (providers != null) {
+            for (InterceptorProvider p : providers) {
+                chain.add(p.getInFaultInterceptors());
+            }
+        }
+        Interceptor<Message> is = (Interceptor<Message>) m.get(Message.FAULT_OUT_INTERCEPTORS);
+        if (is != null) {
+            chain.add(is);
+        }
+    }
     @Override
     protected SortedSet<Phase> getPhases() {
         return getContainer()
             .getExtensionLoader(PhasePolicy.class)
             .getExtension(phasePolicy)
-            .getInPhases();
+            .getOutPhases();
     }
 
     

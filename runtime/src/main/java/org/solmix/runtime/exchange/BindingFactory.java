@@ -18,23 +18,18 @@
  */
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.interceptor.InterceptorProvider;
+import org.solmix.runtime.exchange.model.BindingInfo;
 
 
 /**
- * C/S消息交互模式
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月19日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
+public interface BindingFactory
 {
-    String REQUEST_CONTEXT = "RequestContext";
-    String RESPONSE_CONTEXT = "ResponseContext";
-    void destroy();
     
-    Container getContainer();
-    
-    Endpoint getEndpoint();
+    Binding createBinding(BindingInfo info);
+
 }

@@ -55,9 +55,9 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements Endpo
 
     private final Service service;
     
-    private final Processor inFaultProcessor;
+    private  Processor inFaultProcessor;
     
-    private final Processor outFaultProcessor;
+    private  Processor outFaultProcessor;
    
     public DefaultEndpoint(Container container,Service s,EndpointInfo ed){
         Assert.isNotNull(ed);
@@ -124,7 +124,31 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements Endpo
         }
         return cleanupHooks;
     }
-
+    
+    /**   */
+    @Override
+    public Processor getInFaultProcessor() {
+        return inFaultProcessor;
+    }
+    
+    /**   */
+    @Override
+    public void setInFaultProcessor(Processor inFaultProcessor) {
+        this.inFaultProcessor = inFaultProcessor;
+    }
+    
+    /**   */
+    @Override
+    public Processor getOutFaultProcessor() {
+        return outFaultProcessor;
+    }
+    
+    /**   */
+    @Override
+    public void setOutFaultProcessor(Processor outFaultProcessor) {
+        this.outFaultProcessor = outFaultProcessor;
+    }
+ 
     
 
 }

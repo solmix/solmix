@@ -19,6 +19,7 @@
 package org.solmix.runtime.exchange;
 
 import org.solmix.runtime.exchange.model.BindingInfo;
+import org.solmix.runtime.interceptor.InterceptorProvider;
 
 
 /**
@@ -28,7 +29,7 @@ import org.solmix.runtime.exchange.model.BindingInfo;
  * @version $Id$  2014年10月15日
  */
 
-public interface Binding
+public interface Binding extends InterceptorProvider
 {
 
     Message createMessage();

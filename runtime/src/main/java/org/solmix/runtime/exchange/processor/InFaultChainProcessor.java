@@ -16,40 +16,82 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.processor;
 
+import java.util.Collection;
 import java.util.SortedSet;
 
 import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.Client;
+import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.Exchange;
+import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.interceptor.Interceptor;
+import org.solmix.runtime.interceptor.InterceptorProvider;
 import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
-
 /**
+ * 输入错误处理器.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月19日
+ * @version $Id$ 2014年10月19日
  */
 
-public class InFaultChainProcessor extends AbstractFaultChainIniProcessor
+public class InFaultChainProcessor extends FaultChainInitProcessorSupport
 {
-    private final String phasePolicy;
 
-    public InFaultChainProcessor(Container c,String phasePolicy)
+
+    public InFaultChainProcessor(Container c, String phasePolicy)
     {
-        super(c);
-        this.phasePolicy=phasePolicy;
+        super(c,phasePolicy);
+    }
+
+    @Override
+    protected void initializeInterceptors(Exchange ex,PhaseInterceptorChain chain) {
+        Endpoint e = ex.get(Endpoint.class);
+        Client c = ex.get(Client.class);
+        InterceptorProvider ip = ex.get(InterceptorProvider.class);
+
+        // chain.add(getContainer().getInFaultInterceptors());
+        if (c != null) {
+            chain.add(c.getInFaultInterceptors());
+        } else if (ip != null) {
+            chain.add(ip.getInFaultInterceptors());
+        }
+        chain.add(e.getService().getInFaultInterceptors());
+        chain.add(e.getInFaultInterceptors());
+        chain.add(e.getBinding().getInFaultInterceptors());
+
+        addToChain(chain, ex.getInFault());
+        addToChain(chain, ex.getOut());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addToChain(PhaseInterceptorChain chain, Message m) {
+
+        Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
+        if (providers != null) {
+            for (InterceptorProvider p : providers) {
+                chain.add(p.getInFaultInterceptors());
+            }
+        }
+        Interceptor<Message> is = (Interceptor<Message>) m.get(Message.FAULT_IN_INTERCEPTORS);
+        if (is != null) {
+            chain.add(is);
+        }
     }
 
     @Override
     protected SortedSet<Phase> getPhases() {
         return getContainer()
             .getExtensionLoader(PhasePolicy.class)
-            .getExtension(phasePolicy)
-            .getInPhases();
+            .getExtension(
+            phasePolicy).getInPhases();
     }
 
-    
     @Override
     protected boolean isOutMessage() {
         return false;
