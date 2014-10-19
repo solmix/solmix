@@ -16,16 +16,16 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.service;
+package org.solmix.runtime.exchange.model;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月12日
+ * @version $Id$  2014年10月17日
  */
 
-public interface Service
+public class InterfaceInfo
 {
 
 }

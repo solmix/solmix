@@ -65,6 +65,7 @@ public interface Message extends StringTypeMap
     
     Exchange getExchange();
     
+    void setExchange(Exchange e);
     /**
      * 返回指定类型的消息体
      * @param format

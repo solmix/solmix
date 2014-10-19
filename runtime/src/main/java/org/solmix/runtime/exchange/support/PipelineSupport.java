@@ -16,19 +16,40 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.support;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Pipeline;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月14日
+ * @version $Id$  2014年10月17日
  */
 
-public enum ExchangeType
+public abstract class PipelineSupport implements Pipeline
 {
-    RUNTIME_FAULT,
-    LOGICAL_RUNTIME_FAULT,
-    CHECKED_APPLICATION_FAULT,
-    UNCHECKED_APPLICATION_FAULT,
+   
+    @Override
+    public void close(Message message) throws IOException {
+        OutputStream os = message.getContent(OutputStream.class);
+        if (os != null) {
+            os.close();
+        }
+        InputStream in = message.getContent(InputStream.class);
+        if (in != null) {
+            in.close();
+        }
+    }
+
+    @Override
+    public void close() {
+        //nothing todo
+    }
+
 }

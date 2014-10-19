@@ -16,33 +16,43 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.processor;
 
-import java.io.Closeable;
-import java.util.List;
-import java.util.Map;
+import java.util.SortedSet;
 
-import org.solmix.runtime.exchange.model.EndpointInfo;
-import org.solmix.runtime.interceptor.InterceptorProvider;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 
 /**
- * 负责接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月19日
  */
 
-public interface Endpoint extends InterceptorProvider,Map<String,Object>
+public class InFaultChainProcessor extends AbstractFaultChainIniProcessor
 {
+    private final String phasePolicy;
+
+    public InFaultChainProcessor(Container c,String phasePolicy)
+    {
+        super(c);
+        this.phasePolicy=phasePolicy;
+    }
+
+    @Override
+    protected SortedSet<Phase> getPhases() {
+        return getContainer()
+            .getExtensionLoader(PhasePolicy.class)
+            .getExtension(phasePolicy)
+            .getInPhases();
+    }
+
     
-    EndpointInfo getEndpointInfo();
-    
-    Binding getBinding();
-    
-    Service getService();
-    
-    void addCleanupHook(Closeable c);
-    List<Closeable> getCleanupHooks();
+    @Override
+    protected boolean isOutMessage() {
+        return false;
+    }
 
 }

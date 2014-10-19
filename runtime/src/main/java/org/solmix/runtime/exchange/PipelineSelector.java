@@ -18,31 +18,24 @@
  */
 package org.solmix.runtime.exchange;
 
-import java.io.Closeable;
-import java.util.List;
-import java.util.Map;
-
-import org.solmix.runtime.exchange.model.EndpointInfo;
-import org.solmix.runtime.interceptor.InterceptorProvider;
-
 
 /**
- * 负责接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月17日
  */
 
-public interface Endpoint extends InterceptorProvider,Map<String,Object>
+public interface PipelineSelector
 {
     
-    EndpointInfo getEndpointInfo();
+    void prepare(Message message);
     
-    Binding getBinding();
+    Pipeline select(Message message);
     
-    Service getService();
+    void complete(Exchange exchange);
     
-    void addCleanupHook(Closeable c);
-    List<Closeable> getCleanupHooks();
+    Endpoint getEndpoint();
+
+    void setEndpoint(Endpoint endpoint);
 
 }

@@ -262,5 +262,14 @@ public class DefaultMessage extends StringTypeMapper implements Message
     public boolean hasAttachments() {
         return getAttachments()!=null&&getAttachments().size()>0;
     }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Message#setExchange(org.solmix.runtime.exchange.Exchange)
+     */
+    @Override
+    public void setExchange(Exchange e) {
+        this.exchange=e;
+    }
 
 }

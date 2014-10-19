@@ -23,6 +23,7 @@ import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.exchange.Pipeline;
+import org.solmix.runtime.exchange.PipelineSelector;
 
 
 /**
@@ -36,23 +37,48 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
 
     private static final long serialVersionUID = -2559302429404755489L;
 
-    protected final Container container;
+    protected  Container container;
     private Message in;
     private Message out;
+    private Message inFault;
+    private Message outFault;
+
+    private Endpoint endpoint;
+
+    private boolean oneWay;
+
+    private boolean sync;
     
    public DefaultExchange(DefaultExchange exchange){
        super(exchange);
        this.container=exchange.container;
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#getIn()
-     */
+   
+   @Override
+   public <T> void put(Class<T> key, T value) {
+       super.put(key, value);
+       if (key == Container.class) {
+           container=(Container)value;
+       } else if (key == Endpoint.class) {
+           endpoint = (Endpoint)value;
+       }
+   }
+   
+   @Override
+   public void clear() {
+       super.clear();
+       oneWay=false;
+       sync=true;
+       in=null;
+       out=null;
+       inFault=null;
+       outFault=null;
+       container=null;
+       endpoint=null;
+   }
     @Override
     public Message getIn() {
-        // TODO Auto-generated method stub
-        return null;
+        return in;
     }
 
     /**
@@ -62,7 +88,10 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public void setIn(Message in) {
-        // TODO Auto-generated method stub
+        this.in=in;
+        if(in!=null){
+            in.setExchange(this);
+        }
 
     }
 
@@ -73,8 +102,7 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public Message getOut() {
-        // TODO Auto-generated method stub
-        return null;
+        return out;
     }
 
     /**
@@ -84,8 +112,10 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public void setOut(Message out) {
-        // TODO Auto-generated method stub
-
+       this.out=out;
+       if(out!=null){
+           out.setExchange(this);
+       }
     }
 
     /**
@@ -95,8 +125,7 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public Message getInFault() {
-        // TODO Auto-generated method stub
-        return null;
+        return inFault;
     }
 
     /**
@@ -106,7 +135,10 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public void setInFault(Message m) {
-        // TODO Auto-generated method stub
+       this.inFault=m;
+       if(m!=null){
+           m.setExchange(this);
+       }
 
     }
 
@@ -117,8 +149,7 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public Message getOutFault() {
-        // TODO Auto-generated method stub
-        return null;
+        return outFault;
     }
 
     /**
@@ -128,74 +159,25 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public void setOutFault(Message m) {
-        // TODO Auto-generated method stub
+       this.outFault=m;
+       if(m!=null){
+           m.setExchange(this);
+       }
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#getPipeline()
-     */
+   
     @Override
-    public Pipeline getPipeline() {
-        // TODO Auto-generated method stub
-        return null;
+    public Pipeline getPipeline(Message message) {
+        return get(PipelineSelector.class) != null ? 
+            get(PipelineSelector.class).select(
+            message)
+            : null;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#setPipeline(org.solmix.runtime.exchange.Pipeline)
-     */
     @Override
     public void setPipeline(Pipeline pipeline) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#isOneWay()
-     */
-    @Override
-    public boolean isOneWay() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#setOneWay(boolean)
-     */
-    @Override
-    public void setOneWay(boolean b) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#isSync()
-     */
-    @Override
-    public boolean isSync() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Exchange#setSync(boolean)
-     */
-    @Override
-    public void setSync(boolean b) {
-        // TODO Auto-generated method stub
-
+       put(PipelineSelector.class,new PipelineWrappedSelector(pipeline, getEndpoint()));
     }
 
     /**
@@ -215,8 +197,43 @@ public class DefaultExchange extends StringTypeMapper implements Exchange
      */
     @Override
     public Endpoint getEndpoint() {
-        // TODO Auto-generated method stub
-        return null;
+        return endpoint;
     }
-
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Exchange#isOneWay()
+     */
+    @Override
+    public boolean isOneWay() {
+        return oneWay;
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Exchange#setOneWay(boolean)
+     */
+    @Override
+    public void setOneWay(boolean b) {
+        this.oneWay=b;
+        
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Exchange#isSync()
+     */
+    @Override
+    public boolean isSync() {
+        return sync;
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Exchange#setSync(boolean)
+     */
+    @Override
+    public void setSync(boolean b) {
+      this.sync=b;
+    }
 }

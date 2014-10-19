@@ -16,37 +16,61 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor;
+package org.solmix.runtime.exchange.model;
 
 
 /**
- * 消息传递中出现的异常.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月13日
+ * @version $Id$  2014年10月15日
  */
 
-public class Fault extends RuntimeException
+public class EndpointInfo
 {
-
-    private static final long serialVersionUID = 5729880847366668130L;
-    private boolean server;
-
-    public Fault(String message,Throwable t){
-        super(message,t);
-    }
-
-    /** @param ex */
-    public Fault(Throwable ex)
-    {
-      super(ex);
-      server=true;
+    private BindingInfo bindingInfo;
+    
+    private ServiceInfo serviceInfo;
+    
+    private String phasePolicy;
+    
+    /**   */
+    public BindingInfo getBinding() {
+        return bindingInfo;
     }
 
     
     /**   */
-    public boolean isServer() {
-        return server;
+    public void setBinding(BindingInfo bindingInfo) {
+        this.bindingInfo = bindingInfo;
+    }
+
+    
+    /**   */
+    public ServiceInfo getService() {
+        return serviceInfo;
+    }
+
+    
+    /**   */
+    public void setService(ServiceInfo serviceInfo) {
+        this.serviceInfo = serviceInfo;
+    }
+
+
+    /**
+     * @return
+     */
+    public String getPhasePolicy() {
+        return phasePolicy;
+    }
+
+
+    
+    /**   */
+    public void setPhasePolicy(String phasePolicy) {
+        this.phasePolicy = phasePolicy;
     }
     
+    
+
 }

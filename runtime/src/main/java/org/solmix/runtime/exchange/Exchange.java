@@ -22,7 +22,8 @@ import org.solmix.runtime.Container;
 
 
 /**
- * 信息交换上下文.
+ * 信息交换上下文(ME)<p>
+ * 消息从消费者发送后,在消息处理流转过程中Exchange作为消息的上下文容器.
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月11日
@@ -85,7 +86,7 @@ public interface Exchange extends StringTypeMap
      * 返回关联的传输管道
      * @return
      */
-    Pipeline getPipeline();
+    Pipeline getPipeline(Message message);
     
     /**
      * 设置传输管道
@@ -93,11 +94,29 @@ public interface Exchange extends StringTypeMap
      */
     void setPipeline(Pipeline pipeline);
     
+    /**
+     * 为真表示为单向消息无须返回消息,为假表示为双向消息有返回消息
+     * @return
+     */
     boolean isOneWay();
+    /**
+     * 为真表示为单向消息无须返回消息,为假表示为双向消息有返回消息
+     * @param b
+     */
     void setOneWay(boolean b);
     
+    /**
+     * 为真表示为同步消息交换,为假为异步消息交换
+     * @return
+     */
     boolean isSync();
+    
+    /**
+     * 为真表示为同步消息交换,为假为异步消息交换
+     * @param b
+     */
     void setSync(boolean b);
+    
     
     Container getContainer();
     

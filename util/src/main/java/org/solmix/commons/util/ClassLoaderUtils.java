@@ -19,6 +19,8 @@
 package org.solmix.commons.util;
 
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 
 /**
@@ -29,7 +31,25 @@ import java.net.URL;
 
 public class ClassLoaderUtils
 {
-    
+    public static class ClassLoaderHolder {
+        ClassLoader loader;
+        ClassLoaderHolder(ClassLoader c) {
+            loader = c;
+        }
+        
+        public void reset() {
+            ClassLoaderUtils.setThreadContextClassloader(loader);
+        }
+    }
+    public static ClassLoaderHolder setThreadContextClassloader(final ClassLoader newLoader) {
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoaderHolder>() {
+            public ClassLoaderHolder run() {
+                ClassLoader l = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader(newLoader);
+                return new ClassLoaderHolder(l);
+            }
+        });
+    }
     public static URL getResource(ClassLoader loader,String resourceName, Class<?> callingClass) {
         URL url=null;
         if(loader!=null){

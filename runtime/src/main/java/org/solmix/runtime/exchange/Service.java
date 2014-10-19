@@ -18,31 +18,26 @@
  */
 package org.solmix.runtime.exchange;
 
-import java.io.Closeable;
-import java.util.List;
 import java.util.Map;
 
+import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
-import org.solmix.runtime.interceptor.InterceptorProvider;
 
 
 /**
- * 负责接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月12日
  */
 
-public interface Endpoint extends InterceptorProvider,Map<String,Object>
+public interface Service
 {
+    Invoker getInvoker();
     
-    EndpointInfo getEndpointInfo();
+    void setInvoker(Invoker invoker);
     
-    Binding getBinding();
+    Map<String,Endpoint> getEndpoints();
     
-    Service getService();
-    
-    void addCleanupHook(Closeable c);
-    List<Closeable> getCleanupHooks();
+    EndpointInfo getEndpointInfo(String eid);
 
 }
