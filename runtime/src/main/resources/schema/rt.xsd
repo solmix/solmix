@@ -7,14 +7,12 @@ xmlns:beans="http://www.springframework.org/schema/beans"
  <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"/>
     <xsd:element name="container">
     <xsd:complexType>
-    	<xsd:sequence>
-    		<xsd:element name="listeners" type="xsd:anyType"
-    			minOccurs="0">
+            <xsd:all>
+    		<xsd:element name="listeners" type="xsd:anyType" minOccurs="0">
     		</xsd:element>
-    		<xsd:element name="properties" type="beans:mapType"
-    			minOccurs="0">
+    		<xsd:element name="properties" type="beans:mapType" minOccurs="0">
     		</xsd:element>
-    	</xsd:sequence>
+    	</xsd:all>
     	<xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
     	<xsd:attribute name="name" type="xsd:string"></xsd:attribute>
     </xsd:complexType>

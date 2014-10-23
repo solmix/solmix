@@ -61,7 +61,15 @@ public interface Message extends StringTypeMap
     String INTERCEPTOR_PROVIDERS = Message.class.getName() + ".INTERCEPTOR_PROVIDER";
 
     /**存储invocation参数的key,值类型Map<String,Object>    */
-    String INVOCATION_CONTEXT =  Message.class.getName() + ".INVOCATION_CONTEXT";;
+    String INVOCATION_CONTEXT =  Message.class.getName() + ".INVOCATION_CONTEXT";
+    
+    /**是否为请求消息,值类型Boolean    */
+    String REQUEST_MESSAGE = Message.class.getName() + ".REQUEST_MESSAGE"; 
+
+    /** 类型   */
+    String CONTENT_TYPE = "Content-Type";
+
+    
     
 
 

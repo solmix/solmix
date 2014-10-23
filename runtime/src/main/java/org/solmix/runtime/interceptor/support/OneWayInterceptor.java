@@ -18,11 +18,17 @@
  */
 package org.solmix.runtime.interceptor.support;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
+ * 无返回拦截处理
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月20日
@@ -30,22 +36,31 @@ import org.solmix.runtime.interceptor.Fault;
 
 public class OneWayInterceptor extends PhaseInterceptorSupport<Message>
 {
-
-    /** @param phase */
+    public OneWayInterceptor()
+    {
+        super(Phase.PRE_LOGICAL);
+    }
+    
     public OneWayInterceptor(String phase)
     {
         super(phase);
-        // TODO Auto-generated constructor stub
     }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
-     */
     @Override
-    public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
+    public void handleFault(Message msg) {
+        if(msg.getExchange().isOneWay()&&!isRequest(msg)){
+            InputStream in = msg.getContent(InputStream.class);
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    //ignore
+                }
+            }
+        }
+    }
+    @Override
+    public void handleMessage(Message msg) throws Fault {
+       
         
     }
 

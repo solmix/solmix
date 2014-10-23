@@ -16,27 +16,36 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor.support;
+package org.solmix.runtime.service;
 
-import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$  2014年10月23日
  */
 
-public class LoggingInInterceptor extends LoggingInterceptorSupport
+public class ContainerAwareService implements ContainerAware
 {
-    public LoggingInInterceptor()
-    {
-        super(Phase.RECEIVE);
+
+    private Container container;
+
+    
+    /**   */
+    @Override
+    public Container getContainer() {
+        return container;
     }
-    /** @param phase */
-    public LoggingInInterceptor(String phase)
-    {
-        super(phase);
+
+    
+    /**   */
+    @Override
+    public void setContainer(Container container) {
+        this.container = container;
     }
+   
 
 }

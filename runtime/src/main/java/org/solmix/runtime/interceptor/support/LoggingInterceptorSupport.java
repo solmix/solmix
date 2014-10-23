@@ -20,6 +20,7 @@ package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**

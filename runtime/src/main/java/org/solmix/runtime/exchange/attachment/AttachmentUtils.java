@@ -16,16 +16,30 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.attachment;
+
+import java.util.List;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$  2014年10月22日
  */
 
-public interface Server
+public class AttachmentUtils
 {
 
+    public static boolean isTypeSupported(String contentType, List<String> types) {
+        if (contentType == null) {
+            return false;
+        }
+        contentType = contentType.toLowerCase();
+        for (String s : types) {
+            if (contentType.indexOf(s) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

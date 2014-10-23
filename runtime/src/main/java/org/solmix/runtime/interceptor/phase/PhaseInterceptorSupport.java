@@ -17,16 +17,17 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.interceptor.support;
+package org.solmix.runtime.interceptor.phase;
 
 import java.util.Collection;
 import java.util.Set;
 
 import org.solmix.commons.collections.SortedArraySet;
 import org.solmix.runtime.exchange.Message;
-import org.solmix.runtime.interceptor.phase.PhaseInterceptor;
+import org.solmix.runtime.exchange.MessageUtils;
 
 /**
+ * 其他拦截器必须继承该类.
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月19日
@@ -126,5 +127,7 @@ public abstract class PhaseInterceptorSupport<T extends Message> implements
     public Collection<PhaseInterceptor<? extends Message>> extInterceptors() {
         return null;
     }
-
+    protected boolean isRequest(T message) {
+        return MessageUtils.isRequest(message);
+    }  
 }

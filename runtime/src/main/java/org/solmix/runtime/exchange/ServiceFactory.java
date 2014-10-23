@@ -16,27 +16,17 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor.support;
-
-import org.solmix.runtime.interceptor.phase.Phase;
+package org.solmix.runtime.exchange;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$  2014年10月22日
  */
 
-public class LoggingInInterceptor extends LoggingInterceptorSupport
+public interface ServiceFactory
 {
-    public LoggingInInterceptor()
-    {
-        super(Phase.RECEIVE);
-    }
-    /** @param phase */
-    public LoggingInInterceptor(String phase)
-    {
-        super(phase);
-    }
 
+    Service create();
 }

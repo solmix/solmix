@@ -20,6 +20,8 @@ package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -32,21 +34,19 @@ public class FaultOutInterceptor extends PhaseInterceptorSupport<Message>
 {
 
     /** @param phase */
-    public FaultOutInterceptor(String phase)
+    public FaultOutInterceptor()
     {
-        super(phase);
-        // TODO Auto-generated constructor stub
+        super(Phase.PRE_PROTOCOL);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
-     */
+    
     @Override
     public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
-        
+        Fault f = (Fault)message.getContent(Exception.class);
+        if (f == null) {
+            return;
+        }
+        //TODO
     }
 
 }

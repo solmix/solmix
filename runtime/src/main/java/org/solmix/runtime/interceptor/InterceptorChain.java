@@ -103,29 +103,22 @@ public interface InterceptorChain extends Iterable<Interceptor<? extends Message
     
     void setFaultProcessor(Processor processor);
     /**
-     * Pauses the current chain.   When the stack unwinds, the chain will just
-     * return from the doIntercept method normally.
+     * 暂停Chain执行,恢复(resume)后照常继续执行
      */
     void pause();
 
     /**
-     * Suspends the current chain.  When the stack unwinds, the chain back up
-     * the iterator by one (so on resume, the interceptor that called pause will
-     * be re-entered) and then throw a SuspendedInvocationException to the caller
+     * 中断Chain执行,Chain回退一个interceptor,然后暂停Chain继续执行,对于已经执行的抛出中断异常.
      */
     void suspend();
     
     /**
-     * Resumes the chain.  The chain will use the current thread to continue processing
-     * the last message that was passed into doIntercept
+     * 恢复Chain,用当前线程继续执行上一个未完成的消息.
      */
     void resume();
 
     /**
-     * If the chain is marked as paused, this will JUST mark the chain as
-     * in the EXECUTING phase.   This is useful if an interceptor pauses the chain,
-     * but then immediately decides it should not have done that.   It can unpause
-     * the chain and return normally and the normal processing will continue.
+     * 取消暂停.如果Chain被标记为暂停(paused),那么这个方法可以使Chain恢复执行(EXECUTING)状态,继续执行intercpt
      */
     void unpause();
 }

@@ -18,8 +18,14 @@
  */
 package org.solmix.runtime.interceptor.support;
 
+import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -31,21 +37,17 @@ import org.solmix.runtime.interceptor.Fault;
 public class ServiceInvokerInterceptor extends PhaseInterceptorSupport<Message>
 {
 
-    /** @param phase */
-    public ServiceInvokerInterceptor(String phase)
+    public ServiceInvokerInterceptor()
     {
-        super(phase);
-        // TODO Auto-generated constructor stub
+        super(Phase.INVOKE);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
-     */
     @Override
     public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
+        final Exchange exchange = message.getExchange();
+        final Endpoint endpoint = exchange.get(Endpoint.class);
+        final Service service = endpoint.getService();
+        final Invoker invoker = service.getInvoker();  
         
     }
 

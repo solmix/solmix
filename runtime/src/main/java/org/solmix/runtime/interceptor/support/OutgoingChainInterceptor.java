@@ -19,7 +19,10 @@
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Pipeline;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -31,11 +34,10 @@ import org.solmix.runtime.interceptor.Fault;
 public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message>
 {
 
-    /** @param phase */
-    public OutgoingChainInterceptor(String phase)
+    public OutgoingChainInterceptor()
     {
-        super(phase);
-        // TODO Auto-generated constructor stub
+        //in phase 最后一步
+        super(Phase.POST_INVOKE);
     }
 
     /**
@@ -47,6 +49,15 @@ public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message>
     public void handleMessage(Message message) throws Fault {
         // TODO Auto-generated method stub
         
+    }
+
+    /**
+     * @param message
+     * @return
+     */
+    public static Pipeline getBackPipeline(Message message) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

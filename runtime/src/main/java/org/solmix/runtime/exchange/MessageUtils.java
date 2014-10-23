@@ -28,7 +28,11 @@ package org.solmix.runtime.exchange;
 
 public class MessageUtils
 {
-
+    
+    public static boolean isRequest(Message message) {
+        Boolean request = (Boolean)message.get(Message.REQUEST_MESSAGE);
+        return request != null && request.booleanValue();
+    }
     public static boolean getBoolean(Message message, String key,boolean df) {
         if(message==null)
             return df;

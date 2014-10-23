@@ -18,9 +18,15 @@
  */
 package org.solmix.runtime.interceptor.support;
 
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
+
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.attachment.AttachmentUtils;
 import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -40,15 +46,23 @@ public class AttachmentInInterceptor extends PhaseInterceptorSupport<Message>
         super(Phase.RECEIVE);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
-     */
     @Override
     public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
-        
+       if(message.get(InputStream.class)==null){
+           return;
+       }
+       String contentType = (String) message.get(Message.CONTENT_TYPE);
+       if (AttachmentUtils.isTypeSupported(contentType, getSupportedTypes())) {
+           //TODO
+       }
+
+    }
+
+    /**
+     * @return
+     */
+    protected List<String> getSupportedTypes() {
+        return Collections.singletonList("multipart/related");
     }
 
 }

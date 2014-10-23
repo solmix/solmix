@@ -19,9 +19,12 @@
 
 package org.solmix.runtime.support.spring;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerListener;
 import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.service.InjectTestService;
@@ -61,8 +64,12 @@ public class SpringContainerTest
            Assert.assertEquals("value", v);
             Assert.assertNotNull(c);
             Container c1=  context.getBean("solmix",Container.class);
+           
             Assert.assertNotSame(c, c1);
             Assert.assertNotNull(c1);
+            List<ContainerListener> cls= c1.getContainerListeners();
+            Assert.assertEquals(1, cls.size());
+            
         } finally{
             if(context!=null)
             context.close();

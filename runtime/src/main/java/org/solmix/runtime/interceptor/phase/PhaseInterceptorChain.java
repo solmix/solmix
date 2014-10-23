@@ -38,6 +38,7 @@ import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.FaultType;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
+import org.solmix.runtime.interceptor.SuspendedException;
 
 
 /**
@@ -420,7 +421,15 @@ public class PhaseInterceptorChain implements InterceptorChain
                         LOG.trace("Invoking handleMessage on interceptor " + currentInterceptor);
                     }
                     currentInterceptor.handleMessage(message);
-                    
+                    if (state == State.SUSPENDED) {
+                        throw new SuspendedException();
+                    }
+                }catch(SuspendedException suspended){
+                    if (iterator.hasPrevious()) {
+                        iterator.previous();
+                    }
+                    pause();
+                    throw suspended;
                 } catch (RuntimeException ex) {
                     
                     if (!faultOccurred) {

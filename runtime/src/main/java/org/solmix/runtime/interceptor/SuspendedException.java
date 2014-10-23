@@ -16,27 +16,35 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor.support;
-
-import org.solmix.runtime.interceptor.phase.Phase;
+package org.solmix.runtime.interceptor;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$  2014年10月22日
  */
 
-public class LoggingInInterceptor extends LoggingInterceptorSupport
+public class SuspendedException extends RuntimeException
 {
-    public LoggingInInterceptor()
-    {
-        super(Phase.RECEIVE);
-    }
-    /** @param phase */
-    public LoggingInInterceptor(String phase)
-    {
-        super(phase);
-    }
+    private static final long serialVersionUID = -4389995627948442133L;
 
+
+    public SuspendedException(Throwable cause) {
+        super(cause);
+    }
+    
+    public SuspendedException() {
+    }
+    
+   
+    /**
+     * Returns a transport-specific runtime exception
+     * @return RuntimeException the transport-specific runtime exception, 
+     *         can be null for asynchronous transports
+     */
+    public RuntimeException getRuntimeException() {
+        Throwable ex = getCause();
+        return ex instanceof RuntimeException ? (RuntimeException)ex : null;
+    }
 }

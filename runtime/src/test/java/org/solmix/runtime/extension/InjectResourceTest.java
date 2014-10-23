@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.service.ContainerAwareService;
 import org.solmix.runtime.service.InjectTestService;
 
 /**
@@ -43,7 +44,12 @@ public class InjectResourceTest
             Assert.assertNotNull(its.getContainer());
         }
     }
-
+    @Test
+    public void testAware() {
+        Container c = ContainerFactory.newInstance().createContainer();
+        ContainerAwareService its = c.getExtension(ContainerAwareService.class);
+            Assert.assertNotNull(its.getContainer());
+    }
     @Test
     public void testtime() {
         Container c = ContainerFactory.newInstance().createContainer();

@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ObjectTypeResolver;
@@ -234,7 +235,12 @@ public class ExtensionManagerImpl implements ExtensionManager,
 
             injector.inject(obj);
             injector.construct(obj);
-
+           
+            //ContainerAware
+            if(ContainerAware.class.isAssignableFrom(obj.getClass())){
+                ContainerAware ca= ContainerAware.class.cast(obj);
+                ca.setContainer(container);
+            }
             if (null != activated) {
                 if (cls == null) {
                     cls = obj.getClass();

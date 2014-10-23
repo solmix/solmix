@@ -18,8 +18,14 @@
  */
 package org.solmix.runtime.interceptor.support;
 
+import java.io.IOException;
+
+import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Pipeline;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -30,23 +36,49 @@ import org.solmix.runtime.interceptor.Fault;
 
 public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message>
 {
+    private final MessageSenderEndingInterceptor ending = new MessageSenderEndingInterceptor();
 
-    /** @param phase */
-    public MessageSenderInterceptor(String phase)
+    
+    public MessageSenderInterceptor()
     {
-        super(phase);
-        // TODO Auto-generated constructor stub
+        super(Phase.PREPARE_SEND);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.interceptor.Interceptor#handleMessage(org.solmix.runtime.exchange.Message)
-     */
     @Override
     public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
+        try {
+            getPipeline(message).prepare(message);
+        } catch (IOException ex) {
+            throw new Fault("send message failed", ex);
+        }    
+        
+        // 添加关闭pipeline
+        message.getInterceptorChain().add(ending);
         
     }
 
+    public static Pipeline getPipeline(Message message) {
+        Exchange ex = message.getExchange();
+        Pipeline pl = ex.getPipeline(message);
+        if (pl == null && (ex.getOut() != null || ex.getOutFault() != null)) {
+            pl = OutgoingChainInterceptor.getBackPipeline(message);
+        }
+        return pl;
+    }
+    
+    /**为了关闭pipeline*/
+    public static class MessageSenderEndingInterceptor extends PhaseInterceptorSupport<Message> {
+        public MessageSenderEndingInterceptor() {
+            super(Phase.PREPARE_SEND_ENDING);
+        }
+
+        @Override
+        public void handleMessage(Message message) throws Fault {
+            try {
+                getPipeline(message).close(message);
+            } catch (IOException e) {
+                throw new Fault("send message failed", e);
+            }
+        }
+    }
 }

@@ -20,6 +20,8 @@ package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.interceptor.phase.Phase;
+import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
 
 /**
@@ -30,11 +32,12 @@ import org.solmix.runtime.interceptor.Fault;
 
 public class AttachmentOutInterceptor extends PhaseInterceptorSupport<Message>
 {
+    private final AttachmentOutEndingInterceptor ending = new AttachmentOutEndingInterceptor();
 
     /** @param phase */
-    public AttachmentOutInterceptor(String phase)
+    public AttachmentOutInterceptor()
     {
-        super(phase);
+        super(Phase.PRE_STREAM);
     }
 
     /**
@@ -45,7 +48,24 @@ public class AttachmentOutInterceptor extends PhaseInterceptorSupport<Message>
     @Override
     public void handleMessage(Message message) throws Fault {
         // TODO Auto-generated method stub
-        
+        message.getInterceptorChain().add(ending);   
     }
+    public class AttachmentOutEndingInterceptor extends PhaseInterceptorSupport<Message> {
+        public AttachmentOutEndingInterceptor() {
+            super(Phase.PRE_STREAM_ENDING);
+        }
 
+        @Override
+        public void handleMessage(Message message) {
+            /*AttachmentSerializer ser = message.getContent(AttachmentSerializer.class);
+            if (ser != null) {
+                try {
+                    ser.writeAttachments();
+                } catch (IOException e) {
+                    throw new Fault("WRITE_ATTACHMENTS", e);
+                }
+            }*/
+        }
+
+    }
 }
