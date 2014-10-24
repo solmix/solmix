@@ -19,9 +19,16 @@
 
 package org.solmix.runtime.support.spring;
 
+import java.util.StringTokenizer;
+
 import org.solmix.commons.util.DOMUtils;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
+import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -33,29 +40,32 @@ import org.w3c.dom.NamedNodeMap;
  * @version $Id$ 2014年9月10日
  */
 
-public class AbstractBeanDefinitionParser extends
-    AbstractSingleBeanDefinitionParser
+public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionParser
 {
 
+    /** 当springContext中没有container时,但是实际却需要一个Container,
+     * 这时在spring定义中预先设置一个到container的引线(wire),
+     * 当container准备好后在为其设置上 */
     public static final String WIRE_CONTAINER_ATTRIBUTE = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireBus";
+        AbstractBeanDefinitionParser.class.getName()+ ".wireCT";
 
     public static final String WIRE_CONTAINER_NAME = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireBusName";
+        AbstractBeanDefinitionParser.class.getName()+ ".wireCTName";
 
+    /** container名称   */
     public static final String WIRE_CONTAINER_CREATE = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireBusCreate";
+        AbstractBeanDefinitionParser.class.getName()+ ".wireCTCreate";
 
     public static final String WIRE_CONTAINER_HANDLER = ContainerPostProcessor.class.getName();
 
     private Class<?> beanClass;
 
     @Override
-    protected void doParse(Element element, ParserContext ctx,
-        BeanDefinitionBuilder bean) {
-        boolean setBus = parseAttributes(element, ctx, bean);
-        if (!setBus && hasBusProperty()) {
-            addBusWiringAttribute(bean, true);
+    protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder bean) {
+        //属性中包含了container属性,如果已经通过spring设置上了-返回true,否则返回false.
+        boolean setContainer = parseAttributes(element, ctx, bean);
+        if (!setContainer && hasContainerProperty()) {
+            addContainerWiringAttribute(bean, true);
         }
         parseChildElements(element, ctx, bean);
     }
@@ -74,12 +84,13 @@ public class AbstractBeanDefinitionParser extends
         Element e, String name) {
     }
 
-    protected boolean hasBusProperty() {
+    /** 指明元素中是否包含设置container的属性*/
+    protected boolean hasContainerProperty() {
         return false;
     }
 
-    protected boolean parseAttributes(Element element, ParserContext ctx,
-        BeanDefinitionBuilder bean) {
+    /**处理Element的属性,返回是否设置了Container*/
+    protected boolean parseAttributes(Element element, ParserContext ctx,BeanDefinitionBuilder bean) {
         NamedNodeMap atts = element.getAttributes();
         boolean setBus = false;
         for (int i = 0; i < atts.getLength(); i++) {
@@ -93,7 +104,6 @@ public class AbstractBeanDefinitionParser extends
             if (isNamespace(name, prefix)) {
                 continue;
             }
-
             if ("createdFromAPI".equals(name)) {
                 bean.setAbstract(true);
             } else if ("abstract".equals(name)) {
@@ -103,26 +113,24 @@ public class AbstractBeanDefinitionParser extends
             } else if ("name".equals(name)) {
                 processNameAttribute(element, ctx, bean, val);
             } else if ("container".equals(name)) {
-                setBus = processBusAttribute(element, ctx, bean, val);
+                setBus = processContainerAttribute(element, ctx, bean, val);
             } else if (!"id".equals(name) && isAttribute(pre, name)) {
-                mapAttribute(bean, element, name, val);
+                mapAttribute(bean, element, name, val,ctx);
             }
         }
         return setBus;
     }
 
-    protected void mapAttribute(BeanDefinitionBuilder bean, Element e,
-        String name, String val) {
-        mapAttribute(bean, name, val);
+    protected void mapAttribute(BeanDefinitionBuilder bean, Element e,String name, String val,ParserContext ctx) {
+        mapAttribute(bean, name, val,ctx);
     }
 
-    protected void mapAttribute(BeanDefinitionBuilder bean, String name,
-        String val) {
-        mapToProperty(bean, name, val);
+    protected void mapAttribute(BeanDefinitionBuilder bean, String name, String val,ParserContext ctx) {
+        mapToProperty(bean, name, val,ctx);
     }
 
     protected void mapToProperty(BeanDefinitionBuilder bean,
-        String propertyName, String val) {
+        String propertyName, String val,ParserContext ctx) {
         if (ID_ATTRIBUTE.equals(propertyName)) {
             return;
         }
@@ -132,13 +140,15 @@ public class AbstractBeanDefinitionParser extends
         }
     }
 
-    protected boolean processBusAttribute(Element element, ParserContext ctx,
+    protected boolean processContainerAttribute(Element element, ParserContext ctx,
         BeanDefinitionBuilder bean, String val) {
         if (val != null && val.trim().length() > 0) {
+            //属性中包含Container,并且Spring中包含以val为id的Container.
             if (ctx.getRegistry().containsBeanDefinition(val)) {
                 bean.addPropertyReference("container", val);
             } else {
-                addBusWiringAttribute(bean, true, val, ctx);
+                //spring中没有,但是需要一个Container.
+                addContainerWiringAttribute(bean, true, val, ctx);
             }
             return true;
         }
@@ -160,12 +170,11 @@ public class AbstractBeanDefinitionParser extends
         return "xmlns".equals(prefix) || prefix == null && "xmlns".equals(name);
     }
 
-    protected void addBusWiringAttribute(BeanDefinitionBuilder bean,
-        boolean type) {
-        addBusWiringAttribute(bean, type, null, null);
+    protected void addContainerWiringAttribute(BeanDefinitionBuilder bean, boolean type) {
+        addContainerWiringAttribute(bean, type, null, null);
     }
 
-    protected void addBusWiringAttribute(BeanDefinitionBuilder bean,
+    protected void addContainerWiringAttribute(BeanDefinitionBuilder bean,
         boolean type, String containerName, ParserContext ctx) {
         bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_ATTRIBUTE, type);
         if (containerName != null && containerName.trim().length() > 0) {
@@ -175,6 +184,7 @@ public class AbstractBeanDefinitionParser extends
 
         if (ctx != null
             && !ctx.getRegistry().containsBeanDefinition(WIRE_CONTAINER_HANDLER)) {
+            //注册后置处理器,
             BeanDefinitionBuilder b = BeanDefinitionBuilder.rootBeanDefinition(WIRE_CONTAINER_HANDLER);
             ctx.getRegistry().registerBeanDefinition(WIRE_CONTAINER_HANDLER,
                 b.getBeanDefinition());
@@ -193,5 +203,47 @@ public class AbstractBeanDefinitionParser extends
     protected Class<?> getBeanClass(Element e) {
         return beanClass;
     }
-
+    /**重写这个方法以解决,不设置id时,spring加载报错*/
+    @Override
+    protected String resolveId(Element elem, 
+        AbstractBeanDefinition definition, 
+        ParserContext ctx) throws BeanDefinitionStoreException {
+        //自定义加载id
+        String id = getIdOrName(elem);
+        
+        if (null == id || "".equals(id)) {
+            return super.resolveId(elem, definition, ctx);
+        } 
+        return id;        
+    }
+    protected String getIdOrName(Element elem) {
+        String id = elem.getAttribute(BeanDefinitionParserDelegate.ID_ATTRIBUTE);
+        //如果ID没有设置,那么使用name
+        if (null == id || "".equals(id)) {
+            String names = elem.getAttribute(BeanDefinitionParserDelegate.NAME_ATTRIBUTE);
+            if (null != names) {
+                StringTokenizer st = new StringTokenizer(names, BeanDefinitionParserDelegate.MULTI_VALUE_ATTRIBUTE_DELIMITERS);
+               //处理一下分隔符
+                if (st.countTokens() > 0) {
+                    id = st.nextToken();
+                }
+            }
+        }
+        return id;
+    }
+    protected  void parseMultiRef(String property, String value,
+        BeanDefinitionBuilder bean, ParserContext parserContext) {
+        String[] values = value.split("\\s*[,]+\\s*");
+        ManagedList<Object> list = null;
+        for (int i = 0; i < values.length; i++) {
+            String v = values[i];
+            if (v != null && v.length() > 0) {
+                if (list == null) {
+                    list = new ManagedList<Object>();
+                }
+                list.add(new RuntimeBeanReference(v));
+            }
+        }
+        bean.getBeanDefinition().getPropertyValues().addPropertyValue(property, list);
+    }
 }

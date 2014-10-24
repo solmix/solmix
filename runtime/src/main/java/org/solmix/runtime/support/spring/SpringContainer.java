@@ -50,7 +50,7 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
     {
 
     }
-    
+    //反向调用
     public void setConfig(ContainerDefinitionParser.ContainerType config){
         config.setContainer(this);
     }

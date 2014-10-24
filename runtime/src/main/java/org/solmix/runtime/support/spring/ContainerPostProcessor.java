@@ -80,8 +80,7 @@ public class ContainerPostProcessor implements BeanFactoryPostProcessor
            if(p==null)
                continue;
            String name = (String)beanDefinition.getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_NAME);
-           String create = (String)beanDefinition
-               .getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_CREATE);
+           String create = (String)beanDefinition.getAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_CREATE);
            Object inj = inject;
            if (name != null) {
                if (container != null) {
@@ -94,8 +93,7 @@ public class ContainerPostProcessor implements BeanFactoryPostProcessor
            beanDefinition.removeAttribute(AbstractBeanDefinitionParser.WIRE_CONTAINER_CREATE);
            if (create == null) {
                if (Boolean.valueOf(p.toString())) {
-                   beanDefinition.getPropertyValues()
-                       .addPropertyValue("container", inj);
+                   beanDefinition.getPropertyValues().addPropertyValue("container", inj);
                } else  {
                    ConstructorArgumentValues constructorArgs = beanDefinition.getConstructorArgumentValues();
                    insertConstructorArg(constructorArgs, inj);
@@ -124,10 +122,13 @@ public class ContainerPostProcessor implements BeanFactoryPostProcessor
     }
     
     private Object getContainerByName(String name, ConfigurableListableBeanFactory factory, boolean create, String cn) {
+        
         if (!factory.containsBeanDefinition(name) && (create || Container.DEFAULT_CONTAINER_ID.equals(name))) {
+            //如果没有就创建一个
             DefaultListableBeanFactory df = (DefaultListableBeanFactory)factory;
             RootBeanDefinition rbd = new RootBeanDefinition(SpringContainer.class);
             if (cn != null) {
+                //  SpringContainer.setConfig
                 rbd.setAttribute("config", new RuntimeBeanReference(cn));
             }
             df.registerBeanDefinition(name, rbd);

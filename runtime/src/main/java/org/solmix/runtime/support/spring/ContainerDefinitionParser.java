@@ -73,7 +73,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             } catch (Throwable t) {
             }
         }else{
-            addBusWiringAttribute(bean, true, cname, ctx);
+            addContainerWiringAttribute(bean, true, cname, ctx);
             bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_CREATE, 
                 resolveId(element, null, ctx));
             bean.addConstructorArgValue(cname);
