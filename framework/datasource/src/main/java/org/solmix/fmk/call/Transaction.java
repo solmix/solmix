@@ -7,6 +7,8 @@ import org.solmix.api.call.DSCallManagerFactory;
 import org.solmix.api.datasource.DSRequest;
 import org.solmix.api.datasource.DSResponse;
 import org.solmix.api.exception.SlxException;
+import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.Context;
 import org.solmix.runtime.SystemContext;
 
 public class Transaction
@@ -24,9 +26,14 @@ public class Transaction
                 try {
                     DSCallManager manager = factory.createSimpleDSCallManager();
                     dsc = manager.getDSCall();
+                    Context c = SlxContext.getContext();
+                    if(c!=null){
+                    	dsc.setRequestContext(c);
+                    }
                 } catch (SlxException e) {
                     // Ignore
                 }
+                
             }
         }
         if (DSCallImpl.class.isAssignableFrom(dsc.getClass())) {

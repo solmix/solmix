@@ -319,7 +319,7 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
         }
         if (mybatisStatement == null) {
             throw new SlxException(Tmodule.MYBATIS, Texception.OBJECT_IS_NULL,
-                "configure error:mybatis statement is null");
+                "configure error:["+__bind.getOperationType()+","+__bind.getOperationId()+"] mybatis statement is null");
         }
         return mybatisStatement;
     }

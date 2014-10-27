@@ -375,8 +375,9 @@ public class ServiceDataSource
         if (sqlConnection != null && !connectionIstransactional) {
             ((ISQLDataSource) _ds).freeConnection(sqlConnection);
         }
-        if (returnValue == null)
-            return null;
+        //for what
+       /* if (returnValue == null)
+            return null;*/
         if (returnValue!=null&&DSResponse.class.isAssignableFrom(returnValue.getClass())) {
             dsResponse = (DSResponse) returnValue;
         } else {
