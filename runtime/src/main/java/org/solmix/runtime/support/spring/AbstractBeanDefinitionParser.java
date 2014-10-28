@@ -70,17 +70,18 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         parseChildElements(element, ctx, bean);
     }
 
+    /**处理子元素*/
     protected void parseChildElements(Element element, ParserContext ctx,
         BeanDefinitionBuilder bean) {
         Element el = DOMUtils.getFirstElement(element);
         while (el != null) {
             String name = el.getLocalName();
-            mapElement(ctx, bean, el, name);
+            parseElement(ctx, bean, el, name);
             el = DOMUtils.getNextElement(el);
         }
     }
 
-    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean,
+    protected void parseElement(ParserContext ctx, BeanDefinitionBuilder bean,
         Element e, String name) {
     }
 
@@ -111,25 +112,32 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             } else if ("depends-on".equals(name)) {
                 bean.addDependsOn(val);
             } else if ("name".equals(name)) {
-                processNameAttribute(element, ctx, bean, val);
+                parseNameAttribute(element, ctx, bean, val);
             } else if ("container".equals(name)) {
-                setBus = processContainerAttribute(element, ctx, bean, val);
-            } else if (!"id".equals(name) && isAttribute(pre, name)) {
-                mapAttribute(bean, element, name, val,ctx);
+                setBus = parseContainerAttribute(element, ctx, bean, val);
+            } else if ("id".equals(name)) {
+                parseIdAttribute(bean, element, name, val,ctx);
+            } else if ( isAttribute(pre, name)) {
+                parseAttribute(bean, element, name, val,ctx);
             }
         }
         return setBus;
     }
 
-    protected void mapAttribute(BeanDefinitionBuilder bean, Element e,String name, String val,ParserContext ctx) {
-        mapAttribute(bean, name, val,ctx);
+    protected void parseIdAttribute(BeanDefinitionBuilder bean, Element element,
+        String name, String val, ParserContext ctx) {
+        
     }
 
-    protected void mapAttribute(BeanDefinitionBuilder bean, String name, String val,ParserContext ctx) {
-        mapToProperty(bean, name, val,ctx);
+    protected void parseAttribute(BeanDefinitionBuilder bean, Element e,String name, String val,ParserContext ctx) {
+        parseAttribute(bean, name, val,ctx);
     }
 
-    protected void mapToProperty(BeanDefinitionBuilder bean,
+    protected void parseAttribute(BeanDefinitionBuilder bean, String name, String val,ParserContext ctx) {
+        attributeToProperty(bean, name, val,ctx);
+    }
+
+    protected void attributeToProperty(BeanDefinitionBuilder bean,
         String propertyName, String val,ParserContext ctx) {
         if (ID_ATTRIBUTE.equals(propertyName)) {
             return;
@@ -140,7 +148,8 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         }
     }
 
-    protected boolean processContainerAttribute(Element element, ParserContext ctx,
+    /**Container注入处理*/
+    protected boolean parseContainerAttribute(Element element, ParserContext ctx,
         BeanDefinitionBuilder bean, String val) {
         if (val != null && val.trim().length() > 0) {
             //属性中包含Container,并且Spring中包含以val为id的Container.
@@ -155,7 +164,7 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         return false;
     }
 
-    protected void processNameAttribute(Element element, ParserContext ctx,
+    protected void parseNameAttribute(Element element, ParserContext ctx,
         BeanDefinitionBuilder bean, String val) {
         // nothing
     }
@@ -194,7 +203,8 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     public Class<?> getBeanClass() {
         return beanClass;
     }
-
+    
+    /**spring bean实例class*/
     public void setBeanClass(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
@@ -216,6 +226,8 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         } 
         return id;        
     }
+    
+    /**id 生成策略*/
     protected String getIdOrName(Element elem) {
         String id = elem.getAttribute(BeanDefinitionParserDelegate.ID_ATTRIBUTE);
         //如果ID没有设置,那么使用name
@@ -231,6 +243,8 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         }
         return id;
     }
+    
+    /**字符串作为多值引用*/
     protected  void parseMultiRef(String property, String value,
         BeanDefinitionBuilder bean, ParserContext parserContext) {
         String[] values = value.split("\\s*[,]+\\s*");

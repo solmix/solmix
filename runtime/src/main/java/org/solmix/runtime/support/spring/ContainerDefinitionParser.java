@@ -116,7 +116,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         return container;
     }
     @Override
-    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean,
+    protected void parseElement(ParserContext ctx, BeanDefinitionBuilder bean,
         Element e, String name) {
         if ("properties".equals(name)) {
             Map<?, ?> map = ctx.getDelegate().parseMapElement(e, bean.getBeanDefinition());
