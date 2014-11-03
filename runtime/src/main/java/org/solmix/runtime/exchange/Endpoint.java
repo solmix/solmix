@@ -52,7 +52,7 @@ public interface Endpoint extends InterceptorProvider,Map<String,Object>
     
     void setOutFaultProcessor(Processor p);
     
-  Processor getInFaultProcessor();
+    Processor getInFaultProcessor();
     
     void setInFaultProcessor(Processor p);
 

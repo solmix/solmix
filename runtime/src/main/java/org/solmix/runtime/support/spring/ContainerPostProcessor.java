@@ -34,6 +34,8 @@ import org.springframework.beans.factory.config.ConstructorArgumentValues.ValueH
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * 
@@ -139,4 +141,30 @@ public class ContainerPostProcessor implements BeanFactoryPostProcessor
         return new RuntimeBeanReference(name);
     }
 
+    private static Container getContainerByName(String name,
+        ApplicationContext context, boolean create) {
+        if (!context.containsBean(name)
+            && (create || Container.DEFAULT_CONTAINER_ID.equals(name))) {
+            SpringContainer b = new SpringContainer();
+            ConfigurableApplicationContext cctx = (ConfigurableApplicationContext) context;
+            cctx.getBeanFactory().registerSingleton(name, b);
+            b.setApplicationContext(context);
+        }
+        return context.getBean(name, Container.class);
+    }
+    /**添加默认Container,如果默认container不存在就添加一个*/
+    public static Container addDefault(ApplicationContext ctx) {
+        if (!ctx.containsBean(Container.DEFAULT_CONTAINER_ID)) {
+            Container b = getContainerByName(Container.DEFAULT_CONTAINER_ID, ctx, true);
+            if (ctx instanceof ConfigurableApplicationContext) {
+                ConfigurableApplicationContext cctx = (ConfigurableApplicationContext)ctx;
+                new ContainerPostProcessor(b).postProcessBeanFactory(cctx.getBeanFactory());
+            }
+        }
+        return Container.class.cast(ctx.getBean(Container.DEFAULT_CONTAINER_ID, Container.class));
+    }
+    /**按名称查找container*/
+    public static Container addContainer(ApplicationContext ctx, String name) {
+        return getContainerByName(name, ctx, true);
+    }
 }
