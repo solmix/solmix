@@ -68,8 +68,9 @@ public interface Message extends StringTypeMap
 
     /** 类型   */
     String CONTENT_TYPE = "Content-Type";
-
     
+    /**信息中指定的地址,值类型String    */
+    String ENDPOINT_ADDRESS=Message.class.getName() +".ENDPOINT_ADDRESS";
     
 
 

@@ -46,6 +46,8 @@
 		<module>runtime</module>
 	</modules>
 	<properties>
+		<compile.flags>-Xlint:unchecked,deprecation,fallthrough,finally</compile.flags>
+		<compile.show.deprecation>true</compile.show.deprecation>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
 		<asm.bundle.version>3.1_2</asm.bundle.version>
 		<cglib.bundle.version>2.1_3_6</cglib.bundle.version>
@@ -81,8 +83,8 @@
 		<jsw.version>3.2.3</jsw.version>
 		<maven.version>3.0.3</maven.version>
 		<mina.version>2.0.3</mina.version>
-		<osgi.version>4.3.0</osgi.version>
-		<osgi.core.version>4.3.0</osgi.core.version>
+		<osgi.version>5.0.0</osgi.version>
+		<osgi.core.version>5.0.0</osgi.core.version>
 		<pax.exam.version>4.1.0</pax.exam.version>
 		<pax.logging.version>1.7.0</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
@@ -1000,11 +1002,109 @@
 					<artifactId>maven-eclipse-plugin</artifactId>
 					<version>2.4</version>
 					<configuration>
-						<outputDirectory>${basedir}/eclipse-classes</outputDirectory>
-						<downloadSources>true</downloadSources>
+                        <outputDirectory>${basedir}/eclipse-classes</outputDirectory>
+                        <downloadSources>true</downloadSources>
 						<downloadJavadocs>true</downloadJavadocs>
-					</configuration>
+                        <buildcommands>
+                            <java.lang.String>org.eclipse.jdt.core.javabuilder</java.lang.String>
+                            <java.lang.String>net.sf.eclipsecs.core.CheckstyleBuilder</java.lang.String>
+                            <java.lang.String>net.sourceforge.pmd.eclipse.plugin.pmdBuilder</java.lang.String>
+                        </buildcommands>
+                        <projectnatures>
+                            <nature>org.eclipse.jdt.core.javanature</nature>
+                            <nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
+                            <nature>net.sourceforge.pmd.eclipse.plugin.pmdNature</nature>
+                        </projectnatures>
+                        <ajdtVersion>none</ajdtVersion>
+                        <additionalConfig>
+                            <file>
+                                <name>.checkstyle</name>
+                                <location>/eclipse-checkstyle${checkstyle.extension}</location>
+                            </file>
+                            <file>
+                                <name>.pmd</name>
+                                <location>/eclipse-pmd${pmd.eclipse.ruleset.ext}</location>
+                            </file>
+                            <file>
+                                <name>.ruleset</name>
+                                <location>/pmd-ruleset${pmd.eclipse.ruleset.ext}.xml</location>
+                            </file>
+                        </additionalConfig>
+                    </configuration>
 				</plugin>
+				  <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.12.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.solmix.common</groupId>
+                            <artifactId>solmix-common-buildtools</artifactId>
+                            <version>1.0</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <includeResources>false</includeResources>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <configLocation>checkstyle.xml</configLocation>
+                                <consoleOutput>true</consoleOutput>
+                                <failsOnError>true</failsOnError>
+                                <linkXRef>false</linkXRef>
+                                <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                                <sourceDirectory>${basedir}/src</sourceDirectory>
+                                <excludes>**/archetype-resources/**/*.java</excludes>
+                            </configuration>
+                            <goals>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.1</version>
+                     <dependencies>
+                        <dependency>
+                            <groupId>org.solmix.common</groupId>
+                            <artifactId>solmix-common-buildtools</artifactId>
+                            <version>1.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd</artifactId>
+                            <version>5.0.4</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <rulesets>
+                            <ruleset>pmd-ruleset.xml</ruleset>
+                        </rulesets>
+                        <sourceEncoding>UTF-8</sourceEncoding>
+                        <targetJdk>1.6</targetJdk>
+                        <linkXRef>false</linkXRef>
+                        <includeTests>true</includeTests>
+                        <verbose>true</verbose>
+                        <excludeRoots>
+                            <excludeRoot>${basedir}/src/main/generated</excludeRoot>
+                        </excludeRoots>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
@@ -1342,6 +1442,69 @@
 		</plugins>
 	</reporting>
 	<profiles>
+	 <profile>
+            <id>setup.eclipse</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <pmd.skip>true</pmd.skip>
+                <checkstyle.skip>true</checkstyle.skip>
+            </properties>
+            <build>
+                <defaultGoal>process-test-sources</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-eclipse-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>setup.eclipse.project</id>
+                                <phase>process-test-sources</phase>
+                                <goals>
+                                    <goal>eclipse</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	  <profile>
+            <id>fastinstall</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <pmd.skip>true</pmd.skip>
+                <checkstyle.skip>true</checkstyle.skip>
+            </properties>
+        </profile>
+         <profile>
+            <!-- default profile enables checkstyle and Xlint stuff -->
+            <id>sourcecheck</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <showDeprecation>$compile.show.deprecation}</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <compilerArgument>${compile.flags}</compilerArgument>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 		<!-- START SNIPPET: release-profile -->
 		<profile>
 			<id>apache-release</id>

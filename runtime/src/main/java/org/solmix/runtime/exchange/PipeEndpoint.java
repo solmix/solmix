@@ -18,28 +18,18 @@
  */
 package org.solmix.runtime.exchange;
 
-import java.io.IOException;
-
 
 /**
- * 数据传输管道.
- * 
- * 为Binding提供传输通道
- * 
+ * 管道端点,在传输层接收消息
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月10日
+ * @version $Id$  2014年11月13日
  */
 
-public interface Pipeline extends ProcessorAware
+public interface PipeEndpoint extends ProcessorAware
 {
-    
-    void prepare(Message message) throws IOException;
-    
-    void close(Message message) throws IOException;
-    
-    String getAddress();
-    
-    void close();
-    
 
+    /**
+     * 关闭端点停止接收消息
+     */
+    void shutdown();
 }

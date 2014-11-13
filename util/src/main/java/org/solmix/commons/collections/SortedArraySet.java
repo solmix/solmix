@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.collections;
 
 import java.util.Arrays;
@@ -26,16 +27,15 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 /**
  * 实现了Set的大多数方法,使用数组存储,遍历效率高,但是添加费事.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月14日
+ * @version $Id$ 2014年10月14日
  */
 
-public final class SortedArraySet<T> implements SortedSet<T>
-{
+public final class SortedArraySet<T> implements SortedSet<T> {
+
     final AtomicReference<T[]> data = new AtomicReference<T[]>();
 
     @Override
@@ -59,12 +59,12 @@ public final class SortedArraySet<T> implements SortedSet<T>
         T[] tmp = data.get();
         return tmp == null ? 0 : tmp.length;
     }
-    
+
     @SuppressWarnings("unchecked")
     private T[] newArray(int size) {
-        return (T[])new Object[size];
+        return (T[]) new Object[size];
     }
-    
+
     @Override
     public boolean add(T o) {
         if (!contains(o)) {
@@ -79,7 +79,7 @@ public final class SortedArraySet<T> implements SortedSet<T>
                 tmp2[tmp2.length - 1] = o;
                 Arrays.sort(tmp2);
             }
-            
+
             if (!data.compareAndSet(tmp, tmp2)) {
                 return add(o);
             }
@@ -87,6 +87,7 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
         return false;
     }
+
     @Override
     public boolean addAll(Collection<? extends T> c) {
         boolean val = false;
@@ -95,6 +96,7 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
         return val;
     }
+
     @Override
     public boolean containsAll(Collection<?> c) {
         boolean val = false;
@@ -121,6 +123,7 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
         return val;
     }
+
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean val = false;
@@ -135,14 +138,13 @@ public final class SortedArraySet<T> implements SortedSet<T>
     @Override
     public boolean remove(Object o) {
         T[] tmp = data.get();
-        
+
         if (tmp == null) {
             return false;
         }
         int idx = Arrays.binarySearch(tmp, o);
         if (idx != -1) {
-            if (tmp.length == 1 
-                && !data.compareAndSet(tmp, null)) {
+            if (tmp.length == 1 && !data.compareAndSet(tmp, null)) {
                 return remove(o);
             }
             T[] tmp2 = newArray(tmp.length - 1);
@@ -155,7 +157,6 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
         return false;
     }
-
 
     @Override
     public Object[] toArray() {
@@ -174,15 +175,15 @@ public final class SortedArraySet<T> implements SortedSet<T>
         T[] tmp = data.get();
         if (tmp == null) {
             if (a.length != 0) {
-                return (X[])java.lang.reflect.Array.
-                    newInstance(a.getClass().getComponentType(), 0);
+                return (X[]) java.lang.reflect.Array.newInstance(
+                    a.getClass().getComponentType(), 0);
             }
             return a;
         }
-        
+
         if (a.length < tmp.length) {
-            a = (X[])java.lang.reflect.Array.
-                newInstance(a.getClass().getComponentType(), tmp.length);
+            a = (X[]) java.lang.reflect.Array.newInstance(
+                a.getClass().getComponentType(), tmp.length);
         }
         System.arraycopy(tmp, 0, a, 0, tmp.length);
         if (a.length > tmp.length) {
@@ -197,27 +198,30 @@ public final class SortedArraySet<T> implements SortedSet<T>
         if (!(o instanceof SortedArraySet)) {
             return false;
         }
-        SortedArraySet<T> as = (SortedArraySet<T>)o;
+        SortedArraySet<T> as = (SortedArraySet<T>) o;
         return Arrays.equals(data.get(), as.data.get());
     }
+
     @Override
     public String toString() {
         return Arrays.toString(data.get());
     }
+
     @Override
     public int hashCode() {
-        return Arrays.hashCode(data.get()); 
+        return Arrays.hashCode(data.get());
     }
-    
 
     private class SASIterator<X> implements Iterator<X> {
+
         final X[] data;
+
         int idx;
-        
+
         public SASIterator(X[] d) {
             data = d;
         }
-        
+
         @Override
         public boolean hasNext() {
             return data != null && idx != data.length;
@@ -239,7 +243,6 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
     }
 
-
     @Override
     public Comparator<? super T> comparator() {
         return null;
@@ -253,7 +256,7 @@ public final class SortedArraySet<T> implements SortedSet<T>
         }
         return tmp[0];
     }
-    
+
     @Override
     public T last() {
         T[] tmp = data.get();

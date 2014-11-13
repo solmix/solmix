@@ -25,35 +25,51 @@ package org.solmix.runtime.exchange.model;
  * @version $Id$  2014年10月15日
  */
 
-public interface EndpointInfo
+public class CopyOfEndpointInfo
 {
+    private BindingInfo bindingInfo;
+    
+    private ServiceInfo serviceInfo;
+    
+    private String phasePolicy;
+    
     /**   */
-    public BindingInfo getBinding() ;
+    public BindingInfo getBinding() {
+        return bindingInfo;
+    }
 
     
     /**   */
-    public void setBinding(BindingInfo bindingInfo);
+    public void setBinding(BindingInfo bindingInfo) {
+        this.bindingInfo = bindingInfo;
+    }
 
+    
     /**   */
-    public ServiceInfo getService();
+    public ServiceInfo getService() {
+        return serviceInfo;
+    }
 
+    
     /**   */
-    public void setService(ServiceInfo serviceInfo);
+    public void setService(ServiceInfo serviceInfo) {
+        this.serviceInfo = serviceInfo;
+    }
+
 
     /**
      * @return
      */
-    public String getPhasePolicy() ;
+    public String getPhasePolicy() {
+        return phasePolicy;
+    }
+
 
     
     /**   */
-    public void setPhasePolicy(String phasePolicy) ;
-
-
-    /**
-     * 
-     */
-    public String getAddress();
+    public void setPhasePolicy(String phasePolicy) {
+        this.phasePolicy = phasePolicy;
+    }
     
     
 

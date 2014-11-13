@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -32,12 +32,13 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
- * Provides a base datatype decorator that enables additional functionality to be added to a Map via decoration.
+ * Provides a base datatype decorator that enables additional functionality to
+ * be added to a Map via decoration.
  * <p>
  * Methods are forwarded directly to the decorated map.
  * <p>
- * This implementation does not perform any special processing with {@link #entrySet()}, {@link #keySet()} or
- * {@link #values()}.
+ * This implementation does not perform any special processing with
+ * {@link #entrySet()}, {@link #keySet()} or {@link #values()}.
  * <p>
  * It simply returns the Set/Collection from the wrapped map.
  * 
@@ -45,16 +46,15 @@ import java.util.StringTokenizer;
  * @author solmix.f@gmail.com
  * @since 0.0.1
  */
-public class DataTypeMap implements Map<String,Object>
-{
-    
-    protected transient Map<String,Object> map;
+public class DataTypeMap implements Map<String, Object> {
+
+    protected transient Map<String, Object> map;
+
     /**
      * Constructor only used in deserialization, do not use otherwise.
      */
-    public DataTypeMap()
-    {
-        this(new HashMap<String,Object>());
+    public DataTypeMap() {
+        this(new HashMap<String, Object>());
     }
 
     /**
@@ -62,8 +62,7 @@ public class DataTypeMap implements Map<String,Object>
      * 
      * @param map
      */
-    public DataTypeMap(Map<String,Object> map)
-    {
+    public DataTypeMap(Map<String, Object> map) {
         if (map == null) {
             throw new IllegalArgumentException("Map must not be null");
         }
@@ -87,10 +86,11 @@ public class DataTypeMap implements Map<String,Object>
      */
     public String getString(Object key, String defaultValue) {
         Object value = get(key);
-        if (value == null)
+        if (value == null) {
             return defaultValue;
-        else
+        } else {
             return value.toString();
+        }
     }
 
     public DataTypeMap getSubtree(String key) {
@@ -104,10 +104,11 @@ public class DataTypeMap implements Map<String,Object>
      */
     public String[] getStringArray(Object key, String defaultValue[]) {
         Object value = get(key);
-        if (value == null)
+        if (value == null) {
             return defaultValue;
-        else
+        } else {
             return (String[]) listToArray(getList(key));
+        }
     }
 
     /**
@@ -140,12 +141,12 @@ public class DataTypeMap implements Map<String,Object>
      * @return if value is null return default value.
      */
     @SuppressWarnings("unchecked")
-    public DataTypeMap getMap(Object key, Map<String,Object> defaultValue) {
+    public DataTypeMap getMap(Object key, Map<String, Object> defaultValue) {
         Object value = get(key);
         if (value instanceof DataTypeMap)
             return (DataTypeMap) value;
         if (value instanceof Map<?, ?>)
-            return new DataTypeMap((Map<String,Object>) value);
+            return new DataTypeMap((Map<String, Object>) value);
         if (value == null) {
             if (defaultValue != null) {
                 if (defaultValue instanceof DataTypeMap)
@@ -156,7 +157,7 @@ public class DataTypeMap implements Map<String,Object>
                 return null;
             }
         } else {
-            return new DataTypeMap((Map<String,Object>) value);
+            return new DataTypeMap((Map<String, Object>) value);
         }
     }
 
@@ -180,7 +181,8 @@ public class DataTypeMap implements Map<String,Object>
         if (value instanceof List<?>)
             return (List<?>) value;
         List<String> result = new ArrayList<String>();
-        for (StringTokenizer st = new StringTokenizer(value.toString().trim(), " \r\t\n,"); st.hasMoreTokens(); result.add(st.nextToken().toString().trim()))
+        for (StringTokenizer st = new StringTokenizer(value.toString().trim(),
+            " \r\t\n,"); st.hasMoreTokens(); result.add(st.nextToken().toString().trim()))
             ;
         return result;
     }
@@ -436,11 +438,11 @@ public class DataTypeMap implements Map<String,Object>
             return new Double(value.toString().trim());
     }
 
-    protected Map<String,Object> getMap() {
+    protected Map<String, Object> getMap() {
         return map;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     @Override
     public void clear() {
         map.clear();
@@ -500,7 +502,7 @@ public class DataTypeMap implements Map<String,Object>
     public Collection<Object> values() {
         return map.values();
     }
-   
+
     @Override
     public boolean equals(Object object) {
         if (object == this) {

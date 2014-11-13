@@ -45,4 +45,15 @@ public class MessageUtils
     public static boolean getBoolean(Message message, String key) {
         return getBoolean(message, key,false);
     }
+    public static boolean isTrue(Object property) {
+        if (property == null) {
+            return false;
+        }
+
+        if (Boolean.TRUE.equals(property) || "true".equalsIgnoreCase(property.toString())) {
+            return true;
+        }
+        
+        return false;
+    }
 }

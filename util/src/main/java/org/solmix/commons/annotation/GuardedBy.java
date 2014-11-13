@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2005 Brian Goetz and Tim Peierls
  * Released under the Creative Commons Attribution License
  *   (http://creativecommons.org/licenses/by/2.5)

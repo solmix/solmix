@@ -16,30 +16,25 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.support;
 
-import java.io.IOException;
+import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.EndpointException;
+import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 
 /**
- * 数据传输管道.
- * 
- * 为Binding提供传输通道
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月10日
+ * @version $Id$  2014年11月13日
  */
 
-public interface Pipeline extends ProcessorAware
+public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 {
-    
-    void prepare(Message message) throws IOException;
-    
-    void close(Message message) throws IOException;
-    
-    String getAddress();
-    
-    void close();
-    
 
+    /**    */
+    private static final long serialVersionUID = -2130719449925733112L;
+
+    
+    protected abstract Endpoint createEndpoint() throws  EndpointException;
 }
