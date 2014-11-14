@@ -95,8 +95,10 @@ public class Files {
             throws IOException {
         FileInputStream fis = null;
         fis = new FileInputStream(file);
+        
+        long size= fis.available();
         IOUtils.closeQuietly(fis);
-        return fis.available();
+        return size;
     }
      
     /**
