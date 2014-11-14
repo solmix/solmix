@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.solmix.commons.util.IOUtils;
+import org.apache.commons.io.IOUtils;
+
 
 public class Version
 {

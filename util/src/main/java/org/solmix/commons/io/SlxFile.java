@@ -36,7 +36,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.solmix.commons.util.IOUtils;
+import org.apache.commons.io.IOUtils;
+
 
 
 
@@ -239,7 +240,7 @@ public class SlxFile
    public String getAsString() throws IOException
    {
       StringWriter sw = new StringWriter();
-      IOUtils.copyCharacterStreams(getReader(), sw);
+      IOUtils.copy(getReader(), sw);
       return sw.toString();
    }
 
