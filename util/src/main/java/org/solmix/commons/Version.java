@@ -36,7 +36,7 @@ public class Version
             } catch (IOException e) {
                 // ignore
             } finally {
-                IOUtils.closeQuitely(is);
+                IOUtils.closeQuietly(is);
             }
         }
 

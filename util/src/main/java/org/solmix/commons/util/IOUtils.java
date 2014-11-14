@@ -35,6 +35,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.Socket;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -244,7 +247,7 @@ public final class IOUtils
       return writer.toString();
    }
 
-   public static void closeQuitely(InputStream is)
+   public static void closeQuietly(InputStream is)
    {
       try {
           if(is!=null)
@@ -253,7 +256,7 @@ public final class IOUtils
           LoggerFactory.getLogger(IOUtils.class).error("Problem closing a source or destination.", ignored);
       }
    }
-   public static void closeQuitely(Closeable closeable)
+   public static void closeQuietly(Closeable closeable)
    {
       try {
           if(closeable!=null)
@@ -262,7 +265,7 @@ public final class IOUtils
           LoggerFactory.getLogger(IOUtils.class).error("Problem closing a source or destination.", ignored);
       }
    }
-   public static void closeQuitely(OutputStream os)
+   public static void closeQuietly(OutputStream os)
    {
       try {
          os.flush();
@@ -275,6 +278,76 @@ public final class IOUtils
           LoggerFactory.getLogger(IOUtils.class).error("Problem flush a source or destination.", ignored);
       }
    }
+   public static void closeQuietly(Socket sock){
+       if (sock != null){
+           try {
+               sock.close();
+           } catch (IOException ioe) {
+               // ignored
+           }
+       }
+   }
+   /**
+    * 无条件的关闭 <code>Reader</code>.
+    * <p>
+    * 等同于{@link Reader#close()},发生的任何错误都会被忽略.
+    * 通常用于finally中.
+    * <p>
+    * 例如:
+    * <pre>
+    *   char[] data = new char[1024];
+    *   Reader in = null;
+    *   try {
+    *       in = new FileReader("foo.txt");
+    *       in.read(data);
+    *       in.close(); //close errors are handled
+    *   } catch (Exception e) {
+    *       // error handling
+    *   } finally {
+    *       IOUtils.closeQuietly(in);
+    *   }
+    * </pre>
+    * 
+    * @param input  the Reader to close, may be null or already closed
+    */
+   public static void closeQuietly(Reader input) {
+       closeQuietly((Closeable)input);
+   }
+   /**
+    * 无条件的关闭 <code>Writer</code>.
+    * <p>
+    * 等同于 {@link Writer#close()}, ,发生的任何错误都会被忽略.
+    * 通常用于finally中.
+    * <p>
+    * 例如:
+    * <pre>
+    *   Writer out = null;
+    *   try {
+    *       out = new StringWriter();
+    *       out.write("Hello World");
+    *       out.close(); //close errors are handled
+    *   } catch (Exception e) {
+    *       // error handling
+    *   } finally {
+    *       IOUtils.closeQuietly(out);
+    *   }
+    * </pre>
+    *
+    * @param output  the Writer to close, may be null or already closed
+    */
+   public static void closeQuietly(Writer output) {
+       closeQuietly((Closeable)output);
+   }
+   
+	/**
+	 * 关闭URLConnection
+	 * @param conn
+	 */
+	public static void close(URLConnection conn) {
+		if (conn instanceof HttpURLConnection) {
+			((HttpURLConnection) conn).disconnect();
+		}
+	}
    public static byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
        // Optimized by HHH-7835
        int size;
