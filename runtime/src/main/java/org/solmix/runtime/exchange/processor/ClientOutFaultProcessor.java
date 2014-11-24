@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.processor;
 
 import java.util.Map;
@@ -28,44 +29,41 @@ import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
-
 /**
  * 客服端的输出为请求数据,出错直接回调返回错误
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class ClientOutFaultProcessor extends FaultChainInitProcessorSupport
-{
+public class ClientOutFaultProcessor extends AbstractFaultChainInitProcessor {
 
     /** @param c */
-    public ClientOutFaultProcessor(Container c, String phasePolicy)
-    {
-        super(c,phasePolicy);
+    public ClientOutFaultProcessor(Container c, String phasePolicy) {
+        super(c, phasePolicy);
     }
 
-   
     @Override
     protected SortedSet<Phase> getPhases() {
-        return getContainer()
-            .getExtensionLoader(PhasePolicy.class)
-            .getExtension(phasePolicy)
-            .getOutPhases();
+        return getContainer().getExtensionLoader(PhasePolicy.class).getExtension(
+            phasePolicy).getOutPhases();
     }
+
     @Override
     @SuppressWarnings("unchecked")
     public void process(Message m) {
-        
+
         Exception ex = m.getContent(Exception.class);
         ClientCallback callback = m.getExchange().get(ClientCallback.class);
 
         if (callback != null) {
-            Map<String, Object> resCtx = (Map<String, Object>) m.getExchange().getOut().get(Message.INVOCATION_CONTEXT);
+            Map<String, Object> resCtx = (Map<String, Object>) m.getExchange().getOut().get(
+                Message.INVOCATION_CONTEXT);
             resCtx = (Map<String, Object>) resCtx.get(Client.RESPONSE_CONTEXT);
             callback.handleException(resCtx, ex);
         }
     }
-    
+
     @Override
     protected boolean isOutMessage() {
         return true;

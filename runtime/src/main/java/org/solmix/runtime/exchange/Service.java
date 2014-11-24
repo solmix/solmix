@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,29 +16,34 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import java.util.Map;
 
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.InterceptorProvider;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月12日
+ * @version $Id$ 2014年10月12日
  */
 
-public interface Service extends Map<String,Object>,InterceptorProvider
-{
+public interface Service extends Map<String, Object>, InterceptorProvider {
+
     Invoker getInvoker();
-    
+
     void setInvoker(Invoker invoker);
-    
-    Map<String,Endpoint> getEndpoints();
-    
+
+    Map<String, Endpoint> getEndpoints();
+
     EndpointInfo getEndpointInfo(String eid);
+    
+    Serialization getSerialization();
+    
+    void setSerialization(Serialization s);
 
 }

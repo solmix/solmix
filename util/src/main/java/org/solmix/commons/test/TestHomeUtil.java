@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class TestHomeUtil {
+public final class TestHomeUtil {
 	  private TestHomeUtil() {
 	    }
 

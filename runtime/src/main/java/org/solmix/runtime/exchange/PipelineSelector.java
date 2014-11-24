@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,24 +16,23 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
 
+package org.solmix.runtime.exchange;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月17日
+ * @version $Id$ 2014年10月17日
  */
 
-public interface PipelineSelector
-{
-    
+public interface PipelineSelector {
+
     void prepare(Message message);
-    
+
     Pipeline select(Message message);
-    
+
     void complete(Exchange exchange);
-    
+
     Endpoint getEndpoint();
 
     void setEndpoint(Endpoint endpoint);

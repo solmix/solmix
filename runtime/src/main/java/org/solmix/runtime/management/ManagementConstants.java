@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,28 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
+package org.solmix.runtime.management;
 
-import org.osgi.service.event.Event;
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version $Id$  2014年11月20日
  */
 
-public interface EventService
-{
-    void postEvent(Event event);
+public final class ManagementConstants {
 
-    void sendEvent(Event event);
+    public static final String DEFAULT_DOMAIN_NAME = "org.apache.cxf";
+    public static final String BUS_ID_PROP = "bus.id";
+    public static final String NAME_PROP = "name";
+    public static final String TYPE_PROP = "type";
+    public static final String DESCRIPTION_PROP = "description";
+    public static final String SERVICE_NAME_PROP = "service";
+    public static final String OPERATION_NAME_PROP = "operation";
+    public static final String PORT_NAME_PROP = "port";
+    public static final String INSTANCE_ID_PROP = "instance.id";
+    
+    private ManagementConstants() {
+        
+    }
 }

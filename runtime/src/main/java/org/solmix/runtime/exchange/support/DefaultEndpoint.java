@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.support;
 
 import java.io.Closeable;
@@ -26,54 +27,56 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.solmix.commons.util.Assert;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
-import org.solmix.runtime.exchange.Binding;
 import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.Processor;
+import org.solmix.runtime.exchange.Protocol;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.processor.InFaultChainProcessor;
 import org.solmix.runtime.exchange.processor.OutFaultChainProcessor;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月17日
+ * @version $Id$ 2014年10月17日
  */
 
-public class DefaultEndpoint extends InterceptorProviderSupport implements Endpoint
-{
+public class DefaultEndpoint extends InterceptorProviderSupport implements
+    Endpoint {
 
     private static final long serialVersionUID = -7789429134686264716L;
 
     private final EndpointInfo endpointInfo;
-    private Binding binding;
+
+    private Protocol protocol;
+
     private List<Closeable> cleanupHooks;
 
     private Container container;
 
     private final Service service;
-    
-    private  Processor inFaultProcessor;
-    
-    private  Processor outFaultProcessor;
-   
-    public DefaultEndpoint(Container container,Service s,EndpointInfo ed){
+
+    private Processor inFaultProcessor;
+
+    private Processor outFaultProcessor;
+
+    public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
+        String phasePolicy) {
         Assert.isNotNull(ed);
-        if(container==null){
-            container=ContainerFactory.getThreadDefaultContainer();
-        }else{
-            this.container=container;
+        if (container == null) {
+            container = ContainerFactory.getThreadDefaultContainer();
+        } else {
+            this.container = container;
         }
-        this.service=s;
-        this.endpointInfo=ed;
-        
-        inFaultProcessor=new InFaultChainProcessor(container, ed.getPhasePolicy());
-        outFaultProcessor=new OutFaultChainProcessor(container, ed.getPhasePolicy());
-        
-        
+        this.service = s;
+        this.endpointInfo = ed;
+
+        inFaultProcessor = new InFaultChainProcessor(container, phasePolicy);
+        outFaultProcessor = new OutFaultChainProcessor(container, phasePolicy);
+
     }
+
     @Override
     public EndpointInfo getEndpointInfo() {
         return endpointInfo;
@@ -85,8 +88,8 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements Endpo
      * @see org.solmix.runtime.exchange.Endpoint#getBinding()
      */
     @Override
-    public Binding getBinding() {
-        return binding;
+    public Protocol getBinding() {
+        return protocol;
     }
 
     /**
@@ -124,31 +127,29 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements Endpo
         }
         return cleanupHooks;
     }
-    
+
     /**   */
     @Override
     public Processor getInFaultProcessor() {
         return inFaultProcessor;
     }
-    
+
     /**   */
     @Override
     public void setInFaultProcessor(Processor inFaultProcessor) {
         this.inFaultProcessor = inFaultProcessor;
     }
-    
+
     /**   */
     @Override
     public Processor getOutFaultProcessor() {
         return outFaultProcessor;
     }
-    
+
     /**   */
     @Override
     public void setOutFaultProcessor(Processor outFaultProcessor) {
         this.outFaultProcessor = outFaultProcessor;
     }
- 
-    
 
 }

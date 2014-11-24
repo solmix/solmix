@@ -33,8 +33,7 @@ import org.solmix.runtime.interceptor.InterceptorChain;
  * @version $Id$  2014年10月4日
  */
 
-public interface Message extends StringTypeMap
-{
+public interface Message extends StringTypeMap {
     String  ONEWAY            = Message.class.getName() + ".ONEWAY";;
 
     /** 附件key,值类型:Map<String, DataHandler>   */
@@ -70,7 +69,7 @@ public interface Message extends StringTypeMap
     String CONTENT_TYPE = "Content-Type";
     
     /**信息中指定的地址,值类型String    */
-    String ENDPOINT_ADDRESS=Message.class.getName() +".ENDPOINT_ADDRESS";
+    String ENDPOINT_ADDRESS = Message.class.getName() + ".ENDPOINT_ADDRESS";
     
 
 

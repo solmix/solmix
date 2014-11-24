@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id$  2014年11月4日
  */
 
-public class SystemPropertyAction implements PrivilegedAction<String>
+public final class SystemPropertyAction implements PrivilegedAction<String>
 {
     private static final Logger LOG= LoggerFactory.getLogger(SystemPropertyAction.class);
     private final String property;

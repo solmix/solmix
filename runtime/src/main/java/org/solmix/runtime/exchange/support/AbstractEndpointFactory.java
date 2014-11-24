@@ -18,8 +18,13 @@
  */
 package org.solmix.runtime.exchange.support;
 
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.EndpointException;
+import org.solmix.runtime.exchange.PipelineSelector;
+import org.solmix.runtime.exchange.ProtocolFactory;
+import org.solmix.runtime.exchange.TargetFactory;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 
@@ -32,9 +37,72 @@ import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 {
 
-    /**    */
     private static final long serialVersionUID = -2130719449925733112L;
-
+    
+    protected Container container;
+    
+    protected ProtocolFactory protocolFactory;
+    
+    protected TargetFactory targetFactory;
+    
+    protected PipelineSelector pipelineSelector;
+    
+    protected String address;
     
     protected abstract Endpoint createEndpoint() throws  EndpointException;
+
+    
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Container getContainer() {
+        return container;
+    }
+    
+    public Container getContainer(boolean created) {
+        if (container == null && created) {
+            container = ContainerFactory.getThreadDefaultContainer(created);
+        }
+        return container;
+    }
+
+    public void setContainer(Container container) {
+        this.container = container;
+    }
+    
+    /**   */
+    public ProtocolFactory getProtocolFactory() {
+        return protocolFactory;
+    }
+
+    /**   */
+    public void setProtocolFactory(ProtocolFactory protocolFactory) {
+        this.protocolFactory = protocolFactory;
+    }
+    
+    /**   */
+    public TargetFactory getTargetFactory() {
+        return targetFactory;
+    }
+    
+    /**   */
+    public void setTargetFactory(TargetFactory targetFactory) {
+        this.targetFactory = targetFactory;
+    }
+    
+    /**   */
+    public PipelineSelector getPipelineSelector() {
+        return pipelineSelector;
+    }
+
+    /**   */
+    public void setPipelineSelector(PipelineSelector pipelineSelector) {
+        this.pipelineSelector = pipelineSelector;
+    }
+    
 }

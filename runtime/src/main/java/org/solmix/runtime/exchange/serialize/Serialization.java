@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,18 +16,42 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
 
-import org.osgi.service.event.Event;
+package org.solmix.runtime.exchange.serialize;
+
+import org.solmix.runtime.Extension;
+import org.solmix.runtime.exchange.Service;
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version 0.0.1 2014年8月11日
  */
+@Extension(name = "java")
+public interface Serialization {
 
-public interface EventService
-{
-    void postEvent(Event event);
+    byte getSerializeId();
 
-    void sendEvent(Event event);
+    /**
+     * get content type
+     * 
+     * @return content type
+     */
+    String getContentType();
+
+    void initialize(Service service);
+
+    // ObjectOutput serialize(RemoteInfo info, OutputStream output) throws
+    // IOException;
+
+    // ObjectInput deserialize(RemoteInfo info, InputStream input) throws
+    // IOException;
+
+    <T> ObjectReader<T> createReader(Class<T> cls);
+
+    <T> ObjectWriter<T> createWriter(Class<T> cls);
+
+    Class<?>[] getSupportedReaderFormats();
+
+    Class<?>[] getSupportedWriterFormats();
 }

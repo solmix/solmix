@@ -32,11 +32,11 @@ import org.slf4j.MDC;
 public class MdcTest
 {
    
-public static final Logger log = LoggerFactory.getLogger(MdcTest.class);    
+public static final Logger LOG = LoggerFactory.getLogger(MdcTest.class);    
 @Test   
 public void test(){
 //        org.slf4j.MDC.put("requestContext", "AAAA");
-        log.info("----------");
+        LOG.info("----------");
         
         MDC.remove("requestContext");
     }

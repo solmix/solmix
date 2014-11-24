@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public  final class ArchiveUtils
 {
 
-    private static final Logger log = LoggerFactory.getLogger(ArchiveUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ArchiveUtils.class);
 
     /**
      * Get the JAR URL of the JAR containing the given entry Method used in a non managed environment
@@ -96,7 +96,7 @@ public  final class ArchiveUtils
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Unable to determine JAR Url from " + url + ". Cause: " + e.getMessage());
         }
-        log.trace("JAR URL from URL Entry: " + url + " >> " + jarUrl);
+        LOG.trace("JAR URL from URL Entry: " + url + " >> " + jarUrl);
         return jarUrl;
     }
 }

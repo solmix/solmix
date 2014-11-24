@@ -46,7 +46,7 @@ public final class DateUtils
 
     public static String getFirstDayofMouth(String date, String inPattern, String outPattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(inPattern);
-        String __return = "";
+        String result = "";
         try {
             Date d = sdf.parse(date);
             Calendar c = Calendar.getInstance();
@@ -54,11 +54,11 @@ public final class DateUtils
             int start = c.getActualMinimum(Calendar.DAY_OF_MONTH);
             c.set(Calendar.DAY_OF_MONTH, start);
             sdf = new SimpleDateFormat(outPattern);
-            __return = sdf.format(c.getTime());
+            result = sdf.format(c.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return __return;
+        return result;
     }
 
     public static String getEndDayofMouth(String date, String inPattern, String outPattern) {

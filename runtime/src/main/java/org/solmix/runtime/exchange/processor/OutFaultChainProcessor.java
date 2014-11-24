@@ -39,7 +39,7 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
  * @version $Id$  2014年10月19日
  */
 
-public class OutFaultChainProcessor extends FaultChainInitProcessorSupport
+public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor
 {
 
     public OutFaultChainProcessor(Container c,String phasePolicy)
@@ -63,7 +63,7 @@ public class OutFaultChainProcessor extends FaultChainInitProcessorSupport
     @SuppressWarnings("unchecked")
     private void addToChain(PhaseInterceptorChain chain, Message m) {
 
-        Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
+       final Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
         if (providers != null) {
             for (InterceptorProvider p : providers) {
                 chain.add(p.getInFaultInterceptors());

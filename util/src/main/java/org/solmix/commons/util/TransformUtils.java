@@ -52,7 +52,7 @@ public class TransformUtils
         public abstract Object transform(Object obj) throws Exception;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(TransformUtils.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(TransformUtils.class.getName());
 
     public static <T> T transformType(Class<T> targetType, Object value)
         throws Exception {
@@ -78,7 +78,7 @@ public class TransformUtils
                 DataUtils.setProperties((Map) value, instance);
                 return (T) instance;
             } catch (Exception ee) {
-                log.debug((new StringBuilder()).append(
+                LOG.debug((new StringBuilder()).append(
                     "Tried to convert inbound nested Map to: ").append(
                     targetType.getName()).append(
                     " but DataTools.setProperties() on instantiated class failed").append(
@@ -93,7 +93,7 @@ public class TransformUtils
         }
         if (!targetType.isPrimitive()
             && (targetType.isInterface() || Modifier.isAbstract(targetType.getModifiers())))
-            log.warn((new StringBuilder()).append(
+            LOG.warn((new StringBuilder()).append(
                 "Impossible to convert to target type ").append(
                 targetType.getName()).append(" - it is not a concrete class").toString());
         throw new IllegalArgumentException(
@@ -470,8 +470,8 @@ public class TransformUtils
             }
         }
         if (theEnum == null) {
-            if (log.isWarnEnabled())
-                log.warn("was not found the enum String" + value
+            if (LOG.isWarnEnabled())
+                LOG.warn("was not found the enum String" + value
                     + "for targetType " + targetType.getName());
         }
 

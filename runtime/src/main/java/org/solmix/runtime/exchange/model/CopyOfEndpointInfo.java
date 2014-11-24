@@ -27,21 +27,21 @@ package org.solmix.runtime.exchange.model;
 
 public class CopyOfEndpointInfo
 {
-    private BindingInfo bindingInfo;
+    private ProtocolInfo protocolInfo;
     
     private ServiceInfo serviceInfo;
     
     private String phasePolicy;
     
     /**   */
-    public BindingInfo getBinding() {
-        return bindingInfo;
+    public ProtocolInfo getBinding() {
+        return protocolInfo;
     }
 
     
     /**   */
-    public void setBinding(BindingInfo bindingInfo) {
-        this.bindingInfo = bindingInfo;
+    public void setBinding(ProtocolInfo protocolInfo) {
+        this.protocolInfo = protocolInfo;
     }
 
     

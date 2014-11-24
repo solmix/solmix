@@ -33,7 +33,7 @@ public final class ValidateUtils
    }
    static public void assertNotNull(String message, Object object) {
       if(object == null)
-         throw new NullPointerException(message==null?"":message);
+         throw new IllegalArgumentException(message==null?"":message);
    }
    static public void assertNotNull(Object object) {
       assertNotNull(null, object);

@@ -24,8 +24,8 @@ public final class Bytes
     /**
      * Swap byte
      */
-    public static short swap(short x) {
-        return (short) ((x << 8) | ((x >> 8) & 0xff));
+    public static short swap(final short wrap) {
+        return (short) ((wrap << 8) | ((wrap >> 8) & 0xff));
     }
 
     public static byte[] swap(byte[] x) {
@@ -177,7 +177,7 @@ public final class Bytes
             b = -b;
         if (a < b)
             return 0;
-        int msb = 0;
+        int msb ;
         for (msb = 0; msb < 32; msb++) {
             if ((b << msb) >= a)
                 break;

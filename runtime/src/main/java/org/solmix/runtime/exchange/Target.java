@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,20 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
 
-import org.osgi.service.event.Event;
+package org.solmix.runtime.exchange;
+
 /**
+ * 管道端点,在传输层接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version $Id$ 2014年11月13日
  */
 
-public interface EventService
-{
-    void postEvent(Event event);
+public interface Target extends ProcessorAware {
 
-    void sendEvent(Event event);
+    /**
+     * 关闭端点停止接收消息
+     */
+    void shutdown();
 }

@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 The Solmix Project
+/**
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -18,23 +18,16 @@
  */
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.exchange.model.BindingInfo;
-import org.solmix.runtime.interceptor.InterceptorProvider;
+import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
 
 
 /**
- * 绑定(Binding)
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月15日
+ * @version $Id$  2014年11月24日
  */
 
-public interface Binding extends InterceptorProvider
-{
+public interface ServiceFactoryListener {
 
-    Message createMessage();
-    
-    Message createMessage(Message m);
-    
-    BindingInfo getBindingInfo();
+    void onHandle(final ServiceFactoryEvent event);
 }

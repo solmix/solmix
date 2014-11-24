@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
+package org.solmix.runtime.exchange;
 
-import org.osgi.service.event.Event;
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version $Id$  2014年11月20日
  */
 
-public interface EventService
-{
-    void postEvent(Event event);
+public interface ServerLifeCycleManager {
 
-    void sendEvent(Event event);
+    void startServer(Server server);
+    void stopServer(Server  server);
+    void registerListener(ServerLifeCycleListener listener);
+    void unRegisterListener(ServerLifeCycleListener listener);
 }

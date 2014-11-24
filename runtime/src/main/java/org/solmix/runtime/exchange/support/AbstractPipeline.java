@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,20 +16,39 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
 
+package org.solmix.runtime.exchange.support;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.Pipeline;
 
 /**
- * 管道端点,在传输层接收消息
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月13日
+ * @version $Id$ 2014年10月17日
  */
 
-public interface PipeEndpoint extends ProcessorAware
-{
+public abstract class AbstractPipeline implements Pipeline {
 
-    /**
-     * 关闭端点停止接收消息
-     */
-    void shutdown();
+    @Override
+    public void close(Message message) throws IOException {
+        OutputStream os = message.getContent(OutputStream.class);
+        if (os != null) {
+            os.close();
+        }
+        InputStream in = message.getContent(InputStream.class);
+        if (in != null) {
+            in.close();
+        }
+    }
+
+    @Override
+    public void close() {
+        // nothing todo
+    }
+
 }

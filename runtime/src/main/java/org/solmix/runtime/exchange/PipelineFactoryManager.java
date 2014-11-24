@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 The Solmix Project
+/**
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,16 +16,24 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange.model;
+package org.solmix.runtime.exchange;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月15日
+ * @version $Id$  2014年11月14日
  */
 
-public class BindingInfo
-{
+public interface PipelineFactoryManager {
+    
+    void registerFactory(String name,PipelineFactory factory);
+    
+    
+    void unregisterFactory(String name);
+    
+    PipelineFactory getFactory(String name);
+    
+    
 
 }

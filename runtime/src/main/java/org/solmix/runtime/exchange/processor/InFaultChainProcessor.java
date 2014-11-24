@@ -40,7 +40,7 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
  * @version $Id$ 2014年10月19日
  */
 
-public class InFaultChainProcessor extends FaultChainInitProcessorSupport
+public class InFaultChainProcessor extends AbstractFaultChainInitProcessor
 {
 
 

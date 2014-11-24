@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.processor;
 
 import java.util.SortedSet;
@@ -37,71 +38,74 @@ import org.solmix.runtime.interceptor.FaultType;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月18日
+ * @version $Id$ 2014年10月18日
  */
 
-public abstract class FaultChainInitProcessorSupport implements Processor
-{
+public abstract class AbstractFaultChainInitProcessor implements Processor {
 
-    private static final Logger LOG= LoggerFactory.getLogger(FaultChainInitProcessorSupport.class);
-    private final Container container;
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractFaultChainInitProcessor.class);
+
+    /** 切面阶段定义 */
     protected final String phasePolicy;
+
+    private final Container container;
+
     private ClassLoader loader;
-    
-    public FaultChainInitProcessorSupport(Container c, String phasePolicy){
-        this.container=c;
+
+    public AbstractFaultChainInitProcessor(Container c, String phasePolicy) {
+        this.container = c;
         this.phasePolicy = phasePolicy;
-        if(container!=null){
-            loader=container.getExtension(ClassLoader.class); 
+        if (container != null) {
+            loader = container.getExtension(ClassLoader.class);
         }
     }
-    
+
     @Override
     public void process(Message message) throws ExchangeException {
-        assert message!=null;
-        Container orig=ContainerFactory.getAndSetThreadDefaultContainer(container);
+        assert message != null;
+        Container orig = ContainerFactory.getAndSetThreadDefaultContainer(container);
         ClassLoaderHolder origLoader = null;
         try {
             if (loader != null) {
                 origLoader = ClassLoaderUtils.setThreadContextClassloader(loader);
             }
             Exchange exchange = message.getExchange();
-            
+
             Message faultMessage = null;
-            if(isOutMessage()){
+            if (isOutMessage()) {
                 Exception ex = message.getContent(Exception.class);
                 if (!(ex instanceof Fault)) {
                     ex = new Fault(ex);
                 }
-                FaultType type=  message.get(FaultType.class);
-                faultMessage=exchange.getOut();
-                if(faultMessage==null){
+                FaultType type = message.get(FaultType.class);
+                faultMessage = exchange.getOut();
+                if (faultMessage == null) {
                     faultMessage = new DefaultMessage();
                     faultMessage.setExchange(exchange);
-                    faultMessage = exchange.get(Endpoint.class).getBinding().createMessage(faultMessage);
+                    faultMessage = exchange.get(Endpoint.class).getBinding().createMessage(
+                        faultMessage);
                 }
                 faultMessage.setContent(Exception.class, ex);
-                if(type!=null){
+                if (type != null) {
                     faultMessage.put(FaultType.class, type);
                 }
                 exchange.setOut(null);
                 exchange.setOutFault(faultMessage);
-            }else {
+            } else {
                 faultMessage = message;
                 exchange.setIn(null);
                 exchange.setInFault(faultMessage);
             }
             PhaseInterceptorChain chain = new PhaseInterceptorChain(getPhases());
-            //初始化链
+            // 初始化链
             initializeInterceptors(faultMessage.getExchange(), chain);
-            
+
             faultMessage.setInterceptorChain(chain);
             try {
-                //流转
+                // 流转
                 chain.doIntercept(faultMessage);
             } catch (Exception exc) {
                 LOG.error("Error occurred during error handling, give up!", exc);
@@ -117,7 +121,8 @@ public abstract class FaultChainInitProcessorSupport implements Processor
         }
 
     }
-    /** 
+
+    /**
      * return container
      */
     public Container getContainer() {
@@ -136,6 +141,6 @@ public abstract class FaultChainInitProcessorSupport implements Processor
     /**
      * @return
      */
-    protected abstract boolean isOutMessage() ;
+    protected abstract boolean isOutMessage();
 
 }

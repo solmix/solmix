@@ -1,4 +1,4 @@
-/*
+/**
  *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -33,35 +33,31 @@ import org.solmix.commons.tasks.TaskThreadPool;
  * @version 110035 2012-12-24
  */
 
-public class ParallelTaskAdmin implements TaskAdmin
-{
+public class ParallelTaskAdmin implements TaskAdmin {
 
+    private String groupThreadName = "TaskThread";
 
     private TaskDeliver deliver;
 
-    TaskThreadPool asy_pool;
+    private TaskThreadPool asyPool;
 
     private int colePoleSize = 20;
 
-    
+    ParallelTaskAdmin() {
+
+    }
     public int getPoolSize() {
         return colePoleSize;
     }
 
-    
     public void setPoolSize(int poolSize) {
         this.colePoleSize = poolSize;
     }
 
-    private String groupThreadName = "TaskThread";
-
-    ParallelTaskAdmin()
-    {
-
-    }
+   
 
     public static TaskAdmin getInstance() {
-      
+
         return new ParallelTaskAdmin();
     }
 
@@ -82,21 +78,21 @@ public class ParallelTaskAdmin implements TaskAdmin
     private void initDeliver() {
         if (deliver == null) {
             // syn_pool= new TaskThreadPool(40,false);
-            asy_pool = new TaskThreadPool(colePoleSize, this.getGroupThreadName());
-            deliver = new AsyncDeliver(asy_pool);
+            asyPool = new TaskThreadPool(colePoleSize,
+                this.getGroupThreadName());
+            deliver = new AsyncDeliver(asyPool);
         }
     }
 
-   
     /**
-     * Once the garbage collector frees memory space occupied by the object,
-     *  the first call this method.
+     * Once the garbage collector frees memory space occupied by the object, the
+     * first call this method.
      * 
      */
     @Override
     protected void finalize() {
-        if (asy_pool != null)
-            asy_pool.shutdown();
+        if (asyPool != null)
+            asyPool.shutdown();
     }
 
     public String getGroupThreadName() {

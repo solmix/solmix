@@ -35,7 +35,7 @@ import org.solmix.commons.tasks.TaskThreadPool;
 public class AsyncDeliver implements TaskDeliver
 {
 
-    private TaskThreadPool taskPool;
+    private final TaskThreadPool taskPool;
 
     public AsyncDeliver(final TaskThreadPool taskPool)
     {
@@ -54,7 +54,7 @@ public class AsyncDeliver implements TaskDeliver
     }
 
     protected List<List<CommandTask>> splitBySize(List<CommandTask> tasks, int size) {
-        List<List<CommandTask>> _return = new ArrayList<List<CommandTask>>();
+       final List<List<CommandTask>> _return = new ArrayList<List<CommandTask>>();
         List<CommandTask> subList = new ArrayList<CommandTask>();
         for (int i = 0; i < tasks.size(); i++) {
 
@@ -74,7 +74,7 @@ public class AsyncDeliver implements TaskDeliver
     private final class EventExecuter implements Runnable
     {
 
-        private CommandTask _task;
+        private final CommandTask _task;
 
         public EventExecuter(CommandTask task)
         {

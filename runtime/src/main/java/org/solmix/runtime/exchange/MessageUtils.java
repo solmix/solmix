@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,44 +16,54 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
- import static org.solmix.commons.util.DataUtils.asBoolean;
+import static org.solmix.commons.util.DataUtils.asBoolean;
 
 /**
  * 消息工具类
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月13日
+ * @version $Id$ 2014年10月13日
  */
 
-public class MessageUtils
-{
-    
+public final class MessageUtils {
+
+    private MessageUtils() {
+
+    }
+
     public static boolean isRequest(Message message) {
-        Boolean request = (Boolean)message.get(Message.REQUEST_MESSAGE);
+        Boolean request = (Boolean) message.get(Message.REQUEST_MESSAGE);
         return request != null && request.booleanValue();
     }
-    public static boolean getBoolean(Message message, String key,boolean df) {
-        if(message==null)
+
+    public static boolean getBoolean(Message message, String key, boolean df) {
+        if (message == null) {
             return df;
-        Object v=message.get(key);
-        if(v==null)
-        return df;
+        }
+        Object v = message.get(key);
+        if (v == null) {
+            return df;
+        }
         return asBoolean(v);
     }
-    
+
     public static boolean getBoolean(Message message, String key) {
-        return getBoolean(message, key,false);
+        return getBoolean(message, key, false);
     }
+
     public static boolean isTrue(Object property) {
         if (property == null) {
             return false;
         }
 
-        if (Boolean.TRUE.equals(property) || "true".equalsIgnoreCase(property.toString())) {
+        if (Boolean.TRUE.equals(property)
+            || "true".equalsIgnoreCase(property.toString())) {
             return true;
         }
-        
+
         return false;
     }
 }

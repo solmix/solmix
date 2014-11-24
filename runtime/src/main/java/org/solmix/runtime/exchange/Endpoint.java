@@ -27,7 +27,7 @@ import org.solmix.runtime.interceptor.InterceptorProvider;
 
 
 /**
- * 负责接收消息
+ * 负责接收消息的端点
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月11日
@@ -38,7 +38,7 @@ public interface Endpoint extends InterceptorProvider,Map<String,Object>
     
     EndpointInfo getEndpointInfo();
     
-    Binding getBinding();
+    Protocol getBinding();
     
     Service getService();
     

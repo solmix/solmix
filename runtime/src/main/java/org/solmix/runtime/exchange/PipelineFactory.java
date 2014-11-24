@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,22 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
+package org.solmix.runtime.exchange;
 
-import org.osgi.service.event.Event;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.model.EndpointInfo;
+
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version $Id$  2014年11月14日
  */
 
-public interface EventService
-{
-    void postEvent(Event event);
+public interface PipelineFactory {
 
-    void sendEvent(Event event);
+    
+    Pipeline getPipeline(EndpointInfo info,Container c);
+    
+    Pipeline getpPipeline(EndpointInfo info,String address,Container c);
 }

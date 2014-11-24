@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 
 
-public class Version
+public final class Version
 {
 
     private Version()

@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 The Solmix Project
+/**
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,20 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.management;
 
+import javax.management.JMException;
+import javax.management.ObjectName;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月22日
+ * @version $Id$  2014年11月20日
  */
 
-public interface ServiceFactory
-{
+public interface ManagedComponent {
 
-    Service create();
+    ObjectName getObjectName() throws JMException;
+    
 }

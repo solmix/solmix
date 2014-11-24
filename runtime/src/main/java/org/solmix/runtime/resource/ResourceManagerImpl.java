@@ -53,6 +53,12 @@ public class ResourceManagerImpl implements ResourceManager
             addResourceResolvers(Arrays.asList(resolvers));
         }
     }
+    /**
+     * @param resolvers 
+     */
+    public ResourceManagerImpl(List<ResourceResolver> resolvers) {
+        addResourceResolvers(resolvers);
+    }
     public final void addResourceResolvers(Collection<? extends ResourceResolver> resolvers) { 
         for (ResourceResolver r : resolvers) {
             addResourceResolver(r);

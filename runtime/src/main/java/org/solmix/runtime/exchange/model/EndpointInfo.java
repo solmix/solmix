@@ -16,45 +16,33 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange.model;
 
+package org.solmix.runtime.exchange.model;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月15日
+ * @version $Id$ 2014年10月15日
  */
 
-public interface EndpointInfo
-{
-    /**   */
-    public BindingInfo getBinding() ;
+public interface EndpointInfo {
 
+    /**   */
+    ServiceInfo getService();
+
+    ProtocolInfo getProtocol();
     
     /**   */
-    public void setBinding(BindingInfo bindingInfo);
-
-    /**   */
-    public ServiceInfo getService();
-
-    /**   */
-    public void setService(ServiceInfo serviceInfo);
-
-    /**
-     * @return
-     */
-    public String getPhasePolicy() ;
-
-    
-    /**   */
-    public void setPhasePolicy(String phasePolicy) ;
-
+    void setService(ServiceInfo serviceInfo);
 
     /**
      * 
      */
-    public String getAddress();
-    
-    
+    String getAddress();
+
+    /**
+     * 
+     */
+    String getTransportId();
 
 }

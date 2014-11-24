@@ -36,8 +36,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version $Id$ 2014年8月7日
  */
 
-public class SpringContainerTest
-{
+public class SpringContainerTest {
 
     @Test
     public void test() {
@@ -54,26 +53,29 @@ public class SpringContainerTest
             AdapterManager.class);
         Assert.assertNotNull(apm);
     }
+
     @Test
-    public void testSchema(){
-        ClassPathXmlApplicationContext context =null;
+    public void testSchema() {
+        ClassPathXmlApplicationContext context = null;
         try {
-            context = new ClassPathXmlApplicationContext("/org/solmix/runtime/support/spring/container.xml");
-            Container c=  context.getBean("solmix1",Container.class);
-           String v= c.getProperty("key").toString();
-           Assert.assertEquals("value", v);
+            context = new ClassPathXmlApplicationContext(
+                "/org/solmix/runtime/support/spring/container.xml");
+            Container c = context.getBean("solmix1", Container.class);
+            String v = c.getProperty("key").toString();
+            Assert.assertEquals("value", v);
             Assert.assertNotNull(c);
-            Container c1=  context.getBean("solmix",Container.class);
-           
+            Container c1 = context.getBean("solmix", Container.class);
+
             Assert.assertNotSame(c, c1);
             Assert.assertNotNull(c1);
-            List<ContainerListener> cls= c1.getContainerListeners();
+            List<ContainerListener> cls = c1.getContainerListeners();
             Assert.assertEquals(1, cls.size());
-            
-        } finally{
-            if(context!=null)
-            context.close();
+
+        } finally {
+            if (context != null) {
+                context.close();
+            }
         }
-        
+
     }
 }

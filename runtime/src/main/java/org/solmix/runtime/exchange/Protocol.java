@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,24 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
 
-import org.osgi.service.event.Event;
+package org.solmix.runtime.exchange;
+
+import org.solmix.runtime.exchange.model.ProtocolInfo;
+import org.solmix.runtime.interceptor.InterceptorProvider;
+
 /**
+ * 绑定(Protocol)
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月7日
+ * @version $Id$ 2014年10月15日
  */
 
-public interface EventService
-{
-    void postEvent(Event event);
+public interface Protocol extends InterceptorProvider {
 
-    void sendEvent(Event event);
+    Message createMessage();
+
+    Message createMessage(Message m);
+
+    ProtocolInfo getBindingInfo();
 }

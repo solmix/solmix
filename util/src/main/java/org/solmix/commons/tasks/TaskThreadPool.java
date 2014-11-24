@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class TaskThreadPool extends ThreadPoolExecutor
 {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskThreadPool.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TaskThreadPool.class);
 
     public static AtomicLong totalTask = new AtomicLong();
 
@@ -66,7 +66,7 @@ public class TaskThreadPool extends ThreadPoolExecutor
         try {
             super.execute(runnable);
         } catch (Throwable t) {
-            log.error("Exception: " + t.getMessage(), t);
+            LOG.error("Exception: " + t.getMessage(), t);
         }
     }
 
