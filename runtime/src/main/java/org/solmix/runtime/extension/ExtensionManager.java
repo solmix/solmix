@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,24 +16,28 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.extension;
 
+package org.solmix.runtime.extension;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月26日
+ * @version $Id$ 2014年7月26日
  */
 
-public interface ExtensionManager
-{
-    public static final String EXTENSION_LOCATION= "META-INF/solmix/extensions";
+public interface ExtensionManager {
+
+    public static final String EXTENSION_LOCATION = "META-INF/solmix/extensions";
     
+    public static final String PROP_EXTENSION_LOCATION = "solmix.extensions.location";
+    
+    public static final String PROP_EXTENSION_LOCATION_EXT = "solmix.extensions.ext.location";
+
     void activateAll();
-    
+
     <T> void activateAllByType(Class<T> type);
-    
-    <T> T getExtension(String ns, Class<T> type);
+
+    <T> T getExtension(String name, Class<T> type);
 
     /**
      * init before used

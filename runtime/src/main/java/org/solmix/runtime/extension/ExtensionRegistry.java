@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import java.util.HashMap;
@@ -24,25 +25,26 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月27日
+ * @version $Id$ 2014年7月27日
  */
 
-public class ExtensionRegistry
-{
-    private static  ConcurrentMap<String, ExtensionInfo> extensions 
-    = new ConcurrentHashMap<String, ExtensionInfo>(16, 0.75f, 4);
-   
-    public static Map<String,ExtensionInfo> getRegisteredExtensions() {
-        Map<String, ExtensionInfo> exts = new HashMap<String, ExtensionInfo>(extensions.size());
+public class ExtensionRegistry {
+
+    private static ConcurrentMap<String, ExtensionInfo> extensions = new ConcurrentHashMap<String, ExtensionInfo>(
+        16, 0.75f, 4);
+
+    public static Map<String, ExtensionInfo> getRegisteredExtensions() {
+        Map<String, ExtensionInfo> exts = new HashMap<String, ExtensionInfo>(
+            extensions.size());
         for (Map.Entry<String, ExtensionInfo> ext : extensions.entrySet()) {
             exts.put(ext.getKey(), ext.getValue().cloneNoObject());
         }
         return exts;
     }
+
     public static void removeExtensions(List<? extends ExtensionInfo> list) {
         for (ExtensionInfo e : list) {
             extensions.remove(e);

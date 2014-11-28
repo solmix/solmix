@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.annotation;
 
 import java.lang.annotation.Annotation;
@@ -24,34 +25,31 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月27日
+ * @version $Id$ 2014年7月27日
  */
 
-public abstract class AbstractAnnotationVisitor implements AnnotationVisitor
-{
-    protected Object target;
-    protected Class<?> targetClass;
-    
+public abstract class AbstractAnnotationVisitor implements AnnotationVisitor {
 
-    private final List<Class<? extends Annotation>> targetAnnotations = 
-                                 new ArrayList<Class<? extends Annotation>>(); 
-    
-    
+    protected Object target;
+
+    protected Class<?> targetClass;
+
+    private final List<Class<? extends Annotation>> targetAnnotations = new ArrayList<Class<? extends Annotation>>();
+
     protected AbstractAnnotationVisitor(Class<? extends Annotation> ann) {
         addTargetAnnotation(ann);
     }
-    
+
     protected AbstractAnnotationVisitor(List<Class<? extends Annotation>> ann) {
         targetAnnotations.addAll(ann);
     }
 
-    protected final void addTargetAnnotation(Class<? extends Annotation> ann) { 
-        targetAnnotations.add(ann); 
-    } 
+    protected final void addTargetAnnotation(Class<? extends Annotation> ann) {
+        targetAnnotations.add(ann);
+    }
 
     @Override
     public void visitClass(Class<?> clz, Annotation annotation) {
@@ -78,15 +76,17 @@ public abstract class AbstractAnnotationVisitor implements AnnotationVisitor
         target = object;
         targetClass = object.getClass();
     }
+
     public void setTarget(Object object, Class<?> cls) {
         target = object;
         targetClass = cls;
     }
-    
-    public Object getTarget() { 
+
+    public Object getTarget() {
         return target;
-    } 
-    public Class<?> getTargetClass() { 
+    }
+
+    public Class<?> getTargetClass() {
         return targetClass;
-    } 
+    }
 }

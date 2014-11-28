@@ -37,8 +37,7 @@ import org.solmix.runtime.monitor.support.MonitorServiceImpl;
  * @version $Id$ 2014年8月15日
  */
 
-public class MonitorServiceTest
-{
+public class MonitorServiceTest {
 
     /**
      * @throws java.lang.Exception
@@ -51,30 +50,32 @@ public class MonitorServiceTest
     @Test
     public void test() throws InterruptedException {
         MonitorServiceImpl i = new MonitorServiceImpl();
-        MonitorInfo old=   i.getMonitorInfo();
-        Assert.assertNotNull(old.getUsedMemory()>100);
+        MonitorInfo old = i.getMonitorInfo();
+        Assert.assertNotNull(old.getUsedMemory() > 100);
     }
 
     @Test
     public void testContainerLoad() throws InterruptedException {
         MonitorServiceImpl ms = new MonitorServiceImpl();
-        MonitorInfo old=   ms.getMonitorInfo();
-        List<Container> lists= new ArrayList<Container>();
-        long b=System.currentTimeMillis();
-         for(int i=0;i<10;i++){
-             Container container=    ContainerFactory.newInstance().createContainer();
-          lists.add(container);
-         }
-        MonitorInfo last =   ms.getMonitorInfo();
-        System.out.println("memery used:"+(last.getUsedMemory()-old.getUsedMemory()));
-        System.out.println(System.currentTimeMillis()-b);
+        MonitorInfo old = ms.getMonitorInfo();
+        List<Container> lists = new ArrayList<Container>();
+        long b = System.currentTimeMillis();
+        for (int i = 0; i < 10; i++) {
+            Container container = ContainerFactory.newInstance().createContainer();
+            lists.add(container);
+        }
+        MonitorInfo last = ms.getMonitorInfo();
+        System.out.println("memery used:"
+            + (last.getUsedMemory() - old.getUsedMemory()));
+        System.out.println(System.currentTimeMillis() - b);
     }
+
     @Test
     public void testDiffer() throws InterruptedException {
-        Container one=    ContainerFactory.newInstance().createContainer();
-        AdapterManager a1=   one.getExtension(AdapterManager.class);
-        Container other=    ContainerFactory.newInstance().createContainer();
-        AdapterManager a2=   other.getExtension(AdapterManager.class);
-        Assert.assertTrue(a1.hashCode()!= a2.hashCode());
+        Container one = ContainerFactory.newInstance().createContainer();
+        AdapterManager a1 = one.getExtension(AdapterManager.class);
+        Container other = ContainerFactory.newInstance().createContainer();
+        AdapterManager a2 = other.getExtension(AdapterManager.class);
+        Assert.assertTrue(a1.hashCode() != a2.hashCode());
     }
 }

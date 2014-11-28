@@ -19,30 +19,86 @@
 
 package org.solmix.runtime.exchange.model;
 
+
 /**
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月15日
  */
 
-public interface EndpointInfo {
+public class EndpointInfo extends InfoPropertiesSupport {
+
+    private ServiceInfo service;
+
+    private ProtocolInfo protocol;
+
+    private String address;
+
+    private String transporterName;
+
+    private InfoID iD;
+
+    public EndpointInfo() {
+
+    }
+
+    public EndpointInfo(ServiceInfo service, String transporterName) {
+        this.service = service;
+        this.transporterName = transporterName;
+    }
 
     /**   */
-    ServiceInfo getService();
+    public ServiceInfo getService() {
+        return service;
+    }
 
-    ProtocolInfo getProtocol();
-    
+    public ProtocolInfo getProtocol() {
+        return protocol;
+    }
+
     /**   */
-    void setService(ServiceInfo serviceInfo);
+    public void setService(ServiceInfo serviceInfo) {
+        this.service = serviceInfo;
+    }
+
+    public InterfaceInfo getInterface() {
+        if (service == null) {
+            return null;
+        }
+        return service.getInterface();
+    }
 
     /**
      * 
      */
-    String getAddress();
+    public String getAddress() {
+        return address;
+    }
 
     /**
-     * 
+     * pipeline 类型.
      */
-    String getTransportId();
+    public String getTransporterName() {
+        return transporterName;
+    }
+
+    /**
+     * @return
+     */
+    public InfoID getID() {
+        return iD;
+    }
+
+    public void setID(InfoID iD) {
+        this.iD = iD;
+    }
+
+    @Override
+    public String toString() {
+        return "ProtocolID="
+            + (protocol == null ? ""
+                : (protocol.getID() + ", ServiceID=" + (protocol.getService() == null ? ""
+                    : protocol.getService().getID()))) + ", ID=" + iD;
+    }
 
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.support.spring;
 
 import java.util.Map;
@@ -38,93 +39,104 @@ import org.w3c.dom.Element;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年9月11日
+ * @version $Id$ 2014年9月11日
  */
 
 public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
-    implements BeanDefinitionParser
-{
+    implements BeanDefinitionParser {
+
     private static AtomicInteger counter = new AtomicInteger(0);
 
-    public ContainerDefinitionParser(){
+    public ContainerDefinitionParser() {
         super();
         setBeanClass(ContainerType.class);
     }
+
     @Override
-    protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder bean) {
-        String cname=element.getAttribute("name");
+    protected void doParse(Element element, ParserContext ctx,
+        BeanDefinitionBuilder bean) {
+        String cname = element.getAttribute("name");
         String id = element.getAttribute("id");
-        if (!StringUtils.isEmpty(id)) {
-            bean.addPropertyValue("id", id);
-        }
-        if(StringUtils.isEmpty(cname)){
-            cname="solmix";
+       //container name 为空
+        if (StringUtils.isEmpty(cname)) {
+            // 使用id作为name
+            if (!StringUtils.isEmpty(id)) {
+                cname = id;
+            } else {
+                cname = "solmix";
+            }
         }
         super.doParse(element, ctx, bean);
-        if(ctx.getRegistry().containsBeanDefinition(cname)){
+        if (ctx.getRegistry().containsBeanDefinition(cname)) {
             BeanDefinition def = ctx.getRegistry().getBeanDefinition(cname);
             copyProps(bean, def);
             bean.addConstructorArgValue(cname);
-        }else if(!"solmix".equals(cname)){
+        } else if (!"solmix".equals(cname)) {
             bean.getRawBeanDefinition().setBeanClass(SpringContainer.class);
             bean.setDestroyMethodName("close");
             try {
                 element.setUserData("ID", cname, null);
             } catch (Throwable t) {
             }
-        }else{
+        } else {
             addContainerWiringAttribute(bean, true, cname, ctx);
-            bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_CREATE, 
+            bean.getRawBeanDefinition().setAttribute(WIRE_CONTAINER_CREATE,
                 resolveId(element, null, ctx));
             bean.addConstructorArgValue(cname);
         }
-        
-        
+
     }
+
     private void copyProps(BeanDefinitionBuilder src, BeanDefinition def) {
         for (PropertyValue v : src.getBeanDefinition().getPropertyValues().getPropertyValues()) {
             if (!"name".equals(v.getName())) {
-                def.getPropertyValues().addPropertyValue(v.getName(), v.getValue());
+                def.getPropertyValues().addPropertyValue(v.getName(),
+                    v.getValue());
             }
             src.getBeanDefinition().getPropertyValues().removePropertyValue(v);
         }
-        
+
     }
+
     @Override
-    protected String resolveId(Element element, AbstractBeanDefinition definition, 
-                               ParserContext ctx) {
+    protected String resolveId(Element element,
+        AbstractBeanDefinition definition, ParserContext ctx) {
         String container = null;
         try {
-            container = (String)element.getUserData("ID");
+            container = (String) element.getUserData("ID");
         } catch (Throwable t) {
-            //ignore
+            // ignore
         }
         if (container == null) {
-            container = element.getAttribute("name");        
-            
+            container = element.getAttribute("name");
+
             if (StringUtils.isEmpty(container)) {
-                container = Container.DEFAULT_CONTAINER_ID + ".config" + counter.getAndIncrement();
+                container = Container.DEFAULT_CONTAINER_ID + ".config"
+                    + counter.getAndIncrement();
             } else {
-                container =container + ".config";
+                container = container + ".config";
             }
             try {
                 element.setUserData("ID", container, null);
             } catch (Throwable t) {
-                //maybe no DOM level 3, ignore, but, may have issues with the counter 
+                // maybe no DOM level 3, ignore, but, may have issues with the
+                // counter
             }
         }
         return container;
     }
+
     @Override
     protected void parseElement(ParserContext ctx, BeanDefinitionBuilder bean,
         Element e, String name) {
         if ("properties".equals(name)) {
-            Map<?, ?> map = ctx.getDelegate().parseMapElement(e, bean.getBeanDefinition());
+            Map<?, ?> map = ctx.getDelegate().parseMapElement(e,
+                bean.getBeanDefinition());
             bean.addPropertyValue("properties", map);
         }
     }
-   public static class ContainerType implements ApplicationContextAware
-    {
+
+    public static class ContainerType implements ApplicationContextAware {
 
         Container container;
 
@@ -134,8 +146,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
 
         Map<String, Object> properties;
 
-        public ContainerType(String name)
-        {
+        public ContainerType(String name) {
             this.name = name;
         }
 

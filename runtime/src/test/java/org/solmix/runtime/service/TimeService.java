@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -25,8 +25,7 @@ package org.solmix.runtime.service;
  * @version $Id$  2014年8月3日
  */
 
-public interface TimeService
-{
+public interface TimeService {
     
     Long getCurrentTime();
 

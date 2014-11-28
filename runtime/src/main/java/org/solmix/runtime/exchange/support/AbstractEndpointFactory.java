@@ -18,6 +18,10 @@
  */
 package org.solmix.runtime.exchange.support;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.exchange.Endpoint;
@@ -38,7 +42,8 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 {
 
     private static final long serialVersionUID = -2130719449925733112L;
-    
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractEndpointFactory.class);
+
     protected Container container;
     
     protected ProtocolFactory protocolFactory;
@@ -48,6 +53,8 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     protected PipelineSelector pipelineSelector;
     
     protected String address;
+    
+    protected Map<String, Object> properties;
     
     protected abstract Endpoint createEndpoint() throws  EndpointException;
 
@@ -104,5 +111,28 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     public void setPipelineSelector(PipelineSelector pipelineSelector) {
         this.pipelineSelector = pipelineSelector;
     }
+
+
     
+    /**   */
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+
+    
+    /**   */
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+    protected void initializeAnnotationInterceptors(Endpoint ep, Class<?> cls) {
+        initializeAnnotationInterceptors(ep, new Class<?>[] {cls});
+    }
+
+    protected void initializeAnnotationInterceptors(Endpoint ep, Class<?> ... cls) {
+//        AnnotationInterceptors provider = new AnnotationInterceptors(cls);
+//        if (initializeAnnotationInterceptors(provider, ep)) {
+//            LOG.trace("Added annotation based interceptors and features");
+//        }
+    } 
 }

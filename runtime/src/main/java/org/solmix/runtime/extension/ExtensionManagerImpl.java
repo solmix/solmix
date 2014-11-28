@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -53,8 +53,7 @@ import org.solmix.runtime.resource.SinglePropertyResolver;
  */
 
 public class ExtensionManagerImpl implements ExtensionManager,
-    ConfiguredBeanProvider
-{
+    ConfiguredBeanProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExtensionManagerImpl.class);
 
@@ -72,8 +71,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
 
     public ExtensionManagerImpl(String resources[], ClassLoader cl,
         Map<Class<?>, Object> cache, ResourceManager resourceManager,
-        Container container)
-    {
+        Container container) {
         this.loader = cl;
         this.resourceManager = resourceManager;
         this.activated = cache;
@@ -92,8 +90,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
 
     public ExtensionManagerImpl(String resource, ClassLoader cl,
         Map<Class<?>, Object> initialExtensions,
-        ResourceManager resourceManager, Container container)
-    {
+        ResourceManager resourceManager, Container container) {
         this(new String[] { resource }, cl, initialExtensions, resourceManager,
             container);
     }
@@ -124,10 +121,11 @@ public class ExtensionManagerImpl implements ExtensionManager,
         
         while (urls.hasMoreElements()) {
             final URL url = urls.nextElement();
-            if(LOG.isTraceEnabled())
-                LOG.trace("Load ExtensionInfo from :"+url.getPath());
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Load ExtensionInfo from :" + url.getPath());
+            }
             InputStream is;
-            String inf=url.getFile();
+            String inf = url.getFile();
             try {
                 is = AccessController.doPrivileged(new PrivilegedExceptionAction<InputStream>() {
 
@@ -140,7 +138,8 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 throw (IOException) pae.getException();
             }
             try {
-                List<ExtensionInfo> exts = new InternalExtensionParser(loader).getExtensions(is,inf);
+                List<ExtensionInfo> exts = new InternalExtensionParser(loader)
+                                            .getExtensions(is, inf);
                 for (ExtensionInfo e : exts) {
                     if (loader != l) {
                         e.classloader = l;
@@ -309,10 +308,11 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public boolean hasBeanOfName(String name) {
-        if(name==null)
+        if (name == null) {
             return false;
-        for(ExtensionInfo info:all.values()){
-            if(name.equals(info.getName())){
+        }
+        for (ExtensionInfo info : all.values()) {
+            if (name.equals(info.getName())) {
                 return true;
             }
         }
@@ -326,8 +326,8 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public void activateAll() {
-        for(ExtensionInfo info :all.values()){
-            if(info.getLoadedObject()==null){
+        for (ExtensionInfo info : all.values()) {
+            if (info.getLoadedObject() == null) {
                 loadAndRegister(info);
             }
         }
@@ -341,8 +341,8 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public <T> void activateAllByType(Class<T> type) {
-        for(ExtensionInfo info :all.values()){
-            if(info.getLoadedObject()==null){
+        for (ExtensionInfo info : all.values()) {
+            if (info.getLoadedObject() == null) {
                 synchronized (info) {
                     Class<?> cls = info.getClassObject(loader);
                     if (cls != null && type.isAssignableFrom(cls)) {
@@ -364,12 +364,13 @@ public class ExtensionManagerImpl implements ExtensionManager,
         if (name == null) {
             return null;
         }
-        ExtensionInfo info= all.get(name);
-        if(info!=null){
+        ExtensionInfo info = all.get(name);
+        if (info != null) {
             synchronized (info) {
                 Class<?> cls = info.getClassObject(loader);
-                
-                if (cls != null && type.isAssignableFrom(info.getClassObject(loader))) {
+
+                if (cls != null
+                    && type.isAssignableFrom(info.getClassObject(loader))) {
                     if (info.getLoadedObject() == null) {
                         loadAndRegister(info);
                     }
@@ -378,7 +379,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
             }
         }
         return null;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -387,25 +388,27 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public void initialize() {
-       for(ExtensionInfo info:all.values()){
-           if(!info.isDeferred()&&info.getLoadedObject()==null){
-               loadAndRegister(info);
-           }
-       }
+        for (ExtensionInfo info : all.values()) {
+            if (!info.isDeferred() && info.getLoadedObject() == null) {
+                loadAndRegister(info);
+            }
+        }
     }
-   Set<ExtensionInfo> getExtensionInfos(Class<?> type){
-       Set<ExtensionInfo> set= new HashSet<ExtensionInfo>();
-       for(ExtensionInfo info:all.values()){
-           if(type.isAssignableFrom(info.getClassObject(loader))){
-               set.add(info);
-           }
-       }
-       return set;
-   }
+
+    Set<ExtensionInfo> getExtensionInfos(Class<?> type) {
+        Set<ExtensionInfo> set = new HashSet<ExtensionInfo>();
+        for (ExtensionInfo info : all.values()) {
+            if (type.isAssignableFrom(info.getClassObject(loader))) {
+                set.add(info);
+            }
+        }
+        return set;
+    }
+
     public void removeBeansOfNames(List<String> names) {
         for (String s : names) {
-            for(ExtensionInfo info:all.values()){
-                if(s.equals(info.getName())){
+            for (ExtensionInfo info : all.values()) {
+                if (s.equals(info.getName())) {
                     all.remove(info);
                 }
             }
@@ -415,23 +418,20 @@ public class ExtensionManagerImpl implements ExtensionManager,
     /**
      * @param info
      */
-     void createExtension(ExtensionInfo info) {
-       if(info.getLoadedObject()==null){
-           loadAndRegister(info);
-       }
-        
+    void createExtension(ExtensionInfo info) {
+        if (info.getLoadedObject() == null) {
+            loadAndRegister(info);
+        }
+
     }
 
-	/**
-	 * 
-	 */
-	public void destroyBeans() {
-		for(ExtensionInfo ex:all.values()){
-			if(ex.getLoadedObject()!=null){
-				ResourceInjector inject= new ResourceInjector(resourceManager);
-				inject.destroy(ex.getLoadedObject());
-			}
-		}
-		
-	}
+    public void destroyBeans() {
+        for (ExtensionInfo ex : all.values()) {
+            if (ex.getLoadedObject() != null) {
+                ResourceInjector inject = new ResourceInjector(resourceManager);
+                inject.destroy(ex.getLoadedObject());
+            }
+        }
+
+    }
 }

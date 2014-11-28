@@ -7,10 +7,11 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd">
            
-	<bean id="solmix" class="org.solmix.runtime.support.spring.SpringContainer" >
+	<bean id="solmix" class="org.solmix.runtime.support.spring.SpringContainer">
 		<property name="containerListeners">
 			<list>
-				<bean class="org.solmix.runtime.extension.ContainerListenerImpl"></bean></list></property>
+				<bean class="org.solmix.runtime.extension.ContainerListenerImpl"></bean>
+				</list></property>
 
 	</bean>
 	

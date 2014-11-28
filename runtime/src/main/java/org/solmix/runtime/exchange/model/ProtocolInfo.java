@@ -19,12 +19,49 @@
 
 package org.solmix.runtime.exchange.model;
 
+
 /**
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月15日
  */
 
-public class ProtocolInfo {
+public class ProtocolInfo extends InfoPropertiesSupport {
+
+    private InfoID protocolId;
+
+    private ServiceInfo service;
+
+    private final String protocolName;
+
+    public ProtocolInfo(ServiceInfo service, String protocolName) {
+        this.service = service;
+        this.protocolName = protocolName;
+    }
+
+    /**   */
+    public InfoID getID() {
+        return protocolId;
+    }
+
+    /**   */
+    public void setID(InfoID protocolId) {
+        this.protocolId = protocolId;
+    }
+
+    /**   */
+    public ServiceInfo getService() {
+        return service;
+    }
+
+    /**   */
+    public void setService(ServiceInfo service) {
+        this.service = service;
+    }
+
+    /**   */
+    public String getProtocolName() {
+        return protocolName;
+    }
 
 }

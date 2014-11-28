@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import java.io.BufferedReader;
@@ -30,20 +31,20 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月27日
+ * @version $Id$ 2014年7月27日
  */
 
-public class InternalExtensionParser
-{
- private static Pattern colonPattern = Pattern.compile(":");
- private static final Logger LOG = LoggerFactory.getLogger(InternalExtensionParser.class);
+public class InternalExtensionParser {
+
+    private static Pattern colonPattern = Pattern.compile(":");
+
+    private static final Logger LOG = LoggerFactory.getLogger(InternalExtensionParser.class);
 
     final ClassLoader loader;
-    
+
     public InternalExtensionParser(ClassLoader loader) {
         this.loader = loader;
     }
@@ -56,9 +57,9 @@ public class InternalExtensionParser
         InputStream is = null;
         try {
             String name = url.getFile();
-            name=name.substring(name.lastIndexOf("/")+1);
+            name = name.substring(name.lastIndexOf("/") + 1);
             is = url.openStream();
-            return getExtensions(is,name);
+            return getExtensions(is, name);
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
             return new ArrayList<ExtensionInfo>();
@@ -76,14 +77,16 @@ public class InternalExtensionParser
     /**
      * @param is
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
-    public List<ExtensionInfo> getExtensions(InputStream is,String inf) throws IOException {
+    public List<ExtensionInfo> getExtensions(InputStream is, String inf)
+        throws IOException {
         List<ExtensionInfo> extensions = new ArrayList<ExtensionInfo>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is,
+            "UTF-8"));
         String line = reader.readLine();
         while (line != null) {
-            final ExtensionInfo extension = getExtensionFromTextLine(line,inf);
+            final ExtensionInfo extension = getExtensionFromTextLine(line, inf);
             if (extension != null) {
                 extensions.add(extension);
             }
@@ -93,19 +96,15 @@ public class InternalExtensionParser
     }
 
     /**
-     * META-INF/solmix/extensions
-     * #comments
-     * class:interface:deferend:optional
+     * META-INF/solmix/extensions #comments class:interface:deferend:optional
      * 
-     * Just like:
-     * class
-     * class:interface
-     * class::deferend:optional
+     * Just like: class class:interface class::deferend:optional
      * class:::optional
+     * 
      * @param line
      * @return
      */
-    private ExtensionInfo getExtensionFromTextLine(String line,String inf) {
+    private ExtensionInfo getExtensionFromTextLine(String line, String inf) {
         line = line.trim();
         if (line.length() == 0 || line.charAt(0) == '#') {
             return null;
@@ -129,7 +128,7 @@ public class InternalExtensionParser
         if (parts.length >= 4) {
             ext.setOptional(Boolean.parseBoolean(parts[3]));
         }
-        return  ext;
+        return ext;
     }
-    
+
 }

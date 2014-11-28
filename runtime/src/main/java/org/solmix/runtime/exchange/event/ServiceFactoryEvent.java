@@ -88,6 +88,8 @@ public class ServiceFactoryEvent implements Event, Serializable {
 
     public static int START_CREATE;
 
+    public static int CREATE_FROM_CLASS;
+
     private final int type;
 
     private final AbstractServiceFactory factory;

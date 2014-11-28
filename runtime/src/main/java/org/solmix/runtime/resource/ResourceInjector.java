@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -45,10 +45,9 @@ import org.solmix.runtime.annotation.AnnotationProcessor;
  * @version $Id$  2014年7月27日
  */
 
-public class ResourceInjector extends AbstractAnnotationVisitor
-{
+public class ResourceInjector extends AbstractAnnotationVisitor {
 
-    private static final Logger LOG= LoggerFactory.getLogger(ResourceInjector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResourceInjector.class);
     private static final List<Class<? extends Annotation>> ANNOTATIONS = 
         new ArrayList<Class<? extends Annotation>>();
     

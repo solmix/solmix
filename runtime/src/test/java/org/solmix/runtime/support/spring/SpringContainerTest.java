@@ -64,7 +64,7 @@ public class SpringContainerTest {
             String v = c.getProperty("key").toString();
             Assert.assertEquals("value", v);
             Assert.assertNotNull(c);
-            Container c1 = context.getBean("solmix", Container.class);
+            Container c1 = context.getBean("solmix3", Container.class);
 
             Assert.assertNotSame(c, c1);
             Assert.assertNotNull(c1);

@@ -1,4 +1,4 @@
-/*
+/**
  *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.support.blueprint;
 
 import java.security.AccessController;
@@ -32,53 +33,59 @@ import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.runtime.cm.support.OsgiConfigureUnitManager;
 import org.solmix.runtime.support.ext.ContainerAdaptor;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2013-11-5
+ * @version $Id$ 2013-11-5
  */
 
-public class BpContainer extends ContainerAdaptor
-{
+public class BpContainer extends ContainerAdaptor {
+
     BundleContext bundleContext;
+
     BlueprintContainer blueprintContainer;
-    
+
     /**
      * @param bundleContext the bundleContext to set
      */
     public void setBundleContext(final BundleContext bundleContext) {
         this.bundleContext = bundleContext;
-        ClassLoader bundleClassLoader =
-            AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-                @Override
-                public ClassLoader run() {
-                    return new BundleDelegatingClassLoader(bundleContext.getBundle(), 
-                                                           this.getClass().getClassLoader());
-                }
-            });
+        ClassLoader bundleClassLoader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+
+            @Override
+            public ClassLoader run() {
+                return new BundleDelegatingClassLoader(
+                    bundleContext.getBundle(), this.getClass().getClassLoader());
+            }
+        });
         super.setExtension(bundleClassLoader, ClassLoader.class);
         super.setExtension(bundleContext, BundleContext.class);
-        super.setExtension(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
-        Dictionary<String, Object > properties= new Hashtable<String,Object>();
+        super.setExtension(new OsgiConfigureUnitManager(bundleContext),
+            ConfigureUnitManager.class);
+        Dictionary<String, Object> properties = new Hashtable<String, Object>();
         properties.put(CONTAINER_PROPERTY_NAME, getId());
         bundleContext.registerService(Container.class, this, properties);
     }
-    
+
     /**
      * @param blueprintContainer the blueprintContainer to set
      */
     public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
         this.blueprintContainer = blueprintContainer;
-        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
-        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
-            ConfiguredBeanProvider.class);
-        
+        setExtension(new BlueprintConfigurer(blueprintContainer),
+            BeanConfigurer.class);
+        setExtension(new BlueprintBeanProvider(
+            getExtension(ConfiguredBeanProvider.class), blueprintContainer,
+            bundleContext), ConfiguredBeanProvider.class);
+
     }
+
     @Override
     public String getId() {
         if (id == null) {
-            id =/* bundleContext.getBundle().getSymbolicName() + "-"  +*/ DEFAULT_CONTAINER_ID +"-"+ Integer.toString(this.hashCode());
+            id = bundleContext.getBundle().getSymbolicName() + "-"
+                + DEFAULT_CONTAINER_ID + "-"
+                + Integer.toString(this.hashCode());
         }
         return id;
     }

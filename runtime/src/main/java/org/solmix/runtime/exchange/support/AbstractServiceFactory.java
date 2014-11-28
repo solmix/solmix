@@ -63,6 +63,13 @@ public abstract class AbstractServiceFactory {
             listener.onHandle(event);
         }
     }
+    
+    public void pulishEvent(int type ,Object ... args ) {
+        ServiceFactoryEvent event = new ServiceFactoryEvent(type,this,args);
+        for (ServiceFactoryListener listener : listeners) {
+            listener.onHandle(event);
+        }
+    }
 
     /**   */
     public void setContainer(Container container) {

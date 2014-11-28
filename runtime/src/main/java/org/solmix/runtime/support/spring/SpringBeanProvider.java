@@ -1,4 +1,4 @@
-/*
+/**
  *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -47,8 +47,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @version $Id$ 2013-11-4
  */
 
-public class SpringBeanProvider implements ConfiguredBeanProvider
-{
+public class SpringBeanProvider implements ConfiguredBeanProvider {
 
     private final ApplicationContext context;
 
@@ -56,8 +55,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
 
     private final Set<String> passThroughs = new HashSet<String>();
 
-    public SpringBeanProvider(ApplicationContext context)
-    {
+    public SpringBeanProvider(ApplicationContext context) {
         this(context, null);
     }
 
@@ -90,9 +88,10 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
      */
     @Override
     public List<String> getBeanNamesOfType(Class<?> type) {
-        Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
-        if(context.getParent()!=null){
-            s.addAll(_doGetBeanNamesOfType(context.getParent(),type));
+        Set<String> s = new LinkedHashSet<String>(
+            Arrays.asList(context.getBeanNamesForType(type, false, false)));
+        if (context.getParent() != null) {
+            s.addAll(doGetBeanNamesOfType0(context.getParent(), type));
         }
         s.removeAll(passThroughs);
         if (original != null) {
@@ -103,11 +102,13 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         return new ArrayList<String>(s);
     }
 
-    private Set<String> _doGetBeanNamesOfType(ApplicationContext context,Class<?> type) {
-        
-        Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
-        if(context.getParent()!=null){
-            s.addAll(_doGetBeanNamesOfType(context.getParent(),type));
+    private Set<String> doGetBeanNamesOfType0(ApplicationContext context,
+        Class<?> type) {
+
+        Set<String> s = new LinkedHashSet<String>(
+            Arrays.asList(context.getBeanNamesForType(type, false, false)));
+        if (context.getParent() != null) {
+            s.addAll(doGetBeanNamesOfType0(context.getParent(), type));
         }
         return s;
     }
@@ -124,21 +125,23 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
         } catch (NoSuchBeanDefinitionException nsbde) {
             // ignore
         }
-        if(t==null&&context.getParent()!=null){
-            t=_dogetBeanOfType(context.getParent(),name,type);
+        if (t == null && context.getParent() != null) {
+            t = dogetBeanOfType0(context.getParent(), name, type);
         }
         if (t == null && original != null) {
             t = original.getBeanOfType(name, type);
         }
         return t;
     }
-    //get bean from parent;
-    private <T> T _dogetBeanOfType(ApplicationContext context,String name, Class<T> type){
+
+    // get bean from parent;
+    private <T> T dogetBeanOfType0(ApplicationContext context, String name,
+        Class<T> type) {
         T t = null;
-        if(context!=null){
+        if (context != null) {
             t = type.cast(context.getBean(name, type));
-            if(t==null&&context.getParent()!=null)
-                t=_dogetBeanOfType(context.getParent(),name,type);
+            if (t == null && context.getParent() != null)
+                t = dogetBeanOfType0(context.getParent(), name, type);
         }
         return t;
     }
@@ -150,38 +153,42 @@ public class SpringBeanProvider implements ConfiguredBeanProvider
      */
     @Override
     public <T> Collection<? extends T> getBeansOfType(Class<T> type) {
-        Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
+        Set<String> s = new LinkedHashSet<String>(
+            Arrays.asList(context.getBeanNamesForType(type, false, false)));
         s.removeAll(passThroughs);
         List<T> lst = new LinkedList<T>();
         for (String n : s) {
             lst.add(type.cast(context.getBean(n, type)));
         }
-        if(context.getParent()!=null){
-            lst.addAll(_doGetBeansOfType(context.getParent(),type));
+        if (context.getParent() != null) {
+            lst.addAll(_doGetBeansOfType(context.getParent(), type));
         }
-        if(original!=null){
-            Collection<? extends T> origs=  original.getBeansOfType(type);
-            if(origs!=null)
+        if (original != null) {
+            Collection<? extends T> origs = original.getBeansOfType(type);
+            if (origs != null)
                 lst.addAll(origs);
         }
         return lst;
     }
-    //get bean from parent;
-    private <T> Collection<? extends T> _doGetBeansOfType(ApplicationContext context,Class<T> type){
-        if(context!=null){
-            Set<String> s = new LinkedHashSet<String>(Arrays.asList(context.getBeanNamesForType(type, false, false)));
+
+    // get bean from parent;
+    private <T> Collection<? extends T> _doGetBeansOfType(
+        ApplicationContext context, Class<T> type) {
+        if (context != null) {
+            Set<String> s = new LinkedHashSet<String>(
+                Arrays.asList(context.getBeanNamesForType(type, false, false)));
             s.removeAll(passThroughs);
             List<T> lst = new LinkedList<T>();
             for (String n : s) {
                 lst.add(type.cast(context.getBean(n, type)));
-            }    
-            if(context.getParent()!=null){
-                lst.addAll(_doGetBeansOfType(context.getParent(),type));
+            }
+            if (context.getParent() != null) {
+                lst.addAll(_doGetBeansOfType(context.getParent(), type));
             }
             return lst;
         }
         return null;
-        
+
     }
 
     /**

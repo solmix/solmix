@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.model;
 
 import java.util.HashMap;
@@ -23,19 +24,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月24日
+ * @version $Id$ 2014年10月24日
  */
 
-public abstract class InfoPropertiesSupport
-{
+public abstract class InfoPropertiesSupport {
+
     private InfoPropertiesSupport delegate;
+
     private final AtomicReference<Object[]> extensions = new AtomicReference<Object[]>();
+
     private final AtomicReference<Map<String, Object>> properties = new AtomicReference<Map<String, Object>>();
+
     private boolean delegateProperties;
+
     private Map<String, Object> extensionAttributes;
 
     public void addExtension(Object el) {
@@ -55,18 +59,18 @@ public abstract class InfoPropertiesSupport
         }
         exts2[exts2.length - 1] = el;
         if (!extensions.compareAndSet(exts, exts2)) {
-            //keep trying
+            // keep trying
             addExtension(el);
         }
     }
-    
+
     public AtomicReference<Object[]> getExtensors() {
         if (delegate != null) {
             return delegate.getExtensors();
         }
         return extensions;
     }
-    
+
     public <T> T getExtension(Class<T> cls) {
         if (delegate != null) {
             return delegate.getExtension(cls);
@@ -83,11 +87,12 @@ public abstract class InfoPropertiesSupport
         return null;
     }
 
-    public Object getExtensionAttribute(String name) {        
+    public Object getExtensionAttribute(String name) {
         if (delegate != null) {
             return delegate.getExtensionAttribute(name);
         }
-        return null == extensionAttributes ? null : extensionAttributes.get(name);
+        return null == extensionAttributes ? null
+            : extensionAttributes.get(name);
     }
 
     public Map<String, Object> getExtensionAttributes() {
@@ -96,7 +101,7 @@ public abstract class InfoPropertiesSupport
         }
         return extensionAttributes;
     }
-    
+
     public void addExtensionAttribute(String name, Object attr) {
         if (delegate != null) {
             delegate.addExtensionAttribute(name, attr);
@@ -107,23 +112,23 @@ public abstract class InfoPropertiesSupport
         }
         extensionAttributes.put(name, attr);
     }
-    
+
     public void setExtensionAttributes(Map<String, Object> attrs) {
         if (delegate != null) {
             delegate.setExtensionAttributes(attrs);
             return;
         }
-        extensionAttributes = attrs;        
+        extensionAttributes = attrs;
     }
 
-    
     public void setProperty(String name, Object v) {
         if (delegate != null && delegateProperties) {
             delegate.setProperty(name, v);
             return;
         }
         if (null == properties.get()) {
-            properties.compareAndSet(null, new ConcurrentHashMap<String, Object>(4, 0.75f, 2));
+            properties.compareAndSet(null,
+                new ConcurrentHashMap<String, Object>(4, 0.75f, 2));
         }
         if (v == null) {
             properties.get().remove(name);
@@ -131,7 +136,7 @@ public abstract class InfoPropertiesSupport
             properties.get().put(name, v);
         }
     }
-    
+
     public Object getProperty(String name) {
         if (delegate != null && delegateProperties) {
             return delegate.getProperty(name);
@@ -141,7 +146,7 @@ public abstract class InfoPropertiesSupport
         }
         return properties.get().get(name);
     }
-    
+
     public Object removeProperty(String name) {
         if (delegate != null && delegateProperties) {
             delegate.removeProperty(name);
@@ -151,31 +156,35 @@ public abstract class InfoPropertiesSupport
         }
         return properties.get().remove(name);
     }
-    
+
     public Map<String, Object> getProperties() {
         if (delegate != null && delegateProperties) {
             return delegate.getProperties();
         }
         return properties.get();
     }
+
     public void setProperties(Map<String, Object> p) {
         if (delegate != null && delegateProperties) {
-             delegate.setProperties(p);
+            delegate.setProperties(p);
         }
-         properties.set(p);
+        properties.set(p);
     }
+
     /**
      * 代理InfoPropertiesSupport
+     * 
      * @param p
      * @param delegateProperties
      */
-    public final void setDelegate(InfoPropertiesSupport delegate, boolean delegateProperties) {
+    public final void setDelegate(InfoPropertiesSupport delegate,
+        boolean delegateProperties) {
         this.delegate = delegate;
         this.delegateProperties = delegateProperties;
         if (delegate == null) {
             return;
         }
-       
+
         if (extensionAttributes != null) {
             delegate.setExtensionAttributes(extensionAttributes);
             extensionAttributes = null;
@@ -193,4 +202,12 @@ public abstract class InfoPropertiesSupport
             properties.set(null);
         }
     }
+    protected static final boolean equals(Object o1, Object o2) {
+        if (o1 == null && o2 != null
+            || o1 != null && o2 == null) {
+            return false;
+        }
+        return o1 == null ? true : o1.equals(o2);
+    }
+    
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -31,68 +31,70 @@ import org.solmix.runtime.Extension;
  * @version $Id$ 2014年7月27日
  */
 
-public class ExtensionObjectCache
-{
+public class ExtensionObjectCache {
 
     private final Map<Class<?>, Object> cache;
 
-    public ExtensionObjectCache()
-    {
+    public ExtensionObjectCache() {
         cache = new ConcurrentHashMap<Class<?>, Object>(16, 0.75f, 4);
     }
 
-    public ExtensionObjectCache(int initialCapacity, float loadFactor,
-        int concurrencyLevel)
-    {
-        cache = new ConcurrentHashMap<Class<?>, Object>(initialCapacity, loadFactor,
-            concurrencyLevel);
+    public ExtensionObjectCache(int initialCapacity, float loadFactor, int concurrencyLevel) {
+        cache = new ConcurrentHashMap<Class<?>, Object>(initialCapacity,
+            loadFactor, concurrencyLevel);
     }
-    
+
     /**
      * @param beans
      */
-    public ExtensionObjectCache(Map<Class<?>, Object> extensions)
-    {
-        this.cache=new  ConcurrentHashMap<Class<?>, Object>(extensions);
+    public ExtensionObjectCache(Map<Class<?>, Object> extensions) {
+        this.cache = new ConcurrentHashMap<Class<?>, Object>(extensions);
     }
 
-    public void putObject(Class<?> clazz,Object o){
-        if(o==null)
-            return ;
-        if(isExtension(clazz)&&isExtension(o.getClass())){
-           String name =o.getClass().getAnnotation(Extension.class).name();
-            ExtensionEntry entry=(ExtensionEntry) cache.get(clazz);
-            if(entry==null){
-                cache.put(clazz, new ExtensionEntry(name,o));
-            }else{
-                entry.put(name,o);
+    public void putObject(Class<?> clazz, Object o) {
+        if (o == null) {
+            return;
+        }
+        if (isExtension(clazz) && isExtension(o.getClass())) {
+            String name = o.getClass().getAnnotation(Extension.class).name();
+            ExtensionEntry entry = (ExtensionEntry) cache.get(clazz);
+            if (entry == null) {
+                cache.put(clazz, new ExtensionEntry(name, o));
+            } else {
+                entry.put(name, o);
             }
-        }else{
+        } else {
             cache.put(clazz, o);
         }
     }
-    public Object getObject(Class<?> clazz){
-       Object o= cache.get(clazz);
-       if(o instanceof ExtensionEntry){
-          String name= clazz.getAnnotation(Extension.class).name();
-          return ((ExtensionEntry)o).get(name);
-       }else{
-           return o;
-       }
+
+    public Object getObject(Class<?> clazz) {
+        Object o = cache.get(clazz);
+        if (o instanceof ExtensionEntry) {
+            String name = clazz.getAnnotation(Extension.class).name();
+            return ((ExtensionEntry) o).get(name);
+        } else {
+            return o;
+        }
     }
-    public Object getObjects(Class<?> clazz){
-        Object o= cache.get(clazz);
+
+    public Object getObjects(Class<?> clazz) {
+        Object o = cache.get(clazz);
         return o;
-     }
-    private boolean isExtension(Class<?> clazz){
+    }
+
+    private boolean isExtension(Class<?> clazz) {
         return clazz.isAnnotationPresent(Extension.class);
     }
 
-    static class ExtensionEntry{
-        Map<String, Object>  cache = new ConcurrentHashMap<String, Object>(4, 0.75f, 2);
-        ExtensionEntry(String name,Object o){
+    static class ExtensionEntry {
+
+        Map<String, Object> cache = new ConcurrentHashMap<String, Object>(4, 0.75f, 2);
+
+        ExtensionEntry(String name, Object o) {
             cache.put(name, o);
         }
+
         /**
          * @param name
          * @return
@@ -100,13 +102,14 @@ public class ExtensionObjectCache
         public Object get(String name) {
             return cache.get(name);
         }
+
         /**
          * @param name
          * @param o
          */
         public void put(String name, Object o) {
             cache.put(name, o);
-            
+
         }
     }
 

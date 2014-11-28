@@ -44,8 +44,7 @@ import org.solmix.runtime.bean.Configurable;
  * @version $Id$ 2013-11-5
  */
 
-public class BlueprintConfigurer implements BeanConfigurer
-{
+public class BlueprintConfigurer implements BeanConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlueprintConfigurer.class);
 
@@ -53,22 +52,19 @@ public class BlueprintConfigurer implements BeanConfigurer
 
     private final Map<String, List<MatcherHolder>> wildCardBeanDefinitions = new HashMap<String, List<MatcherHolder>>();
 
-    static class MatcherHolder
-    {
+    static class MatcherHolder {
 
         Matcher matcher;
 
         String wildCardId;
 
-        public MatcherHolder(String orig, Matcher matcher)
-        {
+        public MatcherHolder(String orig, Matcher matcher) {
             wildCardId = orig;
             this.matcher = matcher;
         }
     }
 
-    public BlueprintConfigurer(BlueprintContainer container)
-    {
+    public BlueprintConfigurer(BlueprintContainer container) {
         this.blueprintContainer = container;
         initializeWildcardMap();
     }
@@ -121,20 +117,20 @@ public class BlueprintConfigurer implements BeanConfigurer
      * @param b
      */
     public synchronized void configureBean(String bname, Object bean, boolean checkWildcards) {
-        if(bean==null){
-            bname=getBeanName(bean);
+        if (bean == null) {
+            bname = getBeanName(bean);
         }
-        if(bname==null){
+        if (bname == null) {
             return;
         }
         if (checkWildcards) {
             configureWithWildCard(bname, bean);
         }
-        Method m = Reflection.findMethod(blueprintContainer.getClass(), "injectBeanInstance",
-            BeanMetadata.class, Object.class);
-        
+        Method m = Reflection.findMethod(blueprintContainer.getClass(),
+            "injectBeanInstance", BeanMetadata.class, Object.class);
+
         try {
-            if(m!=null){
+            if (m != null) {
                 ComponentMetadata cm = null;
                 try {
                     cm = blueprintContainer.getComponentMetadata(bname);
@@ -142,19 +138,19 @@ public class BlueprintConfigurer implements BeanConfigurer
                     cm = null;
                 }
                 if (cm instanceof BeanMetadata) {
-                 
+
                     m.invoke(blueprintContainer, cm, bean);
                 }
             }
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t instanceof RuntimeException) {
-                throw (RuntimeException)t;
+                throw (RuntimeException) t;
             } else {
                 throw new RuntimeException(t);
             }
-        }catch(Exception e){
-            LOG.warn("Can't configured object {}",bname);
+        } catch (Exception e) {
+            LOG.warn("Can't configured object {}", bname);
         }
     }
 
@@ -182,8 +178,8 @@ public class BlueprintConfigurer implements BeanConfigurer
 
     protected String getBeanName(Object beanInstance) {
         if (beanInstance instanceof Configurable) {
-            return ((Configurable)beanInstance).getConfigueName();
-        }else{
+            return ((Configurable) beanInstance).getConfigueName();
+        } else {
             return null;
         }
         /*String beanName = null;

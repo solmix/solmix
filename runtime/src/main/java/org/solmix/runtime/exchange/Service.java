@@ -20,10 +20,12 @@
 package org.solmix.runtime.exchange;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.serialize.Serialization;
+import org.solmix.runtime.identity.ID;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 
 /**
@@ -35,15 +37,21 @@ import org.solmix.runtime.interceptor.InterceptorProvider;
 public interface Service extends Map<String, Object>, InterceptorProvider {
 
     Invoker getInvoker();
+    
+    ID getServiceId();
 
     void setInvoker(Invoker invoker);
 
     Map<String, Endpoint> getEndpoints();
 
-    EndpointInfo getEndpointInfo(String eid);
+    EndpointInfo getEndpointInfo(ID eid);
     
     Serialization getSerialization();
     
     void setSerialization(Serialization s);
+    
+    Executor getExecutor();
+
+    void setExecutor(Executor executor);
 
 }

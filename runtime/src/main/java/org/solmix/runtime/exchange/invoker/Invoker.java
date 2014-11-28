@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,18 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.invoker;
 
 import org.solmix.runtime.exchange.Exchange;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月15日
+ * @version $Id$ 2014年10月15日
  */
 
-public interface Invoker
-{
+public interface Invoker {
+
     Object invoke(Exchange exchange, Object o);
 }

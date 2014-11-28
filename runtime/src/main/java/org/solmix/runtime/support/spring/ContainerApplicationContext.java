@@ -67,7 +67,7 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
     public static final String DEFAULT_USER_CFG_FILE = "solmix.xml";
     public static final String DEFAULT_EXT_CFG_FILE = "classpath*:META-INF/solmix/solmix.modules";
 
-    private static final Logger log = LoggerFactory.getLogger(ContainerApplicationContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContainerApplicationContext.class);
 
     private String[] cfgFiles;
 
@@ -161,10 +161,10 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
             final Resource f = findResource(cfgFile);
             if (f!=null&&f.exists()) {
                 resources.add(f);
-                log.info("Used configed file {}",cfgFile);
+                LOG.info("Used configed file {}",cfgFile);
             }else{
                 if(!usingDefault){
-                    log.warn("Can't find configure file {}",cfgFile);
+                    LOG.warn("Can't find configure file {}",cfgFile);
                     throw new ApplicationContextException("Can't find configure file");
                 }
             }
@@ -175,12 +175,12 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext
                 if(ur.exists()){
                     resources.add(ur);
                 }else{
-                    log.warn("Can't find configure file {}",u.getPath());
+                    LOG.warn("Can't find configure file {}",u.getPath());
                 }
             }
         }
-        if(log.isDebugEnabled()){
-            log.debug("Creating application context with resources "+resources.size());
+        if(LOG.isDebugEnabled()){
+            LOG.debug("Creating application context with resources "+resources.size());
         }
         if(0==resources.size()){
             return null;

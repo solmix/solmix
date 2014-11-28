@@ -46,7 +46,16 @@ public final class StringUtils
             return true;
         return false;
     }
-
+    
+    public static boolean isEmpty(List<String> list) {
+        if (list == null || list.size() == 0) {
+            return true;
+        }
+        if (list.size() == 1 && isEmpty(list.get(0))) {
+            return true;
+        }
+        return false;
+    }
     /**
      * is not empty string.
      * 

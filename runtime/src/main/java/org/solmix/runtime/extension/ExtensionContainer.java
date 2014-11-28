@@ -33,6 +33,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.StringUtils;
+import org.solmix.commons.util.SystemPropertyAction;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerFactory;
@@ -52,65 +54,66 @@ import org.solmix.runtime.resource.SinglePropertyResolver;
  * @version $Id$ 2013-11-3
  */
 
-public class ExtensionContainer implements Container
-{
-   private static final Logger LOG = LoggerFactory.getLogger(ExtensionContainer.class);
-  
-   private final  List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
-   
-   private  final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
+public class ExtensionContainer implements Container {
 
- /**
- * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
- */
-    public static enum ContainerStatus
-    {
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionContainer.class);
+
+    private final List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
+
+    private final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
+
+    private boolean firstFireContainerListener = true;
+
+    /**
+     * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
+     */
+    public static enum ContainerStatus {
         CREATING , INITIALIZING , CREATED , CLOSING , CLOSED;
 
     }
     //JVM shutdown hooker
-    static{
-    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				LOG.info("Run JVM shutdown hook!");
-				Container[] containers=ContainerFactory.getContainers();
-				for(Container container:containers){
-					container.close();
-				}
-			}
-		},"SLX-Shutdown-Thread"));
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                LOG.info("Run JVM shutdown hook!");
+                Container[] containers = ContainerFactory.getContainers();
+                for (Container container : containers) {
+                    container.close();
+                }
+            }
+        }, "SLX-Shutdown-Thread"));
     }
 
     protected final Map<Class<?>, Object> extensions;
 
     protected final Set<Class<?>> missingBeans;
+
     private final ExtensionManagerImpl extensionManager;
+
     protected String id;
 
     private ContainerStatus status;
-    private final Map<String, Object> properties = new ConcurrentHashMap<String, Object>(16, 0.75f, 4);
 
-    public ExtensionContainer()
-    {
+    private final Map<String, Object> properties = new ConcurrentHashMap<String, Object>(
+        16, 0.75f, 4);
+
+    public ExtensionContainer() {
         this(null, null, Thread.currentThread().getContextClassLoader());
     }
 
     public ExtensionContainer(Map<Class<?>, Object> beans,
-        Map<String, Object> properties)
-    {
+        Map<String, Object> properties) {
         this(beans, properties, Thread.currentThread().getContextClassLoader());
     }
 
-    public ExtensionContainer(Map<Class<?>, Object> beans)
-    {
+    public ExtensionContainer(Map<Class<?>, Object> beans) {
         this(beans, null, Thread.currentThread().getContextClassLoader());
     }
 
     public ExtensionContainer(Map<Class<?>, Object> beans,
-        Map<String, Object> properties, ClassLoader extensionClassLoader)
-    {
+        Map<String, Object> properties, ClassLoader extensionClassLoader) {
         if (beans == null) {
             extensions = new ConcurrentHashMap<Class<?>, Object>(16, 0.75f, 4);
         } else {
@@ -118,18 +121,19 @@ public class ExtensionContainer implements Container
         }
         missingBeans = new CopyOnWriteArraySet<Class<?>>();
 
-        setStatus( ContainerStatus.CREATING);
+        setStatus(ContainerStatus.CREATING);
         ContainerFactory.possiblySetDefaultContainer(this);
         if (null == properties) {
             properties = new HashMap<String, Object>();
         }
-        ResourceManager rm=new  ResourceManagerImpl();
+        ResourceManager rm = new ResourceManagerImpl();
         properties.put(CONTAINER_PROPERTY_NAME, DEFAULT_CONTAINER_ID);
         properties.put(DEFAULT_CONTAINER_ID, this);
         ResourceResolver propertiesResolver = new PropertiesResolver(properties);
         rm.addResourceResolver(propertiesResolver);
-        
-        ResourceResolver defaultContainer = new SinglePropertyResolver(DEFAULT_CONTAINER_ID, this);
+
+        ResourceResolver defaultContainer = new SinglePropertyResolver(
+            DEFAULT_CONTAINER_ID, this);
         rm.addResourceResolver(defaultContainer);
         rm.addResourceResolver(new ObjectTypeResolver(this));
         rm.addResourceResolver(new ResourceResolver() {
@@ -144,7 +148,6 @@ public class ExtensionContainer implements Container
                     }
                     return t;
                 }
-
                 return null;
             }
 
@@ -153,15 +156,22 @@ public class ExtensionContainer implements Container
                 return null;
             }
         });
-        extensions.put(ResourceManager.class,rm);
-        
-        extensionManager= new ExtensionManagerImpl(new String[0],
-            extensionClassLoader,
-            extensions,
-            rm, 
-            this);
+        extensions.put(ResourceManager.class, rm);
+
+        extensionManager = new ExtensionManagerImpl(new String[0],
+            extensionClassLoader, extensions, rm, this);
         setStatus(ContainerStatus.INITIALIZING);
-        extensionManager.load(new String[]{ExtensionManager.EXTENSION_LOCATION});
+        String internal = SystemPropertyAction.getProperty(
+            ExtensionManager.PROP_EXTENSION_LOCATION,
+            ExtensionManager.EXTENSION_LOCATION);
+        String ext = SystemPropertyAction.getProperty(ExtensionManager.PROP_EXTENSION_LOCATION_EXT);
+        String[] locations;
+        if (StringUtils.isEmpty(ext)) {
+            locations = new String[] {internal };
+        } else {
+            locations = new String[] {internal, ext };
+        }
+        extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);
         extensions.put(ExtensionManager.class, extensionManager);
     }
@@ -205,16 +215,18 @@ public class ExtensionContainer implements Container
                     }
                 } else {
                     if (beanType.isInterface()
-                    && beanType.isAnnotationPresent(Extension.class)) {
-                        if(LOG.isDebugEnabled()){
-                            LOG.debug("found more than one instance for "+beanType.getName()+
-                                ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
+                        && beanType.isAnnotationPresent(Extension.class)) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("found more than one instance for "
+                                + beanType.getName()
+                                + ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
                         }
-                    extensions.put(beanType,
-                        getExtensionLoader(beanType).getDefault());
+                        extensions.put(beanType,
+                            getExtensionLoader(beanType).getDefault());
                     }else{
-                        if(LOG.isWarnEnabled()){
-                            LOG.warn("found "+objs.size()+" instance for "+beanType.getName());
+                        if (LOG.isWarnEnabled()) {
+                            LOG.warn("found " + objs.size() + " instance for "
+                                + beanType.getName());
                         }
                         for (Object o : objs) {
                             extensions.put(beanType, o);
@@ -238,7 +250,7 @@ public class ExtensionContainer implements Container
     protected synchronized ConfiguredBeanProvider createBeanProvider() {
         ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
         if (provider == null) {
-            provider=extensionManager;
+            provider = extensionManager;
             this.setExtension(provider, ConfiguredBeanProvider.class);
         }
         return provider;
@@ -284,7 +296,8 @@ public class ExtensionContainer implements Container
      */
     @Override
     public String getId() {
-        return id == null ? DEFAULT_CONTAINER_ID +"-"+ Integer.toString(Math.abs(this.hashCode())) : id;
+        return id == null ? DEFAULT_CONTAINER_ID + "-"
+            + Integer.toString(Math.abs(this.hashCode())) : id;
     }
 
     /**
@@ -313,8 +326,9 @@ public class ExtensionContainer implements Container
         setStatus(ContainerStatus.INITIALIZING);
         doInitializeInternal();
         setStatus(ContainerStatus.CREATED);
-        if(LOG.isDebugEnabled())
-            LOG.debug("Container Created success for ID:"+getId());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Container Created success for ID:" + getId());
+        }
     }
    
     /**
@@ -331,23 +345,25 @@ public class ExtensionContainer implements Container
      */
     public void setStatus(ContainerStatus status) {
         this.status = status;
-        int type=ContainerEvent.CREATED;
+        int type = ContainerEvent.CREATED;
         switch (status) {
             case CLOSED:
-                type=ContainerEvent.POSTCLOSE;
+                type = ContainerEvent.POSTCLOSE;
                 break;
             case CLOSING:
-                type=ContainerEvent.PRECLOSE;
+                type = ContainerEvent.PRECLOSE;
                 break;
             case CREATED:
-                type=ContainerEvent.CREATED;
+                type = ContainerEvent.CREATED;
                 break;
             case CREATING:
-               return;
+                return;
             case INITIALIZING:
-               return;
+                return;
+            default:
+                break;
         }
-        ContainerEvent event=new ContainerEvent(type,this,this);
+        ContainerEvent event = new ContainerEvent(type, this, this);
         fireContainerEvent(event);
     }
 
@@ -385,18 +401,17 @@ public class ExtensionContainer implements Container
     @Override
     public void addListener(ContainerListener l) {
         synchronized (containerListeners) {
-              containerListeners.add(l);
+            containerListeners.add(l);
         }
-  }
+    }
     @Override
     public void removeListener(ContainerListener l) {
         synchronized (containerListeners) {
-              containerListeners.remove(l);
+            containerListeners.remove(l);
         }
-        
-       
-  }
-    private  boolean firstFireContainerListener=true;
+
+    }
+    
 
     protected void fireContainerEvent(ContainerEvent event) {
         List<ContainerListener> toNotify = null;
@@ -404,8 +419,8 @@ public class ExtensionContainer implements Container
         // Copy array
         synchronized (containerListeners) {
             //if not set ,call default.
-            if (firstFireContainerListener&&containerListeners.size()==0) {
-                firstFireContainerListener=false;
+            if (firstFireContainerListener && containerListeners.size() == 0) {
+                firstFireContainerListener = false;
                 if(LOG.isTraceEnabled())
                     LOG.trace("NO found containerListener,try to load default ContainerListener!");
                 ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
@@ -433,7 +448,7 @@ public class ExtensionContainer implements Container
      */
     @Override
     public void close() {
-       close(true);
+        close(true);
     }
     /**
      * {@inheritDoc}
@@ -442,24 +457,26 @@ public class ExtensionContainer implements Container
      */
     @Override
     public void close(boolean wait) {
-        if(status==ContainerStatus.CLOSING || status==ContainerStatus.CLOSED){
-            return ;
+        if (status == ContainerStatus.CLOSING
+            || status == ContainerStatus.CLOSED) {
+            return;
         }
-        synchronized(this){
+        synchronized (this) {
             setStatus(ContainerStatus.CLOSING);
         }
         destroyBeans();
-        synchronized(this){
+        synchronized (this) {
             setStatus(ContainerStatus.CLOSED);
             notifyAll();
         }
-        if(LOG.isDebugEnabled())
-            LOG.debug("Container Closed for ID:"+getId());
-        if(ContainerFactory.getDefaultContainer(false)==this){
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Container Closed for ID:" + getId());
+        }
+        if (ContainerFactory.getDefaultContainer(false) == this) {
             ContainerFactory.setDefaultContainer(null);
         }
         ContainerFactory.clearDefaultContainerForAnyThread(this);
-        
+
     }
 
     /**
@@ -504,10 +521,11 @@ public class ExtensionContainer implements Container
      */
     @Override
     public void setContainerListeners(List<ContainerListener> containerListeners) {
-        if(containerListeners!=null&&containerListeners.size()>0)
-        synchronized (this.containerListeners) {
-            this.containerListeners.clear();
-            this.containerListeners.addAll(containerListeners);
+        if (containerListeners != null && containerListeners.size() > 0) {
+            synchronized (this.containerListeners) {
+                this.containerListeners.clear();
+                this.containerListeners.addAll(containerListeners);
+            }
         }
     }
 

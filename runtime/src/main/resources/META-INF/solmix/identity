@@ -1,0 +1,4 @@
+org.solmix.runtime.identity.support.GUIDNamespace
+org.solmix.runtime.identity.support.LongNamespace
+org.solmix.runtime.identity.support.StringNamespace
+org.solmix.runtime.identity.support.URINamespace

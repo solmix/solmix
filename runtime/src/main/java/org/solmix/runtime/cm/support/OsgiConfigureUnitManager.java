@@ -89,18 +89,19 @@ public class OsgiConfigureUnitManager implements ConfigureUnitManager
      */
     @Override
     public ConfigureUnit[] listConfigureUnits(String filter) throws IOException {
-     
+
         try {
-            Configuration[] configs= getConfigurationAdmin().listConfigurations(filter);
-            ConfigureUnit[] _return=new ConfigureUnit[configs.length];
-            for(int i=0;i<configs.length;i++){
-                _return[i]=new OsigConfigureUnitDelegating(configs[i]);
+            Configuration[] configs = getConfigurationAdmin().listConfigurations(
+                filter);
+            ConfigureUnit[] result = new ConfigureUnit[configs.length];
+            for (int i = 0; i < configs.length; i++) {
+                result[i] = new OsigConfigureUnitDelegating(configs[i]);
             }
-            return _return;
+            return result;
         } catch (InvalidSyntaxException e) {
-         //ignore.
+            // ignore.
         }
-        return null;
+        return new ConfigureUnit[]{} ;
     }
 
 }

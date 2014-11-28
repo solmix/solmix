@@ -1,4 +1,4 @@
-/*
+/**
  *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -24,28 +24,24 @@ import java.util.Map;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.extension.ExtensionContainer;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2013-11-7
  */
 
-public class ContainerAdaptor extends ExtensionContainer
-{
+public class ContainerAdaptor extends ExtensionContainer {
 
-    public ContainerAdaptor()
-    {
+    public ContainerAdaptor() {
         this(null);
     }
 
-    public ContainerAdaptor(Map<Class<?>, Object> beans)
-    {
+    public ContainerAdaptor(Map<Class<?>, Object> beans) {
         this(beans, Thread.currentThread().getContextClassLoader());
     }
 
-    public ContainerAdaptor(Map<Class<?>, Object> beans, ClassLoader extensionClassLoader)
-    {
+    public ContainerAdaptor(Map<Class<?>, Object> beans,
+        ClassLoader extensionClassLoader) {
         super(beans);
         BeanConfigurer configurer = (BeanConfigurer) super.extensions.get(BeanConfigurer.class);
         if (null == configurer) {

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,19 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.service;
 
 import java.util.Date;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月3日
+ * @version $Id$ 2014年8月3日
  */
 
-public class DateTimeService implements TimeService
-{
+public class DateTimeService implements TimeService {
 
     /**
      * {@inheritDoc}
