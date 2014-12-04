@@ -42,9 +42,9 @@ public class ServiceInfo extends InfoPropertiesSupport {
 
     private final List<ProtocolInfo> protocols = new CopyOnWriteArrayList<ProtocolInfo>();
 
-    private Map<InfoID, MessageInfo> messages;
+    private Map<NamedID, MessageInfo> messages;
 
-    private InfoID iD;
+    private NamedID name;
 
     public ServiceInfo() {
 
@@ -54,22 +54,22 @@ public class ServiceInfo extends InfoPropertiesSupport {
         return interfaceInfo;
     }
 
-    public InterfaceInfo createInterface(InfoID infId) {
+    public InterfaceInfo createInterface(NamedID infId) {
         interfaceInfo = new InterfaceInfo(this, infId);
         return interfaceInfo;
     }
 
     /**   */
-    public InfoID getID() {
-        return iD;
+    public NamedID getName() {
+        return name;
     }
 
     /**   */
-    public void setID(InfoID iD) {
-        this.iD = iD;
+    public void setName(NamedID name) {
+        this.name = name;
     }
 
-    public Map<InfoID, MessageInfo> getMessages() {
+    public Map<NamedID, MessageInfo> getMessages() {
         if (messages == null) {
             initMessagesMap();
         }
@@ -78,7 +78,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
 
     public ProtocolInfo getProtocol(ID qn) {
         for (ProtocolInfo bi : protocols) {
-            if (qn.equals(bi.getID())) {
+            if (qn.equals(bi.getName())) {
                 return bi;
             }
         }
@@ -86,7 +86,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
     }
 
     public void addProtocol(ProtocolInfo binding) {
-        ProtocolInfo bi = getProtocol(binding.getID());
+        ProtocolInfo bi = getProtocol(binding.getName());
         if (bi != null) {
             protocols.remove(bi);
         }
@@ -101,13 +101,13 @@ public class ServiceInfo extends InfoPropertiesSupport {
      * 
      */
     private void initMessagesMap() {
-        messages = new ConcurrentHashMap<InfoID, MessageInfo>(16, 0.75f, 2);
+        messages = new ConcurrentHashMap<NamedID, MessageInfo>(16, 0.75f, 2);
         for (OperationInfo operation : getInterface().getOperations()) {
             if (operation.getInput() != null) {
-                messages.put(operation.getInput().getID(), operation.getInput());
+                messages.put(operation.getInput().getName(), operation.getInput());
             }
             if (operation.getOutput() != null) {
-                messages.put(operation.getOutput().getID(),
+                messages.put(operation.getOutput().getName(),
                     operation.getOutput());
             }
         }
@@ -117,7 +117,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
         initMessagesMap();
     }
 
-    public void setMessages(Map<InfoID, MessageInfo> msgs) {
+    public void setMessages(Map<NamedID, MessageInfo> msgs) {
         messages = msgs;
     }
 
@@ -127,7 +127,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
      */
     public EndpointInfo getEndpoint(ID eid) {
         for (EndpointInfo ei : endpoints) {
-            if (eid.equals(ei.getID())) {
+            if (eid.equals(ei.getName())) {
                 return ei;
             }
         }
@@ -135,7 +135,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
     }
 
     public void addEndpoint(EndpointInfo ep) {
-        EndpointInfo ei = getEndpoint(ep.getID());
+        EndpointInfo ei = getEndpoint(ep.getName());
         if (ei != null) {
             endpoints.remove(ei);
         }

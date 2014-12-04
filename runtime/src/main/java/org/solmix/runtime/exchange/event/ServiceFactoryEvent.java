@@ -54,7 +54,7 @@ public class ServiceFactoryEvent implements Event, Serializable {
     /**
      * BindingInfo, BindingOperationInfo, Implementation Method
      */
-    public final static int BINDING_OPERATION_CREATED = 0x00000001;
+    public final static int BINDING_CREATED = 0x00000001;
 
     /**
      * BindingInfo
@@ -89,6 +89,14 @@ public class ServiceFactoryEvent implements Event, Serializable {
     public static int START_CREATE;
 
     public static int CREATE_FROM_CLASS;
+
+    public static int OPERATIONINFO_IN_MESSAGE_SET;
+
+    public static int OPERATIONINFO_OUT_MESSAGE_SET;
+
+    public static int OPERATIONINFO_FAULT;
+
+    public static int SERVER_CREATED_END;
 
     private final int type;
 

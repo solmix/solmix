@@ -41,8 +41,8 @@ public class MessageInfo extends AbstractMessageInfo {
 
     private Type type;
 
-    public MessageInfo(OperationInfo op, Type type, InfoID iD) {
-        super(op, iD);
+    public MessageInfo(OperationInfo op, Type type, NamedID name) {
+        super(op, name);
         this.type = type;
     }
 
@@ -54,10 +54,10 @@ public class MessageInfo extends AbstractMessageInfo {
         this.type = type;
     }
 
-    public Map<InfoID, ArgumentInfo> getArgumentsMap() {
-        Map<InfoID, ArgumentInfo> args = new HashMap<InfoID, ArgumentInfo>();
+    public Map<NamedID, ArgumentInfo> getArgumentsMap() {
+        Map<NamedID, ArgumentInfo> args = new HashMap<NamedID, ArgumentInfo>();
         for (ArgumentInfo part : getArguments()) {
-            args.put(part.getID(), part);
+            args.put(part.getName(), part);
         }
         return args;
     }
@@ -68,7 +68,7 @@ public class MessageInfo extends AbstractMessageInfo {
         }
 
         List<ArgumentInfo> orderedParts = new ArrayList<ArgumentInfo>();
-        Map<InfoID, ArgumentInfo> partsMap = getArgumentsMap();
+        Map<NamedID, ArgumentInfo> partsMap = getArgumentsMap();
         for (String part : order) {
             ID qname = getArgumentId(part);
             orderedParts.add(partsMap.get(qname));
@@ -78,6 +78,6 @@ public class MessageInfo extends AbstractMessageInfo {
 
     @Override
     public String toString() {
-        return "[MessageInfo " + type + ": " + messageId.toQueryString() + "]";
+        return "[MessageInfo " + type + ": " + name.toQueryString() + "]";
     }
 }

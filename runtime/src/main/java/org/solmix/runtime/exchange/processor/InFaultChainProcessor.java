@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -40,17 +40,15 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
  * @version $Id$ 2014年10月19日
  */
 
-public class InFaultChainProcessor extends AbstractFaultChainInitProcessor
-{
+public class InFaultChainProcessor extends AbstractFaultChainInitProcessor {
 
-
-    public InFaultChainProcessor(Container c, String phasePolicy)
-    {
-        super(c,phasePolicy);
+    public InFaultChainProcessor(Container c, PhasePolicy phasePolicy) {
+        super(c, phasePolicy);
     }
 
     @Override
-    protected void initializeInterceptors(Exchange ex,PhaseInterceptorChain chain) {
+    protected void initializeInterceptors(Exchange ex,
+        PhaseInterceptorChain chain) {
         Endpoint e = ex.get(Endpoint.class);
         Client c = ex.get(Client.class);
         InterceptorProvider ip = ex.get(InterceptorProvider.class);
@@ -86,10 +84,7 @@ public class InFaultChainProcessor extends AbstractFaultChainInitProcessor
 
     @Override
     protected SortedSet<Phase> getPhases() {
-        return getContainer()
-            .getExtensionLoader(PhasePolicy.class)
-            .getExtension(
-            phasePolicy).getInPhases();
+        return phasePolicy.getInPhases();
     }
 
     @Override

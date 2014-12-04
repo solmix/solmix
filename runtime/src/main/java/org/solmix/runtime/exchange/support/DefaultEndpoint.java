@@ -34,6 +34,7 @@ import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.processor.InFaultChainProcessor;
 import org.solmix.runtime.exchange.processor.OutFaultChainProcessor;
+import org.solmix.runtime.interceptor.phase.PhasePolicy;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 /**
@@ -62,7 +63,7 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements
     private Processor outFaultProcessor;
 
     public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
-        String phasePolicy) {
+        PhasePolicy phasePolicy) {
         Assert.isNotNull(ed);
         if (container == null) {
             container = ContainerFactory.getThreadDefaultContainer();

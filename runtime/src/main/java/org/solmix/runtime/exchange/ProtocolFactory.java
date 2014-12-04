@@ -37,6 +37,15 @@ public interface ProtocolFactory {
      * @param d
      * @param e
      */
-    void addListener(Target d, Endpoint e);
+    void addListener(Transporter d, Endpoint e);
+
+    /**
+     * @param service
+     * @param protocol
+     * @param object
+     * @return
+     */
+    ProtocolInfo createProtocolInfo(Service service, String protocol,
+        Object configObject);
 
 }

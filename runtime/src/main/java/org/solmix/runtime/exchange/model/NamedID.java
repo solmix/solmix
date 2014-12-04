@@ -16,32 +16,41 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.model;
 
-import org.solmix.runtime.identity.AbstractNamespace;
 import org.solmix.runtime.identity.BaseID;
-
+import org.solmix.runtime.identity.IDFactory;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月27日
+ * @version $Id$ 2014年11月27日
  */
 
-public class InfoID extends BaseID {
+public class NamedID extends BaseID {
 
     private static final long serialVersionUID = 4677663481983737102L;
 
     private final String name;
 
-    private final String serviceSpace;
+    private final String serviceNamespace;
 
     private int hash;
 
-    protected InfoID(AbstractNamespace n, String space, String name) {
+    public NamedID(NamedID other) {
+        this(other.getServiceNamespace(), other.getName());
+    }
+    
+    public NamedID(String space, String name) {
+        this((NamedIDNamespace) IDFactory.getDefault().getNamespaceByName(
+            NamedIDNamespace.NAME), space, name);
+    }
+
+    protected NamedID(NamedIDNamespace n, String space, String name) {
         super(n);
         this.name = name;
-        this.serviceSpace = space;
+        this.serviceNamespace = space;
         this.hash = 7;
         this.hash = 31 * hash + space.hashCode();
         int nh = name.hashCode();
@@ -50,11 +59,11 @@ public class InfoID extends BaseID {
 
     @Override
     protected int namespaceCompareTo(BaseID o) {
-        if (o == null || !(o instanceof InfoID)) {
+        if (o == null || !(o instanceof NamedID)) {
             return Integer.MIN_VALUE;
         }
-        InfoID other = (InfoID) o;
-        int compare = this.serviceSpace.compareTo(other.getServiceSpace());
+        NamedID other = (NamedID) o;
+        int compare = this.serviceNamespace.compareTo(other.getServiceNamespace());
         if (compare == 0) {
             return this.getName().compareTo(other.getName());
         }
@@ -66,41 +75,40 @@ public class InfoID extends BaseID {
         if (o == this) {
             return true;
         }
-        if (o == null || !(o instanceof InfoID)) {
+        if (o == null || !(o instanceof NamedID)) {
             return false;
         }
-        InfoID other = (InfoID) o;
-        if (serviceSpace.equals(other.getServiceSpace()))
+        NamedID other = (NamedID) o;
+        if (serviceNamespace.equals(other.getServiceNamespace())) {
             return name.equals(other.getName());
+        }
         return false;
     }
 
-    
     @Override
     protected String namespaceGetName() {
-        if (serviceSpace.equals("")) {
+        if (serviceNamespace.equals("")) {
             return name;
         } else {
-            return new StringBuilder().append("{").append(serviceSpace).append(
+            return new StringBuilder().append("{").append(serviceNamespace).append(
                 "}").append(name).toString();
         }
     }
 
-    
     @Override
     protected int namespaceHashCode() {
         return hash;
     }
-    
+
     /**   */
     @Override
     public String getName() {
         return name;
     }
-    
+
     /**   */
-    public String getServiceSpace() {
-        return serviceSpace;
+    public String getServiceNamespace() {
+        return serviceNamespace;
     }
 
 }

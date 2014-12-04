@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
@@ -23,30 +24,26 @@ import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class FaultOutInterceptor extends PhaseInterceptorSupport<Message>
-{
+public class FaultOutInterceptor extends PhaseInterceptorSupport<Message> {
 
     /** @param phase */
-    public FaultOutInterceptor()
-    {
+    public FaultOutInterceptor() {
         super(Phase.PRE_PROTOCOL);
     }
 
-    
     @Override
     public void handleMessage(Message message) throws Fault {
-        Fault f = (Fault)message.getContent(Exception.class);
+        Fault f = (Fault) message.getContent(Exception.class);
         if (f == null) {
             return;
         }
-        //TODO
+        // TODO
     }
 
 }

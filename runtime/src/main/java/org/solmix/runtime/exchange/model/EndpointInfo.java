@@ -19,7 +19,6 @@
 
 package org.solmix.runtime.exchange.model;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
@@ -36,7 +35,9 @@ public class EndpointInfo extends InfoPropertiesSupport {
 
     private String transporterName;
 
-    private InfoID iD;
+    private NamedID name;
+
+    private String transporterId;
 
     public EndpointInfo() {
 
@@ -61,6 +62,16 @@ public class EndpointInfo extends InfoPropertiesSupport {
         this.service = serviceInfo;
     }
 
+    /**   */
+    public String getTransporterId() {
+        return transporterId;
+    }
+
+    /**   */
+    public void setTransporterId(String transporterId) {
+        this.transporterId = transporterId;
+    }
+
     public InterfaceInfo getInterface() {
         if (service == null) {
             return null;
@@ -75,6 +86,12 @@ public class EndpointInfo extends InfoPropertiesSupport {
         return address;
     }
 
+    
+    /**   */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     /**
      * pipeline 类型.
      */
@@ -85,20 +102,27 @@ public class EndpointInfo extends InfoPropertiesSupport {
     /**
      * @return
      */
-    public InfoID getID() {
-        return iD;
+    public NamedID getName() {
+        return name;
     }
 
-    public void setID(InfoID iD) {
-        this.iD = iD;
+    public void setName(NamedID iD) {
+        this.name = iD;
     }
 
     @Override
     public String toString() {
         return "ProtocolID="
             + (protocol == null ? ""
-                : (protocol.getID() + ", ServiceID=" + (protocol.getService() == null ? ""
-                    : protocol.getService().getID()))) + ", ID=" + iD;
+                : (protocol.getName() + ", ServiceID=" + (protocol.getService() == null ? ""
+                    : protocol.getService().getName()))) + ", ID=" + name;
+    }
+
+    /**
+     * @param ptl
+     */
+    public void setProtocol(ProtocolInfo ptl) {
+        this.protocol=ptl;
     }
 
 }

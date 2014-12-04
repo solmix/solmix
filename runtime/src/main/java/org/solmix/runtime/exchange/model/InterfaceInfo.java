@@ -35,26 +35,26 @@ import org.solmix.runtime.identity.ID;
 
 public class InterfaceInfo extends InfoPropertiesSupport {
 
-    private InfoID iD;
+    private NamedID name;
 
     private final ServiceInfo service;
 
     private final Map<ID, OperationInfo> operations = new ConcurrentHashMap<ID, OperationInfo>(4, 0.75f, 2);
 
-    public InterfaceInfo(ServiceInfo info, InfoID iD) {
-        this.iD = iD;
+    public InterfaceInfo(ServiceInfo info, NamedID name) {
+        this.name = name;
         service = info;
         info.setInterface(this);
     }
 
     /**   */
-    public InfoID getID() {
-        return iD;
+    public NamedID getName() {
+        return name;
     }
 
     /**   */
-    public void setID(InfoID iD) {
-        this.iD = iD;
+    public void setName(NamedID name) {
+        this.name = name;
     }
 
     /**   */
@@ -62,7 +62,7 @@ public class InterfaceInfo extends InfoPropertiesSupport {
         return service;
     }
 
-    public OperationInfo addOperation(InfoID operationId) {
+    public OperationInfo addOperation(NamedID operationId) {
         Assert.isNotNull(operationId);
         if (operations.containsKey(operationId)) {
             throw new IllegalArgumentException("Duplicated operationId: "
@@ -74,14 +74,14 @@ public class InterfaceInfo extends InfoPropertiesSupport {
     }
 
     void addOperation(OperationInfo operation) {
-        operations.put(operation.getID(), operation);
+        operations.put(operation.getName(), operation);
     }
 
     public void removeOperation(OperationInfo operation) {
-        operations.remove(operation.getID());
+        operations.remove(operation.getName());
     }
     
-    public OperationInfo getOperation(InfoID operationId) {
+    public OperationInfo getOperation(NamedID operationId) {
         return operations.get(operationId);
     }
     

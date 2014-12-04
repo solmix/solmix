@@ -40,7 +40,7 @@ public class OperationInfo extends InfoPropertiesSupport {
 
     InterfaceInfo interfaceInfo;
 
-    InfoID operationId;
+    NamedID operationId;
 
     String inName;
 
@@ -59,7 +59,7 @@ public class OperationInfo extends InfoPropertiesSupport {
     public OperationInfo() {
     }
 
-    public OperationInfo(InterfaceInfo interfaceInfo, InfoID operationId) {
+    public OperationInfo(InterfaceInfo interfaceInfo, NamedID operationId) {
         this.interfaceInfo = interfaceInfo;
         this.operationId = operationId;
     }
@@ -67,15 +67,15 @@ public class OperationInfo extends InfoPropertiesSupport {
     /**
      * @return
      */
-    public InfoID getID() {
+    public NamedID getName() {
         return operationId;
     }
 
-    public void setID(InfoID iD) {
+    public void setName(NamedID iD) {
         this.operationId = iD;
     }
 
-    public MessageInfo createMessage(InfoID messageId, MessageInfo.Type type) {
+    public MessageInfo createMessage(NamedID messageId, MessageInfo.Type type) {
         return new MessageInfo(this, type, messageId);
     }
 
@@ -149,7 +149,7 @@ public class OperationInfo extends InfoPropertiesSupport {
      * 
      * @param name the fault name.
      */
-    public FaultInfo addFault(InfoID faultId, InfoID messageid) {
+    public FaultInfo addFault(NamedID faultId, NamedID messageid) {
         Assert.isNotNull(faultId);
         if (faults != null && faults.containsKey(faultId)) {
             throw new IllegalArgumentException("duplicated Fault id:" + faultId);
@@ -244,7 +244,7 @@ public class OperationInfo extends InfoPropertiesSupport {
             && equals(inputMessage, oi.inputMessage)
             && equals(outputMessage, oi.outputMessage)
             && equals(faults, oi.faults)
-            && equals(interfaceInfo.getID(), oi.interfaceInfo.getID());
+            && equals(interfaceInfo.getName(), oi.interfaceInfo.getName());
     }
 
 }

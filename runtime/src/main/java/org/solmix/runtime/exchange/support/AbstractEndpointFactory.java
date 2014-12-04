@@ -28,7 +28,8 @@ import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.EndpointException;
 import org.solmix.runtime.exchange.PipelineSelector;
 import org.solmix.runtime.exchange.ProtocolFactory;
-import org.solmix.runtime.exchange.TargetFactory;
+import org.solmix.runtime.exchange.TransporterFactory;
+import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 
@@ -48,13 +49,23 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     
     protected ProtocolFactory protocolFactory;
     
-    protected TargetFactory targetFactory;
+    protected String transporterId;
+    
+    protected String protocolId;
+    
+    protected TransporterFactory transporterFactory;
     
     protected PipelineSelector pipelineSelector;
     
     protected String address;
     
     protected Map<String, Object> properties;
+    
+    protected NamedID serviceName;
+    
+    protected NamedID endpointName;
+    
+    private Object configObject;
     
     protected abstract Endpoint createEndpoint() throws  EndpointException;
 
@@ -93,15 +104,15 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     }
     
     /**   */
-    public TargetFactory getTargetFactory() {
-        return targetFactory;
+    public TransporterFactory getTransporterFactory() {
+        return transporterFactory;
     }
     
     /**   */
-    public void setTargetFactory(TargetFactory targetFactory) {
-        this.targetFactory = targetFactory;
+    public void setTransporterFactory(TransporterFactory transporterFactory) {
+        this.transporterFactory = transporterFactory;
     }
-    
+
     /**   */
     public PipelineSelector getPipelineSelector() {
         return pipelineSelector;
@@ -112,14 +123,10 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
         this.pipelineSelector = pipelineSelector;
     }
 
-
-    
     /**   */
     public Map<String, Object> getProperties() {
         return properties;
     }
-
-
     
     /**   */
     public void setProperties(Map<String, Object> properties) {
@@ -134,5 +141,68 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 //        if (initializeAnnotationInterceptors(provider, ep)) {
 //            LOG.trace("Added annotation based interceptors and features");
 //        }
+    }
+
+
+    
+    /**   */
+    public NamedID getServiceName() {
+        return serviceName;
+    }
+
+
+    
+    /**   */
+    public void setServiceName(NamedID serviceName) {
+        this.serviceName = serviceName;
+    }
+
+
+    
+    /**   */
+    public NamedID getEndpointName() {
+        return endpointName;
+    }
+
+
+    
+    /**   */
+    public void setEndpointName(NamedID endpointName) {
+        this.endpointName = endpointName;
+    }
+
+    /**   */
+    public String getTransporterId() {
+        return transporterId;
+    }
+    
+    /**   */
+    public void setTransporterId(String transporterId) {
+        this.transporterId = transporterId;
+    }
+    
+    /**   */
+    public String getProtocolId() {
+        return protocolId;
+    }
+    
+    /**   */
+    public void setProtocolId(String protocolId) {
+        this.protocolId = protocolId;
+    }
+
+
+    
+    /**   */
+    public Object getConfigObject() {
+        return configObject;
+    }
+
+
+    
+    /**   */
+    public void setConfigObject(Object configObject) {
+        this.configObject = configObject;
     } 
+    
 }

@@ -37,6 +37,7 @@ import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.FaultType;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
+import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 /**
  * 
@@ -49,13 +50,13 @@ public abstract class AbstractFaultChainInitProcessor implements Processor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFaultChainInitProcessor.class);
 
     /** 切面阶段定义 */
-    protected final String phasePolicy;
+    protected final PhasePolicy phasePolicy;
 
     private final Container container;
 
     private ClassLoader loader;
 
-    public AbstractFaultChainInitProcessor(Container c, String phasePolicy) {
+    public AbstractFaultChainInitProcessor(Container c, PhasePolicy phasePolicy) {
         this.container = c;
         this.phasePolicy = phasePolicy;
         if (container != null) {

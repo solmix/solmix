@@ -16,22 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月14日
+ * @version $Id$ 2014年11月14日
  */
 
 public interface PipelineFactory {
 
-    
-    Pipeline getPipeline(EndpointInfo info,Container c);
-    
-    Pipeline getpPipeline(EndpointInfo info,String address,Container c);
+    Pipeline getPipeline(EndpointInfo info, Container c);
+
+    Pipeline getpPipeline(EndpointInfo info, String address, Container c);
 }

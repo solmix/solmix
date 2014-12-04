@@ -30,9 +30,9 @@ import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.exchange.model.ServiceInfo;
 import org.solmix.runtime.exchange.serialize.Serialization;
-import org.solmix.runtime.identity.ID;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 /**
@@ -54,7 +54,7 @@ public class DefaultService extends InterceptorProviderSupport implements
 
     private Invoker invoker;
 
-    private final Map<String, Endpoint> endpoints = new HashMap<String, Endpoint>();
+    private final Map<NamedID, Endpoint> endpoints = new HashMap<NamedID, Endpoint>();
 
     public DefaultService() {
         this((ServiceInfo) null);
@@ -72,7 +72,7 @@ public class DefaultService extends InterceptorProviderSupport implements
 
     @Override
     public String getConfigueName() {
-        return getServiceId().getName();
+        return getServiceName().getName();
     }
 
     @Override
@@ -86,12 +86,12 @@ public class DefaultService extends InterceptorProviderSupport implements
     }
 
     @Override
-    public Map<String, Endpoint> getEndpoints() {
+    public Map<NamedID, Endpoint> getEndpoints() {
         return endpoints;
     }
 
     @Override
-    public EndpointInfo getEndpointInfo(ID eid) {
+    public EndpointInfo getEndpointInfo(NamedID eid) {
         EndpointInfo ef = getServiceInfo().getEndpoint(eid);
         if (ef != null) {
             return ef;
@@ -112,6 +112,11 @@ public class DefaultService extends InterceptorProviderSupport implements
     /**   */
     public ServiceInfo getServiceInfo() {
         return serviceInfos.get(0);
+    }
+    
+    @Override
+    public List<ServiceInfo> getServiceInfos() {
+        return serviceInfos;
     }
 
     /**   */
@@ -135,11 +140,11 @@ public class DefaultService extends InterceptorProviderSupport implements
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.exchange.Service#getServiceId()
+     * @see org.solmix.runtime.exchange.Service#getServiceName()
      */
     @Override
-    public ID getServiceId() {
-        return getServiceInfo().getID();
+    public NamedID getServiceName() {
+        return getServiceInfo().getName();
     }
 
 }

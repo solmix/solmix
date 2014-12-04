@@ -28,25 +28,25 @@ package org.solmix.runtime.exchange.model;
 
 public class ProtocolInfo extends InfoPropertiesSupport {
 
-    private InfoID protocolId;
+    private NamedID name;
 
     private ServiceInfo service;
 
-    private final String protocolName;
+    private final String protocolId;
 
-    public ProtocolInfo(ServiceInfo service, String protocolName) {
+    public ProtocolInfo(ServiceInfo service, String protocolId) {
         this.service = service;
-        this.protocolName = protocolName;
-    }
-
-    /**   */
-    public InfoID getID() {
-        return protocolId;
-    }
-
-    /**   */
-    public void setID(InfoID protocolId) {
         this.protocolId = protocolId;
+    }
+
+    /**   */
+    public NamedID getName() {
+        return name;
+    }
+
+    /**   */
+    public void setName(NamedID name) {
+        this.name = name;
     }
 
     /**   */
@@ -60,8 +60,8 @@ public class ProtocolInfo extends InfoPropertiesSupport {
     }
 
     /**   */
-    public String getProtocolName() {
-        return protocolName;
+    public String getProtocolId() {
+        return protocolId;
     }
 
 }

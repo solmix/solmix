@@ -19,23 +19,22 @@
 
 package org.solmix.runtime.exchange;
 
+import java.util.List;
+
+import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.exchange.model.ProtocolInfo;
+import org.solmix.runtime.exchange.model.ServiceInfo;
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月16日
+ * @version $Id$ 2014年12月1日
  */
 
-public interface Server {
+public interface EndpointInfoFactory {
 
-    void start();
+    EndpointInfo createEndpointInfo(Container container,
+        ServiceInfo serviceInfo, ProtocolInfo b, List<?> extensions);
 
-    void stop();
-
-    void destroy();
-
-    boolean isStarted();
-
-    Endpoint getEndpoint();
-    
-    Transporter getTarget();
 }

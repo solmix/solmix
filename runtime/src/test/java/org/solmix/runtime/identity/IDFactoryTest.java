@@ -19,9 +19,10 @@
 
 package org.solmix.runtime.identity;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.solmix.commons.util.Assert;
-import org.solmix.runtime.exchange.model.InfoNamespace;
+import org.solmix.runtime.exchange.model.NamedID;
+import org.solmix.runtime.exchange.model.NamedIDNamespace;
 
 /**
  * 
@@ -34,8 +35,13 @@ public class IDFactoryTest {
     @Test
     public void test() {
         Namespace ns = IDFactory.getDefault().getNamespaceByName(
-            InfoNamespace.class.getName());
-        Assert.isNotNull(ns);
+            NamedIDNamespace.class.getName());
+        Assert.assertNotNull(ns);
+        NamedID id = (NamedID) IDFactory.getDefault().createID(ns,
+            new String[] {"org.solmix.test", "service" });
+        Assert.assertNotNull(id);
+        Assert.assertEquals("org.solmix.test", id.getServiceNamespace());
+        Assert.assertEquals("service", id.getName());
     }
 
 }

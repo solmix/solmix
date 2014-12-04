@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,37 +16,39 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.interceptor;
 
+package org.solmix.runtime.interceptor;
 
 /**
  * 消息传递中出现的异常.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月13日
+ * @version $Id$ 2014年10月13日
  */
 
-public class Fault extends RuntimeException
-{
+public class Fault extends RuntimeException {
 
     private static final long serialVersionUID = 5729880847366668130L;
+
     private boolean server;
 
-    public Fault(String message,Throwable t){
-        super(message,t);
+    public Fault(String message, Throwable t) {
+        super(message, t);
+    }
+
+    public Fault(String message) {
+        super(message);
     }
 
     /** @param ex */
-    public Fault(Throwable ex)
-    {
-      super(ex);
-      server=true;
+    public Fault(Throwable ex) {
+        super(ex);
+        server = true;
     }
 
-    
     /**   */
     public boolean isServer() {
         return server;
     }
-    
+
 }

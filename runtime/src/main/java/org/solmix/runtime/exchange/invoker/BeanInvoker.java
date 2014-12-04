@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,20 +16,27 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.exchange.invoker;
 
-package org.solmix.runtime.exchange;
+import org.solmix.runtime.exchange.Exchange;
+
 
 /**
- * 管道端点,在传输层接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月13日
+ * @version $Id$  2014年12月4日
  */
 
-public interface Target extends ProcessorAware {
+public class BeanInvoker extends AbstractInvoker {
+    private final Object proxy;
 
-    /**
-     * 关闭端点停止接收消息
-     */
-    void shutdown();
+    public BeanInvoker(Object proxy) {
+        this.proxy = proxy;
+    }
+
+    @Override
+    public Object getServiceObject(Exchange ex) {
+        return proxy;
+    }
+
 }

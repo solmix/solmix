@@ -19,23 +19,16 @@
 
 package org.solmix.runtime.exchange;
 
+import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.model.EndpointInfo;
+
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月16日
+ * @version $Id$ 2014年11月17日
  */
 
-public interface Server {
+public interface TransporterFactory {
 
-    void start();
-
-    void stop();
-
-    void destroy();
-
-    boolean isStarted();
-
-    Endpoint getEndpoint();
-    
-    Transporter getTarget();
+    Transporter getTransporter(EndpointInfo ei, Container container);
 }

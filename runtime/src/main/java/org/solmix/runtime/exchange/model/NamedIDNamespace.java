@@ -29,18 +29,19 @@ import org.solmix.runtime.identity.IDCreateException;
  * @version $Id$ 2014年11月27日
  */
 
-public class InfoNamespace extends AbstractNamespace {
-
+public class NamedIDNamespace extends AbstractNamespace {
+    
+    public static final String NAME = NamedIDNamespace.class.getName();
     /**    */
     private static final long serialVersionUID = 2921002660948196043L;
 
-    public InfoNamespace() {
-        super(InfoNamespace.class.getName(), "Exchange Model Namespace");
+    public NamedIDNamespace() {
+        super(NAME, "Exchange Model Namespace");
     }
 
     @Override
     public String getScheme() {
-        return InfoNamespace.class.getName();
+        return NamedIDNamespace.class.getName();
     }
 
     @Override
@@ -49,12 +50,12 @@ public class InfoNamespace extends AbstractNamespace {
             throw new IDCreateException(
                 "ID cannot be null and must be of length 2");
         }
-        return new InfoID(this, (String) parameters[0], (String) parameters[1]);
+        return new NamedID(this, (String) parameters[0], (String) parameters[1]);
     }
 
     @Override
     public Class<?>[][] getSupportedParameterTypes() {
-        return new Class[][] { {String.class }, {String.class } };
+        return new Class[][] {{String.class }, {String.class } };
     }
 
 }

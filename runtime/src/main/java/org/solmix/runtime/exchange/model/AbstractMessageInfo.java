@@ -39,16 +39,16 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
 
     private final OperationInfo operation;
 
-    InfoID messageId;
+    NamedID name;
 
-    private final Map<ID, ArgumentInfo> messageParts = new LinkedHashMap<ID, ArgumentInfo>(
+    private final Map<NamedID, ArgumentInfo> messageParts = new LinkedHashMap<NamedID, ArgumentInfo>(
         4);
 
     private List<ArgumentInfo> outOfBandArguments;
 
-    AbstractMessageInfo(OperationInfo op, InfoID messageId) {
+    AbstractMessageInfo(OperationInfo op, NamedID name) {
         operation = op;
-        this.messageId = messageId;
+        this.name = name;
     }
 
     public List<ArgumentInfo> getArguments() {
@@ -61,7 +61,7 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
         return parts;
     }
 
-    public ArgumentInfo addArgument(InfoID argumentId) {
+    public ArgumentInfo addArgument(NamedID argumentId) {
         Assert.isNotNull(argumentId);
 
         ArgumentInfo part = new ArgumentInfo(argumentId, this);
@@ -69,13 +69,13 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
         return part;
     }
 
-    public ArgumentInfo getArgument(ID name) {
+    public ArgumentInfo getArgument(NamedID name) {
         ArgumentInfo mpi = messageParts.get(name);
         if (mpi != null) {
             return mpi;
         }
         for (ArgumentInfo mpi2 : getOutOfBandArguments()) {
-            if (name.equals(mpi2.getID())) {
+            if (name.equals(mpi2.getName())) {
                 return mpi2;
             }
         }
@@ -88,10 +88,10 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
      */
     public ID getArgumentId(String part) {
         return IDFactory.getDefault().createID(
-            operation.getID().getNamespace(), part);
+            operation.getName().getNamespace(), part);
     }
 
-    public void removeArgument(ID name) {
+    public void removeArgument(NamedID name) {
         ArgumentInfo messagePart = getArgument(name);
         if (messagePart != null) {
             messageParts.remove(name);
@@ -99,12 +99,12 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
     }
 
     public void addArgument(ArgumentInfo part) {
-        if (messageParts.containsKey(part.getID())) {
-            part.setIndex(messageParts.get(part.getID()).getIndex());
+        if (messageParts.containsKey(part.getName())) {
+            part.setIndex(messageParts.get(part.getName()).getIndex());
         } else {
             part.setIndex(messageParts.size());
         }
-        messageParts.put(part.getID(), part);
+        messageParts.put(part.getName(), part);
     }
 
     public int getArgumentIndex(ArgumentInfo part) {
@@ -124,7 +124,7 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
         return -1;
     }
 
-    public ArgumentInfo addOutOfBandArgument(InfoID argumentId) {
+    public ArgumentInfo addOutOfBandArgument(NamedID argumentId) {
         Assert.isNotNull(argumentId);
 
         ArgumentInfo part = new ArgumentInfo(argumentId, this);
@@ -164,7 +164,7 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
 
     @Override
     public int hashCode() {
-        return messageId == null ? -1 : messageId.hashCode();
+        return name == null ? -1 : name.hashCode();
     }
 
     @Override
@@ -177,16 +177,16 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
             return false;
         }
         AbstractMessageInfo oi = (AbstractMessageInfo) o;
-        return equals(messageId, oi.messageId)
+        return equals(name, oi.name)
             && equals(messageParts, oi.messageParts)
             && equals(outOfBandArguments, oi.outOfBandArguments);
     }
 
-    public InfoID getID() {
-        return messageId;
+    public NamedID getName() {
+        return name;
     }
 
-    public void setID(InfoID iD) {
-        this.messageId = iD;
+    public void setName(NamedID iD) {
+        this.name = iD;
     }
 }

@@ -28,24 +28,24 @@ package org.solmix.runtime.exchange.model;
 
 public class FaultInfo extends AbstractMessageInfo {
 
-    private InfoID faultId;
+    private NamedID faultName;
 
-    FaultInfo(OperationInfo op, InfoID messageId, InfoID faultId) {
+    FaultInfo(OperationInfo op, NamedID messageId, NamedID faultId) {
         super(op, messageId);
-        this.faultId = faultId;
+        this.faultName = faultId;
     }
 
-    public InfoID getFaultID() {
-        return faultId;
+    public NamedID getFaultID() {
+        return faultName;
     }
 
-    public void setFaultID(InfoID fid) {
-        faultId = fid;
+    public void setFaultID(NamedID fid) {
+        faultName = fid;
     }
 
     @Override
     public int hashCode() {
-        return faultId == null ? -1 : faultId.hashCode();
+        return faultName == null ? -1 : faultName.hashCode();
     }
 
     @Override
@@ -58,6 +58,6 @@ public class FaultInfo extends AbstractMessageInfo {
             return false;
         }
         FaultInfo oi = (FaultInfo) o;
-        return equals(faultId, oi.faultId) && super.equals(o);
+        return equals(faultName, oi.faultName) && super.equals(o);
     }
 }

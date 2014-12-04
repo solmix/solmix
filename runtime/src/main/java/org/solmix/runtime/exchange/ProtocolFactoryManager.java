@@ -16,26 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
 package org.solmix.runtime.exchange;
+
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月16日
+ * @version $Id$  2014年12月1日
  */
 
-public interface Server {
+public interface ProtocolFactoryManager {
 
-    void start();
-
-    void stop();
-
-    void destroy();
-
-    boolean isStarted();
-
-    Endpoint getEndpoint();
     
-    Transporter getTarget();
+    void register(String name,ProtocolFactory factory);
+    
+    void unregister(String name);
+    
+    ProtocolFactory getProtocolFactory(String name);
 }

@@ -16,41 +16,46 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.model;
-
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月26日
+ * @version $Id$ 2014年11月26日
  */
 
 public class ArgumentInfo extends InfoPropertiesSupport {
 
-    private  InfoID argumentId;
-    private final AbstractMessageInfo messageInfo ;
+    private NamedID name;
+
+    private final AbstractMessageInfo messageInfo;
+
     private Class<?> typeClass;
+
     private int index;
+
     /**
      * @param argumentId
-     * @param abstractMessageInfo 
+     * @param abstractMessageInfo
      */
-    public ArgumentInfo(InfoID argumentId, AbstractMessageInfo minfo) {
-       this.argumentId=argumentId;
-       this.messageInfo=minfo;
-    }
-    public InfoID getID() {
-        return argumentId;
+    public ArgumentInfo(NamedID argumentId, AbstractMessageInfo minfo) {
+        this.name = argumentId;
+        this.messageInfo = minfo;
     }
 
-    public void setID(InfoID iD) {
-        this.argumentId = iD;
+    public NamedID getName() {
+        return name;
     }
 
-    public AbstractMessageInfo getMessageInfo(){
+    public void setName(NamedID iD) {
+        this.name = iD;
+    }
+
+    public AbstractMessageInfo getMessageInfo() {
         return messageInfo;
     }
+
     public Class<?> getTypeClass() {
         return typeClass;
     }
@@ -66,18 +71,18 @@ public class ArgumentInfo extends InfoPropertiesSupport {
     public void setIndex(int index) {
         this.index = index;
     }
+
     @Override
     public String toString() {
-        return new StringBuilder().append("[ArgumentInfo ID=")
-            .append(getID())
-            .append("]").toString();
+        return new StringBuilder().append("[ArgumentInfo ID=").append(getName()).append(
+            "]").toString();
     }
-    
+
     @Override
     public int hashCode() {
-        return argumentId == null ? -1 : argumentId.hashCode();
+        return name == null ? -1 : name.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -86,8 +91,7 @@ public class ArgumentInfo extends InfoPropertiesSupport {
         if (!(o instanceof ArgumentInfo)) {
             return false;
         }
-        ArgumentInfo oi = (ArgumentInfo)o;
-        return equals(argumentId, oi.argumentId) 
-            && equals(typeClass, oi.typeClass);
+        ArgumentInfo oi = (ArgumentInfo) o;
+        return equals(name, oi.name) && equals(typeClass, oi.typeClass);
     }
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,19 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor.phase;
 
 import java.util.SortedSet;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月12日
+ * @version $Id$ 2014年10月12日
  */
 
-public interface PhasePolicy
-{
+public interface PhasePolicy {
+
     SortedSet<Phase> getInPhases();
 
     SortedSet<Phase> getOutPhases();

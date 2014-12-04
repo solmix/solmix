@@ -19,7 +19,10 @@
 
 package org.solmix.runtime.exchange.invoker;
 
+import java.util.List;
+
 import org.solmix.runtime.exchange.Exchange;
+import org.solmix.runtime.exchange.MessageList;
 
 /**
  * 
@@ -35,10 +38,17 @@ public abstract class AbstractInvoker implements Invoker {
      * @see org.solmix.runtime.exchange.invoker.Invoker#invoke(org.solmix.runtime.exchange.Exchange,
      *      java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Object invoke(Exchange exchange, Object o) {
         final Object serviceObject = getServiceObject(exchange);
         try {
+            List<Object> params = null;
+            if (o instanceof List) {
+                params = ((List<Object>) o);
+            } else if (o != null) {
+                params = new MessageList(o);
+            }
             return null;
         } finally {
             releaseServiceObject(exchange, serviceObject);

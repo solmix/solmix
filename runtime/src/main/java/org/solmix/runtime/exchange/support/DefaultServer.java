@@ -32,8 +32,8 @@ import org.solmix.runtime.exchange.ProtocolFactory;
 import org.solmix.runtime.exchange.Server;
 import org.solmix.runtime.exchange.ServerLifeCycleManager;
 import org.solmix.runtime.exchange.ServerRegistry;
-import org.solmix.runtime.exchange.Target;
-import org.solmix.runtime.exchange.TargetFactory;
+import org.solmix.runtime.exchange.Transporter;
+import org.solmix.runtime.exchange.TransporterFactory;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.management.ComponentManager;
 import org.solmix.runtime.management.ManagedEndpoint;
@@ -54,7 +54,7 @@ public class DefaultServer implements Server {
 
     private final ProtocolFactory protocolFactory;
 
-    private Target target;
+    private Transporter transporter;
 
     private ServerRegistry serverRegistry;
 
@@ -73,7 +73,7 @@ public class DefaultServer implements Server {
      * @param tgFactory 消息目的地
      */
     public DefaultServer(Container container, Endpoint endpoint,
-        ProtocolFactory ptlFactory, TargetFactory tgFactory) {
+        ProtocolFactory ptlFactory, TransporterFactory tgFactory) {
         this.container = container;
         this.endpoint = endpoint;
         this.protocolFactory = ptlFactory;
@@ -84,9 +84,9 @@ public class DefaultServer implements Server {
     /**
      * @param tgFactory
      */
-    private void makeTargetForServer(TargetFactory tgFactory) {
+    private void makeTargetForServer(TransporterFactory tgFactory) {
         EndpointInfo ei = endpoint.getEndpointInfo();
-        target = tgFactory.getTarget(ei, container);
+        transporter = tgFactory.getTransporter(ei, container);
         LOG.info("Server published address is " + ei.getAddress());
 
         serverRegistry = container.getExtension(ServerRegistry.class);
@@ -119,7 +119,7 @@ public class DefaultServer implements Server {
         }
         LOG.trace("Server is starting.");
 
-        protocolFactory.addListener(target, endpoint);
+        protocolFactory.addListener(transporter, endpoint);
         if (serverRegistry != null) {
             LOG.trace("register the server to serverRegistry ");
             serverRegistry.register(this);
@@ -189,8 +189,8 @@ public class DefaultServer implements Server {
     }
 
     @Override
-    public Target getTarget() {
-        return target;
+    public Transporter getTarget() {
+        return transporter;
     }
 
 }

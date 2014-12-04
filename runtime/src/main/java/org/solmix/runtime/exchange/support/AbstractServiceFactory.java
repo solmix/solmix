@@ -27,7 +27,11 @@ import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.ServiceFactoryListener;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
+import org.solmix.runtime.exchange.model.NamedIDPolicy;
 import org.solmix.runtime.exchange.serialize.Serialization;
+import org.solmix.runtime.interceptor.support.OneWayInterceptor;
+import org.solmix.runtime.interceptor.support.OutgoingChainInterceptor;
+import org.solmix.runtime.interceptor.support.ServiceInvokerInterceptor;
 
 /**
  * 
@@ -40,17 +44,17 @@ public abstract class AbstractServiceFactory {
     // private static final Logger LOG =
     // LoggerFactory.getLogger(AbstractServiceFactory.class);
 
-    private Container container;
+    protected NamedIDPolicy namedIDPolicy;
 
-    private Service service;
+    protected boolean serializeSetted;
+    
+    protected Service service;
 
     private Serialization serialization;
 
-    protected boolean serializeSetted;
-
-    private final CopyOnWriteArrayList<ServiceFactoryListener> listeners 
-                      = new CopyOnWriteArrayList<ServiceFactoryListener>();
-
+    private final CopyOnWriteArrayList<ServiceFactoryListener> listeners = new CopyOnWriteArrayList<ServiceFactoryListener>();
+    
+    private Container container;
     public abstract Service create();
 
     /**   */
@@ -63,9 +67,9 @@ public abstract class AbstractServiceFactory {
             listener.onHandle(event);
         }
     }
-    
-    public void pulishEvent(int type ,Object ... args ) {
-        ServiceFactoryEvent event = new ServiceFactoryEvent(type,this,args);
+
+    public void pulishEvent(int type, Object... args) {
+        ServiceFactoryEvent event = new ServiceFactoryEvent(type, this, args);
         for (ServiceFactoryListener listener : listeners) {
             listener.onHandle(event);
         }
@@ -120,4 +124,24 @@ public abstract class AbstractServiceFactory {
     protected void setService(Service service) {
         this.service = service;
     }
+
+    /**   */
+    public NamedIDPolicy getNamedIDPolicy() {
+        return namedIDPolicy;
+    }
+
+    /**   */
+    public void setNamedIDPolicy(NamedIDPolicy namedIDPolicy) {
+        this.namedIDPolicy = namedIDPolicy;
+    }
+
+    /**
+     * 
+     */
+    protected void initDefaultInterceptor() {
+        service.getInInterceptors().add(new ServiceInvokerInterceptor());
+        service.getInInterceptors().add(new OutgoingChainInterceptor());
+        service.getInInterceptors().add(new OneWayInterceptor());
+    }
+
 }

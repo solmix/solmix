@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.processor;
 
 import java.util.Collection;
@@ -32,22 +33,21 @@ import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月19日
+ * @version $Id$ 2014年10月19日
  */
 
-public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor
-{
+public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor {
 
-    public OutFaultChainProcessor(Container c,String phasePolicy)
-    {
-        super(c,phasePolicy);
+    public OutFaultChainProcessor(Container c, PhasePolicy phasePolicy) {
+        super(c, phasePolicy);
     }
+
     @Override
-    protected void initializeInterceptors(Exchange ex, PhaseInterceptorChain chain) {
+    protected void initializeInterceptors(Exchange ex,
+        PhaseInterceptorChain chain) {
         Endpoint e = ex.get(Endpoint.class);
         Client c = ex.get(Client.class);
         if (c != null) {
@@ -56,14 +56,15 @@ public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor
         chain.add(e.getService().getOutFaultInterceptors());
         chain.add(e.getOutFaultInterceptors());
         chain.add(e.getBinding().getOutFaultInterceptors());
-       
+
         addToChain(chain, ex.getIn());
         addToChain(chain, ex.getOutFault());
     }
+
     @SuppressWarnings("unchecked")
     private void addToChain(PhaseInterceptorChain chain, Message m) {
 
-       final Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
+        final Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
         if (providers != null) {
             for (InterceptorProvider p : providers) {
                 chain.add(p.getInFaultInterceptors());
@@ -74,15 +75,12 @@ public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor
             chain.add(is);
         }
     }
+
     @Override
     protected SortedSet<Phase> getPhases() {
-        return getContainer()
-            .getExtensionLoader(PhasePolicy.class)
-            .getExtension(phasePolicy)
-            .getOutPhases();
+        return  phasePolicy.getOutPhases();
     }
 
-    
     @Override
     protected boolean isOutMessage() {
         return true;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,16 +19,17 @@
 
 package org.solmix.runtime.exchange;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.exchange.model.EndpointInfo;
-
 /**
+ * 管道端点,在传输层接收消息
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月17日
+ * @version $Id$ 2014年11月13日
  */
 
-public interface TargetFactory {
+public interface Transporter extends ProcessorAware {
 
-    Target getTarget(EndpointInfo ei, Container container);
+    /**
+     * 关闭端点停止接收消息
+     */
+    void shutdown();
 }
