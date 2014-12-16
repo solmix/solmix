@@ -39,14 +39,13 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
 public class ClientOutFaultProcessor extends AbstractFaultChainInitProcessor {
 
     /** @param c */
-    public ClientOutFaultProcessor(Container c, String phasePolicy) {
+    public ClientOutFaultProcessor(Container c, PhasePolicy phasePolicy) {
         super(c, phasePolicy);
     }
 
     @Override
     protected SortedSet<Phase> getPhases() {
-        return getContainer().getExtensionLoader(PhasePolicy.class).getExtension(
-            phasePolicy).getOutPhases();
+        return phasePolicy.getOutPhases();
     }
 
     @Override

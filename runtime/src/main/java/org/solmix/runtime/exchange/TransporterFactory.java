@@ -19,7 +19,10 @@
 
 package org.solmix.runtime.exchange;
 
+import java.io.IOException;
+
 import org.solmix.runtime.Container;
+import org.solmix.runtime.Extension;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 
 /**
@@ -27,8 +30,8 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年11月17日
  */
-
+@Extension
 public interface TransporterFactory {
 
-    Transporter getTransporter(EndpointInfo ei, Container container);
+    Transporter getTransporter(EndpointInfo ei, Container container)throws IOException;
 }

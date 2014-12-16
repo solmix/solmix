@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,14 +20,17 @@
 package org.solmix.runtime.exchange;
 
 /**
- * 消息处理器 在hola中消息处理其为一个端点,端点接受消息后通过处理器返回,在datax中消息处理器为数据获取服务,将数据获取后返回
- * 在wmix中为请求处理端点,将http请求处理后触发返回.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月13日
+ * @version $Id$ 2014年12月11日
  */
 
-public interface Processor {
+public interface TransporterFactoryManager {
 
-    void process(Message message) throws ExchangeException;
+    void register(String name, TransporterFactory factory);
+
+    void unregister(String name);
+
+    TransporterFactory getFactory(String name);
+
 }

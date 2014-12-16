@@ -20,7 +20,7 @@
 package org.solmix.runtime.exchange;
 
 /**
- * 管道端点,在传输层接收消息
+ * 传输端,在传输层接收消息
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年11月13日

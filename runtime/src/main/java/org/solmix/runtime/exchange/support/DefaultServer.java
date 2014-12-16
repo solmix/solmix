@@ -70,21 +70,23 @@ public class DefaultServer implements Server {
      * @param container server运行容器
      * @param endpoint 负责server信息收发
      * @param ptlFactory server协议
-     * @param tgFactory 消息目的地
+     * @param tgFactory 传输端
+     * @throws IOException 
      */
     public DefaultServer(Container container, Endpoint endpoint,
-        ProtocolFactory ptlFactory, TransporterFactory tgFactory) {
+        ProtocolFactory ptlFactory, TransporterFactory tgFactory) throws IOException {
         this.container = container;
         this.endpoint = endpoint;
         this.protocolFactory = ptlFactory;
-        makeTargetForServer(tgFactory);
+        makeTransporterForServer(tgFactory);
 
     }
 
     /**
      * @param tgFactory
+     * @throws IOException 
      */
-    private void makeTargetForServer(TransporterFactory tgFactory) {
+    private void makeTransporterForServer(TransporterFactory tgFactory) throws IOException {
         EndpointInfo ei = endpoint.getEndpointInfo();
         transporter = tgFactory.getTransporter(ei, container);
         LOG.info("Server published address is " + ei.getAddress());
@@ -155,14 +157,14 @@ public class DefaultServer implements Server {
         if (serverLifeCycleManager != null) {
             serverLifeCycleManager.stopServer(this);
         }
-        getTarget().setProcessor(null);
+        getTransporter().setProcessor(null);
         stopped = true;
     }
 
     @Override
     public void destroy() {
         stop();
-        getTarget().shutdown();
+        getTransporter().shutdown();
         if (serverRegistry != null) {
             LOG.trace("unregister the server to serverRegistry.");
             serverRegistry.unregister(this);
@@ -189,7 +191,7 @@ public class DefaultServer implements Server {
     }
 
     @Override
-    public Transporter getTarget() {
+    public Transporter getTransporter() {
         return transporter;
     }
 

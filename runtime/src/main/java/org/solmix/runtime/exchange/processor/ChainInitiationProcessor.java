@@ -39,7 +39,6 @@ import org.solmix.runtime.interceptor.InterceptorChain;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseChainCache;
-import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 /**
  * Chain初始化消息处理器
@@ -56,16 +55,13 @@ public class ChainInitiationProcessor implements Processor {
 
     protected ClassLoader loader;
 
-    private final String phasePolicy;
 
     private final PhaseChainCache chainCache = new PhaseChainCache();
 
-    public ChainInitiationProcessor(Endpoint endpoint, Container container,
-        String phasePolicy) {
+    public ChainInitiationProcessor(Endpoint endpoint, Container container) {
         super();
         this.endpoint = endpoint;
         this.container = container;
-        this.phasePolicy = phasePolicy;
         if (container != null) {
             loader = container.getExtension(ClassLoader.class);
         }
@@ -124,8 +120,7 @@ public class ChainInitiationProcessor implements Processor {
     }
 
     protected SortedSet<Phase> getPhases() {
-        return container.getExtensionLoader(PhasePolicy.class).getExtension(
-            phasePolicy).getInPhases();
+        return endpoint.getPhasePolicy().getInPhases();
     }
 
     @SuppressWarnings("unchecked")

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.interceptor.InterceptorProvider;
+import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 
 /**
@@ -44,6 +45,10 @@ public interface Endpoint extends InterceptorProvider,Map<String,Object>
     
     void addCleanupHook(Closeable c);
     List<Closeable> getCleanupHooks();
+
+    PhasePolicy getPhasePolicy();
+
+    void setPhasePolicy(PhasePolicy phasePolicy);
 
     /**
      * @return

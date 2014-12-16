@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,10 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import java.io.IOException;
-
 
 /**
  * 数据传输管道.
@@ -27,19 +27,17 @@ import java.io.IOException;
  * 为Binding提供传输通道
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月10日
+ * @version $Id$ 2014年10月10日
  */
 
-public interface Pipeline extends ProcessorAware
-{
-    
+public interface Pipeline extends ProcessorAware {
+
     void prepare(Message message) throws IOException;
-    
+
     void close(Message message) throws IOException;
-    
+
     String getAddress();
-    
+
     void close();
-    
 
 }

@@ -105,7 +105,7 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
         if (pl == null) {
             Exchange ex = msg.getExchange();
             EndpointInfo info = endpoint.getEndpointInfo();
-            final String transportID = info.getTransporterName();
+            final String transportID = info.getTransporterId();
             try {
                 PipelineFactoryManager pfm = ex.getContainer().getExtension(
                     PipelineFactoryManager.class);

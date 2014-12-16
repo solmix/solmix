@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,18 +16,16 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime;
-
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月27日
+ * @version $Id$ 2014年7月27日
  */
 
-public interface ContainerListener
-{
+public interface ContainerListener {
 
     /**
      * @param event

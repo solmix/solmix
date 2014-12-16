@@ -27,7 +27,6 @@ import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.ServiceFactoryListener;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
-import org.solmix.runtime.exchange.model.NamedIDPolicy;
 import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.support.OneWayInterceptor;
 import org.solmix.runtime.interceptor.support.OutgoingChainInterceptor;
@@ -44,7 +43,7 @@ public abstract class AbstractServiceFactory {
     // private static final Logger LOG =
     // LoggerFactory.getLogger(AbstractServiceFactory.class);
 
-    protected NamedIDPolicy namedIDPolicy;
+ 
 
     protected boolean serializeSetted;
     
@@ -123,16 +122,6 @@ public abstract class AbstractServiceFactory {
 
     protected void setService(Service service) {
         this.service = service;
-    }
-
-    /**   */
-    public NamedIDPolicy getNamedIDPolicy() {
-        return namedIDPolicy;
-    }
-
-    /**   */
-    public void setNamedIDPolicy(NamedIDPolicy namedIDPolicy) {
-        this.namedIDPolicy = namedIDPolicy;
     }
 
     /**

@@ -37,5 +37,5 @@ public interface Server {
 
     Endpoint getEndpoint();
     
-    Transporter getTarget();
+    Transporter getTransporter();
 }

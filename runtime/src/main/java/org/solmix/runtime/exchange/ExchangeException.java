@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,17 +16,16 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
 
+package org.solmix.runtime.exchange;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月13日
+ * @version $Id$ 2014年10月13日
  */
 
-public class ExchangeException extends RuntimeException
-{
+public class ExchangeException extends RuntimeException {
 
     /**    */
     private static final long serialVersionUID = 8104358938947200305L;

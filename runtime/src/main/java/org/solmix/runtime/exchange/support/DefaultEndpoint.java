@@ -61,10 +61,13 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements
     private Processor inFaultProcessor;
 
     private Processor outFaultProcessor;
+    
+    private  PhasePolicy phasePolicy;
 
     public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
         PhasePolicy phasePolicy) {
         Assert.isNotNull(ed);
+        this.phasePolicy=phasePolicy;
         if (container == null) {
             container = ContainerFactory.getThreadDefaultContainer();
         } else {
@@ -153,4 +156,23 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements
         this.outFaultProcessor = outFaultProcessor;
     }
 
+    @Override
+    public int hashCode() {
+        return endpointInfo.hashCode();
+    }
+
+    
+    /**   */
+    @Override
+    public PhasePolicy getPhasePolicy() {
+        return phasePolicy;
+    }
+
+    
+    /**   */
+    @Override
+    public void setPhasePolicy(PhasePolicy phasePolicy) {
+        this.phasePolicy = phasePolicy;
+    }
+    
 }

@@ -50,10 +50,9 @@ public class NamedIDPolicy {
 
     /**   */
     public String getServiceNamespace() {
-        if (serviceNamespace == null 
-            && serviceFactory != null
+        if (serviceNamespace == null && serviceFactory != null
             && serviceFactory.getServiceClass() != null) {
-            serviceNamespace=makeNamespaceFromClassName(serviceFactory.getServiceClass());
+            serviceNamespace = makeNamespaceFromClassName(serviceFactory.getServiceClass());
         }
         return serviceNamespace;
     }

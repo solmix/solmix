@@ -33,8 +33,6 @@ public class EndpointInfo extends InfoPropertiesSupport {
 
     private String address;
 
-    private String transporterName;
-
     private NamedID name;
 
     private String transporterId;
@@ -43,9 +41,9 @@ public class EndpointInfo extends InfoPropertiesSupport {
 
     }
 
-    public EndpointInfo(ServiceInfo service, String transporterName) {
+    public EndpointInfo(ServiceInfo service, String transporterId) {
         this.service = service;
-        this.transporterName = transporterName;
+        this.transporterId = transporterId;
     }
 
     /**   */
@@ -90,13 +88,6 @@ public class EndpointInfo extends InfoPropertiesSupport {
     /**   */
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    /**
-     * pipeline 类型.
-     */
-    public String getTransporterName() {
-        return transporterName;
     }
 
     /**

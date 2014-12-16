@@ -75,6 +75,12 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
     protected NamedID endpointName;
 
     protected Class<?> serviceClass;
+    
+    protected Map<Type, Map<String, Class<?>>> parameterizedTypes;
+
+    protected ParameterizedType serviceType;
+    
+    protected NamedIDPolicy namedIDPolicy;
 
     private Map<String, Object> properties;
 
@@ -84,14 +90,12 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
 
     private final List<Method> ignoredMethods = new ArrayList<Method>();
 
-    protected Map<Type, Map<String, Class<?>>> parameterizedTypes;
-
-    protected ParameterizedType serviceType;
-    
     private Executor executor;
-
+    
     public ReflectServiceFactory() {
-        setNamedIDPolicy(new NamedIDPolicy());
+        NamedIDPolicy np = new NamedIDPolicy();
+        np.setServiceFactory(this);
+        setNamedIDPolicy(np);
     }
 
     @Override
@@ -293,6 +297,15 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
         return namedIDPolicy.getInterfaceName();
     }
 
+    /**   */
+    public NamedIDPolicy getNamedIDPolicy() {
+        return namedIDPolicy;
+    }
+
+    /**   */
+    public void setNamedIDPolicy(NamedIDPolicy namedIDPolicy) {
+        this.namedIDPolicy = namedIDPolicy;
+    }
     protected void processParameterizedTypes() {
         parameterizedTypes = new HashMap<Type, Map<String, Class<?>>>();
         if (serviceClass.isInterface()) {

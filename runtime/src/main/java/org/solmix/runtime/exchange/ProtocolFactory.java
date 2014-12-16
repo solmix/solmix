@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.exchange;
 
+import org.solmix.runtime.Extension;
 import org.solmix.runtime.exchange.model.ProtocolInfo;
 
 /**
@@ -26,13 +27,13 @@ import org.solmix.runtime.exchange.model.ProtocolInfo;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月19日
  */
-
+@Extension
 public interface ProtocolFactory {
 
     Protocol createProtocol(ProtocolInfo info);
     
     /**
-     * 设置Target的消息处理器.
+     * 设置Transporter的消息处理器.
      * 
      * @param d
      * @param e
