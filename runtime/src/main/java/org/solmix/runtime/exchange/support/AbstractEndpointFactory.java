@@ -43,15 +43,16 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 {
 
     private static final long serialVersionUID = -2130719449925733112L;
+    
     private static final Logger LOG = LoggerFactory.getLogger(AbstractEndpointFactory.class);
 
     protected Container container;
     
     protected ProtocolFactory protocolFactory;
     
-    protected String transporterId;
+    protected String transporter;
     
-    protected String protocolId;
+    protected String protocol;
     
     protected TransporterFactory transporterFactory;
     
@@ -142,64 +143,54 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 //            LOG.trace("Added annotation based interceptors and features");
 //        }
     }
-
-
     
     /**   */
     public NamedID getServiceName() {
         return serviceName;
     }
-
-
     
     /**   */
     public void setServiceName(NamedID serviceName) {
         this.serviceName = serviceName;
     }
-
-
     
     /**   */
     public NamedID getEndpointName() {
         return endpointName;
     }
 
-
-    
     /**   */
     public void setEndpointName(NamedID endpointName) {
         this.endpointName = endpointName;
     }
 
     /**   */
-    public String getTransporterId() {
-        return transporterId;
+    public String getTransporter() {
+        return transporter;
     }
     
     /**   */
-    public void setTransporterId(String transporterId) {
-        this.transporterId = transporterId;
+    public void setTransporter(String transporter) {
+        this.transporter = transporter;
     }
     
     /**   */
-    public String getProtocolId() {
-        return protocolId;
+    public String getProtocol() {
+        return protocol;
     }
     
     /**   */
-    public void setProtocolId(String protocolId) {
-        this.protocolId = protocolId;
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 
 
-    
     /**   */
     public Object getConfigObject() {
         return configObject;
     }
 
 
-    
     /**   */
     public void setConfigObject(Object configObject) {
         this.configObject = configObject;

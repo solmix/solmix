@@ -36,8 +36,7 @@ import org.solmix.runtime.interceptor.InterceptorChain;
  * @version $Id$  2014年10月14日
  */
 @SuppressWarnings("unchecked")
-public class DefaultMessage extends StringTypeMapper implements Message
-{
+public class DefaultMessage extends StringTypeMapper implements Message {
     private static final long serialVersionUID = 913240661839172917L;
     private Exchange exchange;
     private String id;
@@ -184,50 +183,31 @@ public class DefaultMessage extends StringTypeMapper implements Message
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#getAttachment(java.lang.String)
-     */
     @Override
     public DataHandler getAttachment(String id) {
-        Map<String, DataHandler> attachment= getAttachments();
-        return attachment==null?null:attachment.get(id);
+        Map<String, DataHandler> attachment = getAttachments();
+        return attachment == null ? null : attachment.get(id);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#getAttachmentNames()
-     */
+    
     @Override
     public Set<String> getAttachmentNames() {
-        Map<String, DataHandler> attachment= getAttachments();
-        return attachment==null?null:attachment.keySet();
+        Map<String, DataHandler> attachment = getAttachments();
+        return attachment == null ? null : attachment.keySet();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#removeAttachment(java.lang.String)
-     */
     @Override
     public void removeAttachment(String id) {
-        Map<String, DataHandler> attachment= getAttachments();
-       if(attachment!=null&&attachment.containsKey(id)){
-           attachment.remove(id);
-       }
+        Map<String, DataHandler> attachment = getAttachments();
+        if (attachment != null && attachment.containsKey(id)) {
+            attachment.remove(id);
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#addAttachment(java.lang.String, javax.activation.DataHandler)
-     */
     @Override
     public void addAttachment(String id, DataHandler content) {
-        Map<String, DataHandler> attachment= getAttachments();
-        if(attachment==null){
+        Map<String, DataHandler> attachment = getAttachments();
+        if (attachment == null) {
             setAttachments(new LinkedHashMap<String, DataHandler>());
         }
         getAttachments().put(id, content);
@@ -260,7 +240,7 @@ public class DefaultMessage extends StringTypeMapper implements Message
      */
     @Override
     public boolean hasAttachments() {
-        return getAttachments()!=null&&getAttachments().size()>0;
+        return getAttachments() != null && getAttachments().size() > 0;
     }
     /**
      * {@inheritDoc}
@@ -269,7 +249,14 @@ public class DefaultMessage extends StringTypeMapper implements Message
      */
     @Override
     public void setExchange(Exchange e) {
-        this.exchange=e;
+        this.exchange = e;
     }
+    
+    public static void copyContent(Message m1, Message m2) {
+        for (Class<?> c : m1.getContentType()) {
+            m2.setContent(c, m1.getContent(c));
+        }
+    }
+   
 
 }

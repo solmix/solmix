@@ -58,12 +58,14 @@ public final class MessageUtils {
         if (property == null) {
             return false;
         }
-
         if (Boolean.TRUE.equals(property)
             || "true".equalsIgnoreCase(property.toString())) {
             return true;
         }
-
         return false;
+    }
+
+    public static boolean isEmptyPartialResponse(Message message) {
+        return Boolean.TRUE.equals(message.get(Message.EMPTY_PARTIAL_RESPONSE_MESSAGE));
     }
 }

@@ -70,6 +70,17 @@ public interface Message extends StringTypeMap {
     
     /**信息中指定的地址,值类型String    */
     String ENDPOINT_ADDRESS = Message.class.getName() + ".ENDPOINT_ADDRESS";
+
+    /**是否为输入,值类型Boolean    */
+    String INBOUND_MESSAGE = Message.class.getName() + ".INBOUND_MESSAGE";
+    
+    /**消息响应code,值类型int   */
+    String RESPONSE_CODE = Message.class.getName() + ".RESPONSE_CODE";
+
+    String PROTOCOL_HEADERS = Message.class.getName() + ".PROTOCOL_HEADERS";
+
+    /**表示为空返回消息,值类型Boolean    */
+    String EMPTY_PARTIAL_RESPONSE_MESSAGE = Message.class.getName() + ".EMPTY_PARTIAL_RESPONSE_MESSAGE";;
     
 
 

@@ -32,5 +32,7 @@ public interface TransporterFactoryManager {
     void unregister(String name);
 
     TransporterFactory getFactory(String name);
+    
+    TransporterFactory getFactoryForUri(String uri);
 
 }

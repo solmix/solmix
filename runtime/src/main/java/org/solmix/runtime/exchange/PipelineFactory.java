@@ -19,6 +19,8 @@
 
 package org.solmix.runtime.exchange;
 
+import java.io.IOException;
+
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 
@@ -30,7 +32,7 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
 
 public interface PipelineFactory {
 
-    Pipeline getPipeline(EndpointInfo info, Container c);
+    Pipeline getPipeline(EndpointInfo info, Container c)throws IOException;
 
-    Pipeline getpPipeline(EndpointInfo info, String address, Container c);
+    Pipeline getpPipeline(EndpointInfo info, String address, Container c)throws IOException;
 }

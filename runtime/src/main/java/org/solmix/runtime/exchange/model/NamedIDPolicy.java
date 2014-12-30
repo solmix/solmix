@@ -188,6 +188,8 @@ public class NamedIDPolicy {
 
         return name;
     }
+    
+    
     /**
      * @param serviceClass
      * @return
@@ -216,8 +218,7 @@ public class NamedIDPolicy {
 
             sb.append(word);
         }
-
-        return  "{" + sb.toString() + "}";
+        return sb.toString();
     }
 
    

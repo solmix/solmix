@@ -88,4 +88,15 @@ public class DefaultTransporterFactoryManager implements
         }
         return transporterFactories.get(name);
     }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.TransporterFactoryManager#getFactoryForUri(java.lang.String)
+     */
+    @Override
+    public TransporterFactory getFactoryForUri(String uri) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

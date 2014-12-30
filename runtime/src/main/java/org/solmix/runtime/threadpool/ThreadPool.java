@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,19 +16,33 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.threadpool;
 
-package org.solmix.runtime.exchange;
+import java.util.concurrent.Executor;
+
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月13日
+ * @version $Id$  2014年12月18日
  */
 
-public interface PipelineAware {
+public interface ThreadPool extends Executor {
 
-    Pipeline getPipeline();
-
-    void setPipeline(Pipeline pipeline);
-
+    
+    String getName();
+    
+    /**
+     * 立即执行,如果被拒绝,那么等待timeout毫秒
+     * @param work
+     * @param timeout
+     */
+    void execute(Runnable runnable, long timeout);
+    /**
+     * 
+     * @param processRemainingWorkItems 为true,等待所有活动的任务执行完成后返回,否则直接返回.
+     */
+    void shutdown(boolean processRemainingWorkItems);
+    
+    boolean isShutdown();
 }

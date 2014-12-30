@@ -69,7 +69,7 @@ public class SpringContainerTest {
             Assert.assertNotSame(c, c1);
             Assert.assertNotNull(c1);
             List<ContainerListener> cls = c1.getContainerListeners();
-            Assert.assertEquals(1, cls.size());
+            Assert.assertEquals(2, cls.size());
 
         } finally {
             if (context != null) {

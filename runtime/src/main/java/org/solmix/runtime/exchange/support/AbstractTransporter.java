@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,50 +19,42 @@
 
 package org.solmix.runtime.exchange.support;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.slf4j.Logger;
-import org.solmix.runtime.exchange.Message;
-import org.solmix.runtime.exchange.Pipeline;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.Processor;
+import org.solmix.runtime.exchange.Transporter;
+import org.solmix.runtime.exchange.model.EndpointInfo;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月17日
+ * @version $Id$ 2014年12月17日
  */
 
-public abstract class AbstractPipeline implements Pipeline {
+public abstract class AbstractTransporter implements Transporter {
 
     protected Processor processor;
+
     protected String address;
     
-    public AbstractPipeline(String address) {
+    protected EndpointInfo endpointInfo;
+    
+    protected Container container;
+    
+    public AbstractTransporter(String address, EndpointInfo endpointInfo,
+        Container container) {
         this.address = address;
+        this.endpointInfo = endpointInfo;
+        this.container = container;
     }
-
     @Override
-    public void close(Message message) throws IOException {
-        OutputStream os = message.getContent(OutputStream.class);
-        if (os != null) {
-            os.close();
-        }
-        InputStream in = message.getContent(InputStream.class);
-        if (in != null) {
-            in.close();
-        }
+    public Processor getProcessor() {
+        return processor;
     }
     
     @Override
     public String getAddress() {
         return address;
-    }
-
-    @Override
-    public Processor getProcessor() {
-        return processor;
     }
 
     @Override
@@ -96,6 +88,7 @@ public abstract class AbstractPipeline implements Pipeline {
 
     protected abstract Logger getLogger();
 
+    
     protected void activate(Processor p) {
 
     }
@@ -104,14 +97,4 @@ public abstract class AbstractPipeline implements Pipeline {
 
     }
 
-    @Override
-    public void close() {
-        // nothing todo
-    }
-
-    @Override
-    public String toString() {
-        return "pipeline: " + this.getClass() + System.identityHashCode(this)
-            + "address: " + getAddress();
-    }
 }

@@ -110,6 +110,7 @@ public class DefaultService extends InterceptorProviderSupport implements
     }
 
     /**   */
+    @Override
     public ServiceInfo getServiceInfo() {
         return serviceInfos.get(0);
     }
@@ -146,5 +147,8 @@ public class DefaultService extends InterceptorProviderSupport implements
     public NamedID getServiceName() {
         return getServiceInfo().getName();
     }
-
+    @Override
+    public String toString() {
+        return "[DefaultService " + getServiceName() + "]";
+    }
 }

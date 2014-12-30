@@ -83,7 +83,7 @@ public class ManagedEndpoint implements ManagedComponent,
     
 //    @ManagedAttribute(description = "TransportId Attribute", currencyTimeLimit = 60)
     public String getTransportId() {
-        return endpoint.getEndpointInfo().getTransporterId();
+        return endpoint.getEndpointInfo().getTransporter();
     }
     
 //    @ManagedAttribute(description = "Server State")

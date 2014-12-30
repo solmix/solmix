@@ -22,8 +22,6 @@ package org.solmix.runtime.exchange.manager;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.annotation.Resource;
-
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerListener;
@@ -54,7 +52,6 @@ public class DefaultServerRegistry implements ServerRegistry, ContainerListener 
         return container;
     }
 
-    @Resource
     public void setContainer(Container c) {
         this.container = c;
         if (container != null) {

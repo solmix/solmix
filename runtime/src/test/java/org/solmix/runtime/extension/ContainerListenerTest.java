@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import junit.framework.Assert;
@@ -26,30 +27,31 @@ import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.ContainerListener;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月4日
+ * @version $Id$ 2014年8月4日
  */
 
-public class ContainerListenerTest
-{
+public class ContainerListenerTest {
 
     @Test
     public void test() throws InterruptedException {
         Container c = ContainerFactory.newInstance().createContainer();
-       String create= c.getProperty(ContainerListenerImpl.class.getName()).toString();
-       Assert.assertEquals(ContainerListenerImpl.CREATED, create);
-       c.addListener(new ContainerListener() {
-        
-        @Override
-        public void handleEvent(ContainerEvent event) {
-            if(event.getType()== ContainerEvent.PRECLOSE)
-               Assert.assertEquals(ContainerListenerImpl.PRECLOSE,  event.getContainer().getProperty(ContainerListenerImpl.class.getName()));
-        }
-    });
-       c.close();
+        String create = c.getProperty(ContainerListenerImpl.class.getName()).toString();
+        Assert.assertEquals(ContainerListenerImpl.CREATED, create);
+        c.addListener(new ContainerListener() {
+
+            @Override
+            public void handleEvent(ContainerEvent event) {
+                if (event.getType() == ContainerEvent.PRECLOSE)
+                    Assert.assertEquals(
+                        ContainerListenerImpl.PRECLOSE,
+                        event.getContainer().getProperty(
+                            ContainerListenerImpl.class.getName()));
+            }
+        });
+        c.close();
     }
 
 }

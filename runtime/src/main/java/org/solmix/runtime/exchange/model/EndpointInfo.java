@@ -35,15 +35,15 @@ public class EndpointInfo extends InfoPropertiesSupport {
 
     private NamedID name;
 
-    private String transporterId;
+    private String transporter;
 
     public EndpointInfo() {
 
     }
 
-    public EndpointInfo(ServiceInfo service, String transporterId) {
+    public EndpointInfo(ServiceInfo service, String transporter) {
         this.service = service;
-        this.transporterId = transporterId;
+        this.transporter = transporter;
     }
 
     /**   */
@@ -61,13 +61,13 @@ public class EndpointInfo extends InfoPropertiesSupport {
     }
 
     /**   */
-    public String getTransporterId() {
-        return transporterId;
+    public String getTransporter() {
+        return transporter;
     }
 
     /**   */
-    public void setTransporterId(String transporterId) {
-        this.transporterId = transporterId;
+    public void setTransportor(String transporter) {
+        this.transporter = transporter;
     }
 
     public InterfaceInfo getInterface() {

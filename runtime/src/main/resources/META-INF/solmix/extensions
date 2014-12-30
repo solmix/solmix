@@ -4,3 +4,4 @@ org.solmix.runtime.support.ext.ContainerResourceManager:org.solmix.runtime.resou
 org.solmix.runtime.exchange.manager.DefaultProtocolFactoryManager:org.solmix.runtime.exchange.ProtocolFactoryManager:true:true
 org.solmix.runtime.exchange.manager.DefaultTransporterFactoryManager:org.solmix.runtime.exchange.TransporterFactoryManager:true:true
 org.solmix.runtime.monitor.support.MonitorServiceImpl:org.solmix.runtime.monitor.MonitorService:true:true
+org.solmix.runtime.threadpool.DefaultThreadPoolManager:org.solmix.runtime.threadpool.ThreadPoolManager:true

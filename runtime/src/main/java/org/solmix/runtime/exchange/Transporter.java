@@ -19,6 +19,8 @@
 
 package org.solmix.runtime.exchange;
 
+import java.io.IOException;
+
 /**
  * 传输端,在传输层接收消息
  * 
@@ -32,4 +34,8 @@ public interface Transporter extends ProcessorAware {
      * 关闭端点停止接收消息
      */
     void shutdown();
+    
+    String getAddress();
+    
+    Pipeline getBackPipeline(Message msg) throws IOException;
 }

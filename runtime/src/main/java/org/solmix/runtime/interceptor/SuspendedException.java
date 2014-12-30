@@ -39,8 +39,8 @@ public class SuspendedException extends RuntimeException
     
    
     /**
-     * Returns a transport-specific runtime exception
-     * @return RuntimeException the transport-specific runtime exception, 
+     * Returns a transporter-specific runtime exception
+     * @return RuntimeException the transporter-specific runtime exception, 
      *         can be null for asynchronous transports
      */
     public RuntimeException getRuntimeException() {

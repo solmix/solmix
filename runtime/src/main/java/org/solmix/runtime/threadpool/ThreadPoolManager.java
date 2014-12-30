@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,18 +17,23 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.threadpool;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月13日
+ * @version $Id$ 2014年12月18日
  */
 
-public interface PipelineAware {
+public interface ThreadPoolManager {
 
-    Pipeline getPipeline();
+    public static final String DEFAULT = "default";
+    
+    ThreadPool getDefaultThreadPool();
 
-    void setPipeline(Pipeline pipeline);
+    ThreadPool getThreadPool(String name);
 
+    void addThreadPool(String name, ThreadPool executor);
+
+    void shutdown(boolean processRemainingWorkItems);
 }

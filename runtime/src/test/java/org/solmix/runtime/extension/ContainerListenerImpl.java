@@ -16,23 +16,30 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
+import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerListener;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月4日
+ * @version $Id$ 2014年8月4日
  */
 
-public class ContainerListenerImpl implements ContainerListener
-{
+public class ContainerListenerImpl implements ContainerListener {
 
-    public static final String CREATED="CREATED";
-    public static final String PRECLOSE="PRECLOSE";
+    public static final String CREATED = "CREATED";
+
+    public static final String PRECLOSE = "PRECLOSE";
+
+    public ContainerListenerImpl(Container c) {
+        if (c != null) {
+            c.addListener(this);
+        }
+    }
     /**
      * {@inheritDoc}
      * 
@@ -40,21 +47,24 @@ public class ContainerListenerImpl implements ContainerListener
      */
     @Override
     public void handleEvent(ContainerEvent event) {
-      int type=event.getType();
-      switch (type) {
+        int type = event.getType();
+        switch (type) {
         case ContainerEvent.CREATED:
-            event.getContainer().setProperty(ContainerListenerImpl.class.getName(), CREATED);
+            event.getContainer().setProperty(
+                ContainerListenerImpl.class.getName(), CREATED);
             break;
         case ContainerEvent.PRECLOSE:
-            event.getContainer().setProperty(ContainerListenerImpl.class.getName(), PRECLOSE);
+            event.getContainer().setProperty(
+                ContainerListenerImpl.class.getName(), PRECLOSE);
             break;
         case ContainerEvent.POSTCLOSE:
-            event.getContainer().setProperty(ContainerListenerImpl.class.getName(), null);
+            event.getContainer().setProperty(
+                ContainerListenerImpl.class.getName(), null);
             break;
 
         default:
             break;
-    }
+        }
 
     }
 

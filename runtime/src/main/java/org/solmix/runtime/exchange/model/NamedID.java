@@ -111,4 +111,8 @@ public class NamedID extends BaseID {
         return serviceNamespace;
     }
 
+    @Override
+    public String toString() {
+        return namespaceGetName();
+    }
 }
