@@ -16,19 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange;
 
+package org.solmix.runtime.exchange;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月13日
+ * @version $Id$ 2014年10月13日
  */
 
-public interface ProcessorAware
-{
-    
+public interface ProcessorAware {
+
     Processor getProcessor();
-    
+
     void setProcessor(Processor processor);
 }

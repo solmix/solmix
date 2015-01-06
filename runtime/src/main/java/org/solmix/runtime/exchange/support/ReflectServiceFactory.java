@@ -210,6 +210,9 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
     /**   */
     public void setInvoker(Invoker invoker) {
         this.invoker = invoker;
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Set service invoker :" + invoker.getClass());
+        }
     }
 
     /**
@@ -217,9 +220,11 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
      * @return
      */
     public Endpoint createEndpoint(EndpointInfo info) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Creating Endpoint " + info.getName());
+        }
         Endpoint ep = new DefaultEndpoint(getContainer(), getService(), info, getPhasePolicy());
-        pulishEvent(ServiceFactoryEvent.ENDPOINT_CREATED, info, ep,
-            getServiceClass());
+        pulishEvent(ServiceFactoryEvent.ENDPOINT_CREATED, info, ep, getServiceClass());
         return ep;
     }
 
@@ -235,6 +240,9 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
 
     /**   */
     public NamedID getEndpointName() {
+        if (endpointName == null) {
+            endpointName = getNamedIDPolicy().getEndpointName();
+        }
         return endpointName;
     }
 

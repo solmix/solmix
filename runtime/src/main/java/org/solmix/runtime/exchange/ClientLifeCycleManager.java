@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,19 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.exchange;
 
-package org.solmix.runtime;
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin
- * context.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年4月30日
+ * @version $Id$  2015年1月6日
  */
 
-public interface ContainerExtension {
-
-    void setContainer(Container context);
-
+public interface ClientLifeCycleManager {
+    void clientCreated(Client client);
+    void clientDestroyed(Client client);
+    void registerListener(ClientLifeCycleListener listener);
+    void unRegisterListener(ClientLifeCycleListener listener);
 }

@@ -41,6 +41,11 @@ public interface InterceptorChain extends Iterable<Interceptor<? extends Message
         COMPLETE,
         ABORTED,
     };
+    
+    public static final String STARTING_AFTER_ID = InterceptorChain.class.getName() + ".STARTING_AFTER_ID";
+
+    public static final String STARTING_AT_ID = InterceptorChain.class.getName() + ".STARTING_AT_ID";
+
     /**
      * 添加拦截器
      * @param i

@@ -27,11 +27,11 @@ package org.solmix.runtime.exchange;
 
 public interface TransporterFactoryManager {
 
-    void register(String name, TransporterFactory factory);
+    void register(String type, TransporterFactory factory);
 
-    void unregister(String name);
+    void unregister(String type);
 
-    TransporterFactory getFactory(String name);
+    TransporterFactory getFactory(String type);
     
     TransporterFactory getFactoryForUri(String uri);
 

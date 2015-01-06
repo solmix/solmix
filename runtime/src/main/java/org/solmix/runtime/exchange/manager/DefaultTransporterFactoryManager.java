@@ -24,10 +24,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.annotation.Resource;
+
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.TransporterFactory;
 import org.solmix.runtime.exchange.TransporterFactoryManager;
-import org.solmix.runtime.extension.ExtensionLoader;
+import org.solmix.runtime.exchange.support.TransportDetector;
+import org.solmix.runtime.extension.ExtensionException;
 
 /**
  * 
@@ -40,12 +43,13 @@ public class DefaultTransporterFactoryManager implements
 
     Map<String, TransporterFactory> transporterFactories;
 
-    private final Container container;
+    private  Container container;
 
     private final Set<String> failed = new CopyOnWriteArraySet<String>();
 
-    public DefaultTransporterFactoryManager(Container container) {
-        this.container = container;
+    private final Set<String> loaded = new CopyOnWriteArraySet<String>();
+
+    public DefaultTransporterFactoryManager() {
         transporterFactories = new ConcurrentHashMap<String, TransporterFactory>(
             4, 0.75f, 2);
     }
@@ -63,32 +67,33 @@ public class DefaultTransporterFactoryManager implements
     }
 
     @Override
-    public TransporterFactory getFactory(String name) {
-        TransporterFactory pf = transporterFactories.get(name);
-        if (pf == null) {
-            if (!failed.contains(name)) {
-                pf = loadTransporterFactory(name);
-            }
-            if (pf == null) {
-                failed.add(name);
-                throw new IllegalArgumentException(
-                    "No found protocol factory named :" + name);
-            }
+    public TransporterFactory getFactory(String type) {
+        
+        TransporterFactory factory = transporterFactories.get(type);
+        if (factory == null && !failed.contains(type)) {
+            TransportDetector<TransporterFactory> detector = new TransportDetector<TransporterFactory>(
+                getContainer(), transporterFactories, loaded, TransporterFactory.class);
+            factory = detector.detectInstanceForType(type);
         }
-        return pf;
-    }
-
-    private TransporterFactory loadTransporterFactory(String name) {
-        ExtensionLoader<TransporterFactory> loader = container.getExtensionLoader(TransporterFactory.class);
-        TransporterFactory factory = loader.getExtension(name);
         if (factory == null) {
-            failed.add(name);
-        } else {
-            transporterFactories.put(name, factory);
+            failed.add(type);
+            throw new ExtensionException(
+                "No found  TransporterFactory extension with type: " + type);
         }
-        return transporterFactories.get(name);
+        return factory;
+    }
+    
+    public Container getContainer() {
+        return container;
     }
 
+    @Resource
+    public void setContainer(Container container) {
+        this.container = container;
+        if (container != null) {
+            container.setExtension(this, TransporterFactoryManager.class);
+        }
+    }
     /**
      * {@inheritDoc}
      * 
@@ -96,7 +101,7 @@ public class DefaultTransporterFactoryManager implements
      */
     @Override
     public TransporterFactory getFactoryForUri(String uri) {
-        // TODO Auto-generated method stub
-        return null;
+        return new TransportDetector<TransporterFactory>(getContainer(),
+            transporterFactories, loaded, TransporterFactory.class).detectInstanceForURI(uri);
     }
 }

@@ -27,10 +27,12 @@ package org.solmix.runtime.exchange;
 
 public interface PipelineFactoryManager {
 
-    void registerFactory(String name, PipelineFactory factory);
+    void registerFactory(String type, PipelineFactory factory);
 
-    void unregisterFactory(String name);
+    void unregisterFactory(String type);
 
-    PipelineFactory getFactory(String name);
+    PipelineFactory getFactory(String type);
+    
+    PipelineFactory getFactoryForUri(String uri);
 
 }

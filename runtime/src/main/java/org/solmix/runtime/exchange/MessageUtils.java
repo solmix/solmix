@@ -21,6 +21,8 @@ package org.solmix.runtime.exchange;
 
 import static org.solmix.commons.util.DataUtils.asBoolean;
 
+import org.solmix.commons.util.DataUtils;
+
 /**
  * 消息工具类
  * 
@@ -53,6 +55,14 @@ public final class MessageUtils {
     public static boolean getBoolean(Message message, String key) {
         return getBoolean(message, key, false);
     }
+
+    public static Long getLong(Message message, String key) {
+        if (message == null) {
+            return null;
+        }
+        return DataUtils.getLong(message, key);
+    }
+
 
     public static boolean isTrue(Object property) {
         if (property == null) {

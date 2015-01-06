@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import java.io.Closeable;
@@ -26,24 +27,23 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
-
 /**
  * 负责接收消息的端点
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$ 2014年10月11日
  */
 
-public interface Endpoint extends InterceptorProvider,Map<String,Object>
-{
-    
+public interface Endpoint extends InterceptorProvider, Map<String, Object> {
+
     EndpointInfo getEndpointInfo();
-    
-    Protocol getBinding();
-    
+
+    Protocol getProtocol();
+
     Service getService();
-    
+
     void addCleanupHook(Closeable c);
+
     List<Closeable> getCleanupHooks();
 
     PhasePolicy getPhasePolicy();
@@ -54,11 +54,11 @@ public interface Endpoint extends InterceptorProvider,Map<String,Object>
      * @return
      */
     Processor getOutFaultProcessor();
-    
+
     void setOutFaultProcessor(Processor p);
-    
+
     Processor getInFaultProcessor();
-    
+
     void setInFaultProcessor(Processor p);
 
 }

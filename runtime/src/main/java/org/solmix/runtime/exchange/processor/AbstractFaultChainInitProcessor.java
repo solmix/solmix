@@ -86,7 +86,7 @@ public abstract class AbstractFaultChainInitProcessor implements Processor {
                 if (faultMessage == null) {
                     faultMessage = new DefaultMessage();
                     faultMessage.setExchange(exchange);
-                    faultMessage = exchange.get(Endpoint.class).getBinding().createMessage(
+                    faultMessage = exchange.get(Endpoint.class).getProtocol().createMessage(
                         faultMessage);
                 }
                 faultMessage.setContent(Exception.class, ex);

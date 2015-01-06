@@ -61,7 +61,7 @@ public class InFaultChainProcessor extends AbstractFaultChainInitProcessor {
         }
         chain.add(e.getService().getInFaultInterceptors());
         chain.add(e.getInFaultInterceptors());
-        chain.add(e.getBinding().getInFaultInterceptors());
+        chain.add(e.getProtocol().getInFaultInterceptors());
 
         addToChain(chain, ex.getInFault());
         addToChain(chain, ex.getOut());

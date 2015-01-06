@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import java.util.Map;
@@ -24,41 +25,45 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class ClientCallback implements Future<Object[]> 
-{
+public class ClientCallback implements Future<Object[]> {
+
     protected Map<String, Object> context;
+
     protected Object[] result;
+
     protected Throwable exception;
+
     protected volatile boolean done;
+
     protected boolean cancelled;
+
     protected boolean started;
 
     public ClientCallback() {
     }
 
     /**
-     * Called when a message is first received prior to any actions
-     * being applied to the message.   The InterceptorChain is setup so
-     * modifications to that can be done.
+     * Called when a message is first received prior to any actions being
+     * applied to the message. The InterceptorChain is setup so modifications to
+     * that can be done.
      */
     public void start(Message msg) {
         started = true;
     }
 
     /**
-     * If the processing of the incoming message proceeds normally, this
-     * method is called with the response context values and the resulting objects.
-     *
+     * If the processing of the incoming message proceeds normally, this method
+     * is called with the response context values and the resulting objects.
+     * 
      * The default behavior just stores the objects and calls notifyAll to wake
      * up threads waiting for the response.
-     *
+     * 
      * @param ctx
      * @param res
      */
@@ -74,10 +79,10 @@ public class ClientCallback implements Future<Object[]>
     /**
      * If processing of the incoming message results in an exception, this
      * method is called with the resulting exception.
-     *
+     * 
      * The default behavior just stores the objects and calls notifyAll to wake
      * up threads waiting for the response.
-     *
+     * 
      * @param ctx
      * @param ex
      */
@@ -89,7 +94,6 @@ public class ClientCallback implements Future<Object[]>
             notifyAll();
         }
     }
-
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
@@ -105,11 +109,13 @@ public class ClientCallback implements Future<Object[]>
 
     /**
      * return the map of items returned from an operation.
+     * 
      * @return the response context
      * @throws InterruptedException if the operation was cancelled.
      * @throws ExecutionException if the operation resulted in a fault.
      */
-    public Map<String, Object> getResponseContext() throws InterruptedException, ExecutionException {
+    public Map<String, Object> getResponseContext()
+        throws InterruptedException, ExecutionException {
         synchronized (this) {
             if (!done) {
                 wait();
@@ -146,6 +152,7 @@ public class ClientCallback implements Future<Object[]>
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object[] get(long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException {
         synchronized (this) {
@@ -176,7 +183,8 @@ public class ClientCallback implements Future<Object[]>
     }
 
     /*
-     * If the operation completes with a fault, the resulting exception object ends up here.
+     * If the operation completes with a fault, the resulting exception object
+     * ends up here.
      */
     public Throwable getException() {
         return exception;

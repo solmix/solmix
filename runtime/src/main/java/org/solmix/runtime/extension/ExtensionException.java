@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,33 +16,34 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.extension;
 
+package org.solmix.runtime.extension;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月27日
+ * @version $Id$ 2014年7月27日
  */
 
-public class ExtensionException extends RuntimeException
-{
+public class ExtensionException extends RuntimeException {
 
     /**
      * 
      */
     private static final long serialVersionUID = -6782089782072994243L;
+
     public ExtensionException(String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a <code>ExtensionException</code> with the detail message and cause
-     * provided.
+     * Constructs a <code>ExtensionException</code> with the detail message and
+     * cause provided.
      */
     public ExtensionException(String msg, Throwable cause) {
         super(msg, cause);
     }
+    
 
     /**
      * Constructs an <code>ExtensionException</code> with the provided cause.

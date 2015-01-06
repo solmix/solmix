@@ -28,25 +28,23 @@ import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 
 /**
- * 提供的Interceptor是线程安全的,和{@link InterceptorProviderAttrSupport} 不同之处在于
- * {@link InterceptorProviderAttrSupport}提供的Interceptor可以通过设置被替换
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月17日
  */
 
-public abstract class InterceptorProviderSupport extends
+public abstract class InterceptorProviderAttrSupport extends
     ConcurrentHashMap<String, Object> implements InterceptorProvider {
 
     private static final long serialVersionUID = -1915876045710441978L;
 
-    private final List<Interceptor<? extends Message>> in = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
+    private List<Interceptor<? extends Message>> in = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
 
-    private final List<Interceptor<? extends Message>> out = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
+    private List<Interceptor<? extends Message>> out = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
 
-    private final List<Interceptor<? extends Message>> outFault = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
+    private List<Interceptor<? extends Message>> outFault = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
 
-    private final List<Interceptor<? extends Message>> inFault = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
+    private List<Interceptor<? extends Message>> inFault = new ModCountCopyOnWriteArrayList<Interceptor<? extends Message>>();
 
     @Override
     public Object put(String s, Object o) {
@@ -78,26 +76,22 @@ public abstract class InterceptorProviderSupport extends
 
     public void setInInterceptors(
         List<Interceptor<? extends Message>> interceptors) {
-        in.clear();
-        in.addAll(interceptors);
+        in = interceptors;
     }
 
     public void setInFaultInterceptors(
         List<Interceptor<? extends Message>> interceptors) {
-        inFault.clear();
-        inFault.addAll(interceptors);
+        inFault = interceptors;
     }
 
     public void setOutInterceptors(
         List<Interceptor<? extends Message>> interceptors) {
-        inFault.clear();
-        inFault.addAll(interceptors);
+        out = interceptors;
     }
 
     public void setOutFaultInterceptors(
         List<Interceptor<? extends Message>> interceptors) {
-        inFault.clear();
-        inFault.addAll(interceptors);
+        outFault = interceptors;
     }
 
     @Override

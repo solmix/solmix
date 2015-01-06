@@ -26,6 +26,7 @@ import javax.management.JMException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.Assert;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.ProtocolFactory;
@@ -78,6 +79,7 @@ public class DefaultServer implements Server {
         this.container = container;
         this.endpoint = endpoint;
         this.protocolFactory = ptlFactory;
+        Assert.isNotNull(tgFactory);
         makeTransporterForServer(tgFactory);
 
     }
@@ -123,7 +125,7 @@ public class DefaultServer implements Server {
 
         protocolFactory.addListener(transporter, endpoint);
         if (serverRegistry != null) {
-            LOG.trace("register the server to serverRegistry ");
+            LOG.trace("Register the server to serverRegistry ");
             serverRegistry.register(this);
         }
 

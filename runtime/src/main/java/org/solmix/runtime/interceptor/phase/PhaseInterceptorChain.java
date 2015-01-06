@@ -60,8 +60,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
     /** 缓存当前消息 */
     private static final ThreadLocal<Message> CURRENT_MESSAGE = new ThreadLocal<Message>();
 
-    private static final String PREVIOUS_MESSAGE = "_slx."
-        + PhaseInterceptorChain.class.getName() + ".previous";;
+    private static final String PREVIOUS_MESSAGE = PhaseInterceptorChain.class.getName() + ".PREVIOUS_MESSAGE";
 
     /** 分阶队列 */
     private final Phase phases[];

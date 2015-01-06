@@ -73,7 +73,7 @@ public abstract class AbstractPipeline implements Pipeline {
                 this.processor = processor;
                 if (getLogger().isTraceEnabled()) {
                     getLogger().trace(
-                        "register message Processor: " + processor);
+                        "Register message Processor: " + processor);
                 }
                 if (old == null) {
                     try {

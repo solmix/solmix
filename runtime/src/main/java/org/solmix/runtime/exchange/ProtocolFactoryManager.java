@@ -27,9 +27,9 @@ package org.solmix.runtime.exchange;
 
 public interface ProtocolFactoryManager {
 
-    void register(String name, ProtocolFactory factory);
+    void register(String type, ProtocolFactory factory);
 
-    void unregister(String name);
+    void unregister(String type);
 
-    ProtocolFactory getProtocolFactory(String name);
+    ProtocolFactory getProtocolFactory(String type);
 }

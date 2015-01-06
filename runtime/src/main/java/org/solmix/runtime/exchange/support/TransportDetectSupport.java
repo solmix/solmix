@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,18 +17,20 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime;
+package org.solmix.runtime.exchange.support;
+
+import java.util.List;
+import java.util.Set;
 
 /**
- * Internal plugin activator,used by spring or osgi bulueprint to inject plugin
- * context.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年4月30日
+ * @version $Id$ 2015年1月5日
  */
 
-public interface ContainerExtension {
+public interface TransportDetectSupport {
 
-    void setContainer(Container context);
+    Set<String> getUriPrefixes();
 
+    List<String> getTransportTypes();
 }

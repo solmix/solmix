@@ -35,5 +35,5 @@ public interface Protocol extends InterceptorProvider {
 
     Message createMessage(Message m);
 
-    ProtocolInfo getBindingInfo();
+    ProtocolInfo getProtocolInfo();
 }

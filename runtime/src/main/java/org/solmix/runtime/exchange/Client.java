@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,25 +16,36 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 
-
 /**
  * C/S消息交互模式
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$ 2014年10月11日
  */
 
-public interface Client extends InterceptorProvider,ProcessorAware,PipelineAware
-{
+public interface Client extends InterceptorProvider, Processor {
+
     String REQUEST_CONTEXT = "RequestContext";
+
     String RESPONSE_CONTEXT = "ResponseContext";
+
+    String KEEP_PIPELINE_ALIVE = "KeepPipelineAlive";
+
     void destroy();
-    
+
     Container getContainer();
-    
+
     Endpoint getEndpoint();
+    
+    Pipeline getPipeline();
+    
+    PipelineSelector getPipelineSelector();
+    
+    void setPipelineSelector(PipelineSelector selector);
 }

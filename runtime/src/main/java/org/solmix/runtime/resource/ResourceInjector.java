@@ -223,14 +223,13 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         Class<?> clz = getResourceType(res, method); 
 
         Object resource = resolveResource(resourceName, clz);
-        if (resource == null
-            && "".equals(res.name())) {
+        if (resource == null && "".equals(res.name())) {
             resource = resolveResource(null, clz);
         }
         if (resource != null) {
             invokeSetter(method, resource);
         } else {
-            LOG.trace( "RESOURCE_RESOLVE_FAILED", new Object[] {resourceName, clz});
+            LOG.trace("RESOURCE_RESOLVE_FAILED", new Object[] {resourceName,clz });
         }
     }
 
@@ -306,9 +305,11 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         assert method.getName().startsWith("set") : method;
 
         if (res.name() == null || "".equals(res.name())) {
-            String name = method.getName().substring(3); 
-            name = Character.toLowerCase(name.charAt(0)) + name.substring(1); 
-            return method.getDeclaringClass().getCanonicalName() + "/" + name;
+            String name = method.getName().substring(3);
+            name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+            return new StringBuilder().append(
+                method.getDeclaringClass().getCanonicalName()).append("/")
+                .append(name).toString();
         }
         return res.name();
     } 

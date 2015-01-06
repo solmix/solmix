@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -35,7 +35,7 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.processor.InFaultChainProcessor;
 import org.solmix.runtime.exchange.processor.OutFaultChainProcessor;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
-import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
+import org.solmix.runtime.interceptor.support.InterceptorProviderAttrSupport;
 
 /**
  * 
@@ -43,7 +43,7 @@ import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
  * @version $Id$ 2014年10月17日
  */
 
-public class DefaultEndpoint extends InterceptorProviderSupport implements
+public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
     Endpoint {
 
     private static final long serialVersionUID = -7789429134686264716L;
@@ -67,7 +67,7 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements
     public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
         PhasePolicy phasePolicy) {
         Assert.isNotNull(ed);
-        this.phasePolicy=phasePolicy;
+        this.phasePolicy = phasePolicy;
         if (container == null) {
             container = ContainerFactory.getThreadDefaultContainer();
         } else {
@@ -89,10 +89,10 @@ public class DefaultEndpoint extends InterceptorProviderSupport implements
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.exchange.Endpoint#getBinding()
+     * @see org.solmix.runtime.exchange.Endpoint#getProtocol()
      */
     @Override
-    public Protocol getBinding() {
+    public Protocol getProtocol() {
         return protocol;
     }
 

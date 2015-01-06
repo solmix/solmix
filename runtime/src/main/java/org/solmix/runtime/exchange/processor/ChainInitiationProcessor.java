@@ -139,7 +139,7 @@ public class ChainInitiationProcessor implements Processor {
     }
 
     protected Protocol getBinding() {
-        return endpoint.getBinding();
+        return endpoint.getProtocol();
     }
 
     private void setExchangeProperties(Exchange exchange, Message m) {

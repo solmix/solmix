@@ -20,13 +20,17 @@
 package org.solmix.runtime.exchange.manager;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.annotation.Resource;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.PipelineFactory;
 import org.solmix.runtime.exchange.PipelineFactoryManager;
+import org.solmix.runtime.exchange.support.TransportDetector;
+import org.solmix.runtime.extension.ExtensionException;
 
 /**
  * 
@@ -40,6 +44,10 @@ public class DefaultPipelineFactoryManager implements PipelineFactoryManager {
 
     private final Map<String, PipelineFactory> pipelineFactorys;
 
+    private final Set<String> failed = new CopyOnWriteArraySet<String>();
+
+    private final Set<String> loaded = new CopyOnWriteArraySet<String>();
+
     public DefaultPipelineFactoryManager() {
         pipelineFactorys = new ConcurrentHashMap<String, PipelineFactory>(8,
             0.75f, 4);
@@ -52,19 +60,30 @@ public class DefaultPipelineFactoryManager implements PipelineFactoryManager {
     }
 
     @Override
-    public void registerFactory(String name, PipelineFactory factory) {
-        pipelineFactorys.put(name, factory);
+    public void registerFactory(String type, PipelineFactory factory) {
+        pipelineFactorys.put(type, factory);
     }
 
     @Override
-    public void unregisterFactory(String name) {
-        pipelineFactorys.remove(name);
+    public void unregisterFactory(String type) {
+        pipelineFactorys.remove(type);
     }
 
    
     @Override
-    public PipelineFactory getFactory(String name) {
-        return pipelineFactorys.get(name);
+    public PipelineFactory getFactory(String type) {
+        PipelineFactory factory = pipelineFactorys.get(type);
+        if (factory == null && !failed.contains(type)) {
+            TransportDetector<PipelineFactory> detector = new TransportDetector<PipelineFactory>(
+                getContainer(), pipelineFactorys, loaded, PipelineFactory.class);
+            factory = detector.detectInstanceForType(type);
+        }
+        if (factory == null) {
+            failed.add(type);
+            throw new ExtensionException(
+                "No found  PipelineFactory extension with type: " + type);
+        }
+        return factory;
     }
 
     /**   */
@@ -78,6 +97,12 @@ public class DefaultPipelineFactoryManager implements PipelineFactoryManager {
         if (container != null) {
             container.setExtension(this, PipelineFactoryManager.class);
         }
+    }
+
+    @Override
+    public PipelineFactory getFactoryForUri(String uri) {
+        return new TransportDetector<PipelineFactory>(getContainer(),
+            pipelineFactorys, loaded, PipelineFactory.class).detectInstanceForURI(uri);
     }
 
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,21 +16,20 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange;
 
 import java.util.Map;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月10日
+ * @version $Id$ 2014年10月10日
  */
 
-public interface StringTypeMap extends Map<String, Object>
-{
+public interface StringTypeMap extends Map<String, Object> {
 
     <T> T get(Class<T> key);
-    
+
     <T> void put(Class<T> key, T value);
 }
