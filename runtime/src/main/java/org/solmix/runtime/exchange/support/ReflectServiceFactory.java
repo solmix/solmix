@@ -37,6 +37,7 @@ import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
 import org.solmix.runtime.exchange.invoker.FactoryInvoker;
 import org.solmix.runtime.exchange.invoker.Invoker;
+import org.solmix.runtime.exchange.invoker.OperationDispatcher;
 import org.solmix.runtime.exchange.invoker.SingletonFactory;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.model.NamedID;
@@ -52,7 +53,7 @@ import org.solmix.runtime.interceptor.support.FaultOutInterceptor;
  * @version $Id$ 2014年11月24日
  */
 
-public abstract class ReflectServiceFactory extends AbstractServiceFactory {
+public  class ReflectServiceFactory extends AbstractServiceFactory {
 
     public static final String METHOD_PARAM_ANNOTATIONS = "method.parameters.annotations";
 
@@ -92,6 +93,14 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
 
     private Executor executor;
     
+    private PhasePolicy phasePolicy;
+    
+    private OperationDispatcher operationDispatcher;
+    
+    public ReflectServiceFactory(PhasePolicy phasePolicy) {
+        this();
+        setPhasePolicy(phasePolicy);
+    }
     public ReflectServiceFactory() {
         NamedIDPolicy np = new NamedIDPolicy();
         np.setServiceFactory(this);
@@ -122,7 +131,7 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
             getService().setSerialization(getSerialization());
         }
 
-        //TODO method dispacher
+        getService().put(OperationDispatcher.class.getName(), getOperationDispatcher());
         createEndpoints();
         Service serv = getService();
         pulishEvent(ServiceFactoryEvent.SERVER_CREATED_END, serv);
@@ -166,7 +175,9 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
         getService().getOutFaultInterceptors().add(new FaultOutInterceptor());
     }
 
-    protected abstract void buildService();
+    protected  void buildService(){
+        
+    }
 
     @Override
     protected Serialization defaultSerialization() {
@@ -228,10 +239,14 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
         return ep;
     }
 
-    /**
-     * @return
-     */
-    protected abstract PhasePolicy getPhasePolicy();
+    public PhasePolicy getPhasePolicy() {
+        return phasePolicy;
+    }
+    
+    /**   */
+    public void setPhasePolicy(PhasePolicy phasePolicy) {
+        this.phasePolicy = phasePolicy;
+    }
 
     /**   */
     public void setServiceName(NamedID serviceName) {
@@ -240,12 +255,28 @@ public abstract class ReflectServiceFactory extends AbstractServiceFactory {
 
     /**   */
     public NamedID getEndpointName() {
+        return getEndpointName(true);
+    }
+
+    public NamedID getEndpointName(boolean lookup) {
+        if (endpointName != null || !lookup) {
+            return endpointName;
+        }
         if (endpointName == null) {
             endpointName = getNamedIDPolicy().getEndpointName();
         }
         return endpointName;
     }
-
+    
+    /**   */
+    public OperationDispatcher getOperationDispatcher() {
+        return operationDispatcher;
+    }
+    
+    /**   */
+    public void setOperationDispatcher(OperationDispatcher operationDispatcher) {
+        this.operationDispatcher = operationDispatcher;
+    }
     /**   */
     public void setEndpointName(NamedID endpointName) {
         this.endpointName = endpointName;

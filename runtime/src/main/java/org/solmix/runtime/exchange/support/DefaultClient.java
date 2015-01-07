@@ -100,6 +100,31 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
     
     protected Executor executor;
 
+    public DefaultClient(Container container, Endpoint endpoint) {
+        this(container, endpoint, (PipelineSelector) null);
+    }
+
+    public DefaultClient(Container container, Endpoint endpoint,
+        Pipeline pipeline) {
+        this(container, endpoint, new PipelineWrappedSelector(pipeline));
+    }
+    public DefaultClient(Container container, Endpoint endpoint,
+        PipelineSelector pipelineSelector) {
+        this.container = container;
+        clientOutFaultProcessor = new ClientOutFaultProcessor(container,
+            endpoint.getPhasePolicy());
+        getPipelineSelector().setEndpoint(endpoint);
+        fireLifeCycleManager();
+    }
+
+    protected void fireLifeCycleManager() {
+        ClientLifeCycleManager mgr = container.getExtension(ClientLifeCycleManager.class);
+        if (null != mgr) {
+            mgr.clientCreated(this);
+        }
+    }
+
+
     @SuppressWarnings("unchecked")
     @Override
     public void process(Message message) throws ExchangeException {
@@ -342,6 +367,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         setupExchange(ex, getEndpoint());
         return getPipelineSelector().select(msg);
     }
+    @Override
     public Map<String, Object> getRequestContext() {
         if (isThreadLocalRequestContext()) {
             if (!requestContext.containsKey(Thread.currentThread())) {
@@ -351,6 +377,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
         return currentRequestContext;
     }
+    @Override
     public Map<String, Object> getResponseContext() {
         if (!responseContext.containsKey(Thread.currentThread())) {
             responseContext.put(Thread.currentThread(), new HashMap<String, Object>());
@@ -511,6 +538,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
     }
     
+    @Override
     public void setExecutor(Executor executor) {
         this.executor = executor;
     }
@@ -555,5 +583,16 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             super.clear();
             super.putAll(shared);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Client#invoke(org.solmix.runtime.exchange.model.OperationInfo, java.lang.Object[])
+     */
+    @Override
+    public Object[] invoke(OperationInfo oi, Object[] params) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

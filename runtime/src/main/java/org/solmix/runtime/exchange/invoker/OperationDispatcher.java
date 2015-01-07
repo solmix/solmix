@@ -1,5 +1,5 @@
 /**
- *  Copyright 2012 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,20 +17,24 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.bean;
+package org.solmix.runtime.exchange.invoker;
+
+import java.lang.reflect.Method;
+
+import org.solmix.runtime.exchange.model.OperationInfo;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2013-11-5
+ * @version $Id$ 2015年1月7日
  */
 
-public interface Configurable {
+public interface OperationDispatcher {
 
-    /**
-     * As PID
-     * 
-     * @return
-     */
-    String getConfigureName();
+    Method getMethod(OperationInfo operation);
+
+    OperationInfo getOperation(Method method);
+
+    void bind(Method method, OperationInfo operation);
+
 }

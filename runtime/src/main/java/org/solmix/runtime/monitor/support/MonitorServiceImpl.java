@@ -100,10 +100,10 @@ public class MonitorServiceImpl implements MonitorService, Configurable {
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.bean.Configurable#getConfigueName()
+     * @see org.solmix.runtime.bean.Configurable#getConfigureName()
      */
     @Override
-    public String getConfigueName() {
+    public String getConfigureName() {
         return MonitorServiceImpl.class.getName();
     }
 

@@ -178,7 +178,7 @@ public class BlueprintConfigurer implements BeanConfigurer {
 
     protected String getBeanName(Object beanInstance) {
         if (beanInstance instanceof Configurable) {
-            return ((Configurable) beanInstance).getConfigueName();
+            return ((Configurable) beanInstance).getConfigureName();
         } else {
             return null;
         }

@@ -23,6 +23,7 @@ import java.io.Closeable;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
 
 import org.solmix.commons.util.Assert;
 import org.solmix.runtime.Container;
@@ -63,6 +64,8 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
     private Processor outFaultProcessor;
     
     private  PhasePolicy phasePolicy;
+    
+    private Executor executor;
 
     public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
         PhasePolicy phasePolicy) {
@@ -84,6 +87,17 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
     @Override
     public EndpointInfo getEndpointInfo() {
         return endpointInfo;
+    }
+    
+    /**   */
+    @Override
+    public Executor getExecutor() {
+        return executor == null ? service.getExecutor() : executor;
+    }
+    
+    /**   */
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
     }
 
     /**

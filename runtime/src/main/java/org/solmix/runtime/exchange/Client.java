@@ -19,7 +19,11 @@
 
 package org.solmix.runtime.exchange;
 
+import java.util.Map;
+import java.util.concurrent.Executor;
+
 import org.solmix.runtime.Container;
+import org.solmix.runtime.exchange.model.OperationInfo;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 
 /**
@@ -48,4 +52,20 @@ public interface Client extends InterceptorProvider, Processor {
     PipelineSelector getPipelineSelector();
     
     void setPipelineSelector(PipelineSelector selector);
+
+    Map<String, Object> getRequestContext();
+   
+    Map<String, Object> getResponseContext();
+
+    /**
+     * @param oi
+     * @param params
+     * @return
+     */
+    Object[] invoke(OperationInfo oi, Object[] params);
+
+    /**
+     * @param executor
+     */
+    void setExecutor(Executor executor);
 }

@@ -22,6 +22,7 @@ package org.solmix.runtime.exchange;
 import java.io.Closeable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.interceptor.InterceptorProvider;
@@ -49,7 +50,7 @@ public interface Endpoint extends InterceptorProvider, Map<String, Object> {
     PhasePolicy getPhasePolicy();
 
     void setPhasePolicy(PhasePolicy phasePolicy);
-
+    Executor getExecutor();
     /**
      * @return
      */

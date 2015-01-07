@@ -45,10 +45,10 @@ public class ConfiguredBean implements Configurable
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.bean.Configurable#getConfigueName()
+     * @see org.solmix.runtime.bean.Configurable#getConfigureName()
      */
     @Override
-    public String getConfigueName() {
+    public String getConfigureName() {
         return configureName;
     }
     private String stringAttr = "hello";

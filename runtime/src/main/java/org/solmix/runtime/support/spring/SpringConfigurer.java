@@ -65,24 +65,20 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
 
     private BeanFactory beanFactory;
 
-    public SpringConfigurer()
-    {
+    public SpringConfigurer() {
     }
 
-    public SpringConfigurer(ApplicationContext springContext)
-    {
+    public SpringConfigurer(ApplicationContext springContext) {
         setApplicationContext(springContext);
     }
 
-    static class MatcherHolder
-    {
+    static class MatcherHolder {
 
         Matcher matcher;
 
         String wildCardId;
 
-        public MatcherHolder(String orig, Matcher matcher)
-        {
+        public MatcherHolder(String orig, Matcher matcher) {
             wildCardId = orig;
             this.matcher = matcher;
         }
@@ -193,7 +189,7 @@ public class SpringConfigurer extends BeanConfigurerSupport implements BeanConfi
     }
     protected String getBeanName(Object beanInstance) {
         if (beanInstance instanceof Configurable) {
-            return ((Configurable)beanInstance).getConfigueName();
+            return ((Configurable)beanInstance).getConfigureName();
         }else{//only used interface Configurable powered.
             return null;
         }

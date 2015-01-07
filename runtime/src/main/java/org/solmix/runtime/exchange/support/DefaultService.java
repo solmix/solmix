@@ -71,7 +71,7 @@ public class DefaultService extends InterceptorProviderSupport implements
     }
 
     @Override
-    public String getConfigueName() {
+    public String getConfigureName() {
         return getServiceName().getName();
     }
 
