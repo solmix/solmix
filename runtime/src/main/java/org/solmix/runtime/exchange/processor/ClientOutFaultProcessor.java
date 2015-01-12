@@ -26,11 +26,12 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.Client;
 import org.solmix.runtime.exchange.ClientCallback;
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.MessageUtils;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 /**
- * 客服端的输出为请求数据,出错直接回调返回错误
+ * Client发送请求数据,出错直接回调返回错误
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月20日
@@ -51,6 +52,10 @@ public class ClientOutFaultProcessor extends AbstractFaultChainInitProcessor {
     @Override
     @SuppressWarnings("unchecked")
     public void process(Message m) {
+        //只处理out
+        if (MessageUtils.isInbount(m)) {
+            return;
+        }
 
         Exception ex = m.getContent(Exception.class);
         ClientCallback callback = m.getExchange().get(ClientCallback.class);

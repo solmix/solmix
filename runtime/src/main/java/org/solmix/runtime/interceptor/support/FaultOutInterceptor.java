@@ -20,6 +20,8 @@
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.model.FaultInfo;
+import org.solmix.runtime.exchange.model.OperationInfo;
 import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
@@ -43,7 +45,36 @@ public class FaultOutInterceptor extends PhaseInterceptorSupport<Message> {
         if (f == null) {
             return;
         }
-        // TODO
+        Throwable cause = f.getCause();
+        if (cause == null) {
+            return;
+        }
+        OperationInfo oi = message.getExchange().get(OperationInfo.class);
+
+        if (oi == null) {
+            return;
+        }
+        FaultInfo fi = getFaultForClass(oi, cause.getClass());
+        if (fi != null && cause instanceof Exception) {
+            //TODO
+        }
+    }
+
+    protected FaultInfo getFaultForClass(OperationInfo oi,
+        Class<? extends Throwable> class1) {
+        FaultInfo selectedFaultInfo = null;
+        Class<?> selectedFaultInfoClass = null;
+        for (FaultInfo fi : oi.getFaults()) {
+            Class<?> c = (Class<?>) fi.getProperty(Class.class.getName());
+            if (c != null
+                && c.isAssignableFrom(class1)
+                && (selectedFaultInfo == null || selectedFaultInfoClass.isAssignableFrom(c))) {
+                selectedFaultInfo = fi;
+                selectedFaultInfoClass = c;
+
+            }
+        }
+        return selectedFaultInfo;
     }
 
 }

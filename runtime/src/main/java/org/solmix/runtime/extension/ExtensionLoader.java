@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,32 +16,32 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import java.util.Set;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月20日
+ * @version $Id$ 2014年7月20日
  */
 
-public interface ExtensionLoader<T>
-{
+public interface ExtensionLoader<T> {
+
     T getDefault();
-    
+
     String getDefaultName();
-    
+
     T getExtension(String name);
-    
+
     String getExtensionName(Class<?> clazz);
-    
+
     String getExtensionName(T t);
-    
+
     boolean hasExtension(String name);
-    
+
     Set<String> getLoadedExtensions();
-    
-    void addExtension(String name,Class<T> clazz);
+
+    void addExtension(String name, Class<T> clazz);
 }

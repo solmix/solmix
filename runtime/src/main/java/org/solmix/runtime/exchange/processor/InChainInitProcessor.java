@@ -33,6 +33,7 @@ import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.exchange.Processor;
 import org.solmix.runtime.exchange.Protocol;
 import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.Transporter;
 import org.solmix.runtime.exchange.support.DefaultExchange;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
@@ -47,7 +48,7 @@ import org.solmix.runtime.interceptor.phase.PhaseChainCache;
  * @version $Id$ 2014年10月20日
  */
 
-public class ChainInitiationProcessor implements Processor {
+public class InChainInitProcessor implements Processor {
 
     protected Endpoint endpoint;
 
@@ -58,7 +59,7 @@ public class ChainInitiationProcessor implements Processor {
 
     private final PhaseChainCache chainCache = new PhaseChainCache();
 
-    public ChainInitiationProcessor(Endpoint endpoint, Container container) {
+    public InChainInitProcessor(Endpoint endpoint, Container container) {
         super();
         this.endpoint = endpoint;
         this.container = container;
@@ -97,11 +98,26 @@ public class ChainInitiationProcessor implements Processor {
                 message.setExchange(exchange);
             }
             exchange.setIn(m);
-            setExchangeProperties(exchange, m);
+            setupExchange(exchange, m);
+            
 
-            phaseChain = chainCache.get(getPhases(),
-                endpoint.getService().getInInterceptors(),
-                endpoint.getInInterceptors(), getBinding().getInInterceptors());
+            InterceptorProvider serial = null;
+            if (endpoint.getService().getSerialization() instanceof InterceptorProvider) {
+                serial = (InterceptorProvider)endpoint.getService().getSerialization();
+            }
+
+            if (serial == null) {
+                phaseChain = chainCache.get(getPhases(),
+                                            endpoint.getService().getInInterceptors(),
+                                            endpoint.getInInterceptors(),
+                                            getBinding().getInInterceptors());
+            } else {
+                phaseChain = chainCache.get(getPhases(),
+                                            endpoint.getService().getInInterceptors(),
+                                            endpoint.getInInterceptors(),
+                                            getBinding().getInInterceptors(),
+                                            serial.getInInterceptors());
+            }
             m.setInterceptorChain(phaseChain);
 
             phaseChain.setFaultProcessor(endpoint.getOutFaultProcessor());
@@ -142,10 +158,13 @@ public class ChainInitiationProcessor implements Processor {
         return endpoint.getProtocol();
     }
 
-    private void setExchangeProperties(Exchange exchange, Message m) {
+    private void setupExchange(Exchange exchange, Message m) {
         exchange.put(Endpoint.class, endpoint);
         exchange.put(Protocol.class, getBinding());
         exchange.put(Container.class, container);
+        if (exchange.get(Transporter.class) != null) {
+            exchange.put(Transporter.class, m.get(Transporter.class));
+        }
 
         if (endpoint != null && endpoint.getService() != null) {
             exchange.put(Service.class, endpoint.getService());

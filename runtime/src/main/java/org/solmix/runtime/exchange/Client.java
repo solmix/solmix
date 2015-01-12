@@ -53,19 +53,47 @@ public interface Client extends InterceptorProvider, Processor {
     
     void setPipelineSelector(PipelineSelector selector);
 
+    void setExecutor(Executor executor);
+
     Map<String, Object> getRequestContext();
    
     Map<String, Object> getResponseContext();
+    
+    Object[] invoke(OperationInfo oi,
+                    Object... params) throws Exception;
+    
+    Object[] invoke(OperationInfo oi,
+                    Object[] params,
+                    Map<String, Object> context) throws Exception;
+    
+    Object[] invoke(OperationInfo oi,
+                    Object[] params,
+                    Exchange exchange) throws Exception;
+    
+    Object[] invoke(OperationInfo oi,
+                    Object[] params,
+                    Map<String, Object> context,
+                    Exchange exchange) throws Exception;
 
-    /**
-     * @param oi
-     * @param params
-     * @return
-     */
-    Object[] invoke(OperationInfo oi, Object[] params);
+    void invoke(ClientCallback callback, 
+                OperationInfo oi, 
+                Object... params) throws Exception;
+    
+    void invoke(ClientCallback callback, 
+                OperationInfo oi, 
+                Object[] params,
+                Map<String, Object> context) throws Exception;
+    
+    void invoke(ClientCallback callback, 
+                OperationInfo oi, 
+                Object[] params,
+                Map<String, Object> context,
+                Exchange exchange) throws Exception;
+    
+    void invoke(ClientCallback callback, 
+                OperationInfo oi, 
+                Object[] params,
+                Exchange exchange) throws Exception;
 
-    /**
-     * @param executor
-     */
-    void setExecutor(Executor executor);
+    
 }

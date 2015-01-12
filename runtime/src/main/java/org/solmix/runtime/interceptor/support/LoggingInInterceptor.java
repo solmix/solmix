@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,26 +16,25 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.interceptor.phase.Phase;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class LoggingInInterceptor extends LoggingInterceptorSupport
-{
-    public LoggingInInterceptor()
-    {
+public class LoggingInInterceptor extends LoggingInterceptorSupport {
+
+    public LoggingInInterceptor() {
         super(Phase.RECEIVE);
     }
+
     /** @param phase */
-    public LoggingInInterceptor(String phase)
-    {
+    public LoggingInInterceptor(String phase) {
         super(phase);
     }
 

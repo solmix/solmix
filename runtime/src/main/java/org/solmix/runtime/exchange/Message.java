@@ -62,10 +62,10 @@ public interface Message extends StringTypeMap {
     /**存储invocation参数的key,值类型Map<String,Object>    */
     String INVOCATION_CONTEXT =  Message.class.getName() + ".INVOCATION_CONTEXT";
     
-    /**是否为请求消息,值类型Boolean    */
+    /**是否为请求侧消息,值类型Boolean    */
     String REQUEST_MESSAGE = Message.class.getName() + ".REQUEST_MESSAGE"; 
 
-    /** 类型   */
+    /** 内容类型定义,值类型String,比如:text/xml   */
     String CONTENT_TYPE = "Content-Type";
     
     /**信息中指定的地址,值类型String    */
@@ -82,6 +82,8 @@ public interface Message extends StringTypeMap {
     /**表示为空返回消息,值类型Boolean    */
     String EMPTY_PARTIAL_RESPONSE_MESSAGE = Message.class.getName() + ".EMPTY_PARTIAL_RESPONSE_MESSAGE";;
     
+    /**字符集,值类型String    */
+    String ENCODING = Message.class.getName() + ".ENCODING";
 
 
     /**

@@ -20,6 +20,7 @@ package org.solmix.runtime.exchange.support;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import java.util.concurrent.Executor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.ClassLoaderUtils;
+import org.solmix.commons.util.ClassLoaderUtils.ClassLoaderHolder;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.exchange.Client;
@@ -40,6 +43,7 @@ import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.exchange.ExchangeException;
 import org.solmix.runtime.exchange.Message;
+import org.solmix.runtime.exchange.MessageList;
 import org.solmix.runtime.exchange.MessageUtils;
 import org.solmix.runtime.exchange.Pipeline;
 import org.solmix.runtime.exchange.PipelineSelector;
@@ -47,11 +51,13 @@ import org.solmix.runtime.exchange.Processor;
 import org.solmix.runtime.exchange.Protocol;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.model.InterfaceInfo;
+import org.solmix.runtime.exchange.model.MessageInfo;
 import org.solmix.runtime.exchange.model.OperationInfo;
 import org.solmix.runtime.exchange.model.ProtocolInfo;
 import org.solmix.runtime.exchange.model.ServiceInfo;
 import org.solmix.runtime.exchange.processor.ClientOutFaultProcessor;
 import org.solmix.runtime.exchange.serialize.Serialization;
+import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
 import org.solmix.runtime.interceptor.InterceptorProvider;
@@ -70,8 +76,11 @@ import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 public class DefaultClient extends InterceptorProviderSupport implements Client {
 
     public static final String EXTRA_EXECUTOR = Executor.class.getName() + ".EXTRA_EXECUTOR";
-    public static final String THREAD_LOCAL_REQUEST_CONTEXT=DefaultClient.class.getName()+".THREAD_LOCAL_REQUEST_CONTEXT";
+
+    public static final String THREAD_LOCAL_REQUEST_CONTEXT = DefaultClient.class.getName() + ".THREAD_LOCAL_REQUEST_CONTEXT";
+
     public static final String FINISHED = "exchange.finished";
+
     public static final String SYNC_TIMEOUT = "synchronous.timeout";
     
     private static final Logger LOG = LoggerFactory.getLogger(DefaultClient.class);
@@ -364,7 +373,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         Exchange ex = new DefaultExchange();
         msg.setExchange(ex);
         msg.putAll(getRequestContext());
-        setupExchange(ex, getEndpoint());
+        setupExchange(ex, getEndpoint(), null);
         return getPipelineSelector().select(msg);
     }
     @Override
@@ -403,7 +412,39 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         currentRequestContext.put(THREAD_LOCAL_REQUEST_CONTEXT, b);
     }
     
-    protected void setupExchange(Exchange ex, Endpoint endpoint) {
+    protected PhaseInterceptorChain setupOutInterceptorChain(Endpoint endpoint) {
+        List<Interceptor<? extends Message>> i1 = getOutInterceptors();
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Interceptors provided by client: " + i1);
+        }
+        List<Interceptor<? extends Message>> i2 = endpoint.getOutInterceptors();
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Interceptors provided by endpoint: " + i2);
+        }
+        List<Interceptor<? extends Message>> i3 = endpoint.getProtocol().getOutInterceptors();
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Interceptors provided by protocol: " + i3);
+        }
+        
+        PhaseInterceptorChain chain;
+        PhasePolicy policy = endpoint.getPhasePolicy();
+        Serialization ser = endpoint.getService().getSerialization();
+        if (ser instanceof InterceptorProvider) {
+            InterceptorProvider p = (InterceptorProvider) ser;
+            List<Interceptor<? extends Message>> i4 = p.getOutInterceptors();
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Interceptors provided by serialization: " + i4);
+            }
+            chain = outboundChainCache.get(policy.getOutPhases(), i1, i2, i3, i4);
+        } else {
+            chain = outboundChainCache.get(policy.getOutPhases(), i1, i2, i3);
+        }
+        return chain;
+    }
+    
+    protected void setupExchange(Exchange ex, 
+                                 Endpoint endpoint,
+                                 OperationInfo oi) {
         ex.put(Container.class, container);
         ex.put(Client.class, this);
 
@@ -416,6 +457,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             }
             ex.put(Protocol.class, endpoint.getProtocol());
             ex.put(ProtocolInfo.class, endpoint.getEndpointInfo().getProtocol());
+        }
+        if (oi != null) {
+            ex.put(OperationInfo.class, oi);
         }
         if (ex.isSync() || executor == null) {
             ex.put(Processor.class, this);
@@ -552,6 +596,201 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
     public void setSynchronousTimeout(int synchronousTimeout) {
         this.synchronousTimeout = synchronousTimeout;
     }
+    
+
+    
+    @Override
+    public Object[] invoke(OperationInfo oi, Object... params) throws Exception {
+        return invoke(oi, params, null);
+    }
+
+   
+    @Override
+    public Object[] invoke(OperationInfo oi, 
+                           Object[] params,
+                           Map<String, Object> context) throws Exception {
+        try {
+            return invoke(oi, params, context, (Exchange) null);
+        } finally {
+            if (context != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> res = (Map<String, Object>) context.get(RESPONSE_CONTEXT);
+                if (res != null) {
+                    responseContext.put(Thread.currentThread(), res);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public Object[] invoke(OperationInfo oi, Object[] params, Exchange exchange)
+        throws Exception {
+        Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> resp = new HashMap<String, Object>();
+        Map<String, Object> req = new HashMap<String, Object>(getRequestContext());
+        context.put(RESPONSE_CONTEXT, resp);
+        context.put(REQUEST_CONTEXT, req);
+        try {
+            return invoke(oi, params, context, exchange);
+        } finally {
+            responseContext.put(Thread.currentThread(), resp);
+        }
+    }
+
+    
+    @Override
+    public Object[] invoke(OperationInfo oi, Object[] params,
+        Map<String, Object> context, Exchange exchange) throws Exception {
+        return doInvoke(null, oi, params, context, exchange);
+    }
+
+    
+    @Override
+    public void invoke(ClientCallback callback, OperationInfo oi,
+        Object... params) throws Exception {
+        invoke(callback, oi, params, null, null);
+    }
+
+    @Override
+    public void invoke(ClientCallback callback, OperationInfo oi,
+        Object[] params, Map<String, Object> context) throws Exception {
+        invoke(callback, oi, params, context, null);
+    }
+
+    @Override
+    public void invoke(ClientCallback callback, OperationInfo oi,
+        Object[] params, Map<String, Object> context, Exchange exchange)
+        throws Exception {
+        doInvoke(callback, oi, params, context, exchange);
+
+    }
+
+    @Override
+    public void invoke(ClientCallback callback, OperationInfo oi,
+        Object[] params, Exchange exchange) throws Exception {
+        invoke(callback, oi, params, null, exchange);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private Object[] doInvoke(final ClientCallback callback,
+                              OperationInfo oi,
+                              Object[] params,
+                              Map<String, Object> context,
+                              Exchange exchange) throws Exception {
+        Container original = ContainerFactory.getAndSetThreadDefaultContainer(container);
+        ClassLoaderHolder origLoader = null;
+        try {
+            ClassLoader loader = container.getExtension(ClassLoader.class);
+            if (loader != null) {
+                origLoader = ClassLoaderUtils.setThreadContextClassloader(loader);
+            }
+            if (exchange == null) {
+                exchange = new DefaultExchange();
+            }
+            exchange.setSync(callback == null);
+            Endpoint endpoint = getEndpoint();
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Invoke, operation info: {}, params: {}", oi,
+                    Arrays.toString(params));
+            }
+            Message msg = endpoint.getProtocol().createMessage();
+            Map<String, Object> reqContext = null;
+            Map<String, Object> resContext = null;
+            if (context == null) {
+                context = new HashMap<String, Object>();
+            }
+            reqContext = (Map<String, Object>) context.get(REQUEST_CONTEXT);
+            resContext = (Map<String, Object>) context.get(RESPONSE_CONTEXT);
+            if (reqContext == null) {
+                reqContext = new HashMap<String, Object>(getRequestContext());
+                context.put(REQUEST_CONTEXT, reqContext);
+            }
+            if (resContext == null) {
+                resContext = new HashMap<String, Object>();
+                context.put(RESPONSE_CONTEXT, resContext);
+            }
+
+            msg.put(Message.INVOCATION_CONTEXT, context);
+            if (reqContext != null) {
+                msg.putAll(reqContext);
+                exchange.putAll(reqContext);
+            }
+            msg.setContent(List.class, new MessageList(params));
+
+            if (oi != null) {
+                exchange.setOneWay(oi.getOutput() != null);
+            }
+            exchange.setOut(msg);
+            exchange.put(ClientCallback.class, callback);
+
+            //setup message
+            msg.put(Message.REQUEST_MESSAGE, Boolean.TRUE);
+            msg.put(Message.INBOUND_MESSAGE, Boolean.FALSE);
+            if (oi != null) {
+                msg.put(MessageInfo.class, oi.getInput());
+            }
+            //setup exchange
+            setupExchange(exchange, endpoint, oi);
+            
+            PhaseInterceptorChain chain = setupOutInterceptorChain(endpoint);
+            msg.setInterceptorChain(chain);
+            
+            if (callback == null) {
+                chain.setFaultProcessor(clientOutFaultProcessor);
+            } else {
+                chain.setFaultProcessor(new Processor() {
+
+                    @Override
+                    public void process(Message message)
+                        throws ExchangeException {
+                        Exception ex = message.getContent(Exception.class);
+                        if (ex != null) {
+                            completeExchange(message.getExchange());
+                            // complete exception
+                            if (message.getContent(Exception.class) == null) {
+                                List<Object> resList = null;
+                                Message inMsg = message.getExchange().getIn();
+                                Map<String, Object> ctx = responseContext.get(Thread.currentThread());
+                                resList = inMsg.getContent(List.class);
+                                Object[] result = resList == null ? null : resList.toArray();
+                                callback.handleResponse(ctx, result);
+                                return;
+                            }
+                        }
+                        clientOutFaultProcessor.process(message);
+                    }
+                });
+            }
+            preparePipelineSelector(msg);
+            
+            adapteChain(chain, msg, false);
+            
+            try {
+                chain.doIntercept(msg);
+            } catch (Fault fault) {
+                throw fault;
+            }
+            if (callback != null) {
+                return null;
+            } else {
+                return processResult(msg, exchange, oi, resContext);
+            }
+        } finally {
+            if (origLoader != null) {
+                origLoader.reset();
+            }
+            if (original != container) {
+                ContainerFactory.setDefaultContainer(original);
+            }
+        }
+    }
+
+    
+   
+    protected  void preparePipelineSelector(Message msg) {
+        getPipelineSelector().prepare(msg);
+        msg.getExchange().put(PipelineSelector.class, getPipelineSelector());
+    }
 
     public static class EchoContext extends HashMap<String, Object> {
         private static final long serialVersionUID = 5199023273052841289L;
@@ -585,14 +824,5 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Client#invoke(org.solmix.runtime.exchange.model.OperationInfo, java.lang.Object[])
-     */
-    @Override
-    public Object[] invoke(OperationInfo oi, Object[] params) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+
 }

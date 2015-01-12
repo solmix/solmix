@@ -28,7 +28,7 @@ import org.solmix.runtime.exchange.Transporter;
 import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.exchange.model.ProtocolInfo;
 import org.solmix.runtime.exchange.model.ServiceInfo;
-import org.solmix.runtime.exchange.processor.ChainInitiationProcessor;
+import org.solmix.runtime.exchange.processor.InChainInitProcessor;
 
 
 /**
@@ -45,13 +45,11 @@ public abstract class AbstractProtocolFactory implements ProtocolFactory {
         this.container = container;
     }
     @Override
-    public void addListener(Transporter d, Endpoint e) {
-        ChainInitiationProcessor cip = new ChainInitiationProcessor(e,
-            container);
-        d.setProcessor(cip);
+    public void addListener(Transporter t, Endpoint e) {
+        InChainInitProcessor cip = new InChainInitProcessor(e, container);
+        t.setProcessor(cip);
     }
 
-   
     @Override
     public ProtocolInfo createProtocolInfo(Service service, String protocol,
         Object configObject) {

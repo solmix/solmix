@@ -51,6 +51,7 @@ public interface Endpoint extends InterceptorProvider, Map<String, Object> {
 
     void setPhasePolicy(PhasePolicy phasePolicy);
     Executor getExecutor();
+    void setExecutor(Executor executor);
     /**
      * @return
      */

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor.support;
 
 import java.io.IOException;
@@ -27,20 +28,17 @@ import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message>
-{
+public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message> {
+
     private final MessageSenderEndingInterceptor ending = new MessageSenderEndingInterceptor();
 
-    
-    public MessageSenderInterceptor()
-    {
+    public MessageSenderInterceptor() {
         super(Phase.PREPARE_SEND);
     }
 
@@ -50,11 +48,11 @@ public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message>
             getPipeline(message).prepare(message);
         } catch (IOException ex) {
             throw new Fault("send message failed", ex);
-        }    
-        
+        }
+
         // 添加关闭pipeline
         message.getInterceptorChain().add(ending);
-        
+
     }
 
     public static Pipeline getPipeline(Message message) {
@@ -65,9 +63,11 @@ public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message>
         }
         return pl;
     }
-    
-    /**为了关闭pipeline*/
-    public static class MessageSenderEndingInterceptor extends PhaseInterceptorSupport<Message> {
+
+    /** 为了关闭pipeline */
+    public static class MessageSenderEndingInterceptor extends
+        PhaseInterceptorSupport<Message> {
+
         public MessageSenderEndingInterceptor() {
             super(Phase.PREPARE_SEND_ENDING);
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,26 +16,29 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
-import org.solmix.runtime.exchange.Pipeline;
 import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.Phase;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
+
 /**
+ * 转化为本地Exception.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月20日
+ * @version $Id$  2015年1月12日
  */
 
-public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message> {
+public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
 
-    public OutgoingChainInterceptor() {
-        // in phase 最后一步
-        super(Phase.POST_INVOKE);
+    public ClientFaultConverter() {
+        this(Phase.DECODE);
+    }
+
+    public ClientFaultConverter(String phase) {
+        super(phase);
     }
 
     /**
@@ -46,16 +49,7 @@ public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message> {
     @Override
     public void handleMessage(Message message) throws Fault {
         // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * @param message
-     * @return
-     */
-    public static Pipeline getBackPipeline(Message message) {
-        // TODO Auto-generated method stub
-        return null;
+        
     }
 
 }

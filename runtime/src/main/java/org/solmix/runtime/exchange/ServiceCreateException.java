@@ -1,5 +1,5 @@
-/*
- * Copyright 2014 The Solmix Project
+/**
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -22,22 +22,23 @@ package org.solmix.runtime.exchange;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年10月19日
+ * @version $Id$ 2015年1月9日
  */
 
-public class EndpointException extends Exception {
+public class ServiceCreateException extends RuntimeException {
 
-    /**    */
-    private static final long serialVersionUID = 7472464187366498885L;
+    private static final long serialVersionUID = 297452955110999272L;
 
-    public EndpointException(Throwable cause) {
-        super(cause);
+    public ServiceCreateException(String message, Throwable t) {
+        super(message, t);
     }
 
-    /**
-     * @param string
-     */
-    public EndpointException(String msg) {
-        super(msg);
+    public ServiceCreateException(Throwable t) {
+        super(t);
     }
+
+    public ServiceCreateException(String message) {
+        super(message);
+    }
+
 }

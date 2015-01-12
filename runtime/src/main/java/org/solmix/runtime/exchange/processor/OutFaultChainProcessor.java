@@ -34,11 +34,13 @@ import org.solmix.runtime.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 
 /**
+ *
+ * 输出异常消息处理器.
+ * 处理器会收集Client/Endpoint/Service/Protocol/Message中的interceptor配置,完成切面链调用.
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月19日
  */
-
 public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor {
 
     public OutFaultChainProcessor(Container c, PhasePolicy phasePolicy) {
@@ -56,7 +58,9 @@ public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor {
         chain.add(e.getService().getOutFaultInterceptors());
         chain.add(e.getOutFaultInterceptors());
         chain.add(e.getProtocol().getOutFaultInterceptors());
-
+        if (e.getService().getSerialization() instanceof InterceptorProvider) {
+            chain.add(((InterceptorProvider) e.getService().getSerialization()).getOutFaultInterceptors());
+        }
         addToChain(chain, ex.getIn());
         addToChain(chain, ex.getOutFault());
     }
@@ -67,7 +71,7 @@ public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor {
         final Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
         if (providers != null) {
             for (InterceptorProvider p : providers) {
-                chain.add(p.getInFaultInterceptors());
+                chain.add(p.getOutFaultInterceptors());
             }
         }
         Interceptor<Message> is = (Interceptor<Message>) m.get(Message.FAULT_OUT_INTERCEPTORS);

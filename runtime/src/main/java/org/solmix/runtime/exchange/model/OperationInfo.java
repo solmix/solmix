@@ -188,7 +188,7 @@ public class OperationInfo extends InfoPropertiesSupport {
      * @param name the name.
      * @return the fault; or <code>null</code> if not found.
      */
-    public FaultInfo getFault(QName name) {
+    public FaultInfo getFault(NamedID name) {
         if (faults != null) {
             return faults.get(name);
         }

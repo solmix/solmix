@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,30 +16,30 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor.support;
 
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.phase.PhaseInterceptorSupport;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月20日
+ * @version $Id$ 2014年10月20日
  */
 
-public class LoggingInterceptorSupport extends PhaseInterceptorSupport<Message>
-{
+public class LoggingInterceptorSupport extends PhaseInterceptorSupport<Message> {
 
     /** @param phase */
-    public LoggingInterceptorSupport(String phase)
-    {
+    public LoggingInterceptorSupport(String phase) {
         super(phase);
     }
+
     public LoggingInterceptorSupport(String id, String phase) {
         super(id, phase);
     }
+
     /**
      * {@inheritDoc}
      * 
@@ -48,6 +48,6 @@ public class LoggingInterceptorSupport extends PhaseInterceptorSupport<Message>
     @Override
     public void handleMessage(Message message) throws Fault {
         // TODO Auto-generated method stub
-        
+
     }
 }

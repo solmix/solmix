@@ -36,6 +36,11 @@ public final class MessageUtils {
 
     }
 
+    public static boolean isInbount(Message message) {
+        Boolean request = (Boolean) message.get(Message.INBOUND_MESSAGE);
+        return request != null && request.booleanValue();
+    }
+
     public static boolean isRequest(Message message) {
         Boolean request = (Boolean) message.get(Message.REQUEST_MESSAGE);
         return request != null && request.booleanValue();

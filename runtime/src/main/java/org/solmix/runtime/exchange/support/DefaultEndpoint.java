@@ -29,14 +29,21 @@ import org.solmix.commons.util.Assert;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.EndpointException;
 import org.solmix.runtime.exchange.Processor;
 import org.solmix.runtime.exchange.Protocol;
+import org.solmix.runtime.exchange.ProtocolFactory;
+import org.solmix.runtime.exchange.ProtocolFactoryManager;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.exchange.model.ProtocolInfo;
 import org.solmix.runtime.exchange.processor.InFaultChainProcessor;
 import org.solmix.runtime.exchange.processor.OutFaultChainProcessor;
+import org.solmix.runtime.extension.ExtensionException;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
+import org.solmix.runtime.interceptor.support.ClientFaultConverter;
 import org.solmix.runtime.interceptor.support.InterceptorProviderAttrSupport;
+import org.solmix.runtime.interceptor.support.MessageSenderInterceptor;
 
 /**
  * 
@@ -68,7 +75,7 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
     private Executor executor;
 
     public DefaultEndpoint(Container container, Service s, EndpointInfo ed,
-        PhasePolicy phasePolicy) {
+        PhasePolicy phasePolicy) throws EndpointException {
         Assert.isNotNull(ed);
         this.phasePolicy = phasePolicy;
         if (container == null) {
@@ -78,15 +85,40 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
         }
         this.service = s;
         this.endpointInfo = ed;
+        
+        createProtocol(endpointInfo.getProtocol());
 
         inFaultProcessor = new InFaultChainProcessor(container, phasePolicy);
         outFaultProcessor = new OutFaultChainProcessor(container, phasePolicy);
+        
+        getInFaultInterceptors().add(new ClientFaultConverter());
+        getOutInterceptors().add(new MessageSenderInterceptor());
+        getOutFaultInterceptors().add(new MessageSenderInterceptor());
 
     }
+
+    
 
     @Override
     public EndpointInfo getEndpointInfo() {
         return endpointInfo;
+    }
+
+    protected void createProtocol(ProtocolInfo pi) throws EndpointException {
+        if (pi != null) {
+            String pid = pi.getProtocolId();
+            ProtocolFactory protocolFactory;
+            try {
+                protocolFactory = container.getExtension(
+                    ProtocolFactoryManager.class).getProtocolFactory(pid);
+                if (protocolFactory == null) {
+                    throw new EndpointException("No found protocol for " + pid);
+                }
+                protocol = protocolFactory.createProtocol(pi);
+            } catch (ExtensionException e) {
+                throw new EndpointException(e);
+            }
+        }
     }
     
     /**   */
@@ -95,7 +127,7 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
         return executor == null ? service.getExecutor() : executor;
     }
     
-    /**   */
+    @Override
     public void setExecutor(Executor executor) {
         this.executor = executor;
     }

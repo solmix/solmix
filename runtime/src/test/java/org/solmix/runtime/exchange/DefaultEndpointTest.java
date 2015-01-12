@@ -40,7 +40,7 @@ import org.solmix.runtime.interceptor.phase.PhasePolicy;
 public class DefaultEndpointTest extends Assert {
 
     @Test
-    public void test() {
+    public void test() throws EndpointException {
         Container c = ContainerFactory.getDefaultContainer();
         EndpointInfo ei = new EndpointInfo();
         ei.setAddress("hola://www.solmix.org/a");

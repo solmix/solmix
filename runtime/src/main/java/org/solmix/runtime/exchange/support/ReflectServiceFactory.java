@@ -32,8 +32,10 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.exchange.Endpoint;
+import org.solmix.runtime.exchange.EndpointException;
 import org.solmix.runtime.exchange.ProtocolFactoryManager;
 import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.ServiceCreateException;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
 import org.solmix.runtime.exchange.invoker.FactoryInvoker;
 import org.solmix.runtime.exchange.invoker.Invoker;
@@ -113,7 +115,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         resetFactory();
         pulishEvent(ServiceFactoryEvent.START_CREATE);
         // 构建service
-        buildService();
+        buildServiceModel();
         // 初始化拦截器
         initDefaultInterceptor();
 
@@ -150,9 +152,12 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
                 } catch (Exception e1) {
                     continue;
                 }
-                Endpoint ep = createEndpoint(ei);
-
-                service.getEndpoints().put(ei.getName(), ep);
+                try {
+                    Endpoint ep = createEndpoint(ei);
+                    service.getEndpoints().put(ei.getName(), ep);
+                } catch (EndpointException e) {
+                    throw new ServiceCreateException(e);
+                }
             }
         }
     }
@@ -175,8 +180,8 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         getService().getOutFaultInterceptors().add(new FaultOutInterceptor());
     }
 
-    protected  void buildService(){
-        
+    protected void buildServiceModel() {
+
     }
 
     @Override
@@ -229,8 +234,9 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     /**
      * @param info
      * @return
+     * @throws EndpointException 
      */
-    public Endpoint createEndpoint(EndpointInfo info) {
+    public Endpoint createEndpoint(EndpointInfo info) throws EndpointException {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Creating Endpoint " + info.getName());
         }

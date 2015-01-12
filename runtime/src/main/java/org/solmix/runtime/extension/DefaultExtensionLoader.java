@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import static org.solmix.commons.util.DataUtils.isEmpty;
@@ -31,21 +32,27 @@ import org.solmix.runtime.Extension;
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月5日
+ * @version $Id$ 2014年8月5日
  */
 
-public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
-{
+public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
 
-    private final  ExtensionManagerImpl extensionManager;
+    private final ExtensionManagerImpl extensionManager;
+
     private final Class<T> type;
+
     private String defaultName;
-    private Map<String,ExtensionInfo> cached;
-    private final Object cachedLock=new Object();
-    public DefaultExtensionLoader(Class<T> type,ExtensionManagerImpl extensionManager){
-        this.extensionManager=extensionManager;
-        this.type=type;
+
+    private Map<String, ExtensionInfo> cached;
+
+    private final Object cachedLock = new Object();
+
+    public DefaultExtensionLoader(Class<T> type,
+        ExtensionManagerImpl extensionManager) {
+        this.extensionManager = extensionManager;
+        this.type = type;
     }
+
     /**
      * {@inheritDoc}
      * 
@@ -54,8 +61,9 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
     @Override
     public T getDefault() {
         getExtensionInfos();
-        if(isEmpty(defaultName))
+        if (isEmpty(defaultName)) {
             return null;
+        }
         return getExtension(defaultName);
     }
 
@@ -67,6 +75,7 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
         }
         return cached;
     }
+
     /**
      * 
      */
@@ -74,8 +83,9 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
         Extension e = type.getAnnotation(Extension.class);
         if (e != null) {
             String defName = e.name();
-            if (defName != null)
+            if (defName != null) {
                 defaultName = defName.trim();
+            }
         }
         if (cached == null) {
             Map<String, ExtensionInfo> cachedExtensions = new HashMap<String, ExtensionInfo>();
@@ -98,10 +108,11 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
                     }
                 }
             }
-            cached=cachedExtensions;
+            cached = cachedExtensions;
         }
 
     }
+
     /**
      * {@inheritDoc}
      * 
@@ -109,11 +120,10 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
      */
     @Override
     public String getDefaultName() {
-       getExtensionInfos();
+        getExtensionInfos();
         return defaultName;
     }
 
-  
     /**
      * {@inheritDoc}
      * 
@@ -122,7 +132,8 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
     @Override
     public T getExtension(String name) {
         if (name == null || name.length() == 0)
-            throw new IllegalArgumentException("name is null for type:"+type.getName());
+            throw new IllegalArgumentException("name is null for type:"
+                + type.getName());
         ExtensionInfo info = getExtensionInfos().get(name);
         if (info != null) {
             if (info.getLoadedObject() == null) {
@@ -140,8 +151,8 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
      */
     @Override
     public String getExtensionName(Class<?> clazz) {
-        Extension e=clazz.getAnnotation(Extension.class);
-        if(e!=null){
+        Extension e = clazz.getAnnotation(Extension.class);
+        if (e != null) {
             return e.name().trim();
         }
         return null;
@@ -164,8 +175,9 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
      */
     @Override
     public boolean hasExtension(String name) {
-        if (name == null || name.length() == 0)
+        if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Extension name is null");
+        }
         try {
             return getExtensionInfos().get(name) != null;
         } catch (Throwable t) {
@@ -183,8 +195,8 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
         getExtensionInfos();
         return Collections.unmodifiableSet(new TreeSet<String>(cached.keySet()));
     }
-    
-    public void addExtension(String name,ExtensionInfo info){
+
+    public void addExtension(String name, ExtensionInfo info) {
         getExtensionInfos();
         synchronized (cachedLock) {
             cached.put(name, info);
@@ -194,25 +206,27 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T>
     /**
      * {@inheritDoc}
      * 
-     * @see org.solmix.runtime.extension.ExtensionLoader#addExtension(java.lang.String, java.lang.Class)
+     * @see org.solmix.runtime.extension.ExtensionLoader#addExtension(java.lang.String,
+     *      java.lang.Class)
      */
     @Override
     public void addExtension(String name, Class<T> clazz) {
         getExtensionInfos();
-        if(type.isAssignableFrom(clazz)){
-            throw new IllegalStateException("Input type " +
-                clazz + "not implement Extension " + type);
+        if (type.isAssignableFrom(clazz)) {
+            throw new IllegalStateException("Input type " + clazz
+                + "not implement Extension " + type);
         }
-        if(clazz.isInterface()) {
-            throw new IllegalStateException("Input type " +
-                    clazz + "can not be interface!");
+        if (clazz.isInterface()) {
+            throw new IllegalStateException("Input type " + clazz
+                + "can not be interface!");
         }
-        if(cached.containsKey(name)){
-            throw new IllegalStateException("Extension name " +
-                name + " already existed(Extension " + type + ")!");
+        if (cached.containsKey(name)) {
+            throw new IllegalStateException("Extension name " + name
+                + " already existed(Extension " + type + ")!");
         }
         synchronized (cachedLock) {
-            ExtensionInfo info = new ExtensionInfo(Thread.currentThread().getContextClassLoader());
+            ExtensionInfo info = new ExtensionInfo(
+                Thread.currentThread().getContextClassLoader());
             info.setClassname(clazz.getName());
             info.setInterfaceName(type.getName());
             info.setDeferred(true);

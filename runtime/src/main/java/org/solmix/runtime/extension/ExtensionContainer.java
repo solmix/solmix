@@ -209,6 +209,7 @@ public class ExtensionContainer implements Container {
             if (provider != null) {
                 Collection<?> objs = provider.getBeansOfType(beanType);
                 if (objs == null || objs.isEmpty()) {
+                    return null;
                 } else if (objs != null && objs.size() == 1) {
                     for (Object o : objs) {
                         extensions.put(beanType, o);
@@ -487,8 +488,9 @@ public class ExtensionContainer implements Container {
     @SuppressWarnings("unchecked")
     @Override
     public <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
-        if (type == null)
+        if (type == null) {
             throw new IllegalArgumentException("Extension Type is null!");
+        }
         if (!type.isInterface()) {
             throw new IllegalArgumentException("Extension Type:["
                 + type.getName() + "] is not a interface!");
@@ -500,7 +502,8 @@ public class ExtensionContainer implements Container {
         }
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         if (loader == null) {
-            EXTENSION_LOADERS.putIfAbsent(type, new DefaultExtensionLoader<T>(type,extensionManager));
+            EXTENSION_LOADERS.putIfAbsent(type, new DefaultExtensionLoader<T>(
+                type, extensionManager));
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         }
         return loader;

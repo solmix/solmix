@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.extension;
 
 import static org.junit.Assert.assertThat;
@@ -31,30 +32,30 @@ import org.solmix.runtime.service.TimeService;
 import org.solmix.runtime.service.provider1.IProvider1;
 import org.solmix.runtime.service.provider1.Provider11;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月6日
+ * @version $Id$ 2014年8月6日
  */
 
-public class ExtensionLoaderTest
-{
- public static  Container c;
-   
- @BeforeClass
-public static void before(){
-    c= ContainerFactory.newInstance().createContainer();
-}
+public class ExtensionLoaderTest {
+
+    public static Container c;
+
+    @BeforeClass
+    public static void before() {
+        c = ContainerFactory.newInstance().createContainer();
+    }
+
     @Test
     public void testLoader() {
-        ExtensionLoader<IProvider1> ext=  c.getExtensionLoader(IProvider1.class);
-        IProvider1 provider= ext.getDefault();
+        ExtensionLoader<IProvider1> ext = c.getExtensionLoader(IProvider1.class);
+        IProvider1 provider = ext.getDefault();
         Assert.assertEquals("provider1", provider.sayHello());
-        IProvider1 p2= ext.getExtension("provider2");
+        IProvider1 p2 = ext.getExtension("provider2");
         Assert.assertEquals("provider2", p2.sayHello());
     }
-    
+
     @Test
     public void testexception() {
         try {
@@ -68,35 +69,33 @@ public static void before(){
             c.getExtensionLoader(Provider11.class);
             fail();
         } catch (Exception e) {
-            assertThat(e.getMessage(),
-                containsString("is not a interface!"));
+            assertThat(e.getMessage(), containsString("is not a interface!"));
         }
         try {
-           c.getExtensionLoader(TimeService.class);
+            c.getExtensionLoader(TimeService.class);
             fail();
         } catch (Exception e) {
-            assertThat(e.getMessage(),
-                containsString("without @Extension"));
+            assertThat(e.getMessage(), containsString("without @Extension"));
         }
     }
-    
+
     @Test
     public void testextensionName() {
-        ExtensionLoader<IProvider1>  p= c.getExtensionLoader(IProvider1.class);
-       Assert.assertEquals(p.getExtensionName(Provider11.class),"provider1");
-       Assert.assertTrue(p.hasExtension("provider1"));
+        ExtensionLoader<IProvider1> p = c.getExtensionLoader(IProvider1.class);
+        Assert.assertEquals(p.getExtensionName(Provider11.class), "provider1");
+        Assert.assertTrue(p.hasExtension("provider1"));
     }
-    
-    
+
     @Test
     public void testexts() {
-        for(int i=0;i<1000000;i++){
-            ExtensionLoader<IProvider1> p=   c.getExtensionLoader(IProvider1.class);
-            IProvider1 p1= p.getDefault();
+        for (int i = 0; i < 1000000; i++) {
+            ExtensionLoader<IProvider1> p = c.getExtensionLoader(IProvider1.class);
+            IProvider1 p1 = p.getDefault();
         }
     }
+
     @BeforeClass
-    public static void after(){
+    public static void after() {
         ContainerFactory.setDefaultContainer(null);
     }
 }
