@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor;
 
 import java.util.Collection;
@@ -24,89 +25,96 @@ import java.util.ListIterator;
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.exchange.Processor;
 
-
 /**
  * 拦截链,支持拦截器的遍历执行和异常回退.
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$ 2014年10月11日
  */
 
-public interface InterceptorChain extends Iterable<Interceptor<? extends Message>>
-{
-    enum State {
-        PAUSED,
-        SUSPENDED,
-        EXECUTING,
-        COMPLETE,
-        ABORTED,
-    };
-    
-    public static final String STARTING_AFTER_ID = InterceptorChain.class.getName() + ".STARTING_AFTER_ID";
+public interface InterceptorChain extends
+    Iterable<Interceptor<? extends Message>> {
 
-    public static final String STARTING_AT_ID = InterceptorChain.class.getName() + ".STARTING_AT_ID";
+    String STARTING_AFTER_ID = InterceptorChain.class.getName()
+        + ".STARTING_AFTER_ID";
+
+    String STARTING_AT_ID = InterceptorChain.class.getName()
+        + ".STARTING_AT_ID";
+
+    enum State {
+        PAUSED , SUSPENDED , EXECUTING , COMPLETE , ABORTED ,
+    };
 
     /**
      * 添加拦截器
+     * 
      * @param i
      */
     void add(Interceptor<? extends Message> i);
-    
+
     /**
-     *  批量添加拦截器
+     * 批量添加拦截器
+     * 
      * @param i
      */
     void add(Collection<Interceptor<? extends Message>> i);
-    
+
     /**
      * 从拦截链中移除拦截器
+     * 
      * @param i
      */
     void remove(Interceptor<? extends Message> i);
-    
+
     /**
      * 拦截处理消息,正常完成返回true,异常返回false.
+     * 
      * @param message
      * @return
      */
     boolean doIntercept(Message message);
-    
+
     /**
      * 从某拦截器后开始执行消息拦截.
+     * 
      * @param message
-     * @param inteceptorId  拦截器ID
+     * @param inteceptorId 拦截器ID
      * @return
      */
-    boolean doInterceptAfter(Message message,String inteceptorId);
-    
+    boolean doInterceptAfter(Message message, String inteceptorId);
+
     /**
      * 在某拦截器开始执行消息拦截.
+     * 
      * @param message
-     * @param inteceptorId  拦截器ID
+     * @param inteceptorId 拦截器ID
      * @return
      */
-    boolean doInterceptAt(Message message,String inteceptorId);
-    
+    boolean doInterceptAt(Message message, String inteceptorId);
+
     /**
      * 支持逆向遍历
+     * 
      * @return
      */
     ListIterator<Interceptor<? extends Message>> listIterator();
-    
+
     /**
      * 拦截链状态
+     * 
      * @return
      */
     State getState();
-    
+
     /**
      * 重置状态,包括State和迭代器状态
      */
     void reset();
-    
+
     Processor getFaultProcessor();
-    
+
     void setFaultProcessor(Processor processor);
+
     /**
      * 暂停Chain执行,恢复(resume)后照常继续执行
      */
@@ -116,7 +124,7 @@ public interface InterceptorChain extends Iterable<Interceptor<? extends Message
      * 中断Chain执行,Chain回退一个interceptor,然后暂停Chain继续执行,对于已经执行的抛出中断异常.
      */
     void suspend();
-    
+
     /**
      * 恢复Chain,用当前线程继续执行上一个未完成的消息.
      */

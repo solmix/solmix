@@ -17,22 +17,21 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.dataformat;
 
-import java.io.IOException;
-
-import org.solmix.runtime.Container;
-import org.solmix.runtime.exchange.model.EndpointInfo;
+import org.solmix.runtime.exchange.model.ArgumentInfo;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月14日
+ * @version $Id$ 2014年11月24日
  */
 
-public interface PipelineFactory {
+public interface ObjectReader<T> {
 
-    Pipeline getPipeline(EndpointInfo info, Container c)throws IOException;
+    void setProperty(String prop, Object value); 
+    
+    Object read(T input);
 
-    Pipeline getPipeline(EndpointInfo info, String address, Container c)throws IOException;
+    Object read(T input, ArgumentInfo ai);
 }

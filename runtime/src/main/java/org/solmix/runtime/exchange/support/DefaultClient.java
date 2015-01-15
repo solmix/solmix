@@ -50,13 +50,13 @@ import org.solmix.runtime.exchange.PipelineSelector;
 import org.solmix.runtime.exchange.Processor;
 import org.solmix.runtime.exchange.Protocol;
 import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.model.InterfaceInfo;
 import org.solmix.runtime.exchange.model.MessageInfo;
 import org.solmix.runtime.exchange.model.OperationInfo;
 import org.solmix.runtime.exchange.model.ProtocolInfo;
 import org.solmix.runtime.exchange.model.ServiceInfo;
 import org.solmix.runtime.exchange.processor.ClientOutFaultProcessor;
-import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.Fault;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
@@ -163,7 +163,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         
         PhaseInterceptorChain chain;
         PhasePolicy policy = endpoint.getPhasePolicy();
-        Serialization ser = endpoint.getService().getSerialization();
+        DataFormat ser = endpoint.getService().getDataFormat();
         if (ser instanceof InterceptorProvider) {
             InterceptorProvider p = (InterceptorProvider) ser;
             List<Interceptor<? extends Message>> i4 = p.getInInterceptors();
@@ -428,7 +428,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         
         PhaseInterceptorChain chain;
         PhasePolicy policy = endpoint.getPhasePolicy();
-        Serialization ser = endpoint.getService().getSerialization();
+        DataFormat ser = endpoint.getService().getDataFormat();
         if (ser instanceof InterceptorProvider) {
             InterceptorProvider p = (InterceptorProvider) ser;
             List<Interceptor<? extends Message>> i4 = p.getOutInterceptors();

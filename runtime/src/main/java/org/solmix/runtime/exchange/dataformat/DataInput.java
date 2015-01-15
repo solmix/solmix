@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange.serialize;
+package org.solmix.runtime.exchange.dataformat;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
  * @version $Id$  2014年11月24日
  */
 
-public interface DataReader {
+public interface DataInput {
 
     /**
      * Read boolean.

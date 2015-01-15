@@ -102,8 +102,8 @@ public class InChainInitProcessor implements Processor {
             
 
             InterceptorProvider serial = null;
-            if (endpoint.getService().getSerialization() instanceof InterceptorProvider) {
-                serial = (InterceptorProvider)endpoint.getService().getSerialization();
+            if (endpoint.getService().getDataFormat() instanceof InterceptorProvider) {
+                serial = (InterceptorProvider)endpoint.getService().getDataFormat();
             }
 
             if (serial == null) {

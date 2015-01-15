@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -34,8 +34,7 @@ import org.solmix.runtime.exchange.MessageUtils;
  */
 
 public abstract class PhaseInterceptorSupport<T extends Message> implements
-    PhaseInterceptor<T>
-{
+    PhaseInterceptor<T> {
 
     private final String id;
 
@@ -45,23 +44,19 @@ public abstract class PhaseInterceptorSupport<T extends Message> implements
 
     private final Set<String> after = new SortedArraySet<String>();
 
-    public PhaseInterceptorSupport(String phase)
-    {
+    public PhaseInterceptorSupport(String phase) {
         this(null, phase, false);
     }
 
-    public PhaseInterceptorSupport(String id, String phase)
-    {
+    public PhaseInterceptorSupport(String id, String phase) {
         this(id, phase, false);
     }
 
-    public PhaseInterceptorSupport(String phase, boolean uniqueId)
-    {
+    public PhaseInterceptorSupport(String phase, boolean uniqueId) {
         this(null, phase, uniqueId);
     }
 
-    public PhaseInterceptorSupport(String id, String phase, boolean uniqueId)
-    {
+    public PhaseInterceptorSupport(String id, String phase, boolean uniqueId) {
         if (id == null) {
             id = getClass().getName();
         }
@@ -127,7 +122,8 @@ public abstract class PhaseInterceptorSupport<T extends Message> implements
     public Collection<PhaseInterceptor<? extends Message>> extInterceptors() {
         return null;
     }
+
     protected boolean isRequest(T message) {
         return MessageUtils.isRequest(message);
-    }  
+    }
 }

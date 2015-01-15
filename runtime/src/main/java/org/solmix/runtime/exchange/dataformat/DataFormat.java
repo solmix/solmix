@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright (c) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,27 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.exchange.dataformat;
 
-package org.solmix.runtime.exchange.serialize;
+import org.solmix.runtime.exchange.Service;
+
+
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月24日
+ * @version $Id$  2015年1月13日
  */
 
-public interface ObjectReader<T> extends DataReader {
+public interface DataFormat {
 
-    Object read(T input);
+    void initialize(Service service);
+    
+    <T> ObjectReader<T> createReader(Class<T> cls);
 
-    Object read(T input, Class<?> type);
+    <T> ObjectWriter<T> createWriter(Class<T> cls);
+
+    Class<?>[] getSupportedReaderFormats();
+
+    Class<?>[] getSupportedWriterFormats();
 }

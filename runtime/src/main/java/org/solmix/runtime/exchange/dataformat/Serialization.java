@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -17,10 +17,14 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange.serialize;
+package org.solmix.runtime.exchange.dataformat;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.solmix.runtime.Extension;
-import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.model.SerializationInfo;
 
 /**
  * 
@@ -29,29 +33,15 @@ import org.solmix.runtime.exchange.Service;
  */
 @Extension(name = "java")
 public interface Serialization {
+    
+    String SERIALIZATION_ID = Serialization.class.getName() + ".SERIALIZATION_ID";
 
-    byte getSerializeId();
+    byte getContentTypeId();
 
-    /**
-     * get content type
-     * 
-     * @return content type
-     */
     String getContentType();
 
-    void initialize(Service service);
+    ObjectOutput createObjectOutput(SerializationInfo info, OutputStream output) throws IOException;
 
-    // ObjectOutput serialize(RemoteInfo info, OutputStream output) throws
-    // IOException;
+    ObjectInput  createObjectInput(SerializationInfo info, InputStream input) throws IOException;
 
-    // ObjectInput deserialize(RemoteInfo info, InputStream input) throws
-    // IOException;
-
-    <T> ObjectReader<T> createReader(Class<T> cls);
-
-    <T> ObjectWriter<T> createWriter(Class<T> cls);
-
-    Class<?>[] getSupportedReaderFormats();
-
-    Class<?>[] getSupportedWriterFormats();
 }

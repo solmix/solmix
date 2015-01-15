@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright (c) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,22 +17,17 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange;
-
-import java.io.IOException;
-
-import org.solmix.runtime.Container;
-import org.solmix.runtime.exchange.model.EndpointInfo;
+package org.solmix.runtime.exchange.dataformat;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月14日
+ * @version $Id$ 2015年1月14日
  */
 
-public interface PipelineFactory {
+public interface SerializationManager {
 
-    Pipeline getPipeline(EndpointInfo info, Container c)throws IOException;
+    Serialization getSerializationById(Byte id);
 
-    Pipeline getPipeline(EndpointInfo info, String address, Container c)throws IOException;
+    Serialization getSerializationByName(String extendsionName);
 }

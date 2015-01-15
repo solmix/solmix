@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.exchange.model.ServiceInfo;
-import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.InterceptorProvider;
 
 /**
@@ -48,9 +48,9 @@ public interface Service extends Map<String, Object>, InterceptorProvider {
 
     EndpointInfo getEndpointInfo(NamedID eid);
     
-    Serialization getSerialization();
+    DataFormat getDataFormat();
     
-    void setSerialization(Serialization s);
+    void setDataFormat(DataFormat df);
     
     Executor getExecutor();
     

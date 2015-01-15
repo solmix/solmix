@@ -165,7 +165,7 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
                 pl = factory.getPipeline(info, ex.getContainer());
                 replaceEndpointAddressIfNeeded(msg, info.getAddress(), pl);
             } else {
-                pl = factory.getpPipeline(info, msgAdd, ex.getContainer());
+                pl = factory.getPipeline(info, msgAdd, ex.getContainer());
             }
 
             Processor processor = ex.get(Processor.class);

@@ -28,11 +28,11 @@ import java.util.concurrent.Executor;
 import org.solmix.runtime.bean.Configurable;
 import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.Service;
+import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.exchange.model.ServiceInfo;
-import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 /**
@@ -48,7 +48,7 @@ public class DefaultService extends InterceptorProviderSupport implements
 
     private final List<ServiceInfo> serviceInfos;
 
-    private Serialization serialization;
+    private DataFormat dataFormat;
 
     private Executor executor;
 
@@ -100,13 +100,13 @@ public class DefaultService extends InterceptorProviderSupport implements
     }
 
     @Override
-    public Serialization getSerialization() {
-        return serialization;
+    public DataFormat getDataFormat() {
+        return dataFormat;
     }
 
     @Override
-    public void setSerialization(Serialization s) {
-        this.serialization = s;
+    public void setDataFormat(DataFormat s) {
+        this.dataFormat = s;
     }
 
     /**   */

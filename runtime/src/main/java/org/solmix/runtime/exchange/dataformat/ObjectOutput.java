@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright (c) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,16 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.exchange.serialize;
+package org.solmix.runtime.exchange.dataformat;
+
+import java.io.IOException;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月24日
+ * @version $Id$  2015年1月13日
  */
 
-public interface ObjectWriter<T> extends DataWriter {
+public interface ObjectOutput extends DataOutput {
 
-    void write(Object obj, T output);
+    void writeObject(Object obj) throws IOException;
+    
 }

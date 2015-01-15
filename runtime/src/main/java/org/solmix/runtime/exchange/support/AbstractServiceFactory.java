@@ -26,8 +26,8 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.ServiceFactoryListener;
+import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
-import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.support.OneWayInterceptor;
 import org.solmix.runtime.interceptor.support.OutgoingChainInterceptor;
 import org.solmix.runtime.interceptor.support.ServiceInvokerInterceptor;
@@ -45,11 +45,11 @@ public abstract class AbstractServiceFactory {
 
  
 
-    protected boolean serializeSetted;
+    protected boolean dataFormatSetted;
     
     protected Service service;
 
-    private Serialization serialization;
+    private DataFormat dataFormat;
 
     private final CopyOnWriteArrayList<ServiceFactoryListener> listeners = new CopyOnWriteArrayList<ServiceFactoryListener>();
     
@@ -90,30 +90,30 @@ public abstract class AbstractServiceFactory {
     }
 
     /**   */
-    public Serialization getSerialization() {
-        return getSerialization(true);
+    public DataFormat getDataFormat() {
+        return getDataFormat(true);
 
     }
 
     /**   */
-    public Serialization getSerialization(boolean create) {
-        if (serialization == null && create) {
-            serialization = defaultSerialization();
+    public DataFormat getDataFormat(boolean create) {
+        if (dataFormat == null && create) {
+            dataFormat = defaultDataFormat();
         }
-        return serialization;
+        return dataFormat;
     }
 
     /**
      * @return
      */
-    protected Serialization defaultSerialization() {
+    protected DataFormat defaultDataFormat() {
         return null;
     }
 
     /**   */
-    public void setSerialization(Serialization serialization) {
-        this.serialization = serialization;
-        serializeSetted = serialization != null;
+    public void setDataFormat(DataFormat dataFormat) {
+        this.dataFormat = dataFormat;
+        dataFormatSetted = dataFormat != null;
     }
 
     public Service getService() {

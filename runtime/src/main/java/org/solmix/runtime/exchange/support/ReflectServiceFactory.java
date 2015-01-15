@@ -36,6 +36,7 @@ import org.solmix.runtime.exchange.EndpointException;
 import org.solmix.runtime.exchange.ProtocolFactoryManager;
 import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.ServiceCreateException;
+import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
 import org.solmix.runtime.exchange.invoker.FactoryInvoker;
 import org.solmix.runtime.exchange.invoker.Invoker;
@@ -45,7 +46,6 @@ import org.solmix.runtime.exchange.model.EndpointInfo;
 import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.exchange.model.NamedIDPolicy;
 import org.solmix.runtime.exchange.model.ServiceInfo;
-import org.solmix.runtime.exchange.serialize.Serialization;
 import org.solmix.runtime.interceptor.phase.PhasePolicy;
 import org.solmix.runtime.interceptor.support.FaultOutInterceptor;
 
@@ -129,8 +129,8 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
             getService().setExecutor(getExecutor());
         }
         
-        if (getSerialization() != null) {
-            getService().setSerialization(getSerialization());
+        if (getDataFormat() != null) {
+            getService().setDataFormat(getDataFormat());
         }
 
         getService().put(OperationDispatcher.class.getName(), getOperationDispatcher());
@@ -185,15 +185,15 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     }
 
     @Override
-    protected Serialization defaultSerialization() {
+    protected DataFormat defaultDataFormat() {
         // 通过service class 注解
         // 通过container参数加载
         return null;
     }
 
     public void resetFactory() {
-        if (!serializeSetted) {
-            setSerialization(null);
+        if (!dataFormatSetted) {
+            setDataFormat(null);
         }
         setService(null);
     }
