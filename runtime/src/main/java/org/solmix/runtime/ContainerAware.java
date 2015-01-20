@@ -16,20 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime;
 
+package org.solmix.runtime;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月11日
+ * @version $Id$ 2014年10月11日
  */
 
-public interface ContainerAware
-{
-    
+public interface ContainerAware {
+
     void setContainer(Container container);
-    
+
     Container getContainer();
 
 }

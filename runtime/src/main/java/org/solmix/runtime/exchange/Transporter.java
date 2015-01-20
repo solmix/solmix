@@ -37,5 +37,13 @@ public interface Transporter extends ProcessorAware {
     
     String getAddress();
     
+    /**
+     * 消息返回使用的通道
+     * @param msg
+     * @return
+     * @throws IOException
+     */
     Pipeline getBackPipeline(Message msg) throws IOException;
+    
+    int getDefaultPort();
 }

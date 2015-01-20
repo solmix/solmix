@@ -28,6 +28,7 @@ import java.util.Set;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.bean.ConfiguredBeanProvider.BeanLoaderListener;
+import org.solmix.runtime.extension.DefaultExtensionLoader;
 
 /**
  * 根据URI查找适配的传输层实现.
@@ -110,9 +111,6 @@ public class TransportDetector<T> {
         return prefixes;
     }
 
-    /**
-     * 
-     */
     private void loadAll() {
         provider.loadBeansOfType(cls, new BeanLoaderListener<T>() {
 
@@ -137,17 +135,18 @@ public class TransportDetector<T> {
         provider.loadBeansOfType(cls, new BeanLoaderListener<T>() {
 
             @Override
-            public boolean loadBean(String name, Class<? extends T> type) {
-                return !loaded.contains(name);
+            public boolean loadBean(String name, Class<? extends T> clazz) {
+                return !loaded.contains(name)
+                    && type.equals(DefaultExtensionLoader.extensionName(clazz));
             }
 
             @Override
             public boolean beanLoaded(String name, T bean) {
                 loaded.add(name);
-                if (!map.containsKey(name)) {
-                    registerBean(name, bean);
+                if (!map.containsKey(type)) {
+                    registerBean(type, bean);
                 } 
-                return map.containsKey(name);
+                return map.containsKey(type);
             }
         });
         return map.get(type);

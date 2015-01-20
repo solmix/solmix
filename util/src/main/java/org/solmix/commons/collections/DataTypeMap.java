@@ -75,7 +75,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public String getString(Object key) {
+    public String getString(String key) {
         return getString(key, null);
     }
 
@@ -97,19 +97,6 @@ public class DataTypeMap implements Map<String, Object> {
         return new DataTypeMap(getSubtreePrefixed(key, this));
     }
 
-    /**
-     * @param key
-     * @param defaultValue
-     * @return return key's value if value is null return defaultValue.
-     */
-    public String[] getStringArray(Object key, String defaultValue[]) {
-        Object value = get(key);
-        if (value == null) {
-            return defaultValue;
-        } else {
-            return (String[]) listToArray(getList(key));
-        }
-    }
 
     /**
      * @param key
@@ -129,7 +116,7 @@ public class DataTypeMap implements Map<String, Object> {
      * 
      * @return the decorated map
      */
-    public DataTypeMap getMap(Object key) {
+    public DataTypeMap getMap(String key) {
         return getMap(key, null);
     }
 
@@ -141,18 +128,21 @@ public class DataTypeMap implements Map<String, Object> {
      * @return if value is null return default value.
      */
     @SuppressWarnings("unchecked")
-    public DataTypeMap getMap(Object key, Map<String, Object> defaultValue) {
+    public DataTypeMap getMap(String key, Map<String, Object> defaultValue) {
         Object value = get(key);
-        if (value instanceof DataTypeMap)
+        if (value instanceof DataTypeMap) {
             return (DataTypeMap) value;
-        if (value instanceof Map<?, ?>)
+        }
+        if (value instanceof Map<?, ?>) {
             return new DataTypeMap((Map<String, Object>) value);
+        }
         if (value == null) {
             if (defaultValue != null) {
-                if (defaultValue instanceof DataTypeMap)
+                if (defaultValue instanceof DataTypeMap) {
                     return (DataTypeMap) defaultValue;
-                else
+                } else {
                     return new DataTypeMap(defaultValue);
+                }
             } else {
                 return null;
             }
@@ -165,7 +155,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public List<?> getList(Object key) {
+    public List<?> getList(String key) {
         return getList(key, null);
     }
 
@@ -174,7 +164,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public List<?> getList(Object key, List<?> defaultValue) {
+    public List<?> getList(String key, List<?> defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -193,7 +183,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public List<?> getCommaSeparatedList(Object key) {
+    public List<?> getCommaSeparatedList(String key) {
         return getCommaSeparatedList(key, null);
     }
 
@@ -204,7 +194,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public List<?> getCommaSeparatedList(Object key, List<?> defaultValue) {
+    public List<?> getCommaSeparatedList(String key, List<?> defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -221,7 +211,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public boolean getBoolean(Object key, boolean defaultValue) {
+    public boolean getBoolean(String key, boolean defaultValue) {
         return getBoolean(key, new Boolean(defaultValue)).booleanValue();
     }
 
@@ -231,7 +221,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Boolean getBoolean(Object key) {
+    public Boolean getBoolean(String key) {
         return getBoolean(key, ((Boolean) (null)));
     }
 
@@ -244,7 +234,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Boolean getBoolean(Object key, Boolean defaultValue) {
+    public Boolean getBoolean(String key, Boolean defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -263,7 +253,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Byte getByte(Object key) {
+    public Byte getByte(String key) {
         return getByte(key, ((Byte) (null)));
     }
 
@@ -272,7 +262,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public byte getByte(Object key, byte defaultValue) {
+    public byte getByte(String key, byte defaultValue) {
         return getByte(key, new Byte(defaultValue)).byteValue();
     }
 
@@ -282,7 +272,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Byte getByte(Object key, Byte defaultValue) {
+    public Byte getByte(String key, Byte defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -292,7 +282,7 @@ public class DataTypeMap implements Map<String, Object> {
             return new Byte(value.toString().trim());
     }
 
-    public short getShort(Object key, short defaultValue) {
+    public short getShort(String key, short defaultValue) {
         return getShort(key, new Short(defaultValue)).shortValue();
     }
 
@@ -300,7 +290,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Short getShort(Object key) {
+    public Short getShort(String key) {
         return getShort(key, ((Short) (null)));
     }
 
@@ -311,7 +301,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Short getShort(Object key, Short defaultValue) {
+    public Short getShort(String key, Short defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -325,7 +315,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Integer getInt(Object key) {
+    public Integer getInt(String key) {
         return getInteger(key, ((Integer) (null)));
     }
 
@@ -333,19 +323,19 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Integer getInteger(Object key) {
+    public Integer getInteger(String key) {
         return getInteger(key, ((Integer) (null)));
     }
 
-    public int getInt(Object key, int defaultValue) {
+    public int getInt(String key, int defaultValue) {
         return getInteger(key, new Integer(defaultValue)).intValue();
     }
 
-    public int getInteger(Object key, int defaultValue) {
+    public int getInteger(String key, int defaultValue) {
         return getInteger(key, new Integer(defaultValue)).intValue();
     }
 
-    public Integer getInteger(Object key, Integer defaultValue) {
+    public Integer getInteger(String key, Integer defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -359,7 +349,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param key
      * @return
      */
-    public Long getLong(Object key) {
+    public Long getLong(String key) {
         return getLong(key, ((Long) (null)));
     }
 
@@ -368,7 +358,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public long getLong(Object key, long defaultValue) {
+    public long getLong(String key, long defaultValue) {
         return getLong(key, new Long(defaultValue)).longValue();
     }
 
@@ -377,7 +367,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Long getLong(Object key, Long defaultValue) {
+    public Long getLong(String key, Long defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -387,11 +377,11 @@ public class DataTypeMap implements Map<String, Object> {
             return new Long(value.toString().trim());
     }
 
-    public Float getFloat(Object key) {
+    public Float getFloat(String key) {
         return getFloat(key, ((Float) (null)));
     }
 
-    public float getFloat(Object key, float defaultValue) {
+    public float getFloat(String key, float defaultValue) {
         return getFloat(key, new Float(defaultValue)).floatValue();
     }
 
@@ -400,7 +390,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Float getFloat(Object key, Float defaultValue) {
+    public Float getFloat(String key, Float defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -410,7 +400,7 @@ public class DataTypeMap implements Map<String, Object> {
             return new Float(value.toString().trim());
     }
 
-    public Double getDouble(Object key) {
+    public Double getDouble(String key) {
         return getDouble(key, ((Double) (null)));
     }
 
@@ -419,7 +409,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public double getDouble(Object key, double defaultValue) {
+    public double getDouble(String key, double defaultValue) {
         return getDouble(key, new Double(defaultValue)).doubleValue();
     }
 
@@ -428,7 +418,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @param defaultValue
      * @return
      */
-    public Double getDouble(Object key, Double defaultValue) {
+    public Double getDouble(String key, Double defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;

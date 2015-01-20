@@ -40,6 +40,7 @@ import org.solmix.runtime.interceptor.FaultType;
 import org.solmix.runtime.interceptor.Interceptor;
 import org.solmix.runtime.interceptor.InterceptorChain;
 import org.solmix.runtime.interceptor.SuspendedException;
+import org.solmix.runtime.interceptor.support.ServiceInvokerInterceptor;
 
 /**
  * 分阶拦截链,分截拦截器可在链中按不同阶段遍历执行.
@@ -153,18 +154,28 @@ public class PhaseInterceptorChain implements InterceptorChain {
         return CURRENT_MESSAGE.get();
     }
 
-    /*
-     * public static boolean setCurrentMessage(PhaseInterceptorChain chain,
-     * Message m) { if (getCurrentMessage() == m) { return false; } if
-     * (chain.iterator.hasPrevious()) { chain.iterator.previous(); if
-     * (chain.iterator.next() instanceof ServiceInvokerInterceptor) {
-     * CURRENT_MESSAGE.set(m); return true; } else { String error =
-     * "Only ServiceInvokerInterceptor can update the current chain message";
-     * LOG.warn(error); throw new IllegalStateException(error); } } return
-     * false;
-     * 
-     * }
-     */
+    
+    public static boolean setCurrentMessage(PhaseInterceptorChain chain,
+        Message m) {
+        if (getCurrentMessage() == m) {
+            return false;
+        }
+        if (chain.iterator.hasPrevious()) {
+            chain.iterator.previous();
+            //回退后前移,取出当前interceptor
+            if (chain.iterator.next() instanceof ServiceInvokerInterceptor) {
+                CURRENT_MESSAGE.set(m);
+                return true;
+            } else {
+                String error = "Only ServiceInvokerInterceptor can update the current chain message";
+                LOG.warn(error);
+                throw new IllegalStateException(error);
+            }
+        }
+        return false;
+
+    }
+     
 
     public synchronized void releaseAndAcquireChain() {
         while (!chainReleased) {
@@ -225,7 +236,8 @@ public class PhaseInterceptorChain implements InterceptorChain {
     private void insert(Integer phase, PhaseInterceptor<? extends Message> pi,
         boolean force) {
         Holder ih = new Holder(pi, phase);
-        if (heads[phase] == null) {// 还未设置任何拦截器
+        // 还未设置任何拦截器
+        if (heads[phase] == null) {
             heads[phase] = ih;
             tails[phase] = ih;
             hasAfters[phase] = !pi.getAfter().isEmpty();
@@ -261,7 +273,8 @@ public class PhaseInterceptorChain implements InterceptorChain {
                     heads[idx].prev = ih;
                 }
             }
-        } else {// 已经设置了拦截器
+        } else {
+            // 已经设置了拦截器
             Set<String> before = pi.getBefore();
             Set<String> after = pi.getAfter();
             // 此拦截器需要插入这个节点的前面,如果为null,说明此拦截器不在任何节点的前面,则为最后一个节点.

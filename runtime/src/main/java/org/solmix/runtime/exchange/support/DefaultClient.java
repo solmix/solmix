@@ -75,7 +75,7 @@ import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
 
 public class DefaultClient extends InterceptorProviderSupport implements Client {
 
-    public static final String EXTRA_EXECUTOR = Executor.class.getName() + ".EXTRA_EXECUTOR";
+    public static final String EXECUTOR_USED = Executor.class.getName() + ".EXECUTOR_USED";
 
     public static final String THREAD_LOCAL_REQUEST_CONTEXT = DefaultClient.class.getName() + ".THREAD_LOCAL_REQUEST_CONTEXT";
 
@@ -469,7 +469,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
 
                 @Override
                 public void process(final Message message) throws ExchangeException {
-                    if (!message.getExchange().containsKey(EXTRA_EXECUTOR)) {
+                    if (!message.getExchange().containsKey(EXECUTOR_USED)) {
                         executor.execute(new Runnable() {
                             
                             @Override

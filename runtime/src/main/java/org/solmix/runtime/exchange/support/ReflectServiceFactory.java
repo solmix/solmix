@@ -276,6 +276,9 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     
     /**   */
     public OperationDispatcher getOperationDispatcher() {
+        if (operationDispatcher == null) {
+            operationDispatcher = new SimpleOperationDispatcher();
+        }
         return operationDispatcher;
     }
     

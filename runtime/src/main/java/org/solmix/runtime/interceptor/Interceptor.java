@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,11 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.interceptor;
 
 import org.solmix.runtime.exchange.Message;
-
-
 
 /**
  * 消息拦截器
@@ -41,15 +40,15 @@ import org.solmix.runtime.exchange.Message;
  *                 \|/         .       |    
  *       +----------------------------------------------+----------+   
  *       |          |        Interceptor     N                     |    
- *       +----------+-----------------------------------+----------+ 
- *                                             
+ *       +----------+-----------------------------------+----------+
+ * 
  * </pre>
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月4日
+ * @version $Id$ 2014年10月4日
  */
 
-public interface Interceptor<T extends Message>
-{
+public interface Interceptor<T extends Message> {
 
     /**
      * 处理拦截的消息
@@ -58,7 +57,7 @@ public interface Interceptor<T extends Message>
      * @throws InterceptorException
      */
     void handleMessage(T message) throws Fault;
-    
+
     /**
      * 回退处理异常
      * 

@@ -176,10 +176,19 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     
     /**   */
     public String getProtocol() {
+        if (protocol == null && address != null) {
+            return detectProtocol(address);
+        }
         return protocol;
     }
-    
-    /**   */
+
+    private String detectProtocol(String addr) {
+        if (addr.indexOf("://") != -1) {
+            return addr.substring(0, addr.indexOf("://"));
+        }
+        return null;
+    }
+
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }

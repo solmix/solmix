@@ -18,7 +18,6 @@
  */
 package org.solmix.runtime.io;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 
@@ -30,7 +29,7 @@ import java.io.IOException;
 
 public abstract class AbstractThresholdOutputStream extends AbstractWrappedOutputStream {
     protected int threshold;
-    protected ByteArrayOutputStream buffer;
+    protected LoadingByteArrayOutputStream buffer;
     
     public AbstractThresholdOutputStream(int threshold) {
         this.threshold = threshold;

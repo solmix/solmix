@@ -151,13 +151,16 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
      */
     @Override
     public String getExtensionName(Class<?> clazz) {
+        return extensionName(clazz);
+    }
+    
+    public static String extensionName(Class<?> clazz) {
         Extension e = clazz.getAnnotation(Extension.class);
         if (e != null) {
             return e.name().trim();
         }
         return null;
     }
-
     /**
      * {@inheritDoc}
      * 

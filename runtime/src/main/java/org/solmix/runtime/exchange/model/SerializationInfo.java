@@ -16,30 +16,31 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.model;
-
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年1月13日
+ * @version $Id$ 2015年1月13日
  */
 
 public class SerializationInfo extends InfoPropertiesSupport {
 
     private String name;
 
-    
+    public SerializationInfo(String name) {
+        this.name = name;
+    }
+
     /**   */
     public String getName() {
         return name;
     }
 
-    
     /**   */
     public void setName(String name) {
         this.name = name;
     }
-    
+
 }

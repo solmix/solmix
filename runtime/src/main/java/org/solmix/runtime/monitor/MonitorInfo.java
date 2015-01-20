@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,45 +16,44 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.monitor;
 
+package org.solmix.runtime.monitor;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年8月15日
+ * @version $Id$ 2014年8月15日
  */
 
-public class MonitorInfo
-{
-    /** 可使用内存. */  
-    private long totalMemory;   
-       
-    /** 剩余内存. */  
-    private long freeMemory;   
-       
-    /** 最大可使用内存. */  
-    private long maxMemory;   
-       
-    /** 操作系统. */  
-    private String osName;   
-       
-    /** 总的物理内存. */  
-    private long totalMemorySize;   
-       
-    /** 剩余的物理内存. */  
-    private long freePhysicalMemorySize;   
-       
-    /** 已使用的物理内存. */  
-    private long usedMemory;   
-       
-    /** 线程总数. */  
-    private int totalThread;   
-       
-    /** cpu使用率. */  
+public class MonitorInfo {
+
+    /** 可使用内存. */
+    private long totalMemory;
+
+    /** 剩余内存. */
+    private long freeMemory;
+
+    /** 最大可使用内存. */
+    private long maxMemory;
+
+    /** 操作系统. */
+    private String osName;
+
+    /** 总的物理内存. */
+    private long totalMemorySize;
+
+    /** 剩余的物理内存. */
+    private long freePhysicalMemorySize;
+
+    /** 已使用的物理内存. */
+    private long usedMemory;
+
+    /** 线程总数. */
+    private int totalThread;
+
+    /** cpu使用率. */
     private double cpuRatio;
 
-    
     /**
      * @return the totalMemory
      */
@@ -62,7 +61,6 @@ public class MonitorInfo
         return totalMemory;
     }
 
-    
     /**
      * @param totalMemory the totalMemory to set
      */
@@ -70,7 +68,6 @@ public class MonitorInfo
         this.totalMemory = totalMemory;
     }
 
-    
     /**
      * @return the freeMemory
      */
@@ -78,7 +75,6 @@ public class MonitorInfo
         return freeMemory;
     }
 
-    
     /**
      * @param freeMemory the freeMemory to set
      */
@@ -86,7 +82,6 @@ public class MonitorInfo
         this.freeMemory = freeMemory;
     }
 
-    
     /**
      * @return the maxMemory
      */
@@ -94,7 +89,6 @@ public class MonitorInfo
         return maxMemory;
     }
 
-    
     /**
      * @param maxMemory the maxMemory to set
      */
@@ -102,7 +96,6 @@ public class MonitorInfo
         this.maxMemory = maxMemory;
     }
 
-    
     /**
      * @return the osName
      */
@@ -110,7 +103,6 @@ public class MonitorInfo
         return osName;
     }
 
-    
     /**
      * @param osName the osName to set
      */
@@ -118,7 +110,6 @@ public class MonitorInfo
         this.osName = osName;
     }
 
-    
     /**
      * @return the totalMemorySize
      */
@@ -126,7 +117,6 @@ public class MonitorInfo
         return totalMemorySize;
     }
 
-    
     /**
      * @param totalMemorySize the totalMemorySize to set
      */
@@ -134,7 +124,6 @@ public class MonitorInfo
         this.totalMemorySize = totalMemorySize;
     }
 
-    
     /**
      * @return the freePhysicalMemorySize
      */
@@ -142,7 +131,6 @@ public class MonitorInfo
         return freePhysicalMemorySize;
     }
 
-    
     /**
      * @param freePhysicalMemorySize the freePhysicalMemorySize to set
      */
@@ -150,7 +138,6 @@ public class MonitorInfo
         this.freePhysicalMemorySize = freePhysicalMemorySize;
     }
 
-    
     /**
      * @return the usedMemory
      */
@@ -158,7 +145,6 @@ public class MonitorInfo
         return usedMemory;
     }
 
-    
     /**
      * @param usedMemory the usedMemory to set
      */
@@ -166,7 +152,6 @@ public class MonitorInfo
         this.usedMemory = usedMemory;
     }
 
-    
     /**
      * @return the totalThread
      */
@@ -174,7 +159,6 @@ public class MonitorInfo
         return totalThread;
     }
 
-    
     /**
      * @param totalThread the totalThread to set
      */
@@ -182,7 +166,6 @@ public class MonitorInfo
         this.totalThread = totalThread;
     }
 
-    
     /**
      * @return the cpuRatio
      */
@@ -190,12 +173,11 @@ public class MonitorInfo
         return cpuRatio;
     }
 
-    
     /**
      * @param cpuRatio the cpuRatio to set
      */
     public void setCpuRatio(double cpuRatio) {
         this.cpuRatio = cpuRatio;
-    }  
-    
+    }
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright (c) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,22 +17,28 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange;
+package org.solmix.commons.collections;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.exchange.model.EndpointInfo;
-import org.solmix.runtime.exchange.model.ProtocolInfo;
-import org.solmix.runtime.exchange.model.ServiceInfo;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年12月1日
+ * @version $Id$ 2015年1月20日
  */
 
-public interface EndpointInfoFactory {
+public class UnChangeDictionaryTest extends Assert {
 
-    EndpointInfo createEndpointInfo(Container container,
-        ServiceInfo serviceInfo, ProtocolInfo b, Object endpointConfig);
+    @Test(expected=UnsupportedOperationException.class)
+    public void testput() {
+        UnChangeDictionary<String, Object> ud = new UnChangeDictionary<String, Object>(5);
+        ud.put("aaa", "aaa");
+        ud.put("aAa", "bbb");
+        
+        assertTrue(!ud.get("aaa").equals("aaa"));
+        assertTrue(ud.get("aaa").equals("bbb"));
+        ud.remove("aaa");
 
+    }
 }

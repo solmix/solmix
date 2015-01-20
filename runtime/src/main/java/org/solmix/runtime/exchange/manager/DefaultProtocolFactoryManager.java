@@ -29,6 +29,7 @@ import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.bean.ConfiguredBeanProvider.BeanLoaderListener;
 import org.solmix.runtime.exchange.ProtocolFactory;
 import org.solmix.runtime.exchange.ProtocolFactoryManager;
+import org.solmix.runtime.extension.DefaultExtensionLoader;
 
 /**
  * 
@@ -43,7 +44,9 @@ public class DefaultProtocolFactoryManager implements ProtocolFactoryManager {
     private final Container container;
 
     private final Set<String> failed = new CopyOnWriteArraySet<String>();
+
     private final Set<String> loaded = new CopyOnWriteArraySet<String>();
+
     public DefaultProtocolFactoryManager(Container container) {
         this.container = container;
         protocolFactories = new ConcurrentHashMap<String, ProtocolFactory>(8,
@@ -77,27 +80,30 @@ public class DefaultProtocolFactoryManager implements ProtocolFactoryManager {
         }
         return pf;
     }
-    
+
     private ProtocolFactory loadProtocolFactory(final String type) {
         ConfiguredBeanProvider provider = container.getExtension(ConfiguredBeanProvider.class);
-        provider.loadBeansOfType(ProtocolFactory.class, new BeanLoaderListener<ProtocolFactory>() {
+        provider.loadBeansOfType(ProtocolFactory.class,
+            new BeanLoaderListener<ProtocolFactory>() {
 
-            @Override
-            public boolean loadBean(String name,
-                Class<? extends ProtocolFactory> type) {
-                loaded.add(name);
-                return protocolFactories.containsKey(type);
-            }
-
-            @Override
-            public boolean beanLoaded(String name, ProtocolFactory bean) {
-                if (!loaded.contains(name)) {
-                    register(name,bean);
+                @Override
+                public boolean loadBean(String name,
+                    Class<? extends ProtocolFactory> clzz) {
+                    return !protocolFactories.containsKey(type)
+                        && !loaded.contains(name)
+                        && type.equals(DefaultExtensionLoader.extensionName(clzz));
                 }
-                return protocolFactories.containsKey(type);
-            }
-            
-        });
+
+                @Override
+                public boolean beanLoaded(String name, ProtocolFactory bean) {
+                    loaded.add(name);
+                    if (!protocolFactories.containsKey(type)) {
+                        register(type, bean);
+                    }
+                    return !protocolFactories.containsKey(type);
+                }
+
+            });
         return protocolFactories.get(type);
     }
 

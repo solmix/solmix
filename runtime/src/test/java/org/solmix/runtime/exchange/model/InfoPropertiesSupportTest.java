@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014 The Solmix Project
+ * Copyright (c) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,22 +17,26 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.exchange;
+package org.solmix.runtime.exchange.model;
 
-import org.solmix.runtime.Container;
-import org.solmix.runtime.exchange.model.EndpointInfo;
-import org.solmix.runtime.exchange.model.ProtocolInfo;
-import org.solmix.runtime.exchange.model.ServiceInfo;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年12月1日
+ * @version $Id$ 2015年1月20日
  */
 
-public interface EndpointInfoFactory {
+public class InfoPropertiesSupportTest extends Assert {
 
-    EndpointInfo createEndpointInfo(Container container,
-        ServiceInfo serviceInfo, ProtocolInfo b, Object endpointConfig);
+    @Test
+    public void testExtension() {
+        InfoPropertiesSupport is = new InfoPropertiesSupport() {
+        };
+        EndpointInfo mi = new EndpointInfo();
+        is.addExtension(mi);
+        assertEquals(mi, is.getExtension(EndpointInfo.class));
+    }
 
 }
