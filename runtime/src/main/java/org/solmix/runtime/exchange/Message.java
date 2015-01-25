@@ -64,10 +64,13 @@ public interface Message extends StringTypeMap {
     
     /**是否为请求侧消息,值类型Boolean    */
     String REQUEST_MESSAGE = Message.class.getName() + ".REQUEST_MESSAGE"; 
+    
+    String EVENT_MESSAGE = Message.class.getName() + ".EVENT_MESSAGE"; 
 
     /** 内容类型定义,值类型String,比如:text/xml   */
     String CONTENT_TYPE = "Content-Type";
     
+    String CONTENT_LENGTH = "Content-Length";
 
     /**信息中指定的地址,值类型String    */
     String ENDPOINT_ADDRESS = Message.class.getName() + ".ENDPOINT_ADDRESS";
@@ -89,10 +92,12 @@ public interface Message extends StringTypeMap {
     
     /**字符集,值类型String    */
     String ENCODING = Message.class.getName() + ".ENCODING";
-    
-    /**HTTP方法,值类型String   etc:GET/POST */
-    String HTTP_METHOD = Message.class.getName() + ".HTTP_METHOD";
 
+    /*
+     * HTTP方法,值类型String etc:GET/POST
+     * 
+     * String HTTP_METHOD = Message.class.getName() + ".HTTP_METHOD";
+     */
     /** 客户端连接超时,值类型 long string */
     String CONNECTION_TIMEOUT = Message.class.getName() + ".CONNECTION_TIMEOUT";
 
@@ -104,12 +109,12 @@ public interface Message extends StringTypeMap {
      * 返回消息ID
      * @return
      */
-    String getId();
+    long getId();
     /**
      * 设置消息ID
      * @param id
      */
-    void setId(String id);
+    void setId(long id);
     
     /**
      * 返回该消息所处拦截链的快照,便于动态添加修改.

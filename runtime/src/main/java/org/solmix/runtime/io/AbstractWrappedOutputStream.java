@@ -23,19 +23,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Provides a convenient hook onFirstWrite() for those needing
- * to wrap an output stream.
- *
+ * Provides a convenient hook onFirstWrite() for those needing to wrap an output
+ * stream.
+ * 
  */
 public abstract class AbstractWrappedOutputStream extends OutputStream {
 
     protected OutputStream wrappedStream;
+
     protected boolean written;
+
     protected boolean allowFlush = true;
-    
+
     protected AbstractWrappedOutputStream() {
         super();
     }
+
     protected AbstractWrappedOutputStream(OutputStream os) {
         super();
         wrappedStream = os;
@@ -70,7 +73,7 @@ public abstract class AbstractWrappedOutputStream extends OutputStream {
             wrappedStream.write(b);
         }
     }
-    
+
     @Override
     public void close() throws IOException {
         if (wrappedStream != null) {
@@ -84,8 +87,12 @@ public abstract class AbstractWrappedOutputStream extends OutputStream {
             wrappedStream.flush();
         }
     }
-    
+
     public void allowFlush(boolean b) {
         this.allowFlush = b;
+    }
+
+    public OutputStream getWrappedStream() {
+        return wrappedStream;
     }
 }

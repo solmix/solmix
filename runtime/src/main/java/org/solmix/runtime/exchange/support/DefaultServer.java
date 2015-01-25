@@ -125,7 +125,7 @@ public class DefaultServer implements Server {
 
         protocolFactory.addListener(transporter, endpoint);
         if (serverRegistry != null) {
-            LOG.trace("Register the server to serverRegistry ");
+            LOG.trace("Register the server " + transporter.getAddress());
             serverRegistry.register(this);
         }
 

@@ -83,4 +83,27 @@ public final class MessageUtils {
     public static boolean isEmptyPartialResponse(Message message) {
         return Boolean.TRUE.equals(message.get(Message.EMPTY_PARTIAL_RESPONSE_MESSAGE));
     }
+
+    public static byte getByte(Message outMsg, String key) {
+        Object v = outMsg.get(key);
+        if (v instanceof Byte) {
+            return ((Byte) v).byteValue();
+        } else if (v != null) {
+            return Byte.valueOf(v.toString()).byteValue();
+        } else {
+            return -1;
+        }
+    }
+
+   
+    public static String getString(Message msg, String key) {
+        Object v = msg.get(key);
+        if (v instanceof String) {
+            return (String)v;
+        } else if (v != null) {
+            return v.toString();
+        } else {
+            return null;
+        }
+    }
 }

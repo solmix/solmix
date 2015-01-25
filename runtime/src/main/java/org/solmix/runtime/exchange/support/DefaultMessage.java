@@ -39,7 +39,7 @@ import org.solmix.runtime.interceptor.InterceptorChain;
 public class DefaultMessage extends StringTypeMapper implements Message {
     private static final long serialVersionUID = 913240661839172917L;
     private Exchange exchange;
-    private String id;
+    private long id;
     private InterceptorChain interceptorChain;
     private Object[] contents = new Object[20];
     private int index;
@@ -65,7 +65,7 @@ public class DefaultMessage extends StringTypeMapper implements Message {
      * @see org.solmix.runtime.exchange.Message#getId()
      */
     @Override
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -75,7 +75,7 @@ public class DefaultMessage extends StringTypeMapper implements Message {
      * @see org.solmix.runtime.exchange.Message#setId(java.lang.String)
      */
     @Override
-    public void setId(String id) {
+    public void setId(long id) {
         this.id=id;
     }
 
