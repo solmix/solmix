@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
  * @author solmix.f@gmail.com
  * @version $Id$  2014年3月31日
  */
-
 public class Constants
 {
     public static final String  PROVIDER                           = "provider";
