@@ -81,7 +81,6 @@ public class DefaultServer implements Server {
         this.protocolFactory = ptlFactory;
         Assert.isNotNull(tgFactory);
         makeTransporterForServer(tgFactory);
-
     }
 
     /**
@@ -94,7 +93,6 @@ public class DefaultServer implements Server {
         LOG.info("Server published address is " + ei.getAddress());
 
         serverRegistry = container.getExtension(ServerRegistry.class);
-
         managedEndpoint = createManagedEndpoint();
 
         serverLifeCycleManager = container.getExtension(ServerLifeCycleManager.class);
@@ -122,7 +120,6 @@ public class DefaultServer implements Server {
             return;
         }
         LOG.trace("Server is starting.");
-
         protocolFactory.addListener(transporter, endpoint);
         if (serverRegistry != null) {
             LOG.trace("Register the server " + transporter.getAddress());

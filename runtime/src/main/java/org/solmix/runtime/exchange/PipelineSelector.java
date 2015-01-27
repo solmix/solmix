@@ -20,6 +20,7 @@
 package org.solmix.runtime.exchange;
 
 /**
+ * 传输管道选择器
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月17日

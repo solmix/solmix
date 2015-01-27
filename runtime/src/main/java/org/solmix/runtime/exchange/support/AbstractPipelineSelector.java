@@ -43,7 +43,6 @@ import org.solmix.runtime.interceptor.Fault;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年11月13日
  */
-
 public abstract class AbstractPipelineSelector implements PipelineSelector,
     Closeable {
 

@@ -90,8 +90,12 @@ public class NamedID extends BaseID {
         if (serviceNamespace.equals("")) {
             return name;
         } else {
-            return new StringBuilder().append("{").append(serviceNamespace).append(
-                "}").append(name).toString();
+            if (serviceNamespace.endsWith("/")) {
+                return new StringBuilder().append(serviceNamespace).append(name).toString();
+            } else {
+                return new StringBuilder().append(serviceNamespace).append("/").append(
+                    name).toString();
+            }
         }
     }
 

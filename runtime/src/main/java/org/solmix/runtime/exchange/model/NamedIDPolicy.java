@@ -39,7 +39,14 @@ public class NamedIDPolicy {
     protected ReflectServiceFactory serviceFactory;
 
     protected String serviceNamespace;
+    
+    protected final String protocol;
 
+    public NamedIDPolicy(ReflectServiceFactory factory, String protocol) {
+        serviceFactory = factory;
+        this.protocol = protocol;
+    }
+    
     public ReflectServiceFactory getServiceFactory() {
         return serviceFactory;
     }
@@ -52,7 +59,7 @@ public class NamedIDPolicy {
     public String getServiceNamespace() {
         if (serviceNamespace == null && serviceFactory != null
             && serviceFactory.getServiceClass() != null) {
-            serviceNamespace = makeNamespaceFromClassName(serviceFactory.getServiceClass());
+            serviceNamespace = makeNamespaceFromClassName(serviceFactory.getServiceClass(),protocol);
         }
         return serviceNamespace;
     }
@@ -191,12 +198,17 @@ public class NamedIDPolicy {
     
     
     /**
-     * @param serviceClass
-     * @return
+     * 根据类名生成服务空间名
      */
-    public static String makeNamespaceFromClassName(Class<?> serviceClass) {
+    public static String makeNamespaceFromClassName(Class<?> serviceClass,
+        String protocol) {
+
         String className = serviceClass.getName();
-        int index = serviceClass.getName().lastIndexOf(".");
+        int index = className.lastIndexOf(".");
+
+        if (index == -1 && protocol != null) {
+            return protocol + "://" + "default";
+        }
         String packageName = className.substring(0, index);
 
         StringTokenizer st = new StringTokenizer(packageName, ".");
@@ -207,6 +219,7 @@ public class NamedIDPolicy {
         }
 
         StringBuilder sb = new StringBuilder(80);
+        sb.append(protocol).append("://");
 
         for (int i = words.length - 1; i >= 0; --i) {
             String word = words[i];
@@ -215,9 +228,9 @@ public class NamedIDPolicy {
             if (i != words.length - 1) {
                 sb.append('.');
             }
-
             sb.append(word);
         }
+        sb.append("/");
         return sb.toString();
     }
 

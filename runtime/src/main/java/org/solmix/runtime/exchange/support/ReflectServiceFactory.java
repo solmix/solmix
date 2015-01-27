@@ -104,9 +104,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         setPhasePolicy(phasePolicy);
     }
     public ReflectServiceFactory() {
-        NamedIDPolicy np = new NamedIDPolicy();
-        np.setServiceFactory(this);
-        setNamedIDPolicy(np);
+       
     }
 
     @Override

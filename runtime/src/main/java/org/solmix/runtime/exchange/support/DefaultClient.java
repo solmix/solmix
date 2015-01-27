@@ -122,7 +122,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         this.container = container;
         clientOutFaultProcessor = new ClientOutFaultProcessor(container,
             endpoint.getPhasePolicy());
-        getPipelineSelector().setEndpoint(endpoint);
+        getPipelineSelector(pipelineSelector).setEndpoint(endpoint);
         fireLifeCycleManager();
     }
 
@@ -561,9 +561,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         return getPipelineSelector(null);
     }
 
-    protected PipelineSelector getPipelineSelector(PipelineSelector selector) {
+    protected PipelineSelector getPipelineSelector(PipelineSelector override) {
         if (pipelineSelector == null) {
-            setPipelineSelector(selector);
+            setPipelineSelector(override);
         }
         return pipelineSelector;
     }
@@ -576,7 +576,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
     @Override
     public synchronized void setPipelineSelector(PipelineSelector selector) {
         if (selector == null) {
-            selector = new UpPipelineSelector();
+            selector = new PreparedPipelineSelector();
         } else {
             pipelineSelector = selector;
         }
@@ -761,6 +761,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                     }
                 });
             }
+            //准备数据管道
             preparePipelineSelector(msg);
             
             adapteChain(chain, msg, false);
@@ -785,7 +786,6 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
     }
 
-    
    
     protected  void preparePipelineSelector(Message msg) {
         getPipelineSelector().prepare(msg);

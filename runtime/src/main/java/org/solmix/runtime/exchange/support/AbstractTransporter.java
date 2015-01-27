@@ -65,7 +65,7 @@ public abstract class AbstractTransporter implements Transporter {
                 this.processor = processor;
                 if (getLogger().isTraceEnabled()) {
                     getLogger().trace(
-                        "register message Processor: " + processor);
+                        "Register message Processor: " + processor);
                 }
                 if (old == null) {
                     try {
@@ -87,7 +87,7 @@ public abstract class AbstractTransporter implements Transporter {
     }
 
     protected abstract Logger getLogger();
-
+    
     
     protected void activate(Processor p) {
 

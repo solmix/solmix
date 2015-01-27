@@ -30,15 +30,15 @@ import org.solmix.runtime.exchange.Pipeline;
  * @version $Id$  2014年11月14日
  */
 
-public class UpPipelineSelector extends AbstractPipelineSelector {
+public class PreparedPipelineSelector extends AbstractPipelineSelector {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeferredPipelineSelector.class);
 
-    public UpPipelineSelector() {
+    public PreparedPipelineSelector() {
         super();
     }
 
-    public UpPipelineSelector(Pipeline pipeline) {
+    public PreparedPipelineSelector(Pipeline pipeline) {
         super(pipeline);
     }
     

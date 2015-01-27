@@ -31,9 +31,23 @@ import java.io.IOException;
  */
 
 public interface Pipeline extends ProcessorAware {
+    
+    @Override
+    Processor getProcessor();
+
+    /**
+     * 设置管道当前的消息处理器,同时激活管道
+     */
+    @Override
+    void setProcessor(Processor processor);
 
     void prepare(Message message) throws IOException;
 
+    /**
+     * 完成message传输.
+     * @param message
+     * @throws IOException
+     */
     void close(Message message) throws IOException;
 
     String getAddress();

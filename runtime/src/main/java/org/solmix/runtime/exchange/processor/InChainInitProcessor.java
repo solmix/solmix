@@ -56,7 +56,6 @@ public class InChainInitProcessor implements Processor {
 
     protected ClassLoader loader;
 
-
     private final PhaseChainCache chainCache = new PhaseChainCache();
 
     public InChainInitProcessor(Endpoint endpoint, Container container) {
@@ -90,7 +89,7 @@ public class InChainInitProcessor implements Processor {
                     }
                 }
             }
-
+            //重新组装
             Message m = getBinding().createMessage(message);
             Exchange exchange = m.getExchange();
             if (exchange == null) {
@@ -100,7 +99,6 @@ public class InChainInitProcessor implements Processor {
             exchange.setIn(m);
             setupExchange(exchange, m);
             
-
             InterceptorProvider serial = null;
             if (endpoint.getService().getDataFormat() instanceof InterceptorProvider) {
                 serial = (InterceptorProvider)endpoint.getService().getDataFormat();
@@ -119,7 +117,6 @@ public class InChainInitProcessor implements Processor {
                                             serial.getInInterceptors());
             }
             m.setInterceptorChain(phaseChain);
-
             phaseChain.setFaultProcessor(endpoint.getOutFaultProcessor());
 
             addToChain(phaseChain, m);
@@ -168,7 +165,6 @@ public class InChainInitProcessor implements Processor {
 
         if (endpoint != null && endpoint.getService() != null) {
             exchange.put(Service.class, endpoint.getService());
-
         } else {
             exchange.put(Service.class, null);
         }

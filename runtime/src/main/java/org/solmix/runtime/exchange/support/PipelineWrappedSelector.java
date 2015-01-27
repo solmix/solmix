@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.exchange.support;
 
 import java.io.Closeable;
@@ -28,27 +29,26 @@ import org.solmix.runtime.exchange.Pipeline;
 import org.solmix.runtime.exchange.PipelineSelector;
 import org.solmix.runtime.exchange.Processor;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月17日
+ * @version $Id$ 2014年10月17日
  */
+public class PipelineWrappedSelector implements PipelineSelector, Closeable {
 
-public class PipelineWrappedSelector implements PipelineSelector, Closeable
-{
     private final Pipeline pipeline;
-    private  Endpoint endpoint;
-    
-    public PipelineWrappedSelector(Pipeline pipeline){
-        this(pipeline,null);
+
+    private Endpoint endpoint;
+
+    public PipelineWrappedSelector(Pipeline pipeline) {
+        this(pipeline, null);
     }
 
-    public PipelineWrappedSelector(Pipeline pipeline,Endpoint ed){
-        this.pipeline=pipeline;
-        this.endpoint=ed;
+    public PipelineWrappedSelector(Pipeline pipeline, Endpoint ed) {
+        this.pipeline = pipeline;
+        this.endpoint = ed;
     }
-    
+
     @Override
     public void close() throws IOException {
         pipeline.close();
@@ -61,8 +61,8 @@ public class PipelineWrappedSelector implements PipelineSelector, Closeable
      */
     @Override
     public void prepare(Message message) {
-        Processor p= message.getExchange().get(Processor.class);
-        if(p!=null){
+        Processor p = message.getExchange().get(Processor.class);
+        if (p != null) {
             pipeline.setProcessor(p);
         }
 
@@ -89,7 +89,8 @@ public class PipelineWrappedSelector implements PipelineSelector, Closeable
             if (exchange.getIn() != null) {
                 pipeline.close(exchange.getIn());
             }
-        } catch (IOException e) { }
+        } catch (IOException e) {
+        }
     }
 
     /**
@@ -109,7 +110,7 @@ public class PipelineWrappedSelector implements PipelineSelector, Closeable
      */
     @Override
     public void setEndpoint(Endpoint endpoint) {
-       this.endpoint=endpoint;
+        this.endpoint = endpoint;
     }
 
 }
