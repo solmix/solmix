@@ -107,6 +107,9 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
                     if (operations != null) {
                         boolean freeOnExecute = operations.size() <= 1;
                         for (Roperation operation : operations) {
+                        	if(!(operation.getOperationId() instanceof String)){
+                        		operation.setOperationId(null);
+                        	}
                             operation.setDataSource(operation.getDataSource().replace('$', '/'));
                             DSRequest dsr = SlxContext.getThreadSystemContext().getBean(
                                 DataSourceManager.class).createDSRequest(
