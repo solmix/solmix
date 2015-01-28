@@ -82,9 +82,9 @@ public class SerializerGenerator extends IncrementalGenerator
                   }
 
                   SerializableTypeOracleBuilder typesSentToBrowserBuilder = new SerializableTypeOracleBuilder(
-                          logger, context.getPropertyOracle(), context);
+                          logger, context);
                   SerializableTypeOracleBuilder typesSentFromBrowserBuilder = new SerializableTypeOracleBuilder(
-                          logger, context.getPropertyOracle(), context);
+                          logger, context);
 
                   List<Class<?>> serializableTypes = new ArrayList();
                   Collections.addAll(serializableTypes, annotation.value());
