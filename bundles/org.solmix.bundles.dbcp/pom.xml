@@ -5,6 +5,7 @@
     <artifactId>bundles</artifactId>
     <version>0.5.0</version>
     <relativePath>..</relativePath>
+    
   </parent>
   <artifactId>org.solmix.bundles.dbcp</artifactId>
   <packaging>bundle</packaging>
