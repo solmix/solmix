@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.support.spring;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -77,6 +78,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             try {
                 element.setUserData("ID", cname, null);
             } catch (Throwable t) {
+                //ignore
             }
         } else {
             addContainerWiringAttribute(bean, true, cname, ctx);
@@ -133,6 +135,10 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             Map<?, ?> map = ctx.getDelegate().parseMapElement(e,
                 bean.getBeanDefinition());
             bean.addPropertyValue("properties", map);
+        } else if ("listeners".equals(name)) {
+            List<?> lis = ctx.getDelegate().parseListElement(e,
+                bean.getBeanDefinition());
+            bean.addPropertyValue("containerListeners", lis);
         }
     }
 

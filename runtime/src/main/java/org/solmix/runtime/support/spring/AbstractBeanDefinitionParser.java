@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -23,6 +23,8 @@ import java.util.StringTokenizer;
 
 import org.solmix.commons.util.DOMUtils;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -47,14 +49,14 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
      * 这时在spring定义中预先设置一个到container的引线(wire),
      * 当container准备好后在为其设置上 */
     public static final String WIRE_CONTAINER_ATTRIBUTE = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireCT";
+        AbstractBeanDefinitionParser.class.getName() + ".wireCT";
 
     public static final String WIRE_CONTAINER_NAME = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireCTName";
+        AbstractBeanDefinitionParser.class.getName() + ".wireCTName";
 
     /** container名称   */
     public static final String WIRE_CONTAINER_CREATE = 
-        AbstractBeanDefinitionParser.class.getName()+ ".wireCTCreate";
+        AbstractBeanDefinitionParser.class.getName() + ".wireCTCreate";
 
     public static final String WIRE_CONTAINER_HANDLER = ContainerPostProcessor.class.getName();
 
@@ -91,7 +93,9 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
     }
 
     /**处理Element的属性,返回是否设置了Container*/
-    protected boolean parseAttributes(Element element, ParserContext ctx,BeanDefinitionBuilder bean) {
+    protected boolean parseAttributes(Element element, 
+                                      ParserContext ctx,
+                                      BeanDefinitionBuilder bean) {
         NamedNodeMap atts = element.getAttributes();
         boolean setBus = false;
         for (int i = 0; i < atts.getLength(); i++) {
@@ -116,9 +120,9 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             } else if ("container".equals(name)) {
                 setBus = parseContainerAttribute(element, ctx, bean, val);
             } else if ("id".equals(name)) {
-                parseIdAttribute(bean, element, name, val,ctx);
-            } else if ( isAttribute(pre, name)) {
-                parseAttribute(bean, element, name, val,ctx);
+                parseIdAttribute(bean, element, name, val, ctx);
+            } else if (isAttribute(pre, name)) {
+                parseAttribute(bean, element, name, val, ctx);
             }
         }
         return setBus;
@@ -129,22 +133,24 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         
     }
 
-    protected void parseAttribute(BeanDefinitionBuilder bean, Element e,String name, String val,ParserContext ctx) {
-        parseAttribute(bean, name, val,ctx);
+    protected void parseAttribute(BeanDefinitionBuilder bean, Element e,
+        String name, String val, ParserContext ctx) {
+        parseAttribute(bean, name, val, ctx);
     }
 
-    protected void parseAttribute(BeanDefinitionBuilder bean, String name, String val,ParserContext ctx) {
-        attributeToProperty(bean, name, val,ctx);
+    protected void parseAttribute(BeanDefinitionBuilder bean, String name,
+        String val, ParserContext ctx) {
+        attributeToProperty(bean, name, val, ctx);
     }
 
     protected void attributeToProperty(BeanDefinitionBuilder bean,
-        String propertyName, String val,ParserContext ctx) {
+        String propertyName, String val, ParserContext ctx) {
         if (ID_ATTRIBUTE.equals(propertyName)) {
             return;
         }
 
         if (val != null && val.trim().length() > 0) {
-                bean.addPropertyValue(propertyName, val);
+            bean.addPropertyValue(propertyName, val);
         }
     }
 
@@ -243,7 +249,41 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
         }
         return id;
     }
-    
+    protected Element getFirstChild(Element element) {
+        return DOMUtils.getFirstElement(element);
+    }
+    protected void firstChildAsProperty(Element element, ParserContext ctx, 
+        BeanDefinitionBuilder bean, String propertyName) {
+        Element first = getFirstChild(element);
+        if (first == null) {
+            throw new IllegalStateException(propertyName + " property must have child elements!");
+        }
+        String id;
+        BeanDefinition child;
+        if (first.getNamespaceURI().equals(BeanDefinitionParserDelegate.BEANS_NAMESPACE_URI)) {
+            String name = first.getLocalName();
+            if ("ref".equals(name)) {
+                id = first.getAttribute("bean");
+                if (id == null) {
+                    throw new IllegalStateException("<ref> elements must have a \"bean\" attribute!");
+                }
+                bean.addPropertyReference(propertyName, id);
+                return;
+            } else if ("bean".equals(name)) {
+                BeanDefinitionHolder bdh = ctx.getDelegate().parseBeanDefinitionElement(first);
+                child = bdh.getBeanDefinition();
+                bean.addPropertyValue(propertyName, child);
+                return;
+            } else {
+                throw new UnsupportedOperationException("Elements with the name " + name  
+                                                        + " are not currently "
+                                                        + "supported as sub elements of " 
+                                                        + element.getLocalName());
+            }
+        }
+        child = ctx.getDelegate().parseCustomElement(first, bean.getBeanDefinition());
+        bean.addPropertyValue(propertyName, child);
+    }
     /**字符串作为多值引用*/
     protected  void parseMultiRef(String property, String value,
         BeanDefinitionBuilder bean, ParserContext parserContext) {

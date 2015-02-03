@@ -415,4 +415,21 @@ public final class StringUtils
     private StringUtils()
     {
     }
+    public static String trimToNull(String str) {
+        if (str == null) {
+            return null;
+        }
+
+        String result = str.trim();
+
+        if (result == null || result.length() == 0) {
+            return null;
+        }
+
+        return result;
+    }
+
+    public static String defaultIfEmpty(String str, String defaultStr) {
+        return str == null || str.length() == 0 ? defaultStr : str;
+    }
 }

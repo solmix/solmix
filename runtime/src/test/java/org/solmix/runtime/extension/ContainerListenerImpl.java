@@ -35,6 +35,9 @@ public class ContainerListenerImpl implements ContainerListener {
 
     public static final String PRECLOSE = "PRECLOSE";
 
+    public ContainerListenerImpl(){
+        
+    }
     public ContainerListenerImpl(Container c) {
         if (c != null) {
             c.addListener(this);

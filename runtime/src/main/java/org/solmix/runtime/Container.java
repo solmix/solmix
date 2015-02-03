@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime;
 
 import java.util.List;
@@ -23,41 +24,43 @@ import java.util.Map;
 
 import org.solmix.runtime.extension.ExtensionLoader;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月20日
+ * @version $Id$ 2014年7月20日
  */
 
-public interface Container
-{
-    public static final String DEFAULT_CONTAINER_ID = "solmix";
+public interface Container {
 
-    public static final String CONTAINER_PROPERTY_NAME = "solmix.Container.system.id";
-    
+    String DEFAULT_CONTAINER_ID = "solmix";
+
+    String CONTAINER_PROPERTY_NAME = "solmix.Container.system.id";
+
     /**
      * Get the extension instance of <code>class</code> manager by this system
-     * Container<p>
+     * Container
+     * <p>
      * <li>The type can be a class or interface
      * 
      * @param type
      * @return the extension instance
      */
     <T> T getExtension(Class<T> type);
-    
 
     <T> void setExtension(T instance, Class<T> type);
-    
+
     /**
-     * The inteface <code>type</code> have more than one extension,used this method
+     * The inteface <code>type</code> have more than one extension,used this
+     * method
      * <p>
      * <li>type must be a interface
      * <li>type must be annotated by {@link Extension}
+     * 
      * @param type
      * @return
      */
     <T> ExtensionLoader<T> getExtensionLoader(Class<T> type);
+
     /**
      * Indicate this system Container have the bean name.
      * 
@@ -79,48 +82,53 @@ public interface Container
      * @param containerID
      */
     void setId(String containerID);
+
     /**
      * Open this Container for using.
      */
     void open();
+
     /**
      * @param name
      * @param value
      */
-     void setProperty(String name, Object value);
+    void setProperty(String name, Object value);
+
     /**
      * Get attribute value
      * 
      * @param name to which value is associated to
      * @return attribute value
      */
-     Object getProperty(String name);
-    
+    Object getProperty(String name);
+
     /**
      * Get an over all map.
      * 
      * @return the map
      */
-     Map<String, Object> getProperties();
-     
-     void setProperties(Map<String, Object> properties);
-     
-     void addListener(ContainerListener listener);
-     
-     void removeListener(ContainerListener listener);
-     
-     void setContainerListeners(List<ContainerListener> listeners);
-     
-     List<ContainerListener> getContainerListeners();
-     /**
-      * Close this Container.
-      * 
-      * @param wait
-      */
-     void close(boolean wait);
-     /**
-      * Colse the Container and Release any resource used by this Context (e.g. jcr
-      * sessions).
-      */
-     public void close();
+    Map<String, Object> getProperties();
+
+    void setProperties(Map<String, Object> properties);
+
+    void addListener(ContainerListener listener);
+
+    void removeListener(ContainerListener listener);
+
+    void setContainerListeners(List<ContainerListener> listeners);
+
+    List<ContainerListener> getContainerListeners();
+
+    /**
+     * Close this Container.
+     * 
+     * @param wait
+     */
+    void close(boolean wait);
+
+    /**
+     * Colse the Container and Release any resource used by this Context (e.g.
+     * jcr sessions).
+     */
+    public void close();
 }

@@ -11,8 +11,15 @@
 		</c:properties>
 		<c:listeners>
 			<bean class="org.solmix.runtime.extension.ContainerListenerImpl"></bean>
-		</c:listeners>
+		</c:listeners> 
 	</c:container>
 	<c:container name="solmix3"/>
+	<container id="solmix2" xmlns="http://www.solmix.org/schema/rt">
+		
+		<properties>
+			<entry key="key" value="value"  xmlns="http://www.springframework.org/schema/beans"/>
+		</properties>
+		
+	</container>
 	<bean class="org.solmix.runtime.service.ContainerAwareService"></bean>
 </beans>

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,36 +16,32 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.service;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerAware;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年10月23日
+ * @version $Id$ 2014年10月23日
  */
 
-public class ContainerAwareService implements ContainerAware
-{
+public class ContainerAwareService implements ContainerAware {
 
     private Container container;
 
-    
     /**   */
     @Override
     public Container getContainer() {
         return container;
     }
 
-    
     /**   */
     @Override
     public void setContainer(Container container) {
         this.container = container;
     }
-   
 
 }

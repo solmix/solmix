@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -16,19 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.runtime.support.spring;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月29日
+ * @version $Id$ 2014年7月29日
  */
 
-public class NamespaceHandler extends NamespaceHandlerSupport
-{
+public class NamespaceHandler extends NamespaceHandlerSupport {
 
     /**
      * {@inheritDoc}
@@ -37,7 +36,8 @@ public class NamespaceHandler extends NamespaceHandlerSupport
      */
     @Override
     public void init() {
-        registerBeanDefinitionParser("container",  new ContainerDefinitionParser());
+        registerBeanDefinitionParser("container",
+            new ContainerDefinitionParser());
     }
 
 }
