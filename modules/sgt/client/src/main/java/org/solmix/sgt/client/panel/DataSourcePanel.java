@@ -68,7 +68,7 @@ public abstract class DataSourcePanel extends AbstractPanel implements HasDataSo
      * @param callback
      */
     public void bind(final String datasourceName, final DataBoundComponent component, final Function callback) {
-     final  String dsName=datasourceName.replace("/", "$");
+     final  String dsName=datasourceName.replace("/", "$").replace(".", "$");
         DataSource ds = DataSource.get(dsName);
         if (ds == null) {
             DataSource.load(dsName, new Function() {
