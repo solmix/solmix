@@ -83,8 +83,8 @@
 		<log4j.version>1.2.17</log4j.version>
 		<maven.version>3.0.3</maven.version>
 		<mina.version>2.0.3</mina.version>
-		<osgi.version>4.3.0</osgi.version>
-		<osgi.core.version>4.3.0</osgi.core.version>
+		<osgi.version>5.0.0</osgi.version>
+		<osgi.core.version>5.0.0</osgi.core.version>
 		<pax.exam.version>3.0.3</pax.exam.version>
 		<pax.exam.version2>2.0.0-RC5</pax.exam.version2>
 		<pax.logging.version>1.7.0</pax.logging.version>

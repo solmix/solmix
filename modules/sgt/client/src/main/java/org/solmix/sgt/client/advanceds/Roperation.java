@@ -229,6 +229,9 @@ public class Roperation extends DataClass
         setAttribute("values", value);
     }
 
+    public void setValues(Map value) {
+        setAttribute("values", value);
+    }
     /**
      * Gets the value of the oldValues property.
      * 
