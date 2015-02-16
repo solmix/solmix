@@ -1251,6 +1251,7 @@ public final class DataUtils
         return getProperties(bean, propsToKeep, false);
     }
 
+    
     public static Map<String, Object> getProperties(Object bean, Collection<String> propsToKeep, boolean omitNullValue) throws Exception {
         if (bean == null)
             return null;
@@ -1293,6 +1294,10 @@ public final class DataUtils
 
         return propertyMap;
     }
+    public static Map<String, Object> filtMap(Object bean, Collection<String> propsToKeep) throws Exception {
+        return getProperties(bean, propsToKeep, false);
+    }
+
 
     /**
      * return bean's propertyDescriptor.
@@ -1330,7 +1335,6 @@ public final class DataUtils
     public static Object setProperties(Map propertyMap, Object bean) throws Exception {
         return setProperties(propertyMap, bean, true);
     }
-
     /**
      * directly inject map value to pojo's style bean.
      * 
@@ -1341,6 +1345,10 @@ public final class DataUtils
      * @throws Exception
      */
     public static Object setProperties(Map propertyMap, Object bean, boolean caseSensitive) throws Exception {
+    	return setProperties(propertyMap, bean, null, caseSensitive);
+    }
+    
+    public static Object setProperties(Map propertyMap, Object bean,Collection<String> keeped, boolean caseSensitive) throws Exception {
         if (bean == null) {
             log.error("Null bean passed to setProperties, returning null", new Exception());
             return null;
@@ -1361,6 +1369,9 @@ public final class DataUtils
         }
         Map<String, String> badProperties = null;
         for (Object o : propertyMap.keySet()) {
+        	if(keeped!=null&&!keeped.contains(o)){
+        		continue;
+        	}
             String propertyName = (String) o;
             Object value = propertyMap.get(propertyName);
             PropertyDescriptor property = (PropertyDescriptor) properties.get(propertyName);
@@ -1382,17 +1393,17 @@ public final class DataUtils
                 arguments = createMethodArguments(writeMethod, value, propertyName);
             } catch (IllegalArgumentException e) {
                 if (badProperties == null)
-                    badProperties = new HashMap();
+                    badProperties = new HashMap<String, String>();
                 badProperties.put(propertyName, (new StringBuilder()).append("Exception invoking setter method: ").append(e).toString());
                 continue;
             }
             writeMethod.invoke(bean, arguments);
         }
-        if (badProperties != null) {
+        if (badProperties != null&& log.isTraceEnabled()) {
             StringBuffer __info = new StringBuffer();
             for (String str : badProperties.keySet())
                 __info.append("[" + str + " : " + badProperties.get(str) + "] ");
-            log.info((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
+            log.trace((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
         }
         return bean;
     }

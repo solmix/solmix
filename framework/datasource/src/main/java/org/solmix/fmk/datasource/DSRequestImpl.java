@@ -349,6 +349,7 @@ public class DSRequestImpl implements DSRequest
     public void setDataSourceName(String dataSourceName) {
         if (this.dataSourceName != null && !this.dataSourceName.equals(dataSourceName))
             DefaultDataSourceManager.freeDataSource(dataSource);
+        dataSource=null;
         this.dataSourceName = dataSourceName;
     }
 

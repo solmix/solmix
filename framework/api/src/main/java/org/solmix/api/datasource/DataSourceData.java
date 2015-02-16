@@ -447,7 +447,7 @@ public class DataSourceData implements Serializable
     }
 
     public String getAutoOperationId(Eoperation operationType) {
-        return getName() + "_" + operationType.value();
+        return getName().replace("/", "$") + "_" + operationType.value();
     }
 
     /**
