@@ -3,9 +3,9 @@ package org.solmix.commons.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,7 +28,10 @@ public final class StringUtils
                                                                                                          // pattern.
 
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
-
+    
+    private StringUtils(){
+    }
+    
     public static boolean isBlank(String str) {
         if (str == null || str.length() == 0)
             return true;
@@ -186,50 +189,203 @@ public final class StringUtils
         return sb == null ? src : sb.toString();
     }
 
+ // ==========================================================================
+    // 字符串分割函数。
+    //
+    // 将字符串按指定分隔符分割。
+    // ==========================================================================
+
     /**
-     * split.
-     * 
-     * @param ch char.
-     * @return string array.
+     * 将字符串按指定字符分割。
+     * <p>
+     * 分隔符不会出现在目标数组中，连续的分隔符就被看作一个。如果字符串为<code>null</code>，则返回<code>null</code>。
+     * <p/>
+     * <pre>
+     * StringUtil.split(null, *)         = null
+     * StringUtil.split("", *)           = []
+     * StringUtil.split("a.b.c", '.')    = ["a", "b", "c"]
+     * StringUtil.split("a..b.c", '.')   = ["a", "b", "c"]
+     * StringUtil.split("a:b:c", '.')    = ["a:b:c"]
+     * StringUtil.split("a b c", ' ')    = ["a", "b", "c"]
+     * </pre>
+     * <p/>
+     * </p>
+     *
+     * @param str           要分割的字符串
+     * @param separatorChar 分隔符
+     * @return 分割后的字符串数组，如果原字符串为<code>null</code>，则返回<code>null</code>
      */
-    public static String[] split(String str, char ch) {
-        List<String> list = null;
-        char c;
-        int ix = 0, len = str.length();
-        for (int i = 0; i < len; i++) {
-            c = str.charAt(i);
-            if (c == ch) {
-                if (list == null)
-                    list = new ArrayList<String>();
-                list.add(str.substring(ix, i));
-                ix = i + 1;
-            }
+    public static String[] split(String str, char separatorChar) {
+        if (str == null) {
+            return null;
         }
-        if (ix > 0)
-            list.add(str.substring(ix));
-        return list == null ? EMPTY_STRING_ARRAY
-            : (String[]) list.toArray(EMPTY_STRING_ARRAY);
+
+        int length = str.length();
+
+        if (length == 0) {
+            return EMPTY_STRING_ARRAY;
+        }
+
+        List<String> list = new LinkedList<String>();
+        int i = 0;
+        int start = 0;
+        boolean match = false;
+
+        while (i < length) {
+            if (str.charAt(i) == separatorChar) {
+                if (match) {
+                    list.add(str.substring(start, i));
+                    match = false;
+                }
+
+                start = ++i;
+                continue;
+            }
+
+            match = true;
+            i++;
+        }
+
+        if (match) {
+            list.add(str.substring(start, i));
+        }
+
+        return list.toArray(new String[list.size()]);
     }
 
-    public static final String[] split(String string, String delimiter) {
-        int index = string.indexOf(delimiter);
-        if (index == -1) {
-            return new String[] { string };
+    /**
+     * 将字符串按指定字符分割。
+     * <p>
+     * 分隔符不会出现在目标数组中，连续的分隔符就被看作一个。如果字符串为<code>null</code>，则返回<code>null</code>。
+     * <p/>
+     * <pre>
+     * StringUtil.split(null, *)                = null
+     * StringUtil.split("", *)                  = []
+     * StringUtil.split("abc def", null)        = ["abc", "def"]
+     * StringUtil.split("abc def", " ")         = ["abc", "def"]
+     * StringUtil.split("abc  def", " ")        = ["abc", "def"]
+     * StringUtil.split(" ab:  cd::ef  ", ":")  = ["ab", "cd", "ef"]
+     * StringUtil.split("abc.def", "")          = ["abc.def"]
+     * </pre>
+     * <p/>
+     * </p>
+     *
+     * @param str            要分割的字符串
+     * @param separatorChars 分隔符
+     * @return 分割后的字符串数组，如果原字符串为<code>null</code>，则返回<code>null</code>
+     */
+    public static String[] split(String str, String separatorChars) {
+        return split(str, separatorChars, -1);
+    }
+
+    /**
+     * 将字符串按指定字符分割。
+     * <p>
+     * 分隔符不会出现在目标数组中，连续的分隔符就被看作一个。如果字符串为<code>null</code>，则返回<code>null</code>。
+     * <p/>
+     * <pre>
+     * StringUtil.split(null, *, *)                 = null
+     * StringUtil.split("", *, *)                   = []
+     * StringUtil.split("ab cd ef", null, 0)        = ["ab", "cd", "ef"]
+     * StringUtil.split("  ab   cd ef  ", null, 0)  = ["ab", "cd", "ef"]
+     * StringUtil.split("ab:cd::ef", ":", 0)        = ["ab", "cd", "ef"]
+     * StringUtil.split("ab:cd:ef", ":", 2)         = ["ab", "cdef"]
+     * StringUtil.split("abc.def", "", 2)           = ["abc.def"]
+     * </pre>
+     * <p/>
+     * </p>
+     *
+     * @param str            要分割的字符串
+     * @param separatorChars 分隔符
+     * @param max            返回的数组的最大个数，如果小于等于0，则表示无限制
+     * @return 分割后的字符串数组，如果原字符串为<code>null</code>，则返回<code>null</code>
+     */
+    public static String[] split(String str, String separatorChars, int max) {
+        if (str == null) {
+            return null;
         }
 
-        int length = delimiter.length();
-        ArrayList<String> split = new ArrayList<String>();
-        while (index != -1) {
-            split.add(string.substring(0, index));
-            string = string.substring(index + length);
-            index = string.indexOf(delimiter);
+        int length = str.length();
+
+        if (length == 0) {
+            return EMPTY_STRING_ARRAY;
         }
 
-        if (!string.equals("")) { 
-            split.add(string);
+        List<String> list = new LinkedList<String>();
+        int sizePlus1 = 1;
+        int i = 0;
+        int start = 0;
+        boolean match = false;
+
+        if (separatorChars == null) {
+            // null表示使用空白作为分隔符
+            while (i < length) {
+                if (Character.isWhitespace(str.charAt(i))) {
+                    if (match) {
+                        if (sizePlus1++ == max) {
+                            i = length;
+                        }
+
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+
+                    start = ++i;
+                    continue;
+                }
+
+                match = true;
+                i++;
+            }
+        } else if (separatorChars.length() == 1) {
+            // 优化分隔符长度为1的情形
+            char sep = separatorChars.charAt(0);
+
+            while (i < length) {
+                if (str.charAt(i) == sep) {
+                    if (match) {
+                        if (sizePlus1++ == max) {
+                            i = length;
+                        }
+
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+
+                    start = ++i;
+                    continue;
+                }
+
+                match = true;
+                i++;
+            }
+        } else {
+            // 一般情形
+            while (i < length) {
+                if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+                    if (match) {
+                        if (sizePlus1++ == max) {
+                            i = length;
+                        }
+
+                        list.add(str.substring(start, i));
+                        match = false;
+                    }
+
+                    start = ++i;
+                    continue;
+                }
+
+                match = true;
+                i++;
+            }
         }
 
-        return split.toArray(new String[split.size()]);
+        if (match) {
+            list.add(str.substring(start, i));
+        }
+
+        return list.toArray(new String[list.size()]);
     }
 
     /**
@@ -412,9 +568,7 @@ public final class StringUtils
               p.close();
           }
       }
-    private StringUtils()
-    {
-    }
+   
     public static String trimToNull(String str) {
         if (str == null) {
             return null;
@@ -431,5 +585,17 @@ public final class StringUtils
 
     public static String defaultIfEmpty(String str, String defaultStr) {
         return str == null || str.length() == 0 ? defaultStr : str;
+    }
+
+    /**
+     * @param path
+     * @return
+     */
+     public static String trimToEmpty(String str) {
+        if (str == null) {
+            return "";
+        }
+
+        return str.trim();
     }
 }

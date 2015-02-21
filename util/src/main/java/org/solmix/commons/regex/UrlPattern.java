@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.commons.util;
+package org.solmix.commons.regex;
 
 import java.io.Serializable;
 
@@ -77,7 +77,7 @@ public interface UrlPattern extends Serializable
         }
 
         /**
-         * @see org.solmix.commons.util.magnolia.cms.util.UrlPattern#match(java.lang.String)
+         * @see org.solmix.commons.regex.magnolia.cms.util.UrlPattern#match(java.lang.String)
          */
         @Override
         public boolean match(String str) {
@@ -85,7 +85,7 @@ public interface UrlPattern extends Serializable
         }
 
         /**
-         * @see org.solmix.commons.util.magnolia.cms.util.UrlPattern#getLength()
+         * @see org.solmix.commons.regex.magnolia.cms.util.UrlPattern#getLength()
          */
         @Override
         public int getLength() {
@@ -93,7 +93,7 @@ public interface UrlPattern extends Serializable
         }
 
         /**
-         * @see org.solmix.commons.util.magnolia.cms.util.UrlPattern#getString()
+         * @see org.solmix.commons.regex.magnolia.cms.util.UrlPattern#getString()
          */
         @Override
         public String getPatternString() {

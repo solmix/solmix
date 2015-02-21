@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.commons.util;
+package org.solmix.commons.regex;
 
 import static org.solmix.commons.util.DataUtils.removeEnd;
 

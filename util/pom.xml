@@ -74,6 +74,11 @@
 		  		<groupId>commons-collections</groupId>
 		  		<artifactId>commons-collections</artifactId>
 		  	</dependency>
+		  	<dependency>
+		  		<groupId>javax.servlet</groupId>
+		  		<artifactId>servlet-api</artifactId>
+		  		<optional>true</optional>
+		  	</dependency>
 	</dependencies>
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.commons*;-noimport:=true</solmix.osgi.export.pkg>

@@ -596,16 +596,117 @@ public class Files {
         try {
             unZip("c:/test", "c:/test");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    public static String normalizeAbsolutePath(String path, boolean removeTrailingSlash) throws IllegalPathException {
+        return normalizePath(path, true, false, removeTrailingSlash);
+    }
+
+    private static String normalizePath(String path, boolean forceAbsolute,
+        boolean forceRelative, boolean removeTrailingSlash)
+        throws IllegalPathException {
+        char[] pathChars = StringUtils.trimToEmpty(path).toCharArray();
+        int length = pathChars.length;
+
+        // 检查绝对路径，以及path尾部的"/"
+        boolean startsWithSlash = false;
+        boolean endsWithSlash = false;
+
+        if (length > 0) {
+            char firstChar = pathChars[0];
+            char lastChar = pathChars[length - 1];
+
+            startsWithSlash = firstChar == '/' || firstChar == '\\';
+            endsWithSlash = lastChar == '/' || lastChar == '\\';
+        }
+
+        StringBuilder buf = new StringBuilder(length);
+        boolean isAbsolutePath = forceAbsolute || !forceRelative
+            && startsWithSlash;
+        int index = startsWithSlash ? 0 : -1;
+        int level = 0;
+
+        if (isAbsolutePath) {
+            buf.append("/");
+        }
+
+        while (index < length) {
+            // 跳到第一个非slash字符，或末尾
+            index = indexOfSlash(pathChars, index + 1, false);
+
+            if (index == length) {
+                break;
+            }
+
+            // 取得下一个slash index，或末尾
+            int nextSlashIndex = indexOfSlash(pathChars, index, true);
+
+            String element = new String(pathChars, index, nextSlashIndex
+                - index);
+            index = nextSlashIndex;
+
+            // 忽略"."
+            if (".".equals(element)) {
+                continue;
+            }
+
+            // 回朔".."
+            if ("..".equals(element)) {
+                if (level == 0) {
+                    // 如果是绝对路径，../试图越过最上层目录，这是不可能的，
+                    // 抛出路径非法的异常。
+                    if (isAbsolutePath) {
+                        throw new IllegalPathException(path);
+                    } else {
+                        buf.append("../");
+                    }
+                } else {
+                    buf.setLength(pathChars[--level]);
+                }
+
+                continue;
+            }
+
+            // 添加到path
+            pathChars[level++] = (char) buf.length(); // 将已经读过的chars空间用于记录指定level的index
+            buf.append(element).append('/');
+        }
+
+        // 除去最后的"/"
+        if (buf.length() > 0) {
+            if (!endsWithSlash || removeTrailingSlash) {
+                buf.setLength(buf.length() - 1);
+            }
+        }
+
+        return buf.toString();
+    }
+
+    private static int indexOfSlash(char[] chars, int beginIndex, boolean slash) {
+        int i = beginIndex;
+
+        for (; i < chars.length; i++) {
+            char ch = chars[i];
+
+            if (slash) {
+                if (ch == '/' || ch == '\\') {
+                    break; // if a slash
+                }
+            } else {
+                if (ch != '/' && ch != '\\') {
+                    break; // if not a slash
+                }
+            }
+        }
+
+        return i;
     }
      
 }
  
  
-class ExtensionFileFilter
-        implements FileFilter {
+class ExtensionFileFilter  implements FileFilter {
      
     private final String extension;
      
