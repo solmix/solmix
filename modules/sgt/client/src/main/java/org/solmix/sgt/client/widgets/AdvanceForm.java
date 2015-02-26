@@ -25,4 +25,16 @@ public class AdvanceForm extends DynamicForm
         return _return;
         
     }
+    public  void setValue(String fieldName, String value){
+    	super.setValue(fieldName, value);
+    	 FormItem[] items=  getFields();
+         for(FormItem item:items){
+             if(item instanceof AdvanceItem){
+                 AdvanceItem aitem =(AdvanceItem)item;
+                 if(fieldName.equals(aitem.getHiddenName())){
+                	 aitem.setHiddenValue(value);
+                 }
+             }
+         }
+    }
 }

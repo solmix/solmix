@@ -31,11 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.Context;
 import org.solmix.api.context.WebContext;
 import org.solmix.api.context.WebContextFactory;
-import org.solmix.api.exception.SlxException;
 import org.solmix.fmk.SlxContext;
+import org.solmix.runtime.SystemContext;
 import org.solmix.web.context.WebContextFactoryImpl;
 
 /**
@@ -67,14 +66,11 @@ public class ContextFilter extends AbstractFilter implements Filter
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        final Context originalContext = SlxContext.hasContext() ? SlxContext.getContext() : null;
-        boolean initializedContext = false;
+        final SystemContext originalContext = SlxContext.getSystemContext();
         request.setCharacterEncoding("UTF-8");
         contextFactory = WebContextFactoryImpl.getInstance();
-        if (SlxContext.isSystemContext() || !SlxContext.hasContext()) {
-            final WebContext context = contextFactory.createWebContext(request, response, servletContext);
-            SlxContext.setContext(context);
-            initializedContext = true;
+        final WebContext newCtx = contextFactory.createWebContext(request, response, servletContext);
+        SlxContext.setContext(newCtx);
            /* try {
                 String uri = request.getRequestURI();
                 if (uri != null) {
@@ -103,7 +99,7 @@ public class ContextFilter extends AbstractFilter implements Filter
                 // if for any reason the MDC couldn't be set, just ignore it.
                 log.debug(e.getMessage(), e);
             }*/
-        } else {
+       /* } else {
             try {
                 WebContext context = SlxContext.getWebContext();
                 context.init(request, response, servletContext);
@@ -111,20 +107,19 @@ public class ContextFilter extends AbstractFilter implements Filter
             } catch (SlxException e) {
                 log.error(e.getFullMessage());
             }
-        }
+        }*/
         try {
             doProcess(request, response);
             chain.doFilter(request, response);
         } finally {
-            if (initializedContext) {
 //                SlxContext.release();
-                if (originalContext != null)
-                    SlxContext.setContext(originalContext);
-
+                if (originalContext != null){
+                	SlxContext.setSystemContext(originalContext);
+                }
+                SlxContext.release();
                 // cleanup
 //                MDC.clear();
             }
-        }
     }
 
     /**

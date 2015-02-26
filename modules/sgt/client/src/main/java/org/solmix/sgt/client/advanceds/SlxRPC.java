@@ -19,6 +19,9 @@
 
 package org.solmix.sgt.client.advanceds;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.core.Function;
 import com.smartgwt.client.data.Criteria;
@@ -177,6 +180,24 @@ public class SlxRPC
             if (callback != null)
                 callback.execute();
         }
+    }
+    /**
+     * 检查数据源是否已经加载，未加载的，加载后执行回调函数。
+     * @param callback
+     * @param datasources
+     */
+    public static void loadAndIni(Function callback,String...datasources ){
+    	List<String> requred = new ArrayList<String>();
+		for (String ds : datasources) {
+			if (DataSource.get(ds) == null) {
+				requred.add(ds);
+			}
+		}
+		if (requred.size()>0) {
+			DataSource.load(requred.toArray(new String[]{}), callback, false);
+		} else {
+			callback.execute();
+		}
     }
 
     @SuppressWarnings("unchecked")
