@@ -44,6 +44,7 @@ import org.solmix.api.types.Tmodule;
 import org.solmix.commons.collections.DataTypeMap;
 import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.sql.ConnectionManager;
@@ -102,7 +103,7 @@ public abstract class AbstractSqlSessionFactoryProvider implements SqlSessionFac
      * @see org.solmix.mybatis.SqlSessionFactoryProvider#createSqlSessionFactory(java.lang.String)
      */
     @Override
-    public SqlSessionFactory createSqlSessionFactory(String environment,
+    public synchronized SqlSessionFactory createSqlSessionFactory(String environment,
         Map<String, Object> properties) throws SlxException {
         SqlSessionFactoryHolder sessionFactory = _tempCache.get(environment);
         if (sessionFactory != null) {
@@ -184,8 +185,19 @@ public abstract class AbstractSqlSessionFactoryProvider implements SqlSessionFac
                     ErrorContext.instance().reset();
                 }
             }
-            ConnectionManager conn = getConnectionManager(sc);
-            DataSource dataSource = conn.getDataSource(dbName);
+           ConfiguredBeanProvider provider=  sc.getBean(ConfiguredBeanProvider.class);
+           DataSource dataSource=null;
+           if(provider!=null){
+        	   try {
+				dataSource= provider.getBeanOfType(dbName, DataSource.class);
+			} catch (Exception e) {
+				LOG.trace("Can't load datasource {} from spring,used default configuration",dbName);
+			}
+           }
+            if(dataSource==null){
+            	ConnectionManager conn = getConnectionManager(sc);
+            	dataSource = conn.getDataSource(dbName);
+            }
             Environment env = new Environment(environment,
                 new JdbcTransactionFactory(), dataSource);
             configuration.setEnvironment(env);
