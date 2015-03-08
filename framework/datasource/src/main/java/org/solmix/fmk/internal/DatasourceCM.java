@@ -47,6 +47,8 @@ public class DatasourceCM
     public static final String P_VELOCITY_TEMPLATE_DIR = "velocityTemplateDir";
 
     public static final String P_SLX_VERSION_NUMBER = "slxVersionNumber";
+    
+    public static final String P_DEVELOPMENT = "development";
 
     public static final String P_CLIENT_VERSION_NUMBER = "clientVersionNumber";
 

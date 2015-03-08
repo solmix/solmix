@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.tooling</groupId>
     <artifactId>tooling</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
   </parent>
   <groupId>org.solmix.commands</groupId>
   <artifactId>commands</artifactId>

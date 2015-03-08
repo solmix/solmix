@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>services</artifactId>
 		<groupId>org.solmix.services</groupId>
-		<version>0.5.1-SNAPSHOT</version>
+		<version>0.5.2-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<description>Solmix :: Service :: Event-Core/OSGI-Event</description>

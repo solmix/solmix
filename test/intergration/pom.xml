@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.test</groupId>
     <artifactId>test</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>solmix-test-intergration</artifactId>
@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>org.solmix.modules</groupId>
 			<artifactId>solmix-modules-mybatis</artifactId>
-			<version>0.5.1-SNAPSHOT</version>
+			<version>0.5.2-SNAPSHOT</version>
 		</dependency>
 		
   </dependencies>

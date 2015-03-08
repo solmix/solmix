@@ -176,5 +176,7 @@ public interface DataSource extends FreeResourcesHandler
      * @return
      */
     Map<String, ?> toClientValueMap();
+    
+     boolean isDevelopment();
 
 }

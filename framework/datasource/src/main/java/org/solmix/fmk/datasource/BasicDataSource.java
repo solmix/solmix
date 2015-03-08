@@ -1454,4 +1454,10 @@ public class BasicDataSource implements DataSource
 
     }
 
+	@Override
+	public boolean isDevelopment() {
+		
+		return config.getBoolean(DatasourceCM.P_DEVELOPMENT, false);
+	}
+
 }
