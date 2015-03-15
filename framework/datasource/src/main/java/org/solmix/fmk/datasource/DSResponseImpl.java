@@ -86,6 +86,9 @@ public class DSResponseImpl implements DSResponse
         }
         if (request != null) {
             setOperationType(request.getContext().getOperationType().value());
+//            setStartRow(request.getContext().getStartRow());
+//            setEndRow(request.getContext().getEndRow());
+//            setTotalRows(request.getContext().getTotalRow());
         }
         if(status!=null)
             setStatus(status);

@@ -22,12 +22,14 @@ package org.solmix.sgt.client.pagebar;
 import org.solmix.sgt.client.advanceds.JSCallBack;
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
-import org.solmix.sgt.client.advanceds.SlxRPCManager;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.rpc.RPCRequest;
+import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.ExportDisplay;
@@ -67,7 +69,6 @@ public class PagedListGrid extends ListGrid
 
     public static final int DEFAULT_PAGE_SIZE = 75;
 
-    private boolean usePageBar;
 
     ModalWindow mask;
 
@@ -115,19 +116,7 @@ public class PagedListGrid extends ListGrid
      */
     private int totalRowNum = -1;
 
-    /**
-     * @return the usePageBar
-     */
-    public boolean isUsePageBar() {
-        return usePageBar;
-    }
-
-    /**
-     * @param usePageBar the usePageBar to set
-     */
-    public void setUsePageBar(boolean usePageBar) {
-        this.usePageBar = usePageBar;
-    }
+    
 
     /**
      * @return the pageSize
@@ -156,20 +145,27 @@ public class PagedListGrid extends ListGrid
     public void setMaskMessage(String maskMessage) {
         this.maskMessage = maskMessage;
     }
-
-    public PagedListGrid(int pageSize)
-    {
-        this(null, pageSize, true);
-    }
-
+    @Deprecated
     public PagedListGrid(boolean showPageBar)
     {
-        this(null, DEFAULT_PAGE_SIZE, showPageBar);
+        this();
+    }
+    public PagedListGrid(int pageSize)
+    {
+        this(null, pageSize, (Canvas[])null);
     }
 
-    public PagedListGrid(int pageSize, boolean showPageBar)
+    public PagedListGrid()
     {
-        this(null, pageSize, showPageBar);
+        this(null, DEFAULT_PAGE_SIZE);
+    }
+    public PagedListGrid(Canvas... pageBarControls)
+    {
+        this( DEFAULT_PAGE_SIZE,pageBarControls);
+    }
+    public PagedListGrid(int pageSize,Canvas... pageBarControls)
+    {
+        this(null, pageSize,pageBarControls);
     }
 
     private String maskMessage;
@@ -177,11 +173,11 @@ public class PagedListGrid extends ListGrid
     private final Canvas maskCanvas;
 
     private final ListGrid owner;
+    
 
-    public PagedListGrid(Canvas maskCanvas, int pageSize, boolean usePageBar)
+    public PagedListGrid(Canvas maskCanvas, int pageSize,Canvas... pageBarControls)
     {
         this.maskCanvas = maskCanvas;
-        this.usePageBar = usePageBar;
         this.pageSize = pageSize;
         this.owner = this;
 
@@ -401,16 +397,27 @@ public class PagedListGrid extends ListGrid
         moreExp.setShowMenuIcon(true);
         moreExp.setMenu(menu);
         gridPageControls.addMember(moreExp);
+        if(pageBarControls!=null){
+        	gridPageControls.addSpacer(60);
+        	for(Canvas control:pageBarControls){
+        		gridPageControls.addMember(control);
+        		gridPageControls.addSpacer(10);
+        	}
+        }
         gridPageControls.addFill();
         gridPageControls.addMember(totalRow);
 
         gridPageControls.setAlign(Alignment.LEFT);
-        gridPageControls.hide();
+//        gridPageControls.hide();
+        initPageBar(null);
         this.setGridComponents(new Object[] { ListGridComponent.HEADER, ListGridComponent.FILTER_EDITOR, ListGridComponent.BODY, gridPageControls });
 
     }
 
-    public void exportFunction(ExportFormat format) {
+    public ToolStrip getGridPageControls() {
+		return gridPageControls;
+	}
+	public void exportFunction(ExportFormat format) {
         if(pageSize>100000){
             SC.warn("记录条数大于10万条,请联系管理员!");
         }
@@ -459,26 +466,27 @@ public class PagedListGrid extends ListGrid
      */
     private String operationId;
 
-    protected void pagedFetchData(Criteria criteria, DSCallback dsCallback, DSRequest request) {
-        pagedFetchData(criteria, dsCallback, request, 1);
+	public void pagedFetchData(Criteria criteria, DSCallback dsCallback, DSRequest request) {
+		pagedFetchData(criteria, dsCallback, request, 1);
     }
 
     public void pagedFetchData(Criteria criteria, DSRequest request) {
-        pagedFetchData(criteria, null, request, 1);
+    	pagedFetchData(criteria, null, request, 1);
     }
 
-    protected void pagedFetchData(Criteria criteria, DSCallback dsCallback) {
-        pagedFetchData(criteria, dsCallback, null);
+	public void pagedFetchData(Criteria criteria, DSCallback dsCallback) {
+		pagedFetchData(criteria, dsCallback, null);
     }
 
-    public void pagedFetchData(Criteria criteria) {
-        pagedFetchData(criteria, null, null);
+	public void pagedFetchData(Criteria criteria) {
+		pagedFetchData(criteria, null, null);
     }
-
-    public void pagedFetchData() {
-        pagedFetchData(null);
+	
+	public void pagedFetchData() {
+		pagedFetchData(null);
     }
-
+   
+    
     public void pagedFetchData(Criteria criteria, DSCallback dsCallback, DSRequest request, int pageNum) {
         final ListGrid grid = this;
         this.pageNum = pageNum;
@@ -553,14 +561,22 @@ public class PagedListGrid extends ListGrid
     }
 
     private void initPageBar(DSResponse response) {
-        totalRowNum = response.getTotalRows();
-        int startNum = response.getStartRow() + 1;
-        int endNum = response.getEndRow();
+    	int startNum=0;
+    	int endNum=0;
+    	if(response==null){
+    		totalRowNum=-1;
+    	}else{
+    		totalRowNum = response.getTotalRows();
+    		startNum = response.getStartRow() + 1;
+    		endNum = response.getEndRow();
+    	}
         if (startNum > endNum)
             startNum = endNum;
         if (!gridPageControls.isVisible())
             gridPageControls.show();
-        totalRow.setContents("| " + startNum + "-" + endNum + "条  | 共" + totalRowNum + "条");
+        if(totalRowNum>=0){
+        	totalRow.setContents("| " + startNum + "-" + endNum + "条  | 共" + totalRowNum + "条");
+        }
         totalPage = ((totalRowNum % pageSize) == 0) ? totalRowNum / pageSize : totalRowNum / pageSize + 1;
         totalLabel.setContents("页,共" + totalPage + "页");
         pageNum = 1;
@@ -594,9 +610,13 @@ public class PagedListGrid extends ListGrid
         }
         pagedFetchData(this._criteria, this._callback, this._request, pageNum);
     }
+    @Override
+    public void removeSelectedData(){
+    	removeSelectedData((JSCallBack)null);
+    }
     
-     public void removeSelectedData(JSCallBack callBack ){
-		ListGridRecord[] records = getSelectedRecords();
+	public void removeSelectedData(JSCallBack callBack) {
+		final ListGridRecord[] records = getSelectedRecords();
 		String dsID = getDataSource().getID();
 		Roperation[] opers;
 		if (records != null) {
@@ -613,7 +633,23 @@ public class PagedListGrid extends ListGrid
 				oper.setCriteria(c);
 				opers[i] = oper;
 			}
-			SlxRPCManager.send(opers, callBack);
+			if (callBack != null) {
+				SlxRPC.send(opers, callBack);
+			} else {
+				SlxRPC.send(opers, new JSCallBack() {
+
+					@Override
+					public void execute(RPCResponse response,
+							JavaScriptObject rawData, RPCRequest request) {
+						if (response.getStatus() == RPCResponse.STATUS_SUCCESS) {
+							getRecordList().removeList(records);
+						}else{
+							SC.warn("删除记录错误,错误代码["+response.getStatus()+"]!");
+						}
+
+					}
+				});
+			}
 		}
-     }
+	}
 }
