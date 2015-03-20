@@ -19,6 +19,10 @@
 
 package org.solmix.web.interceptor;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.solmix.api.call.DSCallWebInterceptor;
@@ -82,13 +86,33 @@ public class AbstractRestInterceptor extends DSCallWebInterceptor
         if (rawData != null) {
             if (DataUtils.isArray(rawData)) {
                 _return.setData(res.getRecordList());
-            } else {
+            } else if(isSimpleObject(rawData)){
+            	_return.setData(rawData);
+            }else{
                 _return.setData(res.getSingleRecord());
             }
         }
-
         return _return;
-
+    }
+    
+    private boolean isSimpleObject(Object bean){
+    	Class<?> clz = bean.getClass();
+    	if(clz.isPrimitive()){
+    		return true;
+    	}
+    	if(String.class.isAssignableFrom(clz)){
+    		return true;
+    	}
+    	if(BigDecimal.class.isAssignableFrom(clz)){
+    		return true;
+    	}
+    	if(BigInteger.class.isAssignableFrom(clz)){
+    		return true;
+    	}
+    	if(Date.class.isAssignableFrom(clz)){
+    		return true;
+    	}
+    	return false;
     }
 
     public String getDataformat(HttpServletRequest request) {

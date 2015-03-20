@@ -662,6 +662,9 @@ public class BasicDataSource implements DataSource
             return true;
         } else {
             if (shouldOverride) {
+            	if(policy==null){
+            		return false;
+            	}
                 switch (policy) {
                     case NONE:
                         return false;

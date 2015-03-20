@@ -86,6 +86,17 @@ public class SlxRPC
 
         });
     }
+    
+    public static void send(Roperation oper, final RPCCallback callback) {
+    	 RPCRequest f = new RPCRequest();
+         f.setUseSimpleHttp(true);
+         String action = SLX_BIN_PREFIX + oper.getOperationType().getValue() + "/" + oper.getDataSource() + SLX_DS_SUFF;
+         f.setActionURL(action);
+         Request request = new Request(true);
+         request.setRoperations(oper);
+         f.setData(JSON.encode(request.getJsObj()));
+         RPCManager.sendRequest(f, callback);
+    }
     public static void send(Roperation oper, final XMLCallBack callback) {
         RPCRequest f = new RPCRequest();
         f.setUseSimpleHttp(true);
@@ -107,7 +118,7 @@ public class SlxRPC
 
         });
     }
-    public static void send(Roperation oper[],final JSCallBack callback) {
+    public static void send(Roperation oper[],final JSCallBacks callback) {
         if (oper == null || oper.length < 0)
             return;
         RPCRequest f = new RPCRequest();
@@ -121,16 +132,26 @@ public class SlxRPC
 
             @Override
             public void execute(RPCResponse response, Object rawData, RPCRequest request) {
-                if (rawData instanceof JavaScriptObject) {
-                    response.setJavaScriptObject((JavaScriptObject) rawData);
-                    callback.execute(response, (JavaScriptObject) rawData, request);
-
-                } else {
-                    JavaScriptObject result = JSOHelper.getAttributeAsJavaScriptObject(JSOHelper.eval(rawData.toString()), "response");
-                    response.setJavaScriptObject(result);
-                    callback.execute(response, result, request);
+            	RPCResponse[] ress=null;
+                	JavaScriptObject rawObj=JSOHelper.eval(rawData.toString());
+                    JavaScriptObject result = JSOHelper.getAttributeAsJavaScriptObject(rawObj, "response");
+                    if(result==null){
+                    	JavaScriptObject[] results=	JSOHelper.getAttributeAsJavaScriptObjectArray(rawObj, "responses");
+                    	
+                    	if(results!=null){
+                    		 ress= new RPCResponse[results.length];
+                    		for(int i=0;i<results.length;i++){
+                    			JavaScriptObject r= results[i];
+                    			RPCResponse res= new RPCResponse(r);
+                    			ress[i]=res;
+                    		}
+                    	}
+                    }else{
+                    	RPCResponse res= new RPCResponse(result);
+                    	ress=new RPCResponse[]{res};
+                    }
+                    callback.execute(ress, rawObj, request);
                 }
-            }
 
         });
     }
@@ -145,16 +166,6 @@ public class SlxRPC
 
     }
 
-    /**
-     * Used {@link #send(Roperation[], JSCallBack)}.
-     * @param oper
-     * @param callback
-     */
-    @Deprecated
-    public static void send(Roperation oper[], final SlxRPCCallBack callback) {
-       
-        send(oper,(JSCallBack)callback);
-    }
 
     public static void send(DSRequest dsRequest, Criteria criteria) {
         Roperation op = new Roperation();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 The Solmix Project
+ *  Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,41 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.sql;
+package org.solmix.sgt.client.advanceds;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.smartgwt.client.rpc.RPCRequest;
+import com.smartgwt.client.rpc.RPCResponse;
 
 
 /**
- * 
+ * 一个Call包含了多个数据请求操作，这些操作在服务端顺序执行后返回，多个请求具有原子性，既所有成功为成功。
  * @author solmix.f@gmail.com
- * @version 110035  2011-3-21
+ * @version $Id$  2013-6-18
  */
 
-public enum EInterfaceType
+public interface JSCallBacks
 {
-   DATASOURCE("datasource") , DRIVERMANAGER("drivermanager") , JNDI("jndi") , JNDIOSGI("jndiosgi") , OSGI("osgi"),CONTAINER("container");
 
-   private String value;
-
-   private EInterfaceType(String value)
-   {
-   this.value = value;
-   }
-
-   public String value()
-   {
-      return value;
-   }
-
-   public static EInterfaceType fromValue(String v)
-   {
-      for (EInterfaceType c : EInterfaceType.values())
-      {
-         if ( c.value.equals( v.trim().toLowerCase() ) )
-         {
-            return c;
-         }
-      }
-      throw new IllegalArgumentException(v);
-   }
+    void execute(RPCResponse[] response, JavaScriptObject rawData, RPCRequest request);
 }

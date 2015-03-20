@@ -19,6 +19,7 @@
 
 package com.smartgwt.extensions.fusionchart.server;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -70,8 +71,10 @@ public  class FChartDataSource
             Object template = map.get(TEMPLATE_FILE);
             try {
                 String returnValue = Velocity.evaluateTemplateFileAsString(template.toString(), context);
-                if (returnValue != null)
-                    response.setRawData(returnValue);
+                if (returnValue != null){
+                	returnValue=returnValue.replace("\n", "").replace("\t", "").replace(" ", "");
+                	response.setRawData(returnValue);
+                }
             } catch (SlxException e) {
                 response.setStatus(Status.STATUS_FAILURE);
                 response.setRawData(e.getFullMessage());
@@ -80,8 +83,11 @@ public  class FChartDataSource
         } else if (map.get(TEMPLATE) != null) {
             Object template = map.get(TEMPLATE);
             String returnValue = Velocity.evaluateAsString(template.toString(), context);
-            if (returnValue != null)
-                response.setRawData(returnValue);
+            if (returnValue != null){
+            	returnValue=returnValue.replace("\n", "").replace("\t", "").replace(" ", "");
+            	response.setRawData(returnValue);
+            }
+                
         }
         response.setHandlerName("fchart");
         return response;
@@ -89,6 +95,13 @@ public  class FChartDataSource
     }
 
     protected Object getData(DSRequest req, DataSource ds) throws SlxException {
+    	List<DSRequest> requests=	req.getDSCall().getRequests();
+    	if(requests.size()>1){
+    		DSResponse response =req.getDSCall().getResponse(requests.get(0));
+    		if(response!=null){
+    			return response.getRawData();
+    		}
+    	}
         return ds.execute(req).getRawData();
     }
 

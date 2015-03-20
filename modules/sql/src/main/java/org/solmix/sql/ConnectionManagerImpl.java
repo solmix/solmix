@@ -48,6 +48,7 @@ import org.solmix.commons.util.DataUtils;
 import org.solmix.fmk.base.Reflection;
 import org.solmix.fmk.util.ServiceUtil;
 import org.solmix.runtime.SystemContext;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnit;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.sql.internal.SqlCM;
@@ -445,6 +446,18 @@ public class ConnectionManagerImpl implements ConnectionManager
                     __return = getInternalDs(dbName, dbConfig);
                     break;
                 }
+				case CONTAINER: {
+					ConfiguredBeanProvider provider = sc
+							.getBean(ConfiguredBeanProvider.class);
+					if (provider != null) {
+						try {
+							__return = provider.getBeanOfType(dbName, DataSource.class);
+						} catch (Exception e) {
+							log.warn("Can't load datasource {} from Container.", dbName);
+						}
+					}
+					 break;
+				}
 
                 case DRIVERMANAGER: {
                     boolean credentialsInURL = dbConfig.getBoolean(

@@ -19,7 +19,7 @@
 
 package org.solmix.sgt.client.pagebar;
 
-import org.solmix.sgt.client.advanceds.JSCallBack;
+import org.solmix.sgt.client.advanceds.JSCallBacks;
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
 
@@ -408,8 +408,8 @@ public class PagedListGrid extends ListGrid
         gridPageControls.addMember(totalRow);
 
         gridPageControls.setAlign(Alignment.LEFT);
-//        gridPageControls.hide();
-        initPageBar(null);
+        gridPageControls.hide();
+//        initPageBar(null);
         this.setGridComponents(new Object[] { ListGridComponent.HEADER, ListGridComponent.FILTER_EDITOR, ListGridComponent.BODY, gridPageControls });
 
     }
@@ -612,10 +612,10 @@ public class PagedListGrid extends ListGrid
     }
     @Override
     public void removeSelectedData(){
-    	removeSelectedData((JSCallBack)null);
+    	removeSelectedData((JSCallBacks)null);
     }
     
-	public void removeSelectedData(JSCallBack callBack) {
+	public void removeSelectedData(JSCallBacks callBack) {
 		final ListGridRecord[] records = getSelectedRecords();
 		String dsID = getDataSource().getID();
 		Roperation[] opers;
@@ -636,15 +636,18 @@ public class PagedListGrid extends ListGrid
 			if (callBack != null) {
 				SlxRPC.send(opers, callBack);
 			} else {
-				SlxRPC.send(opers, new JSCallBack() {
+				SlxRPC.send(opers, new JSCallBacks() {
 
 					@Override
-					public void execute(RPCResponse response,
+					public void execute(RPCResponse[] responses,
 							JavaScriptObject rawData, RPCRequest request) {
-						if (response.getStatus() == RPCResponse.STATUS_SUCCESS) {
+						if(responses.length<=0){
+							return;
+						}
+						if (responses[0].getStatus() == RPCResponse.STATUS_SUCCESS) {
 							getRecordList().removeList(records);
 						}else{
-							SC.warn("删除记录错误,错误代码["+response.getStatus()+"]!");
+							SC.warn("删除记录错误,错误代码["+responses[0].getStatus()+"]!");
 						}
 
 					}

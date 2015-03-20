@@ -98,7 +98,7 @@ public class ExtXmlFileRepository extends AbstractDSRepository
         if (DataUtils.isNullOrEmpty(baseDir))
             return null;
         String absolutePath = baseDir.endsWith("/") ? baseDir : baseDir + "/";
-        absolutePath = DataUtils.isNullOrEmpty(dsName) ? absolutePath : absolutePath + "/" + dsName;
+        absolutePath = DataUtils.isNullOrEmpty(dsName) ? absolutePath : absolutePath + dsName;
 
         String xmlName = (new StringBuilder()).append(absolutePath).append(".xml").toString();
         try {

@@ -206,11 +206,15 @@ public class MybatisDataSource extends BasicDataSource implements DataSource,
                     MybatisTransaction.startTransaction(req.getDSCall(),
                         environment, getSqlSessionFactory());
                     session = (SqlSession) getTransactionObject(req);
-                    if (req != null && req.getDSCall() != null)
+                    if (req != null && req.getDSCall() != null){
                         req.getDSCall().registerCallback(this);
+                    }
+                    req.setJoinTransaction(true);
+                }else{
+                	session = getSqlSession(true);
                 }
             }
-            req.setJoinTransaction(true);
+            
         } else {
             session = getSqlSession(true);
         }
