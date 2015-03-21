@@ -26,36 +26,41 @@ public class FusionChart extends HTMLFlow
     private static String chartRoot;
     private  Roperation op;
     private static int IMG_SIZE=42;
-    private FusionChartType chartType;
+    private String chartType;
     public FusionChart(){
-    	this(null,null);
+    	this(null,(String)null);
     }
 
-    public FusionChart(final Roperation op, final FusionChartType chartType)
-    {
-        swfId = "fcxId_" + getID();
-        renderId = "slx_chartC_" + getID();
-        this.op = op;
-        this.chartType = chartType;
-        if(op!=null){
-        this.doOnRender(new Function() {
+	public FusionChart(final Roperation op, final FusionChartType chartType) {
+		this(op,chartType.getValue());
+	}
+	protected FusionChart(final Roperation op, final String chartType) {
+		swfId = "fcxId_" + getID();
+		renderId = "slx_chartC_" + getID();
+		this.op = op;
+		this.chartType = chartType;
+		if (op != null) {
+			this.doOnRender(new Function() {
 
-            @Override
-            public void execute() {
-                SlxRPC.send(op, new XMLCallBack() {
+				@Override
+				public void execute() {
+					SlxRPC.send(op, new XMLCallBack() {
 
-                    @Override
-                    public void execute(RPCResponse response, String xmlString, RPCRequest request) {
-                        showChart(xmlString, chartType);
-                    }
+						@Override
+						public void execute(RPCResponse response,
+								String xmlString, RPCRequest request) {
+							showChart(xmlString, chartType);
+						}
 
-                });
+					});
 
-            }
-        });
-        }
-        setRedrawOnResize(false);
-        this.addResizedHandler(new ResizedHandler() {
+				}
+			});
+		}
+	}
+    public void setRedrawOnResize(boolean redrawOnResize){
+    	super.setRedrawOnResize(redrawOnResize);
+    	this.addResizedHandler(new ResizedHandler() {
 
             @Override
             public void onResized(ResizedEvent event) {
@@ -72,7 +77,8 @@ public class FusionChart extends HTMLFlow
     	count++;
         return swfId+count;
     }
-    protected void onDraw(){
+    @Override
+	protected void onDraw(){
         super.onDraw();
     }
     
@@ -163,8 +169,8 @@ public class FusionChart extends HTMLFlow
 	   }
    }
 
-   public void showChart(String data, FusionChartType chartType) {
-	   showChart(data, chartType.getValue(), getInnerWidth(), getInnerHeight());
+   public void showChart(String data, String chartType) {
+	   showChart(data, chartType, getInnerWidth(), getInnerHeight());
    }
 
 	public void resizeContainerAndActiveChart(String chartId, int width,int height) {
@@ -278,5 +284,10 @@ public class FusionChart extends HTMLFlow
 	    self.redraw = function() {
 	    }
 	    }-*/;
+
+	public void showChart(String dataAsString, FusionChartType type) {
+		showChart(dataAsString, type.getValue());
+		
+	}
 	
 }
