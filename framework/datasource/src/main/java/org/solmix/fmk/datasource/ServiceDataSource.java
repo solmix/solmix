@@ -368,7 +368,19 @@ public class ServiceDataSource
         } catch (Exception e) {
             dsResponse = new DSResponseImpl(request,Status.STATUS_FAILURE);
             log.error("Reflect exception:",e);
+            if(e.getMessage()==null){
+            	if(e.getCause() instanceof SlxException){
+            		SlxException sle =  (SlxException)e.getCause();
+            		String msg = sle.getCode()!=null?
+            				"Server Return Error CODE:"+sle.getCode().value()
+            				:"Server Return Error";
+            		dsResponse.setRawData(msg);
+            	}else{
+            		dsResponse.setRawData("Server Return Error");
+            	}
+            }else{
             dsResponse.setRawData(e.getMessage());
+            }
             return dsResponse;
 //            throw new SlxException(Tmodule.DATASOURCE, Texception.REFLECTION_EXCEPTION, e.getCause());
         }

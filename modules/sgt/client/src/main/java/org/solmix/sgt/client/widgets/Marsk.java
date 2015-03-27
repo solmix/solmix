@@ -25,8 +25,8 @@ public class Marsk {
 		marsk.setWidth("*");
 		marsk.setHeight("*");
 		 content= new HTMLPane();
-	    content.setBackgroundColor("#22B6B6");
-	    content.setContents("<div style='vertical-align: bottom;margin: 5px;'><img src='images/loading1.gif' width='32' height='32' style='margin:8px;float:left;vertical-align:bottom;'/></br><span id='loadingMsg' style='font-size:14px;vertical-align:bottom;'>正在加载应用......</span></div>");
+//	    content.setBackgroundColor("#22B6B6");
+	    content.setContents("<div style='vertical-align:center;margin: 10px;'><img src='images/loading_2.gif' width='32' height='32' style='margin:8px;float:left;vertical-align:bottom;'/></br><span id='loadingMsg' style='font-size:14px;vertical-align:bottom;'>正在加载应用......</span></div>");
 		marsk.addItem(content);
 	}
 	
@@ -36,7 +36,7 @@ public class Marsk {
 		return instance;
 	}
 	public void setContent(String message){
-		String html="<div style='vertical-align: bottom;margin: 10px;'><img src='images/loading1.gif' width='32' height='32' style='margin:8px;float:left;vertical-align:bottom;'/></br><span id='loadingMsg' style='font-size:14px;vertical-align:bottom;'>"+message+"</span></div>";
+		String html="<div style='vertical-align:center;margin: 10px;'><img src='images/loading_2.gif' width='32' height='32' style='margin:8px;float:left;vertical-align:bottom;'/></br><span id='loadingMsg' style='font-size:14px;vertical-align:bottom;'>"+message+"</span></div>";
 		content.setContents(html);
 	}
 	

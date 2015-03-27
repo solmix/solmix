@@ -2,13 +2,13 @@ package org.solmix.sgt.client.chart;
 
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
-import org.solmix.sgt.client.advanceds.XMLCallBack;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.smartgwt.client.core.Function;
+import com.smartgwt.client.rpc.RPCCallback;
 import com.smartgwt.client.rpc.RPCRequest;
 import com.smartgwt.client.rpc.RPCResponse;
 import com.smartgwt.client.util.SC;
@@ -30,8 +30,13 @@ public class FusionChart extends HTMLFlow
     public FusionChart(){
     	this(null,(String)null);
     }
-
+    public FusionChart(FusionWidgetsType type){
+    	this(null,type);
+    }
 	public FusionChart(final Roperation op, final FusionChartType chartType) {
+		this(op,chartType.getValue());
+	}
+	public FusionChart(final Roperation op, final FusionWidgetsType chartType) {
 		this(op,chartType.getValue());
 	}
 	protected FusionChart(final Roperation op, final String chartType) {
@@ -39,24 +44,25 @@ public class FusionChart extends HTMLFlow
 		renderId = "slx_chartC_" + getID();
 		this.op = op;
 		this.chartType = chartType;
-		if (op != null) {
+		
 			this.doOnRender(new Function() {
 
 				@Override
 				public void execute() {
-					SlxRPC.send(op, new XMLCallBack() {
-
-						@Override
-						public void execute(RPCResponse response,
-								String xmlString, RPCRequest request) {
-							showChart(xmlString, chartType);
-						}
-
-					});
+					
+					if (op != null) {
+						SlxRPC.send(op, new RPCCallback() {
+	
+							@Override
+							public void execute(RPCResponse response, Object rawData, RPCRequest request) {
+								showChart(rawData.toString(), chartType);
+							}
+	
+						});
+					}
 
 				}
 			});
-		}
 	}
     public void setRedrawOnResize(boolean redrawOnResize){
     	super.setRedrawOnResize(redrawOnResize);
@@ -91,7 +97,10 @@ public class FusionChart extends HTMLFlow
       return chartRoot ;
     }
   
-    /**
+    public String getChartType() {
+		return chartType;
+	}
+	/**
      * @return the canUpdate
      */
 	public boolean isCanUpdate() {
@@ -115,22 +124,9 @@ public class FusionChart extends HTMLFlow
 				+ (width - IMG_SIZE) / 2 + "px;margin-top:"
 				+ (height - IMG_SIZE) / 2 + "px'>" + "</div>";
 	}
+      
    public void showChart(final String data, final String chartType,final int width,final int height,final ChartDataFormat dataFormat){
-          Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
-
-                  @Override
-                  public boolean execute() {
-                        if(isCanUpdate()){
-                        	if(dataFormat==ChartDataFormat.XML){
-                        		_showXmlChart(data,chartType,width,height);
-                        	}else{
-                        		_showJsonChart(data,chartType,width,height);
-                        	}
-                              return false;
-                        }
-                        return true;
-                  }
-       }, 100);
+        	showChart(data,chartType,width+"",height+"",dataFormat);
    }
    
    public void showChart(final String data, final String chartType,final int width,final int height){
@@ -138,21 +134,29 @@ public class FusionChart extends HTMLFlow
    }
    
    public void showChart(final String data, final String chartType,final String width,final String height,final ChartDataFormat dataFormat){
-      Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
-
-                 @Override
-                 public boolean execute() {
-                       if(isCanUpdate()){
-                    	   if(dataFormat==ChartDataFormat.XML){
-                               _showXmlChart(data,chartType,width,height);
-                         	}else{
-                         		_showJsonChart(data,chartType,width,height);
-                         	}
-                             return false;
-                       }
-                       return true;
-                 }
-       }, 100);
+	   if(isCanUpdate()){
+    	   if(dataFormat==ChartDataFormat.XML){
+               _showXmlChart(data,chartType,width,height);
+         	}else{
+         		_showJsonChart(data,chartType,width,height);
+         	}
+       }else{
+		   Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
+	
+	                 @Override
+	                 public boolean execute() {
+	                       if(isCanUpdate()){
+	                    	   if(dataFormat==ChartDataFormat.XML){
+	                               _showXmlChart(data,chartType,width,height);
+	                         	}else{
+	                         		_showJsonChart(data,chartType,width,height);
+	                         	}
+	                             return false;
+	                       }
+	                       return true;
+	                 }
+	       }, 100);
+       }
    }
    public void showChart(final String data, final String chartType,final String width,final String height){
 	   showChart(data,chartType,width,height,autoDiscoverFormat(data));
@@ -191,37 +195,8 @@ public class FusionChart extends HTMLFlow
      {
            super.onInit();
      }
-    public native void _showXmlChart(String data, String chartType, int width, int height) /*-{
-        var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
-        var renderId=this.@org.solmix.sgt.client.chart.FusionChart::getRenderId()();
-        var chartRoot=this.@org.solmix.sgt.client.chart.FusionChart::getChartRoot()();
-        var chartPath=chartRoot+chartType+".swf";
-        try {
-			//$wnd.FusionCharts.setCurrentRenderer("javascript");
-           var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
-           if (chart.setXMLData != null ) chart.setXMLData(data);
-           else chart.setDataXML(data);
-           chart.render(renderId);
-         } catch (e) {
-         alert(e);
-        }  
-    }-*/;
-    public native void _showJsonChart(String data, String chartType, int width, int height) /*-{
-    var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
-    var renderId=this.@org.solmix.sgt.client.chart.FusionChart::getRenderId()();
-    var chartRoot=this.@org.solmix.sgt.client.chart.FusionChart::getChartRoot()();
-    var chartPath=chartRoot+chartType+".swf";
-    try {
-		//$wnd.FusionCharts.setCurrentRenderer("javascript");
-       var chart = new $wnd.FusionCharts(chartPath, chartId, width, height);
-       if (chart.setJSONData != null ) chart.setJSONData(data);
-       else chart.setJSONData(data);
-       chart.render(renderId);
-     } catch (e) {
-     alert(e);
-    }  
-}-*/;
-    public native void _showXmlChart(String data, String chartType, String width, String height) /*-{
+    
+    private native void _showXmlChart(String data, String chartType, String width, String height) /*-{
     var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
     var renderId=this.@org.solmix.sgt.client.chart.FusionChart::getRenderId()();
     var chartRoot=this.@org.solmix.sgt.client.chart.FusionChart::getChartRoot()();
@@ -235,17 +210,48 @@ public class FusionChart extends HTMLFlow
        alert(e);
     }  
 	}-*/;
-
-    public native void _showJsonChart(String data, String chartType, String width, String height) /*-{
+    
+    private native void renderChart(String chartType, String width, String height) /*-{
     var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
     var renderId=this.@org.solmix.sgt.client.chart.FusionChart::getRenderId()();
     var chartRoot=this.@org.solmix.sgt.client.chart.FusionChart::getChartRoot()();
     var chartPath=chartRoot+chartType+".swf";
     try {
         var chart = new $wnd.FusionCharts(chartPath, chartId, width, height,"0","1");
-        if (chart.setXMLData != null ) chart.setJSONData(data);
-        else chart.setJSONData(data);
         chart.render(renderId);
+      } catch (e) {
+       alert(e);
+    }  
+	}-*/;
+    private native void setJSONData(final String data) /*-{
+    var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
+    try {
+        //if (chart.setJSONData != null ) chart.setJSONData(data);
+        //else chart.setJSONData(data);
+        chart.render(renderId);
+        chart.addEventListener ("Rendered" , function(DOMId){
+        var did = $wnd.FusionCharts(chartId);
+        did.setJSONData(data);
+        } );
+      } catch (e) {
+       alert(e);
+    }  
+	}-*/;
+
+    private native void _showJsonChart(final String data, String chartType, String width, String height) /*-{
+    var chartId=this.@org.solmix.sgt.client.chart.FusionChart::getChartId()();
+    var renderId=this.@org.solmix.sgt.client.chart.FusionChart::getRenderId()();
+    var chartRoot=this.@org.solmix.sgt.client.chart.FusionChart::getChartRoot()();
+    var chartPath=chartRoot+chartType+".swf";
+    try {
+        var chart = new $wnd.FusionCharts(chartPath, chartId, width, height,"0","1");
+        //if (chart.setJSONData != null ) chart.setJSONData(data);
+        //else chart.setJSONData(data);
+        chart.render(renderId);
+        chart.addEventListener ("Rendered" , function(DOMId){
+        var did = $wnd.FusionCharts(chartId);
+        did.setJSONData(data);
+        } );
       } catch (e) {
        alert(e);
     }  
@@ -283,9 +289,13 @@ public class FusionChart extends HTMLFlow
 	    var self = this.@com.smartgwt.client.widgets.BaseWidget::getOrCreateJsObj()();
 	    self.redraw = function() {
 	    }
+	    
 	    }-*/;
 
 	public void showChart(String dataAsString, FusionChartType type) {
+		showChart(dataAsString, type.getValue());
+	}
+	public void showChart(String dataAsString, FusionWidgetsType type) {
 		showChart(dataAsString, type.getValue());
 		
 	}

@@ -22,6 +22,8 @@ package org.solmix.sgt.client.advanceds;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.solmix.sgt.client.widgets.Marsk;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.core.Function;
 import com.smartgwt.client.data.Criteria;
@@ -70,10 +72,12 @@ public class SlxRPC
         Request request = new Request(true);
         request.setRoperations(oper);
         f.setData(JSON.encode(request.getJsObj()));
+//        Marsk.show("加载数据中!");
         RPCManager.sendRequest(f, new RPCCallback() {
 
             @Override
             public void execute(RPCResponse response, Object rawData, RPCRequest request) {
+//            	Marsk.hidden();
                 if (rawData instanceof JavaScriptObject) {
                     response.setJavaScriptObject((JavaScriptObject) rawData);
                     callback.execute(response, (JavaScriptObject) rawData, request);
@@ -128,10 +132,12 @@ public class SlxRPC
         Request request = new Request(true);
         request.setRoperations(oper);
         f.setData(JSON.encode(request.getJsObj()));
+        Marsk.show("加载数据中!");
         RPCManager.sendRequest(f, new RPCCallback() {
 
             @Override
             public void execute(RPCResponse response, Object rawData, RPCRequest request) {
+            	Marsk.hidden();
             	RPCResponse[] ress=null;
                 	JavaScriptObject rawObj=JSOHelper.eval(rawData.toString());
                     JavaScriptObject result = JSOHelper.getAttributeAsJavaScriptObject(rawObj, "response");
