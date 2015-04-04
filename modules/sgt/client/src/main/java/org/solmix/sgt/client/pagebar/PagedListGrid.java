@@ -183,6 +183,7 @@ public class PagedListGrid extends ListGrid
 
         this.setWidth100();
         this.setHeight100();
+        setCanDragSelectText(true);
         gridPageControls = new ToolStrip();
 
         gridPageControls.setWidth100();

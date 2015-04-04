@@ -13,7 +13,8 @@ public class Marsk {
 	private  Marsk(){
 		marsk = new Dialog();
 		marsk.setAutoCenter(true);
-		marsk.setIsModal(true);
+		marsk.setIsModal(false);
+		marsk.setShowModalMask(false);
 		marsk.setMargin(0);
 		Map bodyDefaults = new HashMap();  
         bodyDefaults.put("membersMargin", 0);  
@@ -39,7 +40,9 @@ public class Marsk {
 		String html="<div style='vertical-align:center;margin: 10px;'><img src='images/loading_2.gif' width='32' height='32' style='margin:8px;float:left;vertical-align:bottom;'/></br><span id='loadingMsg' style='font-size:14px;vertical-align:bottom;'>"+message+"</span></div>";
 		content.setContents(html);
 	}
-	
+	public static void showLoadData(){
+		show("加载数据中....");
+	}
 	public static void show(String message){
 		getInstance().setContent(message);
 		getInstance().marsk.show();

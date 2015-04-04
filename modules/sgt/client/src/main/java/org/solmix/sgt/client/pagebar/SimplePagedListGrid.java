@@ -23,6 +23,7 @@ import org.solmix.sgt.client.advanceds.JSCallBack;
 import org.solmix.sgt.client.advanceds.JSCallBacks;
 import org.solmix.sgt.client.advanceds.Roperation;
 import org.solmix.sgt.client.advanceds.SlxRPC;
+import org.solmix.sgt.client.widgets.Marsk;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.data.Criteria;
@@ -243,11 +244,13 @@ public class SimplePagedListGrid extends ListGrid
         	operation.setStartRow(-1);
         	operation.setEndRow(0);
         }
+        Marsk.showLoadData();
         SlxRPC.send(operation, new JSCallBack() {
 			
 			@Override
 			public void execute(RPCResponse response, JavaScriptObject rawData,
 					RPCRequest request) {
+				Marsk.hidden();
 				 if (response.getStatus() == DSResponse.STATUS_SUCCESS) {
 					 RecordList serdata = new RecordList(response.getDataAsObject());
                      grid.setData(serdata);
