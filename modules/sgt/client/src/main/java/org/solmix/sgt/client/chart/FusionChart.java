@@ -40,11 +40,15 @@ public class FusionChart extends HTMLFlow
 		this(op,chartType.getValue());
 	}
 	protected FusionChart(final Roperation op, final String chartType) {
-		swfId = "fcxId_" + getID();
-		renderId = "slx_chartC_" + getID();
+		swfId = "fcId_" + count;
+        renderId="slx_fC_"+count;
+        setID(renderId);
+        ++count;
+        setWidth100();
+        setHeight100();
 		this.op = op;
 		this.chartType = chartType;
-		
+		if(op!=null){
 			this.doOnRender(new Function() {
 
 				@Override
@@ -63,6 +67,7 @@ public class FusionChart extends HTMLFlow
 
 				}
 			});
+		}
 	}
     public void setRedrawOnResize(boolean redrawOnResize){
     	super.setRedrawOnResize(redrawOnResize);
@@ -80,17 +85,18 @@ public class FusionChart extends HTMLFlow
         
     }*/
     public String getChartId(){
-    	count++;
-        return swfId+count;
+        return swfId;
     }
+
+    public String getRenderId(){
+        return renderId;
+    }
+   
     @Override
 	protected void onDraw(){
         super.onDraw();
     }
     
-    public String getRenderId(){
-        return renderId;
-    }
     public String getChartRoot(){
         if(chartRoot==null)
             chartRoot="xchart/";
@@ -119,7 +125,7 @@ public class FusionChart extends HTMLFlow
 		int height = getHeight();
 		return "<div id='"
 				+ renderId
-				+ "'   style='margin-right:30px;float:left;vertical-align:center;' >"
+				+ "'  eventproxy='"+swfId+"' style='margin-right:30px;float:left;vertical-align:center;' onscroll='return "+renderId+".$lh()' >"
 				+ "<img src='images/loading_2.gif' style='margin-left:"
 				+ (width - IMG_SIZE) / 2 + "px;margin-top:"
 				+ (height - IMG_SIZE) / 2 + "px'>" + "</div>";

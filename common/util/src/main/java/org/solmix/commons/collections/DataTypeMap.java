@@ -244,9 +244,9 @@ public class DataTypeMap extends AbstractMapDecorator
         if (value instanceof Boolean)
             return (Boolean) value;
         String s = value.toString().toLowerCase().trim();
-        if (s.equals("true") || s.equals("yes"))
+        if (s.equals("true") || s.equals("yes")|| s.equals("1"))
             return new Boolean(true);
-        if (s.equals("false") || s.equals("no"))
+        if (s.equals("false") || s.equals("no")|| s.equals("0"))
             return new Boolean(false);
         else
             return defaultValue;

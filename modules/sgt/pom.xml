@@ -9,7 +9,7 @@
   <artifactId>sgt</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>client</module>
+  	<!-- <module>client</module> -->
   	<module>share</module>
   	<module>server</module>
   </modules>

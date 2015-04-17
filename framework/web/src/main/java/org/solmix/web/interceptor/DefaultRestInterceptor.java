@@ -83,6 +83,10 @@ public class DefaultRestInterceptor extends AbstractRestInterceptor
             || PROTOCOL_POSTMESSAGE.equalsIgnoreCase(protocol.toString()))
             try {
                 String payload = request.getParameter(payloadName);
+                //back support
+                if(payload == null){
+                	payload = request.getParameter("_transaction");
+                }
                 Request dsRequest = null;
                 if (payload != null) {
                     payload = payload.trim();

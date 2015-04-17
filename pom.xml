@@ -40,11 +40,11 @@
 		<module>framework</module>
 		<module>services</module>
 		<module>modules</module>
-		<module>bundles</module>
-		<module>assemblies</module> 
+		<!-- <module>bundles</module> -->
+	<!-- 	<module>assemblies</module>  -->
 		<!-- <module>launch/base</module> -->
 		<!-- <module>test</module> -->
-		<module>tooling</module>
+		<!-- <module>tooling</module> -->
 	</modules>
 	<properties>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>
