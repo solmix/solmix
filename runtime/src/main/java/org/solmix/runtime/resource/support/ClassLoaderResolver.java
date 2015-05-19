@@ -56,7 +56,12 @@ public class ClassLoaderResolver extends ResourceResolverAdaptor
 
     @Override
     public InputStreamResource getAsStream(String name) { 
-        return new ClassLoaderResource(name, loader);
+        ClassLoaderResource resource= new ClassLoaderResource(name, loader);
+        if(resource.exists()){
+            return resource;
+        }else{
+            return null;
+        }
     } 
 
 }

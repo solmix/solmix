@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.FileUtils;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
 import org.solmix.runtime.extension.ExtensionLoader;
 import org.solmx.service.template.TemplateContext;
 import org.solmx.service.template.TemplateEngine;
@@ -48,7 +49,7 @@ import org.solmx.service.template.TemplateService;
  * @version $Id$ 2015年7月28日
  */
 
-public class DefaultTemplateService implements TemplateService
+public class DefaultTemplateService implements TemplateService,ContainerAware
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultTemplateService.class);
@@ -71,11 +72,11 @@ public class DefaultTemplateService implements TemplateService
 
     private Boolean cacheEnabled =  true;
 
-    public DefaultTemplateService(Container container)
+    public DefaultTemplateService()
     {
-        setContainer(container);
     }
 
+    @Override
     public void setContainer(Container container) {
         this.container = container;
         this.container.setExtension(this, TemplateService.class);

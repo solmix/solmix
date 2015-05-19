@@ -60,6 +60,21 @@ public final class DateUtils
         }
         return result;
     }
+    public static Date getMouthStartDay(){
+        java.util.Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        return c.getTime();
+  }
+  
+  public static Date getRelativeDay(String date ,int i)throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d =sdf.parse(date);
+        java.util.Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.add(Calendar.DAY_OF_MONTH, i);
+        return c.getTime();
+  }
 
     public static String getEndDayofMouth(String date, String inPattern, String outPattern) {
         SimpleDateFormat sdf = new SimpleDateFormat(inPattern);
