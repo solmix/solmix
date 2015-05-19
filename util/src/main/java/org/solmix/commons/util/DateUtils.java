@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public final class DateUtils
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateUtils.class);
 
     public static final long DAY_MS_TIME = 24 * 60 * 60 * 1000;
 

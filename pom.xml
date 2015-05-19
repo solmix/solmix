@@ -61,7 +61,7 @@
 		<depends.maven.plugin.version>1.2</depends.maven.plugin.version>
 		<easymock.version>3.3.1</easymock.version>
 		<equinox.version>3.8.0.v20120529-1548</equinox.version>
-		<mybatis.version>3.3.0</mybatis.version>
+		<mybatis.version>3.2.5</mybatis.version>
 		<felix.bundlerepository.version>1.6.4</felix.bundlerepository.version>
 		<felix.configadmin.version>1.6.0</felix.configadmin.version>
 		<felix.fileinstall.version>3.2.6</felix.fileinstall.version>

@@ -58,18 +58,19 @@ public class CglibUtilsHelper extends UtilsHelper
 
         return builder.toObject();
     }
+   
     private static final Map<String, Object> ALL_UTILS = Collections.unmodifiableMap(ArrayUtils.arrayToMap(new Object[][] {
         { "arrayUtils", ARRAY_UTILS },
         { "classLoaderUtil", CLASS_LOADER_UTILS },
         { "classDescUtil", CLASS_DESC_UTILS },
         { "fileUtil", FILE_UTILS },
-        { "localeUtil", DATA_UTILS },
-        { "messageUtil", DATE_UTILS },
+        { "dataUtils", DATA_UTILS },
+        { "stringEscapeUtils", STRINGESCAPE_UTILS },
         { "objectUtil", OBJECT_UTILS },
-        { "streamUtil", NET_UTILS },
-        { "stringEscapeUtil", STRING_UTILS },
-        { "stringUtil", BASE64_UTILS },
-        { "systemUtil", TRANSFOM_UTILS },
+        { "netUtils", NET_UTILS },
+        { "stringUtils", STRING_UTILS },
+        { "base64Util", BASE64_UTILS },
+        { "transformUtil", TRANSFOM_UTILS },
         { "mathUtil", MATH_UTILS },
         { "utils", MIXIN_UTILS }
    }, String.class, Object.class));

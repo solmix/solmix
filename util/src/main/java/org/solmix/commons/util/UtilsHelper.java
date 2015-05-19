@@ -47,7 +47,7 @@ public class UtilsHelper
      static final ClassDescUtils         CLASS_DESC_UTILS    = new ClassDescUtils();
      static final FileUtils              FILE_UTILS          = new FileUtils();
      static final DataUtils              DATA_UTILS          = new DataUtils();
-     static final DateUtils              DATE_UTILS          = new DateUtils();
+     static final StringEscapeUtils      STRINGESCAPE_UTILS          = new StringEscapeUtils();
      static final ObjectUtils            OBJECT_UTILS         = new ObjectUtils();
      static final NetUtils               NET_UTILS            = new NetUtils();
      static final StringUtils            STRING_UTILS         = new StringUtils();
@@ -62,7 +62,7 @@ public class UtilsHelper
          { "classDescUtil", CLASS_DESC_UTILS },
          { "fileUtils", FILE_UTILS },
          { "dataUtils", DATA_UTILS },
-         { "dateUtils", DATE_UTILS },
+         { "stringEscapeUtils", STRINGESCAPE_UTILS },
          { "objectUtils", OBJECT_UTILS },
          { "netUtils", NET_UTILS },
          { "stringUtils", STRING_UTILS },
