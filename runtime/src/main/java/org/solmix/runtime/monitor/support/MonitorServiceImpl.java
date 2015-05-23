@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.management.ManagementFactory;
 
+import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.bean.Configurable;
 import org.solmix.runtime.monitor.MonitorInfo;
 import org.solmix.runtime.monitor.MonitorService;
@@ -81,7 +82,7 @@ public class MonitorServiceImpl implements MonitorService, Configurable {
 
         double cpuRatio = 0;
         if (osName.toLowerCase().startsWith("windows")) {
-            cpuRatio = this.getCpuRatioForWindows();
+//            cpuRatio = this.getCpuRatioForWindows();
         }
 
         MonitorInfo infoBean = new MonitorInfo();
@@ -171,17 +172,18 @@ public class MonitorServiceImpl implements MonitorService, Configurable {
                 // LOG.info("line="+line);
                 if (caption.equals("System Idle Process")
                     || caption.equals("System")) {
+                	
                     idletime += Long.valueOf(
-                        substring(line, kmtidx, rocidx - 1).trim()).longValue();
+                        substring(line, kmtidx, rocidx - 1)).longValue();
                     idletime += Long.valueOf(
-                        substring(line, umtidx, wocidx - 1).trim()).longValue();
+                        substring(line, umtidx, wocidx - 1)).longValue();
                     continue;
                 }
 
                 kneltime += Long.valueOf(
-                    substring(line, kmtidx, rocidx - 1).trim()).longValue();
+                    substring(line, kmtidx, rocidx - 1)).longValue();
                 usertime += Long.valueOf(
-                    substring(line, umtidx, wocidx - 1).trim()).longValue();
+                    substring(line, umtidx, wocidx - 1)).longValue();
             }
             retn[0] = idletime;
             retn[1] = kneltime + usertime;
@@ -204,6 +206,7 @@ public class MonitorServiceImpl implements MonitorService, Configurable {
         for (int i = startIdx; i <= endIdx; i++) {
             tgt += (char) b[i];
         }
-        return tgt;
+        tgt=StringUtils.trimToNull(tgt);
+        return tgt==null?"0":tgt;
     }
 }

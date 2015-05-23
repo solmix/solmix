@@ -27,7 +27,7 @@ import org.solmix.runtime.interceptor.InterceptorChain;
 
 
 /**
- * 消息
+ * 代表一个消息载体
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月4日

@@ -40,11 +40,6 @@ import org.solmix.runtime.interceptor.support.ServiceInvokerInterceptor;
 
 public abstract class AbstractServiceFactory {
 
-    // private static final Logger LOG =
-    // LoggerFactory.getLogger(AbstractServiceFactory.class);
-
- 
-
     protected boolean dataFormatSetted;
     
     protected Service service;

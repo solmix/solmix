@@ -18,6 +18,8 @@
  */
 package org.solmix.commons.util;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -37,5 +39,9 @@ public class ServletUtils {
         String servletPath = Files.normalizeAbsolutePath(request.getServletPath(), pathInfo.length() != 0);
 
         return servletPath + pathInfo;
+    }
+    
+    public static String normalizeURI(String uri) {
+        return URI.create(StringUtils.trimToEmpty(uri)).normalize().toString();
     }
 }

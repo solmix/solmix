@@ -27,8 +27,18 @@ package org.solmix.runtime;
 
 public interface ContainerAware {
 
+    /**
+     * 设置{@link Container}。
+     * 
+     * @param container
+     */
     void setContainer(Container container);
 
+    /**
+     * 获取设置{@link Container}。
+     * 
+     * @return
+     */
     Container getContainer();
 
 }

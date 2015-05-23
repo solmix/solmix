@@ -22,11 +22,11 @@ package org.solmix.runtime;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +53,7 @@ public abstract class ContainerFactory
 
     protected static Map<Thread, ContainerHolder> threadContainers = new WeakHashMap<Thread, ContainerHolder>(8);
 
+    protected static List<Container> containersRef= new CopyOnWriteArrayList<Container>();
     /**
      * Returns the default system container, creating it if necessary.
      * 
@@ -63,12 +64,8 @@ public abstract class ContainerFactory
     }
     
     public static Container[] getContainers(){
-    	List<Container> all= new ArrayList<Container>();
-    	for(ContainerHolder holder:threadContainers.values()){
-    		if(!holder.stale)
-    			all.add(holder.container);
-    	}
-    	return all.toArray(new Container[]{});
+    	
+    	return containersRef.toArray(new Container[]{});
     }
 
     /**
@@ -95,6 +92,7 @@ public abstract class ContainerFactory
      * @return true if the Container was not set and is now set
      */
     public static synchronized boolean possiblySetDefaultContainer(Container container) {
+    	containersRef.add(container);
         ContainerHolder h = getThreadContainerHolder(false);
         if (h.container == null) {
            h.container=container;
@@ -326,7 +324,7 @@ public abstract class ContainerFactory
                         // mark as stale so if a thread asks again, it will create a new one
                         item.stale = true;
                     }
-                    // This will remove the BusHolder from the only place that should
+                    // This will remove the ContainerHolder from the only place that should
                     // strongly reference it
                     iterator.remove();
                 }

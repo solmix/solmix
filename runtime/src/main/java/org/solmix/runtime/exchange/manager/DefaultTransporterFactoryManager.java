@@ -50,8 +50,7 @@ public class DefaultTransporterFactoryManager implements
     private final Set<String> loaded = new CopyOnWriteArraySet<String>();
 
     public DefaultTransporterFactoryManager() {
-        transporterFactories = new ConcurrentHashMap<String, TransporterFactory>(
-            4, 0.75f, 2);
+        transporterFactories = new ConcurrentHashMap<String, TransporterFactory>(4, 0.75f, 2);
     }
 
     @Override

@@ -49,7 +49,7 @@ public abstract class AbstractFaultChainInitProcessor implements Processor {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFaultChainInitProcessor.class);
 
-    /** 切面阶段定义 */
+    /** 切面步骤定义 */
     protected final PhasePolicy phasePolicy;
 
     private final Container container;

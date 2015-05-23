@@ -162,11 +162,15 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext 
             cfgFiles = new String[] {BeanConfigurer.USER_CFG_FILE };
         }
         for (String cfgFile : cfgFiles) {
-            final Resource f = findResource(cfgFile);
+             Resource f = findResource(cfgFile);
+             if((f==null||!f.exists())&&this.getParent()!=null){
+            	 f=getParent().getResource(cfgFile);
+             }
             if (f != null && f.exists()) {
                 resources.add(f);
                 LOG.info("Used configed file {}", cfgFile);
             } else {
+            	
                 if (!usingDefault) {
                     LOG.warn("Can't find configure file {}", cfgFile);
                     throw new ApplicationContextException(

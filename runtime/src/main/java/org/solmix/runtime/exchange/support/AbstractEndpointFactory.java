@@ -20,14 +20,13 @@ package org.solmix.runtime.exchange.support;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.exchange.Endpoint;
 import org.solmix.runtime.exchange.EndpointException;
 import org.solmix.runtime.exchange.PipelineSelector;
 import org.solmix.runtime.exchange.ProtocolFactory;
+import org.solmix.runtime.exchange.Transporter;
 import org.solmix.runtime.exchange.TransporterFactory;
 import org.solmix.runtime.exchange.model.NamedID;
 import org.solmix.runtime.interceptor.support.InterceptorProviderSupport;
@@ -44,13 +43,11 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
 
     private static final long serialVersionUID = -2130719449925733112L;
     
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractEndpointFactory.class);
-
     protected Container container;
     
     protected ProtocolFactory protocolFactory;
     
-    protected String transporter;
+    protected Transporter transporter;
     
     protected String protocol;
     
@@ -164,15 +161,7 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
         this.endpointName = endpointName;
     }
 
-    /**   */
-    public String getTransporter() {
-        return transporter;
-    }
-    
-    /**   */
-    public void setTransporter(String transporter) {
-        this.transporter = transporter;
-    }
+ 
     
     /**   */
     public String getProtocol() {

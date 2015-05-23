@@ -40,7 +40,9 @@ import org.solmix.runtime.exchange.processor.InChainInitProcessor;
 public abstract class AbstractProtocolFactory implements ProtocolFactory {
 
     protected Container container;
-    
+    public AbstractProtocolFactory(){
+    	
+    }
     public AbstractProtocolFactory(Container container) {
         this.container = container;
     }

@@ -22,7 +22,7 @@ package org.solmix.runtime.exchange;
 import java.io.IOException;
 
 /**
- * 数据传输管道.
+ * {@link Transporter}之间的传输管道.
  * 
  * 为Binding提供传输通道
  * 

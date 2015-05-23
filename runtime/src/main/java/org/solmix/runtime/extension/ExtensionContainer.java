@@ -83,7 +83,7 @@ public class ExtensionContainer implements Container {
                     container.close();
                 }
             }
-        }, "SLX-Shutdown-Thread"));
+        }, "Container-shutdown"));
     }
 
     protected final Map<Class<?>, Object> extensions;
@@ -178,6 +178,9 @@ public class ExtensionContainer implements Container {
 
     @Override
     public void setId(String id) {
+    	if(this.id!=null){
+    		LOG.debug("Renaming container:[{}] to [{}]",this.id,id);
+    	}
         this.id = id;
     }
 
