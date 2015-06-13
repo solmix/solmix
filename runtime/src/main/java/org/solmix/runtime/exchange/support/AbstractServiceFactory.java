@@ -28,6 +28,7 @@ import org.solmix.runtime.exchange.Service;
 import org.solmix.runtime.exchange.ServiceFactoryListener;
 import org.solmix.runtime.exchange.dataformat.DataFormat;
 import org.solmix.runtime.exchange.event.ServiceFactoryEvent;
+import org.solmix.runtime.exchange.invoker.Invoker;
 import org.solmix.runtime.interceptor.support.OneWayInterceptor;
 import org.solmix.runtime.interceptor.support.OutgoingChainInterceptor;
 import org.solmix.runtime.interceptor.support.ServiceInvokerInterceptor;
@@ -127,5 +128,15 @@ public abstract class AbstractServiceFactory {
         service.getInInterceptors().add(new OutgoingChainInterceptor());
         service.getInInterceptors().add(new OneWayInterceptor());
     }
+
+    /**
+     * @return
+     */
+    public abstract Invoker getInvoker() ;
+
+    /**
+     * @return
+     */
+    public abstract Invoker createInvoker() ;
 
 }

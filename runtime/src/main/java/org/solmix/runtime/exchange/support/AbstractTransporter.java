@@ -96,5 +96,21 @@ public abstract class AbstractTransporter implements Transporter {
     protected void deactivate(Processor p) {
 
     }
+    protected abstract class AbstractBackPipeline extends AbstractPipeline {
 
+        public AbstractBackPipeline() {
+            super("");
+        }
+
+        /**
+         *nothing todo.
+         */
+        public void setProcessor(Processor processor) {
+            
+        }
+        
+        protected Logger getLogger() {
+            return AbstractBackPipeline.this.getLogger();
+        }
+    }
 }

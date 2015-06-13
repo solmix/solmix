@@ -27,18 +27,17 @@ package org.solmix.runtime.interceptor.phase;
 
 public class Phase implements Comparable<Object>
 {
-    public static final String SETUP = "setup";
-    public static final String SETUP_ENDING = "setup-ending";
-    public static final String PRE_LOGICAL = "pre-logical";
-    public static final String PRE_LOGICAL_ENDING = "pre-logical-ending";
-    public static final String USER_LOGICAL = "user-logical";
-    public static final String USER_LOGICAL_ENDING = "user-logical-ending";
-    public static final String POST_LOGICAL = "post-logical";
-    public static final String POST_LOGICAL_ENDING = "post-logical-ending";
-    public static final String PRE_ENCODE = "pre-encode";
-    public static final String ENCODE = "encode";
-    public static final String POST_ENCODE = "post-encode";
-    public static final String ENCODE_ENDING = "encode-ending";
+    /**接收*/
+    public static final String RECEIVE = "receive";
+    
+    /**流预处理*/
+    public static final String PRE_STREAM = "pre-stream";
+    /**流预处理结束*/
+    public static final String PRE_STREAM_ENDING = "pre-stream-ending";
+    /**读取*/
+    public static final String READ = "read";
+    
+    /**协议预处理*/
     public static final String PRE_PROTOCOL = "pre-protocol";
     public static final String PRE_PROTOCOL_FRONTEND = "pre-protocol-frontend";
     public static final String PRE_PROTOCOL_ENDING = "pre-protocol-ending";
@@ -46,10 +45,32 @@ public class Phase implements Comparable<Object>
     public static final String USER_PROTOCOL_ENDING = "user-protocol-ending";
     public static final String POST_PROTOCOL = "post-protocol";
     public static final String POST_PROTOCOL_ENDING = "post-protocol-ending";
+    /**编码*/
+    public static final String PRE_ENCODE = "pre-encode";
+    public static final String ENCODE = "encode";
+    public static final String POST_ENCODE = "post-encode";
+    public static final String ENCODE_ENDING = "encode-ending";
+    /**业务逻辑*/
+    public static final String PRE_LOGICAL = "pre-logical";
+    public static final String PRE_LOGICAL_ENDING = "pre-logical-ending";
+    public static final String USER_LOGICAL = "user-logical";
+    public static final String USER_LOGICAL_ENDING = "user-logical-ending";
+    public static final String POST_LOGICAL = "post-logical";
+    public static final String POST_LOGICAL_ENDING = "post-logical-ending";
+    
+    /**服务调用*/
+    public static final String PRE_INVOKE = "pre-invoke";
+    public static final String INVOKE = "invoke";
+    public static final String POST_INVOKE = "post-invoke";
+    
+    public static final String SETUP = "setup";
+    public static final String SETUP_ENDING = "setup-ending";
+    
+    
+   
     public static final String PREPARE_SEND = "prepare-send";
     public static final String PREPARE_SEND_ENDING = "prepare-send-ending";
-    public static final String PRE_STREAM = "pre-stream";
-    public static final String PRE_STREAM_ENDING = "pre-stream-ending";
+  
     public static final String USER_STREAM = "user-stream";
     public static final String USER_STREAM_ENDING = "user-stream-ending";
     public static final String POST_STREAM = "post-stream";
@@ -59,15 +80,13 @@ public class Phase implements Comparable<Object>
     public static final String SEND = "send";
     public static final String SEND_ENDING = "send-ending";
    
-    public static final String RECEIVE = "receive";
-    public static final String READ = "read";
+    
+   
     public static final String PROTOCOL = "protocol";
     public static final String PRE_DECODE = "pre-decode";
     public static final String DECODE = "encode";
     public static final String POST_DECODE = "post-decode";
-    public static final String PRE_INVOKE = "pre-invoke";
-    public static final String INVOKE = "invoke";
-    public static final String POST_INVOKE = "post-invoke";
+  
     private String name;
     private int priority;
     

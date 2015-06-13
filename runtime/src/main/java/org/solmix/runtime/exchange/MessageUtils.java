@@ -45,7 +45,9 @@ public final class MessageUtils {
         Boolean request = (Boolean) message.get(Message.REQUEST_MESSAGE);
         return request != null && request.booleanValue();
     }
-
+    public static boolean isPartialResponse(Message message) {
+        return Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE));
+    }
     public static boolean getBoolean(Message message, String key, boolean df) {
         if (message == null) {
             return df;

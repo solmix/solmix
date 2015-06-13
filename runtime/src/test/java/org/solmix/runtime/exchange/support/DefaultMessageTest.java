@@ -41,19 +41,12 @@ public class DefaultMessageTest extends Assert
     @Test
     public void testAttachmentsLinkedSorted() {
         DefaultMessage message = new DefaultMessage();
-        message.addAttachment("id",null);
         assertTrue(message.getAttachments() instanceof LinkedHashMap);
     }
     @Test
     public void testAttachments() {
         control = EasyMock.createNiceControl();
         DataHandler dh = control.createMock(DataHandler.class);
-        DefaultMessage message = new DefaultMessage();
-        message.addAttachment("id", dh);
-        assertSame(message.getAttachment("id"), dh);
-        assertTrue(message.hasAttachments());
-        message.removeAttachment("id");
-        assertNull(message.getAttachment("id"));
     }
     
     @Test

@@ -18,13 +18,11 @@
  */
 package org.solmix.runtime.exchange.support;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
-import javax.activation.DataHandler;
-
+import org.solmix.runtime.exchange.Attachment;
 import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.exchange.Message;
 import org.solmix.runtime.interceptor.InterceptorChain;
@@ -183,65 +181,8 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         }
     }
 
-    @Override
-    public DataHandler getAttachment(String id) {
-        Map<String, DataHandler> attachment = getAttachments();
-        return attachment == null ? null : attachment.get(id);
-    }
-
-    
-    @Override
-    public Set<String> getAttachmentNames() {
-        Map<String, DataHandler> attachment = getAttachments();
-        return attachment == null ? null : attachment.keySet();
-    }
-
-    @Override
-    public void removeAttachment(String id) {
-        Map<String, DataHandler> attachment = getAttachments();
-        if (attachment != null && attachment.containsKey(id)) {
-            attachment.remove(id);
-        }
-    }
-
-    @Override
-    public void addAttachment(String id, DataHandler content) {
-        Map<String, DataHandler> attachment = getAttachments();
-        if (attachment == null) {
-            setAttachments(new LinkedHashMap<String, DataHandler>());
-        }
-        getAttachments().put(id, content);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#getAttachments()
-     */
-    @Override
-    public Map<String, DataHandler> getAttachments() {
-        return (Map<String, DataHandler>)get(ATTACHMENTS);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#setAttachments(java.util.Map)
-     */
-    @Override
-    public void setAttachments(Map<String, DataHandler> attachments) {
-        put(ATTACHMENTS, attachments);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.exchange.Message#hasAttachments()
-     */
-    @Override
-    public boolean hasAttachments() {
-        return getAttachments() != null && getAttachments().size() > 0;
-    }
+  
+  
     /**
      * {@inheritDoc}
      * 
@@ -256,6 +197,25 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         for (Class<?> c : m1.getContentType()) {
             m2.setContent(c, m1.getContent(c));
         }
+    }
+  
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Message#getAttachments()
+     */
+    @Override
+    public Collection<Attachment> getAttachments() {
+        return (Collection<Attachment>)get(ATTACHMENTS);
+    }
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.exchange.Message#setAttachments(java.util.Collection)
+     */
+    @Override
+    public void setAttachments(Collection<Attachment> attachments) {
+       put(ATTACHMENTS,attachments);
     }
    
 

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
 
 /**
- * 
+ * Identity 扩展。
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年11月27日
  */

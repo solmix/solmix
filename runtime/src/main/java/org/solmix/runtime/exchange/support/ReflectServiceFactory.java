@@ -160,7 +160,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         }
     }
 
-    protected Invoker createInvoker() {
+    public Invoker createInvoker() {
         Class<?> cls = getServiceClass();
         if (cls.isInterface()) {
             return null;

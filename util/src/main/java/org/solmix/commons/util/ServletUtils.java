@@ -18,7 +18,9 @@
  */
 package org.solmix.commons.util;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +42,25 @@ public class ServletUtils {
 
         return servletPath + pathInfo;
     }
-    
+    public static String getBaseURL(HttpServletRequest request) {
+        String fullURL = request.getRequestURL().toString();
+        String fullPath;
+
+        try {
+            fullPath = new URL(fullURL).getPath();
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Invalid URL: " + fullURL, e);
+        }
+
+        // 基本URL
+        StringBuilder buf = new StringBuilder(fullURL);
+        buf.setLength(fullURL.length() - fullPath.length());
+
+        // 加上contextPath
+        buf.append(Files.normalizeAbsolutePath(request.getContextPath(), true));
+
+        return buf.toString();
+    }
     public static String normalizeURI(String uri) {
         return URI.create(StringUtils.trimToEmpty(uri)).normalize().toString();
     }

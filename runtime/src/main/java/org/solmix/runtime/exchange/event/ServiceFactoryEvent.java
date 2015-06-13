@@ -51,8 +51,6 @@ public class ServiceFactoryEvent implements Event, Serializable {
      */
     public final static int SERVER_CREATED = 0x00000001;
 
-   
-
     /**
      * ProtocolInfo
      */
@@ -83,17 +81,19 @@ public class ServiceFactoryEvent implements Event, Serializable {
      */
     public final static int PROXY_CREATED = 0x00000001;
 
-    public static int START_CREATE;
+    public static int START_CREATE = 0x00000001;
+    
+    public static int END_CREATE = 0x00000001;
 
-    public static int CREATE_FROM_CLASS;
+    public static int CREATE_FROM_CLASS = 0x00000001;
 
-    public static int OPERATIONINFO_IN_MESSAGE_SET;
+    public static int OPERATIONINFO_IN_MESSAGE_SET = 0x00000001;
 
-    public static int OPERATIONINFO_OUT_MESSAGE_SET;
+    public static int OPERATIONINFO_OUT_MESSAGE_SET = 0x00000001;
 
-    public static int OPERATIONINFO_FAULT;
+    public static int OPERATIONINFO_FAULT = 0x00000001;
 
-    public static int SERVER_CREATED_END;
+    public static int SERVER_CREATED_END = 0x00000001;
 
     private final int type;
 
@@ -119,6 +119,10 @@ public class ServiceFactoryEvent implements Event, Serializable {
     /**   */
     public int getType() {
         return type;
+    }
+    
+    public Object[] getArgs(){
+        return args;
     }
 
     /**   */

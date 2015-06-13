@@ -90,7 +90,7 @@ public class InChainInitProcessor implements Processor {
                 }
             }
             //重新组装
-            Message m = getBinding().createMessage(message);
+            Message m = getProtocol().createMessage(message);
             Exchange exchange = m.getExchange();
             if (exchange == null) {
                 exchange = new DefaultExchange();
@@ -108,12 +108,12 @@ public class InChainInitProcessor implements Processor {
                 phaseChain = chainCache.get(getPhases(),
                                             endpoint.getService().getInInterceptors(),
                                             endpoint.getInInterceptors(),
-                                            getBinding().getInInterceptors());
+                                            getProtocol().getInInterceptors());
             } else {
                 phaseChain = chainCache.get(getPhases(),
                                             endpoint.getService().getInInterceptors(),
                                             endpoint.getInInterceptors(),
-                                            getBinding().getInInterceptors(),
+                                            getProtocol().getInInterceptors(),
                                             serial.getInInterceptors());
             }
             m.setInterceptorChain(phaseChain);
@@ -151,13 +151,13 @@ public class InChainInitProcessor implements Processor {
         }
     }
 
-    protected Protocol getBinding() {
+    protected Protocol getProtocol() {
         return endpoint.getProtocol();
     }
 
     private void setupExchange(Exchange exchange, Message m) {
         exchange.put(Endpoint.class, endpoint);
-        exchange.put(Protocol.class, getBinding());
+        exchange.put(Protocol.class, getProtocol());
         exchange.put(Container.class, container);
         if (exchange.get(Transporter.class) != null) {
             exchange.put(Transporter.class, m.get(Transporter.class));

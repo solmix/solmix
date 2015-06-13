@@ -18,10 +18,8 @@
  */
 package org.solmix.runtime.exchange;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.Set;
-
-import javax.activation.DataHandler;
 
 import org.solmix.runtime.interceptor.InterceptorChain;
 
@@ -93,18 +91,22 @@ public interface Message extends StringTypeMap {
     /**字符集,值类型String    */
     String ENCODING = Message.class.getName() + ".ENCODING";
 
-    /*
-     * HTTP方法,值类型String etc:GET/POST
-     * 
-     * String HTTP_METHOD = Message.class.getName() + ".HTTP_METHOD";
-     */
     /** 客户端连接超时,值类型 long string */
     String CONNECTION_TIMEOUT = Message.class.getName() + ".CONNECTION_TIMEOUT";
 
     /** 客户端接收超时,值类型 long string */
     String RECEIVE_TIMEOUT = Message.class.getName() + ".RECEIVE_TIMEOUT";
 
+    String REQUEST_URI = Message.class.getName() + ".REQUEST_URI";
+    String REQUEST_URL = Message.class.getName() + ".REQUEST_URL";
 
+    String ACCEPT_CONTENT_TYPE =  "Accept";
+
+    String BASE_PATH = Message.class.getName() + ".BASE_PATH";;
+
+    String ERROR_MESSAGE = Message.class.getName() + ".ERROR_MESSAGE";
+    
+    String PARTIAL_RESPONSE_MESSAGE = Message.class.getName() + ".PARTIAL_RESPONSE_MESSAGE";
     /**
      * 返回消息ID
      * @return
@@ -158,41 +160,19 @@ public interface Message extends StringTypeMap {
      * @param type
      */
     <T> void removeContent(Class<T> type);
-    /**
-     * 根据附件标示返回附件处理Handler.
-     * 
-     * @param id
-     * @return
-     */
-    DataHandler getAttachment(String id);
 
-    Set<String> getAttachmentNames();
-    
-    void removeAttachment(String id);
-
-    /**
-     * 往消息中添加附件
-     * @param id        存储附件的主键
-     * @param content   处理附件的Handler
-     */
-    void addAttachment(String id, DataHandler content);
 
     /**
      * 返回所有的附件
      *
      * @return the attachments in a map or <tt>null</tt>
      */
-    Map<String, DataHandler> getAttachments();
+    Collection<Attachment> getAttachments();
 
     /**
      * 设置消息中附件
      */
-    void setAttachments(Map<String, DataHandler> attachments);
+    void setAttachments(Collection<Attachment> attachments);
 
-    /**
-     *返回该消息中是否包含附件
-     *
-     * @return <tt>true</tt> if this message has any attachments.
-     */
-    boolean hasAttachments();
+
 }

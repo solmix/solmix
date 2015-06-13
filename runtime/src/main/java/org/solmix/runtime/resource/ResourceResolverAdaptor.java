@@ -31,12 +31,6 @@ public class ResourceResolverAdaptor implements ResourceResolver
 {
 
 
-//    @Override
-//    public <T> T resolve(String resourceName, Class<T> resourceType, String implementor) {
-//        return resolve(resourceName,resourceType);
-//    }
-
-
     @Override
     public <T> T resolve(String resourceName, Class<T> resourceType) {
         return null;

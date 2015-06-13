@@ -213,12 +213,5 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
     public PhasePolicy getPhasePolicy() {
         return phasePolicy;
     }
-
-    
-    /**   */
-    @Override
-    public void setPhasePolicy(PhasePolicy phasePolicy) {
-        this.phasePolicy = phasePolicy;
-    }
     
 }

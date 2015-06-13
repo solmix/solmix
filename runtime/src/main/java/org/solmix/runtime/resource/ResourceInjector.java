@@ -86,22 +86,6 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
             || cls.getName().startsWith("javax.")) {
             return false;
         }
-//        NoJSR250Annotations njsr = cls.getAnnotation(NoJSR250Annotations.class);
-        String njsr=null;
-       /* if (njsr != null) {
-            for (String s : njsr.unlessNull()) {
-                try {
-                    Field f = getField(cls, s);
-                    Reflection.setAccessible(f);
-                    if (f.get(o) == null) {
-                        return true;
-                    }
-                } catch (Exception ex) {
-                    return true;
-                }
-            }
-            return false;
-        }*/
         return true;
     }
     

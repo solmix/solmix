@@ -122,7 +122,7 @@ public class Base64 {
 			case '/' :
 				return 63;
 			default :
-				throw new IllegalArgumentException("Invalid char to decode: " + data); //$NON-NLS-1$
+				throw new IllegalArgumentException("Invalid char to decode: " + data); 
 		}
 	}
 
@@ -195,17 +195,32 @@ public class Base64 {
 
 	public static String encode(byte[] bytes) {
 		try {
-			return new String(encodeToCharArray(bytes), "ISO8859_1"); //$NON-NLS-1$
+			return new String(encodeToCharArray(bytes), "ISO8859_1"); 
 		} catch (UnsupportedEncodingException e) {
-			throw new NullPointerException("Do not have ISO8859_1 encoder"); //$NON-NLS-1$
+			throw new NullPointerException("Do not have ISO8859_1 encoder"); 
 		}
 	}
 
 	public static byte[] decode(String encoded) {
 		try {
-			return decodeFromCharArray(encoded.getBytes("ISO8859_1")); //$NON-NLS-1$
+			return decodeFromCharArray(encoded.getBytes("ISO8859_1")); 
 		} catch (UnsupportedEncodingException e) {
-			throw new NullPointerException("Do not have ISO8859_1 encoder"); //$NON-NLS-1$
+			throw new NullPointerException("Do not have ISO8859_1 encoder"); 
 		}
 	}
+
+    
+    public static byte[] decodeChunk(char[] encodedChars, int i, int readCharacters) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param ch
+     * @return
+     */
+    public static boolean isValidBase64(int ch) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

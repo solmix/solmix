@@ -121,7 +121,7 @@ public interface InterceptorChain extends
     void pause();
 
     /**
-     * 中断Chain执行,Chain回退一个interceptor,然后暂停Chain继续执行,对于已经执行的抛出中断异常.
+     * 中断Chain执行,Chain回退一个intercepter,然后暂停Chain继续执行,对于已经执行的抛出中断异常.
      */
     void suspend();
 
@@ -131,7 +131,7 @@ public interface InterceptorChain extends
     void resume();
 
     /**
-     * 取消暂停.如果Chain被标记为暂停(paused),那么这个方法可以使Chain恢复执行(EXECUTING)状态,继续执行intercpt
+     * 取消暂停.如果Chain被标记为暂停(paused),那么这个方法可以使Chain恢复执行(EXECUTING)状态,继续执行intercepter
      */
     void unpause();
 }

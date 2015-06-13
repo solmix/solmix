@@ -48,8 +48,6 @@ public interface Endpoint extends InterceptorProvider, Map<String, Object> {
     List<Closeable> getCleanupHooks();
 
     PhasePolicy getPhasePolicy();
-
-    void setPhasePolicy(PhasePolicy phasePolicy);
     
     Executor getExecutor();
     
