@@ -243,7 +243,7 @@ public class SlxFile
 
    public Reader getReader() throws IOException
    {
-      return new InputStreamReader(getInputStream());
+      return new InputStreamReader(getInputStream(),"UTF-8");
    }
 
    public String getAsString() throws IOException

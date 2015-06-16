@@ -46,11 +46,15 @@ public class SystemContextLoader extends ContextLoaderListener
         //initial web configured spring applicationContext
         super.contextInitialized(event);
         ServletContext servletContext = event.getServletContext();
+        String baseProp=servletContext.getInitParameter("solmixBaseProperty");
+        if(baseProp==null||baseProp.trim().length()==0){
+        	baseProp="solmix.base";
+        }
         String root = servletContext.getRealPath("/");
         if(LOG.isInfoEnabled()){
             LOG.info("Initial Web context,used path:"+root+" As [solmix.base]");
         }
-        System.setProperty("solmix.base", root);
+        System.setProperty(baseProp, root);
         String userConfig = event.getServletContext().getInitParameter("solmix.cfg.file");
         if (userConfig != null) {
             if(LOG.isInfoEnabled()){

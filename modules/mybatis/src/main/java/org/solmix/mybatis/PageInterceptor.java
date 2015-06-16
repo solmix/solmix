@@ -38,6 +38,8 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.sql.SQLDriver;
 
 /**
@@ -49,6 +51,7 @@ import org.solmix.sql.SQLDriver;
     MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }) })
 public class PageInterceptor implements Interceptor
 {
+	private final static Logger LOG = LoggerFactory.getLogger(PageInterceptor.class);
 
     /**
      * {@inheritDoc}
@@ -76,7 +79,13 @@ public class PageInterceptor implements Interceptor
                 DefaultParameterHandler parameterHandler = new DefaultParameterHandler(
                     statement, p.getCriteria(), countBS);
                 parameterHandler.setParameters(countStmt);
-                ResultSet rs = countStmt.executeQuery();
+                ResultSet rs=null;
+				try {
+					rs = countStmt.executeQuery();
+				} catch (Exception e) {
+					LOG.error("Page sql:\n{} with crteria:\n{}",countSql,p.getCriteria());
+					throw e;
+				}
                 if (rs.next()) {
                     total = rs.getInt(1);
                 }
