@@ -16,9 +16,11 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource;
+package org.solmix.runtime.resource.support;
 
 import java.io.InputStream;
+
+import org.solmix.runtime.resource.ResourceResolver;
 
 
 /**

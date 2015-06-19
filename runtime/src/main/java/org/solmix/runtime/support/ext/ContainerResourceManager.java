@@ -22,10 +22,10 @@ import javax.annotation.Resource;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.resource.ObjectTypeResolver;
 import org.solmix.runtime.resource.ResourceManager;
-import org.solmix.runtime.resource.ResourceManagerImpl;
 import org.solmix.runtime.resource.ResourceResolver;
+import org.solmix.runtime.resource.support.ObjectTypeResolver;
+import org.solmix.runtime.resource.support.ResourceManagerImpl;
 
 
 /**

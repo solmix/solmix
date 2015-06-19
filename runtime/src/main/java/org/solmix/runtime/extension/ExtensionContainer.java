@@ -41,12 +41,12 @@ import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.ContainerListener;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.resource.ObjectTypeResolver;
-import org.solmix.runtime.resource.PropertiesResolver;
 import org.solmix.runtime.resource.ResourceManager;
-import org.solmix.runtime.resource.ResourceManagerImpl;
 import org.solmix.runtime.resource.ResourceResolver;
-import org.solmix.runtime.resource.SinglePropertyResolver;
+import org.solmix.runtime.resource.support.ObjectTypeResolver;
+import org.solmix.runtime.resource.support.PropertiesResolver;
+import org.solmix.runtime.resource.support.ResourceManagerImpl;
+import org.solmix.runtime.resource.support.SinglePropertyResolver;
 
 /**
  * 

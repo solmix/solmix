@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource;
+package org.solmix.runtime.resource.support;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
 import org.solmix.runtime.annotation.AbstractAnnotationVisitor;
 import org.solmix.runtime.annotation.AnnotationProcessor;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.resource.ResourceResolver;
 
 
 /**

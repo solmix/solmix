@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.resource;
+package org.solmix.runtime.resource.support;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -28,6 +28,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.resource.ResourceResolver;
 
 /**
  * 

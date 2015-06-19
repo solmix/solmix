@@ -16,30 +16,41 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource;
+package org.solmix.runtime.resource.support;
 
 import java.io.InputStream;
+
+import org.solmix.runtime.resource.ResourceResolver;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年7月26日
+ * @version $Id$  2014年7月27日
  */
 
-public class ResourceResolverAdaptor implements ResourceResolver
+public class ObjectTypeResolver extends ResourceResolverAdaptor implements
+    ResourceResolver
 {
-
-
-    @Override
-    public <T> T resolve(String resourceName, Class<T> resourceType) {
-        return null;
+    
+    private final Object value;
+ 
+    public ObjectTypeResolver(Object v) {
+        value = v;
     }
-
 
     @Override
     public InputStream getAsStream(String name) {
         return null;
     }
 
+    @Override
+    public <T> T resolve(String resourceName, Class<T> resourceType) {
+        if (resourceName == null
+            && value != null
+            && resourceType.isInstance(value)) {
+            return resourceType.cast(value);
+        }
+        return null;
+    }   
 }

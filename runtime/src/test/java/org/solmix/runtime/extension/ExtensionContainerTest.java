@@ -30,7 +30,7 @@ import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.extension.ExtensionContainer.ContainerStatus;
 import org.solmix.runtime.resource.ResourceManager;
-import org.solmix.runtime.resource.ResourceManagerImpl;
+import org.solmix.runtime.resource.support.ResourceManagerImpl;
 import org.solmix.runtime.service.DateTimeService;
 import org.solmix.runtime.service.TimeService;
 import org.solmix.runtime.support.ContainerFactoryImpl;

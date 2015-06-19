@@ -16,9 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource;
+package org.solmix.runtime.resource.support;
 
 import java.io.InputStream;
+import java.util.Map;
 
 
 /**
@@ -27,14 +28,12 @@ import java.io.InputStream;
  * @version $Id$  2014年7月27日
  */
 
-public class ObjectTypeResolver extends ResourceResolverAdaptor implements
-    ResourceResolver
+public class PropertiesResolver extends ResourceResolverAdaptor
 {
+ private final Map<String, Object> properties; 
     
-    private final Object value;
- 
-    public ObjectTypeResolver(Object v) {
-        value = v;
+    public PropertiesResolver(Map<String, Object> p) {
+        properties = p;
     }
 
     @Override
@@ -44,11 +43,13 @@ public class ObjectTypeResolver extends ResourceResolverAdaptor implements
 
     @Override
     public <T> T resolve(String resourceName, Class<T> resourceType) {
-        if (resourceName == null
-            && value != null
-            && resourceType.isInstance(value)) {
-            return resourceType.cast(value);
+        Object obj = properties.get(resourceName);
+        if (null != obj) {
+            return resourceType.cast(properties.get(resourceName));
         }
         return null;
-    }   
+        
+        
+    }    
+
 }

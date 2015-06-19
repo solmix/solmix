@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.solmix.runtime.resource.ResourceResolver;
-import org.solmix.runtime.resource.ResourceResolverAdaptor;
+import org.solmix.runtime.resource.support.ResourceResolverAdaptor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
