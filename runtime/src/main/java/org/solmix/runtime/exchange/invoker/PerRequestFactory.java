@@ -23,8 +23,8 @@ import java.lang.reflect.Modifier;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.exchange.Exchange;
 import org.solmix.runtime.interceptor.Fault;
+import org.solmix.runtime.resource.ResourceInjector;
 import org.solmix.runtime.resource.ResourceManager;
-import org.solmix.runtime.resource.support.ResourceInjector;
 
 
 /**

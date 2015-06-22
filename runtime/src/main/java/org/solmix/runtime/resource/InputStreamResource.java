@@ -16,8 +16,9 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.resource.support;
+package org.solmix.runtime.resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -25,7 +26,7 @@ import java.net.URL;
 
 
 /**
- * 
+ * {@link InputStream} 资源，如：File或Classpath Resource等。
  * @author solmix.f@gmail.com
  * @version $Id$  2015年6月19日
  */
@@ -34,9 +35,24 @@ public interface InputStreamResource
 {
     InputStream getInputStream() throws IOException;
     
+    /**
+     * 资源是否存在
+     * 
+     * @return
+     */
     boolean exists();
     
+    /**
+     * 是否可以通过{@link #getInputStream()}或者{@link #getFile()}读取资源。
+     * @return
+     */
     boolean isReadable();
+    
+    /**
+     * 将资源作为一个文件返回
+     * @return
+     */
+    File getFile() throws IOException;
     
     URL getURL() throws IOException;
     
@@ -44,9 +60,20 @@ public interface InputStreamResource
     URI getURI() throws IOException;
     
     
+    /**
+     * 最后一次修改的时间戳
+     * 
+     * @return
+     * @throws IOException
+     */
     long lastModified() throws IOException;
     
     
+    /**
+     * 文件名
+     * 
+     * @return
+     */
     String getFilename();
     
     String getDescription();

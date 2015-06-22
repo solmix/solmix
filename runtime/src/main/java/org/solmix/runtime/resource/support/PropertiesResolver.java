@@ -18,8 +18,9 @@
  */
 package org.solmix.runtime.resource.support;
 
-import java.io.InputStream;
 import java.util.Map;
+
+import org.solmix.runtime.resource.InputStreamResource;
 
 
 /**
@@ -37,7 +38,7 @@ public class PropertiesResolver extends ResourceResolverAdaptor
     }
 
     @Override
-    public InputStream getAsStream(String name) {
+    public InputStreamResource getAsStream(String name) {
         return null;
     }
 

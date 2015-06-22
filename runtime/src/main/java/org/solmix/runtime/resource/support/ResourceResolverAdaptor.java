@@ -18,8 +18,10 @@
  */
 package org.solmix.runtime.resource.support;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceResolver;
 
 
@@ -40,8 +42,15 @@ public class ResourceResolverAdaptor implements ResourceResolver
 
 
     @Override
-    public InputStream getAsStream(String name) {
+    public InputStreamResource getAsStream(String name) {
         return null;
     }
+
+
+	@Override
+	public InputStreamResource[] getAsStreams(String locationPattern)
+			throws IOException {
+		return null;
+	}
 
 }

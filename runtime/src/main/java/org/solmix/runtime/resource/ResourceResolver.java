@@ -18,7 +18,7 @@
  */
 package org.solmix.runtime.resource;
 
-import java.io.InputStream;
+import java.io.IOException;
 
 
 /**
@@ -29,7 +29,12 @@ import java.io.InputStream;
 
 public interface ResourceResolver
 {
-//    <T> T resolve(String resourceName, Class<T> resourceType,String implementor);
+	String CLASSPATH_ALL_URL_PREFIX = "classpath*:";
+	
     <T> T resolve(String resourceName, Class<T> resourceType);
-    InputStream getAsStream(String name);
+    
+    InputStreamResource getAsStream(String location);
+
+    
+    InputStreamResource[] getAsStreams(String locationPattern) throws IOException;
 }

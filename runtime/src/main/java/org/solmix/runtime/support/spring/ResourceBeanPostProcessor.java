@@ -19,8 +19,8 @@
 package org.solmix.runtime.support.spring;
 
 import org.solmix.runtime.Container;
+import org.solmix.runtime.resource.ResourceInjector;
 import org.solmix.runtime.resource.ResourceManager;
-import org.solmix.runtime.resource.support.ResourceInjector;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;

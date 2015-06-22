@@ -18,8 +18,9 @@
  */
 package org.solmix.runtime.resource.support;
 
-import java.io.InputStream;
 import java.net.URL;
+
+import org.solmix.runtime.resource.InputStreamResource;
 
 
 /**
@@ -44,8 +45,8 @@ public class ClasspathResolver extends ResourceResolverAdaptor
     } 
 
     @Override
-    public InputStream getAsStream(String name) { 
-        return ClassLoader.getSystemResourceAsStream(name);
+    public InputStreamResource getAsStream(String name) { 
+    	return new ClassLoaderResource(name, ClassLoader.getSystemClassLoader());
     } 
 
 }

@@ -40,10 +40,10 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerAware;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.resource.ResourceInjector;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.ResourceResolver;
 import org.solmix.runtime.resource.support.ObjectTypeResolver;
-import org.solmix.runtime.resource.support.ResourceInjector;
 import org.solmix.runtime.resource.support.SinglePropertyResolver;
 
 /**

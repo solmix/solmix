@@ -18,10 +18,13 @@
  */
 package org.solmix.runtime.support.spring;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 
+import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceResolver;
 import org.solmix.runtime.resource.support.ResourceResolverAdaptor;
 import org.springframework.beans.BeansException;
@@ -48,22 +51,14 @@ public class SpringResourceResolver extends ResourceResolverAdaptor implements R
        this.context=applicationContext;
     }
     @Override
-    public InputStream getAsStream(String name) {
+    public InputStreamResource getAsStream(String name) {
         Resource r = context.getResource(name);
         if (r != null && r.exists()) {
-            try {
-                return r.getInputStream();
-            } catch (IOException e) {
-                //ignore and return null
-            }
+                return   new SpringInputStream(r);
         } 
         r = context.getResource("/" + name);
         if (r != null && r.exists()) {
-            try {
-                return r.getInputStream();
-            } catch (IOException e) {
-                //ignore and return null
-            }
+                return  new SpringInputStream(r);
         } 
         return null;
     }
@@ -105,6 +100,60 @@ public class SpringResourceResolver extends ResourceResolverAdaptor implements R
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;        
+    }
+    
+    class SpringInputStream implements InputStreamResource{
+
+    	private Resource resource;
+    	
+    	SpringInputStream(Resource resource){
+    		this.resource=resource;
+    	}
+		@Override
+		public InputStream getInputStream() throws IOException {
+			return resource.getInputStream();
+		}
+
+		@Override
+		public boolean exists() {
+			return resource.exists();
+		}
+
+		@Override
+		public boolean isReadable() {
+			return resource.isReadable();
+		}
+
+		@Override
+		public File getFile() throws IOException {
+			return resource.getFile();
+		}
+
+		@Override
+		public URL getURL() throws IOException {
+			return resource.getURL();
+		}
+
+		@Override
+		public URI getURI() throws IOException {
+			return resource.getURI();
+		}
+
+		@Override
+		public long lastModified() throws IOException {
+			return resource.lastModified();
+		}
+
+		@Override
+		public String getFilename() {
+			return resource.getFilename();
+		}
+
+		@Override
+		public String getDescription() {
+			return resource.getDescription();
+		}
+    	
     }
 
 }

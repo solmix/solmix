@@ -40,11 +40,6 @@ public class ObjectTypeResolver extends ResourceResolverAdaptor implements
     }
 
     @Override
-    public InputStream getAsStream(String name) {
-        return null;
-    }
-
-    @Override
     public <T> T resolve(String resourceName, Class<T> resourceType) {
         if (resourceName == null
             && value != null
