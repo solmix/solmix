@@ -68,7 +68,7 @@ public interface InputStreamResource
      */
     long lastModified() throws IOException;
     
-    
+    InputStreamResource createRelative(String relativePath) throws IOException;
     /**
      * 文件名
      * 

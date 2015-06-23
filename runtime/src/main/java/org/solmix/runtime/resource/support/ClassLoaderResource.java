@@ -9,6 +9,7 @@ import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.Files;
 import org.solmix.commons.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 public class ClassLoaderResource extends AbstractFileStreamResource {
 
@@ -31,7 +32,11 @@ public class ClassLoaderResource extends AbstractFileStreamResource {
 		this.classLoader = classLoader;
 		this.clazz = clazz;
 	}
-
+	@Override
+      public ClassLoaderResource createRelative(String relativePath) {
+            String pathToUse = StringUtils.applyRelativePath(this.path, relativePath);
+            return new ClassLoaderResource(pathToUse, this.classLoader, this.clazz);
+      }
 	@Override
 	public InputStream getInputStream() throws IOException {
 		InputStream is;

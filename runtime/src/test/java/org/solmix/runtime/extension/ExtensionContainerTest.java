@@ -48,7 +48,6 @@ public class ExtensionContainerTest extends Assert
     public void testGetBean() {
         ContainerFactory container=  ContainerFactory.newInstance(ContainerFactoryImpl.class.getName());
          Container c=  container.createContainer();
-         Assert.assertEquals(1, ContainerFactory.getContainers().length);
          ConfiguredBeanProvider provider=  c.getExtension(ConfiguredBeanProvider.class);
          DateTimeService pdm= provider.getBeanOfType(DateTimeService.class.getName(), DateTimeService.class);
          DateTimeService  tm=c.getExtension(DateTimeService.class);

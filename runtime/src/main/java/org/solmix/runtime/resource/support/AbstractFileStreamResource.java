@@ -23,12 +23,17 @@ public  abstract class AbstractFileStreamResource extends AbstractInputStreamRes
 					+ "because it does not reside in the file system: " + url);
 		}
 		try {
-			return new File(new URI(StringUtils.replace(url.toString(), " ",
-					"%20")).getSchemeSpecificPart());
+			return new File(new URI(StringUtils.replace(url.toString(), " ", "%20")).getSchemeSpecificPart());
 		} catch (URISyntaxException ex) {
 			return new File(url.getFile());
 		}
 	}
+	
+	protected File getFile(URI uri) throws IOException {
+         
+          return Files.getFile(uri, getDescription());
+	}
+	
 	protected File getFileForLastModifiedCheck() throws IOException {
 		URL url = getURL();
 		if (Files.isJarURL(url)) {

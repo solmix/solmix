@@ -54,7 +54,11 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
     public void setConfig(ContainerDefinitionParser.ContainerType config){
         config.setContainer(this);
     }
-
+    
+    //覆盖ExtensionContainer，在spring中启用{@link SpringResourceResolver}
+    protected void customResourceManager(ResourceManager rm) {
+    }
+    
     /**
      * {@inheritDoc}
      * 

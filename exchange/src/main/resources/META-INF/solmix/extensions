@@ -1,0 +1,4 @@
+org.solmix.exchange.manager.DefaultServerRegistry:org.solmix.exchange.ServerRegistry
+org.solmix.exchange.manager.DefaultProtocolFactoryManager:org.solmix.exchange.ProtocolFactoryManager:true:true
+org.solmix.exchange.manager.DefaultTransporterFactoryManager:org.solmix.exchange.TransporterFactoryManager:true:true
+org.solmix.exchange.manager.DefaultPipelineFactoryManager:org.solmix.exchange.PipelineFactoryManager:true

@@ -18,7 +18,6 @@
  */
 package org.solmix.runtime.resource.support;
 
-import java.io.InputStream;
 
 import org.solmix.runtime.resource.ResourceResolver;
 

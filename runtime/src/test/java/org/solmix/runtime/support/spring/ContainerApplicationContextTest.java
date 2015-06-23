@@ -50,7 +50,7 @@ public class ContainerApplicationContextTest {
                 file, false);
             Assert.assertNotNull(overload);
             Container c = (Container) overload.getBean("solmix");
-            Assert.assertEquals(c.getContainerListeners().size(), 3);
+            Assert.assertEquals(c.getContainerListeners().size(), 2);
             Assert.assertEquals(1, overload.getConfigResources().length);
 
             ContainerApplicationContext ctx = new ContainerApplicationContext(

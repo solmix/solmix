@@ -153,6 +153,15 @@ public class SpringResourceResolver extends ResourceResolverAdaptor implements R
 		public String getDescription() {
 			return resource.getDescription();
 		}
+        /**
+         * {@inheritDoc}
+         * 
+         * @see org.solmix.runtime.resource.InputStreamResource#createRelative(java.lang.String)
+         */
+        @Override
+        public InputStreamResource createRelative(String relativePath) throws IOException {
+            return new SpringInputStream(resource.createRelative(relativePath));
+        }
     	
     }
 

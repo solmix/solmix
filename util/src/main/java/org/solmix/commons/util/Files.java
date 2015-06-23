@@ -779,6 +779,17 @@ public class Files {
 			return new File(resourceUrl.getFile());
 		}
 	}
+	
+	public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
+	    Assert.assertNotNull(resourceUri, "Resource URI must not be null");
+          if (!URL_PROTOCOL_FILE.equals(resourceUri.getScheme())) {
+                throw new FileNotFoundException(
+                            description + " cannot be resolved to absolute file path " +
+                            "because it does not reside in the file system: " + resourceUri);
+          }
+          return new File(resourceUri.getSchemeSpecificPart());
+    }
+	
 	public static URI toURI(URL url) throws URISyntaxException {
 		return toURI(url.toString());
 	}
@@ -800,6 +811,20 @@ public class Files {
 		int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
 		return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
 	}
+
+    public static String applyRelativePath(String path, String relativePath) {
+        int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        if (separatorIndex != -1) {
+              String newPath = path.substring(0, separatorIndex);
+              if (!relativePath.startsWith(FOLDER_SEPARATOR)) {
+                    newPath += FOLDER_SEPARATOR;
+              }
+              return newPath + relativePath;
+        }
+        else {
+              return relativePath;
+        }
+    }
 }
  
  

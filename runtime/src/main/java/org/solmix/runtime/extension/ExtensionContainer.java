@@ -19,7 +19,6 @@
 
 package org.solmix.runtime.extension;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,8 +43,10 @@ import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.ResourceResolver;
 import org.solmix.runtime.resource.support.ObjectTypeResolver;
+import org.solmix.runtime.resource.support.PathMatchingResourceResolver;
 import org.solmix.runtime.resource.support.PropertiesResolver;
 import org.solmix.runtime.resource.support.ResourceManagerImpl;
+import org.solmix.runtime.resource.support.ResourceResolverAdaptor;
 import org.solmix.runtime.resource.support.SinglePropertyResolver;
 
 /**
@@ -136,7 +137,7 @@ public class ExtensionContainer implements Container {
             DEFAULT_CONTAINER_ID, this);
         rm.addResourceResolver(defaultContainer);
         rm.addResourceResolver(new ObjectTypeResolver(this));
-        rm.addResourceResolver(new ResourceResolver() {
+        rm.addResourceResolver(new ResourceResolverAdaptor() {
 
             @Override
             public <T> T resolve(String resourceName, Class<T> resourceType) {
@@ -150,12 +151,9 @@ public class ExtensionContainer implements Container {
                 }
                 return null;
             }
-
-            @Override
-            public InputStream getAsStream(String name) {
-                return null;
-            }
+            
         });
+        customResourceManager(rm);
         extensions.put(ResourceManager.class, rm);
 
         extensionManager = new ExtensionManagerImpl(new String[0],
@@ -174,6 +172,13 @@ public class ExtensionContainer implements Container {
         extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);
         extensions.put(ExtensionManager.class, extensionManager);
+    }
+
+    /**
+     * @param rm
+     */
+    protected void customResourceManager(ResourceManager rm) {
+        rm.addResourceResolver(new PathMatchingResourceResolver());
     }
 
     @Override

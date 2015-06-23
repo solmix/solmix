@@ -71,6 +71,8 @@ public abstract  class AbstractInputStreamResource implements InputStreamResourc
 	public String getFilename() {
 		return null;
 	}
-
+	public InputStreamResource createRelative(String relativePath) throws IOException{
+	    throw new FileNotFoundException("Cannot create a relative resource for " + getDescription());
+	 }
 
 }
