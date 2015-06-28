@@ -19,7 +19,7 @@
 
 package org.solmix.runtime.resource;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -35,7 +35,9 @@ public interface ResourceManager
 
     <T> T resolveResource(String name, Class<T> type);
     <T> T resolveResource(String resourceName, Class<T> resourceType,String implementor);
-    InputStream getResourceAsStream(String name);
+    InputStreamResource getResourceAsStream(String name);
+    
+    InputStreamResource[] getResourcesAsStream(String location)throws IOException;
 
     void addResourceResolver(ResourceResolver resolver);
 

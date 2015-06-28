@@ -19,7 +19,7 @@
 
 package org.solmix.runtime.resource.support;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.ResourceResolver;
 
@@ -99,8 +100,8 @@ public class ResourceManagerImpl implements ResourceManager {
      * @see org.solmix.runtime.resource.ResourceManager#getResourceAsStream(java.lang.String)
      */
     @Override
-    public InputStream getResourceAsStream(String name) {
-        return findResource(name, InputStream.class, true, registeredResolvers);
+    public InputStreamResource getResourceAsStream(String name) {
+        return findResource(name, InputStreamResource.class, true, registeredResolvers);
     }
 
     /**
@@ -181,5 +182,20 @@ public class ResourceManagerImpl implements ResourceManager {
             new StringBuilder().append(resourceName).append("@").append(
                 implementor).toString(), resourceType);
 
+    }
+
+    
+    @Override
+    public InputStreamResource[] getResourcesAsStream(String location) throws IOException {
+        if (!firstCalled) {
+            onFirstResolve();
+        }
+        for (ResourceResolver rr : registeredResolvers) {
+            InputStreamResource[]  ret=rr.getAsStreams(location);
+            if(ret!=null&&ret.length>0){
+                return ret;
+            }
+        }
+        return null;
     }
 }

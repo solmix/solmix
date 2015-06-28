@@ -39,6 +39,6 @@ public interface ContainerAware {
      * 
      * @return
      */
-    Container getContainer();
+//    Container getContainer();
 
 }

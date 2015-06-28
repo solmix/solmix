@@ -21,14 +21,14 @@ import org.solmix.commons.util.AntMatcher;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.Files;
+import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
-import org.springframework.util.StringUtils;
 
 public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(PathMatchingResourceResolver.class);
 	private ClassLoader classLoader;
-	private AntMatcher matcher;
+	protected AntMatcher matcher;
 	
 	public PathMatchingResourceResolver(){
 		this(ClassLoaderUtils.getDefaultClassLoader());

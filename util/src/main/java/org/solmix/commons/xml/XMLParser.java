@@ -63,6 +63,8 @@ public class XMLParser
     private Map<String, Object> variables;
 
     private XPath xpath;
+    
+    private String namespacePrefix;
 
     public XMLParser(String xml)
     {
@@ -142,10 +144,11 @@ public class XMLParser
         this.document = createDocument(new InputSource(reader));
     }
 
-    public XMLParser(InputStream inputStream, boolean validation, Map<String, Object> variables, EntityResolver entityResolver)
+    public XMLParser(InputStream inputStream, boolean validation, Map<String, Object> variables, EntityResolver entityResolver,String namespacePrefix)
     {
         this(validation, variables, entityResolver);
         this.document = createDocument(new InputSource(inputStream));
+        this.namespacePrefix = namespacePrefix;
     }
 
     public XMLParser(Document document, boolean validation, Map<String, Object> variables, EntityResolver entityResolver)
@@ -251,6 +254,27 @@ public class XMLParser
 
       private Object evaluate(String expression, Object root, QName returnType) {
         try {
+            if(namespacePrefix!=null && expression.indexOf(":")==-1){
+                StringBuffer sb = new StringBuffer();
+                if(expression.indexOf("/")!=-1){
+                    if(!expression.startsWith("/")){
+                        sb.append(namespacePrefix);
+                    }
+                    int index = expression.indexOf("/");
+                    while(index!=-1){
+                        String t=expression.substring(0, index+1);
+                        sb.append(t);
+                        sb.append(namespacePrefix);
+                        expression=expression.substring(index+1);
+                        index=expression.indexOf("/");
+                    }
+                    sb.append(expression);
+                }else{
+                    sb.append(namespacePrefix);
+                    sb.append(expression);
+                }
+                expression= sb.toString();
+            }
           return xpath.evaluate(expression, root, returnType);
         } catch (Exception e) {
           throw new XMLParsingException("Error evaluating XPath.  Cause: " + e, e);

@@ -32,8 +32,6 @@ public class ContainerAwareService implements ContainerAware {
 
     private Container container;
 
-    /**   */
-    @Override
     public Container getContainer() {
         return container;
     }

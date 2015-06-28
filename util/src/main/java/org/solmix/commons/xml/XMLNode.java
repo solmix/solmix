@@ -50,6 +50,7 @@ public class XMLNode
     private Map<String, Object> variables;
 
     private XMLParser xpathParser;
+   
     public XMLNode(XMLParser xpathParser, Node node, Map<String, Object> variables) {
         this.xpathParser = xpathParser;
         this.node = node;
@@ -342,6 +343,7 @@ public class XMLNode
       builder.append("\n");
       return builder.toString();
     }
+    
     public String getPath() {
         StringBuilder builder = new StringBuilder();
         Node current = node;
