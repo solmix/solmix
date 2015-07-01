@@ -268,10 +268,10 @@ public class XMLParser
                         expression=expression.substring(index+1);
                         index=expression.indexOf("/");
                     }
-                    sb.append(expression);
+                    sb.append(processOrSplit(expression));
                 }else{
                     sb.append(namespacePrefix);
-                    sb.append(expression);
+                    sb.append(processOrSplit(expression));
                 }
                 expression= sb.toString();
             }
@@ -279,6 +279,19 @@ public class XMLParser
         } catch (Exception e) {
           throw new XMLParsingException("Error evaluating XPath.  Cause: " + e, e);
         }
+      }
+      private StringBuffer processOrSplit(String expression){
+          StringBuffer sb = new StringBuffer();
+          int index = expression.indexOf("|");
+          while(index!=-1){
+              String t=expression.substring(0, index+1);
+              sb.append(t);
+              sb.append(namespacePrefix);
+              expression=expression.substring(index+1);
+              index=expression.indexOf("|");
+          }
+          sb.append(expression);
+          return sb;
       }
       private Document createDocument(InputSource inputSource) {
           return createDocument(inputSource,"xsd");
