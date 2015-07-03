@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,13 +17,29 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.event;
+package org.solmix.service.event.util;
 
 /**
- * Event interface mark.
+ * 
+ * @author solmix.f@gmail.com
+ * @version 110035 2011-10-2
  */
 
-public interface Event
+public class SyncEventThread extends Thread
 {
-    // NO METHOD
+
+    public SyncEventThread(Runnable command)
+    {
+        super(command);
+    }
+
+    public SyncEventThread(ThreadGroup group, Runnable command, String name)
+    {
+        super(group, command, name);
+    }
+
+    public SyncEventThread(ThreadGroup group, Runnable command)
+    {
+        super(group, command);
+    }
 }

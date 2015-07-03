@@ -1,5 +1,5 @@
 /*
- *  Copyright 2012 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,25 +17,31 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.event;
+package org.solmix.service.event;
+
+import java.beans.EventHandler;
 
 /**
  * 
- * @author Administrator
- * @version 110035 2012-11-30
- * @since 0.1
+ * @author solmix.f@gmail.com
+ * @version 110035 2011-10-1
  */
 
-public interface EventManager
+public interface BlackList
 {
+    /**
+     * Add a topic to this blacklist.
+     * 
+     * @param ref The reference of the service that is blacklisted
+     */
+    public void add(final EventHandler handler);
 
-    final String OSGI = "osgi";
-
-    final String SPRING = "spring";
-
-    void postEvent(IEvent event);
-
-    void sendEvent(IEvent event);
-
-    String getProvider();
+    /**
+     * Lookup whether a given topic is blacklisted.
+     * 
+     * @param ref The reference of the service
+     * 
+     * @return <tt>true</tt> in case that the service reference has been blacklisted, <tt>false</tt> otherwise.
+     */
+    public boolean contains(final EventHandler handler);
 }

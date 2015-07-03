@@ -44,7 +44,7 @@ public class MemeryUsed {
      * @param args
      */
     public static void main(String[] args) {
-        createServiceInfoUsedMemery();
+        createContainerUsedMemery();
     }
     public static void createServiceInfoUsedMemery() {
         MonitorServiceImpl ms = new MonitorServiceImpl();

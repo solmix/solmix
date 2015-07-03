@@ -16,12 +16,13 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
+package org.solmix.runtime.event.support;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.event.Event;
+import org.solmix.runtime.event.IEvent;
 
 
 /**
@@ -35,7 +36,7 @@ public class DelegateEvent implements IEvent
 
     private final Event event;
     
-    DelegateEvent(Event event){
+   public DelegateEvent(Event event){
         this.event=event;
     }
 
@@ -46,11 +47,11 @@ public class DelegateEvent implements IEvent
      */
     @Override
     public Map<String, Object> getProperties() {
-        Map<String, Object> _tmp = new HashMap<String,Object>();
+        Map<String, Object> tmp = new HashMap<String,Object>();
        for(String str:event.getPropertyNames()){
-           _tmp.put(str, event.getProperty(str));
+           tmp.put(str, event.getProperty(str));
        }
-        return _tmp;
+        return tmp;
     }
 
     /**

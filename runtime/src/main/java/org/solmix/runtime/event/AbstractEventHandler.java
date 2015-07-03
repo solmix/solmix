@@ -20,6 +20,7 @@ package org.solmix.runtime.event;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.solmix.runtime.event.support.DelegateEvent;
 
 
 /**
@@ -45,8 +46,8 @@ public abstract class AbstractEventHandler implements EventHandler
       }else{
           handleIEvent(null);
       }
-
     }
+    
     protected IEvent toIEvent(Event event){
         
         return new DelegateEvent(event);

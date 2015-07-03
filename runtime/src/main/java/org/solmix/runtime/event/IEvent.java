@@ -27,10 +27,12 @@ import java.util.Map;
  * @version 110035 2011-10-4
  */
 
-public interface IEvent
+public interface IEvent extends Event
 {
 
-    Map<String, Object> getProperties();
+    public static final String EVENT_TOPIC = "event.topics";
+
+    Map<String, ?> getProperties();
 
     Object getProperty(String name);
 

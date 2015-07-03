@@ -18,16 +18,16 @@
  */
 package org.solmix.runtime.event;
 
-import org.osgi.service.event.Event;
+import org.solmix.runtime.Extension;
 /**
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年8月7日
  */
-
+@Extension
 public interface EventService
 {
-    void postEvent(Event event);
+    void postEvent(IEvent event);
 
-    void sendEvent(Event event);
+    void sendEvent(IEvent event);
 }

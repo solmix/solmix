@@ -44,6 +44,8 @@
 	<modules>
 		<module>util</module>
 		<module>runtime</module>
+		<module>exchange</module>
+		<module>services/event</module>
 	</modules>
 	<properties>
 		<compile.flags>-Xlint:unchecked,deprecation,fallthrough,finally</compile.flags>

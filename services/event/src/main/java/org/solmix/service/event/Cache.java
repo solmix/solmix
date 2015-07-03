@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,14 +16,46 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.service.event;
 
-package org.solmix.runtime.event;
 
 /**
- * Event interface mark.
+ * 
+ * @author solmix.f@gmail.com
+ * @version 110035  2011-10-1
+ * @param <K>
+ * @param <V>
  */
 
-public interface Event
+public interface Cache<K, V>
 {
-    // NO METHOD
+
+    /**
+     * 
+     */
+    void clear();
+
+    /**
+     * @return
+     */
+    int size();
+
+    /**
+     * @param key
+     * @return
+     */
+    V remove(K key);
+
+    /**
+     * @param key
+     * @param value
+     */
+    void add(K key, V value);
+
+    /**
+     * @param key
+     * @return
+     */
+    V get(K key);
+
 }

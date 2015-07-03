@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The Solmix Project
+ * Copyright 2012 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +16,26 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.runtime.event;
+package org.solmix.service.event;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年5月19日
+ * @version 110035  2011-10-1
  */
 
-public interface EventProcessor
+public interface EventTask
 {
+    /**
+     * Deliver the event to the handler.
+     */
+    public void execute();
     
-    boolean process(Event event);
+    void blackListHandler();
 
+    /**
+     * @return
+     */
+    public String getHandlerClassName();
 }
