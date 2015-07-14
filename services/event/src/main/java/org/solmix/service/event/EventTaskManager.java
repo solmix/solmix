@@ -18,27 +18,18 @@
  */
 package org.solmix.service.event;
 
-import org.solmix.runtime.event.EventService;
+import java.util.List;
+
 import org.solmix.runtime.event.IEvent;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月3日
+ * @version $Id$  2015年7月14日
  */
 
-public abstract class AbstractEventService implements EventService
+public interface EventTaskManager
 {
-
-    @Override
-    public void postEvent(IEvent event) {
-
-    }
-
-    @Override
-    public void sendEvent(IEvent event) {
-
-    }
-
+    List<EventTask> createEventTasks(IEvent event);
 }

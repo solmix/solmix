@@ -97,7 +97,6 @@ public class DefaultThreadPool implements ThreadPool {
     public DefaultThreadPool(String name) {
         this(DEFAULT_MAX_SIZE, name);
     }
-
     public DefaultThreadPool(int maxSize) {
         this(maxSize, ThreadPoolManager.DEFAULT);
     }
