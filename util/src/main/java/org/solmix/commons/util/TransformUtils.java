@@ -54,6 +54,7 @@ public class TransformUtils
 
     private static final Logger LOG = LoggerFactory.getLogger(TransformUtils.class.getName());
 
+    @SuppressWarnings("unchecked")
     public static <T> T transformType(Class<T> targetType, Object value)
         throws Exception {
         if (targetType == null)
@@ -62,8 +63,7 @@ public class TransformUtils
             return null;
         if (targetType.isInstance(value))
             return (T) value;
-        if ((value instanceof String) && "".equals(value)
-            && Number.class.isAssignableFrom(targetType))
+        if ((value instanceof String) && "".equals(value) && Number.class.isAssignableFrom(targetType))
             return null;
 
         Transformer transformer = (Transformer) defaultTransformers.get(targetType);
@@ -670,6 +670,35 @@ public class TransformUtils
 
         };
         defaultTransformers.put(Timestamp.class, javaSqlTimestampTransform);
+        
+        Transformer mapTransform = new Transformer() {
+
+            @Override
+            public Object transform(Object input) throws Exception {
+                if(input==null){
+                    return null;
+                }
+                Class<?> targetType=input.getClass();
+                
+                if (input instanceof Map<?,?>)
+                    return Map.class.cast(input);
+                else if(!targetType.isPrimitive()
+                        && !targetType.isInterface() 
+                        && !targetType.isArray()
+                        && !targetType.isAnnotation()
+                        && !targetType.isEnum()){
+                  return  DataUtils.getProperties(input, true);
+                }else {
+                    
+                    throw new Exception((new StringBuilder()).append(
+                        "Can't covert type: ").append(
+                        input.getClass().getName()).append(
+                        " to java.util.Map").toString());
+                }
+            }
+
+        };
+        defaultTransformers.put(Map.class, mapTransform);
     }
 
 }

@@ -17,31 +17,33 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.runtime.event;
+package org.solmix.runtime.i18n;
 
-import java.util.Map;
+import java.io.IOException;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2015年7月3日
+ * @version $Id$ 2015年7月19日
  */
 
-public class TimeMonitorEvent extends BaseEvent
+public class I18nException extends RuntimeException
 {
 
-    public static final String TIME_MONITOER_TOPIC = "org/solmix/monitor/time";
+    private static final long serialVersionUID = 1235405790865720786L;
 
-    public static final String TIMESTAMP = "timestamp";
-
-    public static final String MESSAGE = "message";
-
-    public static final String TOTAL_TIME = "totalTime";
-
-    public static final String TIME_UNIT = "timeUnit";
-
-    public TimeMonitorEvent(Map<String, ?> properties)
+    public I18nException(String string, Throwable e)
     {
-        super(TIME_MONITOER_TOPIC, properties);
+        super(string, e);
+    }
+
+    public I18nException(String string)
+    {
+        super(string);
+    }
+
+    public I18nException(IOException e)
+    {
+        super(e);
     }
 }

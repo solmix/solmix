@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.service.event;
 
 import java.util.List;
@@ -34,23 +35,27 @@ import org.solmix.service.event.filter.CachedTopicFilter;
 import org.solmix.service.event.filter.EventHandlerBlackListImpl;
 import org.solmix.service.event.util.LeastRecentlyUsedCacheMap;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月3日
+ * @version $Id$ 2015年7月3日
  */
 
 public class DefaultEventService extends AbstractEventService
 {
+
     private static final Logger logger = LoggerFactory.getLogger(DefaultEventService.class);
+
     private volatile DefaultThreadPool asyThreadPool;
+
     private volatile DefaultThreadPool synThreadPool;
+
     private volatile SyncDeliver syncDeliver;
+
     private volatile AsyncDeliver asyncDeliver;
-    
+
     private volatile EventTaskManager taskManager;
-    
+
     private Integer cacheSize;
 
     private Integer threadPoolSize;
@@ -58,10 +63,12 @@ public class DefaultEventService extends AbstractEventService
     private Integer timeout;
 
     private String[] ignoreTimeout;
+
     private Boolean requireTopic;
+
     @Resource
     private Container container;
-    
+
     @Override
     public void postEvent(IEvent event) {
         List<EventTask> tasks = taskManager.createEventTasks(event);
@@ -73,25 +80,25 @@ public class DefaultEventService extends AbstractEventService
         List<EventTask> tasks = taskManager.createEventTasks(event);
         handleEvent(tasks, syncDeliver);
     }
-    
+
     protected void handleEvent(List<EventTask> tasks, final EventDeliver deliver) {
         if (tasks != null && tasks.size() > 0)
             deliver.execute(tasks);
 
     }
-    
+
     /**
      * 初始化并启动服务
      */
-    public void start(){
+    public void start() {
         configureService();
         startOrUpdateService();
     }
-    
+
     /**
      * 关闭服务并回收资源
      */
-    public void shutdown(){
+    public void shutdown() {
         taskManager = new EventTaskManager() {
 
             /**
@@ -112,37 +119,30 @@ public class DefaultEventService extends AbstractEventService
         };
     }
 
-    
     public Integer getCacheSize() {
         return cacheSize;
     }
 
-    
     public void setCacheSize(Integer cacheSize) {
         this.cacheSize = cacheSize;
     }
 
-    
     public Integer getThreadPoolSize() {
         return threadPoolSize;
     }
 
-    
     public void setThreadPoolSize(Integer threadPoolSize) {
         this.threadPoolSize = threadPoolSize;
     }
 
-    
     public Integer getTimeout() {
         return timeout;
     }
-    
-    
+
     public Boolean isRequireTopic() {
         return requireTopic;
     }
 
-    
     public void setRequireTopic(Boolean requireTopic) {
         this.requireTopic = requireTopic;
     }
@@ -151,12 +151,10 @@ public class DefaultEventService extends AbstractEventService
         this.timeout = timeout;
     }
 
-    
     public String[] getIgnoreTimeout() {
         return ignoreTimeout;
     }
 
-    
     public void setIgnoreTimeout(String value) {
         if (value == null) {
             ignoreTimeout = null;
@@ -168,19 +166,19 @@ public class DefaultEventService extends AbstractEventService
             }
         }
     }
-    
-    void configureService(){
-        cacheSize=getIntProperty("cacheSize",getCacheSize(),30,10);
-        threadPoolSize=getIntProperty("threadPoolSize", getThreadPoolSize(), 20, 2);
-        timeout=getIntProperty("timeout", getTimeout(), 5000, Integer.MIN_VALUE);
-        requireTopic=getBooleanProperty(isRequireTopic(), true);
-        
-        if(timeout<=100){
-            timeout=0;
+
+    void configureService() {
+        cacheSize = getIntProperty("cacheSize", getCacheSize(), 30, 10);
+        threadPoolSize = getIntProperty("threadPoolSize", getThreadPoolSize(), 20, 2);
+        timeout = getIntProperty("timeout", getTimeout(), 5000, Integer.MIN_VALUE);
+        requireTopic = getBooleanProperty(isRequireTopic(), true);
+
+        if (timeout <= 100) {
+            timeout = 0;
         }
-        
+
     }
-    
+
     protected void startOrUpdateService() {
         if (synThreadPool == null) {
             synThreadPool = new DefaultThreadPool(1024, 0, threadPoolSize, 5, 2 * 60 * 1000l, "SYN-EVENT");
@@ -193,15 +191,16 @@ public class DefaultEventService extends AbstractEventService
         } else {
             asyThreadPool.setMaxThreads(asyncThreadPoolSize);
         }
-        taskManager= createTaskManager();
-        if(syncDeliver==null){
-            syncDeliver= new SyncDeliver(synThreadPool, timeout, ignoreTimeout);
-        }else{
+        taskManager = createTaskManager();
+        if (syncDeliver == null) {
+            syncDeliver = new SyncDeliver(synThreadPool, timeout, ignoreTimeout);
+        } else {
             syncDeliver.update(timeout, ignoreTimeout);
         }
-        
-        asyncDeliver= new AsyncDeliver(asyThreadPool,syncDeliver);
+
+        asyncDeliver = new AsyncDeliver(asyThreadPool, syncDeliver);
     }
+
     /**
      * @return
      */
@@ -236,8 +235,8 @@ public class DefaultEventService extends AbstractEventService
 
         return defaultValue;
     }
-    
-    private int getIntProperty(final String key,final Object value, final int defaultValue, final int min) {
+
+    private int getIntProperty(final String key, final Object value, final int defaultValue, final int min) {
         if (null != value) {
             final int result;
             if (value instanceof Integer) {
@@ -259,14 +258,12 @@ public class DefaultEventService extends AbstractEventService
         return defaultValue;
     }
 
-    
     public Container getContainer() {
         return container;
     }
 
-    
     public void setContainer(Container container) {
         this.container = container;
     }
-    
+
 }

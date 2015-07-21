@@ -68,6 +68,14 @@ public class DataTypeMap implements Map<String, Object> {
         }
         this.map = map;
     }
+    
+    public static DataTypeMap typeof(Map<String,Object> map){
+        if(map instanceof DataTypeMap){
+            return (DataTypeMap)map;
+        }else{
+            return new DataTypeMap(map);
+        }
+    }
 
     /**
      * return String value of the key

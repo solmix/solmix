@@ -2,3 +2,4 @@ org.solmix.runtime.adapter.support.AdapterManagerImpl:org.solmix.runtime.adapter
 org.solmix.runtime.support.ext.ContainerResourceManager:org.solmix.runtime.resource.ResourceManager:true
 org.solmix.runtime.monitor.support.MonitorServiceImpl:org.solmix.runtime.monitor.MonitorService:true:true
 org.solmix.runtime.threadpool.DefaultThreadPoolManager:org.solmix.runtime.threadpool.ThreadPoolManager:true
+org.solmix.runtime.i18n.support.DefaultResourceBundleManager:org.solmix.runtime.i18n.ResourceBundleManager:true:true
