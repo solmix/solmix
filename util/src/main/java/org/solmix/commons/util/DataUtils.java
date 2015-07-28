@@ -203,13 +203,8 @@ public final class DataUtils
         if (obj instanceof Double)
             return ((Double) obj).doubleValue();
         else {
-            try {
                 return (new Double(obj.toString())).doubleValue();
-            } catch (NumberFormatException e) {
-                log.debug("TypeChangeError:", e);
-                return null;
             }
-        }
     }
 
     /**

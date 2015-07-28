@@ -45,7 +45,7 @@ public class Reflection
 
     private static Map<String, ClassEntry> reflectionCache = new ConcurrentHashMap<String, ClassEntry>();
 
-    private static Throwable getRealTargetException(Throwable ite) {
+    public static Throwable getRealTargetException(Throwable ite) {
         if (ite instanceof InvocationTargetException)
             return getRealTargetException(((InvocationTargetException) ite).getTargetException());
         else

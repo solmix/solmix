@@ -19,6 +19,7 @@
 
 package org.solmix.exchange.support;
 
+import org.solmix.commons.collections.StringTypeMapper;
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.Exchange;
 import org.solmix.exchange.Message;

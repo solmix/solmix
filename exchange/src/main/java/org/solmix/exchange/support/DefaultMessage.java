@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.solmix.commons.collections.StringTypeMapper;
 import org.solmix.exchange.Attachment;
 import org.solmix.exchange.Exchange;
 import org.solmix.exchange.Message;

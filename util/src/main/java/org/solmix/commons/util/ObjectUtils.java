@@ -16,19 +16,98 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.util;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年2月21日
+ * @version $Id$ 2015年2月21日
  */
 
-public class ObjectUtils {
+public class ObjectUtils
+{
+
+    /** 代表null值的占位对象。 */
+    public static final Object NULL_PLACEHOLDER = new NullPlaceholder();
+
+    /** 空字符串。 */
+    public static final String EMPTY_STRING = "";
+
+    /** 空的<code>byte</code>数组。 */
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
+    public static final Byte[] EMPTY_BYTE_OBJECT_ARRAY = new Byte[0];
+
+    /** 空的<code>short</code>数组。 */
+    public static final short[] EMPTY_SHORT_ARRAY = new short[0];
+
+    public static final Short[] EMPTY_SHORT_OBJECT_ARRAY = new Short[0];
+
+    /** 空的<code>int</code>数组。 */
+    public static final int[] EMPTY_INT_ARRAY = new int[0];
+
+    public static final Integer[] EMPTY_INTEGER_OBJECT_ARRAY = new Integer[0];
+
+    /** 空的<code>long</code>数组。 */
+    public static final long[] EMPTY_LONG_ARRAY = new long[0];
+
+    public static final Long[] EMPTY_LONG_OBJECT_ARRAY = new Long[0];
+
+    /** 空的<code>float</code>数组。 */
+    public static final float[] EMPTY_FLOAT_ARRAY = new float[0];
+
+    public static final Float[] EMPTY_FLOAT_OBJECT_ARRAY = new Float[0];
+
+    /** 空的<code>double</code>数组。 */
+    public static final double[] EMPTY_DOUBLE_ARRAY = new double[0];
+
+    public static final Double[] EMPTY_DOUBLE_OBJECT_ARRAY = new Double[0];
+
+    /** 空的<code>char</code>数组。 */
+    public static final char[] EMPTY_CHAR_ARRAY = new char[0];
+
+    public static final Character[] EMPTY_CHARACTER_OBJECT_ARRAY = new Character[0];
+
+    /** 空的<code>boolean</code>数组。 */
+    public static final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];
+
+    public static final Boolean[] EMPTY_BOOLEAN_OBJECT_ARRAY = new Boolean[0];
+
+    // object arrays
+
+    /** 空的<code>Object</code>数组。 */
+    public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
+    /** 空的<code>Class</code>数组。 */
+    public static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
+
+    /** 空的<code>String</code>数组。 */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    private final static class NullPlaceholder implements Serializable
+    {
+
+        private static final long serialVersionUID = 7092611880189329093L;
+
+        @Override
+        public String toString() {
+            return "null";
+        }
+
+        private Object readResolve() {
+            return NULL_PLACEHOLDER;
+        }
+    }
+    
+    public static class NullObject{
+        
+    }
+
     /** 是否为<code>null</code>、空字符串、或空数组。 */
     public static boolean isEmptyObject(Object object) {
         if (object == null) {
@@ -51,6 +130,7 @@ public class ObjectUtils {
     /**
      * 如果对象为<code>null</code>，则返回指定默认对象，否则返回对象本身。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.defaultIfNull(null, null)      = null
      * ObjectUtil.defaultIfNull(null, "")        = ""
@@ -59,7 +139,7 @@ public class ObjectUtils {
      * ObjectUtil.defaultIfNull(Boolean.TRUE, *) = Boolean.TRUE
      * </pre>
      *
-     * @param object       要测试的对象
+     * @param object 要测试的对象
      * @param defaultValue 默认值
      * @return 对象本身或默认对象
      */
@@ -78,6 +158,7 @@ public class ObjectUtils {
      * <p>
      * 此方法可以正确地比较多维数组。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.equals(null, null)                  = true
      * ObjectUtil.equals(null, "")                    = false
@@ -194,8 +275,7 @@ public class ObjectUtils {
     /**
      * 取得对象的原始的hash值, 如果对象为<code>null</code>, 则返回<code>0</code>。
      * <p>
-     * 该方法使用<code>System.identityHashCode</code>来取得hash值，该值不受对象本身的
-     * <code>hashCode</code>方法的影响。
+     * 该方法使用<code>System.identityHashCode</code>来取得hash值，该值不受对象本身的 <code>hashCode</code>方法的影响。
      * </p>
      *
      * @param object 对象
@@ -206,9 +286,9 @@ public class ObjectUtils {
     }
 
     /**
-     * 取得对象自身的identity，如同对象没有覆盖<code>toString()</code>方法时，
-     * <code>Object.toString()</code>的原始输出。
+     * 取得对象自身的identity，如同对象没有覆盖<code>toString()</code>方法时， <code>Object.toString()</code>的原始输出。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.identityToString(null)          = null
      * ObjectUtil.identityToString("")            = "java.lang.String@1e23"
@@ -229,9 +309,9 @@ public class ObjectUtils {
     }
 
     /**
-     * 取得对象自身的identity，如同对象没有覆盖<code>toString()</code>方法时，
-     * <code>Object.toString()</code>的原始输出。
+     * 取得对象自身的identity，如同对象没有覆盖<code>toString()</code>方法时， <code>Object.toString()</code>的原始输出。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.identityToString(null, "NULL")            = "NULL"
      * ObjectUtil.identityToString("", "NULL")              = "java.lang.String@1e23"
@@ -240,7 +320,7 @@ public class ObjectUtils {
      * ObjectUtil.identityToString(new Object[0], "NULL")   = "java.lang.Object[]@7fa"
      * </pre>
      *
-     * @param object  对象
+     * @param object 对象
      * @param nullStr 如果对象为<code>null</code>，则返回该字符串
      * @return 对象的identity，如果对象是<code>null</code>，则返回指定字符串
      */
@@ -253,9 +333,10 @@ public class ObjectUtils {
     }
 
     /**
-     * 将对象自身的identity——如同对象没有覆盖<code>toString()</code>方法时，
-     * <code>Object.toString()</code>的原始输出——追加到<code>Appendable</code>中。
+     * 将对象自身的identity——如同对象没有覆盖<code>toString()</code>方法时， <code>Object.toString()</code>的原始输出——追加到
+     * <code>Appendable</code>中。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.appendIdentityToString(buf, null)          = null
      * ObjectUtil.appendIdentityToString(buf, Boolean.TRUE)  = buf.append("java.lang.Boolean@7fa")
@@ -265,8 +346,7 @@ public class ObjectUtils {
      *
      * @param buffer <code>Appendable</code>对象
      * @param object 对象
-     * @return <code>Appendable</code>对象，如果对象为<code>null</code>，则输出
-     *         <code>"null"</code>
+     * @return <code>Appendable</code>对象，如果对象为<code>null</code>，则输出 <code>"null"</code>
      */
     public static <A extends Appendable> A appendIdentityToString(A buffer, Object object) {
         Assert.assertNotNull(buffer, "appendable");
@@ -290,9 +370,9 @@ public class ObjectUtils {
     // ==========================================================================
 
     /**
-     * 取得对象的<code>toString()</code>的值，如果对象为<code>null</code>，则返回空字符串
-     * <code>""</code>。
+     * 取得对象的<code>toString()</code>的值，如果对象为<code>null</code>，则返回空字符串 <code>""</code>。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.toString(null)         = ""
      * ObjectUtil.toString("")           = ""
@@ -311,6 +391,7 @@ public class ObjectUtils {
     /**
      * 取得对象的<code>toString()</code>的值，如果对象为<code>null</code>，则返回指定字符串。
      * <p/>
+     * 
      * <pre>
      * ObjectUtil.toString(null, null)           = null
      * ObjectUtil.toString(null, "null")         = "null"
@@ -320,7 +401,7 @@ public class ObjectUtils {
      * ObjectUtil.toString([1, 2, 3], "null")    = "[1, 2, 3]"
      * </pre>
      *
-     * @param object  对象
+     * @param object 对象
      * @param nullStr 如果对象为<code>null</code>，则返回该字符串
      * @return 对象的<code>toString()</code>的返回值，或指定字符串
      */
@@ -351,44 +432,44 @@ public class ObjectUtils {
     }
 
     public static boolean nullSafeEquals(Object o1, Object o2) {
-		if (o1 == o2) {
-			return true;
-		}
-		if (o1 == null || o2 == null) {
-			return false;
-		}
-		if (o1.equals(o2)) {
-			return true;
-		}
-		if (o1.getClass().isArray() && o2.getClass().isArray()) {
-			if (o1 instanceof Object[] && o2 instanceof Object[]) {
-				return Arrays.equals((Object[]) o1, (Object[]) o2);
-			}
-			if (o1 instanceof boolean[] && o2 instanceof boolean[]) {
-				return Arrays.equals((boolean[]) o1, (boolean[]) o2);
-			}
-			if (o1 instanceof byte[] && o2 instanceof byte[]) {
-				return Arrays.equals((byte[]) o1, (byte[]) o2);
-			}
-			if (o1 instanceof char[] && o2 instanceof char[]) {
-				return Arrays.equals((char[]) o1, (char[]) o2);
-			}
-			if (o1 instanceof double[] && o2 instanceof double[]) {
-				return Arrays.equals((double[]) o1, (double[]) o2);
-			}
-			if (o1 instanceof float[] && o2 instanceof float[]) {
-				return Arrays.equals((float[]) o1, (float[]) o2);
-			}
-			if (o1 instanceof int[] && o2 instanceof int[]) {
-				return Arrays.equals((int[]) o1, (int[]) o2);
-			}
-			if (o1 instanceof long[] && o2 instanceof long[]) {
-				return Arrays.equals((long[]) o1, (long[]) o2);
-			}
-			if (o1 instanceof short[] && o2 instanceof short[]) {
-				return Arrays.equals((short[]) o1, (short[]) o2);
-			}
-		}
-		return false;
-	}
+        if (o1 == o2) {
+            return true;
+        }
+        if (o1 == null || o2 == null) {
+            return false;
+        }
+        if (o1.equals(o2)) {
+            return true;
+        }
+        if (o1.getClass().isArray() && o2.getClass().isArray()) {
+            if (o1 instanceof Object[] && o2 instanceof Object[]) {
+                return Arrays.equals((Object[]) o1, (Object[]) o2);
+            }
+            if (o1 instanceof boolean[] && o2 instanceof boolean[]) {
+                return Arrays.equals((boolean[]) o1, (boolean[]) o2);
+            }
+            if (o1 instanceof byte[] && o2 instanceof byte[]) {
+                return Arrays.equals((byte[]) o1, (byte[]) o2);
+            }
+            if (o1 instanceof char[] && o2 instanceof char[]) {
+                return Arrays.equals((char[]) o1, (char[]) o2);
+            }
+            if (o1 instanceof double[] && o2 instanceof double[]) {
+                return Arrays.equals((double[]) o1, (double[]) o2);
+            }
+            if (o1 instanceof float[] && o2 instanceof float[]) {
+                return Arrays.equals((float[]) o1, (float[]) o2);
+            }
+            if (o1 instanceof int[] && o2 instanceof int[]) {
+                return Arrays.equals((int[]) o1, (int[]) o2);
+            }
+            if (o1 instanceof long[] && o2 instanceof long[]) {
+                return Arrays.equals((long[]) o1, (long[]) o2);
+            }
+            if (o1 instanceof short[] && o2 instanceof short[]) {
+                return Arrays.equals((short[]) o1, (short[]) o2);
+            }
+        }
+        return false;
+    }
 }

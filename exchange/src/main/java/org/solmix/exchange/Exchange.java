@@ -19,6 +19,7 @@
 
 package org.solmix.exchange;
 
+import org.solmix.commons.collections.StringTypeMap;
 import org.solmix.runtime.Container;
 
 /**

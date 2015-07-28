@@ -141,7 +141,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
 
     private void injectResourceClassLevel(Class<?> clz, Resource res) { 
         if (res.name() == null || "".equals(res.name())) { 
-            LOG.info( "RESOURCE_NAME_NOT_SPECIFIED", target.getClass().getName());
+            LOG.info( "Resource name not specified for type:{}", target.getClass().getName());
             return;
         } 
 
@@ -192,7 +192,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         if (resource != null) {
             injectField(field, resource);
         } else {
-            LOG.info(  "RESOURCE_RESOLVE_FAILED", name);
+            LOG.info("Resolve resource failed, resource name: {}", name);
         }
     }
 
@@ -213,7 +213,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         if (resource != null) {
             invokeSetter(method, resource);
         } else {
-            LOG.trace("RESOURCE_RESOLVE_FAILED", new Object[] {resourceName,clz });
+            LOG.trace("Resolve resource failed, resource name:{},type:{} ", new Object[] {resourceName,clz });
         }
     }
 
@@ -312,8 +312,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
                 field.set(getTarget(), resource);
             }
         } catch (Exception e) { 
-            e.printStackTrace();
-            LOG.error("FAILED_TO_INJECT_FIELD"); 
+            LOG.error("Failed to inject field.",e); 
         } finally {
             Reflection.setAccessible(field, accessible);
         }
@@ -330,9 +329,9 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
                     Reflection.setAccessible(method);
                     method.invoke(target);
                 } catch (IllegalAccessException e) {
-                    LOG.warn( "INJECTION_COMPLETE_NOT_VISIBLE", method);
+                    LOG.warn( "inject method {} is not visible", method);
                 } catch (InvocationTargetException e) {
-                    LOG.warn("INJECTION_COMPLETE_THREW_EXCEPTION", e);
+                    LOG.warn("injection throw exception", e);
                 } finally {
                     Reflection.setAccessible(method, accessible);
                 }
@@ -350,9 +349,9 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
                     Reflection.setAccessible(method);
                     method.invoke(target);
                 } catch (IllegalAccessException e) {
-                    LOG.warn( "PRE_DESTROY_NOT_VISIBLE", method);
+                    LOG.warn( "Pre destroy method:{} is not visible", method);
                 } catch (InvocationTargetException e) {
-                    LOG.warn("PRE_DESTROY_THREW_EXCEPTION", e);
+                    LOG.warn("Pre destroy throw exception", e);
                 } finally {
                     Reflection.setAccessible(method, accessible);
                 }

@@ -16,12 +16,10 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.exchange.support;
+package org.solmix.commons.collections;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.solmix.exchange.StringTypeMap;
 
 
 /**

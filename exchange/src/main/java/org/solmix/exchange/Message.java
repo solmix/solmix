@@ -21,6 +21,7 @@ package org.solmix.exchange;
 import java.util.Collection;
 import java.util.Set;
 
+import org.solmix.commons.collections.StringTypeMap;
 import org.solmix.exchange.interceptor.InterceptorChain;
 
 

@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.exchange;
+package org.solmix.commons.collections;
 
 import java.util.Map;
 
