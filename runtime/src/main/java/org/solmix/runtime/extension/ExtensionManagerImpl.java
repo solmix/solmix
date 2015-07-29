@@ -87,6 +87,10 @@ public class ExtensionManagerImpl implements ExtensionManager,
             }
         }
     }
+    
+   public ExtensionInfo getExtensionInfo(String name){
+       return  all.get(name);
+    }
 
     public ExtensionManagerImpl(String resource, ClassLoader cl,
         Map<Class<?>, Object> initialExtensions,
@@ -158,11 +162,6 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.bean.ConfiguredBeanProvider#getBeanNamesOfType(java.lang.Class)
-     */
     @Override
     public List<String> getBeanNamesOfType(Class<?> type) {
         List<String> ret = new LinkedList<String>();
@@ -185,9 +184,6 @@ public class ExtensionManagerImpl implements ExtensionManager,
      */
     @Override
     public <T> T getBeanOfType(String name, Class<T> type) {
-        if (name == null) {
-            return null;
-        }
         ExtensionInfo info =all.get(name);
         if (info != null) {
             if (info.getLoadedObject() == null) {
@@ -197,7 +193,21 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
         return null;
     }
-
+    @Override
+    public <T> T getBeanOfType(Class<T> type) {
+        for(ExtensionInfo info : all.values()){
+            synchronized (info) {
+                Class<?> cls = info.getClassObject(loader);
+                if (cls != null && type.isAssignableFrom(cls)) {
+                    if (info.getLoadedObject() == null) {
+                        loadAndRegister(info);
+                    }
+                    return type.cast(info.getLoadedObject());
+                }
+            }
+        }
+        return null;
+    }
     /**
      * @param info
      */
@@ -207,13 +217,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
         synchronized (info) {
             Class<?> cls = null;
-            /*if (null != info.getInterfaceName()
-                && !"".equals(info.getInterfaceName())) {
-                cls = info.loadInterface(loader);
-            } else {*/
-                cls = info.getClassObject(loader);
-//            }
-
+            cls = info.getClassObject(loader);
             if (null != activated && null != cls
                 && null != activated.get(cls)) {
                 return;
@@ -233,13 +237,9 @@ public class ExtensionManagerImpl implements ExtensionManager,
             ResourceInjector injector = new ResourceInjector(resourceManager);
 
             injector.inject(obj);
+            injector.injectAware(obj);
             injector.construct(obj);
            
-            //ContainerAware
-            if(ContainerAware.class.isAssignableFrom(obj.getClass())){
-                ContainerAware ca= ContainerAware.class.cast(obj);
-                ca.setContainer(container);
-            }
             if (null != activated) {
                 if (cls == null) {
                     cls = obj.getClass();
@@ -434,4 +434,6 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
 
     }
+
+   
 }

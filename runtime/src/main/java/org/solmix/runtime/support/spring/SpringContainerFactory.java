@@ -22,6 +22,7 @@ package org.solmix.runtime.support.spring;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.support.ContainerFactoryImpl;
@@ -75,9 +76,11 @@ public class SpringContainerFactory extends ContainerFactory {
     }
 
     /**
+     * 根据spring配置文件创建Container，如果spring配置文件中已经包含id=solmix的springContainer
+     * 那么这个新配置的container就覆盖默认的。
      * @param configFile
      * @param defaultContextNotExists
-     * @return
+     * @return 返回id=solmix的container
      */
     public Container createContainer(String configFile, boolean includeDefaults) {
         if (configFile == null) {
@@ -104,7 +107,7 @@ public class SpringContainerFactory extends ContainerFactory {
                     }
                 });
             }
-            if (parent == null && includeDefaults && (r == null || !exists)) {
+            if (parent == null && !includeDefaults && (r == null || !exists) && DataUtils.isNullOrEmpty(cfgFiles)) {
                 return new ContainerFactoryImpl().createContainer();
             }
             ConfigurableApplicationContext cac = createApplicationContext(

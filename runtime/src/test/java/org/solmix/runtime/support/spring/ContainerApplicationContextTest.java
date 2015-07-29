@@ -22,7 +22,10 @@ package org.solmix.runtime.support.spring;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.service.ContainerAwareService;
 import org.solmix.runtime.service.InjectTestService;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
 
 /**
  * 
@@ -41,7 +44,72 @@ public class ContainerApplicationContextTest {
         } catch (Exception e) {
         }
     }
-
+    @Test
+    public void testLoad2() {
+        SpringContainerFactory factory = new SpringContainerFactory();
+        String file = "/org/solmix/runtime/support/spring/container-overload.xml";
+        Container c = factory.createContainer(file, true);
+        Assert.assertTrue(c.isProduction());
+       Object o= c.getExtension(ApplicationContext.class).getBean("solmix");
+       Assert.assertSame(o, c);
+        Assert.assertEquals(c.getProperty("runtime.production"),"true");
+        Container c2= c.getExtension(ApplicationContext.class).getBean("solmix2",Container.class);
+        Assert.assertEquals(c2.getProperty("runtime.production"),"false");
+        
+        
+        
+        ContainerAwareService cas = c.getExtension(ContainerAwareService.class);
+        Assert.assertNotNull(cas.getContainer());
+        Assert.assertSame(cas.getContainer(), c);
+        Assert.assertTrue(cas.isProduction());
+        
+        
+        ContainerAwareService cas2 = c2.getExtension(ContainerAwareService.class);
+        Assert.assertSame(cas2.getContainer(), c);
+        Assert.assertTrue(cas2.isProduction());
+        Assert.assertTrue(!c2.isProduction());
+        
+    }
+    
+    
+    @Test
+    public void testLoad3() {
+        //配置中没有，但包含了默认的
+        SpringContainerFactory factory = new SpringContainerFactory();
+        String file = "/org/solmix/runtime/support/spring/container-no-default.xml";
+        //返回的不是配置的，时默认的
+        Container c = factory.createContainer(file, true);
+       Object o= c.getExtension(ApplicationContext.class).getBean("solmix");
+       Assert.assertSame(o, c);
+        Container c2= c.getExtension(ApplicationContext.class).getBean("solmix2",Container.class);
+        Assert.assertEquals(c2.getProperty("runtime.production"),"false");
+    }
+    @Test(expected=RuntimeException.class)
+    public void testLoad4() {
+        SpringContainerFactory factory = new SpringContainerFactory();
+        String file = "/org/solmix/runtime/support/spring/container-no-default.xml";
+        //配置中没有，也不加载默认，不能初始化container。
+        Container c = factory.createContainer(file, false);
+       Object o= c.getExtension(ApplicationContext.class).getBean("solmix");
+       Assert.assertSame(o, c);
+        Assert.assertEquals(c.getProperty("runtime.production"),"true");
+        Container c2= c.getExtension(ApplicationContext.class).getBean("solmix2",Container.class);
+        Assert.assertEquals(c2.getProperty("runtime.production"),"false");
+    }
+    
+    @Test
+    public void testLoad5() {
+        String file = "/org/solmix/runtime/support/spring/container-no-default.xml";
+        ContainerApplicationContext overload = new ContainerApplicationContext(
+            file, false);
+        //由spring决定去一个container。
+        Container c = (Container) overload.getBean("solmix2");
+        Assert.assertTrue(!c.isProduction());
+       Object o= overload.getBean(Container.class);
+       Assert.assertSame(o, c);
+        Assert.assertEquals(c.getProperty("runtime.production"),"false");
+        overload.close();
+    }
     @Test
     public void testLoad() {
         try {

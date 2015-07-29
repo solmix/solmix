@@ -64,6 +64,8 @@ public class ExtensionContainer implements Container {
     private final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
 
     private boolean firstFireContainerListener = true;
+    
+    private boolean production  = true;
 
     /**
      * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
@@ -210,41 +212,31 @@ public class ExtensionContainer implements Container {
                 // missing extensions,return null
                 return null;
             }
-            ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
-            if (provider == null) {
-                provider = createBeanProvider();
-            }
-            if (provider != null) {
-                Collection<?> objs = provider.getBeansOfType(beanType);
-                if (objs == null || objs.isEmpty()) {
-                    return null;
-                } else if (objs != null && objs.size() == 1) {
-                    for (Object o : objs) {
-                        extensions.put(beanType, o);
-                    }
-                } else {
-                    if (beanType.isInterface()
-                        && beanType.isAnnotationPresent(Extension.class)) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("found more than one instance for "
-                                + beanType.getName()
-                                + ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
-                        }
-                        extensions.put(beanType,
-                            getExtensionLoader(beanType).getDefault());
-                    }else{
-                        if (LOG.isWarnEnabled()) {
-                            LOG.warn("found " + objs.size() + " instance for "
-                                + beanType.getName());
-                        }
-                        for (Object o : objs) {
-                            extensions.put(beanType, o);
-                        }
-                    }
+           
+            if (beanType.isInterface()
+                && beanType.isAnnotationPresent(Extension.class)) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("found more than one instance for "
+                        + beanType.getName()
+                        + ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
                 }
-                obj = extensions.get(beanType);
+                obj=getExtensionLoader(beanType).getDefault();
+                if(obj!=null){
+                    extensions.put(beanType, obj);
+                }
+                
+            }else{
+                ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
+                if (provider == null) {
+                    provider = createBeanProvider();
+                }
+                obj= provider.getBeanOfType(beanType);
+               if(obj!=null){
+                   extensions.put(beanType, obj);
+               }
             }
         }
+        obj = extensions.get(beanType);
         if (obj != null) {
             return beanType.cast(obj);
         } else {
@@ -511,7 +503,7 @@ public class ExtensionContainer implements Container {
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         if (loader == null) {
             EXTENSION_LOADERS.putIfAbsent(type, new DefaultExtensionLoader<T>(
-                type, extensionManager));
+                type, extensionManager,this));
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         }
         return loader;
@@ -538,6 +530,16 @@ public class ExtensionContainer implements Container {
                 this.containerListeners.addAll(containerListeners);
             }
         }
+    }
+
+    @Override
+    public boolean isProduction() {
+        return production;
+    }
+
+    @Override
+    public void setProduction(boolean production) {
+        this.production = production;
     }
 
 }

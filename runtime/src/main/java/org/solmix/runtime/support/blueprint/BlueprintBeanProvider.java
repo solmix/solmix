@@ -118,7 +118,24 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
 
         return new ArrayList<String>(names);
     }
-
+    @Override
+    public <T> T getBeanOfType(Class<T> type) {
+        T res=null;
+        Collection<ComponentMetadata> metas=  blueprintContainer.getMetadata(ComponentMetadata.class);
+        if(metas!=null){
+           for(ComponentMetadata meta:metas){
+               Class<?> cls = getClassForMetaData(meta);
+               if (cls != null && type.isAssignableFrom(cls)) {
+                   res= type.cast(blueprintContainer.getComponentInstance(meta.getId()));
+                   break;
+               }
+           }
+        }
+        if(res==null&&original!=null){
+            res=original.getBeanOfType(type); 
+        }
+        return res;
+    }
     @Override
     public <T> T getBeanOfType(String name, Class<T> type) {
         ComponentMetadata cmd = getComponentMetadata(name);

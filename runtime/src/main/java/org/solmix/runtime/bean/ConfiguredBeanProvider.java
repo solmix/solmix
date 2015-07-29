@@ -48,6 +48,7 @@ public interface ConfiguredBeanProvider {
      */
     <T> T getBeanOfType(String name, Class<T> type);
 
+    <T> T getBeanOfType( Class<T> type);
     /**
      * Gets all the configured extensions of the specific types. Causes them all
      * to be loaded.

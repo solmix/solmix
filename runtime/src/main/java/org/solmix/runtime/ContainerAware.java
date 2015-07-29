@@ -34,11 +34,4 @@ public interface ContainerAware {
      */
     void setContainer(Container container);
 
-    /**
-     * 获取设置{@link Container}。
-     * 
-     * @return
-     */
-//    Container getContainer();
-
 }

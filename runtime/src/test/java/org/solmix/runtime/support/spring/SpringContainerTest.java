@@ -27,6 +27,7 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerListener;
 import org.solmix.runtime.adapter.AdapterManager;
 import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.service.ContainerAwareService;
 import org.solmix.runtime.service.InjectTestService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -52,6 +53,8 @@ public class SpringContainerTest {
             "org.solmix.runtime.adapter.support.AdapterManagerImpl",
             AdapterManager.class);
         Assert.assertNotNull(apm);
+        ContainerAwareService cas = c.getExtension(ContainerAwareService.class);
+        Assert.assertNotNull(cas.getContainer());
     }
 
     @Test

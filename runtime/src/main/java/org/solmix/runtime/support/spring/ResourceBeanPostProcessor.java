@@ -49,6 +49,8 @@ public class ResourceBeanPostProcessor implements
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
         throws BeansException {
+        ResourceInjector injector= new ResourceInjector(getResourceManager(bean));
+        injector.injectAware(bean);
         if (!isProcessing) {
             return bean;
         }
@@ -57,7 +59,7 @@ public class ResourceBeanPostProcessor implements
         }
         if (bean != null 
             && injectable(bean, beanName)) {
-            new ResourceInjector(getResourceManager(bean)).inject(bean);
+            injector.inject(bean);
         }
         return bean;
     }

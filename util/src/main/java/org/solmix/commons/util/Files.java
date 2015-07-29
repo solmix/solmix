@@ -636,7 +636,19 @@ public class Files {
     public static String normalizeAbsolutePath(String path, boolean removeTrailingSlash) throws IllegalPathException {
         return normalizePath(path, true, false, removeTrailingSlash);
     }
+    public static String normalizeExtension(String ext) {
+        ext = StringUtils.trimToNull(ext);
 
+        if (ext != null) {
+            ext = ext.toLowerCase();
+
+            if (ext.startsWith(".")) {
+                ext = StringUtils.trimToNull(ext.substring(1));
+            }
+        }
+
+        return ext;
+    }
     private static String normalizePath(String path, boolean forceAbsolute,
         boolean forceRelative, boolean removeTrailingSlash)
         throws IllegalPathException {
@@ -825,9 +837,62 @@ public class Files {
               return relativePath;
         }
     }
+
+    public static FileNameAndExtension getFileNameAndExtension(String path, boolean extensionToLowerCase) {
+        path = StringUtils.trimToEmpty(path);
+
+        String fileName = path;
+        String extension = null;
+
+        if (!StringUtils.isEmpty(path)) {
+            // 如果找到后缀，则index >= 0，且extension != null（除非name以.结尾）
+            int index = path.lastIndexOf('.');
+
+            if (index >= 0) {
+                extension = StringUtils.trimToNull(StringUtils.substring(path, index + 1));
+
+                if (!StringUtils.containsNone(extension, "/\\")) {
+                    extension = null;
+                    index = -1;
+                }
+            }
+
+            if (index >= 0) {
+                fileName = StringUtils.substring(path, 0, index);
+            }
+        }
+
+        return new FileNameAndExtension(fileName, extension, extensionToLowerCase);
+    }
+    public static class FileNameAndExtension {
+        private final String fileName;
+        private final String extension;
+
+        FileNameAndExtension(String fileName, String extension, boolean extensionToLowerCase) {
+            this.fileName = fileName;
+            this.extension = extensionToLowerCase ? StringUtils.toLowerCase(extension) : extension;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
+
+        @Override
+        public String toString() {
+            return extension == null ? fileName : fileName + "." + extension;
+        }
+    }
+    public static String normalizeAbsolutePath(String path) throws IllegalPathException {
+        return normalizePath(path, true, false, false);
+    }
+
 }
  
- 
+
 class ExtensionFileFilter  implements FileFilter {
      
     private final String extension;
@@ -857,5 +922,5 @@ class ExtensionFileFilter  implements FileFilter {
             return this.extension.equals(name.substring(idx + 1));
         }
     }
-     
+   
 }

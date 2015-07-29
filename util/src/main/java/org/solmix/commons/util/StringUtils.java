@@ -661,4 +661,92 @@ public final class StringUtils
         }
         return count;
     }
+
+    public static String toLowerCase(String str) {
+        if (str == null) {
+            return null;
+        }
+
+        return str.toLowerCase();
+    }
+
+    public static boolean containsNone(String str, String invalidChars) {
+        if (str == null || invalidChars == null) {
+            return true;
+        }
+
+        return containsNone(str, invalidChars.toCharArray());
+    }
+    public static boolean containsNone(String str, char[] invalid) {
+        if (str == null || invalid == null) {
+            return true;
+        }
+
+        int strSize = str.length();
+        int validSize = invalid.length;
+
+        for (int i = 0; i < strSize; i++) {
+            char ch = str.charAt(i);
+
+            for (int j = 0; j < validSize; j++) {
+                if (invalid[j] == ch) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static String substring(String str, int start) {
+        if (str == null) {
+            return null;
+        }
+
+        if (start < 0) {
+            start = str.length() + start;
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+
+        if (start > str.length()) {
+            return ObjectUtils.EMPTY_STRING;
+        }
+
+        return str.substring(start);
+    }
+
+    public static String substring(String str, int start, int end) {
+        if (str == null) {
+            return null;
+        }
+
+        if (end < 0) {
+            end = str.length() + end;
+        }
+
+        if (start < 0) {
+            start = str.length() + start;
+        }
+
+        if (end > str.length()) {
+            end = str.length();
+        }
+
+        if (start > end) {
+            return ObjectUtils.EMPTY_STRING;
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+
+        if (end < 0) {
+            end = 0;
+        }
+
+        return str.substring(start, end);
+    }
 }

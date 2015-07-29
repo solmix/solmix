@@ -92,7 +92,9 @@ public abstract class ContainerFactory
      * @return true if the Container was not set and is now set
      */
     public static synchronized boolean possiblySetDefaultContainer(Container container) {
-    	containersRef.add(container);
+        if(!containersRef.contains(container)){
+            containersRef.add(container);
+        }
         ContainerHolder h = getThreadContainerHolder(false);
         if (h.container == null) {
            h.container=container;

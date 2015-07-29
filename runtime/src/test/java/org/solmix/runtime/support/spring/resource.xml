@@ -13,5 +13,5 @@
 	<bean id="timeservice" class="org.solmix.runtime.service.InjectTestService" >
 		<constructor-arg ref="solmix"></constructor-arg>
 	</bean>
-	
+	<bean class="org.solmix.runtime.service.ContainerAwareService"></bean>
 </beans>

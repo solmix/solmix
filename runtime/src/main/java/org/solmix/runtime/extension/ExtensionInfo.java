@@ -103,10 +103,6 @@ public class ExtensionInfo {
      * @return
      */
     public String getName() {
-        /*
-         * return StringUtils.isEmpty(interfaceName) ? className :
-         * interfaceName;
-         */
         return className;
     }
 
@@ -191,6 +187,9 @@ public class ExtensionInfo {
         return obj;
     }
 
+    public void setLoadedObject(Object o){
+        this.obj=o;
+    }
     /**
      * @param loader
      * @return
@@ -233,6 +232,9 @@ public class ExtensionInfo {
         return null;
     }
 
+    public Class<?> getClassObject() {
+        return getClassObject(classloader);
+    }
     /**
      * @param loader
      * @return

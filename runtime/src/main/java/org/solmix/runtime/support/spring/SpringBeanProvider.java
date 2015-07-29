@@ -76,6 +76,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
                         names.add(s2);
                     }
                 }
+                //当spring中有和extensions中相同时，移除extensions。
                 ((ExtensionManagerImpl)original).removeBeansOfNames(names);
             }
         }
@@ -97,7 +98,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
         if (original != null) {
             List<String> origs = original.getBeanNamesOfType(type);
             if (origs != null)
-                s.addAll(original.getBeanNamesOfType(type));
+                s.addAll(origs);
         }
         return new ArrayList<String>(s);
     }
@@ -112,6 +113,22 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
         }
         return s;
     }
+    @Override
+    public <T> T getBeanOfType(Class<T> type) {
+        T t = null;
+        try {
+            t = type.cast(context.getBean( type));
+        } catch (NoSuchBeanDefinitionException nsbde) {
+            // ignore
+        }
+        if (t == null && context.getParent() != null) {
+            t = dogetBeanOfType0(context.getParent(),type);
+        }
+        if (t == null && original != null) {
+            t = original.getBeanOfType( type);
+        }
+        return t;
+    }
     /**
      * {@inheritDoc}
      * 
@@ -120,6 +137,9 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
     @Override
     public <T> T getBeanOfType(String name, Class<T> type) {
         T t = null;
+        /*if(name==null){
+            return getBeanOfType(type);
+        }*/
         try {
             t = type.cast(context.getBean(name, type));
         } catch (NoSuchBeanDefinitionException nsbde) {
@@ -135,8 +155,7 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
     }
 
     // get bean from parent;
-    private <T> T dogetBeanOfType0(ApplicationContext context, String name,
-        Class<T> type) {
+    private <T> T dogetBeanOfType0(ApplicationContext context, String name, Class<T> type) {
         T t = null;
         if (context != null) {
             t = type.cast(context.getBean(name, type));
@@ -145,7 +164,15 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
         }
         return t;
     }
-
+    private <T> T dogetBeanOfType0(ApplicationContext context, Class<T> type) {
+        T t = null;
+        if (context != null) {
+            t = type.cast(context.getBean( type));
+            if (t == null && context.getParent() != null)
+                t = dogetBeanOfType0(context.getParent(), type);
+        }
+        return t;
+    }
     /**
      * {@inheritDoc}
      * 

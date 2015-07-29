@@ -21,13 +21,19 @@ package org.solmix.runtime.extension;
 
 import static org.solmix.commons.util.DataUtils.isEmpty;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.solmix.commons.util.StringUtils;
+import org.solmix.runtime.Container;
 import org.solmix.runtime.Extension;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
 
 /**
  * 
@@ -47,10 +53,12 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
 
     private final Object cachedLock = new Object();
 
+    private final Container container;
     public DefaultExtensionLoader(Class<T> type,
-        ExtensionManagerImpl extensionManager) {
+        ExtensionManagerImpl extensionManager, Container container) {
         this.extensionManager = extensionManager;
         this.type = type;
+        this.container=container;
     }
 
     /**
@@ -61,10 +69,26 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
     @Override
     public T getDefault() {
         getExtensionInfos();
+        String defaultName=getDefaultName();
         if (isEmpty(defaultName)) {
             return null;
         }
         return getExtension(defaultName);
+    }
+    
+    @Override
+    public String getDefaultName(){
+        if(defaultName!=null){
+            return defaultName;
+        }else{
+            Set<String> names=getLoadedExtensions();
+            if(names!=null){
+                Iterator<String> it = names.iterator();
+                if(it.hasNext())
+               return it.next();
+            }
+        }
+        return null;
     }
 
     private Map<String, ExtensionInfo> getExtensionInfos() {
@@ -84,44 +108,53 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
         if (e != null) {
             String defName = e.name();
             if (defName != null) {
-                defaultName = defName.trim();
+                defaultName = StringUtils.trimToNull(defName);
             }
         }
         if (cached == null) {
             Map<String, ExtensionInfo> cachedExtensions = new HashMap<String, ExtensionInfo>();
-            Set<ExtensionInfo> infos = extensionManager.getExtensionInfos(type);
-            for (ExtensionInfo info : infos) {
-                Class<?> clazz = info.getClassObject(null);
-                if (clazz != null) {
-                    Extension anno = clazz.getAnnotation(Extension.class);
-                    if (anno != null && anno.name() != null) {
-                        String implemntor = anno.name().trim();
-                        if (cachedExtensions.get(implemntor) != null) {
-                            ExtensionInfo older = cachedExtensions.get(implemntor);
-                            throw new IllegalStateException("Class:["
-                                + clazz.getName() + "] with name:["
-                                + implemntor + "],conflict and class:["
-                                + older.getClassname() + "]");
+            // 加载spring或者osgi容器中的，容器中的配置会覆盖extensions中配置
+            ConfiguredBeanProvider provider = container.getExtension(ConfiguredBeanProvider.class);
+            // 容器提供的
+                List<String> extensionNames = provider.getBeanNamesOfType(type);
+                if (extensionNames != null) {
+                    for (String name : extensionNames) {
+                        ExtensionInfo info = extensionManager.getExtensionInfo(name);
+                        // 在extensions中配置的
+                        if (info != null) {
+                            Class<?> clazz = info.getClassObject();
+                            if (clazz != null) {
+                                Extension anno = clazz.getAnnotation(Extension.class);
+                                if (anno != null && anno.name() != null) {
+                                    String implemntor = anno.name().trim();
+                                    /*if (cachedExtensions.get(implemntor) != null) {
+                                        ExtensionInfo older = cachedExtensions.get(implemntor);
+                                        throw new IllegalStateException("Class:[" + clazz.getName() + "] with name:[" + implemntor
+                                            + "],conflict and class:[" + older.getClassname() + "]");
+                                    } else {*/
+                                    if (cachedExtensions.get(implemntor) == null) {
+                                        cachedExtensions.put(implemntor, info);
+                                    }
+                                }
+                            }
                         } else {
-                            cachedExtensions.put(anno.name().trim(), info);
+                            T o = provider.getBeanOfType(name, type);
+                            if (o != null) {
+                                info = new ExtensionInfo(Thread.currentThread().getContextClassLoader());
+
+                                info.setClassname(o.getClass().getName());
+                                info.setInterfaceName(type.getName());
+                                info.setDeferred(false);
+                                info.setOptional(false);
+                                info.setLoadedObject(o);
+                                cachedExtensions.put(name, info);
+                            }
                         }
                     }
                 }
-            }
             cached = cachedExtensions;
         }
 
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.extension.ExtensionLoader#getDefaultName()
-     */
-    @Override
-    public String getDefaultName() {
-        getExtensionInfos();
-        return defaultName;
     }
 
     /**

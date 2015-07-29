@@ -35,6 +35,9 @@ import javax.annotation.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Reflection;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
+import org.solmix.runtime.ProductionAware;
 import org.solmix.runtime.annotation.AbstractAnnotationVisitor;
 import org.solmix.runtime.annotation.AnnotationProcessor;
 
@@ -92,6 +95,21 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
     public void inject(Object o) {        
         inject(o, o.getClass());
     }
+    
+    public void injectAware(Object o){
+        Container container=null;
+        if(ContainerAware.class.isInstance(o)){
+            container=(Container)resolveResource(null, Container.class);
+            ContainerAware.class.cast(o).setContainer(container);
+        }
+        if(ProductionAware.class.isInstance(o)){
+            if(container==null){
+                container=(Container)resolveResource(null, Container.class);
+            }
+            ProductionAware.class.cast(o).setProduction(container.isProduction());
+        }
+    }
+    
     
     public void inject(Object o, Class<?> claz) {
         if (processable(claz, o)) {

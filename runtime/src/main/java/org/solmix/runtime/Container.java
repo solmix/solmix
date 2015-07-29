@@ -131,4 +131,14 @@ public interface Container {
      * jcr sessions).
      */
     public void close();
+
+    /**
+     * @return
+     */
+    boolean isProduction();
+
+    /**
+     * @param production
+     */
+    void setProduction(boolean production);
 }

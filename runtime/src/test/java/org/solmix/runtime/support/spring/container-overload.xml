@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:c="http://www.solmix.org/schema/rt"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt http://www.solmix.org/schema/rt/rt.xsd ">
+	<!-- 不设置id，会覆盖默认的 -->
+	<c:container production="true">
+		<c:properties>
+			<entry key="runtime.production" value="true" />
+		</c:properties>
+	</c:container>
+	<c:container id="solmix2"  production="false">
+		<c:properties>
+			<entry key="runtime.production" value="false" />
+		</c:properties>
+	</c:container>
+	
+	<bean class="org.solmix.runtime.service.ContainerAwareService"></bean>
+</beans>

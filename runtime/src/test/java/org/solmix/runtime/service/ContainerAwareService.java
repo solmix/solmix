@@ -21,6 +21,7 @@ package org.solmix.runtime.service;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerAware;
+import org.solmix.runtime.ProductionAware;
 
 /**
  * 
@@ -28,9 +29,10 @@ import org.solmix.runtime.ContainerAware;
  * @version $Id$ 2014年10月23日
  */
 
-public class ContainerAwareService implements ContainerAware {
+public class ContainerAwareService implements ContainerAware,ProductionAware {
 
     private Container container;
+    private boolean production;
 
     public Container getContainer() {
         return container;
@@ -40,6 +42,21 @@ public class ContainerAwareService implements ContainerAware {
     @Override
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.solmix.runtime.ProductionAware#setProduction(boolean)
+     */
+    @Override
+    public void setProduction(boolean productionMode) {
+       this.production=productionMode;
+    }
+
+    
+    public boolean isProduction() {
+        return production;
     }
 
 }
