@@ -7,9 +7,9 @@ import org.solmx.service.template.Renderable;
 /**
  * 渲染<code>Renderable</code>的event handler。
  *
- * @author Michael Zhou
  */
 public class RenderableHandler implements ReferenceInsertionEventHandler {
+    @Override
     public Object referenceInsert(String reference, Object value) {
         if (value instanceof Renderable) {
             return ((Renderable) value).render();

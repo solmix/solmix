@@ -56,7 +56,9 @@ import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmx.service.velocity.support.CloneableEventCartridge;
 import org.solmx.service.velocity.support.CustomizedUberspectImpl;
+import org.solmx.service.velocity.support.PreloadedResourceLoader;
 import org.solmx.service.velocity.support.RenderableHandler;
+import org.solmx.service.velocity.support.ResourceLoaderAdapter;
 import org.solmx.service.velocity.support.Slf4jLogChute;
 
 /**
@@ -65,7 +67,7 @@ import org.solmx.service.velocity.support.Slf4jLogChute;
  * @version $Id$ 2015年7月28日
  */
 
-public class VelocityEngineInfo
+public class VelocityEngineConfiguration
 {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
@@ -76,16 +78,13 @@ public class VelocityEngineInfo
 
     private boolean strictReference = true;
 
-    // template charset encoding
     private String charset;
 
-    // global macros
     private String[] macros;
 
     private boolean productionMode = true;
 
-    // resource loader
-    private String path;
+    private String path="";
 
     private boolean cacheEnabled = true;
 
@@ -99,10 +98,7 @@ public class VelocityEngineInfo
 
     private final CloneableEventCartridge eventCartridge = new CloneableEventCartridge();
 
-    /**
-     * @param log
-     */
-    public VelocityEngineInfo(Logger log)
+    public VelocityEngineConfiguration(Logger log)
     {
         this.log = log;
     }
@@ -122,6 +118,26 @@ public class VelocityEngineInfo
     private void initResourceLoader() {
         if (productionMode) {
             cacheEnabled = true;
+        }
+        properties.setProperty(RESOURCE_LOADER, "solmix");
+        String prefix = "solmix." + RESOURCE_LOADER + ".";
+        
+        properties.setProperty(prefix + "description", "Solmix Resource Loader Adapter");
+        properties.setProperty(prefix + "class", ResourceLoaderAdapter.class.getName());
+        properties.setProperty(prefix + "path", path);
+        properties.setProperty(prefix + "cache", String.valueOf(cacheEnabled));
+        properties.setProperty(prefix + "modificationCheckInterval", String.valueOf(modificationCheckInterval));
+
+        prefix = "preloaded." + RESOURCE_LOADER + ".";
+
+        properties.setProperty(prefix + "description", "Preloaded Resource Loader");
+        properties.setProperty(prefix + "class", PreloadedResourceLoader.class.getName());
+        properties.setProperty(prefix + "cache", String.valueOf(cacheEnabled));
+        properties.setProperty(prefix + "modificationCheckInterval", String.valueOf(modificationCheckInterval));
+        properties.setProperty(prefix + PreloadedResourceLoader.PRELOADED_RESOURCES_KEY, preloadedResources);
+
+        if (!preloadedResources.isEmpty()) {
+            properties.addProperty(RESOURCE_LOADER, "preloaded");
         }
     }
 
@@ -155,7 +171,6 @@ public class VelocityEngineInfo
         Assert.assertTrue(eventCartridge.addEventHandler(handler), "Unknown event handler type: %s", handler.getClass());
     }
 
-    /** 初始化杂项。 */
     private void initMiscs() {
         if (charset == null) {
             charset = DEFAULT_CHARSET;
@@ -198,7 +213,6 @@ public class VelocityEngineInfo
 
         resolveMacro(resourceManager, VM_LIBRARY_DEFAULT);
 
-        // Plugin macros
         if (plugins != null) {
             for (Object plugin : plugins) {
                 if (plugin instanceof VelocityPlugin) {

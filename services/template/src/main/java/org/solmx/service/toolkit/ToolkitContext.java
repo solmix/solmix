@@ -19,18 +19,32 @@
 package org.solmx.service.toolkit;
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月29日
+ * @version $Id$  2015年7月30日
  */
 
-public interface ToolkitService
+public interface ToolkitContext
 {
+    Map<String, Object> getTools();
 
-    ToolkitContext getContext();
-    
-    Map<String,Object> getTools();
+    /**
+     * @param name
+     * @return
+     */
+    Object put(String name);
+
+    /**
+     * @return
+     */
+    Set<String> getToolNames();
+
+    /**
+     * @return
+     */
+    Set<String> getQualifiedToolNames();
 }

@@ -47,12 +47,13 @@ import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.Extension;
+import org.solmix.runtime.ProductionAware;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmx.service.template.TemplateContext;
 import org.solmx.service.template.TemplateException;
 import org.solmx.service.template.TemplateNotFoundException;
 import org.solmx.service.velocity.VelocityEngine;
-import org.solmx.service.velocity.VelocityEngineInfo;
+import org.solmx.service.velocity.VelocityEngineConfiguration;
 
 
 /**
@@ -61,12 +62,12 @@ import org.solmx.service.velocity.VelocityEngineInfo;
  * @version $Id$  2015年7月28日
  */
 @Extension(name="velocity")
-public class DefaultVelocityEngine implements VelocityEngine
+public class DefaultVelocityEngine implements VelocityEngine,ProductionAware
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultVelocityEngine.class);
 
-    private final VelocityEngineInfo info = new VelocityEngineInfo(LOG);
+    private final VelocityEngineConfiguration info = new VelocityEngineConfiguration(LOG);
 
     private final VelocityInstance ri = new VelocityInstance();
 
@@ -81,6 +82,7 @@ public class DefaultVelocityEngine implements VelocityEngine
         LOG.debug("Velocity Engine configration info: {}", info);
         
         ri.setConfiguration(info.getProperties());
+        ri.setApplicationAttribute(ResourceManager.class.getName(), resourceManager);
         ri.setProperty(RuntimeConstants.EVENTHANDLER_REFERENCEINSERTION, RuntimeServicesExposer.class.getName());
         ri.init();
         
@@ -94,7 +96,7 @@ public class DefaultVelocityEngine implements VelocityEngine
         return new String[] { "vm" };
     }
     
-    public VelocityEngineInfo getVelocityEngineInfo(){
+    public VelocityEngineConfiguration getVelocityEngineInfo(){
         return info;
     }
 
@@ -261,7 +263,7 @@ public class DefaultVelocityEngine implements VelocityEngine
     /** 取得解析模板时的默认编码字符集。 */
     protected String getDefaultInputEncoding() {
         if (defaultInputEncoding == null) {
-            defaultInputEncoding =ObjectUtils.defaultIfNull(StringUtils.trimToNull((String) ri.getProperty(RuntimeInstance.INPUT_ENCODING)), VelocityEngineInfo.DEFAULT_CHARSET);
+            defaultInputEncoding =ObjectUtils.defaultIfNull(StringUtils.trimToNull((String) ri.getProperty(RuntimeInstance.INPUT_ENCODING)), VelocityEngineConfiguration.DEFAULT_CHARSET);
         }
 
         return defaultInputEncoding;
@@ -270,7 +272,7 @@ public class DefaultVelocityEngine implements VelocityEngine
     /** 取得输出模板时的默认编码字符集。 */
     protected String getDefaultOutputEncoding() {
         if (defaultOutpuEncoding == null) {
-            defaultOutpuEncoding = ObjectUtils.defaultIfNull(StringUtils.trimToNull((String) ri.getProperty(RuntimeInstance.OUTPUT_ENCODING)), VelocityEngineInfo.DEFAULT_CHARSET);
+            defaultOutpuEncoding = ObjectUtils.defaultIfNull(StringUtils.trimToNull((String) ri.getProperty(RuntimeInstance.OUTPUT_ENCODING)), VelocityEngineConfiguration.DEFAULT_CHARSET);
         }
 
         return defaultOutpuEncoding;
@@ -341,5 +343,10 @@ public class DefaultVelocityEngine implements VelocityEngine
         public String toString() {
             return context.toString();
         }
+    }
+    
+    @Override
+    public void setProduction(boolean productionMode) {
+        info.setProductionMode(productionMode);
     }
 }

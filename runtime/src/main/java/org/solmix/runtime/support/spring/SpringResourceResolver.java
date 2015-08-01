@@ -62,7 +62,18 @@ public class SpringResourceResolver extends ResourceResolverAdaptor implements R
         } 
         return null;
     }
-
+    @Override
+    public InputStreamResource[] getAsStreams(String locationPattern) throws IOException{
+        Resource[] resources=  context.getResources(locationPattern);
+        if(resources!=null){
+            InputStreamResource[] ires = new InputStreamResource[resources.length];
+            for( int i=0;i<resources.length;i++){
+                ires[i]= new SpringInputStream(resources[i]); 
+            }
+            return ires;
+        }
+        return null;
+    }
     @Override
     public <T> T resolve(String resourceName, Class<T> resourceType) {
            

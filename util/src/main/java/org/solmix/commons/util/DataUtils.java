@@ -192,11 +192,14 @@ public final class DataUtils
             return (Boolean) value;
         if (value instanceof Number)
             return new Boolean(((Number) value).intValue() > 0);
-        String boolString = (String) value;
-        if ("".equals(boolString))
-            return null;
+        
+        String s = value.toString().toLowerCase().trim();
+        if (s.equals("true") || s.equals("yes"))
+            return new Boolean(true);
+        if (s.equals("false") || s.equals("no"))
+            return new Boolean(false);
         else
-            return new Boolean(!boolString.equalsIgnoreCase("false"));
+            return null;
     }
 
     public static Double asDouble(Object obj) {
@@ -543,14 +546,8 @@ public final class DataUtils
      * @return
      */
     public static boolean asBoolean(Object value) {
-        if (value instanceof Boolean)
-            return ((Boolean) value).booleanValue();
-        if (value instanceof Number) {
-            return ((Number) value).intValue() > 0;
-        } else {
-            String boolString = (String) value;
-            return boolString != null && !boolString.equals("") && !boolString.equalsIgnoreCase("false");
-        }
+        Boolean b=asBooleanObject(value);
+        return b==null?false:b.booleanValue();
     }
 
     /**

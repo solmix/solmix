@@ -18,19 +18,18 @@
  */
 package org.solmx.service.toolkit;
 
-import java.util.Map;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月29日
+ * @version $Id$  2015年7月30日
  */
 
-public interface ToolkitService
+public interface ToolSetFactory
 {
-
-    ToolkitContext getContext();
+    boolean isSingleton();
     
-    Map<String,Object> getTools();
+    Iterable<String> getToolNames();
+    
+    Object createTool(String name) throws Exception;
 }

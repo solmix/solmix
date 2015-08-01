@@ -18,19 +18,15 @@
  */
 package org.solmx.service.toolkit;
 
-import java.util.Map;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月29日
+ * @version $Id$  2015年7月30日
  */
 
-public interface ToolkitService
+public interface ToolNameAware
 {
 
-    ToolkitContext getContext();
-    
-    Map<String,Object> getTools();
+    void setToolName(String toolName);
 }

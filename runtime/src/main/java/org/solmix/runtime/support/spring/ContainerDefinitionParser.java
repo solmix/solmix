@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.solmix.commons.util.DataUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.Container;
 import org.springframework.beans.BeansException;
@@ -76,7 +77,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             bean.getRawBeanDefinition().setBeanClass(SpringContainer.class);
             bean.setDestroyMethodName("close");
             try {
-                element.setUserData("ID", cname, null);
+                element.setAttribute("ID", cname);
             } catch (Throwable t) {
                 //ignore
             }
@@ -105,11 +106,11 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         AbstractBeanDefinition definition, ParserContext ctx) {
         String container = null;
         try {
-            container = (String) element.getUserData("ID");
+            container = element.getAttribute("ID");
         } catch (Throwable t) {
             // ignore
         }
-        if (container == null) {
+        if (DataUtils.isNullOrEmpty(container)) {
             container = element.getAttribute("name");
 
             if (StringUtils.isEmpty(container)) {
@@ -119,8 +120,9 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
                 container = container + ".config";
             }
             try {
-                element.setUserData("ID", container, null);
+                element.setAttribute("ID", container);
             } catch (Throwable t) {
+                t.printStackTrace();
                 // maybe no DOM level 3, ignore, but, may have issues with the
                 // counter
             }

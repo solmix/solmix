@@ -749,4 +749,59 @@ public final class StringUtils
 
         return str.substring(start, end);
     }
+
+    /**
+     * @param name
+     * @param string
+     * @return
+     */
+    public static String trim(String str, String stripChars) {
+        return trim(str, stripChars, 0);
+    }
+    
+    private static String trim(String str, String stripChars, int mode) {
+        if (str == null) {
+            return null;
+        }
+
+        int length = str.length();
+        int start = 0;
+        int end = length;
+
+        // 扫描字符串头部
+        if (mode <= 0) {
+            if (stripChars == null) {
+                while (start < end && Character.isWhitespace(str.charAt(start))) {
+                    start++;
+                }
+            } else if (stripChars.length() == 0) {
+                return str;
+            } else {
+                while (start < end && stripChars.indexOf(str.charAt(start)) != -1) {
+                    start++;
+                }
+            }
+        }
+
+        // 扫描字符串尾部
+        if (mode >= 0) {
+            if (stripChars == null) {
+                while (start < end && Character.isWhitespace(str.charAt(end - 1))) {
+                    end--;
+                }
+            } else if (stripChars.length() == 0) {
+                return str;
+            } else {
+                while (start < end && stripChars.indexOf(str.charAt(end - 1)) != -1) {
+                    end--;
+                }
+            }
+        }
+
+        if (start > 0 || end < length) {
+            return str.substring(start, end);
+        }
+
+        return str;
+    }
 }

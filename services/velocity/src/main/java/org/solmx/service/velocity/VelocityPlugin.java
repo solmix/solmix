@@ -32,7 +32,7 @@ import org.solmix.runtime.resource.InputStreamResource;
 public interface VelocityPlugin
 {
 
-    void init(VelocityEngineInfo info);
+    void init(VelocityEngineConfiguration info);
     
     InputStreamResource[] getMacros() throws IOException;
 }

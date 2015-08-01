@@ -22,6 +22,7 @@ package org.solmix.runtime.support.spring;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.service.ContainerAwareService;
 import org.solmix.runtime.service.InjectTestService;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -81,8 +82,11 @@ public class ContainerApplicationContextTest {
         Container c = factory.createContainer(file, true);
        Object o= c.getExtension(ApplicationContext.class).getBean("solmix");
        Assert.assertSame(o, c);
+       Container[] containers= ContainerFactory.getContainers();
+       System.out.println(containers.length);
         Container c2= c.getExtension(ApplicationContext.class).getBean("solmix2",Container.class);
         Assert.assertEquals(c2.getProperty("runtime.production"),"false");
+      
     }
     @Test(expected=RuntimeException.class)
     public void testLoad4() {

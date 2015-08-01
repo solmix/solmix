@@ -4,10 +4,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:c="http://www.solmix.org/schema/rt"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt http://www.solmix.org/schema/rt/rt.xsd ">
-	<bean id="velocity" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
 	
+	<bean id="velocity" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
+		<property name="path" value="/macros"></property>
 	</bean>
 	<bean id="velocity2" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
-		<property name="path" value="/template"></property>
+		<property name="path" value="/templates"></property>
+		<property name="strictReference" value="false"></property>
 	</bean>
 </beans>

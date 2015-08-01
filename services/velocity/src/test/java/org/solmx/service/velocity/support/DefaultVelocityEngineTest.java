@@ -35,6 +35,7 @@ import org.solmix.runtime.support.spring.ContainerApplicationContext;
 import org.solmix.runtime.support.spring.SpringContainerFactory;
 import org.solmx.service.template.TemplateException;
 import org.solmx.service.template.TemplateService;
+import org.solmx.service.template.support.MappedTemplateContext;
 import org.solmx.service.velocity.VelocityEngine;
 
 import static org.junit.Assert.*;
@@ -74,14 +75,23 @@ public class DefaultVelocityEngineTest
         assertEquals(ep.getString(RuntimeConstants.PARSER_POOL_SIZE), "50");
         assertEquals(ep.getBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND), false);
         
-        assertEquals(ep.getString(RuntimeConstants.VM_LIBRARY), ObjectUtils.EMPTY_STRING);
+        assertEquals(ep.getString(RuntimeConstants.VM_LIBRARY), "VM_global_library.vm");
     }
     @Test
     public void testDefault2() throws TemplateException, IOException {
-        DefaultVelocityEngine ve = getEngine("velocity2");
-        String ct = ve.mergeTemplate("/templates/test.vm", new VelocityContext(), null);
-        assertEquals(ct, "haha");
+        DefaultVelocityEngine ve = getEngine("velocity");
+        String ct = ve.mergeTemplate("test_macros.vm", new VelocityContext(), null);
+        assertTrue(ct.contains("haha"));
     }
+    
+    
+    @Test
+    public void testTemplate() throws TemplateException, IOException {
+        DefaultVelocityEngine ve = getEngine("velocity2");
+        String ct = ve.evaluate("test_set_null.vm", new MappedTemplateContext());
+        assertEquals("$a", ct);
+    }
+    
     
     private DefaultVelocityEngine getEngine(String id){
         ConfiguredBeanProvider provider=  c.getExtension(ConfiguredBeanProvider.class);

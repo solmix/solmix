@@ -18,19 +18,30 @@
  */
 package org.solmx.service.toolkit;
 
-import java.util.Map;
-
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月29日
+ * @version $Id$  2015年7月28日
  */
 
-public interface ToolkitService
+public class ToolkitException extends RuntimeException
 {
+    private static final long serialVersionUID = -2277849213413292675L;
 
-    ToolkitContext getContext();
-    
-    Map<String,Object> getTools();
+    public ToolkitException() {
+        super();
+    }
+
+    public ToolkitException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ToolkitException(String message) {
+        super(message);
+    }
+
+    public ToolkitException(Throwable cause) {
+        super(cause);
+    }
 }
