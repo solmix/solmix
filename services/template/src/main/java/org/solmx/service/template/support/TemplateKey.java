@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.solmix.commons.util.ArrayUtils;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.StringUtils;
 
@@ -15,10 +15,10 @@ public final class TemplateKey {
     private final Object[] strategyKeys;
 
     public TemplateKey(String templateName, TemplateSearchingStrategy[] strategies) {
-        templateName = Assert.assertNotNull(StringUtils.trimToNull(Files.normalizeAbsolutePath(templateName,false)), "illegal templateName: %s",
+        templateName = Assert.assertNotNull(StringUtils.trimToNull(FileUtils.normalizeAbsolutePath(templateName,false)), "illegal templateName: %s",
                                      templateName);
 
-        org.solmix.commons.util.Files.FileNameAndExtension names = Files.getFileNameAndExtension(templateName, true);
+        org.solmix.commons.util.FileUtils.FileNameAndExtension names = FileUtils.getFileNameAndExtension(templateName, true);
 
         this.templateNameWithoutExtension = names.getFileName();
         this.extension = names.getExtension();

@@ -37,8 +37,8 @@ public class ServletUtils {
         
     }
     public static String getResourcePath(HttpServletRequest request) {
-        String pathInfo = Files.normalizeAbsolutePath(request.getPathInfo(), false);
-        String servletPath = Files.normalizeAbsolutePath(request.getServletPath(), pathInfo.length() != 0);
+        String pathInfo = FileUtils.normalizeAbsolutePath(request.getPathInfo(), false);
+        String servletPath = FileUtils.normalizeAbsolutePath(request.getServletPath(), pathInfo.length() != 0);
 
         return servletPath + pathInfo;
     }
@@ -57,7 +57,7 @@ public class ServletUtils {
         buf.setLength(fullURL.length() - fullPath.length());
 
         // 加上contextPath
-        buf.append(Files.normalizeAbsolutePath(request.getContextPath(), true));
+        buf.append(FileUtils.normalizeAbsolutePath(request.getContextPath(), true));
 
         return buf.toString();
     }

@@ -38,7 +38,7 @@ public class FilesTest extends Assert{
 		URL url = FilesTest.class.getResource("Bean1.class");
 		File f = new File(url.getFile());
 		if (f.exists()) {
-			String s = Files.getFileSize(f);
+			String s = FileUtils.getFileSize(f);
 			assertNotNull(s);
 		}
 	}

@@ -49,7 +49,7 @@ import org.apache.velocity.app.event.EventHandler;
 import org.slf4j.Logger;
 import org.solmix.commons.util.ArrayUtils;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
@@ -227,8 +227,8 @@ public class VelocityEngineConfiguration
     }
 
     private void resolveMacro(ResourceManager resourceManager, String macro) {
-        String path = Files.normalizeAbsolutePath(this.path + "/");
-        String pattern = Files.normalizeAbsolutePath(path + macro);
+        String path = FileUtils.normalizeAbsolutePath(this.path + "/");
+        String pattern = FileUtils.normalizeAbsolutePath(path + macro);
         InputStreamResource[] resources;
 
         try {
@@ -272,7 +272,7 @@ public class VelocityEngineConfiguration
         String templateNameBase;
 
         if (url != null) {
-            templateNameBase = "globalVMs/" + Files.getFilename(url.getPath());
+            templateNameBase = "globalVMs/" + FileUtils.getFilename(url.getPath());
         } else {
             templateNameBase = "globalVMs/globalVM.vm";
         }

@@ -33,7 +33,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.extension.ExtensionLoader;
 import org.solmx.service.template.TemplateContext;
@@ -94,7 +94,7 @@ public class DefaultTemplateService implements TemplateService
             TemplateEngine engine = loader.getExtension(extension);
             String[] exts = engine.getDefaultExtensions();
             for (String ext : exts) {
-                ext = Files.normalizeExtension(ext);
+                ext = FileUtils.normalizeExtension(ext);
                 Assert.assertNotNull(ext, "default extensions for engine: %s", engine);
                 engineMappings.put(ext, engine);
                 LOG.trace("Template Name \"*.{}\" mapped to Template Engine: {}", ext, extension);

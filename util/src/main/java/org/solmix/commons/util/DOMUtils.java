@@ -20,9 +20,11 @@
 package org.solmix.commons.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -718,4 +720,77 @@ public final class DOMUtils {
     public static void addNamespacePrefix(Element element, String namespaceUri, String prefix) {
         element.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:" + prefix, namespaceUri);
     }
+
+    /**
+     * @param is
+     * @return
+     * @throws Exception 
+     */
+    public static Object getValue(InputStream is) throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+        Document doc = builder.parse(is);
+        Element e = doc.getDocumentElement();
+        return getValue(e);
+    }
+    
+    public static Object getValue(Element e) {
+        if (e.getChildNodes() == null)
+            return null;
+        if (e.getChildNodes().getLength() == 1 && e.getFirstChild().getNodeType() != Node.ELEMENT_NODE) {
+            return e.getFirstChild().getNodeValue();
+        } else {
+            Object _return = null;
+            Node node = e.getFirstChild();
+            String tempName = null;
+            Object tempValue = null;
+            int i = 0;
+            boolean sure = false;
+            List<Object> re = null;
+            Map<String, Object> rem = null;
+            for (; node != null; node = node.getNextSibling()) {
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    if (i == 0) {
+                        tempName = node.getNodeName();
+                        tempValue = getValue((Element) node);
+                    } else {
+                        if (node.getNodeName().equals(tempName)) {
+
+                            if (!sure) {
+                                rem = new HashMap<String, Object>();
+                                re = new ArrayList<Object>();
+                                rem.put(tempName, re);
+                                re.add(tempValue);
+                                _return = rem;
+                            }
+
+                            re.add(getValue((Element) node));
+                            sure = true;
+                        } else {
+
+                            if (!sure) {
+                                rem = new HashMap<String, Object>();
+                                rem.put(tempName, tempValue);
+                                _return = rem;
+                            }
+
+                            rem.put(node.getNodeName(), getValue((Element) node));
+                            sure = true;
+                        }
+                    }
+                    i++;
+                }
+
+            }
+            if (i == 1) {
+                Map<String, Object> _r = new HashMap<String, Object>();
+                _r.put(tempName, tempValue);
+                return _r;
+            }
+            return _return;
+        }
+    }
+    
+    
 }

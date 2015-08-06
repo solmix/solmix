@@ -29,7 +29,7 @@ import java.net.URI;
 import java.net.URL;
 
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.springframework.core.io.FileSystemResource;
 
 
@@ -50,14 +50,14 @@ public class FileResource extends AbstractInputStreamResource
     {
         Assert.assertNotNull(file, "File must not be null");
         this.file = file;
-        this.path = Files.normalizeAbsolutePath(file.getPath(),true);
+        this.path = FileUtils.normalizeAbsolutePath(file.getPath(),true);
     }
 
     public FileResource(String path)
     {
         Assert.assertNotNull(path, "Path must not be null");
         this.file = new File(path);
-        this.path = Files.normalizeAbsolutePath(path,true);
+        this.path = FileUtils.normalizeAbsolutePath(path,true);
     }
 
     /**
@@ -135,7 +135,7 @@ public class FileResource extends AbstractInputStreamResource
      */
     @Override
     public FileResource createRelative(String relativePath) {
-        String pathToUse = Files.applyRelativePath(this.path, relativePath);
+        String pathToUse = FileUtils.applyRelativePath(this.path, relativePath);
         return new FileResource(pathToUse);
     }
 

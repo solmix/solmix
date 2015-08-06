@@ -30,7 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 
 
 
@@ -85,7 +85,7 @@ public class URLResource extends AbstractFileStreamResource
   }
     private URL getCleanedUrl(URL originalUrl, String originalPath) {
         try {
-            return new URL(Files.normalizeAbsolutePath(originalPath,true));
+            return new URL(FileUtils.normalizeAbsolutePath(originalPath,true));
         } catch (MalformedURLException ex) {
             // Cleaned URL path cannot be converted to URL
             // -> take original URL.

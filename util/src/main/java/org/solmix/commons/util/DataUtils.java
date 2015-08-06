@@ -494,18 +494,6 @@ public final class DataUtils
             return defaultValue;
     }
 
-    /**
-     * Return the boolean value. if value is null return false.
-     * 
-     * @param value
-     * @return
-     */
-    public static boolean booleanValue(Boolean value) {
-        if (value == null)
-            return false;
-        else
-            return value.booleanValue();
-    }
 
     public static Long getLong(Map map, Object key) {
         Object value = map.get(key);
@@ -1714,15 +1702,6 @@ public final class DataUtils
     }
 
     /**
-     * @param condition
-     * @return
-     */
-    public static String getNoSupportString(Object condition) {
-
-        return new StringBuilder().append("Data Type : [").append(condition.getClass().getName()).append("] is not supported").toString();
-    }
-
-    /**
      * @param submittedPrimaryKeys
      * @return
      */
@@ -1903,21 +1882,7 @@ public final class DataUtils
     public static <T> boolean isNotEqual(T actual, T expect) {
         return actual == null ? (expect == null ? false : true) : !actual.equals(expect);
     }
-    /**
-     * If not equal return true.else return false. used {@link #isNotEqual(Object, Object)}
-     * 
-     * @param <T>
-     * @param actual
-     * @param expect
-     * @return
-     */
-    public static boolean booleanValue(String booleanValue) {
-        if ("true".equalsIgnoreCase(booleanValue))
-            return true;
-        else
-            return false;
-    }
-
+    
     public static byte[] reversal(byte[] value) {
         if (value == null)
             return null;

@@ -7,7 +7,7 @@ import java.net.URL;
 
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +19,7 @@ public class ClassLoaderResource extends AbstractFileStreamResource {
 
 	public ClassLoaderResource(String path, ClassLoader classLoader) {
 		Assert.assertNotNull(path, "Path must not be null");
-		String pathToUse =Files.normalizeAbsolutePath(path, true);
+		String pathToUse =FileUtils.normalizeAbsolutePath(path, true);
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}
@@ -28,7 +28,7 @@ public class ClassLoaderResource extends AbstractFileStreamResource {
 	}
 	protected ClassLoaderResource(String path, ClassLoader classLoader,
 			Class<?> clazz) {
-		this.path = Files.normalizeAbsolutePath(path, true);
+		this.path = FileUtils.normalizeAbsolutePath(path, true);
 		this.classLoader = classLoader;
 		this.clazz = clazz;
 	}
@@ -106,7 +106,7 @@ public class ClassLoaderResource extends AbstractFileStreamResource {
 	}
 
 	public String getFilename() {
-		return Files.getFilename(this.path);
+		return FileUtils.getFilename(this.path);
 	}
 
 	@Override

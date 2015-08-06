@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.AntMatcher;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
 
@@ -44,8 +44,8 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
-		else if (location.startsWith(Files.CLASSPATH_URL_PREFIX)) {
-			return new ClassLoaderResource(location.substring(Files.CLASSPATH_URL_PREFIX.length()), getClassLoader());
+		else if (location.startsWith(FileUtils.CLASSPATH_URL_PREFIX)) {
+			return new ClassLoaderResource(location.substring(FileUtils.CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
@@ -245,10 +245,10 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
               // being arbitrary as long as following the entry format.
               // We'll also handle paths with and without leading "file:" prefix.
               String urlFile = rootDirResource.getURL().getFile();
-              int separatorIndex = urlFile.indexOf(Files.JAR_URL_SEPARATOR);
+              int separatorIndex = urlFile.indexOf(FileUtils.JAR_URL_SEPARATOR);
               if (separatorIndex != -1) {
                     jarFileUrl = urlFile.substring(0, separatorIndex);
-                    rootEntryPath = urlFile.substring(separatorIndex + Files.JAR_URL_SEPARATOR.length());
+                    rootEntryPath = urlFile.substring(separatorIndex + FileUtils.JAR_URL_SEPARATOR.length());
                     jarFile = getJarFile(jarFileUrl);
               }
               else {
@@ -291,13 +291,13 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
     }
     
     protected JarFile getJarFile(String jarFileUrl) throws IOException {
-        if (jarFileUrl.startsWith(Files.FILE_URL_PREFIX)) {
+        if (jarFileUrl.startsWith(FileUtils.FILE_URL_PREFIX)) {
               try {
-                    return new JarFile(Files.toURI(jarFileUrl).getSchemeSpecificPart());
+                    return new JarFile(FileUtils.toURI(jarFileUrl).getSchemeSpecificPart());
               }
               catch (URISyntaxException ex) {
                     // Fallback for URLs that are not valid URIs (should hardly ever happen).
-                    return new JarFile(jarFileUrl.substring(Files.FILE_URL_PREFIX.length()));
+                    return new JarFile(jarFileUrl.substring(FileUtils.FILE_URL_PREFIX.length()));
               }
         }
         else {
@@ -307,7 +307,7 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
     
     protected boolean isJarResource(InputStreamResource resource) throws IOException {
         
-        return Files.isJarURL(resource.getURL());
+        return FileUtils.isJarURL(resource.getURL());
   }
     protected String determineRootDir(String location) {
         int prefixEnd = location.indexOf(":") + 1;

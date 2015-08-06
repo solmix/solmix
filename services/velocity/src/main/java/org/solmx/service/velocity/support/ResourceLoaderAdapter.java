@@ -20,7 +20,7 @@ package org.solmx.service.velocity.support;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceManager;
@@ -58,7 +58,7 @@ public class ResourceLoaderAdapter extends AbstractResourceLoader
         rsvc.getLog().info(getLogID() + " : initialization starting.");
         resourceManager=Assert.assertNotNull((ResourceManager)rsvc.getApplicationAttribute(ResourceManager.class.getName()));
         
-        path = Files.normalizeAbsolutePath(configuration.getString("path"), true);
+        path = FileUtils.normalizeAbsolutePath(configuration.getString("path"), true);
         path += "/";
         Assert.assertTrue(!StringUtils.isEmpty(path), "path");
 

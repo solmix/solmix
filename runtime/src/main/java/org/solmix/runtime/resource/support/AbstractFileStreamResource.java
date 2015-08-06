@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.Files;
+import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.StringUtils;
 
 public  abstract class AbstractFileStreamResource extends AbstractInputStreamResource {
@@ -31,15 +31,15 @@ public  abstract class AbstractFileStreamResource extends AbstractInputStreamRes
 	
 	protected File getFile(URI uri) throws IOException {
          
-          return Files.getFile(uri, getDescription());
+          return FileUtils.getFile(uri, getDescription());
 	}
 	
 	protected File getFileForLastModifiedCheck() throws IOException {
 		URL url = getURL();
-		if (Files.isJarURL(url)) {
-			URL actualUrl = Files.extractJarFileURL(url);
+		if (FileUtils.isJarURL(url)) {
+			URL actualUrl = FileUtils.extractJarFileURL(url);
 			
-			return Files.getFile(actualUrl, "Jar URL");
+			return FileUtils.getFile(actualUrl, "Jar URL");
 		}
 		else {
 			return getFile();
@@ -50,7 +50,7 @@ public  abstract class AbstractFileStreamResource extends AbstractInputStreamRes
 	@Override
 	public long lastModified() throws IOException {
 		URL url = getURL();
-		if (Files.isFileURL(url) || Files.isJarURL(url)) {
+		if (FileUtils.isFileURL(url) || FileUtils.isJarURL(url)) {
 			// Proceed with file system resolution...
 			return super.lastModified();
 		}
@@ -65,7 +65,7 @@ public  abstract class AbstractFileStreamResource extends AbstractInputStreamRes
 	public boolean isReadable() {
 		try {
 			URL url = getURL();
-			if (Files.isFileURL(url)) {
+			if (FileUtils.isFileURL(url)) {
 				// Proceed with file system resolution...
 				File file = getFile();
 				return (file.canRead() && !file.isDirectory());

@@ -58,7 +58,7 @@ import org.apache.commons.io.IOUtils;
  * @version $Id$  2014年11月14日
  */
 
-public class Files {
+public class FileUtils {
 	/** URL prefix for loading from the file system: "file:" */
 	public static final String FILE_URL_PREFIX = "file:";
 
@@ -902,7 +902,7 @@ class ExtensionFileFilter  implements FileFilter {
     }
      
     public File[] getFiles(String srcDir) throws IOException {
-        return (File[]) Files.listFiles(srcDir).toArray();
+        return (File[]) FileUtils.listFiles(srcDir).toArray();
     }
      
     @Override

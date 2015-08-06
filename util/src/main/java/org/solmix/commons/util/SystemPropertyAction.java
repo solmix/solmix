@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.util;
 
 import java.security.AccessController;
@@ -24,27 +25,33 @@ import java.security.PrivilegedAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月4日
+ * @version $Id$ 2014年11月4日
  */
 
 public final class SystemPropertyAction implements PrivilegedAction<String>
 {
-    private static final Logger LOG= LoggerFactory.getLogger(SystemPropertyAction.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(SystemPropertyAction.class);
+
     private final String property;
+
     private final String def;
-    private SystemPropertyAction(String name) {
+
+    private SystemPropertyAction(String name)
+    {
         property = name;
         def = null;
     }
-    private SystemPropertyAction(String name, String d) {
+
+    private SystemPropertyAction(String name, String d)
+    {
         property = name;
         def = d;
     }
-    
+
     @Override
     public String run() {
         if (def != null) {
@@ -52,11 +59,11 @@ public final class SystemPropertyAction implements PrivilegedAction<String>
         }
         return System.getProperty(property);
     }
-    
+
     public static String getProperty(String name) {
         return AccessController.doPrivileged(new SystemPropertyAction(name));
     }
-    
+
     public static String getProperty(String name, String def) {
         try {
             return AccessController.doPrivileged(new SystemPropertyAction(name, def));
@@ -65,6 +72,7 @@ public final class SystemPropertyAction implements PrivilegedAction<String>
             return def;
         }
     }
+
     public static String getPropertyOrNull(String name) {
         try {
             return AccessController.doPrivileged(new SystemPropertyAction(name));
