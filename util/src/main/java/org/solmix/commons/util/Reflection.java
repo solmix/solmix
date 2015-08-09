@@ -213,6 +213,12 @@ public class Reflection
         }
     }
     
+    public static Object invokeMethod(Object target, Method method, Object... params) throws Exception {
+        setAccessible(method);
+        return method.invoke(target, params);
+
+    }
+    
     private static ClassEntry getClassCache(String className) throws Exception {
         ClassEntry classCache = reflectionCache.get(className);
         if (classCache == null)
@@ -293,6 +299,7 @@ public class Reflection
             }
         });
     }
+    
     public static <T extends AccessibleObject> T setAccessible(final T o, final boolean b) {
         return AccessController.doPrivileged(new PrivilegedAction<T>() {
             @Override
@@ -302,6 +309,45 @@ public class Reflection
             }
         });
     }
+    public static boolean isPublicStaticFinal(Field field) {
+        int modifiers = field.getModifiers();
+        return (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers));
+  }
+
+  /**
+   * Determine whether the given method is an "equals" method.
+   * @see java.lang.Object#equals(Object)
+   */
+  public static boolean isEqualsMethod(Method method) {
+        if (method == null || !method.getName().equals("equals")) {
+              return false;
+        }
+        Class<?>[] paramTypes = method.getParameterTypes();
+        return (paramTypes.length == 1 && paramTypes[0] == Object.class);
+  }
+
+  public static boolean isHashCodeMethod(Method method) {
+        return (method != null && method.getName().equals("hashCode") && method.getParameterTypes().length == 0);
+  }
+
+  
+  public static boolean isToStringMethod(Method method) {
+        return (method != null && method.getName().equals("toString") && method.getParameterTypes().length == 0);
+  }
+
+ 
+  public static boolean isObjectMethod(Method method) {
+        if (method == null) {
+              return false;
+        }
+        try {
+              Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+              return true;
+        }
+        catch (Exception ex) {
+              return false;
+        }
+  }
 }
 
 class MethodEntry

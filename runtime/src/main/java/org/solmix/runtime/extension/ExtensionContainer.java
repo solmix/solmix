@@ -174,6 +174,7 @@ public class ExtensionContainer implements Container {
         extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);
         extensions.put(ExtensionManager.class, extensionManager);
+        extensions.put(AssembleBeanSupport.class, new AssembleBeanSupport(this));
     }
 
     /**

@@ -292,13 +292,13 @@ public class ExtensionInfo {
                 }
             } catch (InvocationTargetException ex) {
                 throw new ExtensionException(
-                    "PROBLEM_CREATING_EXTENSION_CLASS", ex.getCause());
+                    "Problem Creating Extension Class", ex.getCause());
             } catch (InstantiationException ex) {
                 throw new ExtensionException(
-                    "PROBLEM_CREATING_EXTENSION_CLASS", ex);
+                    "Problem Creating Extension Class", ex);
             } catch (SecurityException ex) {
                 throw new ExtensionException(
-                    "PROBLEM_CREATING_EXTENSION_CLASS", ex);
+                    "Problem Creating Extension Class", ex);
             } catch (NoSuchMethodException e) {
                 // ignore
             }

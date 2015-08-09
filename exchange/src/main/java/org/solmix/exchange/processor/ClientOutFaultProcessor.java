@@ -39,7 +39,7 @@ import org.solmix.runtime.Container;
 
 public class ClientOutFaultProcessor extends AbstractFaultChainInitProcessor {
 
-    /** @param c */
+    /** @param container */
     public ClientOutFaultProcessor(Container c, PhasePolicy phasePolicy) {
         super(c, phasePolicy);
     }
