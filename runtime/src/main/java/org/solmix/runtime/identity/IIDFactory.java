@@ -81,7 +81,7 @@ public interface IIDFactory {
 
     /**
      * Make a GUID using SHA-1 hash algorithm and a default of 16bits of data
-     * length. The value is Base64 encoded to allow for easy display.
+     * length. The value is Base64Utils encoded to allow for easy display.
      * 
      * @return new ID instance
      * @throws IDCreateException if ID cannot be constructed
@@ -90,7 +90,7 @@ public interface IIDFactory {
 
     /**
      * Make a GUID using SHA-1 hash algorithm and a default of 16bits of data
-     * length. The value is Base64 encoded to allow for easy display.
+     * length. The value is Base64Utils encoded to allow for easy display.
      * 
      * @param length the byte-length of data used to create a GUID
      * @return new ID instance

@@ -29,5 +29,5 @@ package org.solmix.exchange;
 
 public interface Processor {
 
-    void process(Message message) throws ExchangeException;
+    void process(Message message) throws ExchangeRuntimeException;
 }

@@ -21,7 +21,7 @@ package org.solmix.runtime.identity.support;
 
 import java.security.SecureRandom;
 
-import org.solmix.commons.util.Base64;
+import org.solmix.commons.util.Base64Utils;
 import org.solmix.runtime.identity.AbstractNamespace;
 import org.solmix.runtime.identity.IDCreateException;
 
@@ -69,7 +69,7 @@ public class GUID extends StringID {
         // Fill up random bytes
         random.nextBytes(newBytes);
         // Set value
-        value = Base64.encode(newBytes);
+        value = Base64Utils.encode(newBytes);
     }
 
     protected GUID(AbstractNamespace n, String value) {

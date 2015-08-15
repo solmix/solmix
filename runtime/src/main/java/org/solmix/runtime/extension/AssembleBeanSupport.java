@@ -66,9 +66,19 @@ public class AssembleBeanSupport
      * @return 返回组装完成后的对象
      */
     public <T> T assemble(T obj){
+       
+        return assemble(null,obj);
+    }
+    
+    public <T> T assemble(String name,T obj){
         BeanConfigurer configurer =container.getExtension(BeanConfigurer.class);
         if (null != configurer) {
-            configurer.configureBean(obj);
+            if(name!=null){
+                configurer.configureBean(name,obj);
+            }else{
+                configurer.configureBean(obj);
+            }
+           
         }
         ResourceManager resourceManager= container.getExtension(ResourceManager.class);
         if(resourceManager!=null){
@@ -78,7 +88,6 @@ public class AssembleBeanSupport
             injector.construct(obj);
         }
         return obj;
-        
     }
     
     private <T> T instance(Class<T> assemblyType, Object... args) {

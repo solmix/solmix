@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.solmix.exchange.ProtocolFactory;
 import org.solmix.exchange.ProtocolFactoryManager;
+import org.solmix.exchange.ProtocolNoFoundException;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.bean.ConfiguredBeanProvider.BeanLoaderListener;
@@ -74,7 +75,7 @@ public class DefaultProtocolFactoryManager implements ProtocolFactoryManager {
             }
             if (pf == null) {
                 failed.add(name);
-                throw new IllegalArgumentException(
+                throw new ProtocolNoFoundException(
                     "No found protocol factory named :" + name);
             }
         }

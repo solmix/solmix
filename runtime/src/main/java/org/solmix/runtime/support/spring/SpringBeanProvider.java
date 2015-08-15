@@ -158,7 +158,11 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
     private <T> T dogetBeanOfType0(ApplicationContext context, String name, Class<T> type) {
         T t = null;
         if (context != null) {
-            t = type.cast(context.getBean(name, type));
+            try {
+                t = type.cast(context.getBean( type));
+            } catch (NoSuchBeanDefinitionException nsbde ) {
+             // ignore
+            }
             if (t == null && context.getParent() != null)
                 t = dogetBeanOfType0(context.getParent(), name, type);
         }
@@ -167,7 +171,11 @@ public class SpringBeanProvider implements ConfiguredBeanProvider {
     private <T> T dogetBeanOfType0(ApplicationContext context, Class<T> type) {
         T t = null;
         if (context != null) {
-            t = type.cast(context.getBean( type));
+            try {
+                t = type.cast(context.getBean( type));
+            } catch (NoSuchBeanDefinitionException nsbde ) {
+             // ignore
+            }
             if (t == null && context.getParent() != null)
                 t = dogetBeanOfType0(context.getParent(), type);
         }

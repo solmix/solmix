@@ -39,7 +39,7 @@ import org.solmix.exchange.ClientCallback;
 import org.solmix.exchange.ClientLifeCycleManager;
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.Exchange;
-import org.solmix.exchange.ExchangeException;
+import org.solmix.exchange.ExchangeRuntimeException;
 import org.solmix.exchange.Message;
 import org.solmix.exchange.MessageList;
 import org.solmix.exchange.MessageUtils;
@@ -136,7 +136,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
 
     @SuppressWarnings("unchecked")
     @Override
-    public void process(Message message) throws ExchangeException {
+    public void process(Message message) throws ExchangeRuntimeException {
         Endpoint endpoint = message.getExchange().getEndpoint();
         if (endpoint == null) {
             endpoint = getPipelineSelector().getEndpoint();
@@ -468,7 +468,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             ex.put(Processor.class, new Processor() {
 
                 @Override
-                public void process(final Message message) throws ExchangeException {
+                public void process(final Message message) throws ExchangeRuntimeException {
                     if (!message.getExchange().containsKey(EXECUTOR_USED)) {
                         executor.execute(new Runnable() {
                             
@@ -742,7 +742,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
 
                     @Override
                     public void process(Message message)
-                        throws ExchangeException {
+                        throws ExchangeRuntimeException {
                         Exception ex = message.getContent(Exception.class);
                         if (ex != null) {
                             completeExchange(message.getExchange());

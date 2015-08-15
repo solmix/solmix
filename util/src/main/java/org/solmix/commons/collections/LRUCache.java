@@ -1,26 +1,30 @@
-package org.solmix.commons.util;
+
+package org.solmix.commons.collections;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+public class LRUCache<K, V> extends LinkedHashMap<K, V>
+{
 
-	private static final long serialVersionUID = -5167631809472116969L;
+    private static final long serialVersionUID = -5167631809472116969L;
 
-	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-	private static final int DEFAULT_MAX_CAPACITY = 1000;
+    private static final int DEFAULT_MAX_CAPACITY = 1000;
 
-	private volatile int maxCapacity;
+    private volatile int maxCapacity;
 
-	private final Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
-    public LRUCache() {
-    	this(DEFAULT_MAX_CAPACITY);
+    public LRUCache()
+    {
+        this(DEFAULT_MAX_CAPACITY);
     }
 
-    public LRUCache(int maxCapacity) {
+    public LRUCache(int maxCapacity)
+    {
         super(16, DEFAULT_LOAD_FACTOR, true);
         this.maxCapacity = maxCapacity;
     }
@@ -90,12 +94,12 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
         }
     }
 
-	public int getMaxCapacity() {
-		return maxCapacity;
-	}
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
 
-	public void setMaxCapacity(int maxCapacity) {
-		this.maxCapacity = maxCapacity;
-	}
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
 
 }

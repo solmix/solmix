@@ -27,7 +27,7 @@ import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.ClassLoaderUtils.ClassLoaderHolder;
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.Exchange;
-import org.solmix.exchange.ExchangeException;
+import org.solmix.exchange.ExchangeRuntimeException;
 import org.solmix.exchange.Message;
 import org.solmix.exchange.Processor;
 import org.solmix.exchange.interceptor.Fault;
@@ -65,7 +65,7 @@ public abstract class AbstractFaultChainInitProcessor implements Processor {
     }
 
     @Override
-    public void process(Message message) throws ExchangeException {
+    public void process(Message message) throws ExchangeRuntimeException {
         assert message != null;
         Container orig = ContainerFactory.getAndSetThreadDefaultContainer(container);
         ClassLoaderHolder origLoader = null;

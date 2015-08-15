@@ -24,7 +24,6 @@ import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.EndpointException;
 import org.solmix.exchange.PipelineSelector;
 import org.solmix.exchange.ProtocolFactory;
-import org.solmix.exchange.Transporter;
 import org.solmix.exchange.TransporterFactory;
 import org.solmix.exchange.interceptor.support.InterceptorProviderSupport;
 import org.solmix.exchange.model.NamedID;
@@ -47,7 +46,7 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     
     protected ProtocolFactory protocolFactory;
     
-    protected Transporter transporter;
+    protected String transporter;
     
     protected String protocol;
     

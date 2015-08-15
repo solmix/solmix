@@ -25,9 +25,26 @@ package org.solmix.exchange;
  * @version $Id$ 2014年10月13日
  */
 
-public class ExchangeException extends RuntimeException {
+public class ExchangeRuntimeException extends RuntimeException {
+    private static final long serialVersionUID = -3477644407588833097L;
 
-    /**    */
-    private static final long serialVersionUID = 8104358938947200305L;
+    public ExchangeRuntimeException()
+    {
 
+    }
+
+    public ExchangeRuntimeException(String string, Throwable e)
+    {
+        super(string, e);
+    }
+
+    public ExchangeRuntimeException(String string)
+    {
+        super(string);
+    }
+
+    public ExchangeRuntimeException(Throwable e)
+    {
+        super(e);
+    }
 }

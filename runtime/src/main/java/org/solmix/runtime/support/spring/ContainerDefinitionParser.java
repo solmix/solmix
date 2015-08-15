@@ -151,6 +151,8 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         String name;
 
         String id;
+        
+        Boolean production;
 
         Map<String, Object> properties;
 
@@ -177,6 +179,9 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             if (!StringUtils.isEmpty(id)) {
                 container.setId(id);
             }
+            if(production!=null){
+                container.setProduction(production.booleanValue());
+            }
             /*
              * if (features != null) { container.setFeatures(features); features
              * = null; }
@@ -200,6 +205,10 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
 
         public void setId(String s) {
             id = s;
+        }
+        
+        public void setProduction(Boolean production){
+            this.production=production;
         }
     }
 }

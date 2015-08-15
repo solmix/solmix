@@ -5,7 +5,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.solmix.commons.util.Base64;
+import org.solmix.commons.util.Base64Exception;
+import org.solmix.commons.util.Base64Utils;
 
 /**
  * An implementation of a FilterInputStream that decodes the
@@ -61,7 +62,14 @@ public class Base64DecoderStream extends FilterInputStream {
         int readCharacters = fillEncodedBuffer();
 
         if (readCharacters > 0) {
-            decodedChars = Base64.decodeChunk(encodedChars, 0, readCharacters);
+            try {
+                decodedChars = Base64Utils.decodeChunk(encodedChars, 0, readCharacters);
+            } catch (Base64Exception e) {
+                if(e.getCause() instanceof IOException){
+                    throw new IOException(e.getCause());
+                }
+               throw new IOException(e);
+            }
             decodedCount = decodedChars.length; 
             return true;
         }
@@ -110,7 +118,7 @@ public class Base64DecoderStream extends FilterInputStream {
      * Fill our buffer of input characters for decoding from the
      * stream.  This will attempt read a full buffer, but will
      * terminate on an EOF or read error.  This will filter out
-     * non-Base64 encoding chars and will only return a valid
+     * non-Base64Utils encoding chars and will only return a valid
      * multiple of 4 number of bytes.
      *
      * @return The count of characters read.
@@ -126,12 +134,12 @@ public class Base64DecoderStream extends FilterInputStream {
                 // now check to see if this is normal, or potentially an error
                 // if we didn't get characters as a multiple of 4, we may need to complain about this.
                 if ((readCharacters % 4) != 0) {
-                    throw new IOException("Base64 encoding error, data truncated");
+                    throw new IOException("Base64Utils encoding error, data truncated");
                 }
                 // return the count.
                 return readCharacters;
-            } else if (Base64.isValidBase64(ch)) {
-                // if this character is valid in a Base64 stream, copy it to the buffer.
+            } else if (Base64Utils.isValidBase64(ch)) {
+                // if this character is valid in a Base64Utils stream, copy it to the buffer.
                 encodedChars[readCharacters++] = (char)ch;
                 // if we've filled up the buffer, time to quit.
                 if (readCharacters >= encodedChars.length) {
@@ -147,21 +155,25 @@ public class Base64DecoderStream extends FilterInputStream {
     // in order to function as a filter, these streams need to override the different
     // read() signature.
 
+    @Override
     public int read() throws IOException {
         return getByte();
     }
 
 
+    @Override
     public int read(byte [] buffer, int offset, int length) throws IOException {
         return getBytes(buffer, offset, length);
     }
 
 
+    @Override
     public boolean markSupported() {
         return false;
     }
 
 
+    @Override
     public int available() throws IOException {
         return ((in.available() / 4) * 3) + decodedCount;
     }

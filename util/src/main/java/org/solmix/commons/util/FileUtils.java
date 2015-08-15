@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.util;
 
 import java.io.BufferedInputStream;
@@ -54,41 +55,45 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * 配合cmmons FileUtils使用
+ * 
  * @author solmix.f@gmail.com
- * @version $Id$  2014年11月14日
+ * @version $Id$ 2014年11月14日
  */
 
-public class FileUtils {
-	/** URL prefix for loading from the file system: "file:" */
-	public static final String FILE_URL_PREFIX = "file:";
+public class FileUtils
+{
 
-	/** URL protocol for a file in the file system: "file" */
-	public static final String URL_PROTOCOL_FILE = "file";
+    /** URL prefix for loading from the file system: "file:" */
+    public static final String FILE_URL_PREFIX = "file:";
 
-	/** URL protocol for an entry from a jar file: "jar" */
-	public static final String URL_PROTOCOL_JAR = "jar";
+    /** URL protocol for a file in the file system: "file" */
+    public static final String URL_PROTOCOL_FILE = "file";
 
-	/** URL protocol for an entry from a zip file: "zip" */
-	public static final String URL_PROTOCOL_ZIP = "zip";
+    /** URL protocol for an entry from a jar file: "jar" */
+    public static final String URL_PROTOCOL_JAR = "jar";
 
-	/** URL protocol for an entry from a JBoss jar file: "vfszip" */
-	public static final String URL_PROTOCOL_VFSZIP = "vfszip";
+    /** URL protocol for an entry from a zip file: "zip" */
+    public static final String URL_PROTOCOL_ZIP = "zip";
 
-	/** URL protocol for a JBoss file system resource: "vfsfile" */
-	public static final String URL_PROTOCOL_VFSFILE = "vfsfile";
+    /** URL protocol for an entry from a JBoss jar file: "vfszip" */
+    public static final String URL_PROTOCOL_VFSZIP = "vfszip";
 
-	/** URL protocol for a general JBoss VFS resource: "vfs" */
-	public static final String URL_PROTOCOL_VFS = "vfs";
+    /** URL protocol for a JBoss file system resource: "vfsfile" */
+    public static final String URL_PROTOCOL_VFSFILE = "vfsfile";
 
-	/** Separator between JAR URL and file path within the JAR */
-	public static final String JAR_URL_SEPARATOR = "!/";
-	
-	private static final String FOLDER_SEPARATOR = "/";
+    /** URL protocol for a general JBoss VFS resource: "vfs" */
+    public static final String URL_PROTOCOL_VFS = "vfs";
 
-	private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
+    /** Separator between JAR URL and file path within the JAR */
+    public static final String JAR_URL_SEPARATOR = "!/";
 
-	public static final String CLASSPATH_URL_PREFIX ="classpath:";
-	/**
+    private static final String FOLDER_SEPARATOR = "/";
+
+    private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
+
+    public static final String CLASSPATH_URL_PREFIX = "classpath:";
+
+    /**
      * 获取文件MD5值
      *
      * @param file
@@ -99,8 +104,7 @@ public class FileUtils {
         FileInputStream in = null;
         try {
             in = new FileInputStream(file);
-            MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0,
-                    file.length());
+            MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             md5.update(byteBuffer);
             BigInteger bi = new BigInteger(1, md5.digest());
@@ -118,23 +122,22 @@ public class FileUtils {
         }
         return value;
     }
-     
+
     /**
      * 获取文件大小
      *
      * @param file
      * @return
      */
-    public static long getFileLength(File file)
-            throws IOException {
+    public static long getFileLength(File file) throws IOException {
         FileInputStream fis = null;
         fis = new FileInputStream(file);
-        
-        long size= fis.available();
+
+        long size = fis.available();
         IOUtils.closeQuietly(fis);
         return size;
     }
-     
+
     /**
      * 读取文件到二进制
      *
@@ -142,35 +145,33 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static byte[] getBytesFromFile(File file)
-            throws IOException {
+    public static byte[] getBytesFromFile(File file) throws IOException {
         InputStream is = new FileInputStream(file);
-         
+
         long length = file.length();
-         
+
         if (length > Integer.MAX_VALUE) {
             // File is too large
         }
-         
+
         byte[] bytes = new byte[(int) length];
-         
+
         // Read in the bytes
         int offset = 0;
         int numRead = 0;
-        while (offset < bytes.length
-                && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+        while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
             offset += numRead;
         }
-         
+
         // Ensure all the bytes have been read in
         if (offset < bytes.length) {
             throw new IOException("不能读取文件: " + file.getName());
         }
-         
+
         is.close();
         return bytes;
     }
-     
+
     /**
      * 获取标准文件大小，如30KB，15.5MB
      *
@@ -178,8 +179,7 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static String getFileSize(File file)
-            throws IOException {
+    public static String getFileSize(File file) throws IOException {
         long size = getFileLength(file);
         DecimalFormat df = new DecimalFormat("###.##");
         float f;
@@ -190,20 +190,17 @@ public class FileUtils {
             f = (float) size / (float) (1024 * 1024);
             return (df.format(new Float(f).doubleValue()) + " MB");
         }
-         
+
     }
-     
+
     /**
      * 复制文件
      *
-     * @param f1
-     *            源文件
-     * @param f2
-     *            目标文件
+     * @param f1 源文件
+     * @param f2 目标文件
      * @throws Exception
      */
-    public static void copyFile(File f1, File f2)
-            throws Exception {
+    public static void copyFile(File f1, File f2) throws Exception {
         int length = 2097152;
         FileInputStream in = new FileInputStream(f1);
         FileOutputStream out = new FileOutputStream(f2);
@@ -226,7 +223,7 @@ public class FileUtils {
             outC.force(false);
         }
     }
-     
+
     /**
      * 检查文件是否存在
      *
@@ -234,29 +231,27 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static boolean existFile(String fileName)
-            throws IOException {
+    public static boolean existFile(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
             throw new IOException("文件未找到:" + fileName);
         }
         return file.exists();
     }
-     
+
     /**
      * 删除文件
      *
      * @param fileName
      */
-    public static void deleteFile(String fileName)
-            throws IOException {
+    public static void deleteFile(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
             throw new IOException("文件未找到:" + fileName);
         }
         file.delete();
     }
-     
+
     /**
      * 读取文件到字符串
      *
@@ -264,13 +259,12 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static String readFile(String fileName)
-            throws IOException {
+    public static String readFile(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
             throw new IOException("文件未找到:" + fileName);
         }
-         
+
         BufferedReader in = new BufferedReader(new FileReader(file));
         StringBuffer sb = new StringBuffer();
         String str = "";
@@ -280,7 +274,7 @@ public class FileUtils {
         in.close();
         return sb.toString();
     }
-     
+
     /**
      * 获取目录所有所有文件和文件夹
      *
@@ -288,15 +282,14 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static List<File> listFiles(String fileName)
-            throws IOException {
+    public static List<File> listFiles(String fileName) throws IOException {
         File file = new File(fileName);
         if (!file.exists()) {
             throw new IOException("文件未找到:" + fileName);
         }
         return Arrays.asList(file.listFiles());
     }
-     
+
     /**
      * 创建目录
      *
@@ -309,17 +302,14 @@ public class FileUtils {
             dirPath.mkdir();
         }
     }
-     
+
     /**
      * 新建文件
      *
-     * @param fileName
-     *            String 包含路径的文件名 如:E:\phsftp\src\123.txt
-     * @param content
-     *            String 文件内容
+     * @param fileName String 包含路径的文件名 如:E:\phsftp\src\123.txt
+     * @param content String 文件内容
      */
-    public static void createNewFile(String fileName, String content)
-            throws IOException {
+    public static void createNewFile(String fileName, String content) throws IOException {
         String fileNameTemp = fileName;
         File filePath = new File(fileNameTemp);
         if (!filePath.exists()) {
@@ -332,14 +322,13 @@ public class FileUtils {
         pw.flush();
         pw.close();
         fw.close();
-         
+
     }
-     
+
     /**
      * 删除文件夹
      *
-     * @param folderPath
-     *            文件夹路径
+     * @param folderPath 文件夹路径
      */
     public static void delFolder(String folderPath) {
         // 删除文件夹里面所有内容
@@ -349,12 +338,11 @@ public class FileUtils {
         // 删除空文件夹
         myFilePath.delete();
     }
-     
+
     /**
      * 删除文件夹里面的所有文件
      *
-     * @param path
-     *            文件夹路径
+     * @param path 文件夹路径
      */
     public static void delAllFile(String path) {
         File file = new File(path);
@@ -383,18 +371,15 @@ public class FileUtils {
             }
         }
     }
-     
+
     /**
      * 复制单个文件，传统方式
      *
-     * @param srcFile
-     *            包含路径的源文件 如：E:/phsftp/src/abc.txt
-     * @param dirDest
-     *            目标文件目录；若文件目录不存在则自动创建 如：E:/phsftp/dest
+     * @param srcFile 包含路径的源文件 如：E:/phsftp/src/abc.txt
+     * @param dirDest 目标文件目录；若文件目录不存在则自动创建 如：E:/phsftp/dest
      * @throws IOException
      */
-    public static void copyFile(String srcFile, String dirDest)
-            throws IOException {
+    public static void copyFile(String srcFile, String dirDest) throws IOException {
         FileInputStream in = new FileInputStream(srcFile);
         mkdir(dirDest);
         FileOutputStream out = new FileOutputStream(dirDest + "/" + new File(srcFile).getName());
@@ -407,18 +392,15 @@ public class FileUtils {
         out.close();
         in.close();
     }
-     
+
     /**
      * 复制文件夹
      *
-     * @param oldPath
-     *            String 源文件夹路径 如：E:/phsftp/src
-     * @param newPath
-     *            String 目标文件夹路径 如：E:/phsftp/dest
+     * @param oldPath String 源文件夹路径 如：E:/phsftp/src
+     * @param newPath String 目标文件夹路径 如：E:/phsftp/dest
      * @return boolean
      */
-    public static void copyFolder(String oldPath, String newPath)
-            throws IOException {
+    public static void copyFolder(String oldPath, String newPath) throws IOException {
         // 如果文件夹不存在 则新建文件夹
         mkdir(newPath);
         File file = new File(oldPath);
@@ -430,11 +412,10 @@ public class FileUtils {
             } else {
                 temp = new File(oldPath + File.separator + files[i]);
             }
-             
+
             if (temp.isFile()) {
                 FileInputStream input = new FileInputStream(temp);
-                FileOutputStream output = new FileOutputStream(newPath + "/"
-                        + (temp.getName()).toString());
+                FileOutputStream output = new FileOutputStream(newPath + "/" + (temp.getName()).toString());
                 byte[] buffer = new byte[1024 * 2];
                 int len;
                 while ((len = input.read(buffer)) != -1) {
@@ -449,63 +430,50 @@ public class FileUtils {
             }
         }
     }
-     
+
     /**
      * 移动文件到指定目录
      *
-     * @param oldPath
-     *            包含路径的文件名 如：E:/phsftp/src/ljq.txt
-     * @param newPath
-     *            目标文件目录 如：E:/phsftp/dest
+     * @param oldPath 包含路径的文件名 如：E:/phsftp/src/ljq.txt
+     * @param newPath 目标文件目录 如：E:/phsftp/dest
      */
-    public static void moveFile(String oldPath, String newPath)
-            throws IOException {
+    public static void moveFile(String oldPath, String newPath) throws IOException {
         copyFile(oldPath, newPath);
         deleteFile(oldPath);
     }
-     
+
     /**
      * 移动文件到指定目录，不会删除文件夹
      *
-     * @param oldPath
-     *            源文件目录 如：E:/phsftp/src
-     * @param newPath
-     *            目标文件目录 如：E:/phsftp/dest
+     * @param oldPath 源文件目录 如：E:/phsftp/src
+     * @param newPath 目标文件目录 如：E:/phsftp/dest
      */
-    public static void moveFiles(String oldPath, String newPath)
-            throws IOException {
+    public static void moveFiles(String oldPath, String newPath) throws IOException {
         copyFolder(oldPath, newPath);
         delAllFile(oldPath);
     }
-     
+
     /**
      * 移动文件到指定目录，会删除文件夹
      *
-     * @param oldPath
-     *            源文件目录 如：E:/phsftp/src
-     * @param newPath
-     *            目标文件目录 如：E:/phsftp/dest
+     * @param oldPath 源文件目录 如：E:/phsftp/src
+     * @param newPath 目标文件目录 如：E:/phsftp/dest
      */
-    public static void moveFolder(String oldPath, String newPath)
-            throws IOException {
+    public static void moveFolder(String oldPath, String newPath) throws IOException {
         copyFolder(oldPath, newPath);
         delFolder(oldPath);
     }
-     
+
     /**
-     * 解压zip文件
-     * 说明:本程序通过ZipOutputStream和ZipInputStream实现了zip压缩和解压功能.
-     * 问题:由于java.util.zip包并不支持汉字,当zip文件中有名字为中文的文件时,
-     * 就会出现异常:"Exception  in thread "main " java.lang.IllegalArgumentException 
-     * at java.util.zip.ZipInputStream.getUTF8String(ZipInputStream.java:285)
-     * @param srcDir
-     *            解压前存放的目录
-     * @param destDir
-     *            解压后存放的目录
+     * 解压zip文件 说明:本程序通过ZipOutputStream和ZipInputStream实现了zip压缩和解压功能. 问题:由于java.util.zip包并不支持汉字,当zip文件中有名字为中文的文件时,
+     * 就会出现异常:"Exception  in thread "main " java.lang.IllegalArgumentException at
+     * java.util.zip.ZipInputStream.getUTF8String(ZipInputStream.java:285)
+     * 
+     * @param srcDir 解压前存放的目录
+     * @param destDir 解压后存放的目录
      * @throws Exception
      */
-    public static void unZip(String srcDir, String destDir)
-            throws IOException {
+    public static void unZip(String srcDir, String destDir) throws IOException {
         int leng = 0;
         byte[] b = new byte[1024 * 2];
         /** 获取zip格式的文件 **/
@@ -534,21 +502,17 @@ public class FileUtils {
             }
         }
     }
-     
+
     /**
-     * 压缩文件
-     * 说明:本程序通过ZipOutputStream和ZipInputStream实现了zip压缩和解压功能.
-     * 问题:由于java.util.zip包并不支持汉字,当zip文件中有名字为中文的文件时,
-     * 就会出现异常:"Exception  in thread "main " java.lang.IllegalArgumentException 
-     * at java.util.zip.ZipInputStream.getUTF8String(ZipInputStream.java:285)
-     * @param srcDir
-     *            压缩前存放的目录
-     * @param destDir
-     *            压缩后存放的目录
+     * 压缩文件 说明:本程序通过ZipOutputStream和ZipInputStream实现了zip压缩和解压功能. 问题:由于java.util.zip包并不支持汉字,当zip文件中有名字为中文的文件时,
+     * 就会出现异常:"Exception  in thread "main " java.lang.IllegalArgumentException at
+     * java.util.zip.ZipInputStream.getUTF8String(ZipInputStream.java:285)
+     * 
+     * @param srcDir 压缩前存放的目录
+     * @param destDir 压缩后存放的目录
      * @throws Exception
      */
-    public static void zip(String srcDir, String destDir)
-            throws IOException {
+    public static void zip(String srcDir, String destDir) throws IOException {
         String tempFileName = null;
         byte[] buf = new byte[1024 * 2];
         int len;
@@ -567,22 +531,22 @@ public class FileUtils {
                     FileOutputStream fos = new FileOutputStream(tempFileName);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                     ZipOutputStream zos = new ZipOutputStream(bos);// 压缩包
-                     
+
                     ZipEntry ze = new ZipEntry(file.getName());// 压缩包文件名
                     zos.putNextEntry(ze);// 写入新的ZIP文件条目并将流定位到条目数据的开始处
-                     
+
                     while ((len = bis.read(buf)) != -1) {
                         zos.write(buf, 0, len);
                         zos.flush();
                     }
                     bis.close();
                     zos.close();
-                     
+
                 }
             }
         }
     }
-     
+
     /**
      * 读取数据
      *
@@ -591,8 +555,7 @@ public class FileUtils {
      * @return
      * @throws Exception
      */
-    public static String readData(InputStream inSream, String charsetName)
-            throws IOException {
+    public static String readData(InputStream inSream, String charsetName) throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len = -1;
@@ -604,7 +567,7 @@ public class FileUtils {
         inSream.close();
         return new String(data, charsetName);
     }
-     
+
     /**
      * 一行一行读取文件，适合字符读取，若读取中文字符时会出现乱码
      *
@@ -612,8 +575,7 @@ public class FileUtils {
      * @return
      * @throws Exception
      */
-    public static Set<String> readFileLine(String path)
-            throws IOException {
+    public static Set<String> readFileLine(String path) throws IOException {
         Set<String> datas = new HashSet<String>();
         FileReader fr = new FileReader(path);
         BufferedReader br = new BufferedReader(fr);
@@ -625,7 +587,7 @@ public class FileUtils {
         fr.close();
         return datas;
     }
-     
+
     public static void main(String[] args) {
         try {
             unZip("c:/test", "c:/test");
@@ -633,9 +595,11 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+
     public static String normalizeAbsolutePath(String path, boolean removeTrailingSlash) throws IllegalPathException {
         return normalizePath(path, true, false, removeTrailingSlash);
     }
+
     public static String normalizeExtension(String ext) {
         ext = StringUtils.trimToNull(ext);
 
@@ -649,8 +613,31 @@ public class FileUtils {
 
         return ext;
     }
-    private static String normalizePath(String path, boolean forceAbsolute,
-        boolean forceRelative, boolean removeTrailingSlash)
+    /**
+     * 规格化路径。规则如下：
+     * <ol>
+     * <li>路径为空，则返回<code>""</code>。</li>
+     * <li>将所有backslash("\\")转化成slash("/")。</li>
+     * <li>去除重复的"/"或"\\"。</li>
+     * <li>去除"."，如果发现".."，则向上朔一级目录。</li>
+     * <li>空绝对路径返回"/"，空相对路径返回""。</li>
+     * <li>保留路径末尾的"/"（如果有的话，除了空路径）。</li>
+     * <li>对于绝对路径，如果".."上朔的路径超过了根目录，则看作非法路径，抛出异常。</li>
+     * </ol>
+     *
+     * @param path 要规格化的路径
+     * @return 规格化后的路径
+     * @throws IllegalPathException 如果路径非法
+     */
+    public static String normalizePath(String path) throws IllegalPathException {
+        return normalizePath(path, false, false, false);
+    }
+
+    public static String normalizePath(String path, boolean removeTrailingSlash) throws IllegalPathException {
+        return normalizePath(path, false, false, removeTrailingSlash);
+    }
+
+    private static String normalizePath(String path, boolean forceAbsolute, boolean forceRelative, boolean removeTrailingSlash)
         throws IllegalPathException {
         char[] pathChars = StringUtils.trimToEmpty(path).toCharArray();
         int length = pathChars.length;
@@ -668,8 +655,7 @@ public class FileUtils {
         }
 
         StringBuilder buf = new StringBuilder(length);
-        boolean isAbsolutePath = forceAbsolute || !forceRelative
-            && startsWithSlash;
+        boolean isAbsolutePath = forceAbsolute || !forceRelative && startsWithSlash;
         int index = startsWithSlash ? 0 : -1;
         int level = 0;
 
@@ -688,8 +674,7 @@ public class FileUtils {
             // 取得下一个slash index，或末尾
             int nextSlashIndex = indexOfSlash(pathChars, index, true);
 
-            String element = new String(pathChars, index, nextSlashIndex
-                - index);
+            String element = new String(pathChars, index, nextSlashIndex - index);
             index = nextSlashIndex;
 
             // 忽略"."
@@ -748,93 +733,86 @@ public class FileUtils {
 
         return i;
     }
-	public static URL extractJarFileURL(URL jarUrl) throws MalformedURLException {
-		String urlFile = jarUrl.getFile();
-		int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
-		if (separatorIndex != -1) {
-			String jarFile = urlFile.substring(0, separatorIndex);
-			try {
-				return new URL(jarFile);
-			}
-			catch (MalformedURLException ex) {
-				// Probably no protocol in original jar URL, like "jar:C:/mypath/myjar.jar".
-				// This usually indicates that the jar file resides in the file system.
-				if (!jarFile.startsWith("/")) {
-					jarFile = "/" + jarFile;
-				}
-				return new URL(FILE_URL_PREFIX + jarFile);
-			}
-		}
-		else {
-			return jarUrl;
-		}
-	}
 
-	public static boolean isJarURL(URL url) {
-		String protocol = url.getProtocol();
-		return (URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_ZIP.equals(protocol) ||
-				URL_PROTOCOL_VFSZIP.equals(protocol) );
-	}
-
-	public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {
-		Assert.assertNotNull(resourceUrl, "Resource URL must not be null");
-		if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
-			throw new FileNotFoundException(
-					description + " cannot be resolved to absolute file path " +
-					"because it does not reside in the file system: " + resourceUrl);
-		}
-		try {
-			return new File(toURI(resourceUrl).getSchemeSpecificPart());
-		}
-		catch (URISyntaxException ex) {
-			// Fallback for URLs that are not valid URIs (should hardly ever happen).
-			return new File(resourceUrl.getFile());
-		}
-	}
-	
-	public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
-	    Assert.assertNotNull(resourceUri, "Resource URI must not be null");
-          if (!URL_PROTOCOL_FILE.equals(resourceUri.getScheme())) {
-                throw new FileNotFoundException(
-                            description + " cannot be resolved to absolute file path " +
-                            "because it does not reside in the file system: " + resourceUri);
-          }
-          return new File(resourceUri.getSchemeSpecificPart());
+    public static URL extractJarFileURL(URL jarUrl) throws MalformedURLException {
+        String urlFile = jarUrl.getFile();
+        int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
+        if (separatorIndex != -1) {
+            String jarFile = urlFile.substring(0, separatorIndex);
+            try {
+                return new URL(jarFile);
+            } catch (MalformedURLException ex) {
+                // Probably no protocol in original jar URL, like "jar:C:/mypath/myjar.jar".
+                // This usually indicates that the jar file resides in the file system.
+                if (!jarFile.startsWith("/")) {
+                    jarFile = "/" + jarFile;
+                }
+                return new URL(FILE_URL_PREFIX + jarFile);
+            }
+        } else {
+            return jarUrl;
+        }
     }
-	
-	public static URI toURI(URL url) throws URISyntaxException {
-		return toURI(url.toString());
-	}
-	
-	public static URI toURI(String location) throws URISyntaxException {
-		return new URI(StringUtils.replace(location, " ", "%20"));
-	}
 
-	public static boolean isFileURL(URL url) {
-		String protocol = url.getProtocol();
-		return (URL_PROTOCOL_FILE.equals(protocol) || URL_PROTOCOL_VFSFILE.equals(protocol) ||
-				URL_PROTOCOL_VFS.equals(protocol));
-	}
+    public static boolean isJarURL(URL url) {
+        String protocol = url.getProtocol();
+        return (URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol));
+    }
 
-	public static String getFilename(String path) {
-		if (path == null) {
-			return null;
-		}
-		int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
-		return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
-	}
+    public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {
+        Assert.assertNotNull(resourceUrl, "Resource URL must not be null");
+        if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
+            throw new FileNotFoundException(description + " cannot be resolved to absolute file path "
+                + "because it does not reside in the file system: " + resourceUrl);
+        }
+        try {
+            return new File(toURI(resourceUrl).getSchemeSpecificPart());
+        } catch (URISyntaxException ex) {
+            // Fallback for URLs that are not valid URIs (should hardly ever happen).
+            return new File(resourceUrl.getFile());
+        }
+    }
+
+    public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
+        Assert.assertNotNull(resourceUri, "Resource URI must not be null");
+        if (!URL_PROTOCOL_FILE.equals(resourceUri.getScheme())) {
+            throw new FileNotFoundException(description + " cannot be resolved to absolute file path "
+                + "because it does not reside in the file system: " + resourceUri);
+        }
+        return new File(resourceUri.getSchemeSpecificPart());
+    }
+
+    public static URI toURI(URL url) throws URISyntaxException {
+        return toURI(url.toString());
+    }
+
+    public static URI toURI(String location) throws URISyntaxException {
+        return new URI(StringUtils.replace(location, " ", "%20"));
+    }
+
+    public static boolean isFileURL(URL url) {
+        String protocol = url.getProtocol();
+        return (URL_PROTOCOL_FILE.equals(protocol) || URL_PROTOCOL_VFSFILE.equals(protocol) || URL_PROTOCOL_VFS.equals(protocol));
+    }
+
+    public static String getFilename(String path) {
+        if (path == null) {
+            return null;
+        }
+        int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
+    }
 
     public static String applyRelativePath(String path, String relativePath) {
         int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
         if (separatorIndex != -1) {
-              String newPath = path.substring(0, separatorIndex);
-              if (!relativePath.startsWith(FOLDER_SEPARATOR)) {
-                    newPath += FOLDER_SEPARATOR;
-              }
-              return newPath + relativePath;
-        }
-        else {
-              return relativePath;
+            String newPath = path.substring(0, separatorIndex);
+            if (!relativePath.startsWith(FOLDER_SEPARATOR)) {
+                newPath += FOLDER_SEPARATOR;
+            }
+            return newPath + relativePath;
+        } else {
+            return relativePath;
         }
     }
 
@@ -864,11 +842,16 @@ public class FileUtils {
 
         return new FileNameAndExtension(fileName, extension, extensionToLowerCase);
     }
-    public static class FileNameAndExtension {
+
+    public static class FileNameAndExtension
+    {
+
         private final String fileName;
+
         private final String extension;
 
-        FileNameAndExtension(String fileName, String extension, boolean extensionToLowerCase) {
+        FileNameAndExtension(String fileName, String extension, boolean extensionToLowerCase)
+        {
             this.fileName = fileName;
             this.extension = extensionToLowerCase ? StringUtils.toLowerCase(extension) : extension;
         }
@@ -886,31 +869,33 @@ public class FileUtils {
             return extension == null ? fileName : fileName + "." + extension;
         }
     }
+
     public static String normalizeAbsolutePath(String path) throws IllegalPathException {
         return normalizePath(path, true, false, false);
     }
 
 }
- 
 
-class ExtensionFileFilter  implements FileFilter {
-     
+class ExtensionFileFilter implements FileFilter
+{
+
     private final String extension;
-     
-    public ExtensionFileFilter(String extension) {
+
+    public ExtensionFileFilter(String extension)
+    {
         this.extension = extension;
     }
-     
+
     public File[] getFiles(String srcDir) throws IOException {
         return (File[]) FileUtils.listFiles(srcDir).toArray();
     }
-     
+
     @Override
-	public boolean accept(File file) {
+    public boolean accept(File file) {
         if (file.isDirectory()) {
             return false;
         }
-         
+
         String name = file.getName();
         // find the last
         int idx = name.lastIndexOf(".");
@@ -922,5 +907,5 @@ class ExtensionFileFilter  implements FileFilter {
             return this.extension.equals(name.substring(idx + 1));
         }
     }
-   
+
 }
