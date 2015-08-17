@@ -58,8 +58,8 @@ public class OutFaultChainProcessor extends AbstractFaultChainInitProcessor {
         chain.add(e.getService().getOutFaultInterceptors());
         chain.add(e.getOutFaultInterceptors());
         chain.add(e.getProtocol().getOutFaultInterceptors());
-        if (e.getService().getDataFormat() instanceof InterceptorProvider) {
-            chain.add(((InterceptorProvider) e.getService().getDataFormat()).getOutFaultInterceptors());
+        if (e.getService().getDataProcessor() instanceof InterceptorProvider) {
+            chain.add(((InterceptorProvider) e.getService().getDataProcessor()).getOutFaultInterceptors());
         }
         addToChain(chain, ex.getIn());
         addToChain(chain, ex.getOutFault());

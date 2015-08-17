@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 The Solmix Project
+ * Copyright (container) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,32 +16,19 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-
-package org.solmix.exchange.dataformat;
+package org.solmix.exchange.data;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
-import org.solmix.exchange.model.SerializationInfo;
-import org.solmix.runtime.Extension;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version 0.0.1 2014年8月11日
+ * @version $Id$  2015年1月13日
  */
-@Extension(name = "java")
-public interface Serialization {
+
+public interface ObjectOutput extends DataOutput {
+
+    void writeObject(Object obj) throws IOException;
     
-    String SERIALIZATION_ID = Serialization.class.getName() + ".SERIALIZATION_ID";
-
-    byte getContentTypeId();
-
-    String getContentType();
-
-    ObjectOutput createObjectOutput(SerializationInfo info, OutputStream output) throws IOException;
-
-    ObjectInput  createObjectInput(SerializationInfo info, InputStream input) throws IOException;
-
 }

@@ -1,4 +1,4 @@
-package org.solmix.exchange.dataformat;
+package org.solmix.exchange.data;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

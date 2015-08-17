@@ -36,7 +36,7 @@ import org.solmix.exchange.EndpointException;
 import org.solmix.exchange.ProtocolFactoryManager;
 import org.solmix.exchange.Service;
 import org.solmix.exchange.ServiceCreateException;
-import org.solmix.exchange.dataformat.DataFormat;
+import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.event.ServiceFactoryEvent;
 import org.solmix.exchange.interceptor.phase.PhasePolicy;
 import org.solmix.exchange.interceptor.support.FaultOutInterceptor;
@@ -128,7 +128,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         }
         
         if (getDataFormat() != null) {
-            getService().setDataFormat(getDataFormat());
+            getService().setDataProcessor(getDataFormat());
         }
 
         getService().put(OperationDispatcher.class.getName(), getOperationDispatcher());
@@ -183,7 +183,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     }
 
     @Override
-    protected DataFormat defaultDataFormat() {
+    protected DataProcessor defaultDataFormat() {
         // 通过service class 注解
         // 通过container参数加载
         return null;

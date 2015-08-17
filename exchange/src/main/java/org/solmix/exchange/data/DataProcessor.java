@@ -1,5 +1,5 @@
 /**
- * Copyright (container) 2014 The Solmix Project
+ * Copyright (container) 2015 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,22 +16,28 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.exchange.data;
 
-package org.solmix.exchange.dataformat;
+import org.solmix.exchange.Service;
 
-import org.solmix.exchange.model.ArgumentInfo;
+
 
 /**
+ * 对不同数据格式的序列化和反序列化接口
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2014年11月24日
+ * @version $Id$  2015年1月13日
  */
 
-public interface ObjectReader<T> {
+public interface DataProcessor {
 
-    void setProperty(String prop, Object value); 
+    void initialize(Service service);
     
-    Object read(T input);
+    <T> ObjectReader<T> createReader(Class<T> cls);
 
-    Object read(T input, ArgumentInfo ai);
+    <T> ObjectWriter<T> createWriter(Class<T> cls);
+
+    Class<?>[] getSupportedReaderFormats();
+
+    Class<?>[] getSupportedWriterFormats();
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import org.solmix.exchange.dataformat.DataFormat;
+import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.interceptor.InterceptorProvider;
 import org.solmix.exchange.invoker.Invoker;
 import org.solmix.exchange.model.EndpointInfo;
@@ -48,9 +48,9 @@ public interface Service extends Map<String, Object>, InterceptorProvider {
 
     EndpointInfo getEndpointInfo(NamedID eid);
     
-    DataFormat getDataFormat();
+    DataProcessor getDataProcessor();
     
-    void setDataFormat(DataFormat df);
+    void setDataProcessor(DataProcessor df);
     
     Executor getExecutor();
     

@@ -27,7 +27,7 @@ import java.util.concurrent.Executor;
 
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.Service;
-import org.solmix.exchange.dataformat.DataFormat;
+import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.interceptor.support.InterceptorProviderSupport;
 import org.solmix.exchange.invoker.Invoker;
 import org.solmix.exchange.model.EndpointInfo;
@@ -48,7 +48,7 @@ public class DefaultService extends InterceptorProviderSupport implements
 
     private final List<ServiceInfo> serviceInfos;
 
-    private DataFormat dataFormat;
+    private DataProcessor dataProcessor;
 
     private Executor executor;
 
@@ -100,13 +100,13 @@ public class DefaultService extends InterceptorProviderSupport implements
     }
 
     @Override
-    public DataFormat getDataFormat() {
-        return dataFormat;
+    public DataProcessor getDataProcessor() {
+        return dataProcessor;
     }
 
     @Override
-    public void setDataFormat(DataFormat s) {
-        this.dataFormat = s;
+    public void setDataProcessor(DataProcessor s) {
+        this.dataProcessor = s;
     }
 
     /**   */

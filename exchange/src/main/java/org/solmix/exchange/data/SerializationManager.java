@@ -16,19 +16,18 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.exchange.dataformat;
 
-import java.io.IOException;
-
+package org.solmix.exchange.data;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年1月13日
+ * @version $Id$ 2015年1月14日
  */
 
-public interface ObjectOutput extends DataOutput {
+public interface SerializationManager {
 
-    void writeObject(Object obj) throws IOException;
-    
+    Serialization getSerializationById(Byte id);
+
+    Serialization getSerializationByName(String extendsionName);
 }

@@ -48,7 +48,7 @@ import org.solmix.exchange.PipelineSelector;
 import org.solmix.exchange.Processor;
 import org.solmix.exchange.Protocol;
 import org.solmix.exchange.Service;
-import org.solmix.exchange.dataformat.DataFormat;
+import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.interceptor.Fault;
 import org.solmix.exchange.interceptor.Interceptor;
 import org.solmix.exchange.interceptor.InterceptorChain;
@@ -163,7 +163,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         
         PhaseInterceptorChain chain;
         PhasePolicy policy = endpoint.getPhasePolicy();
-        DataFormat ser = endpoint.getService().getDataFormat();
+        DataProcessor ser = endpoint.getService().getDataProcessor();
         if (ser instanceof InterceptorProvider) {
             InterceptorProvider p = (InterceptorProvider) ser;
             List<Interceptor<? extends Message>> i4 = p.getInInterceptors();
@@ -428,7 +428,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         
         PhaseInterceptorChain chain;
         PhasePolicy policy = endpoint.getPhasePolicy();
-        DataFormat ser = endpoint.getService().getDataFormat();
+        DataProcessor ser = endpoint.getService().getDataProcessor();
         if (ser instanceof InterceptorProvider) {
             InterceptorProvider p = (InterceptorProvider) ser;
             List<Interceptor<? extends Message>> i4 = p.getOutInterceptors();

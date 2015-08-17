@@ -1,5 +1,5 @@
 /**
- * Copyright (container) 2015 The Solmix Project
+ * Copyright (container) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,17 +17,21 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.exchange.dataformat;
+package org.solmix.exchange.data;
+
+import org.solmix.exchange.model.ArgumentInfo;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2015年1月14日
+ * @version $Id$ 2014年11月24日
  */
 
-public interface SerializationManager {
+public interface ObjectReader<T> {
 
-    Serialization getSerializationById(Byte id);
+    void setProperty(String prop, Object value); 
+    
+    Object read(T input);
 
-    Serialization getSerializationByName(String extendsionName);
+    Object read(T input, ArgumentInfo ai);
 }

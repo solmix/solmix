@@ -23,7 +23,9 @@ import org.solmix.exchange.interceptor.InterceptorProvider;
 import org.solmix.exchange.model.ProtocolInfo;
 
 /**
- * 绑定(Protocol)
+ * 对协议的绑定，主要功能：
+ * <li>提供协议处理的切面
+ * <li>提供消息创建逻辑
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月15日

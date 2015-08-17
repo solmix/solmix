@@ -17,7 +17,7 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.exchange.dataformat;
+package org.solmix.exchange.data;
 
 import org.solmix.exchange.model.ArgumentInfo;
 

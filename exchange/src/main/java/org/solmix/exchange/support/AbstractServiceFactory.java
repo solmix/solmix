@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.solmix.exchange.Service;
 import org.solmix.exchange.ServiceFactoryListener;
-import org.solmix.exchange.dataformat.DataFormat;
+import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.event.ServiceFactoryEvent;
 import org.solmix.exchange.interceptor.support.OneWayInterceptor;
 import org.solmix.exchange.interceptor.support.OutgoingChainInterceptor;
@@ -45,7 +45,7 @@ public abstract class AbstractServiceFactory {
     
     protected Service service;
 
-    private DataFormat dataFormat;
+    private DataProcessor dataProcessor;
 
     private final CopyOnWriteArrayList<ServiceFactoryListener> listeners = new CopyOnWriteArrayList<ServiceFactoryListener>();
     
@@ -86,30 +86,30 @@ public abstract class AbstractServiceFactory {
     }
 
     /**   */
-    public DataFormat getDataFormat() {
+    public DataProcessor getDataFormat() {
         return getDataFormat(true);
 
     }
 
     /**   */
-    public DataFormat getDataFormat(boolean create) {
-        if (dataFormat == null && create) {
-            dataFormat = defaultDataFormat();
+    public DataProcessor getDataFormat(boolean create) {
+        if (dataProcessor == null && create) {
+            dataProcessor = defaultDataFormat();
         }
-        return dataFormat;
+        return dataProcessor;
     }
 
     /**
      * @return
      */
-    protected DataFormat defaultDataFormat() {
+    protected DataProcessor defaultDataFormat() {
         return null;
     }
 
     /**   */
-    public void setDataFormat(DataFormat dataFormat) {
-        this.dataFormat = dataFormat;
-        dataFormatSetted = dataFormat != null;
+    public void setDataFormat(DataProcessor dataProcessor) {
+        this.dataProcessor = dataProcessor;
+        dataFormatSetted = dataProcessor != null;
     }
 
     public Service getService() {

@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.exchange.dataformat;
+package org.solmix.exchange.data;
 
 import java.io.IOException;
 

@@ -34,7 +34,7 @@ public class Phase implements Comparable<Object>
     public static final String PRE_STREAM = "pre-stream";
     /**流预处理结束*/
     public static final String PRE_STREAM_ENDING = "pre-stream-ending";
-    /**读取*/
+    /**流读取*/
     public static final String READ = "read";
     
     /**协议预处理*/
