@@ -21,11 +21,19 @@ package org.solmix.exchange.interceptor.support;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.Executor;
 
+import org.apache.commons.io.IOUtils;
+import org.solmix.exchange.Endpoint;
+import org.solmix.exchange.Exchange;
 import org.solmix.exchange.Message;
+import org.solmix.exchange.MessageUtils;
+import org.solmix.exchange.Pipeline;
+import org.solmix.exchange.Transporter;
 import org.solmix.exchange.interceptor.Fault;
 import org.solmix.exchange.interceptor.phase.Phase;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
+import org.solmix.exchange.support.DefaultMessage;
 
 /**
  * 无返回拦截处理
@@ -49,18 +57,38 @@ public class OneWayInterceptor extends PhaseInterceptorSupport<Message> {
         if (msg.getExchange().isOneWay() && !isRequest(msg)) {
             InputStream in = msg.getContent(InputStream.class);
             if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    // ignore
-                }
+                IOUtils.closeQuietly(in);
             }
         }
     }
 
     @Override
     public void handleMessage(Message msg) throws Fault {
-//TODO
+        Exchange ex = msg.getExchange();
+        if (ex.isOneWay() 
+            && !MessageUtils.isRequest(msg) 
+            && msg.get(OneWayInterceptor.class)==null
+            && msg.getExchange().get(Executor.class) == null) {
+            msg.put(OneWayInterceptor.class, this);
+            
+            Message partial =new DefaultMessage();
+            Endpoint edp = ex.getEndpoint();
+            if(edp!=null){
+                partial= edp.getProtocol().createMessage(partial);
+            }
+            partial.setExchange(ex);
+            
+            try {
+                Pipeline pl = ex.get(Transporter.class).getBackPipeline(msg);
+                if(pl!=null){
+                    msg.getExchange().setIn(null);
+                    pl.prepare(partial);
+                    pl.close(partial);
+                    msg.getExchange().setIn(msg);
+                }
+            } catch (IOException e) {
+            }
+        }
     }
 
 }

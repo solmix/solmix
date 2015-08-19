@@ -142,7 +142,7 @@ public class InChainInitProcessor implements Processor {
         Collection<InterceptorProvider> providers = (Collection<InterceptorProvider>) m.get(Message.INTERCEPTOR_PROVIDERS);
         if (providers != null) {
             for (InterceptorProvider p : providers) {
-                chain.add(p.getInFaultInterceptors());
+                chain.add(p.getInInterceptors());
             }
         }
         Interceptor<Message> is = (Interceptor<Message>) m.get(Message.IN_INTERCEPTORS);
@@ -159,7 +159,7 @@ public class InChainInitProcessor implements Processor {
         exchange.put(Endpoint.class, endpoint);
         exchange.put(Protocol.class, getProtocol());
         exchange.put(Container.class, container);
-        if (exchange.get(Transporter.class) != null) {
+        if (m.get(Transporter.class) != null) {
             exchange.put(Transporter.class, m.get(Transporter.class));
         }
 

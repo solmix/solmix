@@ -34,4 +34,5 @@ public interface ObjectReader<T> {
     Object read(T input);
 
     Object read(T input, ArgumentInfo ai);
+    <E> E read(T input, Class<E> ai);
 }

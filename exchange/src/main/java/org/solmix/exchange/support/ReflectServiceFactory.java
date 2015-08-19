@@ -127,8 +127,8 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
             getService().setExecutor(getExecutor());
         }
         
-        if (getDataFormat() != null) {
-            getService().setDataProcessor(getDataFormat());
+        if (getDataProcessor() != null) {
+            getService().setDataProcessor(getDataProcessor());
         }
 
         getService().put(OperationDispatcher.class.getName(), getOperationDispatcher());
@@ -183,7 +183,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     }
 
     @Override
-    protected DataProcessor defaultDataFormat() {
+    protected DataProcessor defaultDataProcessor() {
         // 通过service class 注解
         // 通过container参数加载
         return null;
@@ -191,7 +191,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
 
     public void resetFactory() {
         if (!dataFormatSetted) {
-            setDataFormat(null);
+            setDataProcessor(null);
         }
         setService(null);
     }

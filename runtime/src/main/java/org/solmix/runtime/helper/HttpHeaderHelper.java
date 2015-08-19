@@ -23,7 +23,7 @@ public final class HttpHeaderHelper {
     public static final String CONNECTION = "Connection";
     public static final String CLOSE = "close";
     public static final String AUTHORIZATION = "Authorization";
-    private static final String ISO88591 = Charset.forName("ISO-8859-1").name();
+    private static final String UTF_8 = Charset.forName("UTF-8").name();
     
     private static Map<String, String> internalHeaders = new HashMap<String, String>();
     private static ConcurrentHashMap<String, String> encodings = new ConcurrentHashMap<String, String>();
@@ -77,7 +77,7 @@ public final class HttpHeaderHelper {
         return null;
     }
     public static String mapCharset(String enc) {
-        return mapCharset(enc, ISO88591);
+        return mapCharset(enc, UTF_8);
     }    
     
     //helper to map the charsets that various things send in the http Content-Type header 

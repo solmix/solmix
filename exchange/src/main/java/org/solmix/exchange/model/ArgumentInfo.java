@@ -29,12 +29,13 @@ public class ArgumentInfo extends InfoPropertiesSupport {
 
     private NamedID name;
 
-    private final AbstractMessageInfo messageInfo;
+    private  AbstractMessageInfo messageInfo;
 
     private Class<?> typeClass;
 
     private int index;
-
+    public ArgumentInfo(){
+    }
     /**
      * @param argumentId
      * @param abstractMessageInfo

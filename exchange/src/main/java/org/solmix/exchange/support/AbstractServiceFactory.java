@@ -86,15 +86,15 @@ public abstract class AbstractServiceFactory {
     }
 
     /**   */
-    public DataProcessor getDataFormat() {
-        return getDataFormat(true);
+    public DataProcessor getDataProcessor() {
+        return getDataProcessor(true);
 
     }
 
     /**   */
-    public DataProcessor getDataFormat(boolean create) {
+    public DataProcessor getDataProcessor(boolean create) {
         if (dataProcessor == null && create) {
-            dataProcessor = defaultDataFormat();
+            dataProcessor = defaultDataProcessor();
         }
         return dataProcessor;
     }
@@ -102,12 +102,12 @@ public abstract class AbstractServiceFactory {
     /**
      * @return
      */
-    protected DataProcessor defaultDataFormat() {
+    protected DataProcessor defaultDataProcessor() {
         return null;
     }
 
     /**   */
-    public void setDataFormat(DataProcessor dataProcessor) {
+    public void setDataProcessor(DataProcessor dataProcessor) {
         this.dataProcessor = dataProcessor;
         dataFormatSetted = dataProcessor != null;
     }
