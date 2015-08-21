@@ -55,22 +55,14 @@ public class EventHandlerBlackListImpl implements EventHandlerBlackList
             return super.contains(object);
         }
     });
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.eventservice.IEventHandlerBlackList#add(org.osgi.service.event.IEventHandler)
-     */
+ 
     @Override
     public void add(IEventHandler handler) {
         blankList.add(handler);
         
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.eventservice.IEventHandlerBlackList#contains(org.osgi.service.event.IEventHandler)
-     */
+  
     @Override
     public boolean contains(IEventHandler handler) {
         return  blankList.contains(handler);

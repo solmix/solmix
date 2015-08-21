@@ -14,7 +14,8 @@
   	<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
-		</dependency>
+			<scope>provided</scope>
+  	</dependency>
   </dependencies>
   <build>
 		<plugins>
