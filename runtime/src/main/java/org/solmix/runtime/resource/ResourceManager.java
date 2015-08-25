@@ -34,7 +34,9 @@ public interface ResourceManager
     <T> T resolveResource(String name, Class<T> type,  List<ResourceResolver> resolvers);
 
     <T> T resolveResource(String name, Class<T> type);
+    
     <T> T resolveResource(String resourceName, Class<T> resourceType,String implementor);
+    
     InputStreamResource getResourceAsStream(String name);
     
     InputStreamResource[] getResourcesAsStream(String location)throws IOException;

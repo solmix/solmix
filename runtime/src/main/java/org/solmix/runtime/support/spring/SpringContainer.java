@@ -56,6 +56,7 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
     }
     
     //覆盖ExtensionContainer，在spring中启用{@link SpringResourceResolver}
+    @Override
     protected void customResourceManager(ResourceManager rm) {
     }
     
@@ -90,6 +91,7 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
 //        setBean(new SpringConfigureUnitManager(), ConfigureUnitManager.class);
         ResourceManager m = getExtension(ResourceManager.class);
         m.addResourceResolver(new SpringResourceResolver(applicationContext));
+        
         //at last add the spring bean provider.
         ConfiguredBeanProvider provider = getExtension(ConfiguredBeanProvider.class);
         if (!(provider instanceof SpringBeanProvider)) {

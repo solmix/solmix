@@ -103,11 +103,7 @@ public class ObjectUtils
             return NULL_PLACEHOLDER;
         }
     }
-    
-    public static class NullObject{
-        
-    }
-
+ 
     /** 是否为<code>null</code>、空字符串、或空数组。 */
     public static boolean isEmptyObject(Object object) {
         if (object == null) {

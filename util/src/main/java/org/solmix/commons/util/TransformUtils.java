@@ -65,8 +65,7 @@ public class TransformUtils
             return (T) value;
         if ((value instanceof String) && "".equals(value) && Number.class.isAssignableFrom(targetType))
             return null;
-
-        Transformer transformer = (Transformer) defaultTransformers.get(targetType);
+        Transformer transformer = (Transformer) defaultTransformers.get(targetType.getClass());
         if (transformer != null)
             return (T) transformer.transform(value);
         if (targetType.isEnum())
@@ -481,6 +480,15 @@ public class TransformUtils
     public static HashMap<Class<?>,Object> defaultTransformers;
     static {
         defaultTransformers = new HashMap<Class<?>,Object>();
+        Transformer stringTransform = new Transformer() {
+
+            @Override
+            public Object transform(Object input) throws Exception {
+                return input==null?null: input.toString();
+            }
+
+        };
+        defaultTransformers.put(String.class, stringTransform);
         Transformer boolTransform = new Transformer() {
 
             @Override
@@ -490,6 +498,7 @@ public class TransformUtils
 
         };
         defaultTransformers.put(Boolean.TYPE, boolTransform);
+        defaultTransformers.put(Boolean.class, boolTransform);
         Transformer charTransform = new Transformer() {
 
             @Override
