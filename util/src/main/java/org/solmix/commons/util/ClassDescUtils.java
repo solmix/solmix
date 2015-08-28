@@ -19,6 +19,9 @@
 
 package org.solmix.commons.util;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 /**
  * 
  * @author solmix.f@gmail.com
@@ -118,12 +121,218 @@ public class ClassDescUtils
         return ret.toString();
     }
 
+    /** 取得简洁的method描述。 */
+    public static String getSimpleMethodSignature(Method method) {
+        return getSimpleMethodSignature(method, false, false, false, false);
+    }
+
+    /** 取得简洁的method描述。 */
+    public static String getSimpleMethodSignature(Method method, boolean withClassName) {
+        return getSimpleMethodSignature(method, false, false, withClassName, false);
+    }
+    public static String getSimpleClassName(Class<?> clazz) {
+        if (clazz == null) {
+            return null;
+        }
+
+        return getSimpleClassName(clazz.getName());
+    }
+    
+    public static String getSimpleClassName(String javaClassName) {
+        return getSimpleClassName(javaClassName, true);
+    }
+    /** 取得简洁的method描述。 */
+    public static String getSimpleMethodSignature(Method method, boolean withModifiers, boolean withReturnType,
+                                                  boolean withClassName, boolean withExceptionType) {
+        if (method == null) {
+            return null;
+        }
+
+        StringBuilder buf = new StringBuilder();
+
+        if (withModifiers) {
+            buf.append(Modifier.toString(method.getModifiers())).append(' ');
+        }
+
+        if (withReturnType) {
+            buf.append(getSimpleClassName(method.getReturnType())).append(' ');
+        }
+
+        if (withClassName) {
+            buf.append(getSimpleClassName(method.getDeclaringClass())).append('.');
+        }
+
+        buf.append(method.getName()).append('(');
+
+        Class<?>[] paramTypes = method.getParameterTypes();
+
+        for (int i = 0; i < paramTypes.length; i++) {
+            Class<?> paramType = paramTypes[i];
+
+            buf.append(getSimpleClassName(paramType));
+
+            if (i < paramTypes.length - 1) {
+                buf.append(", ");
+            }
+        }
+
+        buf.append(')');
+
+        if (withExceptionType) {
+            Class<?>[] exceptionTypes = method.getExceptionTypes();
+
+            if (!ArrayUtils.isEmptyArray(exceptionTypes)) {
+                buf.append(" throws ");
+
+                for (int i = 0; i < exceptionTypes.length; i++) {
+                    Class<?> exceptionType = exceptionTypes[i];
+
+                    buf.append(getSimpleClassName(exceptionType));
+
+                    if (i < exceptionTypes.length - 1) {
+                        buf.append(", ");
+                    }
+                }
+            }
+        }
+
+        return buf.toString();
+    }
+    
     /**
-     * @param desc
-     * @return
+     * 取得类名，不包括package名。
+     * <p>
+     * 此方法可以正确显示数组和内联类的名称。 例如：
+     * <p/>
+     * <pre>
+     *  ClassUtil.getSimpleClassName(Boolean.class.getName()) = "Boolean"
+     *  ClassUtil.getSimpleClassName(Boolean[].class.getName()) = "Boolean[]"
+     *  ClassUtil.getSimpleClassName(int[][].class.getName()) = "int[][]"
+     *  ClassUtil.getSimpleClassName(Map.Entry.class.getName()) = "Map.Entry"
+     * </pre>
+     * <p>
+     * 本方法和<code>Class.getSimpleName()</code>的区别在于，本方法会保留inner类的外层类名称。
+     * </p>
+     *
+     * @param javaClassName 要查看的类名
+     * @return 简单类名，如果类名为空，则返回 <code>null</code>
      */
-    public static Class<?>[] getType(String desc) {
-        // TODO Auto-generated method stub
-        return null;
+    public static String getSimpleClassName(String javaClassName, boolean proccesInnerClass) {
+        String friendlyClassName = toFriendlyClassName(javaClassName, false, null);
+
+        if (friendlyClassName == null) {
+            return javaClassName;
+        }
+
+        if (proccesInnerClass) {
+            char[] chars = friendlyClassName.toCharArray();
+            int beginIndex = 0;
+
+            for (int i = chars.length - 1; i >= 0; i--) {
+                if (chars[i] == '.') {
+                    beginIndex = i + 1;
+                    break;
+                } else if (chars[i] == '$') {
+                    chars[i] = '.';
+                }
+            }
+
+            return new String(chars, beginIndex, chars.length - beginIndex);
+        } else {
+            return friendlyClassName.substring(friendlyClassName.lastIndexOf(".") + 1);
+        }
+    }
+    
+    /**
+     * 将Java类名转换成友好类名。
+     *
+     * @param javaClassName     Java类名
+     * @param processInnerClass 是否将内联类分隔符 <code>'$'</code> 转换成 <code>'.'</code>
+     * @return 友好的类名。如果参数非法或空，则返回<code>null</code>。
+     */
+    private static String toFriendlyClassName(String javaClassName, boolean processInnerClass, String defaultIfInvalid) {
+        String name = StringUtils.trimToNull(javaClassName);
+
+        if (name == null) {
+            return defaultIfInvalid;
+        }
+
+        if (processInnerClass) {
+            name = name.replace('$', '.');
+        }
+
+        int length = name.length();
+        int dimension = 0;
+
+        // 取得数组的维数，如果不是数组，维数为0
+        for (int i = 0; i < length; i++, dimension++) {
+            if (name.charAt(i) != '[') {
+                break;
+            }
+        }
+
+        // 如果不是数组，则直接返回
+        if (dimension == 0) {
+            return name;
+        }
+
+        // 确保类名合法
+        if (length <= dimension) {
+            return defaultIfInvalid; // 非法类名
+        }
+
+        // 处理数组
+        StringBuilder componentTypeName = new StringBuilder();
+
+        switch (name.charAt(dimension)) {
+            case 'Z':
+                componentTypeName.append("boolean");
+                break;
+
+            case 'B':
+                componentTypeName.append("byte");
+                break;
+
+            case 'C':
+                componentTypeName.append("char");
+                break;
+
+            case 'D':
+                componentTypeName.append("double");
+                break;
+
+            case 'F':
+                componentTypeName.append("float");
+                break;
+
+            case 'I':
+                componentTypeName.append("int");
+                break;
+
+            case 'J':
+                componentTypeName.append("long");
+                break;
+
+            case 'S':
+                componentTypeName.append("short");
+                break;
+
+            case 'L':
+                if (name.charAt(length - 1) != ';' || length <= dimension + 2) {
+                    return defaultIfInvalid; // 非法类名
+                }
+
+                componentTypeName.append(name.substring(dimension + 1, length - 1));
+                break;
+
+            default:
+                return defaultIfInvalid; // 非法类名
+        }
+
+        for (int i = 0; i < dimension; i++) {
+            componentTypeName.append("[]");
+        }
+
+        return componentTypeName.toString();
     }
 }

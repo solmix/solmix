@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public class DefaultToolkitService implements ToolkitService
 
     private Set<ToolName> toolNames = new HashSet<DefaultToolkitService.ToolName>();
 
-    private Map<String, Object> prePulledTools;
+    private Map<String, Object> prePulledTools = new HashMap<String, Object>();
 
     @Resource
     private Container container;
@@ -75,6 +76,7 @@ public class DefaultToolkitService implements ToolkitService
         return new ToolkitContextImpl();
     }
 
+    @PostConstruct
     public void init() {
         if (toolFactories != null) {
             for (Map.Entry<String, Object> e : toolFactories.entrySet()) {
@@ -301,8 +303,12 @@ public class DefaultToolkitService implements ToolkitService
                 put(name);
             }
             alltools = new HashMap<String, Object>();
-            alltools.putAll(pulledTools);
-            alltools.putAll(prePulledTools);
+            if(pulledTools!=null){
+                alltools.putAll(pulledTools);
+            }
+            if(prePulledTools!=null){
+                alltools.putAll(prePulledTools);
+            }
             return Collections.unmodifiableMap(alltools);
         }
         @Override

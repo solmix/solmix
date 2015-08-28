@@ -20,8 +20,6 @@ import org.solmix.commons.Constants;
 public final class StringUtils
 {
 
-    // private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
-
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     private static final Pattern KVP_PATTERN = Pattern.compile("([_.a-zA-Z0-9][-_.a-zA-Z0-9]*)[=](.*)"); // key
@@ -31,7 +29,7 @@ public final class StringUtils
 
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
     
-    private StringUtils(){
+     StringUtils(){
     }
     
     public static boolean isBlank(String str) {

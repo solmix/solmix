@@ -18,6 +18,10 @@
  */
 package org.solmx.service.velocity.support;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import org.apache.commons.collections.ExtendedProperties;
@@ -26,19 +30,12 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.solmix.commons.util.ObjectUtils;
 import org.solmix.runtime.Container;
-import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
-import org.solmix.runtime.monitor.support.MonitorServiceImpl;
-import org.solmix.runtime.support.spring.ContainerApplicationContext;
 import org.solmix.runtime.support.spring.SpringContainerFactory;
 import org.solmx.service.template.TemplateException;
 import org.solmx.service.template.TemplateService;
 import org.solmx.service.template.support.MappedTemplateContext;
-import org.solmx.service.velocity.VelocityEngine;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -88,10 +85,18 @@ public class DefaultVelocityEngineTest
     @Test
     public void testTemplate() throws TemplateException, IOException {
         DefaultVelocityEngine ve = getEngine("velocity2");
-        String ct = ve.evaluate("test_set_null.vm", new MappedTemplateContext());
+        MappedTemplateContext context=   new MappedTemplateContext();
+//        context.put("a", "0");
+        String ct = ve.evaluate("test_set_m.vm",context);
         assertEquals("$a", ct);
     }
     
+    @Test
+    public void testTemplate2() throws TemplateException, IOException {
+        DefaultVelocityEngine ve = getEngine("velocity2");
+        String ct = ve.evaluate("test_set_null.vm", new MappedTemplateContext());
+        assertEquals("$a", ct);
+    }
     
     private DefaultVelocityEngine getEngine(String id){
         ConfiguredBeanProvider provider=  c.getExtension(ConfiguredBeanProvider.class);
