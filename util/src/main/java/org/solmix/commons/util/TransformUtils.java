@@ -65,7 +65,7 @@ public class TransformUtils
             return (T) value;
         if ((value instanceof String) && "".equals(value) && Number.class.isAssignableFrom(targetType))
             return null;
-        Transformer transformer = (Transformer) defaultTransformers.get(targetType.getClass());
+        Transformer transformer = (Transformer) defaultTransformers.get(targetType);
         if (transformer != null)
             return (T) transformer.transform(value);
         if (targetType.isEnum())

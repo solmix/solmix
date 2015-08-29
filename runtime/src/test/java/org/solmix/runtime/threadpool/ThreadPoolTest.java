@@ -1,5 +1,5 @@
 /**
- * Copyright (container) 2014 The Solmix Project
+ * Copyright (c) 2014 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -120,6 +120,7 @@ public class ThreadPoolTest extends Assert {
             for (int i = 0; i < 10; i++) {
                 b2[i] = new BlockingRunner();
                 try {
+                    System.out.println(threadpool.getQueueSize());
                     threadpool.execute(b2[i]);
                 } catch (RejectedExecutionException ex) {
                     fail("failed on item[" + i + "] with: " + ex);

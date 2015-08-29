@@ -88,7 +88,7 @@ public class DefaultVelocityEngineTest
         MappedTemplateContext context=   new MappedTemplateContext();
 //        context.put("a", "0");
         String ct = ve.evaluate("test_set_m.vm",context);
-        assertEquals("$a", ct);
+        assertEquals("false", ct);
     }
     
     @Test
