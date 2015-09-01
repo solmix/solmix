@@ -264,7 +264,22 @@ public class DataTypeMap implements Map<String, Object> {
     public Byte getByte(String key) {
         return getByte(key, ((Byte) (null)));
     }
-
+    public char getChar(String key){
+        return getChar(key,(Character) null);
+    }
+    public char getChar(String key,Character defaultValue){
+        Object value = get(key);
+        if (value == null)
+            return defaultValue;
+        if (value instanceof Character)
+            return (Character) value;
+        else if(value.toString().trim().length()>1){
+            return  value.toString().trim().charAt(0);
+        }else{
+            return (char)0;
+        }
+           
+    }
     /**
      * @param key
      * @param defaultValue

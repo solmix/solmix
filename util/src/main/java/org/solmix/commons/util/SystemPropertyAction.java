@@ -68,7 +68,7 @@ public final class SystemPropertyAction implements PrivilegedAction<String>
         try {
             return AccessController.doPrivileged(new SystemPropertyAction(name, def));
         } catch (SecurityException ex) {
-            LOG.debug("SecurityException raised getting property " + name, ex);
+            LOG.warn("SecurityException raised getting property " + name, ex);
             return def;
         }
     }
@@ -77,7 +77,7 @@ public final class SystemPropertyAction implements PrivilegedAction<String>
         try {
             return AccessController.doPrivileged(new SystemPropertyAction(name));
         } catch (SecurityException ex) {
-            LOG.debug("SecurityException raised getting property " + name, ex);
+            LOG.warn("SecurityException raised getting property " + name, ex);
             return null;
         }
     }

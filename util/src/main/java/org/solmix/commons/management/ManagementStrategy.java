@@ -16,28 +16,35 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.management;
 
 import java.util.EventObject;
 
 import org.solmix.commons.management.Statistic.UpdateMode;
 
-
 /**
  * 
  * @author Administrator
- * @version 110035  2011-8-15
+ * @version 110035 2011-8-15
  */
 
 public interface ManagementStrategy
 {
 
-void manageObject(Object managedObject) throws Exception;
-void manageNamedObject(Object managedObject,Object preferredName)throws Exception;
-<T> T getManagedObjectName(Object managedObject,String customName,Class<T> nameType) throws Exception;
-void unmanageObject (Object managedObject)throws Exception;
-void unmanageNamedObject(Object name) throws Exception;
-boolean isManaged(Object managableObject,Object name);
-void notify(EventObject event)throws Exception;
-Statistic createStatistic(String name,Object owner,UpdateMode updateMode);
-} 
+    void manageObject(Object managedObject) throws Exception;
+
+    void manageNamedObject(Object managedObject, Object preferredName) throws Exception;
+
+    <T> T getManagedObjectName(Object managedObject, String customName, Class<T> nameType) throws Exception;
+
+    void unmanageObject(Object managedObject) throws Exception;
+
+    void unmanageNamedObject(Object name) throws Exception;
+
+    boolean isManaged(Object managableObject, Object name);
+
+    void notify(EventObject event) throws Exception;
+
+    Statistic createStatistic(String name, Object owner, UpdateMode updateMode);
+}

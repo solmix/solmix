@@ -22,7 +22,6 @@ import org.solmix.commons.util.Assert;
  * 转换后的正则表达式, 对每一个通配符建立<em>引用变量</em>, 依次为<code>$1</code>, <code>$2</code>, ...
  * </p>
  *
- * @author Michael Zhou
  */
 public class PathNameWildcardCompiler {
     /** 强制使用绝对路径 */

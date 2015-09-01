@@ -18,7 +18,6 @@ import org.apache.velocity.util.introspection.VelPropertyGet;
  * <li><code>AnyType.get(String)</code>。</li>
  * </ul>
  *
- * @author Michael Zhou
  */
 public class CustomizedUberspectImpl extends org.apache.velocity.util.introspection.UberspectImpl {
     @Override

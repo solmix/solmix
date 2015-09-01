@@ -92,7 +92,7 @@ public class ThreadPoolTest extends Assert {
 
     }
     
-    @Test
+//    @Test
     public void testBlockExecute() {
         threadpool = new DefaultThreadPool(10, 2, 10, 1,
             DEFAULT_DEQUEUE_TIMEOUT);

@@ -16,24 +16,30 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.commons.management;
 
+package org.solmix.commons.management;
 
 /**
  * 
  * @author Administrator
- * @version 110035  2011-8-15
+ * @version 110035 2011-8-15
  */
 
 public interface Statistic
 {
-public enum UpdateMode{
-VALUE,DIFFERENCE,COUNTER,MAXIMUM,MINIMUM
-}
 
-void increment();
-void updateValue(long value);
-long getValue();
-long getUpdateCount();
-void reset();
+    public enum UpdateMode
+    {
+        VALUE , DIFFERENCE , COUNTER , MAXIMUM , MINIMUM
+    }
+
+    void increment();
+
+    void updateValue(long value);
+
+    long getValue();
+
+    long getUpdateCount();
+
+    void reset();
 }

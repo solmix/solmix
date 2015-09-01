@@ -22,7 +22,6 @@ import org.solmx.service.velocity.FastCloneable;
  * <li>假如event handler实现了<code>ContextAware</code>接口，则每次执行时复制一份。</li>
  * </ul>
  *
- * @author Michael Zhou
  */
 public class CloneableEventCartridge extends EventCartridge {
     private final static Logger             log         = LoggerFactory.getLogger(CloneableEventCartridge.class);

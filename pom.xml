@@ -109,14 +109,15 @@
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
-		<commons-fileupload.version>1.3</commons-fileupload.version>
+		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<commons-pool.version>1.6</commons-pool.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
-		<commons-io.version>2.4</commons-io.version>
+		<!-- <commons-io.version>2.4</commons-io.version>fileupload used 2.2 -->
+		<commons-io.version>2.2</commons-io.version>
 		<commons-beanutils.version>1.8.3</commons-beanutils.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
-		<commons-codec.version>1.6</commons-codec.version>
+		<commons-codec.version>1.9</commons-codec.version>
 		<commons-lang.version>2.5</commons-lang.version>
 		<jackson.version>2.4.0</jackson.version>
 		<poi.version>3.9</poi.version>

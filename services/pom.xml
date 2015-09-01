@@ -12,5 +12,7 @@
   	<module>event</module>
   	<module>template</module>
   	<module>velocity</module>
+  	<module>export</module>
+  	<module>jackson</module>
   </modules>
 </project>

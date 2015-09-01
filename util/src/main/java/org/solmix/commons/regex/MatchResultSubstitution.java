@@ -15,7 +15,6 @@ import org.solmix.commons.util.Assert;
  * <code>$1</code>，<code>$2</code>等，但<code>MatchResultSubstitution</code>类支持对多个
  * <code>MatchResult</code>变量进行替换，分别对应不同的前缀。
  *
- * @author Michael Zhou
  */
 public class MatchResultSubstitution extends Substitution {
     /** 代表一个成功但无内容的匹配结果。 */

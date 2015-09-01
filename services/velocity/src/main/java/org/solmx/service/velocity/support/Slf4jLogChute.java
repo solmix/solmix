@@ -9,7 +9,6 @@ import org.solmix.commons.util.Assert;
 /**
  * 将日志输出到slf4j。
  *
- * @author Michael Zhou
  */
 public class Slf4jLogChute implements LogChute {
     private final Logger log;

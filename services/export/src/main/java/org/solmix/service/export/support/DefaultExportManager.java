@@ -56,6 +56,27 @@ public class DefaultExportManager implements ExportManager,ContainerAware
             return service;
         }else{
             service=  extensionLoader.getExtension(exportAs.name());
+            if(service==null){
+                switch (exportAs) {
+                    case CSV:
+                        service=new CSVExportService();
+                        break;
+                    case JSON:
+                        break;
+                    case OOXML:
+                        service= new ExcelExportService();
+                        break;
+                    case XLS:
+                        service= new ExcelExportService();
+                        break;
+                    case XML:
+                        service = new XMLExportService();
+                        break;
+                    default:
+                        break;
+
+                }
+            }
             if(service!=null){
                 exportServices.putIfAbsent(exportAs, service);
             }

@@ -7,7 +7,6 @@ import org.solmx.service.template.TemplateContext;
 /**
  * 将<code>TemplateContext</code>适配到velocity context的适配器。
  *
- * @author Michael Zhou
  */
 public class TemplateContextAdapter extends AbstractContext {
     private final TemplateContext context;
