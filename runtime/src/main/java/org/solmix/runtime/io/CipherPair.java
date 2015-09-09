@@ -30,15 +30,21 @@ import javax.crypto.spec.IvParameterSpec;
 /**
  * A class to hold a pair of encryption and decryption ciphers.
  */
-public class CipherPair {
+public class CipherPair
+{
+
     private final String transformation;
+
     private Cipher enccipher;
+
     private Key key;
+
     private byte[] ivp;
-    
-    public CipherPair(String transformation) throws GeneralSecurityException {
+
+    public CipherPair(String transformation) throws GeneralSecurityException
+    {
         this.transformation = transformation;
-        
+
         int d = transformation.indexOf('/');
         String a;
         if (d > 0) {
@@ -58,15 +64,15 @@ public class CipherPair {
             throw e;
         }
     }
-    
+
     public String getTransformation() {
         return transformation;
     }
-    
+
     public Cipher getEncryptor() {
         return enccipher;
     }
-    
+
     public Cipher getDecryptor() {
         Cipher deccipher = null;
         try {

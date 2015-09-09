@@ -55,6 +55,14 @@ public interface ExportService
     void exportResultSet(List<Map<Object, Object>> list, OutputStream outStream) throws ExportException;
 
     /**
+     * Export record .
+     * @param rows
+     * @param columnMap
+     * @param outStream
+     */
+    void exportResultSet(List<Map<Object, Object>> rows, Map<String, String> columnMap, OutputStream outStream) throws ExportException;
+
+    /**
      * Used the printWriter to print text to a new line.
      * @param out
      * @param printText text to print.
@@ -74,12 +82,5 @@ public interface ExportService
      */
     void setContext(ExportContext ctx);
 
-    /**
-     * Export record .
-     * @param rows
-     * @param columnMap
-     * @param outStream
-     */
-    void exportResultSet(List<Map<Object, Object>> rows, Map<String, String> columnMap, OutputStream outStream) throws ExportException;
-
+   
 }

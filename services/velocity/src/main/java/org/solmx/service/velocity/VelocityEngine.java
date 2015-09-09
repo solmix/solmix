@@ -43,6 +43,5 @@ public interface VelocityEngine extends TemplateEngine
     
     void mergeTemplate(String template, Context context, OutputStream ostream, String inputEncoding, String outputEncoding) throws TemplateException, IOException;
 
-    void mergeTemplate(String template, Context context, Writer writer, String inputEncoding) throws TemplateException,
-                                                                                                     IOException;
+    void mergeTemplate(String template, Context context, Writer writer, String inputEncoding) throws TemplateException,IOException;
 }

@@ -80,7 +80,7 @@ public class ExtensionContainer implements Container {
 
             @Override
             public void run() {
-                LOG.info("Run JVM shutdown hook!");
+                LOG.info("Run JVM shutdown hook,make sure all container is closed!");
                 Container[] containers = ContainerFactory.getContainers();
                 for (Container container : containers) {
                     container.close();

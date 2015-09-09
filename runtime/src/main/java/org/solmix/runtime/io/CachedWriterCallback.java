@@ -16,43 +16,17 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+package org.solmix.runtime.io;
 
-package org.solmix.service.export;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$ 2015年8月21日
+ * @version $Id$  2015年9月9日
  */
 
-public enum ExportAs
+public interface CachedWriterCallback
 {
-
-    CSV("csv") , 
-    JSON("json") , 
-    XML("xml") , 
-    XLS("xls") , 
-    DOC("doc") , 
-    OOXML("ooxml");
-
-    private final String value;
-
-    ExportAs(String v)
-    {
-        value = v;
-    }
-
-    public String value() {
-        return value;
-    }
-
-    public static ExportAs fromValue(String v) {
-        for (ExportAs c : ExportAs.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new ExportException(v);
-    }
-
+    void onClose(CachedWriter os);
+    void onFlush(CachedWriter os);
 }

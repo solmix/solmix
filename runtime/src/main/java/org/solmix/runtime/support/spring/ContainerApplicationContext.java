@@ -172,7 +172,7 @@ public class ContainerApplicationContext extends ClassPathXmlApplicationContext 
             } else {
             	
                 if (!usingDefault) {
-                    throw new ApplicationContextException("Can't find configure file"+cfgFile);
+                    throw new ApplicationContextException("Can't find configure file:"+cfgFile);
                 }
             }
         }
