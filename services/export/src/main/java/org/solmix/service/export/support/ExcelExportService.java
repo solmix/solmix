@@ -92,10 +92,13 @@ public class ExcelExportService extends AbstractExportService
         int rowIndex = 0;
         int cellIndex = 0;
         Row row = worksheet.createRow(rowIndex++);
+        Map<String,String> headerStyleElements = new HashMap<String,String>();
+        headerStyleElements.put("backgroundColor", "#5bb4e0");
         for (String header : headers) {
             if (header.indexOf("$style") == -1) {
                 Cell cell = row.createCell(cellIndex, 1);
                 cell.setCellValue(header);
+                cell.setCellStyle(getCellStyle(headerStyleElements, false));
                 cellIndex++;
             }
         }
@@ -173,6 +176,8 @@ public class ExcelExportService extends AbstractExportService
         }
     }
     
+    
+
     private RichTextString buildRichTextString(List styles, String stringValue) {
         RichTextString styledString = null;
         if (workbook instanceof HSSFWorkbook)

@@ -57,7 +57,6 @@ public class XSSFTemplateEngine extends PoiAbstractTemplateEngine
                    if (row != null) {
                        XSSFCell cell = row.getCell(j);
                        String cellValue = cell.getStringCellValue();
-
                        if (cellValue!=null&&cellValue.startsWith("$>>")) {
                            String script = cellValue.substring(3);
                            Object value = evaluateValue(script, context);

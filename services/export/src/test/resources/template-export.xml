@@ -16,5 +16,7 @@
 	<bean class="org.solmix.service.export.template.XSSFTemplateEngine">
 		<property name="path" value=""></property>
 	</bean>
-	
+	<bean class="org.solmix.service.export.template.XWPFTemplateEngine">
+		<property name="path" value=""></property>
+	</bean>
 </beans>

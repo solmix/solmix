@@ -21,8 +21,13 @@ package org.solmix.service.export.template;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.List;
 
-import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.resource.InputStreamResource;
 import org.solmx.service.template.TemplateContext;
@@ -34,22 +39,31 @@ import org.solmx.service.template.TemplateException;
  * @version $Id$ 2015年9月9日
  */
 @Extension(name = "world2007")
-public class HWPFTemplateEngine extends PoiAbstractTemplateEngine
+public class XWPFTemplateEngine extends PoiAbstractTemplateEngine
 {
     @Override
     public void evaluate(String templateName, TemplateContext context, OutputStream ostream) throws TemplateException, IOException {
         InputStreamResource stream= getInputStreamResource( templateName);
-        HWPFDocument hdt = null;
-        try {
-        hdt = new HWPFDocument(stream.getInputStream());
-        } catch (IOException e1) {
-        e1.printStackTrace();
+        XWPFDocument hdt = new XWPFDocument(stream.getInputStream());
+        Iterator<XWPFTable> it= hdt.getTablesIterator();
+        while(it.hasNext()){
+            XWPFTable table = it.next();
+            int rcount = table.getNumberOfRows();
+            for(int i=0;i<rcount;i++){
+                XWPFTableRow row=  table.getRow(i);
+                List<XWPFTableCell> cells = row.getTableCells();
+                for(XWPFTableCell cell:cells){
+                    System.out.println(cell.getText());
+                }
+            }
         }
+        hdt.write(ostream);
+        hdt.close();
     }
 
     @Override
     public String[] getDefaultExtensions() {
-        return new String[]{"doc"};
+        return new String[]{"docx"};
     }
 
 

@@ -94,7 +94,7 @@ public abstract class PoiAbstractTemplateEngine implements TemplateEngine
                 instance.evaluate(vContext, null, "VelocityExpression",
                     new StringBuilder().append("#set($").append(VT_TMP_NAME).append(" = ").append(expression).append(")\n").toString());
             } catch (Exception e) {
-                throw new ExportException("Velocity evalute exception:\n", e);
+                throw new ExportException("Velocity evalute exception:"+expression, e);
             }
             result = vContext.get(VT_TMP_NAME);
         }

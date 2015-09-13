@@ -43,13 +43,13 @@ import org.solmx.service.template.support.MappedTemplateContext;
  * @version $Id$  2015年9月9日
  */
 
-public class ExcelTemplateTest
+public class POITemplateTest
 {
     Container container;
     XSSFTemplateEngine engine;
     
     @Test
-    public void test() throws IOException{
+    public void testxssf() throws IOException{
         CachedOutputStream ostream= new CachedOutputStream();
         TemplateContext tc = new MappedTemplateContext();
         Map<String,String> map = new HashMap<String,String>();
@@ -59,6 +59,24 @@ public class ExcelTemplateTest
         tc.put("data", map);
         engine.evaluate("/template.xlsx", tc, ostream);
         File f = new File("target/test.xlsx");
+        OutputStream outs = new FileOutputStream(f);
+        IOUtils.copy(ostream.getInputStream(), outs);
+        outs.flush();
+        outs.close();
+    }
+    
+    @Test
+    public void testxwpf() throws IOException{
+        XWPFTemplateEngine engine= container.getExtension(XWPFTemplateEngine.class);
+        CachedOutputStream ostream= new CachedOutputStream();
+        TemplateContext tc = new MappedTemplateContext();
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("A", "某某姓名");
+        map.put("B", "2015-12-1");
+        map.put("C", "56");
+        tc.put("data", map);
+        engine.evaluate("/template.docx", tc, ostream);
+        File f = new File("target/test.docx");
         OutputStream outs = new FileOutputStream(f);
         IOUtils.copy(ostream.getInputStream(), outs);
         outs.flush();
