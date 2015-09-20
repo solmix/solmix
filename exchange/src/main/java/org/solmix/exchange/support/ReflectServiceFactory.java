@@ -21,9 +21,11 @@ package org.solmix.exchange.support;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +87,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     
     protected NamedIDPolicy namedIDPolicy;
 
-    private Map<String, Object> properties;
+    private Dictionary<String, ?> properties;
 
     private Invoker invoker;
 
@@ -160,6 +162,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         }
     }
 
+    @Override
     public Invoker createInvoker() {
         Class<?> cls = getServiceClass();
         if (cls.isInterface()) {
@@ -179,7 +182,11 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     }
 
     protected void buildServiceModel() {
-
+        if(Proxy.isProxyClass(getServiceClass())){
+            LOG.warn("Used proxy for service :{}"+getServiceClass());
+        }
+        pulishEvent(ServiceFactoryEvent.CREATE_FROM_CLASS, getServiceClass());
+        
     }
 
     @Override
@@ -207,16 +214,17 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     }
 
     /**   */
-    public Map<String, Object> getProperties() {
+    public Dictionary<String, ?> getProperties() {
         return properties;
     }
 
     /**   */
-    public void setProperties(Map<String, Object> properties) {
+    public void setProperties(Dictionary<String, ?> properties) {
         this.properties = properties;
     }
 
     /**   */
+    @Override
     public Invoker getInvoker() {
         return invoker;
     }

@@ -33,7 +33,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class InfoPropertiesSupport {
 
     private InfoPropertiesSupport delegate;
-
+    
+    /**扩展*/
     private final AtomicReference<Object[]> extensions = new AtomicReference<Object[]>();
 
     private final AtomicReference<Map<String, Object>> properties = new AtomicReference<Map<String, Object>>();
@@ -102,6 +103,7 @@ public abstract class InfoPropertiesSupport {
         return extensionAttributes;
     }
 
+    /** no thread safe */
     public void addExtensionAttribute(String name, Object attr) {
         if (delegate != null) {
             delegate.addExtensionAttribute(name, attr);
@@ -120,7 +122,9 @@ public abstract class InfoPropertiesSupport {
         }
         extensionAttributes = attrs;
     }
-
+    
+    
+    
     public void setProperty(String name, Object v) {
         if (delegate != null && delegateProperties) {
             delegate.setProperty(name, v);
@@ -210,4 +214,10 @@ public abstract class InfoPropertiesSupport {
         return o1 == null ? true : o1.equals(o2);
     }
     
+
+    public boolean hasProperty(String key) {
+        Object value = getProperty(key);
+        return value != null ;
+    }
+  
 }

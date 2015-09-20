@@ -20,6 +20,7 @@
 package org.solmix.exchange.model;
 
 /**
+ * {@link org.solmix.exchange.Endpoint Endpoint}描述信息
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月15日

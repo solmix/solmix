@@ -18,7 +18,7 @@
  */
 package org.solmix.exchange.support;
 
-import java.util.Map;
+import java.util.Dictionary;
 
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.EndpointException;
@@ -56,13 +56,12 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     
     protected String address;
     
-    protected Map<String, Object> properties;
+    protected Dictionary<String, ?> properties;
     
     protected NamedID serviceName;
     
     protected NamedID endpointName;
     
-    private Object configObject;
     
     protected abstract Endpoint createEndpoint() throws  EndpointException;
 
@@ -121,12 +120,12 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     }
 
     /**   */
-    public Map<String, Object> getProperties() {
+    public Dictionary<String, ?> getProperties() {
         return properties;
     }
     
     /**   */
-    public void setProperties(Map<String, Object> properties) {
+    public void setProperties(Dictionary<String, ?> properties) {
         this.properties = properties;
     }
     protected void initializeAnnotationInterceptors(Endpoint ep, Class<?> cls) {
@@ -180,17 +179,5 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
-
-
-    /**   */
-    public Object getConfigObject() {
-        return configObject;
-    }
-
-
-    /**   */
-    public void setConfigObject(Object configObject) {
-        this.configObject = configObject;
-    } 
     
 }

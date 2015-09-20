@@ -23,12 +23,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 支持transport检查
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2015年1月5日
  */
 
-public interface TransportDetectSupport {
+public interface TypeDetectSupport {
 
     Set<String> getUriPrefixes();
 

@@ -64,8 +64,7 @@ public abstract class AbstractTransporter implements Transporter {
             if (processor != null) {
                 this.processor = processor;
                 if (getLogger().isTraceEnabled()) {
-                    getLogger().trace(
-                        "Register message Processor: " + processor);
+                    getLogger().trace("Register message Processor: " + processor);
                 }
                 if (old == null) {
                     try {
@@ -105,10 +104,12 @@ public abstract class AbstractTransporter implements Transporter {
         /**
          *nothing todo.
          */
+        @Override
         public void setProcessor(Processor processor) {
             
         }
         
+        @Override
         protected Logger getLogger() {
             return AbstractBackPipeline.this.getLogger();
         }

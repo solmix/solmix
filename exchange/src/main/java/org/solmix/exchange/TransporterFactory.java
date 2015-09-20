@@ -33,5 +33,8 @@ import org.solmix.runtime.Extension;
 @Extension
 public interface TransporterFactory {
 
+    /**根据EndpointInfo.getExtension(configedBean)来初始化transporter，根据transporterFactory的supported
+     * Configs来自动创建configedBean
+     * */
     Transporter getTransporter(EndpointInfo ei, Container container)throws IOException;
 }

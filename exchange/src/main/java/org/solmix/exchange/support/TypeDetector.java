@@ -37,7 +37,7 @@ import org.solmix.runtime.extension.DefaultExtensionLoader;
  * @version $Id$ 2015年1月5日
  */
 
-public class TransportDetector<T> {
+public class TypeDetector<T> {
 
     private final Map<String, T> map;
 
@@ -47,7 +47,7 @@ public class TransportDetector<T> {
 
     private final ConfiguredBeanProvider provider;
 
-    public TransportDetector(Container container, Map<String, T> map,
+    public TypeDetector(Container container, Map<String, T> map,
         Set<String> loaded, Class<T> clz) {
         this.map = map;
         this.loaded = loaded;
@@ -101,8 +101,8 @@ public class TransportDetector<T> {
     
     private Set<String> getPrefixes(T t) {
         Set<String> prefixes = null;
-        if (t instanceof TransportDetectSupport) {
-            TransportDetectSupport tds = (TransportDetectSupport) t;
+        if (t instanceof TypeDetectSupport) {
+            TypeDetectSupport tds = (TypeDetectSupport) t;
             prefixes = tds.getUriPrefixes();
         }
         if (prefixes == null) {
@@ -152,9 +152,10 @@ public class TransportDetector<T> {
         return map.get(type);
     }
 
+    @SuppressWarnings("unchecked")
     private void registerBean(String name, T bean) {
-        if (bean instanceof TransportDetectSupport) {
-            TransportDetectSupport tds = (TransportDetectSupport) bean;
+        if (bean instanceof TypeDetectSupport) {
+            TypeDetectSupport tds = (TypeDetectSupport) bean;
             if (tds.getTransportTypes() != null) {
                 for (String tt : tds.getTransportTypes()) {
                     if (!map.containsKey(tt)) {
@@ -163,24 +164,27 @@ public class TransportDetector<T> {
                 }
             }
         } else {
+            Method m =null;
             try {
-                Method m = bean.getClass().getMethod("getSupportTypes",
-                    new Class[0]);
-                if (m != null) {
-                    @SuppressWarnings("unchecked")
-                    Collection<String> c = (Collection<String>) m.invoke(bean);
-                    for (String s : c) {
+                 m = bean.getClass().getMethod("getSupportTypes",new Class[0]);
+            } catch (Exception ex) {}
+            if (m != null) {
+                
+                Collection<String> types=null;
+                try {
+                    types = (Collection<String>) m.invoke(bean);
+                } catch (Exception e) {}
+                if(types!=null){
+                    for (String s : types) {
                         if (!map.containsKey(s)) {
                             map.put(s, bean);
                         }
                     }
-                } else {
-                    if (!map.containsKey(name)) {
-                        map.put(name, bean);
-                    }
                 }
-            } catch (Exception ex) {
-                // ignore
+            } else {
+                if (!map.containsKey(name)) {
+                    map.put(name, bean);
+                }
             }
         }
     }

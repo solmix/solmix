@@ -30,6 +30,8 @@ import java.io.IOException;
 
 public interface Transporter extends ProcessorAware {
 
+    
+    Processor getProcessor();
     /**
      * 关闭端点停止接收消息
      */

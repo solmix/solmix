@@ -32,7 +32,6 @@ import java.io.IOException;
 
 public interface Pipeline extends ProcessorAware {
     
-    @Override
     Processor getProcessor();
 
     /**

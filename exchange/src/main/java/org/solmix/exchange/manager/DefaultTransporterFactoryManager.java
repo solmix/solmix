@@ -28,7 +28,7 @@ import javax.annotation.Resource;
 
 import org.solmix.exchange.TransporterFactory;
 import org.solmix.exchange.TransporterFactoryManager;
-import org.solmix.exchange.support.TransportDetector;
+import org.solmix.exchange.support.TypeDetector;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.extension.ExtensionException;
 
@@ -70,7 +70,7 @@ public class DefaultTransporterFactoryManager implements
         
         TransporterFactory factory = transporterFactories.get(type);
         if (factory == null && !failed.contains(type)) {
-            TransportDetector<TransporterFactory> detector = new TransportDetector<TransporterFactory>(
+            TypeDetector<TransporterFactory> detector = new TypeDetector<TransporterFactory>(
                 getContainer(), transporterFactories, loaded, TransporterFactory.class);
             factory = detector.detectInstanceForType(type);
         }
@@ -93,14 +93,10 @@ public class DefaultTransporterFactoryManager implements
             container.setExtension(this, TransporterFactoryManager.class);
         }
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.TransporterFactoryManager#getFactoryForUri(java.lang.String)
-     */
+   
     @Override
     public TransporterFactory getFactoryForUri(String uri) {
-        return new TransportDetector<TransporterFactory>(getContainer(),
+        return new TypeDetector<TransporterFactory>(getContainer(),
             transporterFactories, loaded, TransporterFactory.class).detectInstanceForURI(uri);
     }
 }

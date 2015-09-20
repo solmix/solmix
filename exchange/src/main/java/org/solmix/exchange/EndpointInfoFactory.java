@@ -19,6 +19,8 @@
 
 package org.solmix.exchange;
 
+import java.util.Dictionary;
+
 import org.solmix.exchange.model.EndpointInfo;
 import org.solmix.exchange.model.ProtocolInfo;
 import org.solmix.exchange.model.ServiceInfo;
@@ -33,6 +35,8 @@ import org.solmix.runtime.Container;
 public interface EndpointInfoFactory {
 
     EndpointInfo createEndpointInfo(Container container,
-        ServiceInfo serviceInfo, ProtocolInfo b, Object endpointConfig);
+                                    ServiceInfo serviceInfo, 
+                                    ProtocolInfo b, 
+                                    Dictionary<String, ?> endpointConfig);
 
 }

@@ -19,6 +19,8 @@
 
 package org.solmix.exchange;
 
+import java.util.Dictionary;
+
 import org.solmix.exchange.model.ProtocolInfo;
 import org.solmix.runtime.Extension;
 
@@ -47,6 +49,6 @@ public interface ProtocolFactory {
      * @return
      */
     ProtocolInfo createProtocolInfo(Service service, String protocol,
-        Object configObject);
+        Dictionary<String, ?> configObject);
 
 }

@@ -27,7 +27,5 @@ package org.solmix.exchange;
 
 public interface ProcessorAware {
 
-    Processor getProcessor();
-
     void setProcessor(Processor processor);
 }

@@ -28,7 +28,7 @@ import javax.annotation.Resource;
 
 import org.solmix.exchange.PipelineFactory;
 import org.solmix.exchange.PipelineFactoryManager;
-import org.solmix.exchange.support.TransportDetector;
+import org.solmix.exchange.support.TypeDetector;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.extension.ExtensionException;
 
@@ -74,7 +74,7 @@ public class DefaultPipelineFactoryManager implements PipelineFactoryManager {
     public PipelineFactory getFactory(String type) {
         PipelineFactory factory = pipelineFactorys.get(type);
         if (factory == null && !failed.contains(type)) {
-            TransportDetector<PipelineFactory> detector = new TransportDetector<PipelineFactory>(
+            TypeDetector<PipelineFactory> detector = new TypeDetector<PipelineFactory>(
                 getContainer(), pipelineFactorys, loaded, PipelineFactory.class);
             factory = detector.detectInstanceForType(type);
         }
@@ -101,7 +101,7 @@ public class DefaultPipelineFactoryManager implements PipelineFactoryManager {
 
     @Override
     public PipelineFactory getFactoryForUri(String uri) {
-        return new TransportDetector<PipelineFactory>(getContainer(),
+        return new TypeDetector<PipelineFactory>(getContainer(),
             pipelineFactorys, loaded, PipelineFactory.class).detectInstanceForURI(uri);
     }
 

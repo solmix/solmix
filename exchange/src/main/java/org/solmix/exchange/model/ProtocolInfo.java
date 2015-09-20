@@ -28,12 +28,16 @@ package org.solmix.exchange.model;
 
 public class ProtocolInfo extends InfoPropertiesSupport {
 
+    public static final String PROTOCOL_NS="http://www.solmix.org/protocol";
     private NamedID name;
 
     private ServiceInfo service;
 
     private final String protocolId;
 
+    public ProtocolInfo(String protocolId){
+        this.protocolId=protocolId;
+    }
     public ProtocolInfo(ServiceInfo service, String protocolId) {
         this.service = service;
         this.protocolId = protocolId;

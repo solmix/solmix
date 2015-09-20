@@ -18,6 +18,8 @@
  */
 package org.solmix.exchange.support;
 
+import java.util.Dictionary;
+
 import javax.annotation.Resource;
 
 import org.solmix.exchange.Endpoint;
@@ -54,7 +56,7 @@ public abstract class AbstractProtocolFactory implements ProtocolFactory {
 
     @Override
     public ProtocolInfo createProtocolInfo(Service service, String protocol,
-        Object configObject) {
+        Dictionary<String, ?> configObject) {
         ProtocolInfo pi = createProtocolInfo(service.getServiceInfo(),
             protocol, configObject);
         if (pi.getName() == null) {
@@ -66,7 +68,7 @@ public abstract class AbstractProtocolFactory implements ProtocolFactory {
     }
     
     public ProtocolInfo createProtocolInfo(ServiceInfo info, String protocol,
-        Object configObject) {
+        Dictionary<String, ?> configObject) {
         return new ProtocolInfo(info, protocol);
     }
     

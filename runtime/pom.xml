@@ -61,6 +61,11 @@
 			<artifactId>org.apache.aries.blueprint.core</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+			<version>4.0.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
