@@ -20,4 +20,5 @@
   		<version>0.6.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+  <name>Solmix :: Services :: Template-jsp</name>
 </project>

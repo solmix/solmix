@@ -18,4 +18,5 @@
     <version>2.3.23</version>
 </dependency>
   </dependencies>
+  <name>Solmix :: Services :: Freemarker</name>
 </project>

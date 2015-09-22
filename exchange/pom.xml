@@ -53,4 +53,5 @@
 			<scope>provided</scope>
 		</dependency>
   </dependencies>
+  <name>Solmix :: Common :: Exchange</name>
 </project>

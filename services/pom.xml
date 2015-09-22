@@ -15,4 +15,5 @@
   	<module>export</module>
   	<module>jackson</module>
   </modules>
+  <name>Solmix :: Services :: Parent</name>
 </project>

@@ -71,4 +71,5 @@
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>
 	<packaging>bundle</packaging>
+	<name>Solmix :: Services :: velocity</name>
 </project>

@@ -15,7 +15,7 @@
   	<dependency>
     <groupId>com.fasterxml.jackson.dataformat</groupId>
     <artifactId>jackson-dataformat-xml</artifactId>
-    <version>2.6.1</version>
 </dependency>
   </dependencies>
+  <name>Solmix :: Services :: Jackson</name>
 </project>
