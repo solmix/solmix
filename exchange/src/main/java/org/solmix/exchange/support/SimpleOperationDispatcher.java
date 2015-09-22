@@ -37,31 +37,19 @@ public class SimpleOperationDispatcher implements OperationDispatcher {
         new ConcurrentHashMap<OperationInfo, Method>(16, 0.75f, 2);
     private final Map<Method, OperationInfo> methodToOp = 
         new ConcurrentHashMap<Method, OperationInfo>(16, 0.75f, 2);
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.invoker.OperationDispatcher#getMethod(org.solmix.exchange.model.OperationInfo)
-     */
+ 
     @Override
     public Method getMethod(OperationInfo operation) {
         return opToMethod.get(operation);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.invoker.OperationDispatcher#getOperation(java.lang.reflect.Method)
-     */
+
     @Override
     public OperationInfo getOperation(Method method) {
         return methodToOp.get(method);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.invoker.OperationDispatcher#bind(java.lang.reflect.Method, org.solmix.exchange.model.OperationInfo)
-     */
+
     @Override
     public void bind(Method method, OperationInfo operation) {
         opToMethod.put(operation, method);

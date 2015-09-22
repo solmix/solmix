@@ -151,7 +151,7 @@ public class ServiceInfo extends InfoPropertiesSupport {
     }
 
     /**
-     * @param interfaceInfo2
+     * @param interfaceInfo
      */
     public void setInterface(InterfaceInfo inf) {
         this.interfaceInfo = inf;

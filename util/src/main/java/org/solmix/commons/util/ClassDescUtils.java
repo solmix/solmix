@@ -335,4 +335,8 @@ public class ClassDescUtils
 
         return componentTypeName.toString();
     }
+    
+    public static String[] getParameterNamesFromDebugInfo(Method method) {
+       return ParamNameReader.getParameterNamesFromDebugInfo(method);
+    }
 }

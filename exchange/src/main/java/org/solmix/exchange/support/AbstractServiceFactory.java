@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.solmix.exchange.Service;
-import org.solmix.exchange.ServiceFactoryListener;
 import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.event.ServiceFactoryEvent;
+import org.solmix.exchange.event.ServiceFactoryListener;
 import org.solmix.exchange.interceptor.support.OneWayInterceptor;
 import org.solmix.exchange.interceptor.support.OutgoingChainInterceptor;
 import org.solmix.exchange.interceptor.support.ServiceInvokerInterceptor;
@@ -45,7 +45,7 @@ public abstract class AbstractServiceFactory {
     
     protected Service service;
 
-    private DataProcessor dataProcessor;
+    protected DataProcessor dataProcessor;
 
     private final CopyOnWriteArrayList<ServiceFactoryListener> listeners = new CopyOnWriteArrayList<ServiceFactoryListener>();
     

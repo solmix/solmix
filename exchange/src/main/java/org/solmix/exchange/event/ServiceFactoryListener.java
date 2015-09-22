@@ -16,9 +16,8 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.exchange;
+package org.solmix.exchange.event;
 
-import org.solmix.exchange.event.ServiceFactoryEvent;
 
 
 /**

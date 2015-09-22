@@ -70,11 +70,6 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
         pipelines.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#complete(org.solmix.exchange.Exchange)
-     */
     @Override
     public void complete(Exchange exchange) {
         // 保持活动
@@ -132,11 +127,6 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
         return pl;
     }
 
-    /**
-     * @param msg
-     * @param address
-     * @param pl
-     */
     protected boolean replaceEndpointAddressIfNeeded(Message msg, String address,
         Pipeline pl) {
        return false;

@@ -65,7 +65,7 @@ public class FaultOutInterceptor extends PhaseInterceptorSupport<Message> {
         FaultInfo selectedFaultInfo = null;
         Class<?> selectedFaultInfoClass = null;
         for (FaultInfo fi : oi.getFaults()) {
-            Class<?> c = fi.getExtension(Class.class);
+            Class<?> c = (Class<?>)fi.getProperty(Class.class.getName());
             if (c != null
                 && c.isAssignableFrom(class1)
                 && (selectedFaultInfo == null || selectedFaultInfoClass.isAssignableFrom(c))) {

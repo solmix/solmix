@@ -90,11 +90,6 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
         return in;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setIn(org.solmix.exchange.Message)
-     */
     @Override
     public void setIn(Message in) {
         this.in = in;
@@ -104,21 +99,11 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#getOut()
-     */
     @Override
     public Message getOut() {
         return out;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setOut(org.solmix.exchange.Message)
-     */
     @Override
     public void setOut(Message out) {
         this.out = out;
@@ -127,21 +112,12 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#getInFault()
-     */
     @Override
     public Message getInFault() {
         return inFault;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setInFault(org.solmix.exchange.Message)
-     */
+    
     @Override
     public void setInFault(Message m) {
         this.inFault = m;
@@ -151,21 +127,11 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#getOutFault()
-     */
     @Override
     public Message getOutFault() {
         return outFault;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setOutFault(org.solmix.exchange.Message)
-     */
     @Override
     public void setOutFault(Message m) {
         this.outFault = m;
@@ -188,62 +154,38 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
             getEndpoint()));
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#getContainer()
-     */
+   
     @Override
     public Container getContainer() {
         return container;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#getEndpoint()
-     */
+   
     @Override
     public Endpoint getEndpoint() {
         return endpoint;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#isOneWay()
-     */
+    
     @Override
     public boolean isOneWay() {
         return oneWay;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setOneWay(boolean)
-     */
+    
     @Override
     public void setOneWay(boolean b) {
         this.oneWay = b;
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#isSync()
-     */
+    
     @Override
     public boolean isSync() {
         return sync;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Exchange#setSync(boolean)
-     */
+   
     @Override
     public void setSync(boolean b) {
         this.sync = b;

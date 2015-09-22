@@ -117,6 +117,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         Pipeline pipeline) {
         this(container, endpoint, new PipelineWrappedSelector(pipeline));
     }
+    
     public DefaultClient(Container container, Endpoint endpoint,
         PipelineSelector pipelineSelector) {
         this.container = container;
@@ -568,15 +569,10 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         return pipelineSelector;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Client#setPipelineSelector(org.solmix.exchange.PipelineSelector)
-     */
     @Override
     public synchronized void setPipelineSelector(PipelineSelector selector) {
         if (selector == null) {
-            selector = new PreparedPipelineSelector();
+            pipelineSelector = new PreparedPipelineSelector();
         } else {
             pipelineSelector = selector;
         }
@@ -718,7 +714,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             msg.setContent(List.class, new MessageList(params));
 
             if (oi != null) {
-                exchange.setOneWay(oi.getOutput() != null);
+                exchange.setOneWay(oi.getOutput() == null);
             }
             exchange.setOut(msg);
             exchange.put(ClientCallback.class, callback);

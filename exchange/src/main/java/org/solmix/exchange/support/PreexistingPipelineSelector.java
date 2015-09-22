@@ -51,11 +51,6 @@ public class PreexistingPipelineSelector implements PipelineSelector, Closeable
         pipeline.close();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#prepare(org.solmix.exchange.Message)
-     */
     @Override
     public void prepare(Message message) {
         Processor pro = message.getExchange().get(Processor.class);
@@ -65,21 +60,13 @@ public class PreexistingPipelineSelector implements PipelineSelector, Closeable
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#select(org.solmix.exchange.Message)
-     */
+  
     @Override
     public Pipeline select(Message message) {
         return pipeline;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#complete(org.solmix.exchange.Exchange)
-     */
+ 
     @Override
     public void complete(Exchange exchange) {
         try {
@@ -91,21 +78,11 @@ public class PreexistingPipelineSelector implements PipelineSelector, Closeable
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#getEndpoint()
-     */
     @Override
     public Endpoint getEndpoint() {
         return endpoint;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#setEndpoint(org.solmix.exchange.Endpoint)
-     */
     @Override
     public void setEndpoint(Endpoint endpoint) {
        this.endpoint=endpoint;

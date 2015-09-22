@@ -132,31 +132,19 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
         this.executor = executor;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Endpoint#getProtocol()
-     */
+    
     @Override
     public Protocol getProtocol() {
         return protocol;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Endpoint#getService()
-     */
+   
     @Override
     public Service getService() {
         return service;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Endpoint#addCleanupHook(java.io.Closeable)
-     */
+  
     @Override
     public void addCleanupHook(Closeable c) {
         if (cleanupHooks == null) {
@@ -165,11 +153,6 @@ public class DefaultEndpoint extends InterceptorProviderAttrSupport implements
         cleanupHooks.add(c);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Endpoint#getCleanupHooks()
-     */
     @Override
     public List<Closeable> getCleanupHooks() {
         if (cleanupHooks == null) {

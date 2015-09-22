@@ -34,66 +34,75 @@ public class ServiceFactoryEvent implements Event, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public final static int DATABINDING_INITIALIZED = 0x00000001;
+    public final static int DATAPROCESSOR_INITIALIZED = 0x00000001;
 
     /**
      * EndpointInfo, Endpoint, Class
      */
-    public final static int ENDPOINT_CREATED = 0x00000001;
+    public final static int ENDPOINT_CREATED = 0x00000002;
 
     /**
      * Server, targetObject, Class
      */
-    public final static int PRE_SERVER_CREATE = 0x00000001;
+    public final static int PRE_SERVER_CREATE = 0x00000003;
 
     /**
      * Server, targetObject, Class
      */
-    public final static int SERVER_CREATED = 0x00000001;
+    public final static int SERVER_CREATED = 0x00000004;
+    
+    /**
+     * InterfaceInfo
+     */
+    public final static int INTERFACE_CREATED = 0x00000005;
 
     /**
      * ProtocolInfo
      */
-    public final static int PROTOCOL_CREATED = 0x00000001;
+    public final static int PROTOCOL_CREATED = 0x00000006;
 
     /**
      * Endpoint
      */
-    public final static int PRE_CLIENT_CREATE = 0x00000001;
+    public final static int PRE_CLIENT_CREATE = 0x00000007;
 
     /**
      * Endpoint, Client
      */
-    public final static int CLIENT_CREATED = 0x00000001;
+    public final static int CLIENT_CREATED = 0x00000008;
 
     /**
      * EndpointInfo, Endpoint, SEI Class, Class
      */
-    public final static int ENDPOINT_SELECTED = 0x00000001;
+    public final static int ENDPOINT_SELECTED = 0x00000009;
 
     /**
      * EndpointInfo
      */
-    public final static int ENDPOINTINFO_CREATED = 0x00000001;
+    public final static int ENDPOINTINFO_CREATED = 0x0000000A;
 
     /**
      * Class[], InvokationHandler, Proxy
      */
-    public final static int PROXY_CREATED = 0x00000001;
+    public final static int PROXY_CREATED = 0x0000000B;
 
-    public static int START_CREATE = 0x00000001;
+    public final static int START_CREATE = 0x0000000C;
     
-    public static int END_CREATE = 0x00000001;
+    public final static int END_CREATE = 0x0000000D;
 
-    public static int CREATE_FROM_CLASS = 0x00000001;
+    public final static int CREATE_FROM_CLASS = 0x0000000E;
 
-    public static int OPERATIONINFO_IN_MESSAGE_SET = 0x00000001;
+    public final static int OPERATIONINFO_IN_MESSAGE_SET = 0x0000000F;
 
-    public static int OPERATIONINFO_OUT_MESSAGE_SET = 0x00000001;
+    public final static int OPERATIONINFO_OUT_MESSAGE_SET = 0x00000010;
+    
+    public static final int OPERATIONINFO_BOUND = 0x00000011;
+    
+    public final static int OPERATIONINFO_FAULT = 0x00000012;
 
-    public static int OPERATIONINFO_FAULT = 0x00000001;
+    public final static int SERVER_CREATED_END = 0x00000013;
 
-    public static int SERVER_CREATED_END = 0x00000001;
+    
 
     private final int type;
 

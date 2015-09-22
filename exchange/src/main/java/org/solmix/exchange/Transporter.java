@@ -47,9 +47,4 @@ public interface Transporter extends ProcessorAware {
      */
     Pipeline getBackPipeline(Message msg) throws IOException;
     
-    /**
-     * 默认端口号
-     * @return
-     */
-    int getDefaultPort();
 }

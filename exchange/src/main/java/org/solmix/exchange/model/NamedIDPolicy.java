@@ -24,7 +24,9 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+import org.solmix.commons.util.ClassDescUtils;
 import org.solmix.exchange.Exchange;
+import org.solmix.exchange.ServiceCreateException;
 import org.solmix.exchange.support.ReflectServiceFactory;
 
 /**
@@ -138,7 +140,7 @@ public class NamedIDPolicy {
     }
 
     public NamedID getOutMessageName(OperationInfo op, Method method) {
-        return new NamedID(op.getName());
+        return new NamedID(op.getName().getServiceNamespace(), op.getName().getName() + "Response");
     }
     
     public boolean isInParam(Method method, int j) {
@@ -153,17 +155,14 @@ public class NamedIDPolicy {
     }
 
     public NamedID getInArgumentName(OperationInfo op, Method method, int j) {
-        String argName = new StringBuilder().append(method.getName()).append(
-            "arg").append(j).toString();
-        return new NamedID(op.getName().getServiceNamespace(), argName);
+        return new NamedID(op.getName().getServiceNamespace(), getDefaultLocalName(op,method,j,"arg"));
     }
 
     public NamedID getOutArgumentName(OperationInfo op, Method method, int j) {
-        String argName = new StringBuilder().append(method.getName()).append(
-            "retrun").append(j).toString();
-        return new NamedID(op.getName().getServiceNamespace(), argName);
+        return new NamedID(op.getName().getServiceNamespace(), getDefaultLocalName(op,method,j,"retrun"));
     }
    
+    /**是否有返回信息*/
     public boolean hasOutMessage(Method method) {
         return Boolean.TRUE;
     }
@@ -234,5 +233,39 @@ public class NamedIDPolicy {
         return sb.toString();
     }
 
-   
+    private String getDefaultLocalName(OperationInfo op, Method method, int paramNumber, String prefix) {
+        Class<?> impl = getServiceFactory().getServiceClass();
+        // try to grab the implementation class so we can read the debug symbols from it
+        if (impl != null) {
+            try {
+                method = impl.getMethod(method.getName(), method.getParameterTypes());
+            } catch (Exception e) {
+                throw new ServiceCreateException(e);
+            }
+        }
+        
+        return createName(method, paramNumber, op.getInput().size(), false, prefix);
+    }
+
+    public static String createName(final Method method, final int paramNumber, final int currentSize, boolean addMethodName, final String flow) {
+        String paramName = "";
+
+        if (paramNumber != -1) {
+            String[] names = ClassDescUtils.getParameterNamesFromDebugInfo(method);
+
+            // get the specific parameter name from the parameter Number
+            if (names != null && names[paramNumber] != null) {
+                paramName = names[paramNumber];
+                addMethodName = false;
+            } else {
+                paramName = flow + currentSize;
+            }
+        } else {
+            paramName = flow;
+        }
+
+        paramName = addMethodName ? method.getName() + paramName : paramName;
+
+        return paramName;
+    }
 }

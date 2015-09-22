@@ -19,12 +19,14 @@
 
 package org.solmix.exchange.support;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -35,20 +37,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.EndpointException;
+import org.solmix.exchange.Exchange;
 import org.solmix.exchange.ProtocolFactoryManager;
 import org.solmix.exchange.Service;
 import org.solmix.exchange.ServiceCreateException;
 import org.solmix.exchange.data.DataProcessor;
 import org.solmix.exchange.event.ServiceFactoryEvent;
+import org.solmix.exchange.interceptor.Fault;
 import org.solmix.exchange.interceptor.phase.PhasePolicy;
 import org.solmix.exchange.interceptor.support.FaultOutInterceptor;
 import org.solmix.exchange.invoker.FactoryInvoker;
 import org.solmix.exchange.invoker.Invoker;
 import org.solmix.exchange.invoker.OperationDispatcher;
 import org.solmix.exchange.invoker.SingletonFactory;
+import org.solmix.exchange.model.ArgumentInfo;
 import org.solmix.exchange.model.EndpointInfo;
+import org.solmix.exchange.model.FaultInfo;
+import org.solmix.exchange.model.InterfaceInfo;
+import org.solmix.exchange.model.MessageInfo;
 import org.solmix.exchange.model.NamedID;
 import org.solmix.exchange.model.NamedIDPolicy;
+import org.solmix.exchange.model.OperationInfo;
 import org.solmix.exchange.model.ServiceInfo;
 
 /**
@@ -188,7 +197,176 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         pulishEvent(ServiceFactoryEvent.CREATE_FROM_CLASS, getServiceClass());
         
     }
+    
+    /**将OperationDispatcher和配置参数放入Service*/
+    protected void setServiceProperties() {
+       OperationDispatcher dispatcher = getOperationDispatcher();
+       getService().put(OperationDispatcher.class.getName(), dispatcher);
+       for (Class<?> c : dispatcher.getClass().getInterfaces()) {
+           getService().put(c.getName(), dispatcher);
+       }
+    }
+    
+    /**创建InterfaceInfo*/
+    protected InterfaceInfo createInterface(ServiceInfo serviceInfo) {
+        NamedID interfaceName = getInterfaceName();
+        InterfaceInfo  ii = new InterfaceInfo(serviceInfo, interfaceName);
+        Method[] methods = getServiceClass().getMethods();
+        //Arrays.sort(methods, new MethodComparator());
+        for (Method m : methods) {
+            if (isValidOperation(m)) {
+                createOperation(serviceInfo, ii, m);
+            }
+        }
+        pulishEvent(ServiceFactoryEvent.INTERFACE_CREATED,ii,getServiceClass());
+        return ii;
+    }
+  
+    
+    /**创建每个Method的OperationInfo*/
+    protected OperationInfo createOperation(ServiceInfo serviceInfo, InterfaceInfo intf, Method m) {
+        OperationInfo op = intf.addOperation(getOperationName(intf, m));
+        final Annotation[] annotations = m.getAnnotations();
+        final Annotation[][] parAnnotations = m.getParameterAnnotations();
+        op.setProperty(METHOD_ANNOTATIONS, annotations);
+        op.setProperty(METHOD_PARAM_ANNOTATIONS, parAnnotations);
+        //XXX 将properties中对method的配置加入这里
+        createMessageInfos(intf, op, m);
+        
+        bindOperation(op, m);
+        
+        pulishEvent(ServiceFactoryEvent.OPERATIONINFO_BOUND,op,m);
+        return op;
+    }
+    
+    /**绑定operaitonInfo和method*/
+    protected void bindOperation(OperationInfo operation, Method method) {
+        getOperationDispatcher().bind(method, operation);
+        
+    }
+    /**创建每个Method的参数为MessageInfo*/
+    protected void createMessageInfos(InterfaceInfo intf, OperationInfo op, Method method) {
+        final Class<?>[] paramClasses = method.getParameterTypes();
+        // Setup the input message
+        op.setProperty(METHOD, method);
+        MessageInfo inMsg = op.createMessage(getInMessageName(op, method), MessageInfo.Type.INPUT);
+        op.setInput(inMsg.getName().getName(), inMsg);
+        final Annotation[][] parAnnotations = method.getParameterAnnotations();
+        final Type[] genParTypes = method.getGenericParameterTypes();
+        for (int j = 0; j < paramClasses.length; j++) {
+            if (Exchange.class.equals(paramClasses[j])) {
+                continue;
+            }
+            if(isInParam(method, j)){
+               NamedID argumentId= getInArgumentName(op, method, j);
+               ArgumentInfo arg= inMsg.addArgument(argumentId);
+               
+               initializeArgument(arg, paramClasses[j], genParTypes[j]);
+               
+               arg.setProperty(METHOD_PARAM_ANNOTATIONS, parAnnotations);
+               arg.setProperty(PARAM_ANNOTATION, parAnnotations[j]);
+               
+               arg.setIndex(j);
+            }
+        }
+        pulishEvent(ServiceFactoryEvent.OPERATIONINFO_IN_MESSAGE_SET,op,method,inMsg);
+        //返回信息
+        boolean hasOut = hasOutMessage(method);
+        if (hasOut) {
+            MessageInfo outMsg = op.createMessage(getOutMessageName(op, method), MessageInfo.Type.OUTPUT);
+            op.setOutput(outMsg.getName().getName(), outMsg);
+            final Class<?> returnType = method.getReturnType();
+            if (!returnType.isAssignableFrom(void.class)) {
+                final NamedID outId = getOutArgumentName(op, method,-1);
+                ArgumentInfo arg= inMsg.addArgument(outId);
+                initializeArgument(arg, method.getReturnType(), method.getGenericReturnType());
+                final Annotation[] annotations = method.getAnnotations();
+                arg.setProperty(METHOD_ANNOTATIONS, annotations);
+                arg.setProperty(PARAM_ANNOTATION, annotations);
+                
+                arg.setIndex(0);
+            }
+            //isHolder
+            //支持将输入参数作为输出 method(in,out)
+            //XXX
+            /*for (int j = 0; j < paramClasses.length; j++) {
+                if (Exchange.class.equals(paramClasses[j])) {
+                    continue;
+                }
+            }*/
+            pulishEvent(ServiceFactoryEvent.OPERATIONINFO_IN_MESSAGE_SET,op,method,outMsg);
+        }
+        if(hasOut){
+            initializeFaults(intf, op, method);
+        }
+    }
 
+    /**处理抛出的Exception*/
+    protected void initializeFaults(final InterfaceInfo service, final OperationInfo op, final Method method) {
+        // Set up the fault messages
+        final Class<?>[] exceptionClasses = method.getExceptionTypes();
+        for (int i = 0; i < exceptionClasses.length; i++) {
+            Class<?> exClazz = exceptionClasses[i];
+            if (Fault.class.isAssignableFrom(exClazz) || exClazz.equals(RuntimeException.class) || exClazz.equals(Throwable.class)) {
+                continue;
+            }
+            createFaultInfo(service, op, exClazz);
+        }
+    }
+    
+    /**创建exception信息*/
+    protected FaultInfo createFaultInfo(final InterfaceInfo service, final OperationInfo op,
+        Class<?> exClass) {
+        if(exClass==null){
+            return null;
+        }
+        String faultMsgName =null;
+        faultMsgName= namedIDPolicy.getFaultMessageName(op, exClass, exClass);
+        if(faultMsgName==null){
+            faultMsgName=exClass.getSimpleName();
+        }
+        NamedID faultName = getFaultName(service,op,exClass,exClass);
+        FaultInfo fi = op.addFault(new NamedID(op.getName().getServiceNamespace(),faultMsgName),
+                                   new NamedID(op.getName().getServiceNamespace(),faultMsgName));
+        fi.setProperty(Class.class.getName(), exClass);
+        ArgumentInfo faultArg=fi.addArgument(new NamedID(faultName.getServiceNamespace(),faultMsgName));
+        faultArg.setTypeClass(exClass);
+        pulishEvent(ServiceFactoryEvent.OPERATIONINFO_FAULT,op,exClass,fi);
+        return fi;
+    }
+    
+    protected void initializeArgument(ArgumentInfo arg, Class<?> rawClass, Type type) {
+        if(type instanceof TypeVariable){
+            if (parameterizedTypes == null) {
+                processParameterizedTypes();
+            }
+            TypeVariable<?> var = (TypeVariable<?>)type;
+            final Object gd = var.getGenericDeclaration();
+            Map<String, Class<?>> mp = parameterizedTypes.get(gd);
+            if (mp != null) {
+                Class<?> c = parameterizedTypes.get(gd).get(var.getName());
+                if (c != null) {
+                    rawClass = c;
+                    type = c;
+                    arg.getMessageInfo().setProperty("parameterized", Boolean.TRUE);
+                }
+            }
+        }
+        arg.setProperty(GENERIC_TYPE, type);
+        
+        if (Collection.class.isAssignableFrom(rawClass)) {
+            arg.setProperty(RAW_CLASS, rawClass);
+        }
+        arg.setTypeClass(rawClass);
+        
+    }
+    
+    protected void initializeDataProcessors() {
+        getDataProcessor().initialize(getService());
+        service.setDataProcessor(getDataProcessor());
+        pulishEvent(ServiceFactoryEvent.DATAPROCESSOR_INITIALIZED,dataProcessor);
+    }
+    
     @Override
     protected DataProcessor defaultDataProcessor() {
         // 通过service class 注解
@@ -347,19 +525,50 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         return namedIDPolicy.getServiceName();
     }
 
-    protected NamedID getInterfaceName() {
+    protected NamedID getFaultName(InterfaceInfo service, OperationInfo op,
+        Class<?> exClass, Class<?> beanClass){
+        return namedIDPolicy.getFaultName(service, op, exClass, beanClass);
+    }
+    protected NamedID getOutArgumentName(OperationInfo op, Method method, final int j) {
+        return namedIDPolicy.getOutArgumentName(op, method, j);
+    }
+    protected NamedID getOutMessageName(OperationInfo op, Method method) {
+        return namedIDPolicy.getOutMessageName(op, method);
+    }
+    protected boolean isValidOperation(Method m) {
+        return namedIDPolicy.isValidOperation(m);
+    }
+    
+    protected boolean isInParam(Method method,int j){
+        return namedIDPolicy.isInParam(method, j);
+    }
+    
+    protected NamedID getInArgumentName(OperationInfo op, Method method, int j) {
+        return namedIDPolicy.getInArgumentName(op, method, j);
+     }
+    
+    protected NamedID getOperationName(InterfaceInfo intf, Method method) {
+        return namedIDPolicy.getOperationName(intf, method);
+    }
+    
+    public NamedID getInterfaceName() {
         return namedIDPolicy.getInterfaceName();
     }
-
     /**   */
     public NamedIDPolicy getNamedIDPolicy() {
         return namedIDPolicy;
     }
-
+    public NamedID getInMessageName(OperationInfo op, Method method) {
+        return namedIDPolicy.getInMessageName(op, method);
+    }
     /**   */
     public void setNamedIDPolicy(NamedIDPolicy namedIDPolicy) {
         this.namedIDPolicy = namedIDPolicy;
     }
+    protected boolean hasOutMessage(Method method) {
+        return namedIDPolicy.hasOutMessage(method);
+    }
+    
     protected void processParameterizedTypes() {
         parameterizedTypes = new HashMap<Type, Map<String, Class<?>>>();
         if (serviceClass.isInterface()) {

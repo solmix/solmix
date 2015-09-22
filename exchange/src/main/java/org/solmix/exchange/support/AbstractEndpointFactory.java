@@ -170,8 +170,9 @@ public abstract class AbstractEndpointFactory extends InterceptorProviderSupport
     }
 
     private String detectProtocol(String addr) {
-        if (addr.indexOf("://") != -1) {
-            return addr.substring(0, addr.indexOf("://"));
+        final String detectAddr=new String(addr.getBytes());
+        if (detectAddr.indexOf("://") != -1) {
+            return detectAddr.substring(0, addr.indexOf("://"));
         }
         return null;
     }

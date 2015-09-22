@@ -55,7 +55,7 @@ public class PreparedPipelineSelector extends AbstractPipelineSelector {
     @Override
     public Pipeline select(Message message) {
         Pipeline pl = message.get(Pipeline.class);
-        if (pl != null) {
+        if (pl == null) {
             pl = getSelectedPipeline(message);
             message.put(Pipeline.class, pl);
         }
