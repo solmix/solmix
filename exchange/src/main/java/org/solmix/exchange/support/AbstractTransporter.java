@@ -21,6 +21,7 @@ package org.solmix.exchange.support;
 
 import org.slf4j.Logger;
 import org.solmix.exchange.Processor;
+import org.solmix.exchange.Protocol;
 import org.solmix.exchange.Transporter;
 import org.solmix.exchange.model.EndpointInfo;
 import org.solmix.runtime.Container;
@@ -34,6 +35,8 @@ import org.solmix.runtime.Container;
 public abstract class AbstractTransporter implements Transporter {
 
     protected Processor processor;
+    
+    protected Protocol protocol;
 
     protected String address;
     
@@ -84,7 +87,17 @@ public abstract class AbstractTransporter implements Transporter {
             }
         }
     }
-
+    
+    @Override
+    public Protocol getProtocol() {
+        return protocol;
+    }
+    
+    @Override
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
+    
     protected abstract Logger getLogger();
     
     

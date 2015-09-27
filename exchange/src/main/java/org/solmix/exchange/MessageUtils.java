@@ -36,15 +36,31 @@ public final class MessageUtils {
 
     }
 
+    /**
+     * 是否为输入消息
+     * @param message
+     * @return
+     */
     public static boolean isInbount(Message message) {
         Boolean request = (Boolean) message.get(Message.INBOUND_MESSAGE);
         return request != null && request.booleanValue();
     }
 
+    /**
+     * 是否为请求消息
+     * @param message
+     * @return
+     */
     public static boolean isRequest(Message message) {
         Boolean request = (Boolean) message.get(Message.REQUEST_MESSAGE);
         return request != null && request.booleanValue();
     }
+    
+    /**
+     * 是否为响应消息
+     * @param message
+     * @return
+     */
     public static boolean isPartialResponse(Message message) {
         return Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE));
     }

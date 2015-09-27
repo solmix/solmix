@@ -51,10 +51,9 @@ public class NamedID extends BaseID {
         super(n);
         this.name = name;
         this.serviceNamespace = space;
-        this.hash = 7;
-        this.hash = 31 * hash + space.hashCode();
-        int nh = name.hashCode();
-        this.hash = 31 * hash + (nh ^ (nh >>> 32));
+        this.hash = 17;
+        this.hash = 37 * hash + name==null?0:name.hashCode();
+        this.hash = 37 * hash + space==null?0:space.hashCode();
     }
 
     @Override

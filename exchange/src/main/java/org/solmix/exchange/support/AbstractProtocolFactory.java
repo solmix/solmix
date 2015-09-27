@@ -22,14 +22,11 @@ import java.util.Dictionary;
 
 import javax.annotation.Resource;
 
-import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.ProtocolFactory;
 import org.solmix.exchange.Service;
-import org.solmix.exchange.Transporter;
 import org.solmix.exchange.model.NamedID;
 import org.solmix.exchange.model.ProtocolInfo;
 import org.solmix.exchange.model.ServiceInfo;
-import org.solmix.exchange.processor.InChainInitProcessor;
 import org.solmix.runtime.Container;
 
 
@@ -47,11 +44,6 @@ public abstract class AbstractProtocolFactory implements ProtocolFactory {
     }
     public AbstractProtocolFactory(Container container) {
         this.container = container;
-    }
-    @Override
-    public void addListener(Transporter t, Endpoint e) {
-        InChainInitProcessor cip = new InChainInitProcessor(e, container);
-        t.setProcessor(cip);
     }
 
     @Override

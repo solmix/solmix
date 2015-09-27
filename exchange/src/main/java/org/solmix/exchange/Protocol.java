@@ -38,4 +38,12 @@ public interface Protocol extends InterceptorProvider {
     Message createMessage(Message m);
 
     ProtocolInfo getProtocolInfo();
+
+    /**
+     * 设置Transporter的消息处理器.
+     * 
+     * @param transporter
+     * @param endpoint
+     */
+    void addListener(Transporter transporter, Endpoint endpoint);
 }

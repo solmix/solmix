@@ -35,14 +35,6 @@ public interface ProtocolFactory {
     Protocol createProtocol(ProtocolInfo info);
     
     /**
-     * 设置Transporter的消息处理器.
-     * 
-     * @param d
-     * @param e
-     */
-    void addListener(Transporter d, Endpoint e);
-
-    /**
      * @param service
      * @param protocol
      * @param object

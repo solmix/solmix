@@ -28,10 +28,17 @@ import java.io.IOException;
  * @version $Id$ 2014年11月13日
  */
 
-public interface Transporter extends ProcessorAware {
+public interface Transporter extends ProcessorAware,ProtocolAware {
 
     
     Processor getProcessor();
+    
+    /**
+     * 该传输端之上运行的协议，通常在{@link Protocol#addListener(Transporter, Endpoint) addListener}中设置。
+     * @return
+     */
+    Protocol getProtocol();
+    
     /**
      * 关闭端点停止接收消息
      */

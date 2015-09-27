@@ -36,7 +36,7 @@ import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 import org.solmix.exchange.support.DefaultMessage;
 
 /**
- * 无返回拦截处理
+ * 服务端接收无返回消息处理
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月20日

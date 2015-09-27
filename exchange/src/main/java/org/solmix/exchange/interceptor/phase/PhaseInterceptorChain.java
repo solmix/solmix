@@ -518,7 +518,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
             @SuppressWarnings("unchecked")
             Interceptor<Message> currentInterceptor = (Interceptor<Message>) iterator.previous();
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Invoking handleException on interceptor "
+                LOG.trace("Invoking handleFault on interceptor "
                     + currentInterceptor);
             }
             try {

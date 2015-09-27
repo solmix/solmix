@@ -120,7 +120,7 @@ public class DefaultServer implements Server {
             return;
         }
         LOG.trace("Server is starting.");
-        protocolFactory.addListener(transporter, endpoint);
+        endpoint.getProtocol().addListener(transporter, endpoint);
         if (serverRegistry != null) {
             LOG.trace("Register the server " + transporter.getAddress());
             serverRegistry.register(this);
