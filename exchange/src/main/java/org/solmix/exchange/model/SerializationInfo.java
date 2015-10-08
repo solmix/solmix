@@ -27,20 +27,30 @@ package org.solmix.exchange.model;
 
 public class SerializationInfo extends InfoPropertiesSupport {
 
-    private String name;
+    private String serialization;
+    private Integer palyload;
 
-    public SerializationInfo(String name) {
-        this.name = name;
+    public SerializationInfo(){
+        
     }
-
-    /**   */
-    public String getName() {
-        return name;
+    public SerializationInfo(String serialization) {
+        this.serialization = serialization;
     }
-
-    /**   */
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getSerialization() {
+        return serialization;
+    }
+    
+    public void setSerialization(String serialization) {
+        this.serialization = serialization;
+    }
+    
+    public Integer getPalyload() {
+        return palyload;
+    }
+    
+    public void setPalyload(Integer palyload) {
+        this.palyload = palyload;
     }
 
 }

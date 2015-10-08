@@ -33,10 +33,26 @@ import org.solmix.exchange.model.ProtocolInfo;
 
 public interface Protocol extends InterceptorProvider {
 
+    /**
+     * 提供消息实例化功能
+     * @return
+     */
     Message createMessage();
 
+    /**
+     * 提供协议层消息初始化功能
+     * <li>添加协议处理所需的附加参数
+     * <li>从底层编码中解析出协议需要的参数
+     * @param m
+     * @return
+     */
     Message createMessage(Message m);
 
+    /**
+     * 协议参数信息
+     * 
+     * @return
+     */
     ProtocolInfo getProtocolInfo();
 
     /**

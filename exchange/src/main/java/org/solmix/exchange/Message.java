@@ -108,6 +108,8 @@ public interface Message extends StringTypeMap {
     String ERROR_MESSAGE = Message.class.getName() + ".ERROR_MESSAGE";
     
     String PARTIAL_RESPONSE_MESSAGE = Message.class.getName() + ".PARTIAL_RESPONSE_MESSAGE";
+
+    String OPERATION = Message.class.getName() + ".OPERATION";
     /**
      * 返回消息ID
      * @return
@@ -154,7 +156,7 @@ public interface Message extends StringTypeMap {
      * 返回消息体类型集合.
      * @return
      */
-    Set<Class<?>> getContentType();
+    Set<Class<?>> getContentTypes();
     
     /**
      * 删除指定类型的数据

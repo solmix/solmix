@@ -37,6 +37,7 @@ public class NamedID extends BaseID {
     private final String serviceNamespace;
 
     private int hash;
+    private String identityName;
 
     public NamedID(NamedID other) {
         this(other.getServiceNamespace(), other.getName());
@@ -47,13 +48,23 @@ public class NamedID extends BaseID {
             NamedIDNamespace.NAME), space, name);
     }
 
-    protected NamedID(NamedIDNamespace n, String space, String name) {
+    protected NamedID(NamedIDNamespace n, String space, String name)
+    {
         super(n);
         this.name = name;
         this.serviceNamespace = space;
         this.hash = 17;
-        this.hash = 37 * hash + name==null?0:name.hashCode();
-        this.hash = 37 * hash + space==null?0:space.hashCode();
+        this.hash = 37 * hash + name == null ? 0 : name.hashCode();
+        this.hash = 37 * hash + space == null ? 0 : space.hashCode();
+        if (serviceNamespace.equals("")) {
+            identityName = name;
+        } else {
+            if (serviceNamespace.endsWith("/")) {
+                identityName = new StringBuilder().append(serviceNamespace).append(name).toString();
+            } else {
+                identityName = new StringBuilder().append(serviceNamespace).append("/").append(name).toString();
+            }
+        }
     }
 
     @Override
@@ -86,16 +97,8 @@ public class NamedID extends BaseID {
 
     @Override
     protected String namespaceGetName() {
-        if (serviceNamespace.equals("")) {
-            return name;
-        } else {
-            if (serviceNamespace.endsWith("/")) {
-                return new StringBuilder().append(serviceNamespace).append(name).toString();
-            } else {
-                return new StringBuilder().append(serviceNamespace).append("/").append(
-                    name).toString();
-            }
-        }
+      
+        return identityName;
     }
 
     @Override
@@ -117,5 +120,43 @@ public class NamedID extends BaseID {
     @Override
     public String toString() {
         return namespaceGetName();
+    }
+    /**
+     * NamedID 转化为可用于标记的字符串
+     * @return
+     */
+    public String toIdentityString() {
+        return namespaceGetName();
+    }
+    
+    /**
+     * 从字符串中生成NamedID
+     * @return
+     */
+    public static NamedID formIdentityString(String identity){
+        if(identity==null){
+            return null;
+        }
+        char[] chars=identity.toCharArray();
+        int index= identity.indexOf("://");
+        if(index<0){
+            index=identity.indexOf(":/");
+            if(index>0){
+                index+=2;
+            }
+        }else{
+            index+=3;
+        }
+        if(index<0){
+            index=0;
+        }
+        for(;index<chars.length;index++){
+            if(chars[index]=='/'){
+                break;
+            }
+        }
+        String serviceName = identity.substring(0, index);
+        String name =identity.substring(index+1);
+        return new NamedID(serviceName, name);
     }
 }

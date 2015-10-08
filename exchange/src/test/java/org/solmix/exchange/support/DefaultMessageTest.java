@@ -25,7 +25,7 @@ import junit.framework.Assert;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Test;
-import org.solmix.exchange.support.DefaultMessage;
+import org.solmix.exchange.model.SerializationInfo;
 
 
 /**
@@ -64,5 +64,31 @@ public class DefaultMessageTest extends Assert
         message.setContent(String.class, yyy);
         assertSame(yyy, message.getContent(String.class));
         
+    }
+    
+    @Test
+    public void performansTest(){
+        DefaultMessage message = new DefaultMessage();
+        long mark = System.currentTimeMillis();
+        for(int i=0;i<1000;i++){
+//            DefaultMessage MSG = new DefaultMessage();
+//            String str="xxxxxxx";
+//            MSG.setContent(String.class, str);
+            SerializationInfo info = new SerializationInfo();
+        }
+        System.out.println(System.currentTimeMillis()-mark);
+        mark = System.currentTimeMillis();
+        for(int i=0;i<1000;i++){
+            String str="xxxxxxx";
+            message.put(String.class, str);
+        }
+        System.out.println(System.currentTimeMillis()-mark);
+        
+        mark = System.currentTimeMillis();
+        for(int i=0;i<1000;i++){
+            long l =182l;
+            message.setId(l);
+        }
+        System.out.println(System.currentTimeMillis()-mark);
     }
 }

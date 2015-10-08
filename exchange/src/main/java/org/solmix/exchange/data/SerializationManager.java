@@ -27,6 +27,7 @@ package org.solmix.exchange.data;
 
 public interface SerializationManager {
 
+    String SERIALIZATION_BYTE="SerializationManager._BYTE";
     Serialization getSerializationById(Byte id);
 
     Serialization getSerializationByName(String extendsionName);

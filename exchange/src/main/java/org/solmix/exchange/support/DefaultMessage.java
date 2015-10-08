@@ -68,51 +68,30 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         return id;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#setId(java.lang.String)
-     */
+   
     @Override
     public void setId(long id) {
         this.id=id;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#getInterceptorChain()
-     */
     @Override
     public InterceptorChain getInterceptorChain() {
         return interceptorChain;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#setInterceptorChain(org.solmix.exchange.interceptor.InterceptorChain)
-     */
+    
     @Override
     public void setInterceptorChain(InterceptorChain chain) {
         this.interceptorChain=chain;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#getExchange()
-     */
+ 
     @Override
     public Exchange getExchange() {
         return exchange;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#getContent(java.lang.Class)
-     */
+   
     @Override
     public <T> T getContent(Class<T> type) {
         for (int x = 0; x < index; x += 2) {
@@ -123,11 +102,7 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#setContent(java.lang.Class, java.lang.Object)
-     */
+   
     @Override
     public <T> void setContent(Class<T> type, Object content) {
         for (int x = 0; x < index; x += 2) {
@@ -147,13 +122,9 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         index += 2;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#getContentType()
-     */
+  
     @Override
-    public Set<Class<?>> getContentType() {
+    public Set<Class<?>> getContentTypes() {
         Set<Class<?>> c = new HashSet<Class<?>>();
         for (int x = 0; x < index; x += 2) {
             c.add((Class<?>)contents[x]);
@@ -161,11 +132,6 @@ public class DefaultMessage extends StringTypeMapper implements Message {
         return c;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#removeContent(java.lang.Class)
-     */
     @Override
     public <T> void removeContent(Class<T> type) {
         for (int x = 0; x < index; x += 2) {
@@ -181,43 +147,27 @@ public class DefaultMessage extends StringTypeMapper implements Message {
             }
         }
     }
-
   
   
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#setExchange(org.solmix.exchange.Exchange)
-     */
     @Override
     public void setExchange(Exchange e) {
         this.exchange = e;
     }
     
     public static void copyContent(Message m1, Message m2) {
-        for (Class<?> c : m1.getContentType()) {
+        for (Class<?> c : m1.getContentTypes()) {
             m2.setContent(c, m1.getContent(c));
         }
     }
   
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#getAttachments()
-     */
     @Override
     public Collection<Attachment> getAttachments() {
         return (Collection<Attachment>)get(ATTACHMENTS);
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.Message#setAttachments(java.util.Collection)
-     */
+  
     @Override
     public void setAttachments(Collection<Attachment> attachments) {
        put(ATTACHMENTS,attachments);
     }
-   
 
 }

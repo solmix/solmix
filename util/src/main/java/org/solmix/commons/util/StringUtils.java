@@ -553,21 +553,29 @@ public final class StringUtils
         }
         return buf == null ? camelName : buf.toString();
     }
+    
     public static String toString(Throwable e) {
+        return toString(null, e);
+    }
+
+    public static String toString(String msg, Throwable e) {
         StringWriter w = new StringWriter();
-          PrintWriter p = new PrintWriter(w);
-          p.print(e.getClass().getName());
-          if (e.getMessage() != null) {
-              p.print(": " + e.getMessage());
-          }
-          p.println();
-          try {
-              e.printStackTrace(p);
-              return w.toString();
-          } finally {
-              p.close();
-          }
-      }
+        if (msg != null) {
+            w.write(msg + "\n");
+        }
+        PrintWriter p = new PrintWriter(w);
+        p.print(e.getClass().getName());
+        if (e.getMessage() != null) {
+            p.print(": " + e.getMessage());
+        }
+        p.println();
+        try {
+            e.printStackTrace(p);
+            return w.toString();
+        } finally {
+            p.close();
+        }
+    }
    
     public static String trimToNull(String str) {
         if (str == null) {

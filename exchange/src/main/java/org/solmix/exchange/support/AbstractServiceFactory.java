@@ -121,7 +121,7 @@ public abstract class AbstractServiceFactory {
     }
 
     /**
-     * 
+     * 添加默认的Interceptor
      */
     protected void initDefaultInterceptor() {
         service.getInInterceptors().add(new ServiceInvokerInterceptor());

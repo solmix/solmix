@@ -124,4 +124,12 @@ public final class MessageUtils {
             return null;
         }
     }
+    public static String getString(Message msg, String key,String defaultString) {
+        String value= getString(msg,key);
+        if(value==null){
+            return defaultString;
+        }else{
+            return value;
+        }
+    }
 }

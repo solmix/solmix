@@ -59,8 +59,7 @@ public class NamedIDPolicy {
 
     /**   */
     public String getServiceNamespace() {
-        if (serviceNamespace == null && serviceFactory != null
-            && serviceFactory.getServiceClass() != null) {
+        if (serviceNamespace == null && serviceFactory != null && serviceFactory.getServiceClass() != null) {
             serviceNamespace = makeNamespaceFromClassName(serviceFactory.getServiceClass(),protocol);
         }
         return serviceNamespace;
@@ -119,6 +118,8 @@ public class NamedIDPolicy {
     public NamedID getOperationName(InterfaceInfo intf, Method method) {
         String sns = intf.getName().getServiceNamespace();
         String name = method.getName();
+        String desc=ClassDescUtils.getTypeDesc(method.getParameterTypes());
+        name+="("+desc+")";
         NamedID nid = new NamedID(sns, name);
         if (intf.getOperation(nid) == null) {
             return nid;
@@ -229,7 +230,6 @@ public class NamedIDPolicy {
             }
             sb.append(word);
         }
-        sb.append("/");
         return sb.toString();
     }
 

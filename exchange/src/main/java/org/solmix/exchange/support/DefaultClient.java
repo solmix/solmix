@@ -487,11 +487,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
 
     }
-    /**
-     * {@inheritDoc}
-     * private
-     * @see org.solmix.exchange.Client#destroy()
-     */
+   
     @Override
     public void destroy() {
         if (container == null) {
@@ -711,11 +707,12 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                 msg.putAll(reqContext);
                 exchange.putAll(reqContext);
             }
-            msg.setContent(List.class, new MessageList(params));
+            msg.setContent(MessageList.class, new MessageList(params));
 
             if (oi != null) {
                 exchange.setOneWay(oi.getOutput() == null);
             }
+            setupOutMessage(msg,endpoint,oi);
             exchange.setOut(msg);
             exchange.put(ClientCallback.class, callback);
 
@@ -782,7 +779,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
     }
 
-   
+    protected void setupOutMessage(Message msg, Endpoint endpoint, OperationInfo oi) {
+    }
+
     protected  void preparePipelineSelector(Message msg) {
         getPipelineSelector().prepare(msg);
         msg.getExchange().put(PipelineSelector.class, getPipelineSelector());

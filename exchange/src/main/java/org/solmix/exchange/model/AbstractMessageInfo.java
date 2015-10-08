@@ -41,8 +41,7 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
 
     NamedID name;
 
-    private final Map<NamedID, ArgumentInfo> messageParts = new LinkedHashMap<NamedID, ArgumentInfo>(
-        4);
+    private final Map<NamedID, ArgumentInfo> messageParts = new LinkedHashMap<NamedID, ArgumentInfo>(4);
 
     private List<ArgumentInfo> outOfBandArguments;
 
@@ -180,6 +179,10 @@ public class AbstractMessageInfo extends InfoPropertiesSupport {
         return equals(name, oi.name)
             && equals(messageParts, oi.messageParts)
             && equals(outOfBandArguments, oi.outOfBandArguments);
+    }
+    
+    public OperationInfo getOperationInfo(){
+        return operation;
     }
 
     public NamedID getName() {

@@ -529,12 +529,15 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
         Class<?> exClass, Class<?> beanClass){
         return namedIDPolicy.getFaultName(service, op, exClass, beanClass);
     }
+    
     protected NamedID getOutArgumentName(OperationInfo op, Method method, final int j) {
         return namedIDPolicy.getOutArgumentName(op, method, j);
     }
+    
     protected NamedID getOutMessageName(OperationInfo op, Method method) {
         return namedIDPolicy.getOutMessageName(op, method);
     }
+    
     protected boolean isValidOperation(Method m) {
         return namedIDPolicy.isValidOperation(m);
     }
@@ -554,17 +557,21 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
     public NamedID getInterfaceName() {
         return namedIDPolicy.getInterfaceName();
     }
+    
     /**   */
     public NamedIDPolicy getNamedIDPolicy() {
         return namedIDPolicy;
     }
+    
     public NamedID getInMessageName(OperationInfo op, Method method) {
         return namedIDPolicy.getInMessageName(op, method);
     }
+    
     /**   */
     public void setNamedIDPolicy(NamedIDPolicy namedIDPolicy) {
         this.namedIDPolicy = namedIDPolicy;
     }
+    
     protected boolean hasOutMessage(Method method) {
         return namedIDPolicy.hasOutMessage(method);
     }
