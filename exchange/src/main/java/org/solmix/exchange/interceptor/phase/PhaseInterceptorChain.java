@@ -188,6 +188,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
         chainReleased = false;
     }
 
+    @Override
     public synchronized void abort() {
         this.state = InterceptorChain.State.ABORTED;
     }
@@ -419,7 +420,6 @@ public class PhaseInterceptorChain implements InterceptorChain {
     @Override
     public boolean doIntercept(Message message) {
         updateIterator();
-
         Message oldMessage = CURRENT_MESSAGE.get();
         try {
             CURRENT_MESSAGE.set(message);
@@ -434,8 +434,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
                     @SuppressWarnings("unchecked")
                     Interceptor<Message> currentInterceptor = (Interceptor<Message>) iterator.next();
                     if (LOG.isTraceEnabled()) {
-                        LOG.trace("Invoking handleMessage on interceptor "
-                            + currentInterceptor);
+                        LOG.trace("Invoking handleMessage on interceptor " + currentInterceptor);
                     }
                     currentInterceptor.handleMessage(message);
                     if (state == State.SUSPENDED) {

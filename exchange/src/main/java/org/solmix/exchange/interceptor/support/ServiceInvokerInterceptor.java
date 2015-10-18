@@ -35,7 +35,6 @@ import org.solmix.exchange.interceptor.phase.Phase;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 import org.solmix.exchange.invoker.Invoker;
-import org.solmix.exchange.support.DefaultMessage;
 
 /**
  * 
@@ -70,7 +69,7 @@ public class ServiceInvokerInterceptor extends PhaseInterceptorSupport<Message> 
 
                     Message outMessage = ex.getOut();
                     if (outMessage == null) {
-                        outMessage = new DefaultMessage();
+                        outMessage = ep.getProtocol().createMessage();
                         outMessage.setExchange(exchange);
                         outMessage = ep.getProtocol().createMessage(outMessage);
                         exchange.setOut(outMessage);
@@ -99,6 +98,7 @@ public class ServiceInvokerInterceptor extends PhaseInterceptorSupport<Message> 
         // 已经使用executor.
         if (executor == executor2 || executor == null) {
             invocation.run();
+            invocation=null;
         } else {
             exchange.put(Executor.class, executor);
             // The current thread holds the lock on PhaseInterceptorChain.

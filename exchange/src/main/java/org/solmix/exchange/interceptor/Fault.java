@@ -32,6 +32,8 @@ public class Fault extends RuntimeException {
 
     private boolean server;
 
+    private String detail;
+
     public Fault(String message, Throwable t) {
         super(message, t);
     }
@@ -49,6 +51,14 @@ public class Fault extends RuntimeException {
     /**   */
     public boolean isServer() {
         return server;
+    }
+
+    public void setDetail(String detail) {
+        this.detail=detail;
+    }
+    
+    public String getDetail() {
+        return detail;
     }
 
 }

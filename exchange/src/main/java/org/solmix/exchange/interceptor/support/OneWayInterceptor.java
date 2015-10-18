@@ -27,7 +27,6 @@ import org.apache.commons.io.IOUtils;
 import org.solmix.exchange.Endpoint;
 import org.solmix.exchange.Exchange;
 import org.solmix.exchange.Message;
-import org.solmix.exchange.MessageUtils;
 import org.solmix.exchange.Pipeline;
 import org.solmix.exchange.Transporter;
 import org.solmix.exchange.interceptor.Fault;
@@ -66,7 +65,7 @@ public class OneWayInterceptor extends PhaseInterceptorSupport<Message> {
     public void handleMessage(Message msg) throws Fault {
         Exchange ex = msg.getExchange();
         if (ex.isOneWay() 
-            && !MessageUtils.isRequest(msg) 
+            && !msg.isRequest() 
             && msg.get(OneWayInterceptor.class)==null
             && msg.getExchange().get(Executor.class) == null) {
             msg.put(OneWayInterceptor.class, this);

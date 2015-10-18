@@ -22,15 +22,15 @@ package org.solmix.exchange;
 import java.io.IOException;
 
 /**
- * {@link Transporter}之间的传输管道.
+ * 数据传输管道.
  * 
- * 为Binding提供传输通道
+ * 为protocol提供传输通道
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月10日
  */
 
-public interface Pipeline extends ProcessorAware {
+public interface Pipeline extends ProcessorAware,ProtocolAware {
     
     Processor getProcessor();
 
@@ -39,11 +39,23 @@ public interface Pipeline extends ProcessorAware {
      */
     @Override
     void setProcessor(Processor processor);
+    
+    /**
+     * 解析pipeline中传输的数据的协议，通过{@link PipelineSelector}注入。
+     * @return
+     */
+    Protocol getProtocol();
 
+    /**
+     * 准备IO
+     * 
+     * @param message
+     * @throws IOException
+     */
     void prepare(Message message) throws IOException;
 
     /**
-     * 完成message传输.
+     * 完成message传输,关闭管道.
      * @param message
      * @throws IOException
      */

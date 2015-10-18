@@ -20,6 +20,7 @@ package org.solmix.exchange.interceptor.support;
 
 import org.solmix.exchange.Message;
 import org.solmix.exchange.interceptor.Fault;
+import org.solmix.exchange.interceptor.FaultType;
 import org.solmix.exchange.interceptor.phase.Phase;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 
@@ -34,22 +35,19 @@ import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
 
     public ClientFaultConverter() {
-        this(Phase.DECODE);
+        this(Phase.UNMARSHAL);
     }
 
     public ClientFaultConverter(String phase) {
         super(phase);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.interceptor.Interceptor#handleMessage(org.solmix.exchange.Message)
-     */
     @Override
     public void handleMessage(Message message) throws Fault {
-        // TODO Auto-generated method stub
-        
+        FaultType fault  = message.get(FaultType.class);
+        if(fault==FaultType.CHECKED_APPLICATION_FAULT){
+            
+        }
     }
 
 }

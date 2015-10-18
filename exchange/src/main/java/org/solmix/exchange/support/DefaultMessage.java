@@ -43,6 +43,9 @@ public class DefaultMessage extends StringTypeMapper implements Message {
     private Object[] contents = new Object[20];
     private int index;
     
+    private boolean request;
+    private boolean inbound;
+    
     public DefaultMessage() {
     }
     public DefaultMessage(Message m) {
@@ -168,6 +171,26 @@ public class DefaultMessage extends StringTypeMapper implements Message {
     @Override
     public void setAttachments(Collection<Attachment> attachments) {
        put(ATTACHMENTS,attachments);
+    }
+    
+    @Override
+    public boolean isRequest() {
+        return request;
+    }
+    
+    @Override
+    public void setRequest(boolean request) {
+        this.request = request;
+    }
+    
+    @Override
+    public boolean isInbound() {
+        return inbound;
+    }
+    
+    @Override
+    public void setInbound(boolean inbound) {
+        this.inbound = inbound;
     }
 
 }

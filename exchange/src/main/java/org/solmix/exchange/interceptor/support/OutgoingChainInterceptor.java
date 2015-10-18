@@ -42,7 +42,7 @@ import org.solmix.exchange.interceptor.phase.PhaseChainCache;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorChain;
 import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 import org.solmix.exchange.interceptor.phase.PhasePolicy;
-import org.solmix.exchange.support.PreexistingPipelineSelector;
+import org.solmix.exchange.support.PipelineWrappedSelector;
 
 /**
  * 
@@ -80,8 +80,8 @@ public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message> {
         if(ex.getPipeline(message)==null
             && ex.get(Transporter.class)!=null){
             try {
-                pipeline = ex.get(Transporter.class).getBackPipeline(ex.getIn());
-                ex.put(PipelineSelector.class, new PreexistingPipelineSelector(pipeline,ex.getEndpoint()));
+                pipeline = ex.get(Transporter.class).getBackPipeline(ex.getOut());
+                ex.put(PipelineSelector.class, new PipelineWrappedSelector(pipeline,ex.getEndpoint()));
             } catch (IOException e) {
             }
         }

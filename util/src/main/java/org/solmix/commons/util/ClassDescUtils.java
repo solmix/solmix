@@ -21,6 +21,12 @@ package org.solmix.commons.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -30,6 +36,18 @@ import java.lang.reflect.Modifier;
 
 public class ClassDescUtils
 {
+
+    public static final String JAVA_IDENT_REGEX = "(?:[_$a-zA-Z][_$a-zA-Z0-9]*)";
+
+    public static final String JAVA_NAME_REGEX = "(?:" + JAVA_IDENT_REGEX + "(?:\\." + JAVA_IDENT_REGEX + ")*)";
+
+    public static final String CLASS_DESC = "(?:L" + JAVA_IDENT_REGEX + "(?:\\/" + JAVA_IDENT_REGEX + ")*;)";
+
+    public static final String ARRAY_DESC = "(?:\\[+(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "))";
+
+    public static final String DESC_REGEX = "(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "|" + ARRAY_DESC + ")";
+
+    public static final Pattern DESC_PATTERN = Pattern.compile(DESC_REGEX);
 
     /**
      * void(V).
@@ -75,6 +93,8 @@ public class ClassDescUtils
      * short(S).
      */
     public static final char JVM_SHORT = 'S';
+
+    private static final ConcurrentMap<String, Class<?>> DESC_CLASS_CACHE = new ConcurrentHashMap<String, Class<?>>();
 
     public static String getTypeDesc(final Class<?>[] cs) {
         if (cs.length == 0)
@@ -130,6 +150,7 @@ public class ClassDescUtils
     public static String getSimpleMethodSignature(Method method, boolean withClassName) {
         return getSimpleMethodSignature(method, false, false, withClassName, false);
     }
+
     public static String getSimpleClassName(Class<?> clazz) {
         if (clazz == null) {
             return null;
@@ -137,13 +158,14 @@ public class ClassDescUtils
 
         return getSimpleClassName(clazz.getName());
     }
-    
+
     public static String getSimpleClassName(String javaClassName) {
         return getSimpleClassName(javaClassName, true);
     }
+
     /** 取得简洁的method描述。 */
-    public static String getSimpleMethodSignature(Method method, boolean withModifiers, boolean withReturnType,
-                                                  boolean withClassName, boolean withExceptionType) {
+    public static String getSimpleMethodSignature(Method method, boolean withModifiers, boolean withReturnType, boolean withClassName,
+        boolean withExceptionType) {
         if (method == null) {
             return null;
         }
@@ -198,12 +220,13 @@ public class ClassDescUtils
 
         return buf.toString();
     }
-    
+
     /**
      * 取得类名，不包括package名。
      * <p>
      * 此方法可以正确显示数组和内联类的名称。 例如：
      * <p/>
+     * 
      * <pre>
      *  ClassUtil.getSimpleClassName(Boolean.class.getName()) = "Boolean"
      *  ClassUtil.getSimpleClassName(Boolean[].class.getName()) = "Boolean[]"
@@ -242,11 +265,11 @@ public class ClassDescUtils
             return friendlyClassName.substring(friendlyClassName.lastIndexOf(".") + 1);
         }
     }
-    
+
     /**
      * 将Java类名转换成友好类名。
      *
-     * @param javaClassName     Java类名
+     * @param javaClassName Java类名
      * @param processInnerClass 是否将内联类分隔符 <code>'$'</code> 转换成 <code>'.'</code>
      * @return 友好的类名。如果参数非法或空，则返回<code>null</code>。
      */
@@ -335,8 +358,67 @@ public class ClassDescUtils
 
         return componentTypeName.toString();
     }
-    
+
     public static String[] getParameterNamesFromDebugInfo(Method method) {
-       return ParamNameReader.getParameterNamesFromDebugInfo(method);
+        return ParamNameReader.getParameterNamesFromDebugInfo(method);
     }
+
+    public static Class<?>[] typeDesc2ClassArray(String desc) throws ClassNotFoundException {
+
+        Class<?>[] ret = typeDesc2ClassArray(ClassLoaderUtils.getDefaultClassLoader(), desc);
+        return ret;
+    }
+
+    private static Class<?>[] typeDesc2ClassArray(ClassLoader cl, String desc) throws ClassNotFoundException {
+        if (desc.length() == 0)
+            return ObjectUtils.EMPTY_CLASS_ARRAY;
+
+        List<Class<?>> cs = new ArrayList<Class<?>>();
+        Matcher m = DESC_PATTERN.matcher(desc);
+        while (m.find())
+            cs.add(desc2class(cl, m.group()));
+        return cs.toArray(ObjectUtils.EMPTY_CLASS_ARRAY);
+    }
+
+    private static Class<?> desc2class(ClassLoader cl, String desc) throws ClassNotFoundException {
+        switch (desc.charAt(0)) {
+            case JVM_VOID:
+                return void.class;
+            case JVM_BOOLEAN:
+                return boolean.class;
+            case JVM_BYTE:
+                return byte.class;
+            case JVM_CHAR:
+                return char.class;
+            case JVM_DOUBLE:
+                return double.class;
+            case JVM_FLOAT:
+                return float.class;
+            case JVM_INT:
+                return int.class;
+            case JVM_LONG:
+                return long.class;
+            case JVM_SHORT:
+                return short.class;
+            case 'L':
+                desc = desc.substring(1, desc.length() - 1).replace('/', '.'); // "Ljava/lang/Object;" ==>
+                                                                               // "java.lang.Object"
+                break;
+            case '[':
+                desc = desc.replace('/', '.'); // "[[Ljava/lang/Object;" ==> "[[Ljava.lang.Object;"
+                break;
+            default:
+                throw new ClassNotFoundException("Class not found: " + desc);
+        }
+
+        if (cl == null)
+            cl = ClassLoaderUtils.getDefaultClassLoader();
+        Class<?> clazz = DESC_CLASS_CACHE.get(desc);
+        if (clazz == null) {
+            clazz = Class.forName(desc, true, cl);
+            DESC_CLASS_CACHE.put(desc, clazz);
+        }
+        return clazz;
+    }
+
 }

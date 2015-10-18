@@ -1284,8 +1284,10 @@ public final class DataUtils
             return null;
         }
         if (propertyMap == null) {
-            log.debug((new StringBuilder()).append("Null propertyMap passed to setProperties for bean of type: ").append(bean.getClass().getName()).append(
-                " returning bean unmodified.").toString());
+            if(log.isDebugEnabled()){
+                log.debug((new StringBuilder()).append("Null propertyMap passed to setProperties for bean of type: ")
+                    .append(bean.getClass().getName()).append(" returning bean unmodified.").toString());
+            }
             return bean;
         }
         Map properties = null;
@@ -1320,17 +1322,17 @@ public final class DataUtils
                 arguments = createMethodArguments(writeMethod, value, propertyName);
             } catch (IllegalArgumentException e) {
                 if (badProperties == null)
-                    badProperties = new HashMap();
+                    badProperties = new HashMap<String,String>();
                 badProperties.put(propertyName, (new StringBuilder()).append("Exception invoking setter method: ").append(e).toString());
                 continue;
             }
             writeMethod.invoke(bean, arguments);
         }
-        if (badProperties != null) {
+        if (badProperties != null && log.isDebugEnabled()) {
             StringBuffer __info = new StringBuffer();
             for (String str : badProperties.keySet())
                 __info.append("[" + str + " : " + badProperties.get(str) + "] ");
-            log.info((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
+            log.debug((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
         }
         return bean;
     }

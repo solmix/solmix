@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.commons.io;
 
 import java.io.IOException;
@@ -32,38 +33,31 @@ public class NullWriter extends Writer
     {
     }
 
-    public void write(char ac[], int i, int j)
-        throws IOException
-    {
+    @Override
+    public void write(char ac[], int i, int j) throws IOException {
     }
 
-    public void write(char ac[])
-        throws IOException
-    {
+    @Override
+    public void write(char ac[]) throws IOException {
     }
 
-    public void write(String s, int i, int j)
-        throws IOException
-    {
+    @Override
+    public void write(String s, int i, int j) throws IOException {
     }
 
-    public void write(String s)
-        throws IOException
-    {
+    @Override
+    public void write(String s) throws IOException {
     }
 
-    public void write(int i)
-        throws IOException
-    {
+    @Override
+    public void write(int i) throws IOException {
     }
 
-    public void close()
-        throws IOException
-    {
+    @Override
+    public void close() throws IOException {
     }
 
-    public void flush()
-        throws IOException
-    {
+    @Override
+    public void flush() throws IOException {
     }
 }

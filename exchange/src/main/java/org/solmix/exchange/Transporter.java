@@ -34,7 +34,7 @@ public interface Transporter extends ProcessorAware,ProtocolAware {
     Processor getProcessor();
     
     /**
-     * 该传输端之上运行的协议，通常在{@link Protocol#addListener(Transporter, Endpoint) addListener}中设置。
+     * 解析传输端接收数据的协议，通过{@link Protocol#addListener(Transporter, Endpoint) addListener}注入。
      * @return
      */
     Protocol getProtocol();

@@ -35,26 +35,6 @@ public final class MessageUtils {
     private MessageUtils() {
 
     }
-
-    /**
-     * 是否为输入消息
-     * @param message
-     * @return
-     */
-    public static boolean isInbount(Message message) {
-        Boolean request = (Boolean) message.get(Message.INBOUND_MESSAGE);
-        return request != null && request.booleanValue();
-    }
-
-    /**
-     * 是否为请求消息
-     * @param message
-     * @return
-     */
-    public static boolean isRequest(Message message) {
-        Boolean request = (Boolean) message.get(Message.REQUEST_MESSAGE);
-        return request != null && request.booleanValue();
-    }
     
     /**
      * 是否为响应消息
@@ -101,15 +81,17 @@ public final class MessageUtils {
     public static boolean isEmptyPartialResponse(Message message) {
         return Boolean.TRUE.equals(message.get(Message.EMPTY_PARTIAL_RESPONSE_MESSAGE));
     }
-
     public static byte getByte(Message outMsg, String key) {
+        return getByte(outMsg, key,(byte)-1);
+    }
+    public static byte getByte(Message outMsg, String key,byte defaultValue) {
         Object v = outMsg.get(key);
         if (v instanceof Byte) {
             return ((Byte) v).byteValue();
         } else if (v != null) {
             return Byte.valueOf(v.toString()).byteValue();
         } else {
-            return -1;
+            return defaultValue;
         }
     }
 
@@ -130,6 +112,25 @@ public final class MessageUtils {
             return defaultString;
         }else{
             return value;
+        }
+    }
+
+    /**
+     * @param msg
+     * @param timeoutKey
+     * @return
+     */
+    public static int getInt(Message message, String key) {
+        if (message == null) {
+            return 0;
+        }
+        Object value=message.get(key);
+        if(value==null){
+            return 0;
+        }else if(value instanceof Integer){
+            return (Integer)value;
+        }else{
+            return Integer.valueOf(value.toString());
         }
     }
 }

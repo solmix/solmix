@@ -113,13 +113,11 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         this(container, endpoint, (PipelineSelector) null);
     }
 
-    public DefaultClient(Container container, Endpoint endpoint,
-        Pipeline pipeline) {
+    public DefaultClient(Container container, Endpoint endpoint, Pipeline pipeline) {
         this(container, endpoint, new PipelineWrappedSelector(pipeline));
     }
     
-    public DefaultClient(Container container, Endpoint endpoint,
-        PipelineSelector pipelineSelector) {
+    public DefaultClient(Container container, Endpoint endpoint, PipelineSelector pipelineSelector) {
         this.container = container;
         clientOutFaultProcessor = new ClientOutFaultProcessor(container,
             endpoint.getPhasePolicy());
@@ -138,7 +136,8 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
     @SuppressWarnings("unchecked")
     @Override
     public void process(Message message) throws ExchangeRuntimeException {
-        Endpoint endpoint = message.getExchange().getEndpoint();
+        Exchange exchange = message.getExchange();
+        Endpoint endpoint = exchange.getEndpoint();
         if (endpoint == null) {
             endpoint = getPipelineSelector().getEndpoint();
             message.getExchange().put(Endpoint.class, endpoint);
@@ -146,8 +145,8 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         
         message = endpoint.getProtocol().createMessage(message);
         message.getExchange().setIn(message);
-        message.put(Message.INBOUND_MESSAGE, Boolean.TRUE);
-        message.put(Message.REQUEST_MESSAGE, Boolean.TRUE);
+        message.setInbound(true);
+        message.setRequest(false);
         
         List<Interceptor<? extends Message>> i1 = getInInterceptors();
         if (LOG.isTraceEnabled()) {
@@ -197,7 +196,14 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             } else if (startingAtID != null) {
                 chain.doInterceptAfter(message, startingAtID);
             } else if (message.getContent(Exception.class) != null) {
-                clientOutFaultProcessor.process(message);
+                if(message.isInbound()){
+                    if(getEndpoint().getInFaultProcessor()!=null){
+                        getEndpoint().getInFaultProcessor().process(message);
+                    }
+                }else{
+                    clientOutFaultProcessor.process(message);
+                }
+                
             } else {
                 callback = message.getExchange().get(ClientCallback.class);
                 if (callback != null) {
@@ -228,8 +234,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                     responseContext.put(Thread.currentThread(), resCtx);
                 }
                 try {
-                    Object obj[] = processResult(message,
-                        message.getExchange(), null, resCtx);
+                    Object obj[] = processResult(message, message.getExchange(), null, resCtx);
 
                     callback.handleResponse(resCtx, obj);
                 } catch (Throwable ex) {
@@ -240,6 +245,13 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             if (original != container) {
                 ContainerFactory.getAndSetThreadDefaultContainer(original);
             }
+            exchange = message.getExchange();
+            synchronized(exchange){
+                exchange.put(FINISHED, Boolean.TRUE);
+                exchange.setIn(message);
+                exchange.notifyAll();
+            }
+            
         }
     }
     
@@ -248,7 +260,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
     protected Object[] processResult(Message message, Exchange exchange,
         OperationInfo operation, Map<String, Object> resCtx) throws Exception {
         Exception ex = null;
-        if (!message.get(Message.INBOUND_MESSAGE).equals(Boolean.TRUE)) {
+        if (!message.isInbound()) {
             ex = message.getContent(Exception.class);
         }
         boolean b = false;
@@ -276,6 +288,10 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         }
         List<Object> resList = null;
         Message inMsg = exchange.getIn();
+        ex = getException(exchange);
+        if (ex != null) {
+            throw ex;
+        }
         if (inMsg != null) {
             if (null != resCtx) {
                 resCtx.putAll(inMsg);
@@ -284,20 +300,20 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                 responseContext.put(Thread.currentThread(), resCtx);
             }
             resList = inMsg.getContent(List.class);
-        }
-        
-        ex = getException(exchange);
-        if (ex != null) {
-            throw ex;
-        }
-        if (resList != null) {
-            return resList.toArray();
+            if(resList==null){
+                Object obj=inMsg.getContent(Object.class);
+                if(obj!=null){
+                   return new Object[]{obj};
+                }
+            }else{
+                return resList.toArray();
+            }
         }
         return null;
     }
     
     protected Exception getException(Exchange exchange) {
-        if (exchange.getIn() != null) {
+        if (exchange.getInFault() != null) {
             return exchange.getInFault().getContent(Exception.class);
         } else if (exchange.getOutFault() != null) {
             return exchange.getOutFault().getContent(Exception.class);
@@ -314,8 +330,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             if (sync != null) {
                 remaining = sync;
             }
-            while (!Boolean.TRUE.equals(exchange.get(FINISHED))
-                && remaining > 0) {
+            while (!Boolean.TRUE.equals(exchange.get(FINISHED)) && remaining > 0) {
                 long start = System.currentTimeMillis();
                 try {
                     exchange.wait(remaining);
@@ -327,11 +342,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             }
             if (!Boolean.TRUE.equals(exchange.get(FINISHED))) {
                 if (LOG.isWarnEnabled()) {
-                    LOG.warn("Response timeout: {}",
-                        exchange.get(OperationInfo.class).getName().toString());
+                    LOG.warn("Response timeout: {}", exchange.get(OperationInfo.class).getName().toString());
                 }
-                throw new IOException("Response timeout: "
-                    + exchange.get(OperationInfo.class).getName().toString());
+                throw new IOException("Response timeout: " + exchange.get(OperationInfo.class).getName().toString());
             }
         }
     }
@@ -707,7 +720,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                 msg.putAll(reqContext);
                 exchange.putAll(reqContext);
             }
-            msg.setContent(MessageList.class, new MessageList(params));
+            msg.setContent(List.class, new MessageList(params));
 
             if (oi != null) {
                 exchange.setOneWay(oi.getOutput() == null);
@@ -717,8 +730,8 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             exchange.put(ClientCallback.class, callback);
 
             //setup message
-            msg.put(Message.REQUEST_MESSAGE, Boolean.TRUE);
-            msg.put(Message.INBOUND_MESSAGE, Boolean.FALSE);
+            msg.setRequest(true);
+            msg.setInbound(false);
             if (oi != null) {
                 msg.put(MessageInfo.class, oi.getInput());
             }

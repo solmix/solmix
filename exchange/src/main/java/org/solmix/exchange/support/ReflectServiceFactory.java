@@ -278,7 +278,7 @@ public  class ReflectServiceFactory extends AbstractServiceFactory {
             final Class<?> returnType = method.getReturnType();
             if (!returnType.isAssignableFrom(void.class)) {
                 final NamedID outId = getOutArgumentName(op, method,-1);
-                ArgumentInfo arg= inMsg.addArgument(outId);
+                ArgumentInfo arg= outMsg.addArgument(outId);
                 initializeArgument(arg, method.getReturnType(), method.getGenericReturnType());
                 final Annotation[] annotations = method.getAnnotations();
                 arg.setProperty(METHOD_ANNOTATIONS, annotations);

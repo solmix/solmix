@@ -85,7 +85,7 @@ public abstract class AbstractInvoker implements Invoker {
                 return null;
             }
 
-            return new MessageList(res);
+            return res;
         } catch (InvocationTargetException e) {
 
             Throwable t = e.getCause();

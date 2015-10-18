@@ -95,6 +95,7 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
         this.in = in;
         if (in != null) {
             in.setExchange(this);
+            in.setInbound(true);
         }
 
     }
@@ -109,6 +110,7 @@ public class DefaultExchange extends StringTypeMapper implements Exchange {
         this.out = out;
         if (out != null) {
             out.setExchange(this);
+            out.setInbound(false);
         }
     }
 

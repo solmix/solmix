@@ -25,7 +25,6 @@ import java.util.SortedSet;
 import org.solmix.exchange.Client;
 import org.solmix.exchange.ClientCallback;
 import org.solmix.exchange.Message;
-import org.solmix.exchange.MessageUtils;
 import org.solmix.exchange.interceptor.phase.Phase;
 import org.solmix.exchange.interceptor.phase.PhasePolicy;
 import org.solmix.runtime.Container;
@@ -53,7 +52,7 @@ public class ClientOutFaultProcessor extends AbstractFaultChainInitProcessor {
     @SuppressWarnings("unchecked")
     public void process(Message m) {
         //只处理out
-        if (MessageUtils.isInbount(m)) {
+        if (m.isInbound()) {
             return;
         }
 

@@ -179,7 +179,7 @@ public class ResourceManagerImpl implements ResourceManager {
     public <T> T resolveResource(String resourceName, Class<T> resourceType,
         String implementor) {
         return resolveResource(
-            new StringBuilder().append(resourceName).append("@").append(
+            new StringBuilder().append(resourceName).append("@,").append(
                 implementor).toString(), resourceType);
 
     }

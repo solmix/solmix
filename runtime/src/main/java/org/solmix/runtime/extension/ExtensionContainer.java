@@ -498,7 +498,7 @@ public class ExtensionContainer implements Container {
         }
         if (!type.isAnnotationPresent(Extension.class)) {
             throw new IllegalArgumentException("Extension Type:["
-                + type.getName() + "] ,without @"
+                + type.getName() + "] ,without @,"
                 + Extension.class.getSimpleName() + " Annotation!");
         }
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);

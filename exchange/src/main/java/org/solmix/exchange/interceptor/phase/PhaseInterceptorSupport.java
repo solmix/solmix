@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.solmix.commons.collections.SortedArraySet;
 import org.solmix.exchange.Message;
-import org.solmix.exchange.MessageUtils;
 
 /**
  * 其他拦截器必须继承该类.
@@ -123,7 +122,10 @@ public abstract class PhaseInterceptorSupport<T extends Message> implements
         return null;
     }
 
+    /**
+     * 是否为请求消息
+     */
     protected boolean isRequest(T message) {
-        return MessageUtils.isRequest(message);
+        return message.isRequest();
     }
 }

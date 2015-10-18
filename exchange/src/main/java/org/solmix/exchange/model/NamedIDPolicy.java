@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 import org.solmix.commons.util.ClassDescUtils;
+import org.solmix.commons.util.ObjectUtils;
 import org.solmix.exchange.Exchange;
 import org.solmix.exchange.ServiceCreateException;
 import org.solmix.exchange.support.ReflectServiceFactory;
@@ -43,6 +44,7 @@ public class NamedIDPolicy {
     protected String serviceNamespace;
     
     protected final String protocol;
+    public static final String OP_PREFIX="(",OP_SUFIX=")";
 
     public NamedIDPolicy(ReflectServiceFactory factory, String protocol) {
         serviceFactory = factory;
@@ -118,8 +120,8 @@ public class NamedIDPolicy {
     public NamedID getOperationName(InterfaceInfo intf, Method method) {
         String sns = intf.getName().getServiceNamespace();
         String name = method.getName();
-        String desc=ClassDescUtils.getTypeDesc(method.getParameterTypes());
-        name+="("+desc+")";
+        String desc = ClassDescUtils.getTypeDesc(method.getParameterTypes());
+        name = new StringBuilder().append(name).append(OP_PREFIX).append(desc).append(OP_SUFIX).toString();
         NamedID nid = new NamedID(sns, name);
         if (intf.getOperation(nid) == null) {
             return nid;
@@ -133,6 +135,17 @@ public class NamedIDPolicy {
                 i++;
             }
         }
+    }
+    
+    public static String getParamsDescFromOperationName(String name){
+        if(name==null){
+            return ObjectUtils.EMPTY_STRING;
+        }
+        int index = name.indexOf(OP_PREFIX);
+        if(index==-1){
+            return ObjectUtils.EMPTY_STRING;
+        }
+        return name.substring(index,name.length()-1);
     }
 
    

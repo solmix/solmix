@@ -54,60 +54,38 @@ public class PipelineWrappedSelector implements PipelineSelector, Closeable {
         pipeline.close();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#prepare(org.solmix.exchange.Message)
-     */
     @Override
     public void prepare(Message message) {
         Processor p = message.getExchange().get(Processor.class);
         if (p != null) {
             pipeline.setProcessor(p);
+            pipeline.setProtocol(endpoint.getProtocol());
         }
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#select(org.solmix.exchange.Message)
-     */
     @Override
     public Pipeline select(Message message) {
         return pipeline;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#complete(org.solmix.exchange.Exchange)
-     */
     @Override
     public void complete(Exchange exchange) {
         try {
             if (exchange.getIn() != null) {
                 pipeline.close(exchange.getIn());
+                pipeline.setProtocol(endpoint.getProtocol());
             }
         } catch (IOException e) {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#getEndpoint()
-     */
     @Override
     public Endpoint getEndpoint() {
         return endpoint;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.exchange.PipelineSelector#setEndpoint(org.solmix.exchange.Endpoint)
-     */
+ 
     @Override
     public void setEndpoint(Endpoint endpoint) {
         this.endpoint = endpoint;

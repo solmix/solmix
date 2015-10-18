@@ -114,7 +114,7 @@ public class DataUtilTest
     }
     @Test
     public void makeListIfSingleTest() {
-        String[] sa= {"11","xx","#@"};
+        String[] sa= {"11","xx","#@,"};
         String abc="abcd";
        List<?> s= DataUtils.makeListIfSingle(abc);
         Assert.assertEquals(1, s.size());

@@ -20,7 +20,7 @@
 package org.solmix.exchange;
 
 /**
- * 传输管道选择器
+ * 传输管道选择器，提供获取pipeline的策略。
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月17日
@@ -28,14 +28,34 @@ package org.solmix.exchange;
 
 public interface PipelineSelector {
 
+    /**
+     * 在消息通过切面之前准备pipeline<br>
+     * 可用于为消息提前准备pipeline.
+     * @param message
+     */
     void prepare(Message message);
 
+    /**
+     * 需要的时候选择pipeline<br>
+     * 懒加载在select时才创建pipeline.
+     * @param message
+     * @return
+     */
     Pipeline select(Message message);
 
+    /**
+     * 在消息交换结束时调用<br>
+     * 可以在complete提供销毁pipeline策略.
+     * @param exchange
+     */
     void complete(Exchange exchange);
 
     Endpoint getEndpoint();
 
+    /**
+     * pipelineSelector 对应的{@link org.solmix.exchange.Endpoint Endpoint}
+     * @param endpoint
+     */
     void setEndpoint(Endpoint endpoint);
 
 }

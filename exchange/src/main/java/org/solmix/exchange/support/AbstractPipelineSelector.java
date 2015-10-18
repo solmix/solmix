@@ -43,8 +43,7 @@ import org.solmix.exchange.model.EndpointInfo;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年11月13日
  */
-public abstract class AbstractPipelineSelector implements PipelineSelector,
-    Closeable {
+public abstract class AbstractPipelineSelector implements PipelineSelector, Closeable {
 
     protected static final String KEEP_PIPELINE_ALIVE = "KeepPipelineAlive";
 
@@ -101,17 +100,14 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
             EndpointInfo info = endpoint.getEndpointInfo();
             final String transportID = info.getTransporter();
             try {
-                PipelineFactoryManager pfm = ex.getContainer().getExtension(
-                    PipelineFactoryManager.class);
+                PipelineFactoryManager pfm = ex.getContainer().getExtension(PipelineFactoryManager.class);
 
                 if (pfm != null) {
                     PipelineFactory factory = pfm.getFactory(transportID);
                     if (factory != null) {
                         pl = createPipeline(msg, ex, factory);
                     } else {
-                        getLogger().warn(
-                            "PipelineFactory not found for:"
-                                + info.getAddress());
+                        getLogger().warn("PipelineFactory not found for:" + info.getAddress());
                     }
                 } else {
                     getLogger().warn("PipelineFactoryManager not found");
@@ -120,9 +116,11 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
                 throw new Fault(e);
             }
         }
-        if(pl!=null&&pl.getAddress()!=null){
+        //根据新pipeline，是否需要更新Address.
+        if (pl != null && pl.getAddress() != null) {
             replaceEndpointAddressIfNeeded(msg, pl.getAddress(), pl);
         }
+        pl.setProtocol(endpoint.getProtocol());
         msg.put(Pipeline.class, pl);
         return pl;
     }
@@ -132,11 +130,6 @@ public abstract class AbstractPipelineSelector implements PipelineSelector,
        return false;
     }
 
-    /**
-     * @param msg
-     * @param ex
-     * @param factory
-     */
     protected Pipeline createPipeline(Message msg, Exchange ex,
         PipelineFactory factory) throws IOException {
         Pipeline pl = null;

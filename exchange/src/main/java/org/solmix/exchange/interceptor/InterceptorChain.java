@@ -134,4 +134,9 @@ public interface InterceptorChain extends
      * 取消暂停.如果Chain被标记为暂停(paused),那么这个方法可以使Chain恢复执行(EXECUTING)状态,继续执行intercepter
      */
     void unpause();
+
+    /**
+     * 
+     */
+    void abort();
 }

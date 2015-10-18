@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.solmix.exchange.Message;
 import org.solmix.exchange.Pipeline;
 import org.solmix.exchange.Processor;
+import org.solmix.exchange.Protocol;
 
 /**
  * 
@@ -38,6 +39,8 @@ public abstract class AbstractPipeline implements Pipeline {
 
     protected Processor processor;
     protected String address;
+    
+    protected Protocol protocol;
     
     public AbstractPipeline(String address) {
         this.address = address;
@@ -92,6 +95,15 @@ public abstract class AbstractPipeline implements Pipeline {
                 }
             }
         }
+    }
+    
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
     }
 
     protected abstract Logger getLogger();

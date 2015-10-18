@@ -47,7 +47,7 @@ public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message> {
         try {
             getPipeline(message).prepare(message);
         } catch (IOException ex) {
-            throw new Fault("send message failed", ex);
+            throw new Fault("prepare Pipeline failed", ex);
         }
 
         // 添加关闭pipeline
@@ -58,6 +58,7 @@ public class MessageSenderInterceptor extends PhaseInterceptorSupport<Message> {
     public static Pipeline getPipeline(Message message) {
         Exchange ex = message.getExchange();
         Pipeline pl = ex.getPipeline(message);
+        //out used back pipeline
         if (pl == null && (ex.getOut() != null || ex.getOutFault() != null)) {
             pl = OutgoingChainInterceptor.getBackPipeline(message);
         }

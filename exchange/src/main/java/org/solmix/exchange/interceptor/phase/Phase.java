@@ -46,10 +46,10 @@ public class Phase implements Comparable<Object>
     public static final String POST_PROTOCOL = "post-protocol";
     public static final String POST_PROTOCOL_ENDING = "post-protocol-ending";
     /**编码*/
-    public static final String PRE_ENCODE = "pre-encode";
-    public static final String ENCODE = "encode";
-    public static final String POST_ENCODE = "post-encode";
-    public static final String ENCODE_ENDING = "encode-ending";
+    public static final String PRE_MARSHAL = "pre-marshal";
+    public static final String MARSHAL = "marshal";
+    public static final String POST_MARSHAL = "post-marshal";
+    public static final String ENCODE_MARSHAL = "marshal-ending";
     /**业务逻辑*/
     public static final String PRE_LOGICAL = "pre-logical";
     public static final String PRE_LOGICAL_ENDING = "pre-logical-ending";
@@ -83,9 +83,9 @@ public class Phase implements Comparable<Object>
     
    
     public static final String PROTOCOL = "protocol";
-    public static final String PRE_DECODE = "pre-decode";
-    public static final String DECODE = "encode";
-    public static final String POST_DECODE = "post-decode";
+    public static final String PRE_UNMARSHAL = "pre-unmarshal";
+    public static final String UNMARSHAL = "unmarshal";
+    public static final String POST_UNMARSHAL = "post-unmarshal";
   
     private String name;
     private int priority;

@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Test;
-import org.solmix.exchange.model.SerializationInfo;
 
 
 /**
@@ -74,7 +73,6 @@ public class DefaultMessageTest extends Assert
 //            DefaultMessage MSG = new DefaultMessage();
 //            String str="xxxxxxx";
 //            MSG.setContent(String.class, str);
-            SerializationInfo info = new SerializationInfo();
         }
         System.out.println(System.currentTimeMillis()-mark);
         mark = System.currentTimeMillis();

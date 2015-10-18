@@ -61,8 +61,6 @@ public interface Message extends StringTypeMap {
     /**存储invocation参数的key,值类型Map<String,Object>    */
     String INVOCATION_CONTEXT =  Message.class.getName() + ".INVOCATION_CONTEXT";
     
-    /**是否为请求侧消息,值类型Boolean    */
-    String REQUEST_MESSAGE = Message.class.getName() + ".REQUEST_MESSAGE"; 
     
     String EVENT_MESSAGE = Message.class.getName() + ".EVENT_MESSAGE"; 
 
@@ -78,8 +76,6 @@ public interface Message extends StringTypeMap {
 
     String QUERY_STRING = Message.class.getName() + ".QUERY_STRING";
 
-    /**是否为输入,值类型Boolean    */
-    String INBOUND_MESSAGE = Message.class.getName() + ".INBOUND_MESSAGE";
     
     /**消息响应code,值类型int   */
     String RESPONSE_CODE = Message.class.getName() + ".RESPONSE_CODE";
@@ -110,6 +106,37 @@ public interface Message extends StringTypeMap {
     String PARTIAL_RESPONSE_MESSAGE = Message.class.getName() + ".PARTIAL_RESPONSE_MESSAGE";
 
     String OPERATION = Message.class.getName() + ".OPERATION";
+    
+    /**
+     * 判断是否为请求消息<br>
+     *<li>true:请求
+     * <li>false:响应
+     * @return
+     */
+    boolean isRequest();
+    
+    /**
+     *  设置是否为请求消息<br>
+     * <li>true:请求
+     * <li>false:响应
+     * @param isRequest
+     */
+    void setRequest(boolean isRequest);
+    
+    /**
+     * 判断是否为消息交换模型中的输入消息.<br>
+     * <li>true:输入
+     * <li>false:输出
+     * @return
+     */
+    boolean isInbound();
+    /**
+     * 设置是否为消息交换模型中的输入消息.<br>
+     * <li>true:输入
+     * <li>false:输出
+     *  @param isRequest
+     */
+    void setInbound(boolean isRequest);
     /**
      * 返回消息ID
      * @return
