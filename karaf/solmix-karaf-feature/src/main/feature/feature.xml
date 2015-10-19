@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="solmix-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
+	<feature name="solmix-runtime" description="Solmix Runtime support"
+		version="${project.version}">
+		<bundle start-level="35">mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
+		<bundle start-level="35">mvn:commons-io/commons-io/${commons-io.version}</bundle>
+		<bundle start-level="35">mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
+		<bundle start-level="35">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
+		<bundle start-level="35">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-tools" description="Solmix Tools"
+		version="${project.version}">
+		<bundle start-level="60">mvn:org.solmix.karaf/solmix-karaf-tools/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-exchange" description="Message exchange parttern"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-runtime</feature>
+		<bundle start-level="35">mvn:org.solmix.common/solmix-common-exchange/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-template" description="Commons service template"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-runtime</feature>
+		<bundle start-level="35">mvn:org.solmix.services/solmix-service-template/${project.version}</bundle>
+	</feature>
+</features>

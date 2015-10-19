@@ -99,10 +99,13 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix.runtime*,org.osgi.service.event*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.runtime*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			org.springframework*;resolution:=optional;version="${spring.version}",
-			org.apache.aries*;version="[1.0,2)";resolution:=optional,*
+			org.apache.aries*;version="[1.0,2)";resolution:=optional,
+			net.sf.cglib.proxy*;resolution:=optional,
+			com.sun.management;resolution:=optional,
+			*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

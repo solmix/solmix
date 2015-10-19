@@ -46,6 +46,7 @@
 		<module>runtime</module>
 		<module>exchange</module>
 		<module>services</module>
+		<module>karaf</module>
 	</modules>
 	<properties>
 		<compile.flags>-Xlint:unchecked,deprecation,fallthrough,finally</compile.flags>
@@ -67,7 +68,7 @@
 		<felix.fileinstall.version>3.2.6</felix.fileinstall.version>
 		<felix.framework.version>4.0.3</felix.framework.version>
 		<felix.gogo.version>0.10.0</felix.gogo.version>
-		<felix.plugin.version>2.4.0</felix.plugin.version>
+		<felix.plugin.version>3.0.0</felix.plugin.version>
 		<felix.utils.version>1.1.0</felix.utils.version>
 		<felix.scr.version>1.6.0</felix.scr.version>
 		<felix.webconsole.version>3.1.8</felix.webconsole.version>
@@ -105,7 +106,7 @@
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
-		<apache.karaf.version>3.0.1</apache.karaf.version>
+		<apache.karaf.version>4.0.2</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>

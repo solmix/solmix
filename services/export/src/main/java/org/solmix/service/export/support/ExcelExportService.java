@@ -95,12 +95,12 @@ public class ExcelExportService extends AbstractExportService
         Map<String,String> headerStyleElements = new HashMap<String,String>();
         headerStyleElements.put("backgroundColor", "#5bb4e0");
         for (String header : headers) {
-            if (header.indexOf("$style") == -1) {
-                Cell cell = row.createCell(cellIndex, 1);
-                cell.setCellValue(header);
+            Cell cell = row.createCell(cellIndex, 1);
+            cell.setCellValue(header);
+            if (header.indexOf("$style") != -1) {
                 cell.setCellStyle(getCellStyle(headerStyleElements, false));
-                cellIndex++;
             }
+            cellIndex++;
         }
         CellStyle wrapStyle = workbook.createCellStyle();
         wrapStyle.setWrapText(true);
@@ -132,11 +132,6 @@ public class ExcelExportService extends AbstractExportService
                     if (cellValue != null || styleElements != null) {
                         if (styleElements != null && styleElements.get("rawValue") != null)
                             cellValue = styleElements.get("rawValue");
-                        if (cellValue instanceof String)
-                            try {
-                                cellValue = new Double((String) cellValue);
-                            } catch (NumberFormatException ignored) {
-                            }
                         if (cellValue instanceof Number) {
                             cell = row.createCell(cellIndex, 0);
                             cell.setCellValue(((Number) cellValue).doubleValue());
