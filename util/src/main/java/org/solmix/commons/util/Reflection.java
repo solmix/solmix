@@ -195,7 +195,7 @@ public class Reflection
     
     public static Object invokeMethod(Object classInstance, String methodName, Object... params) throws Exception {
         try {
-            Method method = findMethod(classInstance.getClass().getName(), methodName, lookupTypes(params));
+            Method method = findMethod(classInstance.getClass(), methodName, lookupTypes(params));
             return method.invoke(classInstance, params);
         } catch (InvocationTargetException ite) {
             Throwable throwable = getRealTargetException(ite);

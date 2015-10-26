@@ -299,6 +299,7 @@ public final class Bytes
 
     public static byte[] hexStringToByte(String hex) {
         // return hex.getBytes();
+        hex=hex.replace(" ","");
         int len = (hex.length() / 2);
         byte[] result = new byte[len];
         char[] achar = hex.toCharArray();
@@ -312,18 +313,6 @@ public final class Bytes
     private static byte toByte(char c) {
         byte b = (byte) "0123456789ABCDEF".indexOf(c);
         return b;
-    }
-
-    public static final String bytesToHexString(byte[] bArray) {
-        StringBuffer sb = new StringBuffer(bArray.length);
-        String sTemp;
-        for (int i = 0; i < bArray.length; i++) {
-            sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
-                sb.append(0);
-            sb.append(sTemp.toUpperCase());
-        }
-        return sb.toString();
     }
 
     public static final Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException {
@@ -344,7 +333,7 @@ public final class Bytes
     }
 
     public static final String objectToHexString(Serializable s) throws IOException {
-        return bytesToHexString(objectToBytes(s));
+        return byteToHexString(objectToBytes(s));
     }
 
     public static final Object hexStringToObject(String hex) throws IOException, ClassNotFoundException {

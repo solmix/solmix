@@ -49,6 +49,7 @@
 		<module>karaf</module>
 	</modules>
 	<properties>
+		<freemarker.version>2.3.23</freemarker.version>
 		<compile.flags>-Xlint:unchecked,deprecation,fallthrough,finally</compile.flags>
 		<compile.show.deprecation>true</compile.show.deprecation>
 		<aopalliance.bundle.version>1.0_4</aopalliance.bundle.version>

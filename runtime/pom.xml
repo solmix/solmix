@@ -101,6 +101,7 @@
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.runtime*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
+			javax.annotation,
 			org.springframework*;resolution:=optional;version="${spring.version}",
 			org.apache.aries*;version="[1.0,2)";resolution:=optional,
 			net.sf.cglib.proxy*;resolution:=optional,

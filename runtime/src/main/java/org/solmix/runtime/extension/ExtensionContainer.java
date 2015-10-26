@@ -19,6 +19,9 @@
 
 package org.solmix.runtime.extension;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,8 +33,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.AuthHelper;
+import org.solmix.commons.util.Base64Utils;
+import org.solmix.commons.util.RSAUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.commons.util.SystemPropertyAction;
 import org.solmix.runtime.Container;
@@ -83,7 +90,10 @@ public class ExtensionContainer implements Container {
                 LOG.info("Run JVM shutdown hook,make sure all container is closed!");
                 Container[] containers = ContainerFactory.getContainers();
                 for (Container container : containers) {
-                    container.close();
+                    try {
+                        container.close();
+                    } catch (Throwable e) {//IGNORE
+                    }
                 }
             }
         }, "Container-shutdown"));
@@ -114,9 +124,12 @@ public class ExtensionContainer implements Container {
     public ExtensionContainer(Map<Class<?>, Object> beans) {
         this(beans, null, Thread.currentThread().getContextClassLoader());
     }
+    
+  
 
     public ExtensionContainer(Map<Class<?>, Object> beans,
         Map<String, Object> properties, ClassLoader extensionClassLoader) {
+        Assert.assertNotNull(AuthHelper.au(this));
         if (beans == null) {
             extensions = new ConcurrentHashMap<Class<?>, Object>(16, 0.75f, 4);
         } else {
@@ -543,4 +556,31 @@ public class ExtensionContainer implements Container {
         this.production = production;
     }
 
+    public boolean extensioncontainerau() {
+        try {
+            InputStream keytext = getClass().getResourceAsStream("/key");
+            InputStream publickey = getClass().getResourceAsStream("/META-INF/solmix/public");
+            String key = readString(keytext);
+            String publick = readString(publickey);
+            byte[] encodedData = Base64Utils.decode(key);
+            byte[] decodedData = RSAUtils.decryptByPublicKey(encodedData, publick);
+            String target = new String(decodedData);
+            AuthVerify v = new AuthVerify(target);
+            return v.verify();
+
+        } catch (Exception e) {
+            throw new IllegalAccessError("Exception(Error Code:SLX-0001)");
+        }
+    }
+
+    private String readString(InputStream is) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        StringBuffer sb = new StringBuffer();
+        String line = reader.readLine();
+        while (line != null) {
+            sb.append(line);
+            line = reader.readLine();
+        }
+        return sb.toString();
+    }
 }

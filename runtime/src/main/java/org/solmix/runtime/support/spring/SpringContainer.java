@@ -48,6 +48,7 @@ public class SpringContainer extends ContainerAdaptor implements ApplicationCont
 
     public SpringContainer()
     {
+        super();
 
     }
     //反向调用

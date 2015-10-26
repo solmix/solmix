@@ -54,4 +54,34 @@
 		</dependency>
   </dependencies>
   <name>Solmix :: Common :: Exchange</name>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Category>solmix</Bundle-Category>
+						<Export-Package>${solmix.osgi.export.pkg}</Export-Package>
+						<Import-Package>${solmix.osgi.import.pkg}</Import-Package>
+						<DynamicImport-Package>${solmix.osgi.dynamic.import}</DynamicImport-Package>
+						<_failok>false</_failok>
+						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<solmix.osgi.export.pkg>org.solmix.exchange*</solmix.osgi.export.pkg>
+		<solmix.osgi.import.pkg>
+		javax.annotation,
+		org.springframework*;resolution:=optional;version="${spring.version}",
+		*
+		</solmix.osgi.import.pkg>
+		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+	</properties>
+	<packaging>bundle</packaging>
 </project>
