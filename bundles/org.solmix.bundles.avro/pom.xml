@@ -68,7 +68,7 @@
       </plugin>
     </plugins>
   </build>
-   <name>Solmix :: Bundles :: jackson</name>
+   <name>Solmix :: Bundles :: Apache Avro</name>
    <packaging>bundle</packaging>
    <dependencies>
    	<dependency>
