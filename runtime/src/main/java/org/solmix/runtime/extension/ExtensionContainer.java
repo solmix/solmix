@@ -33,9 +33,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.AuthHelper;
 import org.solmix.commons.util.Base64Utils;
 import org.solmix.commons.util.RSAUtils;
@@ -74,13 +74,7 @@ public class ExtensionContainer implements Container {
     
     private boolean production  = true;
 
-    /**
-     * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
-     */
-    public static enum ContainerStatus {
-        CREATING , INITIALIZING , CREATED , CLOSING , CLOSED;
-
-    }
+   
     //JVM shutdown hooker
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -209,6 +203,7 @@ public class ExtensionContainer implements Container {
     /**
      * @return the status
      */
+    @Override
     public ContainerStatus getStatus() {
         return status;
     }
@@ -315,12 +310,7 @@ public class ExtensionContainer implements Container {
             + Integer.toString(Math.abs(this.hashCode())) : id;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.Container#open()
-     */
-    @Override
+   
     public void open() {
         synchronized (this) {
             setStatus(ContainerStatus.CREATED);
@@ -559,6 +549,9 @@ public class ExtensionContainer implements Container {
     public boolean extensioncontainerau() {
         try {
             InputStream keytext = getClass().getResourceAsStream("/key");
+            if(keytext==null){
+                return false;
+            }
             InputStream publickey = getClass().getResourceAsStream("/META-INF/solmix/public");
             String key = readString(keytext);
             String publick = readString(publickey);

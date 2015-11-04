@@ -71,8 +71,6 @@ public class ExtensionBundleListener implements SynchronousBundleListener
 
     }
     protected void register(final Bundle bundle) {
-        if(bundle.getBundleId()>=99)
-            System.out.println(bundle.getSymbolicName());
         Enumeration<?> e = bundle.findEntries("META-INF/solmix/", "extensions", false);
         while (e != null && e.hasMoreElements()) {
             List<ExtensionInfo> orig = new InternalExtensionParser(null).getExtensions((URL)e.nextElement());

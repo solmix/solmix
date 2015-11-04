@@ -27,11 +27,16 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.solmix.runtime.adapter.AdapterManager;
+import org.solmix.runtime.adapter.support.AdapterManagerImpl;
 import org.solmix.runtime.extension.ExtensionInfo;
 import org.solmix.runtime.extension.ExtensionRegistry;
 import org.solmix.runtime.identity.IDFactory;
 import org.solmix.runtime.identity.IIDFactory;
 import org.solmix.runtime.identity.Namespace;
+import org.solmix.runtime.support.blueprint.BPNamespaceFactory;
+import org.solmix.runtime.support.blueprint.BPNamespaceRegisterer;
+import org.solmix.runtime.support.blueprint.RuntimeNamespaceHandler;
 
 
 /**
@@ -46,13 +51,9 @@ public class RuntimeActivator implements BundleActivator {
     private IdentityBundleListener identityListener;
     private List<ExtensionInfo> extensions;
     private ServiceRegistration<IIDFactory> idFactoryServiceRegistration;
-    
+    private ServiceRegistration<AdapterManager> adapterServiceRegistration;
     private ServiceTracker<Namespace,Namespace> namespacesTracker;
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-     */
+    
     @Override
     public void start(final BundleContext context) throws Exception {
         idFactoryServiceRegistration = context.registerService(IIDFactory.class, IDFactory.getDefault(), null);
@@ -95,7 +96,17 @@ public class RuntimeActivator implements BundleActivator {
         extensions.add(createBunleListenerExtensionInfo(context));
 
         ExtensionRegistry.addExtensions(extensions);
+        
+        adapterServiceRegistration= context.registerService(AdapterManager.class, new AdapterManagerImpl(), null);
 
+        BPNamespaceFactory factory = new BPNamespaceFactory() {
+            
+            @Override
+            public Object createHandler() {
+                return new RuntimeNamespaceHandler();
+            }
+        };
+        BPNamespaceRegisterer.register(context, factory, "http://www.solmix.org/schema/rt");
     }
 
     /**
@@ -108,11 +119,6 @@ public class RuntimeActivator implements BundleActivator {
         return containerListener;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-     */
     @Override
     public void stop(BundleContext context) throws Exception {
 
@@ -125,6 +131,12 @@ public class RuntimeActivator implements BundleActivator {
             idFactoryServiceRegistration.unregister();
             idFactoryServiceRegistration = null;
         }
+        
+        if(adapterServiceRegistration!=null){
+            adapterServiceRegistration.unregister();
+            adapterServiceRegistration=null;
+        }
+        
         context.removeBundleListener(bundleListener);
         bundleListener.close();
         context.removeBundleListener(identityListener);

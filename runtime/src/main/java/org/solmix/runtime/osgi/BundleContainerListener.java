@@ -64,11 +64,7 @@ public class BundleContainerListener implements ContainerListener
         
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.ContainerListener#handleEvent(org.solmix.runtime.ContainerEvent)
-     */
+  
     @Override
     public void handleEvent(ContainerEvent event) {
         int type = event.getType();

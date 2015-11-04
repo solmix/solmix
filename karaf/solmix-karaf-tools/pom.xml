@@ -48,6 +48,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.karaf.bundle</groupId>
+			<artifactId>org.apache.karaf.bundle.blueprintstate</artifactId>
+			<version>${apache.karaf.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.solmix.common</groupId>
 			<artifactId>solmix-common-exchange</artifactId>
 			<version>${project.version}</version>
@@ -76,4 +82,5 @@
 		<solmix.osgi.export.pkg>org.solmix.karaf.command*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>*</solmix.osgi.import.pkg>
 	</properties>
+	<name>Solmix :: Karaf :: Tools</name>
 </project>

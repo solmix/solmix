@@ -227,7 +227,13 @@ public final class Bytes
            ((b[off + 1] & 0xFF) << 16) +
            ((b[off + 0]) << 24);
     }
-
+    public static int bytes2int(byte[] b)
+    {
+          return ((b[3] & 0xFF) << 0) +
+           ((b[2] & 0xFF) << 8) +
+           ((b[ 1] & 0xFF) << 16) +
+           ((b[0]) << 24);
+    }
     /**
      * @param header
      * @param i

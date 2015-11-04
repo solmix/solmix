@@ -35,7 +35,13 @@ public interface Container {
     String DEFAULT_CONTAINER_ID = "solmix";
 
     String CONTAINER_PROPERTY_NAME = "solmix.Container.system.id";
+    /**
+     * Container status cycle CREATING->INITIALIZING->CREATED->CLOSING->CLOSED
+     */
+    public static enum ContainerStatus {
+        CREATING , INITIALIZING , CREATED , CLOSING , CLOSED;
 
+    }
     /**
      * Get the extension instance of <code>class</code> manager by this system
      * Container
@@ -83,10 +89,6 @@ public interface Container {
      */
     void setId(String containerID);
 
-    /**
-     * Open this Container for using.
-     */
-    void open();
 
     /**
      * @param name
@@ -141,4 +143,9 @@ public interface Container {
      * @param production
      */
     void setProduction(boolean production);
+
+    /**
+     * @return
+     */
+    ContainerStatus getStatus();
 }

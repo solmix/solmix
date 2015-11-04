@@ -41,7 +41,7 @@ public class IdentityExtensionParser {
 
     private static final Logger LOG = LoggerFactory.getLogger(IdentityExtensionParser.class);
     final ClassLoader loader;
-    IdentityExtensionParser(ClassLoader loader) {
+    public IdentityExtensionParser(ClassLoader loader) {
         this.loader = loader;
     }
 
@@ -81,7 +81,7 @@ public class IdentityExtensionParser {
                 line = reader.readLine();
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error("Error loaded Namespace:"+line,e);
         }
         return extensions;
     }
@@ -106,7 +106,7 @@ public class IdentityExtensionParser {
         final String classname = line;
         Object ns = null;
         try {
-            ns = Reflection.newInstance(loader.loadClass(classname));
+            ns = Reflection.newInstance(loadClass(classname));
         } catch (ClassNotFoundException e) {
             LOG.warn("Namespace class not found ", e);
         }
@@ -115,5 +115,9 @@ public class IdentityExtensionParser {
         } else {
             return null;
         }
+    }
+    
+    protected Class<?> loadClass(String classname) throws ClassNotFoundException{
+        return loader.loadClass(classname);
     }
 }

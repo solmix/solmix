@@ -39,7 +39,8 @@ import org.solmix.runtime.support.ext.ContainerAdaptor;
  * @version $Id$ 2013-11-5
  */
 
-public class BpContainer extends ContainerAdaptor {
+public class BpContainer extends ContainerAdaptor
+{
 
     BundleContext bundleContext;
 
@@ -54,17 +55,12 @@ public class BpContainer extends ContainerAdaptor {
 
             @Override
             public ClassLoader run() {
-                return new BundleDelegatingClassLoader(
-                    bundleContext.getBundle(), this.getClass().getClassLoader());
+                return new BundleDelegatingClassLoader(bundleContext.getBundle(), this.getClass().getClassLoader());
             }
         });
         super.setExtension(bundleClassLoader, ClassLoader.class);
         super.setExtension(bundleContext, BundleContext.class);
-        super.setExtension(new OsgiConfigureUnitManager(bundleContext),
-            ConfigureUnitManager.class);
-        Dictionary<String, Object> properties = new Hashtable<String, Object>();
-        properties.put(CONTAINER_PROPERTY_NAME, getId());
-        bundleContext.registerService(Container.class, this, properties);
+        super.setExtension(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
     }
 
     /**
@@ -72,20 +68,24 @@ public class BpContainer extends ContainerAdaptor {
      */
     public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
         this.blueprintContainer = blueprintContainer;
-        setExtension(new BlueprintConfigurer(blueprintContainer),
-            BeanConfigurer.class);
-        setExtension(new BlueprintBeanProvider(
-            getExtension(ConfiguredBeanProvider.class), blueprintContainer,
-            bundleContext), ConfiguredBeanProvider.class);
+        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
+        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
+            ConfiguredBeanProvider.class);
 
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        Dictionary<String, Object> properties = new Hashtable<String, Object>();
+        properties.put(CONTAINER_PROPERTY_NAME, getId());
+        bundleContext.registerService(Container.class, this, properties);
+    };
+
+    @Override
     public String getId() {
         if (id == null) {
-            id = bundleContext.getBundle().getSymbolicName() + "-"
-                + DEFAULT_CONTAINER_ID + "-"
-                + Integer.toString(this.hashCode());
+            id = bundleContext.getBundle().getSymbolicName() + "-" + DEFAULT_CONTAINER_ID + "-" + Integer.toString(this.hashCode());
         }
         return id;
     }

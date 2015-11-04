@@ -33,7 +33,7 @@ import org.solmix.runtime.extension.ExtensionRegistry;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年10月19日
  */
-@Command(scope = "rt", name = "ext-list", description = "Displays a list of all loaded extensions.")
+@Command(scope = "rt", name = "list-ext", description = "Displays a list of all loaded extensions.")
 @Service
 public class ExtensionListCommand implements Action
 {

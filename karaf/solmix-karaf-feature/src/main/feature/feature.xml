@@ -24,38 +24,38 @@
 		<feature version="${project.version}">solmix-runtime</feature>
 		<bundle start-level="35">mvn:org.solmix.services/solmix-service-template/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-service-event" description="Commons service template"
+	<feature name="solmix-service-event" description="Commons service Event"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
 		<bundle start-level="35">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-service-velocity" description="Commons service template"
+	<feature name="solmix-service-velocity" description="Commons service velocity"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
 		<bundle start-level="35">mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>
 		<bundle start-level="35">mvn:org.apache.velocity/velocity/${velocity.version}</bundle>
 		<bundle start-level="35">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-service-freemarker" description="Commons service template"
+	<feature name="solmix-service-freemarker" description="Commons service freemarker"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
 		<bundle start-level="35">mvn:org.freemarker/freemarker/${freemarker.version}</bundle>
 		<bundle start-level="35">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-service-all" description="Commons service template"
+	<feature name="solmix-service-all" description="Commons service all"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
 		<feature version="${project.version}">solmix-service-event</feature>
 		<feature version="${project.version}">solmix-service-velocity</feature>
 		<feature version="${project.version}">solmix-service-freemarker</feature>
 	</feature>
-	<feature name="datax-core" description="Commons service template"
+	<feature name="datax-core" description="Datax core"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
 		<feature version="${project.version}">solmix-service-velocity</feature>
 		<bundle start-level="35">mvn:org.solmix.datax/datax-core/${project.version}</bundle>
 	</feature>
-	<feature name="datax-mybatis" description="Commons service template"
+	<feature name="datax-mybatis" description="Datax mybatis"
 		version="${project.version}">
 		<feature version="${project.version}">datax-core</feature>
 		<bundle start-level="35">mvn:org.mybatis/mybatis/${mybatis.version}</bundle>
