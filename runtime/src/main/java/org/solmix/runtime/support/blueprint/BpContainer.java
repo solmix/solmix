@@ -31,6 +31,8 @@ import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.runtime.cm.support.OsgiConfigureUnitManager;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.runtime.resource.support.PathMatchingResourceResolver;
 import org.solmix.runtime.support.ext.ContainerAdaptor;
 
 /**
@@ -61,8 +63,12 @@ public class BpContainer extends ContainerAdaptor
         super.setExtension(bundleClassLoader, ClassLoader.class);
         super.setExtension(bundleContext, BundleContext.class);
         super.setExtension(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
+        ResourceManager rm= getExtension(ResourceManager.class);
+        rm.addResourceResolver(new PathMatchingResourceResolver(new BundleDelegatingClassLoader(bundleContext.getBundle(), BpContainer.class.getClassLoader())));
     }
-
+    @Override
+    protected void customResourceManager(ResourceManager rm) {
+    }
     /**
      * @param blueprintContainer the blueprintContainer to set
      */

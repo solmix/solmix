@@ -162,7 +162,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
                     return super.tryClass(name, cl);
                 } catch (ExtensionException ee) {
                     if (origExc != null) {
-                        throw new ExtensionException("PROBLEM_LOADING_EXTENSION_CLASS",origExc);
+                        throw new ExtensionException("PROBLEM_LOADING_EXTENSION_CLASS:"+name,origExc);
                     } else {
                         throw ee;
                     }

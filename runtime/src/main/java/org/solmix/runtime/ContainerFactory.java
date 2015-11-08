@@ -68,6 +68,7 @@ public abstract class ContainerFactory
     	return containersRef.toArray(new Container[]{});
     }
 
+   
     /**
      * Return the default system container.
      * 
@@ -332,6 +333,7 @@ public abstract class ContainerFactory
                 }
             }
         }
+        containersRef.remove(container);
     }
 
     protected void initializeContainer(Container container) {

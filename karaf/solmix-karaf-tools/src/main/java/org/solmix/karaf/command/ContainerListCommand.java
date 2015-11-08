@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerFactory;
 
 
 /**
@@ -61,6 +62,7 @@ public class ContainerListCommand implements Action
                 table.addRow().addContent(c.getId(),status,c.isProduction());
             }
         }
+        ContainerFactory.getContainers();
         table.print(System.out, true);
         return null;
     }

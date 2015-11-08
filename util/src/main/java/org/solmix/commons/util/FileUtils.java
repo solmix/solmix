@@ -71,6 +71,9 @@ public class FileUtils
 
     /** URL protocol for an entry from a jar file: "jar" */
     public static final String URL_PROTOCOL_JAR = "jar";
+    
+    /** URL protocol for an entry from a jar file: "bundle(jar)" */
+    public static final String URL_PROTOCOL_BUNDLE = "bundle";
 
     /** URL protocol for an entry from a zip file: "zip" */
     public static final String URL_PROTOCOL_ZIP = "zip";
@@ -756,7 +759,7 @@ public class FileUtils
 
     public static boolean isJarURL(URL url) {
         String protocol = url.getProtocol();
-        return (URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol));
+        return  (URL_PROTOCOL_BUNDLE.equals(protocol)||URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol));
     }
 
     public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {

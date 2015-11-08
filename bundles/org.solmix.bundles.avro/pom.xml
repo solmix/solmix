@@ -29,10 +29,9 @@
    	org.apache.velocity*;resolution:=optional,
    	javax.servlet*;resolution:=optional,
    	com.google.protobuf*;resolution:=optional,
-   	org.xerial.snappy;resolution:=optional,
     *
     </solmix.osgi.import.pkg>
-    <solmix.osgi.private.pkg></solmix.osgi.private.pkg>
+    <solmix.osgi.private.pkg>org.xerial.snappy</solmix.osgi.private.pkg>
     <solmix.osgi.failok>true</solmix.osgi.failok>
     <solmix.category>apache</solmix.category>
   </properties> 

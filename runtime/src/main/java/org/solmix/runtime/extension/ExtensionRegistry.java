@@ -47,7 +47,7 @@ public class ExtensionRegistry {
 
     public static void removeExtensions(List<? extends ExtensionInfo> list) {
         for (ExtensionInfo e : list) {
-            extensions.remove(e);
+            extensions.remove(e.getName());
         }
     }
 
