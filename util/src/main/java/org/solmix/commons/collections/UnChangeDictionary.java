@@ -208,6 +208,10 @@ public class UnChangeDictionary<K, V> extends Dictionary<K, V> implements
     public synchronized void setReadOnly() {
           readOnly = true;
     }
+    
+    public synchronized boolean isReadOnly(){
+        return readOnly;
+    }
 
     /**
      * Returns the number of entries (distinct keys) in this dictionary.
