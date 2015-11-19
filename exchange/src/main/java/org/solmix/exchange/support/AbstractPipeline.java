@@ -97,11 +97,13 @@ public abstract class AbstractPipeline implements Pipeline {
         }
     }
     
+    @Override
     public Protocol getProtocol() {
         return protocol;
     }
 
     
+    @Override
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
     }
@@ -124,6 +126,6 @@ public abstract class AbstractPipeline implements Pipeline {
     @Override
     public String toString() {
         return "pipeline: " + this.getClass() + System.identityHashCode(this)
-            + "address: " + getAddress();
+            + ",address: " + getAddress();
     }
 }

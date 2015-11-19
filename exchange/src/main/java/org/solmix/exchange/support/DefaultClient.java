@@ -503,6 +503,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
    
     @Override
     public void destroy() {
+        if(LOG.isDebugEnabled()){
+            LOG.debug("destroy client :"+getEndpoint().getEndpointInfo().getAddress());
+        }
         if (container == null) {
             return;
         }
@@ -777,6 +780,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
             } catch (Fault fault) {
                 throw fault;
             }
+            //返回数据在callback中处理
             if (callback != null) {
                 return null;
             } else {

@@ -85,13 +85,13 @@ public class DefaultServerRegistry implements ServerRegistry, ContainerListener 
 
             break;
         case ContainerEvent.POSTCLOSE: 
+            servers.clear();
+            break;
+        case ContainerEvent.PRECLOSE:
             Server[] serverArray = servers.toArray(new Server[] {});
             for (Server server : serverArray) {
                 server.destroy();
             }
-            break;
-        case ContainerEvent.PRECLOSE:
-            servers.clear();
             break;
         default:
             break;
