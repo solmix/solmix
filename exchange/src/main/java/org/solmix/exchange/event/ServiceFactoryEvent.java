@@ -81,11 +81,6 @@ public class ServiceFactoryEvent implements Event, Serializable {
      */
     public final static int ENDPOINTINFO_CREATED = 0x0000000A;
 
-    /**
-     * Class[], InvokationHandler, Proxy
-     */
-    public final static int PROXY_CREATED = 0x0000000B;
-
     public final static int START_CREATE = 0x0000000C;
     
     public final static int END_CREATE = 0x0000000D;
