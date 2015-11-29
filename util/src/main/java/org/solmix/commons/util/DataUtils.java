@@ -36,7 +36,6 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -161,23 +160,6 @@ public final class DataUtils
         return map;
     }
 
-    public static String fastDateFormat(java.util.Date date) {
-        Calendar calendar = Calendar.getInstance();
-        StringWriter out = new StringWriter();
-        calendar.setTime(date);
-        out.write(String.valueOf(calendar.get(1)));
-        out.write("-");
-        out.write(String.valueOf(calendar.get(2) + 1));
-        out.write("-");
-        out.write(String.valueOf(calendar.get(5)));
-        out.write(" ");
-        out.write(String.valueOf(calendar.get(11)));
-        out.write(":");
-        out.write(String.valueOf(calendar.get(12)));
-        out.write(":");
-        out.write(String.valueOf(calendar.get(13)));
-        return out.toString();
-    }
 
     /**
      * Return Boolean .
@@ -227,35 +209,6 @@ public final class DataUtils
             putMultiple(reverseMap, origMap.get(key), key);
         }
         return reverseMap;
-    }
-
-    /**
-     * Split the string by delimiter
-     * 
-     * @param toSplit
-     * @param delimiter
-     * @return
-     */
-    public static List<String> simpleSplit(String toSplit, String delimiter) {
-        if (toSplit == null) {
-            return null;
-        } else {
-            List<String> output = new ArrayList<String>();
-            StringTokenizer tokens = new StringTokenizer(toSplit, delimiter, true);
-            boolean lastTokenWasDelimiter = false;
-            while (tokens.hasMoreTokens()) {
-                String token = tokens.nextToken();
-                if (!token.equals(delimiter)) {
-                    output.add(token);
-                    lastTokenWasDelimiter = false;
-                } else {
-                    if (lastTokenWasDelimiter)
-                        output.add("");
-                    lastTokenWasDelimiter = true;
-                }
-            }
-            return output;
-        }
     }
 
     /**

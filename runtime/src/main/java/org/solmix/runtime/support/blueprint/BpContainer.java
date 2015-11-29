@@ -23,6 +23,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
@@ -31,6 +32,7 @@ import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.cm.ConfigureUnitManager;
 import org.solmix.runtime.cm.support.OsgiConfigureUnitManager;
+import org.solmix.runtime.resource.ResourceInjector;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.support.PathMatchingResourceResolver;
 import org.solmix.runtime.support.ext.ContainerAdaptor;
@@ -83,6 +85,18 @@ public class BpContainer extends ContainerAdaptor
     @Override
     public void initialize() {
         super.initialize();
+        Set<String> ids =blueprintContainer.getComponentIds();
+        ResourceManager rm  = getExtension(ResourceManager.class);
+        ResourceInjector injector = new ResourceInjector(rm);
+        if(ids!=null){
+            for(String id:ids){
+              Object instance =  blueprintContainer.getComponentInstance(id);
+              if(instance instanceof Container){
+                  continue;
+              }
+              injector.inject(instance);
+            }
+        }
         Dictionary<String, Object> properties = new Hashtable<String, Object>();
         properties.put(CONTAINER_PROPERTY_NAME, getId());
         bundleContext.registerService(Container.class, this, properties);

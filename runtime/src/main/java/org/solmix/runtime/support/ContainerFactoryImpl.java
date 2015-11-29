@@ -35,11 +35,6 @@ import org.solmix.runtime.extension.ExtensionContainer;
 public class ContainerFactoryImpl extends ContainerFactory
 {
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.ContainerFactory#createContainer()
-     */
     @Override
     public Container createContainer() {
         return createContainer(new HashMap<Class<?>, Object>());

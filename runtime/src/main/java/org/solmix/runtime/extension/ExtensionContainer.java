@@ -20,6 +20,7 @@
 package org.solmix.runtime.extension;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -548,22 +549,37 @@ public class ExtensionContainer implements Container {
 
     public boolean extensioncontainerau() {
         try {
+            String location ="/META-INF/solmix/public";
             InputStream keytext = getClass().getResourceAsStream("/key");
             if(keytext==null){
                 return false;
             }
-            InputStream publickey = getClass().getResourceAsStream("/META-INF/solmix/public");
+            InputStream publickey = getClass().getResourceAsStream(location);
             String key = readString(keytext);
             String publick = readString(publickey);
             byte[] encodedData = Base64Utils.decode(key);
             byte[] decodedData = RSAUtils.decryptByPublicKey(encodedData, publick);
             String target = new String(decodedData);
             AuthVerify v = new AuthVerify(target);
-            return v.verify();
+            boolean verify= v.verify();
+            if(!verify){
+               try {
+                String authlock= getAuthLock(location);
+                   File f = new File(authlock);
+                   if(!f.exists()){
+                       f.createNewFile();
+                   }
+                } catch (Exception e) { }
+                }
+            return verify;
 
         } catch (Exception e) {
             throw new IllegalAccessError("Exception(Error Code:SLX-0001)");
         }
+    }
+    private String getAuthLock(String location){
+        
+        return SystemPropertyAction.getProperty("java.io.tmpdir")+File.separator+"authlock"+File.separator+location.hashCode();
     }
 
     private String readString(InputStream is) throws Exception {

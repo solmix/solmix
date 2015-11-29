@@ -19,6 +19,7 @@
 
 package org.solmix.commons.util;
 
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -135,6 +136,25 @@ public final class DateUtils
         Date date = new Date();
         date.setTime(Long.valueOf(dateLongStr));
         return getDateString(date, "yyyy-MM-dd");
+    }
+    
+
+    public static String fastDateFormat(java.util.Date date) {
+        Calendar calendar = Calendar.getInstance();
+        StringWriter out = new StringWriter();
+        calendar.setTime(date);
+        out.write(String.valueOf(calendar.get(1)));
+        out.write("-");
+        out.write(String.valueOf(calendar.get(2) + 1));
+        out.write("-");
+        out.write(String.valueOf(calendar.get(5)));
+        out.write(" ");
+        out.write(String.valueOf(calendar.get(11)));
+        out.write(":");
+        out.write(String.valueOf(calendar.get(12)));
+        out.write(":");
+        out.write(String.valueOf(calendar.get(13)));
+        return out.toString();
     }
 
     public static void main(String args[]) {

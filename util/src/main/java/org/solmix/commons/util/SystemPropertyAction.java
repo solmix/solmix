@@ -19,6 +19,8 @@
 
 package org.solmix.commons.util;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -80,5 +82,20 @@ public final class SystemPropertyAction implements PrivilegedAction<String>
             LOG.warn("SecurityException raised getting property " + name, ex);
             return null;
         }
+    }
+
+    private static int PID = -1;
+
+    public static int getPid() {
+        if (PID < 0) {
+            try {
+                RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+                String name = runtime.getName(); // format: "pid@hostname"
+                PID = Integer.parseInt(name.substring(0, name.indexOf('@')));
+            } catch (Throwable e) {
+                PID = 0;
+            }
+        }
+        return PID;
     }
 }

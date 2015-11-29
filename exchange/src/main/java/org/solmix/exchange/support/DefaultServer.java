@@ -165,7 +165,7 @@ public class DefaultServer implements Server {
         stop();
         getTransporter().shutdown();
         if (serverRegistry != null) {
-            LOG.trace("unregister the server to serverRegistry.");
+            LOG.trace("unregister server ： "+this.getEndpoint().getEndpointInfo());
             serverRegistry.unregister(this);
         }
 

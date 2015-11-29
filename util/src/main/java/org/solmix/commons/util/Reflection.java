@@ -21,9 +21,11 @@ package org.solmix.commons.util;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Map;
@@ -348,6 +350,26 @@ public class Reflection
               return false;
         }
   }
+  
+  public static Class<?> getGenericClass(Class<?> cls) {
+      return getGenericClass(cls, 0);
+  }
+
+    public static Class<?> getGenericClass(Class<?> cls, int i) {
+        try {
+            ParameterizedType parameterizedType = ((ParameterizedType) cls.getGenericInterfaces()[0]);
+            Object genericClass = parameterizedType.getActualTypeArguments()[i];
+            if (genericClass instanceof ParameterizedType) {
+                return (Class<?>) ((ParameterizedType) genericClass).getRawType();
+            } else if (genericClass instanceof GenericArrayType) {
+                return (Class<?>) ((GenericArrayType) genericClass).getGenericComponentType();
+            } else {
+                return (Class<?>) genericClass;
+            }
+        } catch (Throwable e) {
+            throw new IllegalArgumentException(cls.getName() + " generic type undefined!", e);
+        }
+    }
 }
 
 class MethodEntry

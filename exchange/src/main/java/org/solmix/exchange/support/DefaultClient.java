@@ -149,15 +149,15 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         message.setRequest(false);
         
         List<Interceptor<? extends Message>> i1 = getInInterceptors();
-        if (LOG.isTraceEnabled()) {
+        if (LOG.isTraceEnabled()&&i1!=null&&i1.size()>0) {
             LOG.trace("Interceptors provided by client: " + i1);
         }
         List<Interceptor<? extends Message>> i2 = endpoint.getInInterceptors();
-        if (LOG.isTraceEnabled()) {
+        if (LOG.isTraceEnabled()&&i2!=null&&i2.size()>0) {
             LOG.trace("Interceptors provided by endpoint: " + i2);
         }
         List<Interceptor<? extends Message>> i3 = endpoint.getProtocol().getInInterceptors();
-        if (LOG.isTraceEnabled()) {
+        if (LOG.isTraceEnabled()&&i3!=null&&i3.size()>0) {
             LOG.trace("Interceptors provided by protocol: " + i3);
         }
         
@@ -167,7 +167,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         if (ser instanceof InterceptorProvider) {
             InterceptorProvider p = (InterceptorProvider) ser;
             List<Interceptor<? extends Message>> i4 = p.getInInterceptors();
-            if (LOG.isTraceEnabled()) {
+            if (LOG.isTraceEnabled()&&i4!=null&&i4.size()>0) {
                 LOG.trace("Interceptors provided by serialization: " + i4);
             }
             chain = inboundChainCache.get(policy.getInPhases(), i1, i2, i3, i4);

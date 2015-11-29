@@ -810,4 +810,32 @@ public final class StringUtils
 
         return str;
     }
+    /**
+     * Split the string by delimiter
+     * 
+     * @param toSplit
+     * @param delimiter
+     * @return
+     */
+    public static List<String> simpleSplit(String toSplit, String delimiter) {
+        if (toSplit == null) {
+            return null;
+        } else {
+            List<String> output = new ArrayList<String>();
+            StringTokenizer tokens = new StringTokenizer(toSplit, delimiter, true);
+            boolean lastTokenWasDelimiter = false;
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                if (!token.equals(delimiter)) {
+                    output.add(token);
+                    lastTokenWasDelimiter = false;
+                } else {
+                    if (lastTokenWasDelimiter)
+                        output.add("");
+                    lastTokenWasDelimiter = true;
+                }
+            }
+            return output;
+        }
+    }
 }

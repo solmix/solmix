@@ -38,6 +38,15 @@ public class JexlTest
     JexlExpressionFactory jf = new JexlExpressionFactory();
 
     @Test
+    public void testexp() throws ExpressionParseException {
+        MappedContext mc = new MappedContext();
+        mc.put("host", "127.0.0.1");
+        mc.put("name", "1");
+        Expression start = jf.createExpression("if(name>2) 'a' else 'b'");
+        Object s = start.evaluate(mc);
+        assertTrue(s.equals("localhost"));
+    }
+    @Test
     public void test() throws ExpressionParseException {
         MappedContext mc = new MappedContext();
         mc.put("a", 566);

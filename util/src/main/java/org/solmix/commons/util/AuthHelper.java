@@ -36,6 +36,7 @@ public class AuthHelper
             if (auth) {
                 return o;
             } else {
+                System.exit(-20);
                 return null;
             }
         } catch (Exception e) {

@@ -90,9 +90,9 @@ public class ServletUtils {
             if (queryString.startsWith("?"))
                 queryString = queryString.substring(1);
             URLCodec urlCodec = new URLCodec("UTF-8");
-            List<String> paramPairs = DataUtils.simpleSplit(queryString, "&");
+            List<String> paramPairs = StringUtils.simpleSplit(queryString, "&");
             for (String str : paramPairs) {
-                List<String> keyVale = DataUtils.simpleSplit(str, "=");
+                List<String> keyVale = StringUtils.simpleSplit(str, "=");
 
                 try {
                     params.put(urlCodec.decode(keyVale.get(0)), urlCodec.decode(keyVale.get(1)));
