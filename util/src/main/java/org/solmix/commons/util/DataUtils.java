@@ -1281,11 +1281,11 @@ public final class DataUtils
             }
             writeMethod.invoke(bean, arguments);
         }
-        if (badProperties != null && log.isDebugEnabled()) {
+        if (badProperties != null && log.isTraceEnabled()) {
             StringBuffer __info = new StringBuffer();
             for (String str : badProperties.keySet())
                 __info.append("[" + str + " : " + badProperties.get(str) + "] ");
-            log.debug((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
+            log.trace((new StringBuilder()).append("setProperties: couldn't set:\n").append(__info.toString()).toString());
         }
         return bean;
     }

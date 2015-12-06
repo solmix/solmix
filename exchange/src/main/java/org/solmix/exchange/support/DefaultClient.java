@@ -723,7 +723,9 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
                 msg.putAll(reqContext);
                 exchange.putAll(reqContext);
             }
-            msg.setContent(List.class, new MessageList(params));
+            if(params!=null){
+                msg.setContent(List.class, new MessageList(params));
+            }
 
             if (oi != null) {
                 exchange.setOneWay(oi.getOutput() == null);
