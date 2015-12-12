@@ -30,6 +30,7 @@ import org.solmix.exchange.Exchange;
 import org.solmix.exchange.MessageList;
 import org.solmix.exchange.Service;
 import org.solmix.exchange.interceptor.Fault;
+import org.solmix.exchange.interceptor.FaultType;
 import org.solmix.exchange.model.OperationInfo;
 
 /**
@@ -93,20 +94,38 @@ public abstract class AbstractInvoker implements Invoker {
             if (t == null) {
                 t = e;
             }
+            exchange.getIn().put(FaultType.class, FaultType.UNCHECKED_FAULT);
+            for (Class<?> cl : method.getExceptionTypes()) {
+                if (cl.isInstance(t)) {
+                    exchange.getIn().put(FaultType.class, FaultType.CHECKED_FAULT);
+                    break;
+                }
+            }
             if (t instanceof Fault) {
+                exchange.getIn().put(FaultType.class, FaultType.CHECKED_FAULT);
                 throw (Fault) t;
             } else {
-                throw new Fault("Exception invoke method " + method.toString()
-                    + " params " + params + " " + e.getMessage(), t);
+                throw createFault(t, method, params, true);
             }
         } catch (Fault f) {
+            exchange.getIn().put(FaultType.class, FaultType.UNCHECKED_FAULT);
             throw f;
         } catch (Exception e) {
-            throw new Fault("Exception invoke method " + method.toString()
-                + " params " + params + " " + e.getMessage(), e);
+            exchange.getIn().put(FaultType.class, FaultType.UNCHECKED_FAULT);
+            throw createFault(e, method, params, false);
         }
     }
-
+    
+    protected Fault createFault(Throwable ex, Method m, List<Object> params, boolean checked) {
+        if (checked) {
+            return new Fault(ex);
+        } else {
+            String message = (ex == null) ? "" : ex.getMessage(); 
+            String method = (m == null) ? "<null>" : m.toString(); 
+            return new Fault("Exception invoke method " + method+ " params " + params + " " +message,ex); 
+        }
+    }
+    
     protected Object performInvocation(Exchange exchange,
         final Object serviceObject, Method m, Object[] paramArray)
         throws Exception {

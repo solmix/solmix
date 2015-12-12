@@ -38,6 +38,9 @@ public class MessageList extends ArrayList<Object> {
     public MessageList() {
         super(6);
     }
+    public MessageList(int  size) {
+        super(size);
+    }
     public MessageList(Object ... values) {
         super(Arrays.asList(values));
     }

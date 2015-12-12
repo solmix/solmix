@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.io;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,6 +32,8 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class IOUtils {
     public static final Charset UTF8_CHARSET = Charset.forName("utf-8");
@@ -39,7 +42,19 @@ public final class IOUtils {
     private IOUtils() {
 
     }
-    
+    public static String[] readLines(InputStream is) throws IOException
+    {
+          List<String> lines = new ArrayList<String>();
+          BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        try {
+            String line;
+            while ((line = reader.readLine()) != null)
+                lines.add(line);
+            return lines.toArray(new String[0]);
+        } finally {
+            reader.close();
+        }
+    }
     /**
      * Use this function instead of new String(byte[], String) to avoid surprises from 
      * non-standard default encodings.

@@ -18,6 +18,19 @@
  */
 package org.solmix.exchange.interceptor.support;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.ClassLoaderUtils;
+import org.solmix.commons.util.Reflection;
+import org.solmix.commons.util.StringUtils;
 import org.solmix.exchange.Message;
 import org.solmix.exchange.interceptor.Fault;
 import org.solmix.exchange.interceptor.FaultType;
@@ -34,6 +47,7 @@ import org.solmix.exchange.interceptor.phase.PhaseInterceptorSupport;
 
 public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ClientFaultConverter.class);
     public ClientFaultConverter() {
         this(Phase.UNMARSHAL);
     }
@@ -44,10 +58,86 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        FaultType fault  = message.get(FaultType.class);
-        if(fault==FaultType.CHECKED_APPLICATION_FAULT){
-            
+        Fault fault = (Fault)message.getContent(Exception.class);
+        FaultType type  = message.get(FaultType.class);
+        if(type==FaultType.CHECKED_FAULT){
+           String detail= fault.getDetail();
+           if(!StringUtils.isEmpty(detail)){
+               Class<?> exceptionClass = null;
+               List<String> lines = new ArrayList<String>();
+               try {
+                   StringReader stringReader = new StringReader(detail);
+                   BufferedReader reader = new BufferedReader(stringReader);
+                    try {
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                            lines.add(line);
+                    } finally {
+                        reader.close();
+                    }
+                    String firstLine= lines.get(0);
+                    String className = firstLine.substring(0, firstLine.indexOf(":"));
+                    String msg =firstLine.substring(firstLine.indexOf(":")+1,firstLine.length());
+                    exceptionClass= ClassLoaderUtils.loadClass(className, ClientFaultConverter.class);
+                    if(exceptionClass!=null&&Throwable.class.isAssignableFrom(exceptionClass)){
+                        Throwable throwable= null;
+                        Constructor cons=  exceptionClass.getConstructor(String.class);
+                        if(cons!=null){
+                            throwable=(Throwable) cons.newInstance(msg);
+                        }else{
+                            throwable=  (Throwable)Reflection.newInstance(exceptionClass);
+                        }
+                        List<StackTraceElement> stackTraceList = new ArrayList<StackTraceElement>();
+                        for(int i=1;i<lines.size();i++){
+                            String st= lines.get(i);
+                            stackTraceList.add(parseStackTrackLine(st));
+                        }
+                        StackTraceElement[] stackTraceElement = new StackTraceElement[stackTraceList.size()];
+                        throwable.setStackTrace(stackTraceList.toArray(stackTraceElement));
+                        message.setContent(Exception.class, new Fault(throwable));
+                    }
+               } catch (IOException e) {
+                   //ignore
+               } catch (Exception e) {
+                   throw new Fault(e);
+               }
+              
+           }
         }
-    }
 
+    }
+    private static StackTraceElement parseStackTrackLine(String oneLine) {
+        StringTokenizer stInner = new StringTokenizer(oneLine, "!");
+        return new StackTraceElement(stInner.nextToken(), stInner.nextToken(),
+                stInner.nextToken(), Integer.parseInt(stInner.nextToken()));
+    }
+    
+    public static String toString(Throwable e ,int limit) {
+        return toString(null, e, limit);
+    }
+    public static String toString(String msg, Throwable e ,int limit) {
+        StringBuffer w = new StringBuffer();
+       
+        w.append(e.getClass().getName()+":");
+        if (msg != null) {
+            w.append(msg+": " );
+        }
+        if (e.getMessage() != null) {
+            w.append( e.getMessage());
+        }
+        w.append("\n");
+            StackTraceElement[] elements = e.getStackTrace();
+            if(elements!=null){
+                for(StackTraceElement el:elements){
+                    if(w.length()<limit-60){
+                    w.append(el.getClassName()).append("!").append(el.getMethodName()).append("!")
+                    .append(el.getFileName()).append("!").append(el.getLineNumber()).append("\n");
+                    }else{
+                        w.append("....more....");
+                    }
+                }
+                
+            }
+            return w.toString();
+    }
 }

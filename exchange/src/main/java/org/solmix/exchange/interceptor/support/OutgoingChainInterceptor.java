@@ -80,7 +80,11 @@ public class OutgoingChainInterceptor extends PhaseInterceptorSupport<Message> {
         if(ex.getPipeline(message)==null
             && ex.get(Transporter.class)!=null){
             try {
-                pipeline = ex.get(Transporter.class).getBackPipeline(ex.getOut());
+               Message out= ex.getOut();
+               if(out==null){
+                   out=ex.getOutFault();
+               }
+                pipeline = ex.get(Transporter.class).getBackPipeline(out);
                 ex.put(PipelineSelector.class, new PipelineWrappedSelector(pipeline,ex.getEndpoint()));
             } catch (IOException e) {
             }

@@ -560,13 +560,14 @@ public final class StringUtils
 
     public static String toString(String msg, Throwable e) {
         StringWriter w = new StringWriter();
-        if (msg != null) {
-            w.write(msg + "\n");
-        }
+       
         PrintWriter p = new PrintWriter(w);
-        p.print(e.getClass().getName());
+        p.print(e.getClass().getName()+":");
+        if (msg != null) {
+            w.write(msg+": " );
+        }
         if (e.getMessage() != null) {
-            p.print(": " + e.getMessage());
+            p.print( e.getMessage());
         }
         p.println();
         try {
@@ -576,6 +577,7 @@ public final class StringUtils
             p.close();
         }
     }
+    
    
     public static String trimToNull(String str) {
         if (str == null) {

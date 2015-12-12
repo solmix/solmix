@@ -32,15 +32,18 @@ import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.annotation.ThreadSafe;
+import org.solmix.exchange.Exchange;
 import org.solmix.exchange.Message;
 import org.solmix.exchange.MessageUtils;
 import org.solmix.exchange.Processor;
+import org.solmix.exchange.Service;
 import org.solmix.exchange.interceptor.Fault;
 import org.solmix.exchange.interceptor.FaultType;
 import org.solmix.exchange.interceptor.Interceptor;
 import org.solmix.exchange.interceptor.InterceptorChain;
 import org.solmix.exchange.interceptor.SuspendedException;
 import org.solmix.exchange.interceptor.support.ServiceInvokerInterceptor;
+import org.solmix.exchange.model.OperationInfo;
 
 /**
  * 分阶拦截链,分截拦截器可在链中按不同阶段遍历执行.
@@ -456,7 +459,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
                         if (ex2 == null) {
                             ex2 = ex;
                         }
-                        defaultLogging(message, ex2, "");
+                        defaultLogging(message, ex2, getServiceInfo(message));
                         boolean isOneWay = false;
                         if (message.getExchange() != null) {
                             if (message.getContent(Exception.class) != null) {
@@ -484,28 +487,46 @@ public class PhaseInterceptorChain implements InterceptorChain {
         }
     }
 
+    private String getServiceInfo(Message message) {
+        StringBuilder description = new StringBuilder();
+        if (message.getExchange() != null) {
+            Exchange exchange = message.getExchange();
+            Service service = exchange.get(Service.class);
+            if (service != null) {
+                description.append('\'');
+                description.append(service.getServiceName());
+                OperationInfo boi = exchange.get(OperationInfo.class);
+                if (boi != null) {
+                    description.append("#").append(boi.getName().getName());
+                }
+                description.append("\' ");
+            }
+        }
+        return description.toString();
+    }
+
     private void defaultLogging(Message message, Exception ex,
         String description) {
         FaultType type = message.get(FaultType.class);
-        if (type == FaultType.CHECKED_APPLICATION_FAULT) {
+        if (type == FaultType.CHECKED_FAULT) {
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Application " + description
+                LOG.trace("Service " + description
                     + "has thrown exception, unwinding now", ex);
             } else if (LOG.isInfoEnabled()) {
                 Throwable t = ex;
                 if (ex instanceof Fault && ex.getCause() != null) {
                     t = ex.getCause();
                 }
-                LOG.info("Application " + description
+                LOG.info("Service " + description
                     + "has thrown exception, unwinding now: "
                     + t.getClass().getName() + ": " + ex.getMessage());
             }
         } else if (LOG.isWarnEnabled()) {
-            if (type == FaultType.UNCHECKED_APPLICATION_FAULT) {
-                LOG.warn("Application " + description
+            if (type == FaultType.UNCHECKED_FAULT) {
+                LOG.warn("Service " + description
                     + "has thrown exception, unwinding now", ex);
             } else {
-                LOG.warn("Interceptor for " + description
+                LOG.warn("Service for " + description
                     + "has thrown exception, unwinding now", ex);
             }
         }

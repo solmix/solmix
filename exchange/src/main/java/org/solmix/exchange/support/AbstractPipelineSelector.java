@@ -45,7 +45,7 @@ import org.solmix.exchange.model.EndpointInfo;
  */
 public abstract class AbstractPipelineSelector implements PipelineSelector, Closeable {
 
-    protected static final String KEEP_PIPELINE_ALIVE = "KeepPipelineAlive";
+    public static final String KEEP_PIPELINE_ALIVE = "KeepPipelineAlive";
 
     protected List<Pipeline> pipelines = new CopyOnWriteArrayList<Pipeline>();
 

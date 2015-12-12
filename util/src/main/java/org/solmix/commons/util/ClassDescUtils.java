@@ -19,6 +19,7 @@
 
 package org.solmix.commons.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -46,7 +47,11 @@ public class ClassDescUtils
     public static final String ARRAY_DESC = "(?:\\[+(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "))";
 
     public static final String DESC_REGEX = "(?:(?:[VZBCDFIJS])|" + CLASS_DESC + "|" + ARRAY_DESC + ")";
+    public static final Pattern GETTER_METHOD_DESC_PATTERN = Pattern.compile("get([A-Z][_a-zA-Z0-9]*)\\(\\)(" + DESC_REGEX + ")");
 
+    public static final Pattern SETTER_METHOD_DESC_PATTERN = Pattern.compile("set([A-Z][_a-zA-Z0-9]*)\\((" + DESC_REGEX + ")\\)V");
+    public static final Pattern IS_HAS_CAN_METHOD_DESC_PATTERN = Pattern.compile("(?:is|has|can)([A-Z][_a-zA-Z0-9]*)\\(\\)Z");
+    
     public static final Pattern DESC_PATTERN = Pattern.compile(DESC_REGEX);
 
     /**
@@ -379,8 +384,11 @@ public class ClassDescUtils
             cs.add(desc2class(cl, m.group()));
         return cs.toArray(ObjectUtils.EMPTY_CLASS_ARRAY);
     }
-
-    private static Class<?> desc2class(ClassLoader cl, String desc) throws ClassNotFoundException {
+    public static Class<?> desc2class(String desc) throws ClassNotFoundException
+    {
+          return desc2class(ClassLoaderUtils.getDefaultClassLoader(), desc);
+    }
+    public static Class<?> desc2class(ClassLoader cl, String desc) throws ClassNotFoundException {
         switch (desc.charAt(0)) {
             case JVM_VOID:
                 return void.class;
@@ -420,5 +428,49 @@ public class ClassDescUtils
         }
         return clazz;
     }
+    public static String getName(Class<?> c)
+    {
+          if( c.isArray() )
+          {
+                StringBuilder sb = new StringBuilder();
+                do
+                {
+                      sb.append("[]");
+                      c = c.getComponentType();
+                }
+                while( c.isArray() );
 
+                return c.getName() + sb.toString();
+          }
+          return c.getName();
+    }
+
+    public static String getMethodDesc(Method m) {
+              StringBuilder ret = new StringBuilder(m.getName()).append('(');
+              Class<?>[] parameterTypes = m.getParameterTypes();
+              for(int i=0;i<parameterTypes.length;i++)
+                    ret.append(getTypeDesc(parameterTypes[i]));
+              ret.append(')').append(getTypeDesc(m.getReturnType()));
+              return ret.toString();
+    }
+
+    public static String getDescWithoutMethodName(Method m)
+    {
+          StringBuilder ret = new StringBuilder();
+          ret.append('(');
+          Class<?>[] parameterTypes = m.getParameterTypes();
+          for(int i=0;i<parameterTypes.length;i++)
+                ret.append(getTypeDesc(parameterTypes[i]));
+          ret.append(')').append(getTypeDesc(m.getReturnType()));
+          return ret.toString();
+    }
+
+    public static String getConstructorDesc(Constructor<?> c) {
+              StringBuilder ret = new StringBuilder("(");
+              Class<?>[] parameterTypes = c.getParameterTypes();
+              for(int i=0;i<parameterTypes.length;i++)
+                    ret.append(getTypeDesc(parameterTypes[i]));
+              ret.append(')').append('V');
+              return ret.toString();
+    }
 }

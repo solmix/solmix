@@ -92,6 +92,7 @@ public class DefaultThreadPool implements ThreadPool {
     private List<PropertyChangeListener> changeListenerList;
     
     public DefaultThreadPool() {
+        this("solmix-threadpool");
     }
 
     public DefaultThreadPool(String name) {
