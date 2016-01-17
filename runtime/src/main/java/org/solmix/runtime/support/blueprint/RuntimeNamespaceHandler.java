@@ -51,8 +51,8 @@ public class RuntimeNamespaceHandler implements NamespaceHandler
 
     @Override
     public URL getSchemaLocation(String arg0) {
-        if ("http://www.solmix.org/schema/rt".equals(arg0)) {
-            return getClass().getClassLoader().getResource("schema/blueprint/rt.xsd");
+        if ("http://www.solmix.org/schema/rt/v1.0.0".equals(arg0)) {
+            return getClass().getClassLoader().getResource("schema/blueprint/rt-1.0.0.xsd");
         }
         return null;
     }

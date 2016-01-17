@@ -112,7 +112,7 @@
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
-		<commons-pool.version>1.6</commons-pool.version>
+		<commons-pool2.version>2.3</commons-pool2.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<!-- <commons-io.version>2.4</commons-io.version>fileupload used 2.2 -->
@@ -131,6 +131,8 @@
 		<solmix.bundle.category>solmix</solmix.bundle.category>
 		<solmix.version>0.6.1-SNAPSHOT</solmix.version>
 		<logback.version>1.1.2</logback.version>
+		<netty.version>5.0.0.Alpha2</netty.version>
+		<jredis.version>2.7.3</jredis.version>
 	</properties>
 	<repositories>
 
@@ -764,37 +766,7 @@
 			<!-- ===================================================================================== -->
 			<!-- solmix version dependency -->
 			<!-- ===================================================================================== -->
-			<dependency>
-				<groupId>org.solmix.launch</groupId>
-				<artifactId>solmix-launch-base</artifactId>
-				<classifier>web</classifier>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.launch</groupId>
-				<artifactId>solmix-launch-base</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-engine</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-api</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-datasource</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-dsrepo</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
+			
 			<dependency>
 				<groupId>org.solmix.common</groupId>
 				<artifactId>solmix-common-util</artifactId>
@@ -805,11 +777,7 @@
 				<artifactId>solmix-common-runtime</artifactId>
 				<version>${solmix.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-pool</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
+		
 			<dependency>
 				<groupId>org.solmix.services</groupId>
 				<artifactId>services-event-core</artifactId>
@@ -825,16 +793,7 @@
 				<artifactId>solmix-modules-sql</artifactId>
 				<version>${solmix.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.solmix.framework</groupId>
-				<artifactId>solmix-framework-web</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.modules</groupId>
-				<artifactId>solmix-modules-jpa</artifactId>
-				<version>${solmix.version}</version>
-			</dependency>
+			
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
 				<artifactId>org.apache.servicemix.bundles.oro</artifactId>
@@ -873,9 +832,9 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>commons-pool</groupId>
-				<artifactId>commons-pool</artifactId>
-				<version>${commons-pool.version}</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>${commons-pool2.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -891,26 +850,6 @@
 				<version>${jta.version}</version>
 			</dependency>
 			
-			<dependency>
-				<groupId>org.solmix.shell</groupId>
-				<artifactId>shell</artifactId>
-				<version>${project.version}</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.shell</groupId>
-				<artifactId>dsrepo</artifactId>
-				<version>${project.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.solmix.shell</groupId>
-				<artifactId>datasource</artifactId>
-				<version>${project.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
 				<artifactId>org.apache.servicemix.bundles.jdom</artifactId>

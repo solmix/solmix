@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:beans="http://www.springframework.org/schema/beans"
- targetNamespace="http://www.solmix.org/schema/rt" xmlns="http://www.solmix.org/schema/rt" 
+ targetNamespace="http://www.solmix.org/schema/rt/v1.0.0" xmlns="http://www.solmix.org/schema/rt/v1.0.0" 
   elementFormDefault="qualified"
   attributeFormDefault="unqualified">
  <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"/>

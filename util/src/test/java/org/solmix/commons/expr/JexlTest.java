@@ -44,7 +44,7 @@ public class JexlTest
         mc.put("name", "1");
         Expression start = jf.createExpression("if(name>2) 'a' else 'b'");
         Object s = start.evaluate(mc);
-        assertTrue(s.equals("localhost"));
+        assertTrue(s.equals("b"));
     }
     @Test
     public void test() throws ExpressionParseException {

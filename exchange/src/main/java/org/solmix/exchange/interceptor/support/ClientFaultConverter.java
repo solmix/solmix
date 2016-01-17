@@ -60,7 +60,6 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
     public void handleMessage(Message message) throws Fault {
         Fault fault = (Fault)message.getContent(Exception.class);
         FaultType type  = message.get(FaultType.class);
-        if(type==FaultType.CHECKED_FAULT){
            String detail= fault.getDetail();
            if(!StringUtils.isEmpty(detail)){
                Class<?> exceptionClass = null;
@@ -78,10 +77,19 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
                     String firstLine= lines.get(0);
                     String className = firstLine.substring(0, firstLine.indexOf(":"));
                     String msg =firstLine.substring(firstLine.indexOf(":")+1,firstLine.length());
-                    exceptionClass= ClassLoaderUtils.loadClass(className, ClientFaultConverter.class);
+                    if(type==FaultType.CHECKED_FAULT){
+                        exceptionClass= ClassLoaderUtils.loadClass(className, ClientFaultConverter.class);
+                    }else{
+                        if(className.startsWith("java.lang")){
+                            exceptionClass= ClassLoaderUtils.loadClass(className, ClientFaultConverter.class);
+                        }else{
+                            exceptionClass= java.io.IOException.class;
+                        }
+                    }
+                   
                     if(exceptionClass!=null&&Throwable.class.isAssignableFrom(exceptionClass)){
                         Throwable throwable= null;
-                        Constructor cons=  exceptionClass.getConstructor(String.class);
+                        Constructor<?> cons=  exceptionClass.getConstructor(String.class);
                         if(cons!=null){
                             throwable=(Throwable) cons.newInstance(msg);
                         }else{
@@ -102,7 +110,6 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
                    throw new Fault(e);
                }
               
-           }
         }
 
     }

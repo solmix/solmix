@@ -90,9 +90,9 @@
 						<Bundle-Activator>org.solmix.runtime.osgi.RuntimeActivator</Bundle-Activator>
 						<_failok>false</_failok>
 						<_removeheaders>Ignore-Package,Include-Resource,Private-Package</_removeheaders>
-						<Export-Service>
+						<!-- <Export-Service>
                             	${solmix.export.service}
-                        </Export-Service>
+                        </Export-Service> -->
 					</instructions>
 				</configuration>
 			</plugin>
@@ -116,12 +116,11 @@
 			org.apache.aries*;version="[1.0,2)";resolution:=optional,
 			net.sf.cglib.proxy*;resolution:=optional,
 			com.sun.management;resolution:=optional,
+			javassist*;resolution:=optional,
 			*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
-		<solmix.export.service>
-			org.apache.aries.blueprint.NamespaceHandler;osgi.service.blueprint.namespace="http://www.solmix.org/schema/rt"
-		</solmix.export.service>
+		
 	</properties>
 	<packaging>bundle</packaging>
 </project>

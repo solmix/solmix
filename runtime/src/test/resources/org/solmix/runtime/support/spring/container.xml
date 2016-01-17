@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:c="http://www.solmix.org/schema/rt"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt http://www.solmix.org/schema/rt/rt.xsd ">
+	xmlns:c="http://www.solmix.org/schema/rt/v1.0.0"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.solmix.org/schema/rt/v1.0.0
+	http://www.solmix.org/schema/rt/rt-1.0.0.xsd ">
 	<c:container id="solmix1">
 		
 		<c:properties>
@@ -14,7 +19,7 @@
 		</c:listeners> 
 	</c:container>
 	<c:container name="solmix3"/>
-	<container id="solmix2" xmlns="http://www.solmix.org/schema/rt">
+	<container id="solmix2" xmlns="http://www.solmix.org/schema/rt/v1.0.0">
 		
 		<properties>
 			<entry key="key" value="value"  xmlns="http://www.springframework.org/schema/beans"/>

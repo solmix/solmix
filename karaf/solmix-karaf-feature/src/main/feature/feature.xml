@@ -7,40 +7,41 @@
 		<bundle start-level="35">mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
 		<bundle start-level="35">mvn:commons-io/commons-io/${commons-io.version}</bundle>
 		<bundle start-level="35">mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-tools" description="Solmix Tools"
 		version="${project.version}">
+		<feature version="${project.version}">solmix-runtime</feature>
 		<bundle start-level="60">mvn:org.solmix.karaf/solmix-karaf-tools/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-exchange" description="Message exchange parttern"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
-		<bundle start-level="35">mvn:org.solmix.common/solmix-common-exchange/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.common/solmix-common-exchange/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-service-template" description="Commons service template"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
-		<bundle start-level="35">mvn:org.solmix.services/solmix-service-template/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-template/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-service-event" description="Commons service Event"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
-		<bundle start-level="35">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-service-velocity" description="Commons service velocity"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
 		<bundle start-level="35">mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>
 		<bundle start-level="35">mvn:org.apache.velocity/velocity/${velocity.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-service-freemarker" description="Commons service freemarker"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
 		<bundle start-level="35">mvn:org.freemarker/freemarker/${freemarker.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-freemarker/${project.version}</bundle>
 	</feature>
 	<feature name="solmix-service-all" description="Commons service all"
 		version="${project.version}">
@@ -53,13 +54,80 @@
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
 		<feature version="${project.version}">solmix-service-velocity</feature>
-		<bundle start-level="35">mvn:org.solmix.datax/datax-core/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.datax/datax-core/${project.version}</bundle>
 	</feature>
 	<feature name="datax-mybatis" description="Datax mybatis"
 		version="${project.version}">
 		<feature version="${project.version}">datax-core</feature>
 		<bundle start-level="35">mvn:org.mybatis/mybatis/${mybatis.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.datax/datax-jdbc/${project.version}</bundle>
-		<bundle start-level="35">mvn:org.solmix.datax/datax-mybatis/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.datax/datax-jdbc/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.datax/datax-mybatis/${project.version}</bundle>
+	</feature>
+	<feature name="hola-common" description="Hola Commons" version="${project.version}">
+		<feature version="${project.version}">solmix-exchange</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-common/${project.version}</bundle>
+	</feature>
+	<feature name="hola-transport" description="Hola transport layer" version="${project.version}">
+		<feature version="${project.version}">hola-common</feature>
+		<bundle start-level="35">mvn:io.netty/netty-common/${netty.version}</bundle>
+		<bundle start-level="35">mvn:io.netty/netty-handler/${netty.version}</bundle>
+		<bundle start-level="35">mvn:io.netty/netty-codec/${netty.version}</bundle>
+		<bundle start-level="35">mvn:io.netty/netty-transport/${netty.version}</bundle>
+		<bundle start-level="35">mvn:io.netty/netty-resolver/${netty.version}</bundle>
+		<bundle start-level="35">mvn:io.netty/netty-buffer/${netty.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-transports-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-transports-netty/${project.version}</bundle>
+	</feature>
+	<feature name="hola-rs" description="Hola remote service layer" version="${project.version}">
+		<feature version="${project.version}">hola-transport</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-generic/${project.version}</bundle>
+	</feature>
+	
+	<feature name="hola-discovery-mdns" description="Hola discovery service mDNS implementation" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-jmdns/${project.version}</bundle>
+	</feature>
+	<feature name="hola-discovery-redis" description="Hola discovery service redis implementation" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<bundle start-level="35">mvn:org.apache.commons/commons-pool2/${commons-pool2.version}</bundle>
+		<bundle start-level="35">mvn:redis.clients/jedis/${jredis.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-redis/${project.version}</bundle>
+	</feature>
+	
+	<feature name="hola-discovery-zookeeper" description="Hola discovery service zookeeper implementation" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<bundle start-level="35">mvn:org.apache.zookeeper/zookeeper/3.4.6</bundle>
+		<bundle start-level="35">mvn:com.google.guava/guava/16.0.1</bundle>
+		<bundle start-level="35">mvn:org.apache.curator/curator-framework/2.9.1</bundle>
+		<bundle start-level="35">mvn:org.apache.curator/curator-client/2.9.1</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-zookeeper/${project.version}</bundle>
+	</feature>
+	<feature name="hola-cluster" description="Hola remote service cluster" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-cluster/${project.version}</bundle>
+	</feature>
+	<feature name="hola-monitor" description="Hola monitor service" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-monitor/${project.version}</bundle>
+	</feature>
+	<feature name="hola-builder" description="Hola service builder" version="${project.version}">
+		<feature version="${project.version}">hola-rs</feature>
+		<feature version="${project.version}">hola-monitor</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-builder/${project.version}</bundle>
+	</feature>
+	
+	<feature name="hola-sample-provider" description="simple provider" version="${project.version}">
+		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-api/${project.version}</bundle>
+		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-provider/${project.version}</bundle>
+	</feature>
+	
+	<feature name="hola-sample-consumer" description="simple consumer" version="${project.version}">
+		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-api/${project.version}</bundle>
+		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-consumer/${project.version}</bundle>
 	</feature>
 </features>

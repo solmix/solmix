@@ -106,7 +106,7 @@ public class RuntimeActivator implements BundleActivator {
                 return new RuntimeNamespaceHandler();
             }
         };
-        BPNamespaceRegisterer.register(context, factory, "http://www.solmix.org/schema/rt");
+        BPNamespaceRegisterer.register(context, factory, "http://www.solmix.org/schema/rt/v1.0.0");
     }
 
     /**

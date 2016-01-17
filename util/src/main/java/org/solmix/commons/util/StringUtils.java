@@ -528,6 +528,28 @@ public final class StringUtils
         }
         return buf.toString();
     }
+    public static String splitToCamelName(String splitName, String split) {
+        if (splitName == null || splitName.length() == 0) {
+            return splitName;
+        }
+        if(splitName.indexOf(split)<0){
+            return splitName;
+        }
+        StringTokenizer tokens = new StringTokenizer(splitName, split);
+        StringBuilder buf = new StringBuilder();
+        boolean first=true;
+        while(tokens.hasMoreTokens()){
+            String t=tokens.nextToken();
+            t=t.toLowerCase();
+            if(first){
+                buf.append(t);
+                first=false;
+            }else{
+                buf.append(t.substring(0, 1).toUpperCase()).append(t.substring(1, t.length()));
+            }
+        }
+        return buf.toString();
+    }
 
     public static String camelToSplitName(String camelName, String split) {
         if (camelName == null || camelName.length() == 0) {
