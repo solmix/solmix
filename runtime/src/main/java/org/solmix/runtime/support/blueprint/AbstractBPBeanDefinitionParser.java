@@ -19,6 +19,7 @@
 package org.solmix.runtime.support.blueprint;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -287,5 +288,33 @@ public abstract class AbstractBPBeanDefinitionParser
             parseElement(ctx, bean, el, name);
             el = DOMUtils.getNextElement(el);
         }
+    }
+    
+    public static String getIdOrName(Element elem) {
+        String id = elem.getAttribute("id");
+
+        if (null == id || "".equals(id)) {
+            String names = elem.getAttribute("name");
+            if (null != names) {
+                StringTokenizer st = new StringTokenizer(names, ",");
+                if (st.countTokens() > 0) {
+                    id = st.nextToken();
+                }
+            }
+        }
+        return id;
+    }
+    
+    public static MutableCollectionMetadata mapMultiProperty(MutableBeanMetadata bean, String propertyName, String val, ParserContext context){
+        String[] values = val.split("\\s*[,]+\\s*");
+        MutableCollectionMetadata list = context.createMetadata(MutableCollectionMetadata.class);
+        for (int i = 0; i < values.length; i++) {
+            String v = values[i];
+            if (v != null && v.length() > 0) {
+                list.addValue(createRef(context, v));
+            }
+           
+        }
+        return list;
     }
 }

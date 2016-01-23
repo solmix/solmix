@@ -23,10 +23,14 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
+import org.osgi.service.blueprint.reflect.BeanMetadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
@@ -90,11 +94,35 @@ public class BpContainer extends ContainerAdaptor
         ResourceInjector injector = new ResourceInjector(rm);
         if(ids!=null){
             for(String id:ids){
-              Object instance =  blueprintContainer.getComponentInstance(id);
-              if(instance instanceof Container){
-                  continue;
-              }
-              injector.inject(instance);
+                ComponentMetadata meta=  blueprintContainer.getComponentMetadata(id);
+                if(meta instanceof BeanMetadata){
+                    BeanMetadata bean = (BeanMetadata)meta;
+                    
+                    //如果factory或者初始化的bean需要依赖container，会循环依赖
+                    List<String> depids=bean.getDependsOn();
+                    if(depids!=null&&depids.size()>0){
+                        boolean dependencyContainer=false;
+                        for(String depid:depids){
+                            ComponentMetadata dmeta=  blueprintContainer.getComponentMetadata(depid);
+                            if(dmeta instanceof MutableBeanMetadata){
+                                MutableBeanMetadata dbean = (MutableBeanMetadata)dmeta;
+                               if(dbean.getRuntimeClass()==BpContainer.class){
+                                   dependencyContainer=true;
+                                   break;
+                               }
+                            }
+                        }
+                        if(dependencyContainer){
+                            continue;
+                        }
+                    }
+                    Object instance =  blueprintContainer.getComponentInstance(id);
+                    if(instance instanceof Container){
+                        continue;
+                    }
+                    injector.inject(instance);
+                }
+             
             }
         }
         Dictionary<String, Object> properties = new Hashtable<String, Object>();
