@@ -73,6 +73,7 @@ public abstract class AbstractTransporter implements Transporter {
                     try {
                         activate(processor);
                     } catch (RuntimeException ex) {
+                        deactivate(processor);
                         this.processor = null;
                         throw ex;
                     }
