@@ -78,10 +78,17 @@
 		<bundle start-level="40">mvn:org.solmix.hola/hola-transports-api/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-transports-netty/${project.version}</bundle>
 	</feature>
+	
 	<feature name="hola-rs" description="Hola remote service layer" version="${project.version}">
 		<feature version="${project.version}">hola-transport</feature>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-api/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-generic/${project.version}</bundle>
+	</feature>
+	
+	<feature name="hola-rs-jaxws" description="CXF Jaxws WebService " version="${project.version}">
+		<feature version="${project.version}">hola-transport</feature>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-api/${project.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.hola/hola-rs-jaxws/${project.version}</bundle>
 	</feature>
 	
 	<feature name="hola-discovery-mdns" description="Hola discovery service mDNS implementation" version="${project.version}">

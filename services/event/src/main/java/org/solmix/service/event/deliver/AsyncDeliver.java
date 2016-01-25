@@ -53,7 +53,6 @@ public class AsyncDeliver implements EventDeliver
      * 
      * If the Event publisher used the same thread,the Event Handler also used the same thread as a synchronous event.
      * 
-     * @see org.solmix.eventservice.EventDeliver#execute(java.util.List)
      */
     @Override
     public void execute(List<EventTask> tasks) {
