@@ -21,7 +21,7 @@ package org.solmix.commons.util;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -37,8 +37,8 @@ public class RSAUtilsTest extends Assert
     static String publicKey;
     static String privateKey;
  
-    @BeforeClass
-    public static void setup() throws Exception{
+    @Before
+    public  void setup() throws Exception{
         Map<String, Object> keyMap = RSAUtils.genKeyPair();
         publicKey = RSAUtils.getPublicKey(keyMap);
         privateKey = RSAUtils.getPrivateKey(keyMap);

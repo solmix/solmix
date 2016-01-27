@@ -37,7 +37,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
-import org.solmix.commons.util.AuthHelper;
 import org.solmix.commons.util.Base64Utils;
 import org.solmix.commons.util.RSAUtils;
 import org.solmix.commons.util.StringUtils;
@@ -48,6 +47,7 @@ import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.ContainerListener;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.helper.AuthHelper;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.ResourceResolver;
 import org.solmix.runtime.resource.support.ObjectTypeResolver;
@@ -577,6 +577,7 @@ public class ExtensionContainer implements Container {
             throw new IllegalAccessError("Exception(Error Code:SLX-0001)");
         }
     }
+    
     private String getAuthLock(String location){
         
         return SystemPropertyAction.getProperty("java.io.tmpdir")+File.separator+"authlock"+File.separator+location.hashCode();

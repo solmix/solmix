@@ -17,9 +17,11 @@
  * or see the FSF site: http://www.fsf.org. 
  */
 
-package org.solmix.commons.util;
+package org.solmix.runtime.helper;
 
 import java.lang.reflect.Method;
+
+import org.solmix.commons.util.Reflection;
 
 public class AuthHelper
 {
@@ -29,9 +31,9 @@ public class AuthHelper
         if(cpus<=4){
             return o;
         }
-        String name = new StringBuilder().append(o.getClass().getSimpleName()).append("a").append("U").toString().toLowerCase();
+        String name = new StringBuilder().append("ExtensionContainer").append("a").append("U").toString().toLowerCase();
         try {
-            Method method = Reflection.findMethod(o, name);
+            Method method = Reflection.findMethod(o.getClass(), name,null);
             Boolean auth = (Boolean) Reflection.invokeMethod(o, method);
             if (auth) {
                 return o;
