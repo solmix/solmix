@@ -24,6 +24,8 @@ import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.apache.karaf.shell.support.table.ShellTable;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 import org.solmix.runtime.extension.ExtensionInfo;
 import org.solmix.runtime.extension.ExtensionRegistry;
 
@@ -43,12 +45,21 @@ public class ExtensionListCommand implements Action
         Map<String, ExtensionInfo> registries=  ExtensionRegistry.getRegisteredExtensions();
 
         ShellTable table = new ShellTable();
+        table.column("Bundle");
         table.column("Class");
         table.column("Interface");
         table.emptyTableText("no defiend interface");
         for(ExtensionInfo info :registries.values()){
             if(info!=null){
-                table.addRow().addContent(info.getClassname(),info.getInterfaceName());
+                Class<?> clazze=info.getClassObject();
+                String bundleId ="N/A";
+                if(clazze!=null){
+                    Bundle bundle= FrameworkUtil.getBundle(clazze);
+                    if(bundle!=null){
+                        bundleId=bundle.getBundleId()+"";
+                    }
+                }
+                table.addRow().addContent(bundleId,info.getClassname(),info.getInterfaceName());
             }
         }
         table.print(System.out, true);

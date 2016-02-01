@@ -120,7 +120,11 @@ public class BpContainer extends ContainerAdaptor
                     if(instance instanceof Container){
                         continue;
                     }
-                    injector.inject(instance);
+                    injector.injectAware(instance);
+                    if(injectable(instance,id)){
+                        injector.inject(instance);
+                    }
+                   
                 }
              
             }
@@ -129,6 +133,10 @@ public class BpContainer extends ContainerAdaptor
         properties.put(CONTAINER_PROPERTY_NAME, getId());
         bundleContext.registerService(Container.class, this, properties);
     };
+    
+    private boolean injectable(Object bean,String beanId){
+        return !"solmix".equals(beanId) && ResourceInjector.processable(bean.getClass(), bean);
+    }
 
     @Override
     public String getId() {

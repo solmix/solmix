@@ -61,6 +61,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.aries.blueprint</groupId>
@@ -71,6 +72,7 @@
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
 			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		
 	</dependencies>

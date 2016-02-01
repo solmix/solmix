@@ -86,7 +86,7 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
             } 
             if (cls == null) {
                 try {
-                    Method m = Reflection.findMethod(container.getClass().getName(), "loadClass", String.class);
+                    Method m = Reflection.findMethod(container.getClass(), "loadClass", String.class);
                     cls = (Class<?>) m.invoke(container, bm.getClassName());
                 } catch (Exception e) {
                     // ignore

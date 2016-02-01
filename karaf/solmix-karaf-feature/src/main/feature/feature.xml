@@ -128,6 +128,13 @@
 		<bundle start-level="40">mvn:org.solmix.hola/hola-builder/${project.version}</bundle>
 	</feature>
 	
+	<feature name="wmix-core" description="Wmix core" version="${project.version}">
+		<feature>http</feature>
+		<feature version="${project.version}">solmix-exchange</feature>
+		<bundle start-level="35">mvn:commons-fileupload/commons-fileupload/${commons-fileupload.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.wmix/wmix-core/${project.version}</bundle>
+	</feature>
+	
 	<feature name="hola-sample-provider" description="simple provider" version="${project.version}">
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-api/${project.version}</bundle>
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-provider/${project.version}</bundle>

@@ -130,7 +130,7 @@ public class Reflection
     }
 
     public static Method findMethod(Object instance, String methodName) throws Exception {
-        return findMethod(instance.getClass().getName(), methodName, new Class[0]);
+        return findMethod(instance.getClass(), methodName, new Class[0]);
     }
     
     public static Method findMethod(String className, String methodName, Class<?>... methodArgs) throws Exception {
