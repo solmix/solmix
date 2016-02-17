@@ -57,6 +57,7 @@ public class PerRequestFactory implements Factory {
             ResourceManager resourceManager = b.getExtension(ResourceManager.class);
             if (resourceManager != null) {
                 ResourceInjector injector = new ResourceInjector(resourceManager);
+                injector.injectAware(o);
                 injector.inject(o);
                 injector.construct(o);
             }

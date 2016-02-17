@@ -46,14 +46,14 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年8月17日
  */
-
+@SuppressWarnings("rawtypes")
 public class JacksonDataProcessor implements DataProcessor
 {
     private ObjectMapper objectMapper;
     private XmlMapper xmlMapper;
     private boolean omitNullValues = true;
     public boolean prettyPrint ;
-    List<JsonSerializer<?>> jsonSerializers;
+    List<JsonSerializer> jsonSerializers;
     /**
      * {@inheritDoc}
      * 
@@ -178,12 +178,13 @@ public class JacksonDataProcessor implements DataProcessor
     }
 
     
-    public List<JsonSerializer<?>> getJsonSerializers() {
+   
+    public List<JsonSerializer> getJsonSerializers() {
         return jsonSerializers;
     }
 
     
-    public void setJsonSerializers(List<JsonSerializer<?>> jsonSerializers) {
+    public void setJsonSerializers(List<JsonSerializer> jsonSerializers) {
         this.jsonSerializers = jsonSerializers;
     }
     

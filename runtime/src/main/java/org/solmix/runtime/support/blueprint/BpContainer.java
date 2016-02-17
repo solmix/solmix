@@ -123,6 +123,7 @@ public class BpContainer extends ContainerAdaptor
                     injector.injectAware(instance);
                     if(injectable(instance,id)){
                         injector.inject(instance);
+                        injector.construct(instance);
                     }
                    
                 }

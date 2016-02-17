@@ -83,8 +83,8 @@ public class AssembleBeanSupport
         ResourceManager resourceManager= container.getExtension(ResourceManager.class);
         if(resourceManager!=null){
             ResourceInjector injector = new ResourceInjector(resourceManager);
-            injector.inject(obj);
             injector.injectAware(obj);
+            injector.inject(obj);
             injector.construct(obj);
         }
         return obj;

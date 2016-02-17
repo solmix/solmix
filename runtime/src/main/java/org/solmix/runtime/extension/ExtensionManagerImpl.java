@@ -37,7 +37,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
-import org.solmix.runtime.ContainerAware;
 import org.solmix.runtime.bean.BeanConfigurer;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.resource.ResourceInjector;
@@ -235,9 +234,8 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 }
             }
             ResourceInjector injector = new ResourceInjector(resourceManager);
-
-            injector.inject(obj);
             injector.injectAware(obj);
+            injector.inject(obj);
             injector.construct(obj);
            
             if (null != activated) {

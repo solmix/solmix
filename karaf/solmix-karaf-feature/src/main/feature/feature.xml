@@ -30,6 +30,19 @@
 		<feature version="${project.version}">solmix-runtime</feature>
 		<bundle start-level="40">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
 	</feature>
+	
+	<feature name="solmix-service-jackson" description="Commons service Jackson"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-runtime</feature>
+		<bundle start-level="35">mvn:org.codehaus.woodstox/stax2-api/3.1.4</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-annotations/2.6.0</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-jackson/${project.version}</bundle>
+	</feature>
+	
 	<feature name="solmix-service-velocity" description="Commons service velocity"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-service-template</feature>
@@ -133,6 +146,13 @@
 		<feature version="${project.version}">solmix-exchange</feature>
 		<bundle start-level="35">mvn:commons-fileupload/commons-fileupload/${commons-fileupload.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.wmix/wmix-core/${project.version}</bundle>
+	</feature>
+	
+	<feature name="datax-wmix" description="Wmix core" version="${project.version}">
+		<feature>wmix-core</feature>
+		<feature>datax-core</feature>
+		<feature>solmix-service-jackson</feature>
+		<bundle start-level="40">mvn:org.solmix.datax/datax-wmix/${project.version}</bundle>
 	</feature>
 	
 	<feature name="hola-sample-provider" description="simple provider" version="${project.version}">
