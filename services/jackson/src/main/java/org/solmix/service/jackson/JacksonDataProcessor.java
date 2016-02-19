@@ -77,10 +77,10 @@ public class JacksonDataProcessor implements DataProcessor
             }
         }
         objectMapper.registerModule(module);
-        objectMapper.getSerializationConfig().with(SerializationFeature.INDENT_OUTPUT);
-        objectMapper.getSerializationConfig().with(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.getSerializationConfig().without(SerializationFeature.WRITE_NULL_MAP_VALUES);
-        objectMapper.getFactory().enable(Feature.AUTO_CLOSE_TARGET);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.enable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+        objectMapper.enable(Feature.AUTO_CLOSE_TARGET);
     }
 
     
@@ -96,10 +96,10 @@ public class JacksonDataProcessor implements DataProcessor
             }
         }
         objectMapper.registerModule(module);
-        objectMapper.getSerializationConfig().with(SerializationFeature.INDENT_OUTPUT);
-        objectMapper.getSerializationConfig().with(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.getSerializationConfig().without(SerializationFeature.WRITE_NULL_MAP_VALUES);
-        objectMapper.getFactory().enable(Feature.AUTO_CLOSE_TARGET);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.enable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+        objectMapper.enable(Feature.AUTO_CLOSE_TARGET);
     }
 
     @SuppressWarnings("unchecked")
