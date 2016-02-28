@@ -82,7 +82,7 @@ public class ContainerListCommand implements Action
                 }
             }
         } catch (Exception e) {
-            LOG.info("Cannot retrieve the list of CXF Busses.", e);
+            LOG.info("Cannot retrieve the list of Solmix container.", e);
         }
         return cs;
     }

@@ -136,7 +136,7 @@
 		<bundle start-level="40">mvn:org.solmix.hola/hola-monitor/${project.version}</bundle>
 	</feature>
 	<feature name="hola-builder" description="Hola service builder" version="${project.version}">
-		<feature version="${project.version}">hola-rs</feature>
+		<feature version="${project.version}">hola-cluster</feature>
 		<feature version="${project.version}">hola-monitor</feature>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-builder/${project.version}</bundle>
 	</feature>
@@ -156,6 +156,8 @@
 	</feature>
 	
 	<feature name="hola-sample-provider" description="simple provider" version="${project.version}">
+		<feature version="${project.version}">hola-discovery-redis</feature>
+		<feature version="${project.version}">hola-discovery-zookeeper</feature>
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-api/${project.version}</bundle>
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-provider/${project.version}</bundle>
 	</feature>
