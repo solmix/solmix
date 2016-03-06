@@ -105,4 +105,9 @@ public class DefaultTrackerClient implements TrackerClient {
         trackerConnectionManager.executeFdfsTrackerCmd(command);
     }
 
+    
+    public void setTrackerConnectionManager(TrackerConnectionManager trackerConnectionManager) {
+        this.trackerConnectionManager = trackerConnectionManager;
+    }
+
 }

@@ -16,6 +16,14 @@ public class DefaultThumbImageConfig implements ThumbImageConfig {
 
     private static String cachedPrefixName;
 
+    public DefaultThumbImageConfig(){
+        
+    }
+    
+    public DefaultThumbImageConfig(int width,int height){
+        this.width=width;
+        this.height=height;
+    }
     /**
      * 生成前缀如:_150x150
      */

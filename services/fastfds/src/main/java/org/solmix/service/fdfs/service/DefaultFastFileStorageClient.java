@@ -194,4 +194,9 @@ public class DefaultFastFileStorageClient extends DefaultGenerateStorageClient i
         super.deleteFile(storePath.getGroup(), storePath.getPath());
     }
 
+    
+    public void setThumbImageConfig(ThumbImageConfig thumbImageConfig) {
+        this.thumbImageConfig = thumbImageConfig;
+    }
+
 }
