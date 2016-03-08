@@ -27,8 +27,8 @@ package org.solmix.runtime.management;
 
 public final class ManagementConstants {
 
-    public static final String DEFAULT_DOMAIN_NAME = "org.apache.cxf";
-    public static final String BUS_ID_PROP = "bus.id";
+    public static final String DEFAULT_DOMAIN_NAME = "org.solmix";
+    public static final String CONTAINER_ID_PROP = "container.id";
     public static final String NAME_PROP = "name";
     public static final String TYPE_PROP = "type";
     public static final String DESCRIPTION_PROP = "description";

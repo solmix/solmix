@@ -174,7 +174,6 @@ public abstract class ContainerFactory
                 try {
                     rd = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                     factoryClass = rd.readLine();
-                    // busFactoryCondition = rd.readLine();
                 } finally {
                     if (rd != null) {
                         rd.close();
@@ -315,7 +314,6 @@ public abstract class ContainerFactory
      * {@link Container#shutdown(boolean)} was invoked) and it wants to remove any reference to itself for any
      * thread.
      * 
-     * @param bus the bus to remove
      */
     public static void clearDefaultContainerForAnyThread(final Container container) {
         synchronized (threadContainers) {

@@ -19,12 +19,16 @@
 package org.solmix.runtime.osgi;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.solmix.runtime.adapter.AdapterManager;
@@ -50,10 +54,15 @@ public class RuntimeActivator implements BundleActivator {
     private ExtensionBundleListener bundleListener;
     private IdentityBundleListener identityListener;
     private List<ExtensionInfo> extensions;
+    private ManagedThreadPoolList threadpool= new ManagedThreadPoolList();
     private ServiceRegistration<IIDFactory> idFactoryServiceRegistration;
     private ServiceRegistration<AdapterManager> adapterServiceRegistration;
+    private ServiceRegistration<?> workThreadpoolRegistration;
     private ServiceTracker<Namespace,Namespace> namespacesTracker;
+    @SuppressWarnings("rawtypes")
+    private ServiceTracker configAdminTracker;
     
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void start(final BundleContext context) throws Exception {
         idFactoryServiceRegistration = context.registerService(IIDFactory.class, IDFactory.getDefault(), null);
@@ -91,10 +100,18 @@ public class RuntimeActivator implements BundleActivator {
         // 注册已经存在的
         bundleListener.registerExistingBundles(context);
         identityListener.regiterExistingNamespce(context);
+        //Thread pool
+        configAdminTracker = new ServiceTracker(context, ConfigurationAdmin.class.getName(), null);
+        configAdminTracker.open();
+        threadpool.setConfigAdminTracker(configAdminTracker);
+        
+        workThreadpoolRegistration = registerManagedServiceFactory(context, ManagedServiceFactory.class, 
+            threadpool,
+            ManagedThreadPoolList.FACTORY_PID);
 
         extensions = new ArrayList<ExtensionInfo>();
-        extensions.add(createBunleListenerExtensionInfo(context));
-
+        extensions.add(createManagedThreadPoolListExtension(threadpool));
+        extensions.add(createBundleListenerExtensionInfo(context));
         ExtensionRegistry.addExtensions(extensions);
         
         adapterServiceRegistration= context.registerService(AdapterManager.class, new AdapterManagerImpl(), null);
@@ -109,11 +126,31 @@ public class RuntimeActivator implements BundleActivator {
         BPNamespaceRegisterer.register(context, factory, "http://www.solmix.org/schema/rt/v1.0.0");
     }
 
+    private ExtensionInfo createManagedThreadPoolListExtension(final ManagedThreadPoolList threadpool) {
+        return new ExtensionInfo(ManagedThreadPoolList.class) {
+            @Override
+            public Object getLoadedObject() {
+                return threadpool;
+            }
+
+            @Override
+            public ExtensionInfo cloneNoObject() {
+                return this;
+            }
+        };
+    }
+
+    private ServiceRegistration<?> registerManagedServiceFactory(BundleContext context, Class<?> serviceClass, Object service, String servicePid) {
+        Hashtable<String, Object> props = new Hashtable<String, Object>();
+        props.put(Constants.SERVICE_PID, servicePid);
+        return context.registerService(serviceClass.getName(), service, props);
+    }
+
     /**
      * @param context
      * @return
      */
-    private ExtensionInfo createBunleListenerExtensionInfo(BundleContext context) {
+    private ExtensionInfo createBundleListenerExtensionInfo(BundleContext context) {
         ExtensionInfo containerListener = new ExtensionInfo(BundleContainerListener.class);
         containerListener.setArgs(new Object[]{context});
         return containerListener;
@@ -136,7 +173,11 @@ public class RuntimeActivator implements BundleActivator {
             adapterServiceRegistration.unregister();
             adapterServiceRegistration=null;
         }
-        
+        threadpool.shutDown();
+        if(workThreadpoolRegistration!=null){
+            workThreadpoolRegistration.unregister();
+        }
+        configAdminTracker.close();
         context.removeBundleListener(bundleListener);
         bundleListener.close();
         context.removeBundleListener(identityListener);

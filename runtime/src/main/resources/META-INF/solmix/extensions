@@ -3,3 +3,4 @@ org.solmix.runtime.support.ext.ContainerResourceManager:org.solmix.runtime.resou
 org.solmix.runtime.monitor.support.MonitorServiceImpl:org.solmix.runtime.monitor.MonitorService:true:true
 org.solmix.runtime.threadpool.DefaultThreadPoolManager:org.solmix.runtime.threadpool.ThreadPoolManager:true
 org.solmix.runtime.i18n.support.DefaultResourceBundleManager:org.solmix.runtime.i18n.ResourceBundleManager:true:true
+org.solmix.runtime.management.support.DefaultComponentManager:org.solmix.runtime.management.ComponentManager:true

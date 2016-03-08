@@ -118,24 +118,37 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
 
         return new ArrayList<String>(names);
     }
+
     @Override
     public <T> T getBeanOfType(Class<T> type) {
-        T res=null;
-        Collection<ComponentMetadata> metas=  blueprintContainer.getMetadata(ComponentMetadata.class);
-        if(metas!=null){
-           for(ComponentMetadata meta:metas){
-               Class<?> cls = getClassForMetaData(meta);
-               if (cls != null && type.isAssignableFrom(cls)) {
-                   res= type.cast(blueprintContainer.getComponentInstance(meta.getId()));
-                   break;
-               }
-           }
+        T res = null;
+        Collection<ComponentMetadata> metas = blueprintContainer.getMetadata(ComponentMetadata.class);
+        if (metas != null) {
+            for (ComponentMetadata meta : metas) {
+                Class<?> cls = getClassForMetaData(meta);
+                if (cls != null && type.isAssignableFrom(cls)) {
+                    res = type.cast(blueprintContainer.getComponentInstance(meta.getId()));
+                    break;
+                }
+            }
         }
-        if(res==null&&original!=null){
-            res=original.getBeanOfType(type); 
+        if (res == null && original != null) {
+            res = original.getBeanOfType(type);
+        }
+        if(res==null){
+            try {
+                ServiceReference<T> reference = bundleContext.getServiceReference(type);
+                if (reference != null) {
+                   res=bundleContext.getService(reference);
+                }
+            } catch (Exception ex) {
+                // ignore, just don't support the OSGi services
+                LOG.info("Try to find the Bean with type:" + type + " from OSGi services and get error: " + ex);
+            }
         }
         return res;
     }
+    
     @Override
     public <T> T getBeanOfType(String name, Class<T> type) {
         ComponentMetadata cmd = getComponentMetadata(name);

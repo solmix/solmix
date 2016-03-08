@@ -30,6 +30,9 @@ import org.osgi.framework.Version;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerListener;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
+import org.solmix.runtime.extension.ExtensionManagerImpl;
+import org.solmix.runtime.threadpool.ThreadPoolManager;
 
 /**
  * 
@@ -61,7 +64,14 @@ public class BundleContainerListener implements ContainerListener
             && args[0] instanceof BundleContext) {
             defaultContext = (BundleContext)args[0];
         }
-        
+        registedConfiguredBeanProvider();
+    }
+    
+    private void registedConfiguredBeanProvider(){
+        final ConfiguredBeanProvider provider = container.getExtension(ConfiguredBeanProvider.class);
+        if(provider instanceof ExtensionManagerImpl){
+            container.setExtension(new OSGIBeanProvider(provider,defaultContext), ConfiguredBeanProvider.class);
+        }
     }
 
   
@@ -91,6 +101,12 @@ public class BundleContainerListener implements ContainerListener
      */
     private void registerAsOsgiService() {
         BundleContext bctx = container.getExtension(BundleContext.class);
+        //把所有container中的thead 加入统一管理
+        ManagedThreadPoolList wqList = container.getExtension(ManagedThreadPoolList.class);
+        if (wqList != null) {
+            ThreadPoolManager manager = container.getExtension(ThreadPoolManager.class);
+            wqList.addAllToWorkQueueManager(manager);
+        }
         if (bctx != null) {
             Hashtable<String, Object> props = new Hashtable<String, Object>();
             props.put(CONTEXT_SYMBOLIC_NAME_PROPERTY,

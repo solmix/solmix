@@ -22,6 +22,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.management.JMException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;
 import org.solmix.runtime.ContainerListener;
@@ -37,6 +41,7 @@ import org.solmix.runtime.management.ComponentManager;
 
 public class DefaultThreadPoolManager implements ThreadPoolManager {
 
+    private static final Logger LOG  = LoggerFactory.getLogger(DefaultThreadPoolManager.class);
     Map<String, ThreadPool> namedPools = new ConcurrentHashMap<String, ThreadPool>(4, 0.75f, 2);
 
     private Container container;
@@ -63,8 +68,11 @@ public class DefaultThreadPoolManager implements ThreadPoolManager {
             container.setExtension(this, ThreadPoolManager.class);
             componentManager = container.getExtension(ComponentManager.class);
             if (componentManager != null) {
-                // componentManager.register(component)
-                // TODO
+                 try {
+                    componentManager.register(new ThreadPoolManagerMBean(this));
+                } catch (JMException e) {
+                    LOG.warn(e.getMessage(),e);
+                }
             }
             ConfiguredBeanProvider cbp = container.getExtension(ConfiguredBeanProvider.class);
             if (cbp != null) {
@@ -135,14 +143,20 @@ public class DefaultThreadPoolManager implements ThreadPoolManager {
                 synchronized (dtp) {
                     if (dtp.getShareCount() == 0 && componentManager != null
                         && componentManager.getMBeanServer() != null) {
-                        // componentManager.register(component)
-                        // TODO
+                        try {
+                            componentManager.register(new ThreadPoolMBean((DefaultThreadPool)executor, this));
+                        } catch (JMException e) {
+                            LOG.warn(e.getMessage(),e);
+                        }
                     }
                 }
 
             } else if (componentManager != null) {
-                // componentManager.register(component)
-                // TODO
+                try {
+                    componentManager.register(new ThreadPoolMBean((DefaultThreadPool)executor, this));
+                } catch (JMException e) {
+                    LOG.warn(e.getMessage(),e);
+                }
             }
         }
     }
@@ -161,12 +175,13 @@ public class DefaultThreadPoolManager implements ThreadPoolManager {
                         if (impl.getShareCount() == 0
                             && componentManager != null
                             && componentManager.getMBeanServer() != null) {
-                            // TODO
-                            /*
-                             * try { componentManager.unregister(new
-                             * WorkQueueImplMBeanWrapper(impl, this)); } catch
-                             * (JMException jmex) { }
-                             */
+                            
+                            try {
+                                componentManager.unregister(new ThreadPoolMBean(impl, this));
+                            } catch (JMException jmex) {
+                                LOG.warn(jmex.getMessage(),jmex);
+                            }
+                             
                         }
                     }
                 } else {

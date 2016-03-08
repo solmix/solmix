@@ -97,7 +97,7 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
                                       ParserContext ctx,
                                       BeanDefinitionBuilder bean) {
         NamedNodeMap atts = element.getAttributes();
-        boolean setBus = false;
+        boolean setContainer = false;
         for (int i = 0; i < atts.getLength(); i++) {
             Attr node = (Attr) atts.item(i);
             String val = node.getValue();
@@ -118,14 +118,14 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             } else if ("name".equals(name)) {
                 parseNameAttribute(element, ctx, bean, val);
             } else if ("container".equals(name)) {
-                setBus = parseContainerAttribute(element, ctx, bean, val);
+                setContainer = parseContainerAttribute(element, ctx, bean, val);
             } else if ("id".equals(name)) {
                 parseIdAttribute(bean, element, name, val, ctx);
             } else if (isAttribute(pre, name)) {
                 parseAttribute(bean, element, name, val, ctx);
             }
         }
-        return setBus;
+        return setContainer;
     }
 
     protected void parseIdAttribute(BeanDefinitionBuilder bean, Element element,

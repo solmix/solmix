@@ -22,6 +22,7 @@ import java.util.concurrent.Executor;
 
 
 /**
+ * 线程池
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年12月18日

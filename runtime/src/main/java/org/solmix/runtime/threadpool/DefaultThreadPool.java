@@ -25,8 +25,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
@@ -52,7 +54,9 @@ import org.solmix.commons.util.Reflection;
  */
 
 public class DefaultThreadPool implements ThreadPool {
-
+    
+    public static final String PROPERTY_NAME = "name";
+    
     public static final int DEFAULT_MAX_SIZE = 256;
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultThreadPool.class);
@@ -646,6 +650,17 @@ public class DefaultThreadPool implements ThreadPool {
                 throw ree;
             }
         }    
+    }
+    public Dictionary<String, String> getProperties() {
+        Dictionary<String, String> properties = new Hashtable<String, String>();
+        NumberFormat nf = NumberFormat.getIntegerInstance();
+        properties.put("name", nf.format(getName()));
+        properties.put("maxThreads", nf.format(getMaxThreads()));
+        properties.put("minThreads", nf.format(getMinThreads()));
+        properties.put("initialSize", nf.format(getInitialSize()));
+        properties.put("maxQueueSize", nf.format(getMaxQueueSize()));
+        properties.put("queueSize", nf.format(getQueueSize()));
+        return properties;
     }
 
 }

@@ -25,6 +25,9 @@ import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.management.ManagedComponent;
 import org.solmix.runtime.management.ManagementConstants;
+import org.solmix.runtime.management.annotation.ManagedAttribute;
+import org.solmix.runtime.management.annotation.ManagedOperation;
+import org.solmix.runtime.management.annotation.ManagedResource;
 
 
 /**
@@ -32,7 +35,7 @@ import org.solmix.runtime.management.ManagementConstants;
  * @author solmix.f@gmail.com
  * @version $Id$  2014年11月20日
  */
-
+@ManagedResource(componentName = "Endpoint", description = "Responsible for managing server instances.")
 public class ManagedEndpoint implements ManagedComponent,
     ServerLifeCycleListener {
 
@@ -52,7 +55,7 @@ public class ManagedEndpoint implements ManagedComponent,
         server = s;
     }
     
-//    @ManagedOperation        
+    @ManagedOperation        
     public void start() {
         if (state == State.STARTED) {
             return;
@@ -64,27 +67,27 @@ public class ManagedEndpoint implements ManagedComponent,
         server.start();
     }
     
-//    @ManagedOperation
+    @ManagedOperation
     public void stop() {
         server.stop();
     }
     
-//    @ManagedOperation
+    @ManagedOperation
     public void destroy() {
         server.destroy();
     }
 
-//    @ManagedAttribute(description = "Address Attribute", currencyTimeLimit = 60)
+    @ManagedAttribute(description = "Address Attribute", currencyTimeLimit = 60)
     public String getAddress() {
         return endpoint.getEndpointInfo().getAddress();
     }
     
-//    @ManagedAttribute(description = "TransportId Attribute", currencyTimeLimit = 60)
+    @ManagedAttribute(description = "TransportId Attribute", currencyTimeLimit = 60)
     public String getTransportId() {
         return endpoint.getEndpointInfo().getTransporter();
     }
     
-//    @ManagedAttribute(description = "Server State")
+    @ManagedAttribute(description = "Server State")
     public String getState() {
         return state.toString();
     }
@@ -110,16 +113,16 @@ public class ManagedEndpoint implements ManagedComponent,
 
     @Override
     public ObjectName getObjectName() throws JMException {
-        String busId = container.getId();
+        String id = container.getId();
         StringBuilder buffer = new StringBuilder();
         buffer.append(ManagementConstants.DEFAULT_DOMAIN_NAME).append(':');
-        buffer.append(ManagementConstants.BUS_ID_PROP).append('=').append(busId).append(',');
-        buffer.append(ManagementConstants.TYPE_PROP).append('=').append("Bus.Service.Endpoint,");
+        buffer.append(ManagementConstants.CONTAINER_ID_PROP).append('=').append(id).append(',');
+        buffer.append(ManagementConstants.TYPE_PROP).append('=').append("Exchange.Service.Endpoint,");
        
 
         String serviceName = (String)endpoint.get(SERVICE_NAME);
         if (StringUtils.isEmpty(serviceName)) {
-//            serviceName = endpoint.getService().getName().toString();
+            serviceName = endpoint.getService().getServiceName().toIdentityString();
         }
         serviceName = ObjectName.quote(serviceName);
         buffer.append(ManagementConstants.SERVICE_NAME_PROP).append('=').append(serviceName).append(',');
@@ -127,7 +130,7 @@ public class ManagedEndpoint implements ManagedComponent,
         
         String endpointName = (String)endpoint.get(ENDPOINT_NAME);
         if (StringUtils.isEmpty(endpointName)) {
-//            endpointName = endpoint.getEndpointInfo().getName().getLocalPart();
+            endpointName = endpoint.getEndpointInfo().getName().toIdentityString();
         }
         endpointName = ObjectName.quote(endpointName);
         buffer.append(ManagementConstants.PORT_NAME_PROP).append('=').append(endpointName).append(',');
