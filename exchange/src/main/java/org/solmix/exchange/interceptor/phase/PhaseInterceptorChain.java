@@ -449,8 +449,8 @@ public class PhaseInterceptorChain implements InterceptorChain {
                     }
                     pause();
                     throw suspended;
-                } catch (RuntimeException ex) {
-
+                } catch (Exception ex) {
+                    //发生Exception时启动异常处理.
                     if (!faultOccurred) {
                         faultOccurred = true;
                         message.setContent(Exception.class, ex);

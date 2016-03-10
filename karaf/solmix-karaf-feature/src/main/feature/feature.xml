@@ -166,4 +166,8 @@
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-api/${project.version}</bundle>
 		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-consumer/${project.version}</bundle>
 	</feature>
+	
+	<feature name="hola-sample-monitor" description="simple Monitor" version="${project.version}">
+		<bundle start-level="65">mvn:org.solmix.hola.sample/simple-monitor/${project.version}</bundle>
+	</feature>
 </features>

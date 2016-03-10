@@ -50,6 +50,8 @@ public class AttachmentOutInterceptor extends PhaseInterceptorSupport<Message>
         // TODO Auto-generated method stub
         message.getInterceptorChain().add(ending);   
     }
+    
+    
     public class AttachmentOutEndingInterceptor extends PhaseInterceptorSupport<Message> {
         public AttachmentOutEndingInterceptor() {
             super(Phase.PRE_STREAM_ENDING);

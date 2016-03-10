@@ -20,6 +20,7 @@
 package org.solmix.exchange.interceptor;
 
 import org.solmix.exchange.Message;
+import org.solmix.runtime.Extension;
 
 /**
  * 消息拦截器
@@ -47,7 +48,7 @@ import org.solmix.exchange.Message;
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年10月4日
  */
-
+@Extension
 public interface Interceptor<T extends Message> {
 
     /**
