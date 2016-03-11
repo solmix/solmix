@@ -56,7 +56,6 @@
 		<dependency>
 			<groupId>org.solmix.common</groupId>
 			<artifactId>solmix-common-exchange</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<packaging>bundle</packaging>

@@ -5,9 +5,7 @@
     <artifactId>solmix-service-parent</artifactId>
     <version>0.6.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.solmix.services</groupId>
   <artifactId>solmix-service-jsp</artifactId>
-  <version>0.6.1-SNAPSHOT</version>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.tomcat</groupId>
@@ -17,7 +15,6 @@
   	<dependency>
   		<groupId>org.solmix.services</groupId>
   		<artifactId>solmix-service-template</artifactId>
-  		<version>0.6.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   <name>Solmix :: Services :: Template-jsp</name>

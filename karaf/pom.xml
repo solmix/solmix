@@ -7,7 +7,7 @@
   </parent>
   <groupId>org.solmix.karaf</groupId>
   <artifactId>solmix-karaf</artifactId>
-  <name>Karaf Integration</name>
+  <name>Solmix :: Karaf Integration</name>
   <packaging>pom</packaging>
   <modules>
   	<module>solmix-karaf-tools</module>

@@ -98,4 +98,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<name>Solmia :: Karaf :: features</name>
 </project>
