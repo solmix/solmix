@@ -30,6 +30,7 @@
     <solmix.osgi.private.pkg></solmix.osgi.private.pkg>
     <solmix.osgi.failok>true</solmix.osgi.failok>
     <solmix.category>mchange</solmix.category>
+    <solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
   </properties> 
    <build>
     <plugins>

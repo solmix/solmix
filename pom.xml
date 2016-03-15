@@ -101,7 +101,7 @@
 		<spring.version>4.0.6.RELEASE</spring.version><!-- 4.2.5.RELEASE -->
 		<sshd.version>0.5.0</sshd.version>
 		<xbean.version>3.7</xbean.version>
-		<apache.shiro.version>1.2.3</apache.shiro.version><!-- 1.2.4 -->
+		<apache.shiro.version>1.2.4</apache.shiro.version><!-- 1.2.4 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <bnd.version.policy>[$(version;==;$(@)),$(version;+;$(@)))</bnd.version.policy> -->
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
@@ -117,7 +117,7 @@
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<!-- <commons-io.version>2.4</commons-io.version>fileupload used 2.2 -->
 		<commons-io.version>2.2</commons-io.version>
-		<commons-beanutils.version>1.8.3</commons-beanutils.version>
+		<commons-beanutils.version>1.9.2</commons-beanutils.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<commons-codec.version>1.9</commons-codec.version>
 		<commons-lang.version>2.5</commons-lang.version>
@@ -848,7 +848,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.datax</groupId>
-				<artifactId>data-mybatis</artifactId>
+				<artifactId>datax-mybatis</artifactId>
 				<version>${datax.version}</version>
 			</dependency>
 			<dependency>

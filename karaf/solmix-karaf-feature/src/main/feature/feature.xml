@@ -69,11 +69,15 @@
 		<feature version="${project.version}">solmix-service-velocity</feature>
 		<bundle start-level="40">mvn:org.solmix.datax/datax-core/${project.version}</bundle>
 	</feature>
-	<feature name="datax-mybatis" description="Datax mybatis"
+	<feature name="datax-jdbc" description="Datax core"
 		version="${project.version}">
 		<feature version="${project.version}">datax-core</feature>
-		<bundle start-level="35">mvn:org.mybatis/mybatis/${mybatis.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.datax/datax-jdbc/${project.version}</bundle>
+	</feature>
+	<feature name="datax-mybatis" description="Datax mybatis"
+		version="${project.version}">
+		<feature version="${project.version}">datax-jdbc</feature>
+		<bundle start-level="35">mvn:org.mybatis/mybatis/${mybatis.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.datax/datax-mybatis/${project.version}</bundle>
 	</feature>
 	<feature name="hola-common" description="Hola Commons" version="${project.version}">
