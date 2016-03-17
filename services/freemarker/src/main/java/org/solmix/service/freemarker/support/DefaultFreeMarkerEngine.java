@@ -20,11 +20,27 @@ package org.solmix.service.freemarker.support;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Locale;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.StringUtils;
+import org.solmix.runtime.ProductionAware;
+import org.solmix.runtime.resource.ResourceManager;
+import org.solmix.service.freemarker.FreeMarkerConfiguration;
 import org.solmix.service.freemarker.FreeMarkerEngine;
 import org.solmx.service.template.TemplateContext;
 import org.solmx.service.template.TemplateException;
+
+import freemarker.core.Environment;
+import freemarker.core.ParseException;
+import freemarker.template.Template;
 
 
 /**
@@ -33,96 +49,131 @@ import org.solmx.service.template.TemplateException;
  * @version $Id$  2015年9月13日
  */
 
-public class DefaultFreeMarkerEngine implements FreeMarkerEngine
+@SuppressWarnings("deprecation")
+public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAware
 {
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmx.service.template.TemplateEngine#getDefaultExtensions()
-     */
+    private static final Logger LOG  =LoggerFactory.getLogger(DefaultFreeMarkerEngine.class);
+    private final FreeMarkerConfiguration configuration = new FreeMarkerConfiguration(LOG);
+    
+    
+    static {
+        try {
+            freemarker.log.Logger.selectLoggerLibrary(freemarker.log.Logger.LIBRARY_SLF4J);
+            freemarker.log.Logger.setCategoryPrefix("");
+        } catch (Throwable ee) {
+        }
+    }
+    @Resource
+    private ResourceManager resourceManager;
+    
+    @PostConstruct
+    public void init() throws Exception{
+        configuration.init(resourceManager);
+    }
+    public FreeMarkerConfiguration getConfiguration(){
+        return configuration;
+    }
+  
     @Override
     public String[] getDefaultExtensions() {
-        // TODO Auto-generated method stub
-        return null;
+        return new String[] { "ftl" };
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmx.service.template.TemplateEngine#exists(java.lang.String)
-     */
+ 
     @Override
     public boolean exists(String templateName) {
-        // TODO Auto-generated method stub
-        return false;
+        try {
+            return configuration.getTemplateLoader().findTemplateSource(templateName) != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmx.service.template.TemplateEngine#evaluate(java.lang.String, org.solmx.service.template.TemplateContext)
-     */
+  
     @Override
     public String evaluate(String templateName, TemplateContext context) throws TemplateException, IOException {
-        // TODO Auto-generated method stub
-        return null;
+        StringWriter out = new StringWriter();
+        render(templateName, context, out, null, null, null);
+        return out.toString();
     }
+    
+    private void render(String templateName, Object context, Writer writer, OutputStream ostream, String inputCharset,
+        String outputCharset) throws TemplateException, IOException {
+        Locale locale = Locale.getDefault();
+        
+        if (StringUtils.isEmpty(inputCharset)) {
+            inputCharset = configuration.getConfiguration().getDefaultEncoding();
+        }
+        inputCharset = StringUtils.defaultIfEmpty(inputCharset,FreeMarkerConfiguration. DEFAULT_CHARSET);
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmx.service.template.TemplateEngine#evaluate(java.lang.String, org.solmx.service.template.TemplateContext, java.io.OutputStream)
-     */
+        if (StringUtils.isEmpty(outputCharset)) {
+            outputCharset = configuration.getConfiguration().getOutputEncoding();
+        }
+
+        outputCharset = StringUtils.defaultIfEmpty(outputCharset, FreeMarkerConfiguration.DEFAULT_CHARSET);
+        
+        if (writer == null) {
+            if (ostream == null) {
+                throw new IllegalArgumentException("missing output writer");
+            }
+
+            writer = new OutputStreamWriter(ostream, outputCharset);
+        }
+
+        try {
+            Template template = configuration.getConfiguration().getTemplate(templateName, locale, inputCharset);
+            Environment env = template.createProcessingEnvironment(context, writer);
+
+            env.setLocale(locale);
+            env.setOutputEncoding(outputCharset);
+
+            env.process();
+        } catch (freemarker.template.TemplateException e) {
+            throw new TemplateException("Error rendering FreeMarker template: " + templateName, e);
+        } catch (ParseException e) {
+            throw new TemplateException("Error rendering FreeMarker template: " + templateName, e);
+        }
+    }
     @Override
     public void evaluate(String templateName, TemplateContext context, OutputStream ostream) throws TemplateException, IOException {
-        // TODO Auto-generated method stub
+        render(templateName, context, null, ostream, null, null);
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmx.service.template.TemplateEngine#evaluate(java.lang.String, org.solmx.service.template.TemplateContext, java.io.Writer)
-     */
     @Override
     public void evaluate(String templateName, TemplateContext context, Writer writer) throws TemplateException, IOException {
-        // TODO Auto-generated method stub
+        render(templateName, context, writer, null, null, null);
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.service.freemarker.FreeMarkerEngine#mergeTemplate(java.lang.String, java.lang.Object, java.lang.String)
-     */
+ 
     @Override
     public String mergeTemplate(String templateName, Object context, String inputCharset) throws TemplateException, IOException {
-        // TODO Auto-generated method stub
-        return null;
+        StringWriter out = new StringWriter();
+        render(templateName, context, out, null, inputCharset, null);
+        return out.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.service.freemarker.FreeMarkerEngine#mergeTemplate(java.lang.String, java.lang.Object, java.io.OutputStream, java.lang.String, java.lang.String)
-     */
+   
     @Override
     public void mergeTemplate(String templateName, Object context, OutputStream ostream, String inputCharset, String outputCharset)
         throws TemplateException, IOException {
-        // TODO Auto-generated method stub
+        render(templateName, context, null, ostream, inputCharset, outputCharset);
 
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.service.freemarker.FreeMarkerEngine#mergeTemplate(java.lang.String, java.lang.Object, java.io.Writer, java.lang.String)
-     */
+   
     @Override
     public void mergeTemplate(String templateName, Object context, Writer out, String inputCharset) throws TemplateException, IOException {
-        // TODO Auto-generated method stub
+        render(templateName, context, out, null, inputCharset, null);
 
+    }
+
+    @Override
+    public void setProduction(boolean productionMode) {
+      configuration.setProduction(productionMode);
+        
     }
 
 }

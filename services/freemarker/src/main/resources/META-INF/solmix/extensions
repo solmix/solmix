@@ -1,0 +1,1 @@
+org.solmix.service.freemarker.support.DefaultFreeMarkerEngine:org.solmx.service.template.TemplateEngine:true:true
