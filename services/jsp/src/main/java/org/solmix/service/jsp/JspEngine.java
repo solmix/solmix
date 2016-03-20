@@ -18,8 +18,8 @@
  */
 package org.solmix.service.jsp;
 
-import org.solmx.service.template.TemplateEngine;
-import org.solmx.service.template.TemplateNotFoundException;
+import org.solmix.service.template.TemplateEngine;
+import org.solmix.service.template.TemplateNotFoundException;
 
 
 /**

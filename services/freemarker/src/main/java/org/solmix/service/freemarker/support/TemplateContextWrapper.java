@@ -1,8 +1,8 @@
 
 package org.solmix.service.freemarker.support;
 
-import org.solmx.service.template.Renderable;
-import org.solmx.service.template.TemplateContext;
+import org.solmix.service.template.Renderable;
+import org.solmix.service.template.TemplateContext;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;

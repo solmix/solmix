@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.solmix.commons.util.Assert;
-import org.solmx.service.template.TemplateContext;
+import org.solmix.service.template.TemplateContext;
 
 
 /**

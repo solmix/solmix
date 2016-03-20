@@ -30,8 +30,8 @@ import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.resource.InputStreamResource;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
 
 /**
  * 

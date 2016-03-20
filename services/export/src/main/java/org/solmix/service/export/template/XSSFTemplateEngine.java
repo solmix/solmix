@@ -27,8 +27,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.solmix.runtime.resource.InputStreamResource;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
 
 /**
  * 

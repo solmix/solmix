@@ -5,10 +5,10 @@
 	xmlns:c="http://www.solmix.org/schema/rt/v1.0.0"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt/v1.0.0 http://www.solmix.org/schema/rt/rt-1.0.0.xsd ">
 	
-	<bean id="velocity" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
+	<bean id="velocity" class="org.solmix.service.velocity.support.DefaultVelocityEngine">
 		<property name="path" value="/macros"></property>
 	</bean>
-	<bean id="velocity2" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
+	<bean id="velocity2" class="org.solmix.service.velocity.support.DefaultVelocityEngine">
 		<property name="path" value="/templates"></property>
 		<property name="strictReference" value="false"></property>
 	</bean>

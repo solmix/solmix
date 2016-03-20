@@ -25,8 +25,8 @@ import java.io.OutputStream;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.resource.InputStreamResource;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
 
 /**
  * 

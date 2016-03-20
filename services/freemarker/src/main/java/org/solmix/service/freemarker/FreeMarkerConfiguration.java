@@ -37,7 +37,7 @@ import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.service.freemarker.support.TemplateContextWrapper;
 import org.solmix.service.freemarker.support.TemplateLoaderAdapter;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateException;
 
 import freemarker.cache.StrongCacheStorage;
 import freemarker.cache.TemplateLoader;

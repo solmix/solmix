@@ -39,9 +39,9 @@ import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.service.jsp.JspEngine;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
-import org.solmx.service.template.TemplateNotFoundException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
+import org.solmix.service.template.TemplateNotFoundException;
 
 /**
  * 

@@ -1,1 +1,1 @@
-org.solmx.service.velocity.support.DefaultVelocityEngine:org.solmx.service.template.TemplateEngine:true:true
+org.solmix.service.velocity.support.DefaultVelocityEngine:org.solmix.service.template.TemplateEngine:true:true

@@ -6,8 +6,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt/v1.0.0 http://www.solmix.org/schema/rt/rt-1.0.0.xsd ">
 	<c:container id="solmix">
 	</c:container>
-	<bean class="org.solmx.service.velocity.support.UserService"></bean>
-	<bean id="velocity" class="org.solmx.service.velocity.support.DefaultVelocityEngine">
+	<bean class="org.solmix.service.velocity.support.UserService"></bean>
+	<bean id="velocity" class="org.solmix.service.velocity.support.DefaultVelocityEngine">
 	
 	</bean>
 </beans>

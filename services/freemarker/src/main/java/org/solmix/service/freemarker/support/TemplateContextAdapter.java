@@ -1,6 +1,6 @@
 package org.solmix.service.freemarker.support;
 
-import org.solmx.service.template.TemplateContext;
+import org.solmix.service.template.TemplateContext;
 
 import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleHash;

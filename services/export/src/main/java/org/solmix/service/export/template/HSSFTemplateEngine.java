@@ -26,8 +26,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.solmix.runtime.resource.InputStreamResource;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
 
 
 

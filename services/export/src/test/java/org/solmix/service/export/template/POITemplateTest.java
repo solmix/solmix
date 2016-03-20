@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.io.CachedOutputStream;
 import org.solmix.runtime.support.spring.SpringContainerFactory;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.support.MappedTemplateContext;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.support.MappedTemplateContext;
 
 
 /**

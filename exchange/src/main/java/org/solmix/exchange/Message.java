@@ -99,7 +99,7 @@ public interface Message extends StringTypeMap {
 
     String ACCEPT_CONTENT_TYPE =  "Accept";
 
-    String BASE_PATH = Message.class.getName() + ".BASE_PATH";;
+    String BASE_PATH = "basePath";;
 
     String ERROR_MESSAGE = Message.class.getName() + ".ERROR_MESSAGE";
     

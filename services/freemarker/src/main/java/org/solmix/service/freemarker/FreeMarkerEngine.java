@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import org.solmx.service.template.TemplateEngine;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateEngine;
+import org.solmix.service.template.TemplateException;
 
 
 /**

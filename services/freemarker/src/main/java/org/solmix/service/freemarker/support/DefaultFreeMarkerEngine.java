@@ -31,12 +31,13 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.StringUtils;
+import org.solmix.runtime.Extension;
 import org.solmix.runtime.ProductionAware;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.service.freemarker.FreeMarkerConfiguration;
 import org.solmix.service.freemarker.FreeMarkerEngine;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateException;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateException;
 
 import freemarker.core.Environment;
 import freemarker.core.ParseException;
@@ -48,7 +49,7 @@ import freemarker.template.Template;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年9月13日
  */
-
+@Extension(name="freemarker")
 @SuppressWarnings("deprecation")
 public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAware
 {
@@ -174,6 +175,10 @@ public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAwar
     public void setProduction(boolean productionMode) {
       configuration.setProduction(productionMode);
         
+    }
+    
+    public void setPath(String path){
+        configuration.setPath(path);
     }
 
 }

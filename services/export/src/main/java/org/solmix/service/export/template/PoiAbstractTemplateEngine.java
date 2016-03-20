@@ -31,11 +31,11 @@ import org.solmix.commons.util.FileUtils;
 import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.service.export.ExportException;
-import org.solmx.service.template.TemplateContext;
-import org.solmx.service.template.TemplateEngine;
-import org.solmx.service.template.TemplateException;
-import org.solmx.service.velocity.VelocityEngine;
-import org.solmx.service.velocity.support.TemplateContextAdapter;
+import org.solmix.service.template.TemplateContext;
+import org.solmix.service.template.TemplateEngine;
+import org.solmix.service.template.TemplateException;
+import org.solmix.service.velocity.VelocityEngine;
+import org.solmix.service.velocity.support.TemplateContextAdapter;
 
 
 /**

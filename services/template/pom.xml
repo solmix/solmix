@@ -44,7 +44,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmx.service.template*,org.solmx.service.toolkit*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.service.template*,org.solmix.service.toolkit*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>*</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

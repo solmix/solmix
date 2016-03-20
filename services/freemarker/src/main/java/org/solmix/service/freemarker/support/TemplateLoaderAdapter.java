@@ -2,7 +2,6 @@
 package org.solmix.service.freemarker.support;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
@@ -24,7 +23,7 @@ public class TemplateLoaderAdapter implements TemplateLoader
     public TemplateLoaderAdapter(ResourceManager resourceManager, String path)
     {
         this.resourceManager = resourceManager;
-        path = FileUtils.normalizeAbsolutePath(path, true);
+        path = FileUtils.normalizePath(path, true);
         Assert.assertNotNull(path);
         if(!path.endsWith("/"))
             path = path + '/';
@@ -42,7 +41,7 @@ public class TemplateLoaderAdapter implements TemplateLoader
         if(resource==null||!resource.exists()){
             return null;
         }
-        return null;
+        return  new TemplateSource(resource);
     }
 
     @Override
@@ -85,73 +84,5 @@ public class TemplateLoaderAdapter implements TemplateLoader
 
         return templateName;
     }
-    /** 保存resource已经打开的流，以便关闭。 */
-    public static class TemplateSource {
-        private final InputStreamResource    resource;
-        private       InputStream istream;
 
-        public TemplateSource(InputStreamResource resource) {
-            this.resource = Assert.assertNotNull(resource, "resource");
-        }
-
-        public InputStreamResource getResource() {
-            return resource;
-        }
-
-        public InputStream getInputStream() throws IOException {
-            if (istream == null) {
-                istream = resource.getInputStream();
-            }
-
-            return istream;
-        }
-
-        public void close() {
-            if (istream != null) {
-                try {
-                    istream.close();
-                } catch (IOException e) {
-                }
-
-                istream = null;
-            }
-        }
-
-        @Override
-        public int hashCode() {
-            return 31 + (resource == null ? 0 : resource.hashCode());
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-
-            if (obj == null) {
-                return false;
-            }
-
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-
-            TemplateSource other = (TemplateSource) obj;
-
-            if (resource == null) {
-                if (other.resource != null) {
-                    return false;
-                }
-            } else if (!resource.equals(other.resource)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return resource.toString();
-        }
-    }
 }

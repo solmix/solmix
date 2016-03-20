@@ -1,6 +1,6 @@
 package org.solmix.service.freemarker.support;
 
-import org.solmx.service.template.Renderable;
+import org.solmix.service.template.Renderable;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.StringModel;
