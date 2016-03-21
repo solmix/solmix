@@ -140,6 +140,8 @@
 		<cglib.version>3.1</cglib.version>
 		<commons-jexl.version>2.1.1</commons-jexl.version>
 		<commons-lang3.version>3.4</commons-lang3.version>
+		<curator.version>2.10.0</curator.version>
+		<zookeeper.version>3.4.6</zookeeper.version>
 	</properties>
 	<repositories>
 
@@ -242,6 +244,31 @@
 				  <artifactId>jackson-dataformat-xml</artifactId>
 				  <version>${jackson.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.curator</groupId>
+				<artifactId>curator-framework</artifactId>
+				<version>${curator.version}</version>
+			</dependency>
+			<dependency>
+	            <groupId>org.apache.curator</groupId>
+	            <artifactId>curator-client</artifactId>
+	            <version>${curator.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.curator</groupId>
+	            <artifactId>curator-recipes</artifactId>
+	            <version>${curator.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.curator</groupId>
+	            <artifactId>curator-test</artifactId>
+	            <version>${curator.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.zookeeper</groupId>
+	            <artifactId>zookeeper</artifactId>
+	            <version>${zookeeper.version}</version>
+	        </dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.framework</artifactId>

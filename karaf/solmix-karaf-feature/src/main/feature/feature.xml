@@ -125,8 +125,8 @@
 		<feature version="${project.version}">hola-rs</feature>
 		<bundle start-level="35">mvn:org.apache.zookeeper/zookeeper/3.4.6</bundle>
 		<bundle start-level="35">mvn:com.google.guava/guava/16.0.1</bundle>
-		<bundle start-level="35">mvn:org.apache.curator/curator-framework/2.9.1</bundle>
-		<bundle start-level="35">mvn:org.apache.curator/curator-client/2.9.1</bundle>
+		<bundle start-level="35">mvn:org.apache.curator/curator-framework/${curator.version}</bundle>
+		<bundle start-level="35">mvn:org.apache.curator/curator-client/${curator.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-api/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-discovery-zookeeper/${project.version}</bundle>
 	</feature>
