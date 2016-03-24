@@ -201,6 +201,10 @@ public class NetUtils {
         return localAddress;
     }
     
+    public static String getLocalIp(){
+        return getLocalAddress().toString();
+    }
+    
     public static String getLogHost() {
         InetAddress address = LOCAL_ADDRESS;
         return address == null ? LOCALHOST : address.getHostAddress();
