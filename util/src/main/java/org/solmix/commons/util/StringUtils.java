@@ -22,16 +22,22 @@ public final class StringUtils
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    private static final Pattern KVP_PATTERN = Pattern.compile("([_.a-zA-Z0-9][-_.a-zA-Z0-9]*)[=](.*)"); // key
-                                                                                                         // value
-                                                                                                         // pair
-                                                                                                         // pattern.
-
+    private static final Pattern KVP_PATTERN = Pattern.compile("([_.a-zA-Z0-9][-_.a-zA-Z0-9]*)[=](.*)"); 
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
     
      StringUtils(){
     }
-    
+     static final String check = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+
+     public static boolean isEmail(String email) {
+         if (isBlank(email)) {
+             return false;
+         } else {
+             Pattern pattern = Pattern.compile(check);
+             Matcher matcher = pattern.matcher(email);
+             return matcher.matches();
+         }
+     }
     public static boolean isBlank(String str) {
         if (str == null || str.length() == 0)
             return true;

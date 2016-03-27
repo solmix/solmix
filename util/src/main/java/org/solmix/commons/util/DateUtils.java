@@ -156,6 +156,20 @@ public final class DateUtils
         out.write(String.valueOf(calendar.get(13)));
         return out.toString();
     }
+    
+    public static Date getMinuteAfter(Date date, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minute);
+        return calendar.getTime();
+    }
+
+    public static Date getMinuteBefore(Date date, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, -minute);
+        return calendar.getTime();
+    }
 
     public static void main(String args[]) {
         System.out.println(DateUtils.getFirstDayofMouth("201105", "yyyyMM", "yyyyMMdd"));

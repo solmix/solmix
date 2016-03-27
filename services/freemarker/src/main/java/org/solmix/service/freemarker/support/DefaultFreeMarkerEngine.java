@@ -36,6 +36,7 @@ import org.solmix.runtime.ProductionAware;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.service.freemarker.FreeMarkerConfiguration;
 import org.solmix.service.freemarker.FreeMarkerEngine;
+import org.solmix.service.freemarker.FreeMarkerPlugin;
 import org.solmix.service.template.TemplateContext;
 import org.solmix.service.template.TemplateException;
 
@@ -56,7 +57,6 @@ public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAwar
 
     private static final Logger LOG  =LoggerFactory.getLogger(DefaultFreeMarkerEngine.class);
     private final FreeMarkerConfiguration configuration = new FreeMarkerConfiguration(LOG);
-    
     
     static {
         try {
@@ -179,6 +179,11 @@ public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAwar
     
     public void setPath(String path){
         configuration.setPath(path);
+    }
+    
+    
+    public void setPlugins(FreeMarkerPlugin[] plugins) {
+        configuration.setPlugins(plugins);
     }
 
 }
