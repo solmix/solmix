@@ -44,6 +44,7 @@ import org.solmix.exchange.interceptor.InterceptorChain;
 import org.solmix.exchange.interceptor.SuspendedException;
 import org.solmix.exchange.interceptor.support.ServiceInvokerInterceptor;
 import org.solmix.exchange.model.OperationInfo;
+import org.solmix.runtime.exception.InvokerException;
 
 /**
  * 分阶拦截链,分截拦截器可在链中按不同阶段遍历执行.
@@ -222,10 +223,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
                 + ((phaseName == null) ? ": Phase declaration is missing."
                     : ": Phase " + phaseName + " specified does not exist."));
         } else {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Adding interceptor " + i + " to phase " + phaseName);
-            }
-
+                LOG.trace("Adding interceptor {} to phase {}" ,i,phaseName);
             insert(phase, pi, force);
         }
         Collection<PhaseInterceptor<? extends Message>> extras = pi.extInterceptors();
@@ -505,30 +503,36 @@ public class PhaseInterceptorChain implements InterceptorChain {
         return description.toString();
     }
 
-    private void defaultLogging(Message message, Exception ex,
-        String description) {
+    private void defaultLogging(Message message, Exception ex, String description) {
         FaultType type = message.get(FaultType.class);
         if (type == FaultType.CHECKED_FAULT) {
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Service " + description
-                    + "has thrown exception, unwinding now", ex);
+                    + "has thrown exception,  unwinding interceptor chain now", ex);
             } else if (LOG.isInfoEnabled()) {
                 Throwable t = ex;
                 if (ex instanceof Fault && ex.getCause() != null) {
                     t = ex.getCause();
                 }
                 LOG.info("Service " + description
-                    + "has thrown exception, unwinding now: "
+                    + "has thrown exception,  unwinding interceptor chain now: "
                     + t.getClass().getName() + ": " + ex.getMessage());
             }
         } else if (LOG.isWarnEnabled()) {
-            if (type == FaultType.UNCHECKED_FAULT) {
-                LOG.warn("Service " + description
-                    + "has thrown exception, unwinding now", ex);
-            } else {
-                LOG.warn("Service for " + description
-                    + "has thrown exception, unwinding now", ex);
+            StringBuilder msg  =new StringBuilder();
+            Throwable actucle=ex;
+            if(ex instanceof InvokerException){
+                msg.append(type==FaultType.UNCHECKED_FAULT?"Service ":"Interceptor ")
+                    .append(description)
+                    .append("has thrown exception, unwinding interceptor chain now: \n")
+                    .append("(").append(ex.getClass().getName()).append("=")
+                    .append(ex.getMessage()).append(")");
+                actucle = ex.getCause();
+            }else{
+                msg.append(type==FaultType.UNCHECKED_FAULT?"Service ":"Interceptor ")
+                    .append(description).append("has thrown exception, unwinding interceptor chain now: ");
             }
+            LOG.warn(msg.toString(),actucle);
         }
     }
 

@@ -25,6 +25,7 @@ import static org.solmix.commons.util.DataUtils.listToArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -264,21 +265,38 @@ public class DataTypeMap implements Map<String, Object> {
     public Byte getByte(String key) {
         return getByte(key, ((Byte) (null)));
     }
-    public char getChar(String key){
-        return getChar(key,(Character) null);
+
+    public char getChar(String key) {
+        return getChar(key, (Character) null);
     }
-    public char getChar(String key,Character defaultValue){
+
+    public Date getDate(String key) {
+        return getDate(key, null);
+    }
+
+    public Date getDate(String key, Date defaultValue) {
+        Object value = get(key);
+        if (value == null)
+            return defaultValue;
+        if (value instanceof Date)
+            return (Date) value;
+        else {
+            return null;
+        }
+    }
+
+    public char getChar(String key, Character defaultValue) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
         if (value instanceof Character)
             return (Character) value;
-        else if(value.toString().trim().length()>1){
-            return  value.toString().trim().charAt(0);
-        }else{
-            return (char)0;
+        else if (value.toString().trim().length() > 1) {
+            return value.toString().trim().charAt(0);
+        } else {
+            return (char) 0;
         }
-           
+
     }
     /**
      * @param key
@@ -339,7 +357,7 @@ public class DataTypeMap implements Map<String, Object> {
      * @return
      */
     public Integer getInt(String key) {
-        return getInteger(key, ((Integer) (null)));
+        return getInteger(key, ((Integer) (0)));
     }
 
     /**

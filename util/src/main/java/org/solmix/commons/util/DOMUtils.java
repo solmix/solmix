@@ -734,63 +734,159 @@ public final class DOMUtils {
         return getValue(e);
     }
     
-    public static Object getValue(Element e) {
-        if (e.getChildNodes() == null)
-            return null;
-        if (e.getChildNodes().getLength() == 1 && e.getFirstChild().getNodeType() != Node.ELEMENT_NODE) {
-            return e.getFirstChild().getNodeValue();
-        } else {
-            Object _return = null;
-            Node node = e.getFirstChild();
-            String tempName = null;
-            Object tempValue = null;
-            int i = 0;
-            boolean sure = false;
-            List<Object> re = null;
-            Map<String, Object> rem = null;
-            for (; node != null; node = node.getNextSibling()) {
+	public static Object getValue(Element e) {
+		if (e.getChildNodes() == null)
+			return null;
+		if (e.getChildNodes().getLength() == 1
+				&& e.getFirstChild().getNodeType() != Node.ELEMENT_NODE) {
+			return e.getFirstChild().getNodeValue();
+		} else {
+			Object _return = null;
+			Node node = e.getFirstChild();
+			String tempName = null;
+			Object tempValue = null;
+			int i = 0;
+			boolean sure = false;
+			List<Object> re = null;
+			Map<String, Object> rem = null;
+			for (; node != null; node = node.getNextSibling()) {
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    if (i == 0) {
-                        tempName = node.getNodeName();
-                        tempValue = getValue((Element) node);
-                    } else {
-                        if (node.getNodeName().equals(tempName)) {
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					if (i == 0) {
+						tempName = node.getNodeName();
+						tempValue = getValue((Element) node);
+					} else {
+						if (node.getNodeName().equals(tempName)) {
 
-                            if (!sure) {
-                                rem = new HashMap<String, Object>();
-                                re = new ArrayList<Object>();
-                                rem.put(tempName, re);
-                                re.add(tempValue);
-                                _return = rem;
-                            }
+							if (!sure) {
+								rem = new HashMap<String, Object>();
+								re = new ArrayList<Object>();
+								rem.put(tempName, re);
+								re.add(tempValue);
+								_return = rem;
+							}
 
-                            re.add(getValue((Element) node));
-                            sure = true;
-                        } else {
+							re.add(getValue((Element) node));
+							sure = true;
+						} else {
 
-                            if (!sure) {
-                                rem = new HashMap<String, Object>();
-                                rem.put(tempName, tempValue);
-                                _return = rem;
-                            }
+							if (!sure) {
+								rem = new HashMap<String, Object>();
+								rem.put(tempName, tempValue);
+								_return = rem;
+							}
 
-                            rem.put(node.getNodeName(), getValue((Element) node));
-                            sure = true;
-                        }
-                    }
-                    i++;
-                }
+							rem.put(node.getNodeName(),
+									getValue((Element) node));
+							sure = true;
+						}
+					}
+					i++;
+				}
 
-            }
-            if (i == 1) {
-                Map<String, Object> _r = new HashMap<String, Object>();
-                _r.put(tempName, tempValue);
-                return _r;
-            }
-            return _return;
-        }
-    }
-    
-    
+			}
+			if (i == 1) {
+				Map<String, Object> _r = new HashMap<String, Object>();
+				_r.put(tempName, tempValue);
+				return _r;
+			}
+			return _return;
+		}
+	}
+
+	public static Element toElement(String key, Object value) throws Exception {
+		return toElement(key, value, false);
+	}
+
+	public static Element toElement(String key, Object value,
+			boolean mapAsAttribute) throws Exception {
+		Document doc = null;
+		Element element = null;
+		doc = getTempDocument();
+		element = doc.createElement(key);
+		if (value instanceof Map<?,?>) {
+			_buildMap(element, (Map<?,?>) value, mapAsAttribute);
+		} else if (value instanceof List) {
+			_buildList(element, (List<?>) value, mapAsAttribute);
+		} else {
+			element.setTextContent(value.toString());
+		}
+		return element;
+	}
+
+	private static Document getTempDocument()
+			throws ParserConfigurationException {
+		if (tempDoc == null) {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			tempDoc = builder.newDocument();
+		}
+		return tempDoc;
+	}
+
+	private static void _buildMap(Element element, Map<?,?> mvalue,
+			boolean mapAsAttribute) throws ParserConfigurationException {
+		for (Object _key : mvalue.keySet()) {
+			Document doc = getTempDocument();
+			Element child = doc.createElement(_key.toString());
+			Object _value = mvalue.get(_key);
+			element.appendChild(child);
+			if (_value instanceof Map) {
+				_buildMap(child, (Map<?,?>) _value, mapAsAttribute);
+			} else if (_value instanceof List) {
+				_buildList(child, (List<?>) _value, mapAsAttribute);
+			} else {
+				if (mapAsAttribute)
+					child.setAttribute((String) _key,
+							_value != null ? _value.toString() : "");
+				else
+					child.setTextContent(_value != null ? _value.toString()
+							: "");
+			}
+		}
+
+	}
+
+	private static void _buildList(Element element, List<?> value,
+			boolean mapAsAttribute) throws ParserConfigurationException {
+		for (Object _v : value) {
+
+			if (_v instanceof Map) {
+				_buildMap(element, (Map<?,?>) _v, mapAsAttribute);
+			} else if (_v instanceof List) {
+				_buildList(element, (List<?>) _v, mapAsAttribute);
+			} else {
+				Document doc = getTempDocument();
+				Element child = doc.createElement(autoBuildTags(element
+						.getNodeName()));
+				child.setTextContent(_v.toString());
+				element.appendChild(child);
+			}
+
+		}
+
+	}
+
+	private static String autoBuildTags(String parent) {
+		if (parent.endsWith("s") || parent.endsWith("S")) {
+			parent.subSequence(0, parent.length() - 1);
+		}
+		return parent;
+	}
+
+	private static Document tempDoc;
+
+	public static Map<String, Object> toMap(List<Object> objs) {
+		Map<String, Object> _return = new HashMap<String, Object>();
+		for (Object obj : objs) {
+			if (obj instanceof Element) {
+				Element e = (Element) obj;
+				Object value = getValue(e);
+				_return.put(e.getNodeName(), value);
+			}
+		}
+
+		return _return;
+	}
+
 }
