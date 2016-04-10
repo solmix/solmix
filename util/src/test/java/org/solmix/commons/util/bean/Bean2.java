@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.commons.util;
+package org.solmix.commons.util.bean;
 
 /**
  * 

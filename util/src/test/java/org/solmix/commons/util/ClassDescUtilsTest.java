@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.solmix.commons.util.bean.Bean1;
 
 
 /**

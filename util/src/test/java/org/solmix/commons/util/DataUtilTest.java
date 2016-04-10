@@ -19,13 +19,17 @@
 
 package org.solmix.commons.util;
 
+import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
+import org.solmix.commons.util.bean.Bean1;
+import org.solmix.commons.util.bean.Bean11;
+import org.solmix.commons.util.bean.Bean2;
+
+import junit.framework.Assert;
 
 /**
  * 
@@ -36,7 +40,7 @@ public class DataUtilTest
 
     @Test
     public void getPropertyDescriptorsTest() throws Exception {
-        Map map = DataUtils.getPropertyDescriptors(Bean1.class);
+        Map<String, PropertyDescriptor> map = DataUtils.getPropertyDescriptors(Bean1.class);
 
         Assert.assertNotNull(map.get("b"));
     }

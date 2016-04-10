@@ -140,7 +140,7 @@
 		<cglib.version>3.1</cglib.version>
 		<commons-jexl.version>2.1.1</commons-jexl.version>
 		<commons-lang3.version>3.4</commons-lang3.version>
-		<curator.version>3.1.0</curator.version>
+		<curator.version>2.10.0</curator.version>
 		<zookeeper.version>3.4.8</zookeeper.version>
 	</properties>
 	<repositories>
@@ -1231,7 +1231,7 @@
                             <ruleset>pmd-ruleset.xml</ruleset>
                         </rulesets>
                         <sourceEncoding>UTF-8</sourceEncoding>
-                        <targetJdk>1.6</targetJdk>
+                        <targetJdk>1.7</targetJdk>
                         <linkXRef>false</linkXRef>
                         <includeTests>true</includeTests>
                         <verbose>true</verbose>
@@ -1328,8 +1328,8 @@
 					 <configuration>
 				          <compilerVersion>1.7</compilerVersion>
 				          <fork>true</fork>
-				          <source>1.6</source>
-				          <target>1.6</target>
+				          <source>1.7</source>
+				          <target>1.7</target>
 				          <debug>true</debug>
 				          <encoding>${project.build.sourceEncoding}</encoding>
 				          <optimize>true</optimize>

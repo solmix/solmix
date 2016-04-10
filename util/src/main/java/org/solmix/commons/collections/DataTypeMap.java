@@ -162,16 +162,18 @@ public class DataTypeMap implements Map<String, Object> {
 
     /**
      * @param key
-     * @return
+     * @return key's value if value is null return null.
      */
     public List<?> getList(String key) {
         return getList(key, null);
     }
 
     /**
+     * if values is String with tokenizer <code> \r\t\n,</code> split it to list.
+     * 
      * @param key
      * @param defaultValue
-     * @return
+     * @return  key's value if value is null return defaultValue.
      */
     public List<?> getList(String key, List<?> defaultValue) {
         Object value = get(key);

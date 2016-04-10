@@ -1,4 +1,21 @@
-
+/**
+ * Copyright 2016 The Solmix Project
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.gnu.org/licenses/ 
+ * or see the FSF site: http://www.fsf.org. 
+ */
 package org.solmix.commons;
 
 import java.io.IOException;
@@ -11,20 +28,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * 版本信息工具类
+ * 
+ * @author solmix.f@gmail.com
+ */
 public final class Version
 {
 
     private static final Logger LOG  = LoggerFactory.getLogger(Version.class);
-    private Version()
-    {
-    }
     
-   
+    private Version() { }
 
     /**
-     * @param groupId
-     * @param artifactId
-     * @return return special version
+     * 通过jar中打包的maven信息获取版本号.
+     * 
+     * @param groupId Maven groupid
+     * @param artifactId Maven artifactId
+     * @return 返回版本号
      */
     public static String readFromMaven(String groupId, String artifactId) {
         String propPath = "/META-INF/maven/" + groupId + "/" + artifactId
@@ -48,6 +69,15 @@ public final class Version
         return "undetermined (please report this as bug)";
     }
     
+    /**
+     * 根据Class获取版本号,
+     * <li>查找MANIFEST.MF规范中的实现版本
+     * <li>根据jar命名规则确定版本号
+     * 
+     * @param cls class
+     * @param defaultVersion 找不到确定的版本号时的默认值
+     * @return
+     */
     public static String getVersion(Class<?> cls, String defaultVersion) {
         try {
             // 首先查找MANIFEST.MF规范中的版本号

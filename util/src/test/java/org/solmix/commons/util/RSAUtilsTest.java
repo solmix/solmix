@@ -48,8 +48,8 @@ public class RSAUtilsTest extends Assert
     
     @Test
     public void generationKey()throws Exception{
-        privateKey="MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAIL1Vub2R41nA2nxjk414023rooV2KDulI0IX12+/cU5RJoCkln6uB5B8xSh6NGWo22Fl5IfcAflL+g8FV5FgglL1tXWXMbiDYD1zvs2Xrf77hWV0Xn6InNS3Ijrfxw1AggUc1mXehY5/Le9CPGszRkQmWeh6VtApG3UM/EkdIh9AgMBAAECgYEAgGmggDNIsFAt2cniV7ChpciSXpbTZ+LqSWzHTr6ESstACKCy74ZY2lqiyD2HdVT4BeH0YXVwPl2u31NjRKB1w8zcyAKvYXrXKGp7OVByz/YMVcIijtui/8MLrRiAxe69OiDRhE9lA7io+gnYUKLnyv7HJDjQzIvwz/1qJS9iqKUCQQDK7Rvu4ZC54YwAYnVRnyh6geJ1DaGYd09BMIAlrR4Poc9f1Ej+RJiJX3wlHHzveLC7TSHF/D3B3WIxelp3NvovAkEApTWif6Bi2S+MkKvgIMf02H3eLd+2+VmK6QV0SUTFdwH9QPEv1Z+WJpMckM+8cavAxYAUemo0J7fEvPLa16y5EwJBAJA0JyF+kcZGDaNIVG6IV8+W9UKRSUB7qIp+2NHtT+tz5VYIGUb3oB4fCK2mrPHQJmczzMhRE+HsXJckh50oKGkCQF9RlrP0IZQVbxB5WhMPyyCtXmcxUCyFkTPoxbMQTq3fI/M4NNUYAlW3Qx/5+0vKQKqyvx3x8K2JxaUOqV0OdqkCQALxlO+Sls96MOo/OaBsCRLL0yQf49+Kcc7RhSSem5rmhL3lXgmpHMFsg5dxB9SSdPVy/+hpHigr59Uk0+7Vrc4=";
-        String source = "2015-10-1~2016-02-01:1/10.176.34.59";
+        privateKey="MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAILmsCwCl76KdS7OryipI38ew9oY4RpDqsd2seAq0evuS8U8EGRIxQVd0YkbC9PeHt5F8fSrZivbg6s1+dhlAfe03tTFsW2YH9QtsGMLOEKv2Ihln80mM2UnrzY8IiuURD3K2/dqTDrTumICyrt1klmYJ5u5JXTx2izKDL/JvKKlAgMBAAECgYBRNfOoajdgdB/9WSccT8sA68JQRc0p8T87nmz+iTJRcDa79+angOoSyUDdEdWFrTFzbuuMguXRYc/PYZ5O3WOZObifoHvaGP/hDW7S8+oVuK1IFEnveM+33r2EzceAnpKR4FtfSWq7A4ziEoY1PujpxZWTBDD/dzCdRvwgRK+7QQJBAME+wyCNkBOu5BKYnIloMS9f0KSDDkk/srca/fBUEjSZbZhRUvETRXEoYeOjxuTf2hvFjiGNAhSHx/0OOia13zUCQQCtaQS5diDx7Vh26x6ugn6MZYwUb+Bvt35+HqvjLzD9k5PELDaZQf9MxfWsceny79ttWgWFloyj6XanOGokZvOxAkEAq44RYmPqhV7dARlU1rOV/q28J2BlnWecO+wNhn7MTr/qyK9hx71JB8VG6fWqi+Oi2MbQgD6TmzBTvfcUbutFBQJAL3gUBwDDO/aQxNzP5U1rfts9YUrO0UYVpkiXHPWKH6AKTyUbPRDH5ig6fB4iwJHQKzr9T/hKP4RlKplS1OwpwQJAZVYVCwYuNiWv45fugTZzOD6viDPh/Pbd3cC/BYaw4TdnBXV6KzNQjsghd5vXsgyVbt4kCDn37Cj90KVriuuQqg==";
+        String source = "jdbc:oracle:thin:@10.176.162.76:1521:empt";
         System.out.println("原文字：\r\n" + source);
         byte[] data = source.getBytes();
         byte[] encodedData = RSAUtils.encryptByPrivateKey(data, privateKey);

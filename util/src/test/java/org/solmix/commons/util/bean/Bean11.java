@@ -16,19 +16,21 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
-package org.solmix.commons.util;
+package org.solmix.commons.util.bean;
 
 /**
  * 
  * @version 110035
  */
-public class Bean1
+public class Bean11
 {
    private int a;
 
    private boolean a11;
 
    /**
+    * s
+    * 
     * @return the a11
     */
    public boolean isA11()

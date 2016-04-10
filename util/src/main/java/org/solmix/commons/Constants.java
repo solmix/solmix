@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 The Solmix Project
  *
  * This is free software; you can redistribute it and/or modify it
@@ -38,6 +38,7 @@ public class Constants
     public static final String  PATH_KEY                           = "path";
 
     public static final String  INTERFACE_KEY                      = "interface";
+    
     public static final String  VERSION_KEY                        = "version";
 
     public static final String  REVISION_KEY                       = "revision";

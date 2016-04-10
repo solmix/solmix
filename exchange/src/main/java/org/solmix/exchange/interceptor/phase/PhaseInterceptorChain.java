@@ -447,7 +447,7 @@ public class PhaseInterceptorChain implements InterceptorChain {
                     }
                     pause();
                     throw suspended;
-                } catch (Exception ex) {
+                } catch (RuntimeException ex) {
                     //发生Exception时启动异常处理.
                     if (!faultOccurred) {
                         faultOccurred = true;
@@ -541,19 +541,14 @@ public class PhaseInterceptorChain implements InterceptorChain {
         while (iterator.hasPrevious()) {
             @SuppressWarnings("unchecked")
             Interceptor<Message> currentInterceptor = (Interceptor<Message>) iterator.previous();
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Invoking handleFault on interceptor "
-                    + currentInterceptor);
-            }
+            LOG.trace("Invoking handleFault on interceptor {}",  currentInterceptor);
             try {
                 currentInterceptor.handleFault(message);
             } catch (RuntimeException e) {
-                LOG.warn("Exception in handleFault on interceptor "
-                    + currentInterceptor, e);
+                LOG.warn("Exception in handleFault on interceptor "+ currentInterceptor, e);
                 throw e;
             } catch (Exception e) {
-                LOG.warn("Exception in handleFault on interceptor "
-                    + currentInterceptor, e);
+                LOG.warn("Exception in handleFault on interceptor "+ currentInterceptor, e);
                 throw new RuntimeException(e);
             }
         }

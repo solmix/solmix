@@ -23,6 +23,7 @@ import java.util.Map;
 
 
 /**
+ * 实现基于class.getName()为主键存放Object实例的功能.
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2014年10月10日
