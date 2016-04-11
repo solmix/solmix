@@ -83,9 +83,13 @@ public abstract class AbstractDownloadCommand
         throws IOException {
         File file = new File(finalname);
         if (file.exists()) {
-            System.out.println("Ignoring bundle from \u001B[36m" + location
-                + "\u001B[0m ");
-            return;
+            if(finalname.toLowerCase().contains("snapshot/")){
+                System.out.println("Override bundle from \u001B[33m" + location
+                    + "\u001B[0m");
+            }else{
+                System.out.println("Ignore bundle from \u001B[36m" + location
+                    + "\u001B[0m ");
+            }
         } else {
             System.out.println("Downloading bundle from \u001B[33m" + location
                 + "\u001B[0m");
