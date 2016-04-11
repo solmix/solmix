@@ -48,8 +48,8 @@ public class RSAUtilsTest extends Assert
     
     @Test
     public void generationKey()throws Exception{
-        privateKey="MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAILmsCwCl76KdS7OryipI38ew9oY4RpDqsd2seAq0evuS8U8EGRIxQVd0YkbC9PeHt5F8fSrZivbg6s1+dhlAfe03tTFsW2YH9QtsGMLOEKv2Ihln80mM2UnrzY8IiuURD3K2/dqTDrTumICyrt1klmYJ5u5JXTx2izKDL/JvKKlAgMBAAECgYBRNfOoajdgdB/9WSccT8sA68JQRc0p8T87nmz+iTJRcDa79+angOoSyUDdEdWFrTFzbuuMguXRYc/PYZ5O3WOZObifoHvaGP/hDW7S8+oVuK1IFEnveM+33r2EzceAnpKR4FtfSWq7A4ziEoY1PujpxZWTBDD/dzCdRvwgRK+7QQJBAME+wyCNkBOu5BKYnIloMS9f0KSDDkk/srca/fBUEjSZbZhRUvETRXEoYeOjxuTf2hvFjiGNAhSHx/0OOia13zUCQQCtaQS5diDx7Vh26x6ugn6MZYwUb+Bvt35+HqvjLzD9k5PELDaZQf9MxfWsceny79ttWgWFloyj6XanOGokZvOxAkEAq44RYmPqhV7dARlU1rOV/q28J2BlnWecO+wNhn7MTr/qyK9hx71JB8VG6fWqi+Oi2MbQgD6TmzBTvfcUbutFBQJAL3gUBwDDO/aQxNzP5U1rfts9YUrO0UYVpkiXHPWKH6AKTyUbPRDH5ig6fB4iwJHQKzr9T/hKP4RlKplS1OwpwQJAZVYVCwYuNiWv45fugTZzOD6viDPh/Pbd3cC/BYaw4TdnBXV6KzNQjsghd5vXsgyVbt4kCDn37Cj90KVriuuQqg==";
-        String source = "jdbc:oracle:thin:@10.176.162.76:1521:empt";
+        privateKey="";
+        String source = "";
         System.out.println("原文字：\r\n" + source);
         byte[] data = source.getBytes();
         byte[] encodedData = RSAUtils.encryptByPrivateKey(data, privateKey);

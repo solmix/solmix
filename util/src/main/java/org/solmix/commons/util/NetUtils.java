@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.collections.LRUCache;
+import org.solmix.commons.net.IPAddress;
 
 /**
  * IP and Port Helper for RPC, 
@@ -314,5 +315,9 @@ public class NetUtils {
 		sb.append(path);
 		return sb.toString();
 	}
+    
+    public static String toIpAddrString(final InetAddress addr){
+        return new IPAddress(addr).toIpAddrString();
+    }
     
 }
