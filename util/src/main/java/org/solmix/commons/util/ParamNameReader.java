@@ -29,6 +29,7 @@ import java.util.Map;
 
 
 /**
+ * 根据字节码读取参数名称
  * 
  * @author solmix.f@gmail.com
  * @version $Id$  2015年9月21日

@@ -282,7 +282,9 @@ public class DataTypeMap implements Map<String, Object> {
             return defaultValue;
         if (value instanceof Date)
             return (Date) value;
-        else {
+        else if(value instanceof Long){
+            return new Date((Long)value);
+        }else{
             return null;
         }
     }

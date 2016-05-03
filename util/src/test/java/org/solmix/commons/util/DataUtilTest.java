@@ -127,4 +127,10 @@ public class DataUtilTest
         Assert.assertEquals(3, aa.size());
         Assert.assertEquals("11", aa.get(0));
     }
+    
+    @Test
+    public void test_buildMap(){
+        Map<Object,Object> re = DataUtils.buildMap("var",2,"vv",3);
+        Assert.assertEquals(2, re.size());
+    }
 }

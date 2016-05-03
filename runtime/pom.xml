@@ -72,7 +72,11 @@
 			<optional>true</optional>
 			<scope>provided</scope>
 		</dependency>
-		
+			<dependency>
+            <groupId>tanukisoft</groupId>
+            <artifactId>wrapper</artifactId>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -96,16 +100,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.2</version>
-			</plugin>
 		</plugins>
 	</build>
 	<properties>
@@ -117,6 +111,7 @@
 			net.sf.cglib.proxy*;resolution:=optional,
 			com.sun.management;resolution:=optional,
 			javassist*;resolution:=optional,
+			org.tanukisoftware*;resolution:=optional,
 			*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>

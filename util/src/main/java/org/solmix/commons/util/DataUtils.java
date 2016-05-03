@@ -781,72 +781,18 @@ public final class DataUtils
         return result;
     }
 
-    public static Map buildMap(Object key, Object value) {
-        return buildMap(key, value, null, null, null, null, null, null, null, null, null, null);
-    }
-
-    /**
-     * @param key
-     * @param value
-     * @param key2
-     * @param value2
-     * @return
-     */
-    public static Map buildMap(Object key, Object value, Object key2, Object value2) {
-        return buildMap(key, value, key2, value2, null, null, null, null, null, null, null, null);
-    }
-
-    public static Map buildMap(Object key, Object value, Object key2, Object value2, Object key3, Object value3) {
-        return buildMap(key, value, key2, value2, key3, value3, null, null, null, null, null, null);
-    }
-
-    public static Map buildMap(Object key, Object value, Object key2, Object value2, Object key3, Object value3, Object key4, Object value4) {
-        return buildMap(key, value, key2, value2, key3, value3, key4, value4, null, null, null, null);
-    }
-
-    public static Map buildMap(Object key, Object value, Object key2, Object value2, Object key3, Object value3, Object key4, Object value4,
-        Object key5, Object value5) {
-        return buildMap(key, value, key2, value2, key3, value3, key4, value4, key5, value5, null, null);
-    }
-
-    public static Map buildMap(Object key, Object value, Object key2, Object value2, Object key3, Object value3, Object key4, Object value4,
-        Object key5, Object value5, Object key6, Object value6) {
-        Map result = new HashMap();
-        if (key != null)
-            result.put(key, value);
-        if (key2 != null)
-            result.put(key2, value2);
-        if (key3 != null)
-            result.put(key3, value3);
-        if (key4 != null)
-            result.put(key4, value4);
-        if (key5 != null)
-            result.put(key5, value5);
-        if (key6 != null)
-            result.put(key6, value6);
+    public static Map<Object,Object> buildMap(Object... objects ){
+        if(objects==null){
+            return null;
+        }
+        if(objects.length%2!=0){
+            throw new IllegalArgumentException("buildMap must with pair object");
+        }
+        Map<Object,Object> result = new HashMap<Object,Object>();
+        for(int i=0;i<objects.length;i=i+2)
+        result.put(i, i+1);
         return result;
     }
-
-    public static Map buildMap(Object key, Object value, Object key2, Object value2, Object key3, Object value3, Object key4, Object value4,
-        Object key5, Object value5, Object key6, Object value6, Object key7, Object value7) {
-        Map result = new HashMap();
-        if (key != null)
-            result.put(key, value);
-        if (key2 != null)
-            result.put(key2, value2);
-        if (key3 != null)
-            result.put(key3, value3);
-        if (key4 != null)
-            result.put(key4, value4);
-        if (key5 != null)
-            result.put(key5, value5);
-        if (key6 != null)
-            result.put(key6, value6);
-        if (key7 != null)
-            result.put(key7, value7);
-        return result;
-    }
-
     /**
      * when the uri String start with "file:","jar:","http:","https:" return true.
      * 
@@ -1975,7 +1921,7 @@ public final class DataUtils
      * @param pairs
      * @return
      */
-    public static Map<String, String> toStringMap(String... pairs) {
+    public static Map<String, String> buildMap(String... pairs) {
         Map<String, String> parameters = new HashMap<String, String>();
         if (pairs.length > 0) {
             if (pairs.length % 2 != 0) {

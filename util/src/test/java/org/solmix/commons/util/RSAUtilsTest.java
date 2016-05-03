@@ -48,8 +48,8 @@ public class RSAUtilsTest extends Assert
     
     @Test
     public void generationKey()throws Exception{
-        privateKey="";
-        String source = "";
+//        privateKey="";
+        String source = "sdfeses";
         System.out.println("原文字：\r\n" + source);
         byte[] data = source.getBytes();
         byte[] encodedData = RSAUtils.encryptByPrivateKey(data, privateKey);

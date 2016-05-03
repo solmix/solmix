@@ -96,6 +96,27 @@ public class FileUtils
 
     public static final String CLASSPATH_URL_PREFIX = "classpath:";
 
+
+    public static boolean makeDirs(File dir, int numTries) throws InterruptedException {        
+        if (numTries < 1) {
+            throw new IllegalArgumentException("number of tries must be greater than zero");
+        }
+
+        int tries = 0;
+        while (tries++ < numTries) {
+            boolean result = dir.mkdirs();
+            if (result) {
+                return true;
+            } else {
+                if (dir.exists()) {
+                    return true;
+                } else {
+                    Thread.sleep(100);
+                }
+            }
+        }
+        return false;
+    }
     /**
      * 获取文件MD5值
      *
@@ -443,6 +464,21 @@ public class FileUtils
     public static void moveFile(String oldPath, String newPath) throws IOException {
         copyFile(oldPath, newPath);
         deleteFile(oldPath);
+    }
+    
+    public static boolean moveFile(File moveFrom, File moveTo) {
+        if (moveFrom.isDirectory()) {
+            throw new IllegalArgumentException("moveFrom is a directory " + moveFrom);
+        }
+        if (moveTo.isDirectory()) {
+            throw new IllegalArgumentException("moveTo is a directory " + moveTo);
+        }
+        boolean success = moveFrom.renameTo(moveTo);
+        if (!success) {
+            moveTo.delete();
+            success = moveFrom.renameTo(moveTo);
+        }
+        return success;
     }
 
     /**
@@ -877,6 +913,19 @@ public class FileUtils
         return normalizePath(path, true, false, false);
     }
 
+    public static void setReadWriteOnlyByOwner(File file) throws IOException {
+
+        String path = file.getAbsolutePath();
+
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+              return;
+        }
+        //Unix type systems
+        else {
+              Runtime.getRuntime().exec("chmod 600 " + path);
+        }
+      }
+
 }
 
 class ExtensionFileFilter implements FileFilter
@@ -910,5 +959,4 @@ class ExtensionFileFilter implements FileFilter
             return this.extension.equals(name.substring(idx + 1));
         }
     }
-
 }

@@ -41,4 +41,20 @@ public class TokenUtils
         return token;
     }
 
+    public static String generateRandomToken(){
+        Random r;
+        long rand1, rand2;
+
+        r = new Random(System.currentTimeMillis());
+        rand1 = Math.abs(r.nextLong());
+        try { 
+            Thread.sleep(rand1%100); 
+        } catch(InterruptedException e){
+        }
+        
+        rand2 = r.nextLong();
+        return System.currentTimeMillis() + "-" +
+            Math.abs(rand1) + "-" + Math.abs(rand2);
+    }
+
 }
