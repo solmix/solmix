@@ -156,7 +156,7 @@ public abstract class AbstractNamespace implements Namespace {
     public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
         if(type.isInstance(this))
             return type.cast(this);
-        Container sc= Containers.get();
+        Container sc= Containers.getThreadDefaultContainer();
         if(sc==null)
             return null;
         AdapterManager apm= sc.getExtension(AdapterManager.class);

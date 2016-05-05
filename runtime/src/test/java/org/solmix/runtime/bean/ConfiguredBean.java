@@ -37,6 +37,9 @@ public class ConfiguredBean implements Configurable
 
     private  String configureName;
 
+    public ConfiguredBean(){
+        
+    }
     public ConfiguredBean(String configureName)
     {
         this.configureName = configureName;

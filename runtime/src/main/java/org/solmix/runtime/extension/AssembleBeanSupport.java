@@ -95,7 +95,7 @@ public class AssembleBeanSupport
         try {
             try {
                 // if there is a container constructor, use it.
-                if (container != null && args == null) {
+                if (container != null && (args==null||args.length==0)) {
                     Constructor<T> con = assemblyType.getConstructor(Container.class);
                     obj = con.newInstance(container);
                     return obj;

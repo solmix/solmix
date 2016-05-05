@@ -44,7 +44,7 @@ public class MonitorServiceTest {
      */
     @After
     public void tearDown() throws Exception {
-        Containers.set(null);
+        Containers.setThreadDefaultContainer(null);
     }
 
     @Test

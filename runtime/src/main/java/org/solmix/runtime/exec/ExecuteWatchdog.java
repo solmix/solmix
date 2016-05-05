@@ -15,9 +15,6 @@ package org.solmix.runtime.exec;
  * }
  * </pre>
  
- * @author thomas.haas@softwired-inc.com
- * @author <a href="mailto:sbailliez@imediation.com">Stephane Bailliez</a>
- * @see Execute
  */
 public class ExecuteWatchdog implements Runnable {
         

@@ -31,7 +31,7 @@
        </triggeringPolicy>
     </appender> 
     <logger name="org.apache.velocity"  level="INFO" />  
-    <logger name="org.solmix" level="TRACE" />  
+    <logger name="org.solmix" level="INFO" />  
     
     <!-- 日志输出级别 -->
     <root level="INFO">   

@@ -59,7 +59,6 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-junit</artifactId>
-			<version>2.0.0.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -70,11 +69,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-		    <groupId>org.jasypt</groupId>
-		    <artifactId>jasypt</artifactId>
-		    <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
@@ -109,7 +103,6 @@
 			javax.servlet;resolution:=optional;version="(2,4)",
 			javax.servlet.http;resolution:=optional;version="(2,4)",
 			org.apache.commons.vfs;resolution:=optional,
-			org.jasypt.*;resolution:=optional,
 			org.apache.commons.net;resolution:=optional,
 			javax.resource.spi.work;resolution:=optional,
 			org.solmix.osgi.proxy;resolution:=optional,

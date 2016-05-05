@@ -41,6 +41,11 @@
 		    <scope>provided</scope>
 		</dependency>
 		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
 		    <groupId>org.javassist</groupId>
 		    <artifactId>javassist</artifactId>
 		    <scope>provided</scope>
@@ -111,6 +116,7 @@
 			net.sf.cglib.proxy*;resolution:=optional,
 			com.sun.management;resolution:=optional,
 			javassist*;resolution:=optional,
+			org.jasypt.*;resolution:=optional,
 			org.tanukisoftware*;resolution:=optional,
 			*
 		</solmix.osgi.import.pkg>

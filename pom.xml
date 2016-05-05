@@ -47,6 +47,7 @@
 		<module>exchange</module>
 		<module>services</module>
 		<module>karaf</module>
+		<module>test</module>
 	</modules>
 	<properties>
 		<freemarker.version>2.3.23</freemarker.version>
@@ -58,6 +59,8 @@
 		<jasypt.bundle.version>1.7_1</jasypt.bundle.version>
 		<jetty.version>9.0.5.v20130815</jetty.version><!-- 9.2.14.v20151106 -->
 		<junit.bundle.version>4.7_2</junit.bundle.version>
+		<junit.version>4.7</junit.version>
+		<hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 		<jta.version>1.1.1</jta.version>
 		<geronimo.servlet.version>1.2</geronimo.servlet.version>
 		<depends.maven.plugin.version>1.2</depends.maven.plugin.version>
@@ -416,9 +419,14 @@
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.servicemix.bundles</groupId>
-				<artifactId>org.apache.servicemix.bundles.junit</artifactId>
-				<version>${junit.bundle.version}</version>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-junit</artifactId>
+				<version>${hamcrest-junit.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.servicemix.bundles</groupId>
@@ -1138,7 +1146,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
