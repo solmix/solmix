@@ -18,7 +18,8 @@
  */
 package org.solmix.commons.expr.jexl;
 
-import org.apache.commons.jexl2.JexlEngine;
+import org.apache.commons.jexl3.JexlBuilder;
+import org.apache.commons.jexl3.JexlEngine;
 import org.solmix.commons.expr.Expression;
 import org.solmix.commons.expr.ExpressionContext;
 import org.solmix.commons.expr.ExpressionFactory;
@@ -33,7 +34,7 @@ import org.solmix.commons.expr.ExpressionParseException;
 
 public class JexlExpressionFactory implements ExpressionFactory
 {
-    private final JexlEngine engine = new JexlEngine();
+    private final JexlEngine engine =new JexlBuilder().create();
 
     /** 是否支持context变量，就是用小数点分隔的变量名。 */
     private boolean supportContextVariables = true;
@@ -62,6 +63,7 @@ public class JexlExpressionFactory implements ExpressionFactory
      * @param expr 表达式字符串
      * @return 表达式
      */
+    @Override
     public Expression createExpression(final String expr) throws ExpressionParseException {
         final Expression jexlExpression;
 
@@ -78,6 +80,7 @@ public class JexlExpressionFactory implements ExpressionFactory
                  *
                  * @return 表达式字符串表示
                  */
+                @Override
                 public String getExpressionText() {
                     return expr;
                 }
@@ -88,6 +91,7 @@ public class JexlExpressionFactory implements ExpressionFactory
                  * @param context <code>ExpressionContext</code>上下文
                  * @return 表达式的计算结果
                  */
+                @Override
                 public Object evaluate(ExpressionContext context) {
                     // 首先执行jexl表达式
                     Object value = jexlExpression.evaluate(context);

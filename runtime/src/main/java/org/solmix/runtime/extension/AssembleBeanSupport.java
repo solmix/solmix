@@ -102,10 +102,12 @@ public class AssembleBeanSupport
                 } else if (container != null && args != null) {
                     Constructor<T> con;
                     boolean noc = false;
+                    
                     try {
-                        con = assemblyType.getConstructor(Container.class, Object[].class);
+                      
+                        con = assemblyType.getConstructor(getTypes(container,args));
                     } catch (Exception ex) {
-                        con = assemblyType.getConstructor(Object[].class);
+                        con = assemblyType.getConstructor(getTypes(null,args));
                         noc = true;
                     }
                     if (noc) {
@@ -133,5 +135,19 @@ public class AssembleBeanSupport
             throw new ExtensionException("PROBLEM_FINDING_CONSTRUCTOR", e);
         }
         return obj;
+    }
+    
+    private Class<?>[] getTypes(Container c,Object[] args){
+        int length =c==null?args.length:args.length+1;
+        Class<?>[] types = new Class<?>[length];
+        int i=0;
+        if(c!=null){
+            types[0]=Container.class;
+            i=1;
+        }
+        for(;i<types.length;i++){
+            types[i]=args[i].getClass();
+        }
+        return types;
     }
 }

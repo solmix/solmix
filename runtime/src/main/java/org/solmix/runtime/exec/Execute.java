@@ -27,6 +27,9 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 
  * @author solmix.f@gmail.com
@@ -396,7 +399,6 @@ public class Execute
         }
     }
 
-    private static org.apache.commons.logging.Log log=
-        org.apache.commons.logging.LogFactory.getLog( Execute.class );
+    private static Logger log=    LoggerFactory.getLogger(Execute.class);
     
 }

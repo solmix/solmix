@@ -19,8 +19,7 @@
 
 package org.solmix.commons.expr.jexl;
 
-import org.apache.commons.jexl2.Expression;
-import org.apache.commons.jexl2.JexlContext;
+import org.apache.commons.jexl3.JexlContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.expr.ExpressionContext;
@@ -37,14 +36,14 @@ public class JexlExpression implements org.solmix.commons.expr.Expression
 
     private static final Logger log = LoggerFactory.getLogger(JexlExpression.class);
 
-    private Expression expression;
+    private org.apache.commons.jexl3.JexlExpression expression;
 
     /**
      * 创建一个Jexl表达式。
      *
      * @param expr jexl表达式对象
      */
-    public JexlExpression(Expression expr)
+    public JexlExpression(org.apache.commons.jexl3.JexlExpression expr)
     {
         this.expression = expr;
     }
@@ -54,8 +53,9 @@ public class JexlExpression implements org.solmix.commons.expr.Expression
      *
      * @return 表达式字符串表示
      */
+    @Override
     public String getExpressionText() {
-        return expression.getExpression();
+        return expression.getSourceText();
     }
 
     /**
@@ -64,12 +64,13 @@ public class JexlExpression implements org.solmix.commons.expr.Expression
      * @param context <code>ExpressionContext</code>上下文
      * @return 表达式的计算结果
      */
+    @Override
     public Object evaluate(ExpressionContext context) {
         try {
             JexlContext jexlContext = new JexlContextAdapter(context);
 
             if (log.isDebugEnabled()) {
-                log.debug("Evaluating EL: " + expression.getExpression());
+                log.debug("Evaluating EL: " + expression.getSourceText());
             }
 
             Object value = expression.evaluate(jexlContext);
@@ -96,14 +97,17 @@ public class JexlExpression implements org.solmix.commons.expr.Expression
             this.expressionContext = Assert.assertNotNull(expressionContext, "expressionContext");
         }
 
+        @Override
         public Object get(String key) {
             return expressionContext.get(key);
         }
 
+        @Override
         public void set(String key, Object value) {
             expressionContext.put(key, value);
         }
 
+        @Override
         public boolean has(String key) {
             return expressionContext.get(key) != null;
         }

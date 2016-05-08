@@ -20,6 +20,8 @@ package org.solmix.commons.xml;
 
 import java.util.Map;
 
+import org.solmix.commons.util.SystemPropertyAction;
+
 
 /**
  * 
@@ -76,8 +78,15 @@ public class VariablesParser
           return builder.toString();
         }
     }
+    /**变量映射*/
     public static String parse(String string, Map<String,Object> variables) {
         VariableTokenHandler handler = new VariableTokenHandler(variables);
+        GenericTokenParser parser = new GenericTokenParser("${", "}", handler);
+        return parser.parse(string);
+      }
+    /**首先在配置中查找,找不到通过System.getProperty*/
+    public static String parseWithSystem(String string, Map<String,Object> variables) {
+        VariableSystemHandler handler = new VariableSystemHandler(variables);
         GenericTokenParser parser = new GenericTokenParser("${", "}", handler);
         return parser.parse(string);
       }
@@ -89,6 +98,7 @@ public class VariablesParser
           this.variables = variables;
         }
 
+        @Override
         public String handleToken(String content) {
           if (variables != null && variables.containsKey(content)) {
             return variables.get(content).toString();
@@ -96,4 +106,26 @@ public class VariablesParser
           return "${" + content + "}";
         }
       }
+      
+      private static class VariableSystemHandler implements TokenHandler {
+          private Map<String,Object> variables;
+
+          public VariableSystemHandler(Map<String,Object> variables) {
+            this.variables = variables;
+          }
+
+          @Override
+        public String handleToken(String content) {
+            if (variables != null && variables.containsKey(content)) {
+              return variables.get(content).toString();
+            }else{
+                String prop=SystemPropertyAction.getProperty(content);
+                if(prop!=null){
+                    return prop;
+                }else{
+                    return "${" + content + "}";
+                }
+            }
+          }
+        }
 }

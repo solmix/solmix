@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Copies standard output and error of subprocesses to standard output and
  * error of the parent process.
@@ -115,8 +118,6 @@ public class PumpStreamHandler implements ExecuteStreamHandler {
         result.setDaemon(true);
         return result;
     }
-
-    private static org.apache.commons.logging.Log log=
-        org.apache.commons.logging.LogFactory.getLog( PumpStreamHandler.class );
+    private static Logger log=    LoggerFactory.getLogger(PumpStreamHandler.class);
 
 }

@@ -42,7 +42,7 @@ public class JexlTest
         MappedContext mc = new MappedContext();
         mc.put("host", "127.0.0.1");
         mc.put("name", "1");
-        Expression start = jf.createExpression("if(name>2) 'a' else 'b'");
+        Expression start = jf.createExpression("name>2? 'a' : 'b'");
         Object s = start.evaluate(mc);
         assertTrue(s.equals("b"));
     }
