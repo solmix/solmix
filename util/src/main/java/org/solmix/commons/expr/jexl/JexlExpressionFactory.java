@@ -34,6 +34,9 @@ import org.solmix.commons.expr.ExpressionParseException;
 
 public class JexlExpressionFactory implements ExpressionFactory
 {
+	public JexlExpressionFactory(){
+		System.out.println();
+	}
     private final JexlEngine engine =new JexlBuilder().create();
 
     /** 是否支持context变量，就是用小数点分隔的变量名。 */
