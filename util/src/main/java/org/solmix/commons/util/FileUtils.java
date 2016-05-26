@@ -32,6 +32,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -925,6 +926,22 @@ public class FileUtils
               Runtime.getRuntime().exec("chmod 600 " + path);
         }
       }
+
+	public static final int BUFSIZ = 2048;
+
+	public static void copyStream(InputStream is, OutputStream os) throws IOException {
+		copyStream(is, os, new byte[BUFSIZ]);
+	}
+
+	public static void copyStream(InputStream is, OutputStream os, byte[] buf)throws IOException {
+		int bytesRead = 0;
+		while (true) {
+			bytesRead = is.read(buf);
+			if (bytesRead == -1)
+				break;
+			os.write(buf, 0, bytesRead);
+		}
+	}
 
 }
 

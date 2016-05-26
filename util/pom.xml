@@ -97,6 +97,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt</artifactId>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.commons*;-noimport:=true</solmix.osgi.export.pkg>
@@ -106,8 +111,10 @@
 			org.apache.commons.vfs;resolution:=optional,
 			org.apache.commons.net;resolution:=optional,
 			javax.resource.spi.work;resolution:=optional,
+			org.jasypt.*;resolution:=optional,
 			org.solmix.osgi.proxy;resolution:=optional,
-			*;resolution:=optional</solmix.osgi.import.pkg>
+			*;resolution:=optional
+		</solmix.osgi.import.pkg>
 	</properties>
 	<packaging>bundle</packaging>
 </project>

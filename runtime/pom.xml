@@ -77,11 +77,6 @@
 			<optional>true</optional>
 			<scope>provided</scope>
 		</dependency>
-			<dependency>
-            <groupId>tanukisoft</groupId>
-            <artifactId>wrapper</artifactId>
-            <scope>provided</scope>
-        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -108,7 +103,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<solmix.osgi.export.pkg>org.solmix.runtime*</solmix.osgi.export.pkg>
+		<solmix.osgi.export.pkg>org.solmix.runtime*;-noimport:=true</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
 			javax.annotation,
 			org.springframework*;resolution:=optional;version="${spring.version}",

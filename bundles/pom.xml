@@ -45,6 +45,7 @@
 		<module>org.solmix.bundles.c3p0</module>
 		<module>org.solmix.bundles.druid</module>
 		<module>org.solmix.bundles.thumbnailator</module>
+		<module>org.solmix.bundles.sigar</module>
 	</modules>
 	<version>0.5.0</version>
 	<groupId>org.solmix.bundles</groupId>

@@ -21,7 +21,6 @@ import org.solmix.commons.util.ClassLoaderUtils;
 /**
  * Wrapper.
  * 
- * @author qian.lei
  */
 
 public abstract class Wrapper

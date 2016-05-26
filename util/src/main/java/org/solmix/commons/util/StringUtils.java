@@ -3,6 +3,7 @@ package org.solmix.commons.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -868,4 +869,51 @@ public final class StringUtils
             return output;
         }
     }
+    
+	public static String formatDuration(long duration) {
+		return formatDuration(duration, 0, false);
+	}
+
+	public static String formatDuration(long duration, int scale,
+			boolean minDigits) {
+		long hours, mins;
+		int digits;
+		double millis;
+
+		hours = duration / 3600000;
+		duration -= hours * 3600000;
+
+		mins = duration / 60000;
+		duration -= mins * 60000;
+
+		millis = (double) duration / 1000;
+
+		StringBuffer buf = new StringBuffer();
+
+		if (hours > 0 || minDigits == false) {
+			buf.append(
+					hours < 10 && minDigits == false ? "0" + hours : String
+							.valueOf(hours)).append(':');
+			minDigits = false;
+		}
+
+		if (mins > 0 || minDigits == false) {
+			buf.append(
+					mins < 10 && minDigits == false ? "0" + mins : String
+							.valueOf(mins)).append(':');
+			minDigits = false;
+		}
+
+		// Format seconds and milliseconds
+		NumberFormat fmt = NumberFormat.getInstance();
+		digits = (minDigits == false || (scale == 0 && millis >= 9.5) ? 2 : 1);
+		fmt.setMinimumIntegerDigits(digits);
+		fmt.setMaximumIntegerDigits(2); // Max of 2
+		fmt.setMinimumFractionDigits(0); // Don't need any
+		fmt.setMaximumFractionDigits(scale);
+
+		buf.append(fmt.format(millis));
+
+		return buf.toString();
+	}
 }

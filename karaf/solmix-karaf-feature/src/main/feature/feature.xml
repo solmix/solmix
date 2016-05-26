@@ -10,6 +10,10 @@
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
 	</feature>
+	<feature name="solmix-karaf-wrapper" description="Karaf Wrapper"
+		version="4.0.5">
+		<bundle start-level="60">mvn:org.solmix.karaf/solmix-karaf-wrapper/4.0.5-SNAPSHOT</bundle>
+	</feature>
 	<feature name="solmix-tools" description="Solmix Tools"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>

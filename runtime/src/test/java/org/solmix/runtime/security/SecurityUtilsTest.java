@@ -31,7 +31,7 @@ import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.Test;
-import org.solmix.runtime.security.SecurityUtils;
+import org.solmix.commons.util.SecurityUtils;
 
 import junit.framework.Assert;
 

@@ -31,6 +31,7 @@ import java.util.Set;
 
 import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.PropertyUtils;
+import org.solmix.commons.util.SecurityUtils;
 import org.solmix.commons.util.TokenUtils;
 
 /**

@@ -12,5 +12,6 @@
   <modules>
   	<module>solmix-karaf-tools</module>
   	<module>solmix-karaf-feature</module>
+  	<module>solmix-karaf-wrapper</module>
   </modules>
 </project>

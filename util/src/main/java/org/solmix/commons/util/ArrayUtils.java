@@ -3610,4 +3610,30 @@ public class ArrayUtils {
     public static boolean arrayContains(char[] array, char[] arrayToFind) {
         return arrayIndexOf(array, arrayToFind) != -1;
     }
+
+	public static Object[] combine(Object[] a1, Object[] a2) {
+		Object[] r;
+		Class c;
+		if (a1 == null) {
+			if (a2 == null) {
+				return null;
+			}
+			c = a2.getClass().getComponentType();
+			r = (Object[]) java.lang.reflect.Array.newInstance(c, a2.length);
+			System.arraycopy(a2, 0, r, 0, a2.length);
+
+		} else if (a2 == null) {
+			c = a1.getClass().getComponentType();
+			r = (Object[]) java.lang.reflect.Array.newInstance(c, a1.length);
+			System.arraycopy(a1, 0, r, 0, a1.length);
+		} else {
+			c = a1.getClass().getComponentType();
+			r = (Object[]) java.lang.reflect.Array.newInstance(c, a1.length
+					+ a2.length);
+			System.arraycopy(a1, 0, r, 0, a1.length);
+			System.arraycopy(a2, 0, r, a1.length, a2.length);
+		}
+
+		return r;
+	}
 }
