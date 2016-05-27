@@ -50,7 +50,9 @@ public class WrapperServiceImpl implements WrapperService {
         File etc = new File(System.getProperty("karaf.etc"));
         File bin = new File(base, "bin");
         File lib = new File(base, "lib/wrapper");
-
+        
+        File jni = new File(base, "lib/jni");
+        mkdir(jni);
         if (name == null) {
             name = base.getName();
         }
@@ -65,14 +67,17 @@ public class WrapperServiceImpl implements WrapperService {
         props.put("${displayName}", displayName);
         props.put("${description}", description);
         props.put("${startType}", startType);
+        props.put("${libPath}", "wrapper.java.library.path.1=%KARAF_HOME%/lib/wrapper/ \n wrapper.java.library.path.2=%KARAF_HOME%/lib/jni/  \n");
 
         String os = System.getProperty("os.name", "Unknown");
         File serviceFile;
         File wrapperConf;
         File systemdFile = null;
+        boolean usedOldVersion=false;
         if (os.startsWith("Win")) {
             String arch = System.getProperty("os.arch");
             if (arch.equalsIgnoreCase("amd64") || arch.equalsIgnoreCase("x86_64")) {
+            	usedOldVersion=true;
                 mkdir(bin);
 
                 copyResourceTo(new File(bin, name + "-wrapper.exe"), "windows64/karaf-wrapper.exe", false);
@@ -103,7 +108,7 @@ public class WrapperServiceImpl implements WrapperService {
             mkdir(bin);
 
             File file = new File(bin, name + "-wrapper");
-            copyResourceTo(file, "macosx/karaf-wrapper", false);
+            copyResourceTo(file, "macosx/32/karaf-wrapper", false);
             chmod(file, "a+x");
 
             serviceFile = new File(bin, name + "-service");
@@ -118,14 +123,14 @@ public class WrapperServiceImpl implements WrapperService {
             
             mkdir(lib);
 
-            copyResourceTo(new File(lib, "libwrapper.jnilib"), "macosx/libwrapper.jnilib", false);
+            copyResourceTo(new File(lib, "libwrapper.jnilib"), "macosx/32/libwrapper.jnilib", false);
         } else if (os.startsWith("Linux")) {
             String arch = System.getProperty("os.arch");
             if (arch.equalsIgnoreCase("amd64") || arch.equalsIgnoreCase("x86_64")) {
                 mkdir(bin);
 
                 File file = new File(bin, name + "-wrapper");
-                copyResourceTo(file, "linux64/karaf-wrapper", false);
+                copyResourceTo(file, "linux/x8664/karaf-wrapper", false);
                 chmod(file, "a+x");
 
                 serviceFile = new File(bin, name + "-service");
@@ -140,12 +145,112 @@ public class WrapperServiceImpl implements WrapperService {
                 copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
 
                 mkdir(lib);
-                copyResourceTo(new File(lib, "libwrapper.so"), "linux64/libwrapper.so", false);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/x8664/libwrapper.so", false);
+            }else if (arch.equalsIgnoreCase("ppc64")) {
+                mkdir(bin);
+
+                File file = new File(bin, name + "-wrapper");
+                copyResourceTo(file, "linux/ppc64/karaf-wrapper", false);
+                chmod(file, "a+x");
+
+                serviceFile = new File(bin, name + "-service");
+                copyFilteredResourceTo(serviceFile, "unix/karaf-service", props, envs, includes);
+                chmod(serviceFile, "a+x");
+
+                systemdFile = new File(bin, name + ".service");
+                copyFilteredResourceTo(systemdFile, "unix/karaf.service", props, envs, includes);
+                chmod(systemdFile, "a+x");
+
+                wrapperConf = new File(etc, name + "-wrapper.conf");
+                copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
+
+                mkdir(lib);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/ppc64/libwrapper.so", false);
+            }else if (arch.equalsIgnoreCase("ppc")||arch.equalsIgnoreCase("ppc32")) {
+                mkdir(bin);
+
+                File file = new File(bin, name + "-wrapper");
+                copyResourceTo(file, "linux/ppc32/karaf-wrapper", false);
+                chmod(file, "a+x");
+
+                serviceFile = new File(bin, name + "-service");
+                copyFilteredResourceTo(serviceFile, "unix/karaf-service", props, envs, includes);
+                chmod(serviceFile, "a+x");
+
+                systemdFile = new File(bin, name + ".service");
+                copyFilteredResourceTo(systemdFile, "unix/karaf.service", props, envs, includes);
+                chmod(systemdFile, "a+x");
+
+                wrapperConf = new File(etc, name + "-wrapper.conf");
+                copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
+
+                mkdir(lib);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/ppc32/libwrapper.so", false);
+            }else if (arch.equalsIgnoreCase("ppc64le")) {
+                mkdir(bin);
+
+                File file = new File(bin, name + "-wrapper");
+                copyResourceTo(file, "linux/ppc64le/karaf-wrapper", false);
+                chmod(file, "a+x");
+
+                serviceFile = new File(bin, name + "-service");
+                copyFilteredResourceTo(serviceFile, "unix/karaf-service", props, envs, includes);
+                chmod(serviceFile, "a+x");
+
+                systemdFile = new File(bin, name + ".service");
+                copyFilteredResourceTo(systemdFile, "unix/karaf.service", props, envs, includes);
+                chmod(systemdFile, "a+x");
+
+                wrapperConf = new File(etc, name + "-wrapper.conf");
+                copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
+
+                mkdir(lib);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/ppc64le/libwrapper.so", false);
+            }else if (arch.equalsIgnoreCase("armel")) {
+                mkdir(bin);
+
+                File file = new File(bin, name + "-wrapper");
+                copyResourceTo(file, "linux/armel32/karaf-wrapper", false);
+                chmod(file, "a+x");
+
+                serviceFile = new File(bin, name + "-service");
+                copyFilteredResourceTo(serviceFile, "unix/karaf-service", props, envs, includes);
+                chmod(serviceFile, "a+x");
+
+                systemdFile = new File(bin, name + ".service");
+                copyFilteredResourceTo(systemdFile, "unix/karaf.service", props, envs, includes);
+                chmod(systemdFile, "a+x");
+
+                wrapperConf = new File(etc, name + "-wrapper.conf");
+                copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
+
+                mkdir(lib);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/armel32/libwrapper.so", false);
+            }else if (arch.equalsIgnoreCase("armhf")) {
+                mkdir(bin);
+
+                File file = new File(bin, name + "-wrapper");
+                copyResourceTo(file, "linux/armhf32/karaf-wrapper", false);
+                chmod(file, "a+x");
+
+                serviceFile = new File(bin, name + "-service");
+                copyFilteredResourceTo(serviceFile, "unix/karaf-service", props, envs, includes);
+                chmod(serviceFile, "a+x");
+
+                systemdFile = new File(bin, name + ".service");
+                copyFilteredResourceTo(systemdFile, "unix/karaf.service", props, envs, includes);
+                chmod(systemdFile, "a+x");
+
+                wrapperConf = new File(etc, name + "-wrapper.conf");
+                copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
+
+                mkdir(lib);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/armhf32/libwrapper.so", false);
             } else {
                 mkdir(bin);
 
                 File file = new File(bin, name + "-wrapper");
-                copyResourceTo(file, "linux/karaf-wrapper", false);
+                copyResourceTo(file, "linux/x8632/karaf-wrapper", false);
                 chmod(file, "a+x");
 
                 serviceFile = new File(bin, name + "-service");
@@ -160,7 +265,7 @@ public class WrapperServiceImpl implements WrapperService {
                 copyFilteredResourceTo(wrapperConf, "unix/karaf-wrapper.conf", props, envs, includes);
 
                 mkdir(lib);
-                copyResourceTo(new File(lib, "libwrapper.so"), "linux/libwrapper.so", false);
+                copyResourceTo(new File(lib, "libwrapper.so"), "linux/x8632/libwrapper.so", false);
             }
         } else if (os.startsWith("AIX")) {
             String arch = System.getProperty("os.arch");
@@ -286,7 +391,12 @@ public class WrapperServiceImpl implements WrapperService {
 
         // install the wrapper jar to the lib directory
         mkdir(lib);
-        copyResourceTo(new File(lib, "karaf-wrapper.jar"), "all/karaf-wrapper.jar", false);
+        if(usedOldVersion){
+        	copyResourceTo(new File(lib, "karaf-wrapper.jar"), "all/3_2_3/karaf-wrapper.jar", false);
+        }else{
+        	copyResourceTo(new File(lib, "karaf-wrapper.jar"), "all/3_5_9/karaf-wrapper.jar", false);
+        }
+        
         mkdir(etc);
 
         createJar(new File(lib, "karaf-wrapper-main.jar"), "org/apache/karaf/wrapper/internal/service/Main.class");
