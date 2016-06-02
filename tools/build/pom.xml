@@ -1,13 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-  <groupId>org.solmix.common</groupId>
-  <artifactId>solmix-common-buildtools</artifactId>
-  <dependencies>
+	<artifactId>solmix-build-tools</artifactId>
+	<dependencies>
   	<dependency>
   		<groupId>jdom</groupId>
   		<artifactId>jdom</artifactId>
@@ -49,25 +49,24 @@
         <scope>provided</scope>
   	 </dependency>
   </dependencies>
-  <build>
-  <plugins>
-  <plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					 <configuration>
-				          <compilerVersion>1.7</compilerVersion>
-				          <fork>true</fork>
-				          <source>1.6</source>
-				          <target>1.6</target>
-				          <debug>true</debug>
-				          <encoding>${project.build.sourceEncoding}</encoding>
-				          <optimize>true</optimize>
-				          <showDeprecation>true</showDeprecation>
-				          <showWarnings>true</showWarnings>
-				        </configuration>
-				</plugin>
-  </plugins>
-  </build>
-  <version>1.0</version>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerVersion>1.7</compilerVersion>
+					<fork>true</fork>
+					<source>1.6</source>
+					<target>1.6</target>
+					<debug>true</debug>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<optimize>true</optimize>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<version>1.0</version>
 </project>

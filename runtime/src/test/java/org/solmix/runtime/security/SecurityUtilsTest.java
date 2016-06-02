@@ -32,6 +32,7 @@ import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.Test;
 import org.solmix.commons.util.SecurityUtils;
+import org.solmix.commons.util.TokenUtils;
 
 import junit.framework.Assert;
 
@@ -75,9 +76,10 @@ public class SecurityUtilsTest
     }
     @Test
     public void encrypt() throws Exception{
-        StringEncryptor encryptor= createEncryptor("23411");
-       String encrypted = SecurityUtils.encrypt(encryptor,"sdfe");
-       assertEquals("sdfe",SecurityUtils.decrypt(encryptor, encrypted));
+        StringEncryptor encryptor= createEncryptor("gdw");
+        String token  =TokenUtils.generateRandomToken();
+       String encrypted = SecurityUtils.encrypt(encryptor,token);
+       assertEquals(token,SecurityUtils.decrypt(encryptor, encrypted));
     }
     @Test
     public void encrypt2() {
