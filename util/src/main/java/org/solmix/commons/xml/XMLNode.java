@@ -121,6 +121,10 @@ public class XMLNode
     public String getName() {
       return name;
     }
+    
+    public Map<String,Object> getAttributes(){
+    	return attributes;
+    }
 
     public String getStringBody() {
       return getStringBody(null);

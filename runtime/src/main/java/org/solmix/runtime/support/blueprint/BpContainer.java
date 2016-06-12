@@ -85,10 +85,10 @@ public class BpContainer extends ContainerAdaptor
             ConfiguredBeanProvider.class);
 
     }
-
+    
     @Override
-    public void initialize() {
-        super.initialize();
+    protected void doInitializeInternal() {
+        super.doInitializeInternal();
         Set<String> ids =blueprintContainer.getComponentIds();
         ResourceManager rm  = getExtension(ResourceManager.class);
         ResourceInjector injector = new ResourceInjector(rm);
@@ -133,7 +133,7 @@ public class BpContainer extends ContainerAdaptor
         Dictionary<String, Object> properties = new Hashtable<String, Object>();
         properties.put(CONTAINER_PROPERTY_NAME, getId());
         bundleContext.registerService(Container.class, this, properties);
-    };
+    }
     
     private boolean injectable(Object bean,String beanId){
         return !"solmix".equals(beanId) && ResourceInjector.processable(bean.getClass(), bean);

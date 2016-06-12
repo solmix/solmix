@@ -57,11 +57,7 @@ public class OsgiConfigureUnitManager implements ConfigureUnitManager
         return admin;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.cm.ConfigureUnitManager#createFactoryConfigureUnit(java.lang.String)
-     */
+ 
     @Override
     public ConfigureUnit createFactoryConfigureUnit(String factoryPid) throws IOException {
         Configuration c = getConfigurationAdmin().createFactoryConfiguration(factoryPid);
@@ -72,27 +68,17 @@ public class OsgiConfigureUnitManager implements ConfigureUnitManager
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.cm.ConfigureUnitManager#getConfigureUnit(java.lang.String)
-     */
     @Override
     public ConfigureUnit getConfigureUnit(String pid) throws IOException {
         return new OsigConfigureUnitDelegating(getConfigurationAdmin().getConfiguration(pid));
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.api.cm.ConfigureUnitManager#listConfigureUnits(java.lang.String)
-     */
+   
     @Override
     public ConfigureUnit[] listConfigureUnits(String filter) throws IOException {
 
         try {
-            Configuration[] configs = getConfigurationAdmin().listConfigurations(
-                filter);
+            Configuration[] configs = getConfigurationAdmin().listConfigurations( filter);
             ConfigureUnit[] result = new ConfigureUnit[configs.length];
             for (int i = 0; i < configs.length; i++) {
                 result[i] = new OsigConfigureUnitDelegating(configs[i]);

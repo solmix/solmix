@@ -314,7 +314,7 @@ public class ExtensionInfo {
             notFound = true;
             if (!optional) {
                 throw new ExtensionException(
-                    "PROBLEM_CREATING_EXTENSION_CLASS", ex.getCause());
+                    "problem creating extension class", ex.getCause());
             } else {
                 LOG.info("Could not load optional extension " + getName(), ex);
             }
@@ -328,7 +328,7 @@ public class ExtensionInfo {
                 a.add(args);
             }
             if (!optional) {
-                throw new ExtensionException("PROBLEM_FINDING_CONSTRUCTOR", ex);
+                throw new ExtensionException("problem finding constructor", ex);
             } else {
                 LOG.info("Could not load optional extension " + getName(), ex);
             }
@@ -336,7 +336,7 @@ public class ExtensionInfo {
             notFound = true;
             if (!optional) {
                 throw new ExtensionException(
-                    "PROBLEM_CREATING_EXTENSION_CLASS", e);
+                    "problem creating extension class", e);
             } else {
                 LOG.info("Could not load optional extension " + getName(), e);
             }

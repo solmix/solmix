@@ -49,7 +49,7 @@ import org.solmix.runtime.extension.ExtensionManagerImpl;
 public class BlueprintBeanProvider implements ConfiguredBeanProvider
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BlueprintConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BlueprintBeanProvider.class);
 
     BundleContext bundleContext;
 
@@ -143,7 +143,7 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
                 }
             } catch (Exception ex) {
                 // ignore, just don't support the OSGi services
-                LOG.info("Try to find the Bean with type:" + type + " from OSGi services and get error: " + ex);
+                LOG.debug("Try to find the Bean with type:" + type + " from OSGi services and get error: " + ex);
             }
         }
         return res;
@@ -188,7 +188,7 @@ public class BlueprintBeanProvider implements ConfiguredBeanProvider
                 }
             } catch (Exception ex) {
                 // ignore, just don't support the OSGi services
-                LOG.info("Try to find the Bean with type:" + type + " from OSGi services and get error: " + ex);
+                LOG.debug("Try to find the Bean with type:" + type + " from OSGi services and get error: " + ex);
             }
         }
 

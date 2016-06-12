@@ -99,7 +99,7 @@ public class KeystoreManager
         try {
             KeyStore keystore = CustomKeyStore.getInstance(KeyStore.getDefaultType(), isDB,container);
             File file = new File(filePath);
-            char[] password = null;
+            char[] password =  filePassword.toCharArray();;
 
             if (!file.exists()) {
                 //throw IOException
@@ -107,7 +107,7 @@ public class KeystoreManager
                     throw new IOException("User specified keystore [" + filePath + "] does not exist.");
                 }
 
-                password = filePassword.toCharArray();
+                
                 createInternalKeystore(keystoreConfig);
                 FileUtils.setReadWriteOnlyByOwner(file);
             }
