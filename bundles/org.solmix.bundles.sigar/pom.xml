@@ -60,16 +60,10 @@
    <name>Solmix :: Bundles :: Sigar Bundle</name>
    <packaging>bundle</packaging>
    <dependencies>
-   	<dependency>
+   	 <dependency>
 			<groupId>org.fusesource</groupId>
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-	      			<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		</dependency> 
    </dependencies>
 </project>
