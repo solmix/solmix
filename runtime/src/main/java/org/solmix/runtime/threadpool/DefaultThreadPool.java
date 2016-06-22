@@ -115,6 +115,15 @@ public class DefaultThreadPool implements ThreadPool {
             name);
     }
     
+    public DefaultThreadPool(int coreThread,int queueSize, String name) {
+        this(queueSize,
+        		coreThread,
+        		coreThread*2,
+        		coreThread,
+	            2 * 60 * 1000L,
+	            name);
+    }
+    
     public DefaultThreadPool(int maxQueueSize,
         int initialThreads,
         int maxThreads,
