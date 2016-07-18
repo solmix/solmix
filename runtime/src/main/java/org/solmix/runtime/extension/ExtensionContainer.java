@@ -353,21 +353,22 @@ public class ExtensionContainer implements Container {
         this.status = status;
         int type = ContainerEvent.CREATED;
         switch (status) {
-            case CLOSED:
-                type = ContainerEvent.POSTCLOSE;
+            case CREATING:
+                return;
+            case INITIALIZING:
+            	type = ContainerEvent.INITIALIZING;
+            	break;
+            case CREATED:
+                type = ContainerEvent.CREATED;
                 break;
             case CLOSING:
                 type = ContainerEvent.PRECLOSE;
                 break;
-            case CREATED:
-                type = ContainerEvent.CREATED;
+            case CLOSED:
+                type = ContainerEvent.POSTCLOSE;
                 break;
-            case CREATING:
-                return;
-            case INITIALIZING:
-                return;
             default:
-                break;
+                return;
         }
         ContainerEvent event = new ContainerEvent(type, this, this);
         fireContainerEvent(event);
@@ -540,6 +541,10 @@ public class ExtensionContainer implements Container {
     @Override
     public boolean isProduction() {
         return production;
+    }
+    
+    public ExtensionManagerImpl getExtensionManager(){
+    	return extensionManager;
     }
 
     @Override

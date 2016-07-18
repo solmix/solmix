@@ -60,6 +60,7 @@
 		<jetty.version>9.0.5.v20130815</jetty.version><!-- 9.2.14.v20151106 -->
 		<junit.bundle.version>4.7_2</junit.bundle.version>
 		<junit.version>4.7</junit.version>
+		<unitils.version>3.4.2</unitils.version>
 		<hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 		<jta.version>1.1.1</jta.version>
 		<geronimo.servlet.version>1.2</geronimo.servlet.version>
@@ -422,6 +423,11 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.unitils</groupId>
+			    <artifactId>unitils-core</artifactId>
+			    <version>${unitils.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hamcrest</groupId>
@@ -1146,7 +1152,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -1154,6 +1159,11 @@
 			<artifactId>easymock</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>install</defaultGoal>

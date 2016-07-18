@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
+import org.solmix.runtime.ContainerListener;
 import org.solmix.runtime.extension.ExtensionContainer;
 
 
@@ -35,16 +36,26 @@ import org.solmix.runtime.extension.ExtensionContainer;
 public class ContainerFactoryImpl extends ContainerFactory
 {
 
+    
+    public Container createContainer(ContainerListener... listeners) {
+        return createContainer(new HashMap<Class<?>, Object>(),listeners);
+    }
     @Override
     public Container createContainer() {
-        return createContainer(new HashMap<Class<?>, Object>());
+        return createContainer((ContainerListener[])null);
     }
-    public Container createContainer(Map<Class<?>, Object> e) {
-        return createContainer(e, new HashMap<String, Object>());
+    public Container createContainer(Map<Class<?>, Object> e,ContainerListener... listeners) {
+        return createContainer(e, new HashMap<String, Object>(),listeners);
     }
-    public Container createContainer(Map<Class<?>, Object> e, Map<String, Object> properties) {
+    
+    public Container createContainer(Map<Class<?>, Object> e, Map<String, Object> properties,ContainerListener... listeners) {
         ExtensionContainer container = new ExtensionContainer(e, properties);
         possiblySetDefaultContainer(container);
+        if(listeners!=null&&listeners.length>0){
+        	for(ContainerListener listener:listeners){
+        		container.addListener(listener);
+        	}
+        }
         initializeContainer(container);
         container.initialize();
         return container;

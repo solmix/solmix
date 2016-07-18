@@ -87,6 +87,10 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
     }
     
+    public void addLocalExtensionInfo(ExtensionInfo info){
+    	all.put(info.getName(), info);
+    }
+    
    public ExtensionInfo getExtensionInfo(String name){
        return  all.get(name);
     }

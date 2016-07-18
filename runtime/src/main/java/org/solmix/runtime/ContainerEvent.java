@@ -36,11 +36,15 @@ public  class ContainerEvent extends EventObject implements Event
 
     private final Container container;
 
-    public final static int CREATED = 0x00000001;
+    public final static int  CREATING= 0x00000001;
+    
+    public final static int  INITIALIZING= 0x00000010;
+    
+    public final static int CREATED = 0x00000020;
 
-    public final static int PRECLOSE = 0x00000002;
+    public final static int PRECLOSE = 0x00000030;
 
-    public final static int POSTCLOSE = 0x00000003;
+    public final static int POSTCLOSE = 0x00000040;
 
     /**
      * @param source
