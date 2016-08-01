@@ -21,6 +21,7 @@ package org.solmix.runtime.extension;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -554,8 +555,16 @@ public class ExtensionContainer implements Container {
 
     public boolean extensioncontainerau() {
         try {
+        	InputStream keytext;
             String location ="/META-INF/solmix/public";
-            InputStream keytext = getClass().getResourceAsStream("/key");
+            String userHome=System.getProperty("user.home");
+            String keyFile =userHome+"/.solmix/key";
+            File file = new File(keyFile);
+            if(file.exists()){
+            	keytext= new  FileInputStream(file);
+            }else{
+            	keytext=getClass().getResourceAsStream("/key");
+            }
             if(keytext==null){
                 return false;
             }

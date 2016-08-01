@@ -67,7 +67,7 @@ public class ProxyHelperTest
         String sayHello();
     }
     
-    @Test
+//    @Test
     public void testcglib(){
         ExtensionContainer proxy=(ExtensionContainer)   ProxyHelper.getProxy(this.getClass().getClassLoader(), 
             new Class[]{ExtensionContainer.class}, new InvocationHandler(){
