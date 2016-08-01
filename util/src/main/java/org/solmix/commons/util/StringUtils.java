@@ -428,6 +428,19 @@ public final class StringUtils
         }
         return sb.toString();
     }
+    
+    public static String join(Object[] array, String split) {
+        if (array.length == 0)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0)
+                sb.append(split);
+            sb.append(array[i]);
+        }
+        return sb.toString();
+    }
+    
 
     /**
      * join string like javascript.
