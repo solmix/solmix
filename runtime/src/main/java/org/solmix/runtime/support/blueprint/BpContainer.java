@@ -21,8 +21,6 @@ package org.solmix.runtime.support.blueprint;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
@@ -130,9 +128,10 @@ public class BpContainer extends ContainerAdaptor
              
             }
         }
-        Dictionary<String, Object> properties = new Hashtable<String, Object>();
+ /*       //used org.solmix.runtime.osgi.BundleContainerListener
+  * Dictionary<String, Object> properties = new Hashtable<String, Object>();
         properties.put(CONTAINER_PROPERTY_NAME, getId());
-        bundleContext.registerService(Container.class, this, properties);
+        bundleContext.registerService(Container.class, this, properties);*/
     }
     
     private boolean injectable(Object bean,String beanId){

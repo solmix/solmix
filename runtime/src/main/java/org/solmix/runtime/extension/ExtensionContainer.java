@@ -427,7 +427,7 @@ public class ExtensionContainer implements Container {
         // Copy array
         synchronized (containerListeners) {
             //if not set ,call default.
-            if (firstFireContainerListener && containerListeners.size() == 0) {
+            if (firstFireContainerListener/* && containerListeners.size() == 0*/) {
                 firstFireContainerListener = false;
                 if(LOG.isTraceEnabled())
                     LOG.trace("NO found containerListener,try to load default ContainerListener!");
@@ -533,7 +533,7 @@ public class ExtensionContainer implements Container {
     public void setContainerListeners(List<ContainerListener> containerListeners) {
         if (containerListeners != null && containerListeners.size() > 0) {
             synchronized (this.containerListeners) {
-                this.containerListeners.clear();
+                /*this.containerListeners.clear();*/
                 this.containerListeners.addAll(containerListeners);
             }
         }
