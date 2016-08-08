@@ -16,13 +16,16 @@ public class OSGIBeanProvider implements ConfiguredBeanProvider
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(OSGIBeanProvider.class);
+    
     private static final String USED_OSGI_BEAN_PROVIDER = "org.solmix.runtime.osgi.USED_OSGI_PROVIDER";
 
+    public static final String SERVICE_NAME="service.name";
     final ConfiguredBeanProvider orign;
 
     final BundleContext context;
 
     private boolean checkCompatibleProvider;
+    
 
     public OSGIBeanProvider(ConfiguredBeanProvider provider, BundleContext defaultContext)
     {
@@ -30,6 +33,8 @@ public class OSGIBeanProvider implements ConfiguredBeanProvider
         this.context = defaultContext;
         Object check = context.getProperty(USED_OSGI_BEAN_PROVIDER);
         checkCompatibleProvider = check == null || DataUtils.asBoolean(check);
+       
+        
     }
 
     @Override

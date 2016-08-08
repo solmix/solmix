@@ -7,17 +7,21 @@ xmlns:beans="http://www.springframework.org/schema/beans"
  <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"/>
     <xsd:element name="container">
     <xsd:complexType>
-    	<xsd:all>
-    		<xsd:element name="listeners" type="xsd:anyType"
-    			minOccurs="0">
-    		</xsd:element>
-    		<xsd:element name="properties" type="beans:mapType"
-    			minOccurs="0">
-    		</xsd:element>
-    	</xsd:all>
+            <xsd:sequence>
+            	<xsd:choice minOccurs="0" maxOccurs="unbounded"><xsd:element name="listeners" type="xsd:anyType" minOccurs="0">
+            	</xsd:element><xsd:element name="properties" type="beans:mapType" minOccurs="0">
+            	</xsd:element><xsd:element name="ref" type="refType" minOccurs="0" maxOccurs="unbounded">
+            	</xsd:element></xsd:choice>
+            </xsd:sequence>
+            
     	<xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
     	<xsd:attribute name="name" type="xsd:string"></xsd:attribute>
     	<xsd:attribute name="production" type="xsd:boolean"></xsd:attribute>
     </xsd:complexType>
     </xsd:element>
+
+    <xsd:complexType name="refType">
+    	<xsd:attribute name="container-id" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="filter" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
 </xsd:schema>

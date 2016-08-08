@@ -23,6 +23,7 @@ import org.solmix.commons.util.ClassLoaderUtils;
 import org.solmix.commons.util.FileUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.resource.InputStreamResource;
+import org.solmix.runtime.support.blueprint.BundleDelegatingClassLoader;
 
 public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
 
@@ -119,22 +120,57 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
         String subPattern = locationPattern.substring(rootDirPath.length());
         InputStreamResource[] rootDirResources = getAsStreams(rootDirPath);
         Set<InputStreamResource> result = new LinkedHashSet<InputStreamResource>(16);
+        Collection<? extends InputStreamResource> matching=null ;
         for (InputStreamResource rootDirResource : rootDirResources) {
               if (isJarResource(rootDirResource)) {
-                    result.addAll(doFindPathMatchingJarResources(rootDirResource, subPattern));
+            	  	if(isBundleResource(rootDirResource)){
+            	  		matching=doFindPathMatchingBundleResources(rootDirResource, subPattern);
+            	  	}else{
+            	  		matching=doFindPathMatchingJarResources(rootDirResource, subPattern);
+            	  	}
               }
               else {
-                    result.addAll(doFindPathMatchingFileResources(rootDirResource, subPattern));
+            	  matching=doFindPathMatchingFileResources(rootDirResource, subPattern);
               }
+        }
+        if(matching!=null){
+        	result.addAll(matching);
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Resolved location pattern [" + locationPattern + "] to resources " + result);
         }
         return result.toArray(new InputStreamResource[result.size()]);
     }
-
     
-    protected Set<InputStreamResource> doFindPathMatchingFileResources(InputStreamResource rootDirResource, String subPattern) throws IOException {
+    private Collection<InputStreamResource> doFindPathMatchingBundleResources(InputStreamResource rootDirResource, String subPattern) throws IOException {
+			URL url =rootDirResource.getURL();
+			if(getClassLoader() instanceof BundleDelegatingClassLoader){
+				BundleDelegatingClassLoader loader  = (BundleDelegatingClassLoader)getClassLoader();
+				boolean recurse;
+				//查找子目录
+				if(subPattern.startsWith("**/")){
+					subPattern=subPattern.substring(3);
+					recurse=true;
+				}else{
+					recurse=false;
+				}
+				if(loader.getBundle()==null){
+					throw new IllegalStateException("BundleDelegatingClassLoader without bundle instance!");
+				}
+				Enumeration<URL> urls =loader.getBundle().findEntries(url.getPath(), subPattern, recurse);
+				if(urls!=null){
+		              Set<InputStreamResource> result = new LinkedHashSet<InputStreamResource>(8);
+					while(urls.hasMoreElements()){
+						URL u  = urls.nextElement();
+						result.add(new URLResource(u));
+					}
+					return result;
+				}
+			}
+		return null;
+	}
+    
+	protected Set<InputStreamResource> doFindPathMatchingFileResources(InputStreamResource rootDirResource, String subPattern) throws IOException {
         File rootDir;
         try {
               rootDir = rootDirResource.getFile().getAbsoluteFile();
@@ -305,10 +341,15 @@ public class PathMatchingResourceResolver extends ResourceResolverAdaptor {
         }
   }
     
-    protected boolean isJarResource(InputStreamResource resource) throws IOException {
-        
-        return FileUtils.isJarURL(resource.getURL());
-  }
+	protected boolean isJarResource(InputStreamResource resource)throws IOException {
+
+		return FileUtils.isJarURL(resource.getURL());
+	}
+
+	protected boolean isBundleResource(InputStreamResource resource)throws IOException {
+
+		return FileUtils.isBundleURL(resource.getURL());
+	}
     protected String determineRootDir(String location) {
         int prefixEnd = location.indexOf(":") + 1;
         int rootDirEnd = location.length();

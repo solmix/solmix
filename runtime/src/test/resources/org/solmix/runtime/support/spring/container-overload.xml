@@ -5,15 +5,22 @@
 	xmlns:c="http://www.solmix.org/schema/rt/v1.0.0"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.solmix.org/schema/rt/v1.0.0 http://www.solmix.org/schema/rt/rt-1.0.0.xsd ">
 	<!-- 不设置id，会覆盖默认的 -->
-	<c:container production="true">
+	<c:container id="solmix" production="true">
 		<c:properties>
 			<entry key="runtime.production" value="true" />
 		</c:properties>
+		<c:listeners>
+			<bean class="org.solmix.runtime.extension.ContainerListenerImpl"></bean>
+		</c:listeners> 
 	</c:container>
 	<c:container id="solmix2"  production="false">
 		<c:properties>
 			<entry key="runtime.production" value="false" />
 		</c:properties>
+		<c:ref container-id="solmix" filter="org.solmix.runtime.service*"/>
+		<c:listeners>
+			<bean class="org.solmix.runtime.extension.ContainerListenerImpl"></bean>
+		</c:listeners> 
 	</c:container>
 	
 	<bean class="org.solmix.runtime.service.ContainerAwareService"></bean>

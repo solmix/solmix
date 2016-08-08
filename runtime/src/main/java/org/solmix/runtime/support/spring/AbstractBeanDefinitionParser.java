@@ -130,7 +130,6 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
 
     protected void parseIdAttribute(BeanDefinitionBuilder bean, Element element,
         String name, String val, ParserContext ctx) {
-        
     }
 
     protected void parseAttribute(BeanDefinitionBuilder bean, Element e,
@@ -181,7 +180,7 @@ public class AbstractBeanDefinitionParser extends AbstractSingleBeanDefinitionPa
             && !"id".equals(name);
     }
 
-    private boolean isNamespace(String name, String prefix) {
+    protected boolean isNamespace(String name, String prefix) {
         return "xmlns".equals(prefix) || prefix == null && "xmlns".equals(name);
     }
 

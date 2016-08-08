@@ -19,6 +19,7 @@
 
 package org.solmix.runtime.support.spring;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,16 +27,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.solmix.commons.util.DataUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.extension.ContainerReference;
+import org.solmix.runtime.extension.ExtensionContainer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
+import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
 
 /**
@@ -141,9 +147,38 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             List<?> lis = ctx.getDelegate().parseListElement(e,
                 bean.getBeanDefinition());
             bean.addPropertyValue("containerListeners", lis);
+        } else if ("ref".equals(name)) {
+        	BeanDefinitionBuilder component = BeanDefinitionBuilder.genericBeanDefinition(ContainerReference.class);
+        	parseRefAttributes(e, ctx, component);
+        	bean.addPropertyValue("reference", component.getBeanDefinition());
         }
     }
-
+    @Override
+	protected void parseIdAttribute(BeanDefinitionBuilder bean, Element element,
+            String name, String val, ParserContext ctx) {
+    	bean.addPropertyValue(BeanDefinitionParserDelegate.ID_ATTRIBUTE, val);
+        }
+	protected boolean parseRefAttributes(Element element, ParserContext ctx,BeanDefinitionBuilder bean) {
+		NamedNodeMap atts = element.getAttributes();
+		boolean setContainer = false;
+		for (int i = 0; i < atts.getLength(); i++) {
+			Attr node = (Attr) atts.item(i);
+			String val = node.getValue();
+			String name = node.getLocalName();
+			String prefix = node.getPrefix();
+			if (isNamespace(name, prefix)) {
+				continue;
+			}
+			 String propertyName=name;
+			 if ("container-id".equals(name)) {
+				 propertyName="id";
+			} 
+			 if (val != null && val.trim().length() > 0) {
+		            bean.addPropertyValue(propertyName, val);
+		       }
+		}
+		return setContainer;
+	}
     public static class ContainerType implements ApplicationContextAware {
 
         Container container;
@@ -155,7 +190,7 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         Boolean production;
 
         Map<String, Object> properties;
-
+        private List<ContainerReference> references;
         public ContainerType(String name) {
             this.name = name;
         }
@@ -178,14 +213,17 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
 
             if (!StringUtils.isEmpty(id)) {
                 container.setId(id);
+            }else{
+            	if(!StringUtils.isEmpty(name)){
+            		container.setId(name);
+            	}
             }
             if(production!=null){
                 container.setProduction(production.booleanValue());
             }
-            /*
-             * if (features != null) { container.setFeatures(features); features
-             * = null; }
-             */
+           if(references!=null){
+        	   ((ExtensionContainer)container).setReferences(references);
+           }
         }
 
         public Map<String, Object> getProperties() {
@@ -209,6 +247,12 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         
         public void setProduction(Boolean production){
             this.production=production;
+        }
+        public void setReference(ContainerReference ref){
+        	if(references==null){
+        		references = new ArrayList<ContainerReference>();
+        	}
+        	references.add(ref);
         }
     }
 }

@@ -76,6 +76,7 @@ public class ExtensionContainer implements Container {
     
     private boolean production  = true;
 
+    private List<ContainerReference> references;
    
     //JVM shutdown hooker
     static {
@@ -95,7 +96,7 @@ public class ExtensionContainer implements Container {
         }, "Container-shutdown"));
     }
 
-    protected final Map<Class<?>, Object> extensions;
+    public final Map<Class<?>, Object> extensions;
 
     protected final Set<Class<?>> missingBeans;
 
@@ -104,6 +105,7 @@ public class ExtensionContainer implements Container {
     protected String id;
 
     private ContainerStatus status;
+    
 
     private final Map<String, Object> properties = new ConcurrentHashMap<String, Object>(
         16, 0.75f, 4);
@@ -133,7 +135,6 @@ public class ExtensionContainer implements Container {
         }
         missingBeans = new CopyOnWriteArraySet<Class<?>>();
 
-        setStatus(ContainerStatus.CREATING);
         ContainerFactory.possiblySetDefaultContainer(this);
         if (null == properties) {
             properties = new HashMap<String, Object>();
@@ -169,7 +170,7 @@ public class ExtensionContainer implements Container {
 
         extensionManager = new ExtensionManagerImpl(new String[0],
             extensionClassLoader, extensions, rm, this);
-        setStatus(ContainerStatus.INITIALIZING);
+        setStatus(ContainerStatus.CREATING);
         String internal = SystemPropertyAction.getProperty(
             ExtensionManager.PROP_EXTENSION_LOCATION,
             ExtensionManager.EXTENSION_LOCATION);
@@ -185,6 +186,7 @@ public class ExtensionContainer implements Container {
         extensions.put(ExtensionManager.class, extensionManager);
         extensions.put(AssembleBeanSupport.class, new AssembleBeanSupport(this));
     }
+
 
     /**
      * @param rm
@@ -222,7 +224,7 @@ public class ExtensionContainer implements Container {
             if (missingBeans.contains(beanType)) {
                 // missing extensions,return null
                 return null;
-            }
+            } 
            
             if (beanType.isInterface()
                 && beanType.isAnnotationPresent(Extension.class)) {
@@ -250,7 +252,21 @@ public class ExtensionContainer implements Container {
         obj = extensions.get(beanType);
         if (obj != null) {
             return beanType.cast(obj);
-        } else {
+        } else	if(references!=null){
+    		for(ContainerReference ref:references){
+    			if(ref.match(beanType)){
+    				Container refc = ref.getRef();
+    				if(refc==null){
+    					LOG.warn("type:{} match container:{} ,but reference container is null",beanType,ref.getId());
+    					continue;
+    				}
+    				T  t = refc.getExtension(beanType);
+    				if(t!=null){
+    					return t;
+    				}
+    			}
+    		}
+    	}else {
             missingBeans.add(beanType);
         }
         return null;
@@ -355,7 +371,8 @@ public class ExtensionContainer implements Container {
         int type = ContainerEvent.CREATED;
         switch (status) {
             case CREATING:
-                return;
+            	type = ContainerEvent.CREATING;
+                break;
             case INITIALIZING:
             	type = ContainerEvent.INITIALIZING;
             	break;
@@ -449,20 +466,12 @@ public class ExtensionContainer implements Container {
             l.handleEvent(event);
         }
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.Container#close()
-     */
+
     @Override
     public void close() {
         close(true);
     }
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.solmix.runtime.Container#close(boolean)
-     */
+
     @Override
     public void close(boolean wait) {
         if (status == ContainerStatus.CLOSING
@@ -552,6 +561,21 @@ public class ExtensionContainer implements Container {
     public void setProduction(boolean production) {
         this.production = production;
     }
+    
+    public void setReference(ContainerReference ref){
+    	this.addReference(ref);
+    }
+    
+    public void setReferences(List<ContainerReference> refs){
+    	this.references=refs;
+    }
+    
+    public void addReference(ContainerReference ref){
+    	if(references==null){
+    		references = new ArrayList<ContainerReference>();
+    	}
+    	references.add(ref);
+    }
 
     public boolean extensioncontainerau() {
         try {
@@ -607,4 +631,5 @@ public class ExtensionContainer implements Container {
         }
         return sb.toString();
     }
+    
 }

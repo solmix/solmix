@@ -64,21 +64,22 @@ public class BundleContainerListener implements ContainerListener
             && args[0] instanceof BundleContext) {
             defaultContext = (BundleContext)args[0];
         }
-        registedConfiguredBeanProvider();
-    }
-    
-    private void registedConfiguredBeanProvider(){
-        final ConfiguredBeanProvider provider = container.getExtension(ConfiguredBeanProvider.class);
-        if(provider instanceof ExtensionManagerImpl){
-            container.setExtension(new OSGIBeanProvider(provider,defaultContext), ConfiguredBeanProvider.class);
-        }
     }
 
   
     @Override
     public void handleEvent(ContainerEvent event) {
         int type = event.getType();
-        if (ContainerEvent.CREATED == type) {
+        if (ContainerEvent.INITIALIZING == type) {
+        	final ConfiguredBeanProvider provider = container.getExtension(ConfiguredBeanProvider.class);
+        	 BundleContext ctx= container.getExtension(BundleContext.class);
+        	 if(ctx==null){
+        		 ctx=defaultContext;
+        	 }
+             if(provider instanceof ExtensionManagerImpl){
+                 container.setExtension(new OSGIBeanProvider(provider,ctx), ConfiguredBeanProvider.class);
+             }
+        }else if (ContainerEvent.CREATED == type) {
             registerAsOsgiService();
         } else if (ContainerEvent.POSTCLOSE == type) {
             unregister();

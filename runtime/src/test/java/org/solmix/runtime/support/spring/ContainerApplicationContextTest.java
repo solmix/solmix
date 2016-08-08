@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.service.ContainerAwareService;
+import org.solmix.runtime.service.ContainerRefTestService;
 import org.solmix.runtime.service.InjectTestService;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -58,8 +58,8 @@ public class ContainerApplicationContextTest {
         Assert.assertEquals(c2.getProperty("runtime.production"),"false");
         
         
-        
         ContainerAwareService cas = c.getExtension(ContainerAwareService.class);
+        c.getExtension(ContainerRefTestService.class);
         Assert.assertNotNull(cas.getContainer());
         Assert.assertSame(cas.getContainer(), c);
         Assert.assertTrue(cas.isProduction());

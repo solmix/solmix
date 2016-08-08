@@ -796,7 +796,12 @@ public class FileUtils
 
     public static boolean isJarURL(URL url) {
         String protocol = url.getProtocol();
-        return  (URL_PROTOCOL_BUNDLE.equals(protocol)||URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol));
+        return  URL_PROTOCOL_JAR.equals(protocol) ||(URL_PROTOCOL_BUNDLE.equals(protocol)|| URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol));
+    }
+    
+    public static boolean isBundleURL(URL url){
+    	String protocol = url.getProtocol();
+    	return URL_PROTOCOL_BUNDLE.equals(protocol);
     }
 
     public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {

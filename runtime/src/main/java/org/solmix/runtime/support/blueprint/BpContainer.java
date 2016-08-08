@@ -67,9 +67,7 @@ public class BpContainer extends ContainerAdaptor
         super.setExtension(bundleClassLoader, ClassLoader.class);
         super.setExtension(bundleContext, BundleContext.class);
         super.setExtension(new OsgiConfigureUnitManager(bundleContext), ConfigureUnitManager.class);
-        ResourceManager rm= getExtension(ResourceManager.class);
-        rm.addResourceResolver(new PathMatchingResourceResolver(new BundleDelegatingClassLoader(bundleContext.getBundle(), BpContainer.class.getClassLoader())));
-    }
+     }
     @Override
     protected void customResourceManager(ResourceManager rm) {
     }
@@ -78,17 +76,17 @@ public class BpContainer extends ContainerAdaptor
      */
     public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
         this.blueprintContainer = blueprintContainer;
-        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
-        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
-            ConfiguredBeanProvider.class);
-
     }
     
     @Override
     protected void doInitializeInternal() {
         super.doInitializeInternal();
+        ResourceManager rm= getExtension(ResourceManager.class);
+        rm.addResourceResolver(new PathMatchingResourceResolver(new BundleDelegatingClassLoader(bundleContext.getBundle(), BpContainer.class.getClassLoader())));
+        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
+        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
+            ConfiguredBeanProvider.class);
         Set<String> ids =blueprintContainer.getComponentIds();
-        ResourceManager rm  = getExtension(ResourceManager.class);
         ResourceInjector injector = new ResourceInjector(rm);
         if(ids!=null){
             for(String id:ids){
