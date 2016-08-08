@@ -21,7 +21,6 @@ package org.solmix.runtime.extension;
 
 import static org.solmix.commons.util.DataUtils.isEmpty;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -270,5 +269,13 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
         }
 
     }
+
+	/**
+	 * 扩展点没有加载到任何可用的扩展
+	 * @return
+	 */
+	public boolean isEmptyLoaded() {
+		return getExtensionInfos()==null||getExtensionInfos().size()==0;
+	}
 
 }

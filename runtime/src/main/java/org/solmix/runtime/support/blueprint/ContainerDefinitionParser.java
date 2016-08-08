@@ -22,7 +22,10 @@ import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
 import org.solmix.commons.util.StringUtils;
+import org.solmix.runtime.extension.ContainerReference;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
 
 /**
@@ -73,7 +76,26 @@ public class ContainerDefinitionParser extends AbstractBPBeanDefinitionParser
         } else if ("listeners".equals(name)) {
             bean.addProperty("containerListeners", parseListData(ctx, bean, el));
         }else if ("ref".equals(name)) {
-        	
+        	MutableBeanMetadata meta = ctx.createMetadata(MutableBeanMetadata.class);
+        	NamedNodeMap atts = el.getAttributes();
+    		for (int i = 0; i < atts.getLength(); i++) {
+    			Attr node = (Attr) atts.item(i);
+    			String val = node.getValue();
+    			String attrName = node.getLocalName();
+    			String prefix = node.getPrefix();
+    			if (isNamespace(name, prefix)) {
+    				continue;
+    			}
+    			 String propertyName=attrName;
+    			 if ("container-id".equals(attrName)) {
+    				 propertyName="id";
+    			} 
+    			 if (val != null && val.trim().length() > 0) {
+    		           bean.addProperty(propertyName, createValue(ctx, val));
+    		       }
+    		}
+            meta.setRuntimeClass(ContainerReference.class);
+            bean.addProperty("reference",  meta);
         }
     }
    

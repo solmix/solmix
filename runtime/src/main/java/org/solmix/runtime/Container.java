@@ -61,6 +61,7 @@ public interface Container {
      * <p>
      * <li>type must be a interface
      * <li>type must be annotated by {@link Extension}
+     * <li>If no one extension found return null
      * 
      * @param type
      * @return

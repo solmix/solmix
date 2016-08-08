@@ -233,10 +233,10 @@ public class ExtensionContainer implements Container {
                         + beanType.getName()
                         + ",but this is a extension interface ,return the default one,see getExtensionLoader()!");
                 }
-                obj=getExtensionLoader(beanType).getDefault();
-                if(obj!=null){
-                    extensions.put(beanType, obj);
-                }
+                ExtensionLoader<T> extLoader = getExtensionLoader(beanType);
+				if (extLoader != null && extLoader.getDefault() != null) {
+					extensions.put(beanType, extLoader.getDefault());
+				}
                 
             }else{
                 ConfiguredBeanProvider provider = (ConfiguredBeanProvider) extensions.get(ConfiguredBeanProvider.class);
@@ -518,9 +518,31 @@ public class ExtensionContainer implements Container {
         }
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         if (loader == null) {
-            EXTENSION_LOADERS.putIfAbsent(type, new DefaultExtensionLoader<T>(
-                type, extensionManager,this));
-            loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
+        	DefaultExtensionLoader<T> newLoader  = new DefaultExtensionLoader<T>(
+                    type, extensionManager,this);
+        	if(!newLoader.isEmptyLoaded()){
+        		 EXTENSION_LOADERS.putIfAbsent(type, newLoader);
+                 loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
+        	}else {
+        		if(references!=null){
+        			for(ContainerReference ref:references){
+            			if(ref.match(type)){
+            				Container refc = ref.getRef();
+            				if(refc==null){
+            					LOG.warn("type:{} match container:{} ,but reference container is null",type,ref.getId());
+            					continue;
+            				}
+            				ExtensionLoader<T> t = refc.getExtensionLoader(type);
+            				if(t!=null){
+            					return t;
+            				}
+            			}
+            		}
+        		}else{
+        			loader= null;
+        		}
+        	}
+           
         }
         return loader;
     }
