@@ -91,7 +91,7 @@ public class ContainerDefinitionParser extends AbstractBPBeanDefinitionParser
     				 propertyName="id";
     			} 
     			 if (val != null && val.trim().length() > 0) {
-    		           bean.addProperty(propertyName, createValue(ctx, val));
+    				 meta.addProperty(propertyName, createValue(ctx, val));
     		       }
     		}
             meta.setRuntimeClass(ContainerReference.class);
