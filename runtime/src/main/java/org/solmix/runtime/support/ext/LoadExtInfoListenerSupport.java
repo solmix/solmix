@@ -38,7 +38,19 @@ public abstract class LoadExtInfoListenerSupport implements ContainerListener {
 	protected abstract void bind() ;
 	
 	protected void  bind(Class<?> clazz){
-		infos.add(new ExtensionInfo(clazz));
+		ExtensionInfo ei = new ExtensionInfo(clazz);
+		ei.setDeferred(true);
+		infos.add(ei);
 	}
-
+	protected void  bind(Class<?> intf,Class<?> clazz){
+		bind(intf,clazz,true);
+	}
+	protected void  bind(Class<?> intf,Class<?> clazz,boolean deferred){
+		ExtensionInfo ei = new ExtensionInfo(clazz);
+		ei.setDeferred(deferred);
+		if(clazz.isAssignableFrom(intf)){
+			ei.setInterfaceName(intf.getName());
+		}
+		infos.add(ei);
+	}
 }
