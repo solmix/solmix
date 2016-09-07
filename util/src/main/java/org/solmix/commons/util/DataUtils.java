@@ -759,10 +759,10 @@ public final class DataUtils
      * @param lists
      * @return
      */
-    public static List<Object> buildList(List<Object>... lists) {
-        List<Object> result = new ArrayList<Object>();
-        for (List<Object> list : lists) {
-            result.add(list);
+    public static <T> List<T> buildList(List<T>... lists) {
+        List<T> result = new ArrayList<T>();
+        for (List<T> list : lists) {
+            result.addAll(list);
         }
         return result;
     }
@@ -773,9 +773,9 @@ public final class DataUtils
      * @param lists
      * @return
      */
-    public static List<Object> buildList(Object... lists) {
-        List<Object> result = new ArrayList<Object>();
-        for (Object list : lists) {
+    public static <T> List<T> buildList(T... lists) {
+        List<T> result = new ArrayList<T>();
+        for (T list : lists) {
             result.add(list);
         }
         return result;
