@@ -39,7 +39,9 @@ public final class Version
     private static final Logger LOG  = LoggerFactory.getLogger(Version.class);
     
     private Version() { }
-
+    public static String readFromMaven(String groupId, String artifactId) {
+    	return readFromMaven(Version.class, groupId, artifactId);
+    }
     /**
      * 通过jar中打包的maven信息获取版本号.
      * 
@@ -47,10 +49,13 @@ public final class Version
      * @param artifactId Maven artifactId
      * @return 返回版本号
      */
-    public static String readFromMaven(String groupId, String artifactId) {
+    public static String readFromMaven(Class<?> baseCalss,String groupId, String artifactId) {
         String propPath = "/META-INF/maven/" + groupId + "/" + artifactId
             + "/pom.properties";
-        InputStream is = Version.class.getResourceAsStream(propPath);
+        InputStream is = baseCalss.getResourceAsStream(propPath);
+        if(is==null){
+        	is= Version.class.getResourceAsStream(propPath);
+        }
         if (is != null) {
             Properties properties = new Properties();
             try {
