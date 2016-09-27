@@ -24,7 +24,6 @@ import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +97,9 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
                         List<StackTraceElement> stackTraceList = new ArrayList<StackTraceElement>();
                         for(int i=1;i<lines.size();i++){
                             String st= lines.get(i);
-                            stackTraceList.add(parseStackTrackLine(st));
+                            StackTraceElement stack = parseStackTrackLine(st);
+                            if(stack!=null)
+                            	stackTraceList.add(stack);
                         }
                         StackTraceElement[] stackTraceElement = new StackTraceElement[stackTraceList.size()];
                         throwable.setStackTrace(stackTraceList.toArray(stackTraceElement));
@@ -114,9 +115,14 @@ public class ClientFaultConverter extends PhaseInterceptorSupport<Message> {
 
     }
     private static StackTraceElement parseStackTrackLine(String oneLine) {
-        StringTokenizer stInner = new StringTokenizer(oneLine, "!");
-        return new StackTraceElement(stInner.nextToken(), stInner.nextToken(),
-                stInner.nextToken(), Integer.parseInt(stInner.nextToken()));
+    	String[] lineSplited =oneLine.split("!");
+    	if(lineSplited.length>=4){
+    		return new StackTraceElement(lineSplited[0], lineSplited[1],
+    				lineSplited[2], Integer.parseInt(lineSplited[3]));
+    	}else{
+    		return null;
+    	}
+    	
     }
     
     public static String toString(Throwable e ,int limit) {
