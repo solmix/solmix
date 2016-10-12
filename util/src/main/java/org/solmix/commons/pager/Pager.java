@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Pager {
     public static final String DEFAULT_PROCESSOR_CLASSNAME = DefaultPagerProcessor.class.getName();
     private static final Map<String,Pager> PAGER_PROCESSOR_MAP = Collections.synchronizedMap(new HashMap<String,Pager>());
@@ -80,7 +80,7 @@ public class Pager {
      * @param pagesize The size of each page.
      * @return PageList containing results of seek.
      */
-    public PageList<Object> seek(Collection<Object> source, int pagenum, int pagesize) {
+    public PageList seek(Collection source, int pagenum, int pagesize) {
         return seek(source, pagenum, pagesize, null);
     }
 
@@ -94,14 +94,14 @@ public class Pager {
      * @param pc The PageControl object to use to control paging.
      * @return PageList containing results of seek.
      */
-    public PageList<Object> seek(Collection<Object> source, PageControl pc) {
+    public PageList seek(Collection source, PageControl pc) {
         if (pc == null)
             pc = PageControl.PAGE_ALL;
 
         return seek(source, pc.getPageNum(), pc.getPageSize(), null);
     }
 
-    public PageList<Object> seek(Collection<Object> source, PageControl pc, Object procData) {
+    public PageList seek(Collection source, PageControl pc, Object procData) {
         if (pc == null)
             pc = PageControl.PAGE_ALL;
         return seek(source, pc.getPageNum(), pc.getPageSize(), procData);
@@ -121,9 +121,9 @@ public class Pager {
      * @param procData - any data object required by the _processor.
      * @return PageList containing results of seek.
      */
-    public PageList<Object> seek(Collection<Object> source, int pagenum, int pagesize,
+    public PageList seek(Collection source, int pagenum, int pagesize,
                          Object procData) {
-        PageList<Object> dest = new PageList<Object>();
+        PageList dest = new PageList();
         dest.setTotalSize(seek(source, dest, pagenum, pagesize, procData));
         return dest;
     }
@@ -141,7 +141,7 @@ public class Pager {
      *        returned.
      * @param pagesize The size of each page.
      */
-    public void seek(Collection<Object> source, Collection<Object> dest, int pagenum,
+    public void seek(Collection source, Collection dest, int pagenum,
                      int pagesize) {
         seek(source, dest, pagenum, pagesize, null);
     }
@@ -160,9 +160,9 @@ public class Pager {
      * @param pagesize The size of each page.
      * @param procData any object required to process the item.
      */
-    public int seek(Collection<Object> source, Collection<Object> dest, int pagenum,
+    public int seek(Collection source, Collection dest, int pagenum,
                     int pagesize, Object procData) {
-        Iterator<Object> iter = source.iterator();
+        Iterator iter = source.iterator();
         int i, currentPage, size = source.size();
 
         if (pagesize == -1 || pagenum == -1) {
@@ -225,9 +225,9 @@ public class Pager {
      * @param pagesize The size of each page.
      * @param procData any object required to process the item.
      */
-    public PageList<Object> seekAll(Collection<Object> source, int pagenum, int pagesize,
+    public PageList seekAll(Collection source, int pagenum, int pagesize,
                             Object procData) {
-        PageList<Object> dest = new PageList<Object>();
+        PageList dest = new PageList();
         dest.setTotalSize(seekAll(source, dest, pagenum, pagesize, procData));
         return dest;
     }
@@ -248,9 +248,10 @@ public class Pager {
      * @param pagesize The size of each page.
      * @param procData any object required to process the item.
      */
-    public int seekAll(Collection<Object> source, Collection<Object> dest, int pagenum,
+   
+	public int seekAll(Collection source, Collection dest, int pagenum,
                        int pagesize, Object procData) {
-        Iterator<Object> iter = source.iterator();
+        Iterator iter = source.iterator();
         int i, currentPage, size = source.size();
 
         if (pagesize == -1 || pagenum == -1) {
@@ -312,7 +313,7 @@ public class Pager {
      * page list with the same total size
      */
     public PageList<?> processAll(PageList<?> source) {
-        PageList<Object> dest = new PageList<Object>();
+        PageList dest = new PageList();
         int size = source.getTotalSize();
         for (Iterator<?> it = source.iterator(); it.hasNext();) {
             Object elt = this.processor.processElement(it.next());
