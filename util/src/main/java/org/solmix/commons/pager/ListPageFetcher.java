@@ -14,12 +14,12 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 
 	private List data;
 
-	private int sortOrder;
+	private PageControl.SORT sortOrder;
 
 	public ListPageFetcher(List<T> data) {
 		super();
 		this.data = data;
-		this.sortOrder = PageControl.SORT_UNSORTED;
+		this.sortOrder = PageControl.SORT.UNSORTED;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 		this.ensureSortOrder(control);
 		res.setTotalSize(this.data.size());
 
-		startIdx = clamp(control.getPageEntityIndex(), 0, this.data.size() - 1);
+		startIdx = clamp(control.getPageFirstIndex(), 0, this.data.size() - 1);
 		curIdx = startIdx;
 
 		if (control.getPageSize() == PageControl.SIZE_UNLIMITED) {
@@ -70,11 +70,11 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 			return;
 
 		this.sortOrder = control.getSortOrder();
-		if (this.sortOrder == PageControl.SORT_UNSORTED) {
+		if (this.sortOrder == PageControl.SORT.UNSORTED) {
 			return;
-		} else if (this.sortOrder == PageControl.SORT_ASC) {
+		} else if (this.sortOrder == PageControl.SORT.ASC) {
 			Collections.sort(data);
-		} else if (this.sortOrder == PageControl.SORT_DESC) {
+		} else if (this.sortOrder == PageControl.SORT.DESC) {
 			Collections.sort(data, new DescSorter());
 		} else {
 			throw new IllegalStateException("Unknown control sorting type: "

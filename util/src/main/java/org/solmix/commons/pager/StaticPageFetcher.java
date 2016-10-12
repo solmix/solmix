@@ -52,7 +52,7 @@ public class StaticPageFetcher<T> extends PageFetcher<T>
             return res;
         }
 
-        startIdx = control.getPageEntityIndex();
+        startIdx = control.getPageFirstIndex();
         endIdx = startIdx + control.getPageSize();
 
         if (startIdx >= this.data.size())
