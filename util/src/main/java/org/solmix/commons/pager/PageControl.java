@@ -19,9 +19,8 @@
 package org.solmix.commons.pager;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
-import org.solmix.commons.util.ArrayUtils;
+import org.solmix.commons.util.StringUtils;
 
 /**
  * A utility class to wrap up all the paging/sorting options that are frequently
@@ -33,9 +32,6 @@ public class PageControl implements Serializable, Cloneable {
 
 	public static final int SIZE_UNLIMITED = -1;
 	public static final int DEFAULT_SORT=0;
-	public enum SORT{
-		UNSORTED,ASC,DESC
-	}
 
 	public static final String[] SQL_SORTS = { "", "ASC", "DESC" };
 
@@ -47,8 +43,7 @@ public class PageControl implements Serializable, Cloneable {
 	private int pageNum = 0;
 	private int pageSize = SIZE_UNLIMITED;
 	private int totalSize = SIZE_UNLIMITED;
-	private SORT sortOrder = SORT.UNSORTED;
-	private String[] sortAttribute;
+	private SortAttr[] sortAttributes;
 	private boolean immutable = false;
 	// Meta-data that PageLists have returned
 	private Serializable metaData;
@@ -66,58 +61,51 @@ public class PageControl implements Serializable, Cloneable {
 		int pageNum=pageSize>=0? startRow/pageSize:0;
 		return new PageControl(pageNum, pageSize);
 	}
+	
+	public static PageControl sortWith(PageControl pg ,String column){
+		PageControl newpc;
+		if(pg==null){
+			newpc=new PageControl();
+		}else{
+			newpc= new PageControl(pg);
+		}
+		newpc.addSort(column);
+		return newpc;
+	}
+
+	public void addSort(String column) {
+		if(sortAttributes==null){
+			sortAttributes= new SortAttr[]{SortAttr.build(column)};
+		}else{
+			int oldLength=sortAttributes.length;
+			SortAttr[] newsort= new SortAttr[oldLength+1];
+			for(int i=0;i<sortAttributes.length;i++){
+				newsort[i]=sortAttributes[i];
+			}
+			newsort[oldLength]=SortAttr.build(column);
+			sortAttributes=newsort;
+		}
+		
+	}
 
 	public PageControl(int pagenum, int pagesize) {
 		this.pageNum = pagenum;
 		this.pageSize = pagesize;
 	}
 
-	public PageControl(int pagenum, int pagesize, SORT sortorder,
-			String[] sortattribute) {
+	public PageControl(int pagenum, int pagesize, SortAttr[] sortattribute) {
 		this.pageNum = pagenum;
 		this.pageSize = pagesize;
-		this.sortOrder = sortorder;
-		this.sortAttribute = sortattribute;
+		this.sortAttributes = sortattribute;
 	}
 
 	public PageControl(PageControl pc) {
 		pageNum = pc.getPageNum();
 		pageSize = pc.getPageSize();
-		sortOrder = pc.getSortOrder();
-		sortAttribute = pc.getSortAttribute();
+		sortAttributes = pc.getSortAttribute();
 		metaData = pc.getMetaData();
 	}
 
-	public boolean isAscending() {
-		return sortOrder == SORT.ASC;
-	}
-
-	public boolean isDescending() {
-		return sortOrder == SORT.DESC;
-	}
-
-	/**
-	 * sets the initial defaults for the PageControl. Sort attribute specifies
-	 * which attribute to sort on.
-	 * 
-	 * @param pc
-	 * @param defaultSortAttr
-	 *            specifies the attribute to sort on.
-	 * @return PageControl
-	 */
-	public static PageControl initDefaults(PageControl pc, String[] defaultSortAttr) {
-		if (pc == null) {
-			pc = new PageControl();
-		} else {
-			pc = (PageControl) pc.clone();
-		}
-
-		
-		if (pc.getSortOrder() == SORT.UNSORTED) {
-			pc.setSortOrder(SORT.ASC);
-		}
-		return pc;
-	}
 
 	/** @return The current page number (0-based) */
 	public int getPageNum() {
@@ -157,28 +145,19 @@ public class PageControl implements Serializable, Cloneable {
 		this.pageSize = pagesize;
 	}
 
-	public SORT getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(SORT sortOrder) {
-		if (immutable)
-			throw new IllegalStateException("immutable object");
-		this.sortOrder = sortOrder;
-	}
-
-	public String[] getSortAttribute() {
-		return sortAttribute;
+	
+	public SortAttr[] getSortAttribute() {
+		return sortAttributes;
 	}
 
 	/**
 	 * @param attr
 	 *            Set the attribute that the sort is based on.
 	 */
-	public void setSortAttribute(String[] attr) {
+	public void setSortAttribute(SortAttr[] attr) {
 		if (immutable)
 			throw new IllegalStateException("immutable object");
-		sortAttribute = attr;
+		sortAttributes = attr;
 	}
 
 	public Serializable getMetaData() {
@@ -216,23 +195,7 @@ public class PageControl implements Serializable, Cloneable {
 		s.append("pn=" + pageNum + " ");
 		s.append("ps=" + pageSize + " ");
 
-		s.append("so=");
-
-		switch (sortOrder) {
-		case ASC:
-			s.append("asc ");
-			break;
-		case DESC:
-			s.append("desc");
-			break;
-		case UNSORTED:
-			s.append("unsorted ");
-			break;
-		default:
-			s.append(' ');
-		}
-
-		s.append("sa=" + sortAttribute + " ");
+		s.append("sa=" + StringUtils.toString(sortAttributes) + " ");
 		s.append("}");
 		return s.toString();
 	}
@@ -242,17 +205,16 @@ public class PageControl implements Serializable, Cloneable {
 		if (o instanceof PageControl) {
 			PageControl pc = (PageControl) o;
 			return pageNum == pc.getPageNum() && pageSize == pc.getPageSize()
-					&& sortOrder == pc.getSortOrder()
-					&& sortAttribute == pc.getSortAttribute();
+					&& sortAttributes == pc.getSortAttribute();
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		int hashcode= (37 * pageNum) + (37 * pageSize) +sortOrder.hashCode();
-		if(sortAttribute!=null&&sortAttribute.length>0){
-			for(String attr:sortAttribute){
+		int hashcode= (37 * pageNum) + (37 * pageSize) ;
+		if(sortAttributes!=null&&sortAttributes.length>0){
+			for(SortAttr attr:sortAttributes){
 				hashcode=hashcode+attr.hashCode();
 			}
 		}
@@ -261,7 +223,7 @@ public class PageControl implements Serializable, Cloneable {
 
 	@Override
 	public Object clone() {
-		PageControl res = new PageControl(pageNum, pageSize, sortOrder,sortAttribute);
+		PageControl res = new PageControl(pageNum, pageSize,sortAttributes);
 		res.metaData = metaData;
 		return res;
 	}

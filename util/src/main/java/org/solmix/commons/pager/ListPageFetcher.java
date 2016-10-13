@@ -1,6 +1,5 @@
 package org.solmix.commons.pager;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
@@ -14,12 +13,10 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 
 	private List data;
 
-	private PageControl.SORT sortOrder;
 
 	public ListPageFetcher(List<T> data) {
 		super();
 		this.data = data;
-		this.sortOrder = PageControl.SORT.UNSORTED;
 	}
 
 	@Override
@@ -31,7 +28,7 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 			return new PageList<T> ();
 		}
 
-		this.ensureSortOrder(control);
+//		this.ensureSortOrder(control);
 		res.setTotalSize(this.data.size());
 
 		startIdx = clamp(control.getPageFirstIndex(), 0, this.data.size() - 1);
@@ -64,23 +61,7 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 		}
 	}
 
-	
-	private void ensureSortOrder(PageControl control) {
-		if (control.getSortOrder() == this.sortOrder)
-			return;
 
-		this.sortOrder = control.getSortOrder();
-		if (this.sortOrder == PageControl.SORT.UNSORTED) {
-			return;
-		} else if (this.sortOrder == PageControl.SORT.ASC) {
-			Collections.sort(data);
-		} else if (this.sortOrder == PageControl.SORT.DESC) {
-			Collections.sort(data, new DescSorter());
-		} else {
-			throw new IllegalStateException("Unknown control sorting type: "
-					+ this.sortOrder);
-		}
-	}
 
 	public static long clamp(long val, long min, long max) {
 		if (val < min)
