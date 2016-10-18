@@ -1,0 +1,18 @@
+-------------------------------------------------
+add smartgwt.jar 3.1 to local maven repository
+-------------------------------------------------
+mvn install:install-file -Dfile=/home/solmix/sdk/smartgwt.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=3.1 -Dpackaging=jar
+mvn install:install-file -Dfile=E:\sdk\smartgwt-3.1\smartgwt.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=3.1 -Dpackaging=jar
+-------------------------------------------------
+add smartgwt-skins.jar 3.1 to local maven repository
+-------------------------------------------------
+mvn install:install-file -Dfile=/home/solmix/sdk/smartgwt-skins.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=3.1 -Dpackaging=jar
+mvn install:install-file -Dfile=E:\sdk\smartgwt-3.1\smartgwt-skins.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=3.1 -Dpackaging=jar
+
+add smartgwt-skins.jar 3.1 to local maven repository
+-------------------------------------------------
+mvn install:install-file -Dfile=/home/solmix/sdk/4.0/smartgwt-skins.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=4.0 -Dpackaging=jar
+mvn install:install-file -Dfile=/home/solmix/sdk/4.0/smartgwt.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=4.0 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile=/home/solmix/sdk/pom.xml -DgroupId=com.alibaba -DartifactId=opensesame -Dversion=2.0 -Dpackaging=pom
