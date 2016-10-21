@@ -16,28 +16,31 @@ import java.util.List;
  */
 public class SumJavaCode
 {
+	public interface FileFilter{
+		boolean filter(String name);
+	}
 
-    static long fileCont = 0;
+     long fileCont = 0;
 
-    static long normalLines = 0; // 空行
+     long normalLines = 0; // 空行
 
-    static long commentLines = 0; // 注释行
+     long commentLines = 0; // 注释行
 
-    static long whiteLines = 0; // 代码行
+     long whiteLines = 0; // 代码行
 
-    static List<String> packList = new ArrayList<String>();
+     List<String> packList = new ArrayList<String>();
 
     public static void main(String[] args) throws IOException {
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("/home/solmix/o/gits/datax");
+        File f = new File("/home/solmix/o/gits/");
         System.out.println(f.getName());
         sjc.treeFile(f);
-        System.out.println("文件数目:"+fileCont+" 总代码行数:"+(whiteLines+commentLines+normalLines));
-        System.out.println("空行:"+whiteLines);
-        System.out.println("注释行:"+commentLines);
-        System.out.println("代码行:"+normalLines);
+        System.out.println("文件数目:"+sjc.getFileCount()+" 总代码行数:"+(sjc.getWhiteLines()+sjc.getNormalLines()+sjc.getCommentLines()));
+        System.out.println("空行:"+sjc.getWhiteLines());
+        System.out.println("注释行:"+sjc.getCommentLines());
+        System.out.println("代码行:"+sjc.getNormalLines());
         // System.out.println(System.getProperty("file.separator"));
        /* for (String pack : packList) {
              System.out.println(pack);
@@ -125,4 +128,21 @@ public class SumJavaCode
         System.out.println(normalLines - begin + ":" + file.getPath());
     }
     }
+
+	public long getFileCount() {
+		return fileCont;
+	}
+
+	public long getNormalLines() {
+		return normalLines;
+	}
+
+	public long getCommentLines() {
+		return commentLines;
+	}
+
+	public long getWhiteLines() {
+		return whiteLines;
+	}
+    
 }
