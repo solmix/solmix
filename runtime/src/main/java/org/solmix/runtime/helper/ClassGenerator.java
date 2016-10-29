@@ -14,8 +14,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.solmix.commons.util.ClassDescUtils;
-
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -26,6 +24,9 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.LoaderClassPath;
 import javassist.NotFoundException;
+
+import org.solmix.commons.util.ClassDescUtils;
+import org.solmix.commons.util.ClassLoaderUtils;
 
 public final class ClassGenerator
 {
@@ -270,7 +271,17 @@ public final class ClassGenerator
 	}
 
 	public Class<?> toClass(){
-		return toClass(getClass().getClassLoader(), getClass().getProtectionDomain());
+		ClassLoader loader = ClassLoaderUtils.getClassLoader(ClassGenerator.class);
+		return toClass(loader, getClass().getProtectionDomain());
+	}
+	
+	/**
+	 * used basedclass's ClassLoader and ProtectionDomain to load class.
+	 * @param basedClass
+	 * @return
+	 */
+	public Class<?> toClass(Class<?> basedClass){
+		return toClass(basedClass.getClassLoader(),basedClass.getProtectionDomain());
 	}
 
 	public Class<?> toClass(ClassLoader loader, ProtectionDomain pd)

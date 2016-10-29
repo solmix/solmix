@@ -337,7 +337,7 @@ public abstract class Wrapper
 
 		try
 		{
-			Class<?> wc = cc.toClass();
+			Class<?> wc = cc.toClass(Wrapper.class);
 			// setup static field.
 			wc.getField("pts").set(null, pts);
 			wc.getField("pns").set(null, pts.keySet().toArray(new String[0]));

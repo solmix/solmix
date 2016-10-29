@@ -31,6 +31,7 @@ import java.security.PrivilegedAction;
 
 public class ClassLoaderUtils
 {
+	
     public static class ClassLoaderHolder {
         ClassLoader loader;
         ClassLoaderHolder(ClassLoader c) {
@@ -152,6 +153,7 @@ public class ClassLoaderUtils
         }
         return loadClass2(className, callingClass).asSubclass(type);
     }
+    
     private static Class<?> loadClass2(String className, Class<?> callingClass)
         throws ClassNotFoundException {
         try {
@@ -193,6 +195,13 @@ public class ClassLoaderUtils
 		}
 		return cl;
 	}
+    
+    /**
+     * First form current thread context classLoader.
+     * Second form class.getClassLoader
+     * @param class
+     * @return
+     */
     public static ClassLoader getClassLoader(Class<?> cls) {
         ClassLoader cl = null;
           try {
