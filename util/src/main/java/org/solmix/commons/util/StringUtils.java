@@ -933,7 +933,7 @@ public final class StringUtils
 	private static final char DOUBLEQUOTE = '"';
 	private static final char BACKSLASH = '\\';
 	public static String[] splitCommandLine(String str, boolean extract) {
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		int slen;
 		char c;
 		int i=0;
@@ -985,8 +985,13 @@ public final class StringUtils
 				i++;
 			}
 		}
-		return (String[])list.toArray(new String[list.size()]);
+		return list.toArray(new String[list.size()]);
 	}
+	
+	public static String[] explodeQuoted(String arg) {
+		return splitCommandLine(arg, true);
+	}
+
 	public static String extractQuoted(String str) {
 		if (str.length() == 0) {
 			return str;
