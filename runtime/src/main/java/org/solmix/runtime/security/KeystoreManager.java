@@ -140,8 +140,14 @@ public class KeystoreManager
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         String javaHome = System.getProperty("java.home");
         String keytool = javaHome + File.separator + "bin" + File.separator + "keytool";
+        String filePath = keystoreConfig.getFilePath();
+        File file = new File(filePath);
+        File parent  = file.getParentFile();
+        if(parent!=null&&!parent.exists()){
+        	parent.mkdir();
+        }
         String[] args = { keytool, "-genkey", "-dname", getDName(keystoreConfig), "-alias", keystoreConfig.getAlias(), "-keystore",
-            keystoreConfig.getFilePath(), "-storepass", keystoreConfig.getFilePassword(), "-keypass", keystoreConfig.getFilePassword(), "-keyalg",
+        		filePath, "-storepass", keystoreConfig.getFilePassword(), "-keypass", keystoreConfig.getFilePassword(), "-keyalg",
             "RSA", "-validity", "3650" // 10 years
         };
 
