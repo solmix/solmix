@@ -6,6 +6,9 @@ import java.util.Set;
 public abstract class ExtensionBinding {
 	private final Set<ExtensionInfo> extensionInfos = new HashSet<ExtensionInfo>();
 
+	public ExtensionBinding(){
+		bind();
+	}
 	public Set<ExtensionInfo> getExtensionInfos() {
 		return extensionInfos;
 	}
