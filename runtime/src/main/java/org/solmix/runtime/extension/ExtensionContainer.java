@@ -587,7 +587,7 @@ public class ExtensionContainer implements Container {
     /** just for context(spring/bp) to inject */
     @Deprecated
     public void setExtensionBindings(List<ExtensionBinding> bindings){
-    	if (extensionBindings != null && extensionBindings.size() > 0) {
+    	if (bindings != null && bindings.size() > 0) {
             synchronized (this.extensionBindings) {
                 this.extensionBindings.addAll(bindings);
             }
