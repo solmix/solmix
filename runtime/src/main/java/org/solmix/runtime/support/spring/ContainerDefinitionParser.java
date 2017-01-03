@@ -147,6 +147,10 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
             List<?> lis = ctx.getDelegate().parseListElement(e,
                 bean.getBeanDefinition());
             bean.addPropertyValue("containerListeners", lis);
+        } else if ("bindings".equals(name)) {
+            List<?> lis = ctx.getDelegate().parseListElement(e,
+                bean.getBeanDefinition());
+            bean.addPropertyValue("extensionBindings", lis);
         } else if ("ref".equals(name)) {
         	BeanDefinitionBuilder component = BeanDefinitionBuilder.genericBeanDefinition(ContainerReference.class);
         	parseRefAttributes(e, ctx, component);

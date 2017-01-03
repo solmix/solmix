@@ -8,10 +8,18 @@ xmlns:beans="http://www.springframework.org/schema/beans"
     <xsd:element name="container">
     <xsd:complexType>
             <xsd:sequence>
-            	<xsd:choice minOccurs="0" maxOccurs="unbounded"><xsd:element name="listeners" type="xsd:anyType" minOccurs="0">
-            	</xsd:element><xsd:element name="properties" type="beans:mapType" minOccurs="0">
-            	</xsd:element><xsd:element name="ref" type="refType" minOccurs="0" maxOccurs="unbounded">
-            	</xsd:element></xsd:choice>
+            	<xsd:choice minOccurs="0" maxOccurs="unbounded">
+            		<xsd:element name="listeners" type="xsd:anyType"
+            			minOccurs="0">
+            		</xsd:element>
+            		<xsd:element name="bindings" type="xsd:anyType" minOccurs="0"></xsd:element>
+            		<xsd:element name="properties" type="beans:mapType"
+            			minOccurs="0">
+            		</xsd:element>
+            		<xsd:element name="ref" type="refType" minOccurs="0"
+            			maxOccurs="unbounded">
+            		</xsd:element>
+            	</xsd:choice>
             </xsd:sequence>
             
     	<xsd:attribute name="id" type="xsd:ID"></xsd:attribute>

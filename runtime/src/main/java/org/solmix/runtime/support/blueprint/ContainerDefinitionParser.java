@@ -75,6 +75,8 @@ public class ContainerDefinitionParser extends AbstractBPBeanDefinitionParser
             bean.addProperty(name, parseMapData(ctx, bean, el));
         } else if ("listeners".equals(name)) {
             bean.addProperty("containerListeners", parseListData(ctx, bean, el));
+        } else if ("bindings".equals(name)) {
+            bean.addProperty("extensionBindings", parseListData(ctx, bean, el));
         }else if ("ref".equals(name)) {
         	MutableBeanMetadata meta = ctx.createMetadata(MutableBeanMetadata.class);
         	NamedNodeMap atts = el.getAttributes();

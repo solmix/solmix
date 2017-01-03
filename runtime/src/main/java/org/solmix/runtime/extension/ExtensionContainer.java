@@ -69,6 +69,8 @@ public class ExtensionContainer implements Container {
     private static final Logger LOG = LoggerFactory.getLogger(ExtensionContainer.class);
 
     private final List<ContainerListener> containerListeners = new ArrayList<ContainerListener>(4);
+    
+    private final List<ExtensionBinding> extensionBindings= new ArrayList<ExtensionBinding>(4);
 
     private final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<Class<?>, ExtensionLoader<?>>();
 
@@ -347,6 +349,7 @@ public class ExtensionContainer implements Container {
 
     public void initialize() {
         setStatus(ContainerStatus.INITIALIZING);
+        loadExtensionBindings();
         doInitializeInternal();
         setStatus(ContainerStatus.CREATED);
         if (LOG.isDebugEnabled()) {
@@ -354,7 +357,19 @@ public class ExtensionContainer implements Container {
         }
     }
    
-    /**
+    private void loadExtensionBindings() {
+		if(extensionBindings.size()>0){
+			for(ExtensionBinding bind:extensionBindings){
+				Set<ExtensionInfo> infos=bind.getExtensionInfos();
+				if(infos!=null&&infos.size()>0){
+					for(ExtensionInfo info:infos)
+						extensionManager.addLocalExtensionInfo(info);
+				}
+			}
+		}
+	}
+
+	/**
      * 
      */
     protected void doInitializeInternal() {
@@ -566,6 +581,15 @@ public class ExtensionContainer implements Container {
             synchronized (this.containerListeners) {
                 /*this.containerListeners.clear();*/
                 this.containerListeners.addAll(containerListeners);
+            }
+        }
+    }
+    /** just for context(spring/bp) to inject */
+    @Deprecated
+    public void setExtensionBindings(List<ExtensionBinding> bindings){
+    	if (extensionBindings != null && extensionBindings.size() > 0) {
+            synchronized (this.extensionBindings) {
+                this.extensionBindings.addAll(bindings);
             }
         }
     }
