@@ -14,7 +14,7 @@ import org.solmix.service.fdfs.proto.FdfsCommand;
  * 负责借出连接，在连接上执行业务逻辑，然后归还连
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class ConnectionManager {

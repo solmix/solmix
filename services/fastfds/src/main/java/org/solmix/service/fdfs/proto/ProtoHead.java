@@ -14,7 +14,7 @@ import org.solmix.service.fdfs.proto.mapper.BytesUtil;
  * FDFS协议头一共10位
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class ProtoHead {

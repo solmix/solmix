@@ -9,7 +9,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageAppendFileRequest;
 /**
  * 添加文件命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageAppendFileCommand extends AbstractFdfsCommand<Void> {

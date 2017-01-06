@@ -16,7 +16,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
  * size使用也有限制
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageTruncateRequest extends FdfsRequest {

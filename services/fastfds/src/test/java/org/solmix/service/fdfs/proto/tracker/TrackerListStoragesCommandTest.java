@@ -12,8 +12,6 @@ import org.solmix.service.fdfs.proto.CommandTestBase;
 /**
  * 列举存储目录服务器状态
  * 
- * @author tobato
- *
  */
 public class TrackerListStoragesCommandTest extends CommandTestBase {
 

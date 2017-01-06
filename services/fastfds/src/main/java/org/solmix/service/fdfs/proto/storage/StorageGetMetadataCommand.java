@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageGetMetadataResponse
 /**
  * 设置文件标签
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageGetMetadataCommand extends AbstractFdfsCommand<Set<MateData>> {

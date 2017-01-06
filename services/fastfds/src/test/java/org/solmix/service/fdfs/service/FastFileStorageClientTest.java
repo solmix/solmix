@@ -32,8 +32,6 @@ import org.solmix.service.fdfs.model.ThumbImageConfig;
 /**
  * FastFileStorageClient客户端
  * 
- * @author tobato
- *
  */
 public class FastFileStorageClientTest {
 

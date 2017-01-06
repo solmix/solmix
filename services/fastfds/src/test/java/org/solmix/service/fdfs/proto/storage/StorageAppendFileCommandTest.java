@@ -12,8 +12,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 文件续传命令
  * 
- * @author tobato
- *
  */
 public class StorageAppendFileCommandTest extends StorageCommandTestBase {
 

@@ -13,7 +13,7 @@ import org.solmix.service.fdfs.proto.FdfsCommand;
 /**
  * 管理TrackerClient连接池分配
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerConnectionManager extends ConnectionManager {

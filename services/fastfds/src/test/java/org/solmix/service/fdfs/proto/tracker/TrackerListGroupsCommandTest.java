@@ -11,8 +11,6 @@ import org.solmix.service.fdfs.proto.CommandTestBase;
 /**
  * 列举存储目录分组情况
  * 
- * @author tobato
- *
  */
 public class TrackerListGroupsCommandTest extends CommandTestBase {
 

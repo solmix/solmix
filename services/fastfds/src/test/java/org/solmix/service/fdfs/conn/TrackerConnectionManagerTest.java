@@ -17,7 +17,6 @@ import org.solmix.service.fdfs.proto.tracker.TrackerListGroupsCommand;
 /**
  * 验证会轮询地址
  * 
- * @author tobato
  *
  */
 public class TrackerConnectionManagerTest {

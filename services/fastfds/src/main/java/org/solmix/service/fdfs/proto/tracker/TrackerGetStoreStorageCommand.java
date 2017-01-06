@@ -9,7 +9,7 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerGetStoreStorageWith
 /**
  * 获取存储节点命令
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerGetStoreStorageCommand extends AbstractFdfsCommand<StorageNode> {

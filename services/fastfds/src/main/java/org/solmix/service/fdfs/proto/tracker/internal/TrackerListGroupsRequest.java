@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.ProtoHead;
 /**
  * 列出分组命令
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerListGroupsRequest extends FdfsRequest {

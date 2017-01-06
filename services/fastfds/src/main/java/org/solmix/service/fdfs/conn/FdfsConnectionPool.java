@@ -13,7 +13,7 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
  * 定义了对象池要实现的功能,对一个地址进行池化Map Pool
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsConnectionPool extends GenericKeyedObjectPool<InetSocketAddress, Connection> {

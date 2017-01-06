@@ -16,8 +16,6 @@ import org.solmix.service.fdfs.proto.OtherConstants;
 /**
  * 测试对象序列化
  * 
- * @author tobato
- *
  */
 public class FdfsParamMapperTest {
 

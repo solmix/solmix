@@ -10,7 +10,6 @@ import org.junit.Test;
 /**
  * 循环列表测试-支持列表轮询算法
  * 
- * @author tobato
  *
  */
 public class CircularListTest {

@@ -19,7 +19,7 @@ import org.solmix.service.fdfs.proto.tracker.TrackerListStoragesCommand;
 /**
  * 目录服务客户端默认实现
  * 
- * @author tobato
+ * 
  *
  */
 public class DefaultTrackerClient implements TrackerClient {

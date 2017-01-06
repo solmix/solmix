@@ -8,7 +8,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageDownloadResponse;
 /**
  * 文件下载命令
  * 
- * @author tobato
+ * 
  * @param <T>
  *
  */

@@ -8,8 +8,6 @@ import org.junit.Test;
 /**
  * socket连接测试
  * 
- * @author tobato
- *
  */
 public class ConnectionTest extends MockServerTestBase {
 

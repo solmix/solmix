@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.OtherConstants;
 /**
  * 文件标签（元数据）映射对象
  * 
- * @author tobato
+ * 
  *
  */
 public class MetadataMapper {

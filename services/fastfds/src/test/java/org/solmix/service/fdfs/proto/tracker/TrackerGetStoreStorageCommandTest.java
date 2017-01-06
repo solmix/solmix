@@ -9,8 +9,6 @@ import org.solmix.service.fdfs.proto.CommandTestBase;
 /**
  * 获取存储节点交易
  * 
- * @author tobato
- *
  */
 public class TrackerGetStoreStorageCommandTest extends CommandTestBase {
 

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * 缩略图配置参数
  * 
- * @author tobato
+ * 
  *
  */
 public class DefaultThumbImageConfig implements ThumbImageConfig {

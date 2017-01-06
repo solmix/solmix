@@ -11,8 +11,6 @@ import java.net.URL;
 /**
  * 测试工具类
  * 
- * @author tobato
- *
  */
 public class TestUtils {
 

@@ -8,7 +8,7 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerGetFetchStorageRequ
 /**
  * 获取源服务器
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerGetFetchStorageCommand extends AbstractFdfsCommand<StorageNodeInfo> {

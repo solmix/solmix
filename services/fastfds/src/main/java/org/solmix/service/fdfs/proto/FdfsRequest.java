@@ -9,7 +9,7 @@ import org.solmix.service.fdfs.proto.mapper.ObjectMateData;
 /**
  * Fdfs交易请求基类
  * 
- * @author tobato
+ * 
  *
  */
 public abstract class FdfsRequest {

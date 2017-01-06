@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * 缩略图配置测试
  * 
- * @author tobato
- *
  */
 public class DefaultThumbImageConfigTest {
 

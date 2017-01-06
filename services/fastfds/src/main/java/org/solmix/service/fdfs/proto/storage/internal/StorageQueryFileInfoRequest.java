@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 查询文件信息命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageQueryFileInfoRequest extends FdfsRequest {

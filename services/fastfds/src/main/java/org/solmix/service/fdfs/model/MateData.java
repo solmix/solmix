@@ -3,7 +3,7 @@ package org.solmix.service.fdfs.model;
 /**
  * 文件元数据(MateData)
  * 
- * @author tobato
+ * 
  *
  */
 public class MateData {

@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * 模拟socket处理类
  * 
- * @author tobato
- *
  */
 public class FdfsMockHandler extends Thread {
 

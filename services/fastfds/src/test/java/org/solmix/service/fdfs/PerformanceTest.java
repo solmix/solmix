@@ -12,8 +12,6 @@ import org.solmix.service.fdfs.service.AppendFileStorageClient;
 /**
  * 性能测试
  * 
- * @author tobato
- *
  */
 public class PerformanceTest {
 

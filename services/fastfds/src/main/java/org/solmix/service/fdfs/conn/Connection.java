@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
  * 
  * 负责连接的管理
  * 
- * @author tobato
+ * 
  *
  */
 public interface Connection {

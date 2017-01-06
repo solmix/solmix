@@ -9,8 +9,6 @@ import org.junit.Test;
 /**
  * TrackerAddressHolder测试
  * 
- * @author tobato
- *
  */
 public class TrackerAddressHolderTest {
 

@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerListStoragesRespons
 /**
  * 列出组命令
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerListStoragesCommand extends AbstractFdfsCommand<List<StorageState>> {

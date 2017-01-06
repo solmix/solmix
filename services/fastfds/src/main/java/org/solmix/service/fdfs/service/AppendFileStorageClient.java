@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.model.StorePath;
  * 适合处理大文件，分段传输
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public interface AppendFileStorageClient extends GenerateStorageClient {

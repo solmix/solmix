@@ -12,7 +12,7 @@ import org.solmix.service.fdfs.proto.mapper.MetadataMapper;
 /**
  * 列出分组信息执行结果
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageGetMetadataResponse extends FdfsResponse<Set<MateData>> {

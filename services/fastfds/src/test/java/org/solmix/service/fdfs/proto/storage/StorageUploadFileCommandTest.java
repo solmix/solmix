@@ -7,7 +7,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 文件上传命令测试
  * 
- * @author tobato
  *
  */
 public class StorageUploadFileCommandTest extends StorageCommandTestBase {

@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.proto.storage.FdfsInputStream;
 /**
  * 文件下载结果
  * 
- * @author tobato
+ * 
  * @param <T>
  *
  */

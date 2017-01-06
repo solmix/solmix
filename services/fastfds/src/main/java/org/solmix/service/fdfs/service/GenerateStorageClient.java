@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.proto.storage.DownloadCallback;
 /**
  * 基本文件存储客户端操作
  * 
- * @author tobato
+ * 
  *
  */
 public interface GenerateStorageClient {

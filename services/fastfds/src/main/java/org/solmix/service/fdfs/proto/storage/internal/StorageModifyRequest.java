@@ -12,7 +12,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 文件修改请求
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageModifyRequest extends FdfsRequest {

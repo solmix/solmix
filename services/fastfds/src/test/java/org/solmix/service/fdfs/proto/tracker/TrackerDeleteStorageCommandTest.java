@@ -12,8 +12,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 删除存储服务器
  * 
- * @author tobato
- *
  */
 public class TrackerDeleteStorageCommandTest extends StorageCommandTestBase {
 

@@ -18,8 +18,6 @@ import org.solmix.service.fdfs.exception.FdfsUnavailableException;
 /**
  * TrackerLocator创建
  * 
- * @author tobato
- *
  */
 public class TrackerLocatorTest {
 

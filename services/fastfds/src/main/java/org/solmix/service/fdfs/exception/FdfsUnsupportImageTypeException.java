@@ -3,7 +3,7 @@ package org.solmix.service.fdfs.exception;
 /**
  * 不支持的图片格式
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsUnsupportImageTypeException extends FdfsException {

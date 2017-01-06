@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageDeleteFileRequest;
 /**
  * 文件删除命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageDeleteFileCommand extends AbstractFdfsCommand<Void> {

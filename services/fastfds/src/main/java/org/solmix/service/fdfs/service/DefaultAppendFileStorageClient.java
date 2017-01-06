@@ -13,7 +13,7 @@ import org.solmix.service.fdfs.proto.storage.StorageUploadFileCommand;
 /**
  * 存储服务客户端接口实现
  * 
- * @author tobato
+ * 
  *
  */
 public class DefaultAppendFileStorageClient extends DefaultGenerateStorageClient implements AppendFileStorageClient {

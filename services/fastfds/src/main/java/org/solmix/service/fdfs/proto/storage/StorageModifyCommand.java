@@ -8,7 +8,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageModifyRequest;
 /**
  * 文件修改命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageModifyCommand extends AbstractFdfsCommand<Void> {

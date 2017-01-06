@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.ProtoHead;
 /**
  * 获取存储节点请求
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerGetStoreStorageRequest extends FdfsRequest {

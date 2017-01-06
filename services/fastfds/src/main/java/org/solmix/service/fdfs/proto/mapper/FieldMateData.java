@@ -13,7 +13,7 @@ import org.solmix.service.fdfs.proto.OtherConstants;
 /**
  * 属性映射MateData定义
  * 
- * @author tobato
+ * 
  *
  */
 class FieldMateData {

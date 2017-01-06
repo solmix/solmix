@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 文件上传命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageDeleteFileRequest extends FdfsRequest {

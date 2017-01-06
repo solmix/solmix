@@ -3,7 +3,7 @@ package org.solmix.service.fdfs.model;
 /**
  * 缩略图生成配置支持
  * 
- * @author tobato
+ * 
  *
  */
 public interface ThumbImageConfig {

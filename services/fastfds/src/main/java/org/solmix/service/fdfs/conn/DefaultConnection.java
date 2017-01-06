@@ -19,7 +19,7 @@ import org.solmix.service.fdfs.proto.mapper.BytesUtil;
 /**
  * 默认连接实现
  * 
- * @author tobato
+ * 
  *
  */
 public class DefaultConnection implements Connection {

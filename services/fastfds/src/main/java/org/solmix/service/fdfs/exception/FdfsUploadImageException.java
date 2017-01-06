@@ -3,7 +3,7 @@ package org.solmix.service.fdfs.exception;
 /**
  * 上传图片例外
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsUploadImageException extends FdfsException {

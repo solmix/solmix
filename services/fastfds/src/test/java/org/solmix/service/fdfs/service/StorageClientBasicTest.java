@@ -15,8 +15,6 @@ import org.solmix.service.fdfs.proto.storage.DownloadByteArray;
 /**
  * 文件基础操作测试演示
  * 
- * @author tobato
- *
  */
 public class StorageClientBasicTest extends StorageClientTestBase {
 

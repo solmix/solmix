@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerDeleteStorageReques
 /**
  * 移除存储服务器命令
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerDeleteStorageCommand extends AbstractFdfsCommand<Void> {

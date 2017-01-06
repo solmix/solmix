@@ -10,8 +10,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 文件查询处理
  * 
- * @author tobato
- *
  */
 public class StorageQueryFileInfoCommandTest extends StorageCommandTestBase {
 

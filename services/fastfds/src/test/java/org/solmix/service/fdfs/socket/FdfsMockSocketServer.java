@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 /**
  * 模拟测试服务
  * 
- * @author tobato
- *
  */
 public class FdfsMockSocketServer extends Thread {
 

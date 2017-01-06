@@ -9,7 +9,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageUploadFileRequest;
 /**
  * 文件上传命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageUploadFileCommand extends AbstractFdfsCommand<StorePath> {

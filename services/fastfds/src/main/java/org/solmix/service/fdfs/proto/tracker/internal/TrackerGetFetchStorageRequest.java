@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 获取源服务器
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerGetFetchStorageRequest extends FdfsRequest {

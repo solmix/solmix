@@ -13,7 +13,7 @@ import org.solmix.service.fdfs.exception.FdfsIOException;
 /**
  * 交易命令抽象类
  * 
- * @author tobato
+ * 
  * @param <T>
  *
  */

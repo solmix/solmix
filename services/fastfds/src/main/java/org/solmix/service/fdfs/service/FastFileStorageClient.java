@@ -9,7 +9,7 @@ import org.solmix.service.fdfs.model.StorePath;
 /**
  * 面向普通应用的文件操作接口封装
  * 
- * @author tobato
+ * 
  *
  */
 public interface FastFileStorageClient extends GenerateStorageClient {

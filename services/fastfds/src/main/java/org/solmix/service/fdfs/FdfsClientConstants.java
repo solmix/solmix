@@ -3,7 +3,7 @@ package org.solmix.service.fdfs;
 /**
  * 客户端常量配置
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsClientConstants {

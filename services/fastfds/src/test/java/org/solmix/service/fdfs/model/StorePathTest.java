@@ -12,8 +12,6 @@ import org.solmix.service.fdfs.exception.FdfsUnsupportStorePathException;
 /**
  * 文件路径对象
  * 
- * @author tobato
- *
  */
 public class StorePathTest {
 

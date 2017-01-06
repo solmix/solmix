@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageQueryFileInfoReques
 /**
  * 文件删除命令
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageQueryFileInfoCommand extends AbstractFdfsCommand<FileInfo> {

@@ -15,8 +15,6 @@ import org.solmix.service.fdfs.conn.TrackerConnectionManager;
 /**
  * StorageClient测试基类
  * 
- * @author tobato
- *
  */
 public class StorageClientTestBase
 {

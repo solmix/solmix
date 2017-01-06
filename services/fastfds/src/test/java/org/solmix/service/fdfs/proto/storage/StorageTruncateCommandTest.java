@@ -10,8 +10,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 文件截取命令
  * 
- * @author tobato
- *
  */
 public class StorageTruncateCommandTest extends StorageCommandTestBase {
 

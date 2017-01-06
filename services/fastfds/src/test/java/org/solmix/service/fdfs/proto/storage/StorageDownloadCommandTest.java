@@ -7,8 +7,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 文件下载
  * 
- * @author tobato
- *
  */
 public class StorageDownloadCommandTest extends StorageCommandTestBase {
 

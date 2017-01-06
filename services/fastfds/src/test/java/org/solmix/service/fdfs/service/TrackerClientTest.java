@@ -24,8 +24,6 @@ import org.solmix.service.fdfs.proto.ErrorCodeConstants;
 /**
  * unit test for TrackerClientService
  * 
- * @author tobato
- *
  */
 public class TrackerClientTest {
 

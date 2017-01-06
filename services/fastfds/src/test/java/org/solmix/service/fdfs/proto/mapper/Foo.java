@@ -5,8 +5,6 @@ import org.solmix.service.fdfs.proto.OtherConstants;
 /**
  * 测试类
  * 
- * @author tobato
- *
  */
 public class Foo {
 

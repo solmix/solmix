@@ -26,7 +26,7 @@ import org.solmix.service.fdfs.proto.storage.enums.StorageMetdataSetType;
 /**
  * 基本存储客户端操作实现
  * 
- * @author tobato
+ * 
  *
  */
 public class DefaultGenerateStorageClient implements GenerateStorageClient {

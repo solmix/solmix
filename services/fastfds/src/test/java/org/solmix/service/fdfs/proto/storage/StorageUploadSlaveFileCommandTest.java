@@ -20,8 +20,6 @@ import net.coobird.thumbnailator.Thumbnails;
 /**
  * 文件上传命令测试
  * 
- * @author tobato
- *
  */
 public class StorageUploadSlaveFileCommandTest extends StorageCommandTestBase {
 

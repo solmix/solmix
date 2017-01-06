@@ -13,7 +13,7 @@ import org.solmix.commons.util.DataUtils;
 /**
  * param对象与byte映射器
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsParamMapper {

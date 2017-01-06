@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 文件下载请求
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageDownloadRequest extends FdfsRequest {

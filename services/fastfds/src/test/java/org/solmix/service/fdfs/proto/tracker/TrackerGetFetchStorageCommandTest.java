@@ -8,8 +8,6 @@ import org.solmix.service.fdfs.proto.StorageCommandTestBase;
 /**
  * 获取源服务器
  * 
- * @author tobato
- *
  */
 public class TrackerGetFetchStorageCommandTest extends StorageCommandTestBase {
 

@@ -28,7 +28,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageUploadSlaveFileRequ
  * 
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageUploadSlaveFileCommand extends AbstractFdfsCommand<StorePath> {

@@ -6,7 +6,7 @@ import java.io.InputStream;
 /**
  * 文件下载回调接口
  * 
- * @author tobato
+ * 
  *
  * @param <T>
  */

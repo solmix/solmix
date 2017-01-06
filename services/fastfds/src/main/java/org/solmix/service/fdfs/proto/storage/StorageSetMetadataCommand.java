@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.storage.internal.StorageSetMetadataRequest;
 /**
  * 设置文件标签
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageSetMetadataCommand extends AbstractFdfsCommand<Void> {

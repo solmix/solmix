@@ -14,7 +14,7 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
  * 定义了被池化的对象的创建，初始化，激活，钝化以及销毁功能
  * </per>
  * 
- * @author tobato
+ * 
  *
  */
 public class PooledConnectionFactory extends BaseKeyedPooledObjectFactory<InetSocketAddress, Connection> {

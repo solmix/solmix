@@ -7,7 +7,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
  * fastdfs中group的状态信息
  * 
  * @author yuqih
- * @author tobato
+ * 
  * 
  */
 public class GroupState {

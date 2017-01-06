@@ -50,7 +50,7 @@ public class ThreadPoolMBean implements ManagedComponent
         return pool.getActiveCount(); 
     }
     
-    @ManagedAttribute(description = "The WorkQueue has nothing to do",
+    @ManagedAttribute(description = "The Threadpool has nothing to do",
                       persistPolicy = "OnUpdate")
     public boolean isQueueEmpty() {
         return pool.isQueueEmpty();

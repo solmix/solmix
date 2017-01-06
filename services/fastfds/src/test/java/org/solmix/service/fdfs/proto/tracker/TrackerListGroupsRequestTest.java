@@ -7,8 +7,6 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerListGroupsRequest;
 /**
  * 列举Groups请求
  * 
- * @author tobato
- *
  */
 public class TrackerListGroupsRequestTest {
 

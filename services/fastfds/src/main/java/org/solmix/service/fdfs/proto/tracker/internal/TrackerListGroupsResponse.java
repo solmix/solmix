@@ -14,7 +14,7 @@ import org.solmix.service.fdfs.proto.mapper.ObjectMateData;
 /**
  * 列出分组信息执行结果
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerListGroupsResponse extends FdfsResponse<List<GroupState>> {

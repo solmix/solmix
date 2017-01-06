@@ -10,7 +10,6 @@ import org.solmix.service.fdfs.socket.FdfsMockSocketServer;
 /**
  * socket 测试基类
  * 
- * @author tobato
  *
  */
 public class MockServerTestBase {

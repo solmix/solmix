@@ -19,8 +19,6 @@ import org.solmix.service.fdfs.proto.ErrorCodeConstants;
 /**
  * Metadata操作演示
  * 
- * @author tobato
- *
  */
 public class StorageClientMetadataTest extends StorageClientTestBase {
 

@@ -17,7 +17,7 @@ import org.solmix.service.fdfs.proto.storage.enums.StorageMetdataSetType;
 /**
  * 设置文件标签
  * 
- * @author tobato
+ * 
  *
  */
 public class StorageSetMetadataRequest extends FdfsRequest {

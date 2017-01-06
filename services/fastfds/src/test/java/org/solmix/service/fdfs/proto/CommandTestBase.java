@@ -10,8 +10,6 @@ import org.solmix.service.fdfs.conn.PooledConnectionFactory;
 /**
  * command测试基类
  * 
- * @author tobato
- *
  */
 public class CommandTestBase {
     /** 日志 */

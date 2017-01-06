@@ -3,7 +3,7 @@ package org.solmix.service.fdfs.proto.mapper;
 /**
  * 映射例外
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsColumnMapException extends RuntimeException {

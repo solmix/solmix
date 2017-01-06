@@ -5,7 +5,7 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 /**
  * 连接池配置
  * 
- * @author tobato
+ * 
  *
  */
 public class ConnectionPoolConfig extends GenericKeyedObjectPoolConfig {

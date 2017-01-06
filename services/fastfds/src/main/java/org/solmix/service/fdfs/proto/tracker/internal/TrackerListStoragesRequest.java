@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 列出存储状态
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerListStoragesRequest extends FdfsRequest {

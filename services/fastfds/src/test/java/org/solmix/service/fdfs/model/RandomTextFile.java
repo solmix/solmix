@@ -9,8 +9,6 @@ import org.solmix.service.fdfs.TestUtils;
 /**
  * 测试用随机字符文件
  * 
- * @author tobato
- *
  */
 public class RandomTextFile {
 

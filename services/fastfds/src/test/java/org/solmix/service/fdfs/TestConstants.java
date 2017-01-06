@@ -8,8 +8,6 @@ import org.solmix.service.fdfs.socket.FdfsMockSocketServer;
 /**
  * 测试常量定义
  * 
- * @author tobato
- *
  */
 @SuppressWarnings("unused")
 public class TestConstants {

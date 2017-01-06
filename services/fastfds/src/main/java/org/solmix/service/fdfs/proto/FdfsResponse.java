@@ -11,7 +11,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsParamMapper;
 /**
  * Fdfs交易应答基类
  * 
- * @author tobato
+ * 
  *
  */
 public abstract class FdfsResponse<T> {

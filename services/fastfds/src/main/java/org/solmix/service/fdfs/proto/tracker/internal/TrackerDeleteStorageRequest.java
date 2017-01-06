@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.mapper.FdfsColumn;
 /**
  * 移除存储服务器
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerDeleteStorageRequest extends FdfsRequest {

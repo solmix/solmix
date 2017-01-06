@@ -7,7 +7,7 @@ package org.solmix.service.fdfs.conn;
  * 由Nginx服务器承担此角色，通常配置以后就不会再改变
  * </pre>
  * 
- * @author tobato
+ * 
  *
  */
 public class FdfsWebServer {

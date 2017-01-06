@@ -10,7 +10,7 @@ import org.solmix.service.fdfs.proto.tracker.internal.TrackerListGroupsResponse;
 /**
  * 列出组命令
  * 
- * @author tobato
+ * 
  *
  */
 public class TrackerListGroupsCommand extends AbstractFdfsCommand<List<GroupState>> {
