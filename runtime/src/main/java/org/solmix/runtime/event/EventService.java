@@ -30,4 +30,5 @@ public interface EventService
     void postEvent(IEvent event);
 
     void sendEvent(IEvent event);
+    
 }

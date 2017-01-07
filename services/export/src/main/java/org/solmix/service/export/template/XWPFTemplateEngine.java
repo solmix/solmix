@@ -24,7 +24,10 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
@@ -53,7 +56,24 @@ public class XWPFTemplateEngine extends PoiAbstractTemplateEngine
                 XWPFTableRow row=  table.getRow(i);
                 List<XWPFTableCell> cells = row.getTableCells();
                 for(XWPFTableCell cell:cells){
-                    System.out.println(cell.getText());
+                	 String cellValue = cell.getText();
+                     if (cellValue!=null&&cellValue.startsWith("$>>")) {
+                         String script = cellValue.substring(3);
+                         Object value = evaluateValue(script, context);
+                         if (value != null) {
+                        	 List<IBodyElement> ii= cell.getBodyElements();
+                        	 IBodyElement be = ii.get(0);
+                        	 
+                        	 if(be instanceof XWPFParagraph ){
+                        		 XWPFParagraph ph  =(XWPFParagraph)be;
+                        		 XWPFRun run= ph.getRuns().get(0);
+                        		 //PIO 当前版本还不支持
+                        		 run.removeCarriageReturn();
+                        		 run.setText(value.toString());
+                        		
+                        	 }
+                         }
+                     }
                 }
             }
         }

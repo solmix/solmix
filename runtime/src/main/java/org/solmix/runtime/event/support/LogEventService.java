@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.event.EventService;
+import org.solmix.runtime.event.EventServiceAdapter;
 import org.solmix.runtime.event.IEvent;
 
 
@@ -32,7 +33,7 @@ import org.solmix.runtime.event.IEvent;
  * @version $Id$  2015年7月3日
  */
 @Extension(name="log")
-public class LogEventService implements EventService
+public class LogEventService extends  EventServiceAdapter
 {
     private static final Logger LOG = LoggerFactory.getLogger(LogEventService.class);
 

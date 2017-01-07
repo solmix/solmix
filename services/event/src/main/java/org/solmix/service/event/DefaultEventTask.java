@@ -33,7 +33,7 @@ import org.solmix.runtime.event.IEventHandler;
 public class DefaultEventTask implements EventTask
 {
     private static final Logger logger = LoggerFactory.getLogger(DefaultEventTask.class);
-    private final DefaultEventTaskManager taskManager;
+    private final EventTaskManager taskManager;
     private final IEvent event;
     private final IEventHandler handler;
     
@@ -42,7 +42,7 @@ public class DefaultEventTask implements EventTask
      * @param event
      * @param eventHandler
      */
-    public DefaultEventTask(DefaultEventTaskManager taskManager, IEvent event, IEventHandler handler)
+    public DefaultEventTask(EventTaskManager taskManager, IEvent event, IEventHandler handler)
     {
         this.taskManager=taskManager;
         this.event=event;

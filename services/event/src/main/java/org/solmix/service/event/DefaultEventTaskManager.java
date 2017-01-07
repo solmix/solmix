@@ -120,5 +120,16 @@ public class DefaultEventTaskManager implements EventTaskManager
         blackList.add(handler);
 
     }
+    
+	public void addEventHandler(String topic, IEventHandler handler) {
+		
+	}
 
+	public void addEventHandler(IEventHandler handler) {
+		
+	}
+
+	public void removeEventHandler(String topic) {
+		
+	}
 }

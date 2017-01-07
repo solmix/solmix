@@ -27,7 +27,9 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.event.EventServiceAdapter;
 import org.solmix.runtime.event.IEvent;
+import org.solmix.runtime.event.IEventHandler;
 import org.solmix.runtime.threadpool.DefaultThreadPool;
 import org.solmix.service.event.deliver.AsyncDeliver;
 import org.solmix.service.event.deliver.SyncDeliver;
@@ -41,7 +43,7 @@ import org.solmix.service.event.util.LeastRecentlyUsedCacheMap;
  * @version $Id$ 2015年7月3日
  */
 
-public class DefaultEventService extends AbstractEventService
+public class DefaultEventService extends EventServiceAdapter
 {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultEventService.class);
@@ -114,8 +116,13 @@ public class DefaultEventService extends AbstractEventService
              */
             @Override
             public List<EventTask> createEventTasks(final IEvent event) {
-                throw new IllegalStateException("The EventAdmin is stopped");
+                throw new IllegalStateException("The EventService is shutdown");
             }
+
+			@Override
+			public void addToBlackList(IEventHandler handler) {
+				 throw new IllegalStateException("The EventAdmin is shutdown");
+			}
         };
     }
 
@@ -266,4 +273,15 @@ public class DefaultEventService extends AbstractEventService
         this.container = container;
     }
 
+	public void addEventHandler(String topic, IEventHandler handler) {
+		
+	}
+
+	public void addEventHandler(IEventHandler handler) {
+		
+	}
+
+	public void removeEventHandler(String topic) {
+		
+	}
 }

@@ -20,7 +20,9 @@ package org.solmix.runtime.event.support;
 
 import org.solmix.runtime.Extension;
 import org.solmix.runtime.event.EventService;
+import org.solmix.runtime.event.EventServiceAdapter;
 import org.solmix.runtime.event.IEvent;
+import org.solmix.runtime.event.IEventHandler;
 
 
 /**
@@ -30,7 +32,7 @@ import org.solmix.runtime.event.IEvent;
  * @version $Id$  2015年7月3日
  */
 @Extension(name="null")
-public class NullEventService implements EventService
+public class NullEventService extends EventServiceAdapter
 {
     @Override
     public void postEvent(IEvent event) {
@@ -41,5 +43,7 @@ public class NullEventService implements EventService
     public void sendEvent(IEvent event) {
         event=null;
     }
+
+	
 
 }

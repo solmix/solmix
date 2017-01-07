@@ -65,7 +65,6 @@ public class XSSFTemplateEngine extends PoiAbstractTemplateEngine
                            }
                        }
 
-                       System.out.println(cell.getStringCellValue());
                    }
                }
            }

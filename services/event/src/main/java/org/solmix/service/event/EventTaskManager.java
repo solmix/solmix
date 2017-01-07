@@ -21,6 +21,7 @@ package org.solmix.service.event;
 import java.util.List;
 
 import org.solmix.runtime.event.IEvent;
+import org.solmix.runtime.event.IEventHandler;
 
 
 /**
@@ -32,4 +33,7 @@ import org.solmix.runtime.event.IEvent;
 public interface EventTaskManager
 {
     List<EventTask> createEventTasks(IEvent event);
+
+	void addToBlackList(IEventHandler handler);
+
 }
