@@ -30,11 +30,16 @@ import java.util.Map;
 public interface IEvent extends Event
 {
 
+	/**the same with EventConstants.EVENT_TOPIC*/
     public static final String EVENT_TOPIC = "event.topics";
 
     Map<String, ?> getProperties();
 
     Object getProperty(String name);
 
+    /**
+     * Event's topic,net start and end with "/"
+     * @return
+     */
     String getTopic();
 }

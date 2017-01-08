@@ -73,6 +73,11 @@ public class DefaultEventTask implements EventTask
     @Override
     public void blackListHandler() {
         taskManager.addToBlackList(handler);
+        if(handler instanceof EventHandlerProxy){
+        	((EventHandlerProxy)handler).blackListHandler();
+        }else{
+        	logger.warn("Blacklisting Eventhandler due to timeout!");
+        }
 
     }
 

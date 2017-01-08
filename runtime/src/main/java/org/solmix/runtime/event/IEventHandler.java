@@ -28,6 +28,6 @@ package org.solmix.runtime.event;
 public interface IEventHandler
 {
     
-    boolean handle(IEvent event);
+    void handle(IEvent event);
 
 }

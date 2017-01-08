@@ -1,5 +1,6 @@
 package org.solmix.service.event;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.solmix.runtime.event.EventTopic;
@@ -8,23 +9,21 @@ import org.solmix.runtime.event.IEventHandler;
 
 @EventTopic(value="org/solmix/monitor/time")
 public class AsyMonitorEventHandler implements IEventHandler {
-
-	private AtomicInteger  count= new AtomicInteger();
-	private long threadId;
+	CountDownLatch count;
+	private int hanlded=0;
+	public AsyMonitorEventHandler(CountDownLatch count) {
+		this.count=count;
+	}
 	@Override
-	public boolean handle(IEvent event) {
-		count.getAndIncrement();
-		threadId=Thread.currentThread().getId();
-		return false;
+	public void handle(IEvent event) {
+		count.countDown();
+		hanlded++;
+		System.out.println(Thread.currentThread().getName()+"-"+System.currentTimeMillis());
+	}
+	public long getHanlded() {
+		return hanlded;
 	}
 
-	public int getCount(){
-		return count.intValue();
-	}
-
-	public long getThreadId() {
-		return threadId;
-	}
 
 	
 }

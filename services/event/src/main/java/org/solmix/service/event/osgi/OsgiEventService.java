@@ -20,7 +20,6 @@ package org.solmix.service.event.osgi;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.solmix.runtime.event.EventService;
 import org.solmix.runtime.event.EventServiceAdapter;
 import org.solmix.runtime.event.IEvent;
 

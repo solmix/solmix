@@ -18,6 +18,8 @@
  */
 package org.solmix.service.event.deliver;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -91,14 +93,12 @@ public class SyncDeliver implements EventDeliver
             final EventTask task = i.next();
 
             if (!useTimeout(task)) {
-                // no timeout, we can directly execute
+                //直接执行
                 task.execute();
             } else if (syncThread != null) {
-                // if this is a cascaded event, we directly use this thread
-                // otherwise we could end up in a starvation
-                final long startTime = System.currentTimeMillis();
+                final long startTime = getTimeInMillis();
                 task.execute();
-                if (System.currentTimeMillis() - startTime > timeout) {
+                if (getTimeInMillis() - startTime > timeout) {
                     task.blackListHandler();
                 }
             } else {
@@ -137,7 +137,12 @@ public class SyncDeliver implements EventDeliver
         }
 
     }
-
+    public long getTimeInMillis()
+    {
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        return bean.isThreadCpuTimeEnabled() ?
+            bean.getThreadCpuTime(Thread.currentThread().getId())/1000000 : System.currentTimeMillis();
+    }
   
     private boolean useTimeout(EventTask task) {
         // we only check the classname if a timeout is configured

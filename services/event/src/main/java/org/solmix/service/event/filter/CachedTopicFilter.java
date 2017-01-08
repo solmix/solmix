@@ -33,7 +33,7 @@ public class CachedTopicFilter implements TopicFilter
 
     private final Cache<String, String> cache;
 
-    private final char[] keyChars = "event.topics".toCharArray();
+    private final char[] keyChars = TOPIC_PROP.toCharArray();
 
     private final char[] filterStart;
 

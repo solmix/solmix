@@ -273,15 +273,39 @@ public class DefaultEventService extends EventServiceAdapter
         this.container = container;
     }
 
+    private DefaultEventTaskManager getDefaultEventTaskManager(String operation){
+    	if(this.taskManager instanceof DefaultEventTaskManager){
+    		return (DefaultEventTaskManager)this.taskManager;
+    	}else{
+    		throw new IllegalStateException(operation+" is not supported");
+    	}
+    }
 	public void addEventHandler(String topic, IEventHandler handler) {
-		
+		getDefaultEventTaskManager("addEventHandler").addEventHandler(topic, handler);
 	}
 
 	public void addEventHandler(IEventHandler handler) {
-		
+		getDefaultEventTaskManager("addEventHandler").addEventHandler( handler);
 	}
 
 	public void removeEventHandler(String topic) {
-		
+		getDefaultEventTaskManager("removeEventHandler").removeEventHandler(topic);
 	}
+
+	public DefaultThreadPool getAsyThreadPool() {
+		return asyThreadPool;
+	}
+
+	public void setAsyThreadPool(DefaultThreadPool asyThreadPool) {
+		this.asyThreadPool = asyThreadPool;
+	}
+
+	public DefaultThreadPool getSynThreadPool() {
+		return synThreadPool;
+	}
+
+	public void setSynThreadPool(DefaultThreadPool synThreadPool) {
+		this.synThreadPool = synThreadPool;
+	}
+	
 }

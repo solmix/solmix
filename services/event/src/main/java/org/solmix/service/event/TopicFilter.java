@@ -18,21 +18,22 @@
  */
 package org.solmix.service.event;
 
-
+import org.solmix.runtime.event.IEvent;
 
 /**
  * 
  * @author solmix.f@gmail.com
- * @version 110035  2011-10-1
+ * @version 110035 2011-10-1
  */
 
-public interface TopicFilter
-{
+public interface TopicFilter {
 
-/**
- * @param cache
- * @param ignoreTopic
- * @return
- */
-String createFilter(String topic);
+	static final String TOPIC_PROP = IEvent.EVENT_TOPIC;
+
+	/**
+	 * @param cache
+	 * @param ignoreTopic
+	 * @return
+	 */
+	String createFilter(String topic);
 }

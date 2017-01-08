@@ -43,7 +43,7 @@ public interface EventFilter
          * @param reference An unused service reference
          * @return <tt>true</tt>
          */
-        public boolean match(final ServiceReference/* <?> */reference) {
+        public boolean match(final ServiceReference <?> reference) {
             return true;
         }
 
@@ -63,7 +63,7 @@ public interface EventFilter
          * @param dictionary An unused dictionary.
          * @return <tt>true</tt>
          */
-        public boolean matchCase(final Dictionary/* <String,?> */dictionary) {
+        public boolean matchCase(final Dictionary <String,?>dictionary) {
             return true;
         }
 
