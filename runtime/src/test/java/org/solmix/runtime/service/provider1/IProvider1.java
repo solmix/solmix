@@ -26,7 +26,7 @@ import org.solmix.runtime.Extension;
  * @author solmix.f@gmail.com
  * @version $Id$  2014年8月6日
  */
-@Extension(name="provider1")
+@Extension("provider1")
 public interface IProvider1
 {
     String sayHello();

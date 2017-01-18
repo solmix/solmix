@@ -105,7 +105,7 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
     private void loadExtensions() {
         Extension e = type.getAnnotation(Extension.class);
         if (e != null) {
-            String defName = e.name();
+            String defName = e.value();
             if (defName != null) {
                 defaultName = StringUtils.trimToNull(defName);
             }
@@ -124,8 +124,8 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
                             Class<?> clazz = info.getClassObject();
                             if (clazz != null) {
                                 Extension anno = clazz.getAnnotation(Extension.class);
-                                if (anno != null && anno.name() != null) {
-                                    String implemntor = anno.name().trim();
+                                if (anno != null && anno.value() != null) {
+                                    String implemntor = anno.value().trim();
                                     /*if (cachedExtensions.get(implemntor) != null) {
                                         ExtensionInfo older = cachedExtensions.get(implemntor);
                                         throw new IllegalStateException("Class:[" + clazz.getName() + "] with name:[" + implemntor
@@ -189,7 +189,7 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
     public static String extensionName(Class<?> clazz) {
         Extension e = clazz.getAnnotation(Extension.class);
         if (e != null) {
-            return e.name().trim();
+            return e.value().trim();
         }
         return null;
     }

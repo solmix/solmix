@@ -30,7 +30,7 @@ import org.solmix.runtime.Extension;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年7月28日
  */
-@Extension(name="velocity")
+@Extension("velocity")
 public interface TemplateEngine
 {
 

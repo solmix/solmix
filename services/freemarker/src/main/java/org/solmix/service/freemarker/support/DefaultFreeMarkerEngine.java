@@ -50,7 +50,7 @@ import freemarker.template.Template;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年9月13日
  */
-@Extension(name="freemarker")
+@Extension("freemarker")
 @SuppressWarnings("deprecation")
 public class DefaultFreeMarkerEngine implements FreeMarkerEngine ,ProductionAware
 {

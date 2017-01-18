@@ -26,7 +26,7 @@ import org.solmix.runtime.Extension;
  * @author solmix.f@gmail.com
  * @version $Id$  2014年8月6日
  */
-@Extension(name="provider2")
+@Extension(value="provider2")
 public class Provider12 implements IProvider1
 {
 

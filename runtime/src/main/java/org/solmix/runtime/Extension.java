@@ -35,5 +35,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Extension {
 
-    String name() default "";
+    String value() default "";
 }

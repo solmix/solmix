@@ -33,7 +33,7 @@ import org.solmix.service.template.TemplateException;
  * @author solmix.f@gmail.com
  * @version $Id$ 2015年9月9日
  */
-@Extension(name = "world2007")
+@Extension( "world2007")
 public class HWPFTemplateEngine extends PoiAbstractTemplateEngine
 {
     @Override

@@ -31,7 +31,7 @@ import org.solmix.runtime.Extension;
  * @author solmix.f@gmail.com
  * @version $Id$  2015年8月7日
  */
-@Extension(name="xls")
+@Extension("xls")
 public interface ExportService
 {
 

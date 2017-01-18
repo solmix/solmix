@@ -56,7 +56,7 @@ public class ExtensionObjectCache {
             return;
         }
         if (isExtension(clazz) && isExtension(o.getClass())) {
-            String name = o.getClass().getAnnotation(Extension.class).name();
+            String name = o.getClass().getAnnotation(Extension.class).value();
             ExtensionEntry entry = (ExtensionEntry) cache.get(clazz);
             if (entry == null) {
                 cache.put(clazz, new ExtensionEntry(name, o));
@@ -71,7 +71,7 @@ public class ExtensionObjectCache {
     public Object getObject(Class<?> clazz) {
         Object o = cache.get(clazz);
         if (o instanceof ExtensionEntry) {
-            String name = clazz.getAnnotation(Extension.class).name();
+            String name = clazz.getAnnotation(Extension.class).value();
             return ((ExtensionEntry) o).get(name);
         } else {
             return o;
