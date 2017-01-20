@@ -58,7 +58,8 @@ public class PageControl implements Serializable, Cloneable {
 	
 	public static PageControl fromRows(int startRow,int endRow){
 		int pageSize = endRow-startRow;
-		int pageNum=pageSize>=0? startRow/pageSize:0;
+		//start from 1
+		int pageNum=pageSize>0? (startRow/pageSize)+1:1;
 		return new PageControl(pageNum, pageSize);
 	}
 	
@@ -175,7 +176,8 @@ public class PageControl implements Serializable, Cloneable {
 	 * and page number.
 	 */
 	public int getPageFirstIndex() {
-		return pageNum * pageSize;
+		int first = (pageNum - 1) * pageSize;
+		return first < 0 ? 0 : first;
 	}
 
 	@Override
@@ -213,9 +215,9 @@ public class PageControl implements Serializable, Cloneable {
 	@Override
 	public int hashCode() {
 		int hashcode= (37 * pageNum) + (37 * pageSize) ;
-		if(sortAttributes!=null&&sortAttributes.length>0){
-			for(SortAttr attr:sortAttributes){
-				hashcode=hashcode+attr.hashCode();
+		if (sortAttributes != null && sortAttributes.length > 0) {
+			for (SortAttr attr : sortAttributes) {
+				hashcode = hashcode + attr.hashCode();
 			}
 		}
 		return hashcode;
