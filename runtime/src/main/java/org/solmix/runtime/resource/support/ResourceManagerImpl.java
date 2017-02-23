@@ -139,37 +139,37 @@ public class ResourceManagerImpl implements ResourceManager {
     }
 
     private <T> T findResource(String name, Class<T> type, boolean asStream,
-        List<ResourceResolver> resolvers) {
-        if (!firstCalled) {
-            onFirstResolve();
-        }
-        if (resolvers == null) {
-            resolvers = registeredResolvers;
-        }
-        if (LOG.isTraceEnabled()) {
-            if (name == null) {
-                LOG.trace("Resolving " + type);
-            } else {
-                LOG.trace("Resolving resource [" + name + "]"
-                    + (asStream ? " as stream " : " type is " + type));
+            List<ResourceResolver> resolvers) {
+            if (!firstCalled) {
+                onFirstResolve();
             }
-        }
-
-        T ret = null;
-
-        for (ResourceResolver rr : resolvers) {
-            if (asStream) {
-                ret = type.cast(rr.getAsStream(name));
-            } else {
-                ret = rr.resolve(name, type);
+            if (resolvers == null) {
+                resolvers = registeredResolvers;
             }
-            if (ret != null) {
-                break;
+            if (LOG.isTraceEnabled()) {
+                if (name == null) {
+                    LOG.trace("Resolving " + type);
+                } else {
+                    LOG.trace("Resolving resource [" + name + "]"
+                        + (asStream ? " as stream " : " type is " + type));
+                }
             }
-        }
-        return ret;
-    }
 
+            T ret = null;
+
+            for (ResourceResolver rr : resolvers) {
+                if (asStream) {
+                    ret = type.cast(rr.getAsStream(name));
+                } else {
+                    ret = rr.resolve(name, type);
+                }
+                if (ret != null) {
+                    break;
+                }
+            }
+            return ret;
+        }
+    
     protected void onFirstResolve() {
         // nothing
         firstCalled = true;

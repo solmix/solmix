@@ -19,7 +19,6 @@
 
 package org.solmix.runtime.transaction;
 
-import java.util.Map;
 
 /**
  * 
@@ -30,13 +29,24 @@ import java.util.Map;
 public interface TransactionService
 {
 
-    void rollback() throws TransactionException;
+	 /**
+     * 实际的事物对象，比如 
+     * <li>JDBC Connection
+     * <li>sqlSession
+     * <li>EntityManager
+     * @return
+     */
+    Object getTransactionObject();
+    
+    void commit();
+    
+    void rollback();
 
-    void commit() throws TransactionException;
-
-    void bindResource(Object object, Transaction transaction);
-
-    Map<Object, Transaction> getResourceMap();
-
-    Transaction getResource(Object object);
+    void close();
+    
+    void reset();
+    
+    boolean isOpen();
+    void released();
+    void requested();
 }
