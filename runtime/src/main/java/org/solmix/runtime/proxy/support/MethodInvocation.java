@@ -6,4 +6,6 @@ public interface MethodInvocation {
 
 	Object[] getArguments();
 	Method getMethod();
+	Object proceed() throws Throwable;
+	Object getThis();
 }

@@ -7,4 +7,8 @@ public class ProxyInvocationException extends RuntimeException {
 		super(msg);
 	}
 
+	public ProxyInvocationException(String msg, Throwable ex) {
+		super(msg,ex);
+	}
+
 }

@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
-import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
@@ -109,7 +108,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,
 			}
 
 			// Get the interception chain for this method.
-			List<Object> chain = this.config.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
+			List<Object> chain = this.config.getInterceptorsAndDynamicInterception(method, targetClass);
 
 			// Check whether we have any advice. If we don't, we can fallback on direct
 			// reflective invocation of the target, and avoid creating a MethodInvocation.
@@ -129,9 +128,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,
 			// Massage return value if necessary.
 			Class<?> returnType = method.getReturnType();
 			if (retVal != null && retVal == target && returnType.isInstance(proxy) ) {
-				// Special case: it returned "this" and the return type of the method
-				// is type-compatible. Note that we can't help if the target sets
-				// a reference to itself in another returned object.
+				
 				retVal = proxy;
 			} else if (retVal == null && returnType != Void.TYPE && returnType.isPrimitive()) {
 				throw new ProxyInvocationException("Null return value from advice does not match primitive return type for: " + method);

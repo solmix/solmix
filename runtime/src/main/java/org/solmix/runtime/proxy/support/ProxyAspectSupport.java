@@ -160,8 +160,7 @@ public class ProxyAspectSupport extends ProxyInfo {
 	}
 
 	public void setTargetSource(TargetSource targetSource) {
-		this.targetSource = (targetSource != null ? targetSource
-				: EMPTY_TARGET_SOURCE);
+		this.targetSource = (targetSource != null ? targetSource : EMPTY_TARGET_SOURCE);
 	}
 
 	public Class<?>[] getProxiedInterfaces() {
@@ -189,12 +188,12 @@ public class ProxyAspectSupport extends ProxyInfo {
 		return false;
 	}
 
-	public List<Object> getInterceptorsAndDynamicInterceptionAdvice(
+	public List<Object> getInterceptorsAndDynamicInterception(
 			Method method, Class<?> targetClass) {
 		MethodCacheKey cacheKey = new MethodCacheKey(method);
 		List<Object> cached = this.methodCache.get(cacheKey);
 		if (cached == null) {
-			cached = this.aspectChainFactory.getInterceptorsAndDynamicInterceptionAdvice(
+			cached = this.aspectChainFactory.getInterceptorsAndDynamicInterception(
 					this, method, targetClass);
 			this.methodCache.put(cacheKey, cached);
 		}

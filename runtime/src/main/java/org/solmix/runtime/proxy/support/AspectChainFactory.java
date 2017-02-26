@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface AspectChainFactory {
 
-	List<Object> getInterceptorsAndDynamicInterceptionAdvice(ProxyAspectSupport config, Method method, Class<?> targetClass);
+	List<Object> getInterceptorsAndDynamicInterception(ProxyAspectSupport config, Method method, Class<?> targetClass);
 
 }

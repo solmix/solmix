@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.solmix.runtime.proxy.Aspect;
 import org.solmix.runtime.proxy.Aspector;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 public class AspectorAdapterRegistry {
 
@@ -16,13 +15,11 @@ public class AspectorAdapterRegistry {
 	public static AspectorAdapterRegistry getInstance() {
 		return instance;
 	}
-	/**
-	 * Create a new DefaultAdvisorAdapterRegistry, registering well-known adapters.
-	 */
+	
 	public AspectorAdapterRegistry() {
-		registerAdvisorAdapter(new MethodBeforeAdviceAdapter());
-		registerAdvisorAdapter(new AfterReturningAdviceAdapter());
-		registerAdvisorAdapter(new ThrowsAdviceAdapter());
+		registerAspectorAdapter(new InvokeBeforeAspectAdapter());
+		registerAspectorAdapter(new InvokeAfterAspectAdapter());
+		registerAspectorAdapter(new ThrowsAspectAdapter());
 	}
 
 
@@ -36,12 +33,12 @@ public class AspectorAdapterRegistry {
 		Aspect advice = (Aspect) adviceObject;
 		if (advice instanceof MethodInterceptor) {
 			// So well-known it doesn't even need an adapter.
-			return new DefaultPointcutAdvisor(advice);
+			return new DefaultCutpointAspector(advice);
 		}
 		for (AspectorAdapter adapter : this.adapters) {
 			// Check that it is supported.
 			if (adapter.supportsAspect(advice)) {
-				return new DefaultPointcutAdvisor(advice);
+				return new DefaultCutpointAspector(advice);
 			}
 		}
 		throw new UnknownAspectTypeException(advice);
