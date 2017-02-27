@@ -15,13 +15,13 @@ public class DefaultAspectChainFactory implements AspectChainFactory {
 	public List<Object> getInterceptorsAndDynamicInterception(
 			ProxyAspectSupport config, Method method, Class<?> targetClass) {
 		
-		List<Object> interceptorList = new ArrayList<Object>(config.getAspects().length);
+		List<Object> interceptorList = new ArrayList<Object>(config.getAspectors().length);
 		
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
 		boolean hasIntroductions = hasMatchingIntroductions(config, actualClass);
 		AspectorAdapterRegistry registry = AspectorAdapterRegistry.getInstance();
 
-		for (Aspector aspector : config.getAspects()) {
+		for (Aspector aspector : config.getAspectors()) {
 			
 			if (aspector instanceof CutpointAspector) {
 				// Add it conditionally.
@@ -61,8 +61,8 @@ public class DefaultAspectChainFactory implements AspectChainFactory {
 	 * Determine whether the Advisors contain matching introductions.
 	 */
 	private static boolean hasMatchingIntroductions(ProxyAspectSupport config, Class<?> actualClass) {
-		for (int i = 0; i < config.getAspects().length; i++) {
-			Aspector advisor = config.getAspects()[i];
+		for (int i = 0; i < config.getAspectors().length; i++) {
+			Aspector advisor = config.getAspectors()[i];
 			if (advisor instanceof IntroductionAspector) {
 				IntroductionAspector ia = (IntroductionAspector) advisor;
 				if (ia.getClassFilter().matches(actualClass)) {

@@ -47,21 +47,6 @@
 			</dependency> -->
 		<!-- ===========end ============ -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>
@@ -101,6 +86,11 @@
 		    <groupId>org.jasypt</groupId>
 		    <artifactId>jasypt</artifactId>
 		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.solmix.test</groupId>
+			<artifactId>solmix-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<properties>

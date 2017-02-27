@@ -34,8 +34,11 @@ import org.solmix.runtime.extension.ExtensionContainer;
 
 public class ProxyHelperTest
 {
-    
-    @Test
+	  @Test
+	    public void mtest(){
+		  
+	  }
+//    @Test
     public void test(){
         ProxyInterface proxy=(ProxyInterface)   ProxyHelper.getProxy(this.getClass().getClassLoader(), 
             new Class[]{ProxyInterface.class}, new InvocationHandler(){

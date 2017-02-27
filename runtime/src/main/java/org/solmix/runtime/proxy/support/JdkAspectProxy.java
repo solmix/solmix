@@ -10,14 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
-import org.solmix.runtime.proxy.Aspect;
 import org.solmix.runtime.proxy.AspectProxy;
+import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.ProxyConfigException;
 import org.solmix.runtime.proxy.ProxyInvocationException;
 import org.solmix.runtime.proxy.target.TargetSource;
 
-public class JdkAspectProxy implements AspectProxy, InvocationHandler,
-		Serializable {
+public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializable {
 
 	private static final long serialVersionUID = -5955470265462916452L;
 	private static final Logger LOG = LoggerFactory.getLogger(JdkAspectProxy.class);
@@ -27,7 +26,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,
 
 	public JdkAspectProxy(ProxyAspectSupport config) {
 		Assert.isNotNull(config, "ProxyAspectSupport must not be null");
-		if (config.getAspects().length == 0
+		if (config.getAspectors().length == 0
 				&& config.getTargetSource() == ProxyAspectSupport.EMPTY_TARGET_SOURCE) {
 			throw new ProxyConfigException("No advisors and no TargetSource specified");
 		}
@@ -89,7 +88,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,
 				return hashCode();
 			}
 			if (!this.config.isOpaque() && method.getDeclaringClass().isInterface() &&
-					method.getDeclaringClass().isAssignableFrom(Aspect.class)) {
+					method.getDeclaringClass().isAssignableFrom(Aspected.class)) {
 				// Service invocations on ProxyConfig with the proxy config...
 				return ProxyUtils.invokeJoinpointUsingReflection(this.config, method, args);
 			}

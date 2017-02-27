@@ -32,6 +32,6 @@ public class DefaultTransactionServiceFactory implements TransactionServiceFacto
 {
     @Override
     public TransactionService createTransactionService() {
-        return new DefaultTransactionService();
+        return null/* new DefaultTransactionService()*/;
     }
 }

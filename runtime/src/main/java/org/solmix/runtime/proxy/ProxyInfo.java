@@ -29,6 +29,11 @@ public class ProxyInfo implements Serializable {
 	public void setOptimize(boolean optimize) {
 		this.optimize = optimize;
 	}
+	
+	/**
+	 * 是否需要性能优化
+	 * @return
+	 */
 	public boolean isOptimize() {
 		return this.optimize;
 	}

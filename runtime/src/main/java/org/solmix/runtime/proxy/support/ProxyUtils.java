@@ -82,7 +82,7 @@ public class ProxyUtils {
 
 	
 	public static boolean equalsAdvisors(ProxyAspectSupport a, ProxyAspectSupport b) {
-		return Arrays.equals(a.getAspects(), b.getAspects());
+		return Arrays.equals(a.getAspectors(), b.getAspectors());
 	}
 
 	public static Object invokeJoinpointUsingReflection(Object target,

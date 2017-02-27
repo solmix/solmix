@@ -2,8 +2,10 @@ package org.solmix.commons.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -132,4 +134,53 @@ public abstract class ClassUtils {
 			return null;
 		}
 	}
+
+		public static String classNamesToString(Collection<Class<?>> classes) {
+			if (DataUtils.isNullOrEmpty(classes)) {
+				return "[]";
+			}
+			StringBuilder sb = new StringBuilder("[");
+			for (Iterator<Class<?>> it = classes.iterator(); it.hasNext(); ) {
+				Class<?> clazz = it.next();
+				sb.append(clazz.getName());
+				if (it.hasNext()) {
+					sb.append(", ");
+				}
+			}
+			sb.append("]");
+			return sb.toString();
+		}
+
+		public static String getShortName(Class<?> clazz) {
+			return getShortName(getQualifiedName(clazz));
+		}
+		public static String getShortName(String className) {
+			int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+			int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
+			if (nameEndIndex == -1) {
+				nameEndIndex = className.length();
+			}
+			String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+			shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
+			return shortName;
+		}
+
+		public static String getQualifiedName(Class<?> clazz) {
+			Assert.isNotNull(clazz, "Class must not be null");
+			if (clazz.isArray()) {
+				return getQualifiedNameForArray(clazz);
+			}
+			else {
+				return clazz.getName();
+			}
+		}
+		private static String getQualifiedNameForArray(Class<?> clazz) {
+			StringBuilder result = new StringBuilder();
+			while (clazz.isArray()) {
+				clazz = clazz.getComponentType();
+				result.append(ClassUtils.ARRAY_SUFFIX);
+			}
+			result.insert(0, clazz.getName());
+			return result.toString();
+		}
 }

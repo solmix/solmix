@@ -18,12 +18,6 @@
  */
 package org.solmix.runtime.transaction.support;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.solmix.runtime.transaction.Transaction;
-import org.solmix.runtime.transaction.TransactionException;
-import org.solmix.runtime.transaction.TransactionService;
 
 
 /**
@@ -32,9 +26,9 @@ import org.solmix.runtime.transaction.TransactionService;
  * @version $Id$  2015年8月12日
  */
 
-public class DefaultTransactionService implements TransactionService
+public class DefaultTransactionService /*implements TransactionService*/
 {
-    private final Map<Object,Transaction> transactions = new HashMap<Object, Transaction>();
+   /* private final Map<Object,Transaction> transactions = new HashMap<Object, Transaction>();
     
     
     @Override
@@ -70,6 +64,6 @@ public class DefaultTransactionService implements TransactionService
     @Override
     public Transaction getResource(Object object) {
         return transactions.get(object);
-    }
+    }*/
 
 }
