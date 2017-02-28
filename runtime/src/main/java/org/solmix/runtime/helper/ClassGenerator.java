@@ -27,10 +27,10 @@ import javassist.NotFoundException;
 
 import org.solmix.commons.util.ClassDescUtils;
 import org.solmix.commons.util.ClassLoaderUtils;
+import org.solmix.runtime.proxy.RuntimeProxy;
 
 public final class ClassGenerator
 {
-	public static interface DC{} // dynamic class tag interface.
 
 	private static final AtomicLong CLASS_NAME_COUNTER = new AtomicLong(0);
 
@@ -50,7 +50,7 @@ public final class ClassGenerator
 
 	public static boolean isDynamicClass(Class<?> cl)
 	{
-		return ClassGenerator.DC.class.isAssignableFrom(cl);
+		return RuntimeProxy.class.isAssignableFrom(cl);
 	}
 
 	public static ClassPool getClassPool(ClassLoader loader)
@@ -66,6 +66,20 @@ public final class ClassGenerator
 			POOL_MAP.put(loader, pool);
 		}
 		return pool;
+	}
+	
+	public static String getClassName(String className,boolean isPublic){
+		long id = CLASS_NAME_COUNTER.getAndIncrement();
+		StringBuilder sb = new StringBuilder();
+		if(( className == null || !isPublic)){
+			sb.append(ClassGenerator.class.getName());
+			sb.append("$$");
+		}else{
+			sb.append(className);
+			sb.append("$$");
+		}
+		sb.append(id);
+		return sb.toString();
 	}
 
 	private ClassPool mPool;
@@ -288,17 +302,15 @@ public final class ClassGenerator
 	{
 		if( mCtc != null )
 			mCtc.detach();
-		long id = CLASS_NAME_COUNTER.getAndIncrement();
 		try
 		{
 			CtClass ctcs = mSuperClass == null ? null : mPool.get(mSuperClass);
 			if( mClassName == null )
-				mClassName = ( mSuperClass == null || javassist.Modifier.isPublic(ctcs.getModifiers())
-						? ClassGenerator.class.getName() : mSuperClass + "$sc" ) + id;
+				mClassName =getClassName(mSuperClass,javassist.Modifier.isPublic(ctcs.getModifiers()));
 			mCtc = mPool.makeClass(mClassName);
 			if( mSuperClass != null )
 				mCtc.setSuperclass(ctcs);
-			mCtc.addInterface(mPool.get(DC.class.getName())); // add dynamic class tag.
+			mCtc.addInterface(mPool.get(RuntimeProxy.class.getName())); // add dynamic class tag.
 			if( mInterfaces != null )
 				for( String cl : mInterfaces ) mCtc.addInterface(mPool.get(cl));
 			if( mFields != null )

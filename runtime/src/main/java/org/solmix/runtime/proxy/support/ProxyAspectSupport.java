@@ -37,12 +37,12 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 
 	private boolean preFiltered = false;
 
-	private Aspector[] advisorArray = new Aspector[0];
+	private Aspector[] aspectorArray = new Aspector[0];
 	
 	/** Package-protected to allow direct access for efficiency */
 	TargetSource targetSource = EMPTY_TARGET_SOURCE;
 
-	private List<Aspector> advisors = new LinkedList<Aspector>();
+	private List<Aspector> aspectors = new LinkedList<Aspector>();
 	
 	private AspectChainFactory aspectChainFactory= new DefaultAspectChainFactory();
 
@@ -162,7 +162,10 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 	public void setTarget(Object target) {
 		setTargetSource(new SimpleTargetSource(target));
 	}
-
+	
+	public void setTargetClass(Class<?> targetClass) {
+		this.targetSource =NullTargetSource.forClass(targetClass);
+	}
 	@Override
 	public void setTargetSource(TargetSource targetSource) {
 		this.targetSource = (targetSource != null ? targetSource : EMPTY_TARGET_SOURCE);
@@ -179,7 +182,7 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 
 	
 	protected final void updateAspectArray() {
-		this.advisorArray = this.advisors.toArray(new Aspector[this.advisors.size()]);
+		this.aspectorArray = this.aspectors.toArray(new Aspector[this.aspectors.size()]);
 	}
 
 	@Override
@@ -216,12 +219,12 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 
 	@Override
 	public Aspector[] getAspectors() {
-		return this.advisorArray;
+		return this.aspectorArray;
 	}
 
 	@Override
 	public void addAspector(Aspector aspector) throws ProxyConfigException {
-		int pos = this.advisors.size();
+		int pos = this.aspectors.size();
 		addAspector(pos, aspector);
 	}
 
@@ -249,11 +252,11 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		if (isFrozen()) {
 			throw new ProxyConfigException("Cannot add aspector: Configuration is frozen.");
 		}
-		if (pos > this.advisors.size()) {
+		if (pos > this.aspectors.size()) {
 			throw new IllegalArgumentException(
-					"Illegal position " + pos + " in advisor list with size " + this.advisors.size());
+					"Illegal position " + pos + " in advisor list with size " + this.aspectors.size());
 		}
-		this.advisors.add(pos, aspector);
+		this.aspectors.add(pos, aspector);
 		updateAspectArray();
 		adviceChanged();
 	}
@@ -275,12 +278,12 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		if (isFrozen()) {
 			throw new ProxyConfigException("Cannot remove Aspector: Configuration is frozen.");
 		}
-		if (index < 0 || index > this.advisors.size() - 1) {
+		if (index < 0 || index > this.aspectors.size() - 1) {
 			throw new ProxyConfigException("Aspector index " + index + " is out of bounds: " +
-					"This configuration only has " + this.advisors.size() + " advisors.");
+					"This configuration only has " + this.aspectors.size() + " advisors.");
 		}
 
-		Aspector advisor = this.advisors.get(index);
+		Aspector advisor = this.aspectors.get(index);
 		if (advisor instanceof IntroductionAspector) {
 			IntroductionAspector ia = (IntroductionAspector) advisor;
 			// We need to remove introduction interfaces.
@@ -289,13 +292,13 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 			}
 		}
 
-		this.advisors.remove(index);
+		this.aspectors.remove(index);
 		updateAspectorArray();
 		adviceChanged();
 	}
 	
 	protected final void updateAspectorArray() {
-		this.advisorArray = this.advisors.toArray(new Aspector[this.advisors.size()]);
+		this.aspectorArray = this.aspectors.toArray(new Aspector[this.aspectors.size()]);
 	}
 	
 	public boolean removeInterface(Class<?> intf) {
@@ -305,7 +308,7 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 	@Override
 	public int indexOf(Aspector aspector) {
 		Assert.isNotNull(aspector, "Aspector must not be null");
-		return this.advisors.indexOf(aspector);
+		return this.aspectors.indexOf(aspector);
 	}
 
 	@Override
@@ -324,8 +327,8 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 
 	@Override
 	public void addAspect(Aspect aspect) throws ProxyConfigException {
-		// TODO Auto-generated method stub
-		
+		int pos = this.aspectors.size();
+		addAspect(pos, aspect);
 	}
 
 	@Override
@@ -334,7 +337,7 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		if (aspect instanceof IntroductionAspect) {
 			// We don't need an IntroductionAdvisor for this kind of introduction:
 			// It's fully self-describing.
-			addAdvisor(pos, new DefaultIntroductionAspector(aspect, (IntroductionAspect) aspect));
+			addAspector(pos, new DefaultIntroductionAspector(aspect, (IntroductionAspect) aspect));
 		}
 		else {
 			addAspector(pos, new DefaultCutpointAspector(aspect));
@@ -357,8 +360,8 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 	@Override
 	public int indexOf(Aspect aspect) {
 		Assert.isNotNull(aspect, "aspect must not be null");
-		for (int i = 0; i < this.advisors.size(); i++) {
-			Aspector aspector = this.advisors.get(i);
+		for (int i = 0; i < this.aspectors.size(); i++) {
+			Aspector aspector = this.aspectors.get(i);
 			if (aspector.getAspect() == aspect) {
 				return i;
 			}
@@ -376,8 +379,8 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		StringBuilder sb = new StringBuilder(getClass().getName());
 		sb.append(": ").append(this.interfaces.size()).append(" interfaces ");
 		sb.append(ClassUtils.classNamesToString(this.interfaces)).append("; ");
-		sb.append(this.advisors.size()).append(" aspectors ");
-		sb.append(this.advisors).append("; ");
+		sb.append(this.aspectors.size()).append(" aspectors ");
+		sb.append(this.aspectors).append("; ");
 		sb.append("targetSource [").append(this.targetSource).append("]; ");
 		sb.append(super.toString());
 		return sb.toString();

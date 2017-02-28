@@ -5,6 +5,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
@@ -12,12 +13,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.Reflection;
-import org.solmix.runtime.proxy.Aspect;
+import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.ProxyInvocationException;
 import org.solmix.runtime.proxy.RuntimeProxy;
+import org.solmix.runtime.proxy.TargetClassAware;
+import org.solmix.runtime.proxy.target.SimpleTargetSource;
+import org.solmix.runtime.proxy.target.TargetSource;
 
 public class ProxyUtils {
 
@@ -32,7 +37,7 @@ public class ProxyUtils {
 			}
 		}
 		boolean addSpringProxy = !advised.isInterfaceProxied(RuntimeProxy.class);
-		boolean addAdvised = !advised.isOpaque() && !advised.isInterfaceProxied(Aspect.class);
+		boolean addAdvised = !advised.isOpaque() && !advised.isInterfaceProxied(Aspected.class);
 		int nonUserIfcCount = 0;
 		if (addSpringProxy) {
 			nonUserIfcCount++;
@@ -46,7 +51,7 @@ public class ProxyUtils {
 			proxiedInterfaces[specifiedInterfaces.length] = RuntimeProxy.class;
 		}
 		if (addAdvised) {
-			proxiedInterfaces[proxiedInterfaces.length - 1] = Aspect.class;
+			proxiedInterfaces[proxiedInterfaces.length - 1] = Aspected.class;
 		}
 		return proxiedInterfaces;
 	}
@@ -276,5 +281,34 @@ public class ProxyUtils {
 		return Reflection.findMethod(type, bridgeMethod.getName(), bridgeMethod.getParameterTypes());
 	}
 
+	public static Class<? extends Object> getTargetClass(Object target) {
+		Assert.isNotNull(target, "Candidate object must not be null");
+		Class<?> result = null;
+		while (target instanceof TargetClassAware) {
+			result = ((TargetClassAware) target).getTargetClass();
+			Object nested = null;
+			if (target instanceof Aspected) {
+				TargetSource targetSource = ((Aspected) target).getTargetSource();
+				if (targetSource instanceof SimpleTargetSource) {
+					nested = ((SimpleTargetSource) targetSource).getTarget();
+				}
+			}
+			target = nested;
+		}
+		if (result == null) {
+			result = (isCglibProxy(target) ? target.getClass().getSuperclass() : target.getClass());
+		}
+		return result;
+	}
 
+		public static boolean isJdkDynamicProxy(Object object) {
+		return (object instanceof RuntimeProxy && Proxy.isProxyClass(object.getClass()));
+	}
+
+		public static boolean isCglibProxy(Object object) {
+			return (object instanceof RuntimeProxy && ClassUtils.isByteCodeProxy(object));
+		}
+		public static boolean isJavassistProxy(Object object) {
+			return (object instanceof RuntimeProxy && ClassUtils.isByteCodeProxy(object));
+		}
 }

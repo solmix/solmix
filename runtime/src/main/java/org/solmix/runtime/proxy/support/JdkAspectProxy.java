@@ -44,8 +44,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializab
 			LOG.debug("Creating JDK dynamic proxy: target source is "
 					+ this.config.getTargetSource());
 		}
-		Class<?>[] proxiedInterfaces = ProxyUtils
-				.completeProxiedInterfaces(this.config);
+		Class<?>[] proxiedInterfaces = ProxyUtils.completeProxiedInterfaces(this.config);
 		findDefinedEqualsAndHashCodeMethods(proxiedInterfaces);
 		return Proxy.newProxyInstance(classLoader, proxiedInterfaces, this);
 	}

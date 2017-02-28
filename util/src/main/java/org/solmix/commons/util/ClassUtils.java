@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
 public abstract class ClassUtils {
 
 	/** Suffix for array class names: "[]" */
@@ -32,31 +31,35 @@ public abstract class ClassUtils {
 
 	/** The ".class" file suffix */
 	public static final String CLASS_FILE_SUFFIX = ".class";
+
 	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz) {
 		return getAllInterfacesForClass(clazz, null);
 	}
-	
-	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz, ClassLoader classLoader) {
+
+	public static Class<?>[] getAllInterfacesForClass(Class<?> clazz,
+			ClassLoader classLoader) {
 		Set<Class<?>> ifcs = getAllInterfacesForClassAsSet(clazz, classLoader);
 		return ifcs.toArray(new Class<?>[ifcs.size()]);
 	}
-	
-	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, ClassLoader classLoader) {
+
+	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz,
+			ClassLoader classLoader) {
 		Assert.isNotNull(clazz, "Class must not be null");
 		if (clazz.isInterface() && isVisible(clazz, classLoader)) {
-			return Collections.<Class<?>>singleton(clazz);
+			return Collections.<Class<?>> singleton(clazz);
 		}
 		Set<Class<?>> interfaces = new LinkedHashSet<Class<?>>();
 		while (clazz != null) {
 			Class<?>[] ifcs = clazz.getInterfaces();
 			for (Class<?> ifc : ifcs) {
-				interfaces.addAll(getAllInterfacesForClassAsSet(ifc, classLoader));
+				interfaces.addAll(getAllInterfacesForClassAsSet(ifc,
+						classLoader));
 			}
 			clazz = clazz.getSuperclass();
 		}
 		return interfaces;
 	}
-	
+
 	public static boolean isVisible(Class<?> clazz, ClassLoader classLoader) {
 		if (classLoader == null) {
 			return true;
@@ -65,8 +68,7 @@ public abstract class ClassUtils {
 			Class<?> actualClass = classLoader.loadClass(clazz.getName());
 			return (clazz == actualClass);
 			// Else: different interface class found...
-		}
-		catch (ClassNotFoundException ex) {
+		} catch (ClassNotFoundException ex) {
 			// No interface class found...
 			return false;
 		}
@@ -78,34 +80,35 @@ public abstract class ClassUtils {
 		int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
 		return className.substring(lastDotIndex + 1) + CLASS_FILE_SUFFIX;
 	}
-	
+
 	public static String getPackageName(Class<?> clazz) {
 		Assert.isNotNull(clazz, "Class must not be null");
 		return getPackageName(clazz.getName());
 	}
-	
+
 	public static String getPackageName(String fqClassName) {
 		Assert.isNotNull(fqClassName, "Class name must not be null");
 		int lastDotIndex = fqClassName.lastIndexOf(PACKAGE_SEPARATOR);
-		return (lastDotIndex != -1 ? fqClassName.substring(0, lastDotIndex) : "");
+		return (lastDotIndex != -1 ? fqClassName.substring(0, lastDotIndex)
+				: "");
 	}
-	
-	public static boolean hasMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+
+	public static boolean hasMethod(Class<?> clazz, String methodName,
+			Class<?>... paramTypes) {
 		return (getMethodIfAvailable(clazz, methodName, paramTypes) != null);
 	}
-	
-	public static Method getMethodIfAvailable(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+
+	public static Method getMethodIfAvailable(Class<?> clazz,
+			String methodName, Class<?>... paramTypes) {
 		Assert.isNotNull(clazz, "Class must not be null");
 		Assert.isNotNull(methodName, "Method name must not be null");
 		if (paramTypes != null) {
 			try {
 				return clazz.getMethod(methodName, paramTypes);
-			}
-			catch (NoSuchMethodException ex) {
+			} catch (NoSuchMethodException ex) {
 				return null;
 			}
-		}
-		else {
+		} else {
 			Set<Method> candidates = new HashSet<Method>(1);
 			Method[] methods = clazz.getMethods();
 			for (Method method : methods) {
@@ -120,67 +123,90 @@ public abstract class ClassUtils {
 		}
 	}
 
-	
 	public static boolean hasConstructor(Class<?> clazz, Class<?>... paramTypes) {
 		return (getConstructorIfAvailable(clazz, paramTypes) != null);
 	}
-	
-	public static <T> Constructor<T> getConstructorIfAvailable(Class<T> clazz, Class<?>... paramTypes) {
+
+	public static <T> Constructor<T> getConstructorIfAvailable(Class<T> clazz,
+			Class<?>... paramTypes) {
 		Assert.isNotNull(clazz, "Class must not be null");
 		try {
 			return clazz.getConstructor(paramTypes);
-		}
-		catch (NoSuchMethodException ex) {
+		} catch (NoSuchMethodException ex) {
 			return null;
 		}
 	}
 
-		public static String classNamesToString(Collection<Class<?>> classes) {
-			if (DataUtils.isNullOrEmpty(classes)) {
-				return "[]";
-			}
-			StringBuilder sb = new StringBuilder("[");
-			for (Iterator<Class<?>> it = classes.iterator(); it.hasNext(); ) {
-				Class<?> clazz = it.next();
-				sb.append(clazz.getName());
-				if (it.hasNext()) {
-					sb.append(", ");
-				}
-			}
-			sb.append("]");
-			return sb.toString();
+	public static String classNamesToString(Collection<Class<?>> classes) {
+		if (DataUtils.isNullOrEmpty(classes)) {
+			return "[]";
 		}
+		StringBuilder sb = new StringBuilder("[");
+		for (Iterator<Class<?>> it = classes.iterator(); it.hasNext();) {
+			Class<?> clazz = it.next();
+			sb.append(clazz.getName());
+			if (it.hasNext()) {
+				sb.append(", ");
+			}
+		}
+		sb.append("]");
+		return sb.toString();
+	}
 
-		public static String getShortName(Class<?> clazz) {
-			return getShortName(getQualifiedName(clazz));
-		}
-		public static String getShortName(String className) {
-			int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
-			int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
-			if (nameEndIndex == -1) {
-				nameEndIndex = className.length();
-			}
-			String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
-			shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
-			return shortName;
-		}
+	public static String getShortName(Class<?> clazz) {
+		return getShortName(getQualifiedName(clazz));
+	}
 
-		public static String getQualifiedName(Class<?> clazz) {
-			Assert.isNotNull(clazz, "Class must not be null");
-			if (clazz.isArray()) {
-				return getQualifiedNameForArray(clazz);
-			}
-			else {
-				return clazz.getName();
-			}
+	public static String getShortName(String className) {
+		int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+		int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
+		if (nameEndIndex == -1) {
+			nameEndIndex = className.length();
 		}
-		private static String getQualifiedNameForArray(Class<?> clazz) {
-			StringBuilder result = new StringBuilder();
-			while (clazz.isArray()) {
-				clazz = clazz.getComponentType();
-				result.append(ClassUtils.ARRAY_SUFFIX);
-			}
-			result.insert(0, clazz.getName());
-			return result.toString();
+		String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+		shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
+		return shortName;
+	}
+
+	public static String getQualifiedName(Class<?> clazz) {
+		Assert.isNotNull(clazz, "Class must not be null");
+		if (clazz.isArray()) {
+			return getQualifiedNameForArray(clazz);
+		} else {
+			return clazz.getName();
 		}
+	}
+
+	private static String getQualifiedNameForArray(Class<?> clazz) {
+		StringBuilder result = new StringBuilder();
+		while (clazz.isArray()) {
+			clazz = clazz.getComponentType();
+			result.append(ClassUtils.ARRAY_SUFFIX);
+		}
+		result.insert(0, clazz.getName());
+		return result.toString();
+	}
+
+	public static Collection<? extends Class<?>> getAllInterfacesAsSet(
+			Object instance) {
+		Assert.isNotNull(instance, "Instance must not be null");
+		return getAllInterfacesForClassAsSet(instance.getClass());
+	}
+
+	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz) {
+		return getAllInterfacesForClassAsSet(clazz, null);
+	}
+
+	public static boolean isByteCodeProxy(Object object) {
+		return ClassUtils.isByteCodeProxyClass(object.getClass());
+	}
+
+	public static boolean isByteCodeProxyClass(Class<?> clazz) {
+		return (clazz != null && isByteCodeProxyClassName(clazz.getName()));
+	}
+
+	public static boolean isByteCodeProxyClassName(String className) {
+		return (className != null && className.contains(CGLIB_CLASS_SEPARATOR));
+	}
+
 }

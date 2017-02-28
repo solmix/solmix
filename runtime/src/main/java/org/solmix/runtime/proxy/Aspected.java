@@ -2,7 +2,7 @@ package org.solmix.runtime.proxy;
 
 import org.solmix.runtime.proxy.target.TargetSource;
 
-public interface Aspected {
+public interface Aspected  extends TargetClassAware{
 
 	boolean isFrozen();
 	boolean isProxyTargetClass();

@@ -20,23 +20,30 @@ public class DefaultIntroductionAspector implements IntroductionAspector,ClassFi
 
 	/**
 	 * Create a DefaultIntroductionAdvisor for the given advice.
-	 * @param advice the Advice to apply
+	 * @param advice the Aspect to apply
 	 * @param introductionInfo the IntroductionInfo that describes
 	 * the interface to introduce (may be {@code null})
 	 */
 	public DefaultIntroductionAspector(Aspect advice, IntroductionAspect introductionInfo) {
-		Assert.isNotNull(advice, "Advice must not be null");
+		Assert.isNotNull(advice, "Aspect must not be null");
 		this.aspect = advice;
 		if (introductionInfo != null) {
 			Class<?>[] introducedInterfaces = introductionInfo.getInterfaces();
 			if (introducedInterfaces.length == 0) {
-				throw new IllegalArgumentException("IntroductionAdviceSupport implements no interfaces");
+				throw new IllegalArgumentException("IntroductionAspectSupport implements no interfaces");
 			}
 			for (Class<?> ifc : introducedInterfaces) {
 				addInterface(ifc);
 			}
 		}
 	}
+	
+	public DefaultIntroductionAspector(DynamicIntroductionAspect aspect, Class<?> intf) {
+		Assert.isNotNull(aspect, "Aspect must not be null");
+		this.aspect = aspect;
+		addInterface(intf);
+	}
+	
 	public void addInterface(Class<?> intf) {
 		Assert.isNotNull(intf, "Interface must not be null");
 		if (!intf.isInterface()) {

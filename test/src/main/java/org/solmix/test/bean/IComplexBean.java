@@ -3,6 +3,10 @@ package org.solmix.test.bean;
 import java.io.IOException;
 
 public interface IComplexBean {
+	int getAge() ;
+
+	void setAge(int age);
+	
 	String getName();
 
 	void setName(String name);
