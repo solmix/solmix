@@ -46,6 +46,7 @@
 		<module>org.solmix.bundles.druid</module>
 		<module>org.solmix.bundles.thumbnailator</module>
 		<module>org.solmix.bundles.sigar</module>
+		<module>org.solmix.bundles.cglib</module>
 	</modules>
 	<version>0.5.0</version>
 	<groupId>org.solmix.bundles</groupId>

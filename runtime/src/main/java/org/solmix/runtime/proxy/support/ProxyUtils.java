@@ -306,9 +306,7 @@ public class ProxyUtils {
 	}
 
 		public static boolean isCglibProxy(Object object) {
-			return (object instanceof RuntimeProxy && ClassUtils.isByteCodeProxy(object));
+			return (object instanceof RuntimeProxy && ClassUtils.isCglibProxy(object));
 		}
-		public static boolean isJavassistProxy(Object object) {
-			return (object instanceof RuntimeProxy && ClassUtils.isByteCodeProxy(object));
-		}
+	
 }

@@ -18,6 +18,12 @@
  */
 package org.solmix.runtime.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+
 
 /**
  * 
@@ -28,45 +34,44 @@ package org.solmix.runtime.helper;
 public class CglibProxyHelper extends ProxyHelper
 {
     CglibProxyHelper() throws Exception {
-//        Class.forName("net.sf.cglib.proxy.Enhancer");
-//        Class.forName("net.sf.cglib.proxy.MethodInterceptor");
-//        Class.forName("net.sf.cglib.proxy.MethodProxy");
+        Class.forName("net.sf.cglib.proxy.Enhancer");
+        Class.forName("net.sf.cglib.proxy.MethodInterceptor");
+        Class.forName("net.sf.cglib.proxy.MethodProxy");
     }
     @Override
     protected Object getProxyInternal(ClassLoader loader, Class<?>[] interfaces, 
                                       final java.lang.reflect.InvocationHandler h) {
         
-//        Class<?> superClass = null;
-//        List<Class<?>> theInterfaces = new ArrayList<Class<?>>();
-//        
-//        for (Class<?> c : interfaces) {
-//            if (!c.isInterface()) {
-//                if (superClass != null) {
-//                    throw new IllegalArgumentException("Only a single superclass is supported");
-//                }
-//                superClass = c; 
-//            } else {
-//                theInterfaces.add(c);
-//            }
-//        }
-//        if (superClass != null) {
-//            Enhancer enhancer = new Enhancer();
-//            enhancer.setClassLoader(loader);
-//            enhancer.setSuperclass(superClass);
-//            enhancer.setInterfaces(theInterfaces.toArray(new Class[theInterfaces.size()]));
-//            enhancer.setCallback(new MethodInterceptor() {
-//
-//                @Override
-//                public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) 
-//                    throws Throwable {
-//                    return h.invoke(obj, method, args);
-//                }
-//                
-//            });
-//            return enhancer.create();
-//        } else {
-//            return super.getProxyInternal(loader, interfaces, h);
-//        }
-    	return null;
+        Class<?> superClass = null;
+        List<Class<?>> theInterfaces = new ArrayList<Class<?>>();
+        
+        for (Class<?> c : interfaces) {
+            if (!c.isInterface()) {
+                if (superClass != null) {
+                    throw new IllegalArgumentException("Only a single superclass is supported");
+                }
+                superClass = c; 
+            } else {
+                theInterfaces.add(c);
+            }
+        }
+        if (superClass != null) {
+            Enhancer enhancer = new Enhancer();
+            enhancer.setClassLoader(loader);
+            enhancer.setSuperclass(superClass);
+            enhancer.setInterfaces(theInterfaces.toArray(new Class[theInterfaces.size()]));
+            enhancer.setCallback(new MethodInterceptor() {
+
+                @Override
+                public Object intercept(Object obj, java.lang.reflect.Method method, Object[] args, net.sf.cglib.proxy.MethodProxy proxy) 
+                    throws Throwable {
+                    return h.invoke(obj, method, args);
+                }
+                
+            });
+            return enhancer.create();
+        } else {
+            return super.getProxyInternal(loader, interfaces, h);
+        }
     }
 }

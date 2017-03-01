@@ -21,7 +21,7 @@ public class DefaultAspectProxyFactory implements AspectProxyFactory {
 			if (targetClass.isInterface()) {
 				return new JdkAspectProxy(config);
 			}
-			return new JavasistAspectProxy(config);
+			return new CglibAspectProxy(config);
 		} else {
 			return new JdkAspectProxy(config);
 		}

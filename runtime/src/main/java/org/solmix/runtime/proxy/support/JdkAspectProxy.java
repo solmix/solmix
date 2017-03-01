@@ -72,7 +72,7 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializab
 			throws Throwable {
 		MethodInvocation invocation;
 		Object oldProxy = null;
-
+		boolean setProxyContext = false;
 		TargetSource targetSource = this.config.targetSource;
 		Class<?> targetClass = null;
 		Object target = null;
@@ -94,9 +94,10 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializab
 
 			Object retVal;
 
-//			if (this.config.exposeProxy) {
-//				oldProxy = AopContext.setCurrentProxy(proxy);
-//			}
+			if (this.config.isExposeProxy()) {
+				oldProxy = ProxyContext.setCurrentProxy(proxy);
+				setProxyContext = true;
+			}
 
 			// May be null. Get as late as possible to minimize the time we "own" the target,
 			// in case it comes from a pool.
@@ -138,10 +139,10 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializab
 				// Must have come from TargetSource.
 				targetSource.releaseTarget(target);
 			}
-//			if (setProxyContext) {
-//				// Restore old proxy.
-//				AopContext.setCurrentProxy(oldProxy);
-//			}
+			if (setProxyContext) {
+				// Restore old proxy.
+				ProxyContext.setCurrentProxy(oldProxy);
+			}
 		}
 	}
 

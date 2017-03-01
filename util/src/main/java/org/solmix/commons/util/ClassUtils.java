@@ -197,16 +197,21 @@ public abstract class ClassUtils {
 		return getAllInterfacesForClassAsSet(clazz, null);
 	}
 
-	public static boolean isByteCodeProxy(Object object) {
-		return ClassUtils.isByteCodeProxyClass(object.getClass());
+	public static boolean isCglibProxy(Object object) {
+		return ClassUtils.isCglibProxyClass(object.getClass());
 	}
 
-	public static boolean isByteCodeProxyClass(Class<?> clazz) {
-		return (clazz != null && isByteCodeProxyClassName(clazz.getName()));
+	public static boolean isCglibProxyClass(Class<?> clazz) {
+		return (clazz != null && isCglibProxyClassName(clazz.getName()));
 	}
 
-	public static boolean isByteCodeProxyClassName(String className) {
+	public static boolean isCglibProxyClassName(String className) {
 		return (className != null && className.contains(CGLIB_CLASS_SEPARATOR));
+	}
+
+	public static boolean isFinalizeMethod(Method method) {
+		return (method != null && method.getName().equals("finalize") &&
+				method.getParameterTypes().length == 0);
 	}
 
 }

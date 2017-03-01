@@ -176,6 +176,7 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		return this.interfaces.toArray(new Class<?>[this.interfaces.size()]);
 	}
 
+	@Override
 	public Class<?> getTargetClass() {
 		return this.targetSource.getTargetClass();
 	}
@@ -384,6 +385,17 @@ public class ProxyAspectSupport extends ProxyInfo  implements Aspected{
 		sb.append("targetSource [").append(this.targetSource).append("]; ");
 		sb.append(super.toString());
 		return sb.toString();
+	}
+
+	public ProxyAspectSupport getConfigurationOnlyCopy() {
+		ProxyAspectSupport copy = new ProxyAspectSupport();
+		copy.copyFrom(this);
+		copy.targetSource = NullTargetSource.forClass(getTargetClass(), getTargetSource().isStatic());
+		copy.aspectChainFactory = this.aspectChainFactory;
+		copy.interfaces = this.interfaces;
+		copy.aspectors = this.aspectors;
+		copy.updateAspectorArray();
+		return copy;
 	}
 
 
