@@ -3,6 +3,7 @@ package org.solmix.runtime.proxy.support;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -10,9 +11,12 @@ import java.util.WeakHashMap;
 import net.sf.cglib.core.CodeGenerationException;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.CallbackFilter;
+import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import net.sf.cglib.proxy.NoOp;
 import net.sf.cglib.proxy.UndeclaredThrowableException;
 import net.sf.cglib.transform.impl.UndeclaredThrowableStrategy;
 
@@ -23,11 +27,12 @@ import org.solmix.commons.util.ClassUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.runtime.proxy.Aspect;
 import org.solmix.runtime.proxy.AspectProxy;
+import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.Aspector;
 import org.solmix.runtime.proxy.ProxyConfigException;
 import org.solmix.runtime.proxy.ProxyInvocationException;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
+import org.solmix.runtime.proxy.interceptor.ReflectionMethodInvocation;
+import org.solmix.runtime.proxy.target.TargetSource;
 
 public class CglibAspectProxy implements AspectProxy {
 
@@ -46,11 +51,15 @@ public class CglibAspectProxy implements AspectProxy {
 	private transient Map<String, Integer> fixedInterceptorMap;
 
 	private transient int fixedInterceptorOffset;
+	private Object[] constructorArgs;
 
+	private Class<?>[] constructorArgTypes;
+	private final transient AspectedDispatcher aspectedDispatcher;
 
 	public CglibAspectProxy(ProxyAspectSupport config) {
 		Assert.isNotNull(config,"ProxyAspectSupport must not be null");
 		this.aspector=config;
+		this.aspectedDispatcher= new AspectedDispatcher(this.aspector);
 	}
 
 	@Override
@@ -58,7 +67,17 @@ public class CglibAspectProxy implements AspectProxy {
 		
 		return getProxy(null);
 	}
-
+	public void setConstructorArguments(Object[] constructorArgs, Class<?>[] constructorArgTypes) {
+		if (constructorArgs == null || constructorArgTypes == null) {
+			throw new IllegalArgumentException("Both 'constructorArgs' and 'constructorArgTypes' need to be specified");
+		}
+		if (constructorArgs.length != constructorArgTypes.length) {
+			throw new IllegalArgumentException("Number of 'constructorArgs' (" + constructorArgs.length +
+					") must match number of 'constructorArgTypes' (" + constructorArgTypes.length + ")");
+		}
+		this.constructorArgs = constructorArgs;
+		this.constructorArgTypes = constructorArgTypes;
+	}
 	@Override
 	public Object getProxy(ClassLoader classLoader) {
 		if(LOG.isDebugEnabled()){
@@ -115,11 +134,14 @@ public class CglibAspectProxy implements AspectProxy {
 	
 	private Object createProxyClassAndInstance(Enhancer enhancer,
 			Callback[] callbacks) {
-		// TODO Auto-generated method stub
-		return null;
+		enhancer.setInterceptDuringConstruction(false);
+		enhancer.setCallbacks(callbacks);
+		return (this.constructorArgs != null ?
+				enhancer.create(this.constructorArgTypes, this.constructorArgs) :
+				enhancer.create());
 	}
 
-	private Callback[] adaptorCallbacks(Class<?> rootClass) {
+	private Callback[] adaptorCallbacks(Class<?> rootClass) throws Exception {
 		Callback aopInterceptor = new DynamicAspectedInterceptor(this.aspector);
 		boolean exposeProxy = this.aspector.isExposeProxy();
 		boolean isFrozen = this.aspector.isFrozen();
@@ -135,8 +157,46 @@ public class CglibAspectProxy implements AspectProxy {
 					new StaticUnaspectedInterceptor(this.aspector.getTargetSource().getTarget()) :
 					new DynamicUnaspectedInterceptor(this.aspector.getTargetSource());
 		}
+		
+		Callback targetDispatcher = isStatic ?
+				new StaticDispatcher(this.aspector.getTargetSource().getTarget()) : new SerializableNoOp();
 
-		return null;
+		Callback[] mainCallbacks = new Callback[]{
+				aopInterceptor, // for normal advice
+				targetInterceptor, // invoke target without considering advice, if optimized
+				new SerializableNoOp(), // no override for methods mapped to this
+				targetDispatcher,
+				this.aspectedDispatcher,
+				new EqualsInterceptor(this.aspector),
+				new HashCodeInterceptor(this.aspector)
+			};
+		Callback[] callbacks;
+
+		// If the target is a static one and the advice chain is frozen,
+		// then we can make some optimisations by sending the AOP calls
+		// direct to the target using the fixed chain for that method.
+		if (isStatic && isFrozen) {
+			Method[] methods = rootClass.getMethods();
+			Callback[] fixedCallbacks = new Callback[methods.length];
+			this.fixedInterceptorMap = new HashMap<String, Integer>(methods.length);
+			for (int x = 0; x < methods.length; x++) {
+				List<Object> chain = this.aspector.getInterceptorsAndDynamicInterception(methods[x], rootClass);
+				fixedCallbacks[x] = new FixedChainStaticTargetInterceptor(
+						chain, this.aspector.getTargetSource().getTarget(), this.aspector.getTargetClass());
+				this.fixedInterceptorMap.put(methods[x].toString(), x);
+			}
+
+			// Now copy both the callbacks from mainCallbacks
+			// and fixedCallbacks into the callbacks array.
+			callbacks = new Callback[mainCallbacks.length + fixedCallbacks.length];
+			System.arraycopy(mainCallbacks, 0, callbacks, 0, mainCallbacks.length);
+			System.arraycopy(fixedCallbacks, 0, callbacks, mainCallbacks.length, fixedCallbacks.length);
+			this.fixedInterceptorOffset = mainCallbacks.length;
+		}
+		else {
+			callbacks = mainCallbacks;
+		}
+		return callbacks;
 	}
 
 	protected Enhancer createEnhancer() {
@@ -182,6 +242,194 @@ public class CglibAspectProxy implements AspectProxy {
 		}
 		return retVal;
 	}
+	@SuppressWarnings("serial")
+	private static class FixedChainStaticTargetInterceptor implements MethodInterceptor, Serializable {
+
+		private final List<Object> adviceChain;
+
+		private final Object target;
+
+		private final Class<?> targetClass;
+
+		public FixedChainStaticTargetInterceptor(List<Object> adviceChain, Object target, Class<?> targetClass) {
+			this.adviceChain = adviceChain;
+			this.target = target;
+			this.targetClass = targetClass;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			MethodInvocation invocation = new CglibMethodInvocation(proxy, this.target, method, args,
+					this.targetClass, this.adviceChain, methodProxy);
+			// If we get here, we need to create a MethodInvocation.
+			Object retVal = invocation.proceed();
+			retVal = processReturnType(proxy, this.target, method, retVal);
+			return retVal;
+		}
+	}
+
+	@SuppressWarnings("serial")
+	private static class EqualsInterceptor implements MethodInterceptor, Serializable {
+
+		private final ProxyAspectSupport support;
+
+		public EqualsInterceptor(ProxyAspectSupport support) {
+			this.support = support;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) {
+			Object other = args[0];
+			if (proxy == other) {
+				return true;
+			}
+			if (other instanceof Factory) {
+				Callback callback = ((Factory) other).getCallback(INVOKE_EQUALS);
+				if (!(callback instanceof EqualsInterceptor)) {
+					return false;
+				}
+				ProxyAspectSupport otherAdvised = ((EqualsInterceptor) callback).support;
+				return ProxyUtils.equalsInProxy(this.support, otherAdvised);
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	@SuppressWarnings("serial")
+	private static class HashCodeInterceptor implements MethodInterceptor, Serializable {
+
+		private final ProxyAspectSupport support;
+
+		public HashCodeInterceptor(ProxyAspectSupport support) {
+			this.support = support;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) {
+			return CglibAspectProxy.class.hashCode() * 13 + this.support.getTargetSource().hashCode();
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	private static class AspectedDispatcher implements Dispatcher, Serializable {
+
+		private final ProxyAspectSupport support;
+
+		public AspectedDispatcher(ProxyAspectSupport support) {
+			this.support = support;
+		}
+
+		@Override
+		public Object loadObject() throws Exception {
+			return this.support;
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	public static class SerializableNoOp implements NoOp, Serializable {
+	}
+
+	@SuppressWarnings("serial")
+	private static class StaticDispatcher implements Dispatcher, Serializable {
+
+		private Object target;
+
+		public StaticDispatcher(Object target) {
+			this.target = target;
+		}
+
+		@Override
+		public Object loadObject() {
+			return this.target;
+		}
+	}
+	@SuppressWarnings("serial")
+	private static class DynamicUnaspectedInterceptor implements MethodInterceptor, Serializable {
+
+		private final TargetSource targetSource;
+
+		public DynamicUnaspectedInterceptor(TargetSource targetSource) {
+			this.targetSource = targetSource;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			Object target = this.targetSource.getTarget();
+			try {
+				Object retVal = methodProxy.invoke(target, args);
+				return processReturnType(proxy, target, method, retVal);
+			}
+			finally {
+				this.targetSource.releaseTarget(target);
+			}
+		}
+	}
+
+	
+	@SuppressWarnings("serial")
+	private static class StaticUnaspectedInterceptor implements MethodInterceptor, Serializable {
+
+		private final Object target;
+
+		public StaticUnaspectedInterceptor(Object target) {
+			this.target = target;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			Object retVal = methodProxy.invoke(this.target, args);
+			return processReturnType(proxy, this.target, method, retVal);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	private static class StaticUnaspectedExposedInterceptor implements MethodInterceptor, Serializable {
+
+		private final Object target;
+
+		public StaticUnaspectedExposedInterceptor(Object target) {
+			this.target = target;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			Object oldProxy = null;
+			try {
+				oldProxy = ProxyContext.setCurrentProxy(proxy);
+				Object retVal = methodProxy.invoke(this.target, args);
+				return processReturnType(proxy, this.target, method, retVal);
+			}finally {
+				ProxyContext.setCurrentProxy(oldProxy);
+			}
+		}
+	}
+
+	@SuppressWarnings("serial")
+	private static class DynamicUnaspectedExposedInterceptor implements MethodInterceptor, Serializable {
+
+		private final TargetSource targetSource;
+
+		public DynamicUnaspectedExposedInterceptor(TargetSource targetSource) {
+			this.targetSource = targetSource;
+		}
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			Object oldProxy = null;
+			Object target = this.targetSource.getTarget();
+			try {
+				oldProxy = ProxyContext.setCurrentProxy(proxy);
+				Object retVal = methodProxy.invoke(target, args);
+				return processReturnType(proxy, target, method, retVal);
+			}
+			finally {
+				ProxyContext.setCurrentProxy(oldProxy);
+				this.targetSource.releaseTarget(target);
+			}
+		}
+	}
 	
 	private static class ProxyCallbackFilter implements CallbackFilter {
 
@@ -204,19 +452,19 @@ public class CglibAspectProxy implements AspectProxy {
 				return NO_OVERRIDE;
 			}
 			if (!this.support.isOpaque() && method.getDeclaringClass().isInterface() &&
-					method.getDeclaringClass().isAssignableFrom(Advised.class)) {
+					method.getDeclaringClass().isAssignableFrom(Aspected.class)) {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Method is declared on Advised interface: " + method);
 				}
 				return DISPATCH_ADVISED;
 			}
 			// We must always proxy equals, to direct calls to this.
-			if (AopUtils.isEqualsMethod(method)) {
+			if (ProxyUtils.isEqualsMethod(method)) {
 				LOG.debug("Found 'equals' method: " + method);
 				return INVOKE_EQUALS;
 			}
 			// We must always calculate hashCode based on the proxy.
-			if (AopUtils.isHashCodeMethod(method)) {
+			if (ProxyUtils.isHashCodeMethod(method)) {
 				LOG.debug("Found 'hashCode' method: " + method);
 				return INVOKE_HASHCODE;
 			}
@@ -370,6 +618,7 @@ public class CglibAspectProxy implements AspectProxy {
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	private static class DynamicAspectedInterceptor implements MethodInterceptor,Serializable{
 
 		private final ProxyAspectSupport support;

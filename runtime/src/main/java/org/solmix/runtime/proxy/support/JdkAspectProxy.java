@@ -14,6 +14,7 @@ import org.solmix.runtime.proxy.AspectProxy;
 import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.ProxyConfigException;
 import org.solmix.runtime.proxy.ProxyInvocationException;
+import org.solmix.runtime.proxy.interceptor.ReflectionMethodInvocation;
 import org.solmix.runtime.proxy.target.TargetSource;
 
 public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializable {

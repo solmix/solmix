@@ -1,9 +1,12 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.solmix.runtime.proxy.support.MethodInvocation;
+import org.solmix.runtime.proxy.support.ProxyUtils;
 
 
 public class ReflectionMethodInvocation implements ProxyMethodInvacation {

@@ -5,12 +5,13 @@ import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.solmix.runtime.proxy.support.MethodInterceptor;
 import org.solmix.runtime.proxy.support.MethodInvocation;
 import org.solmix.runtime.proxy.support.ProxyUtils;
 
-public abstract class AbstractTraceInterceptor implements MethodInterceptor,
-		Serializable {
+public abstract class AbstractTraceInterceptor implements MethodInterceptor,Serializable {
+	
+	private static final long serialVersionUID = 1L;
+
 	protected transient Logger defaultLogger = LoggerFactory.getLogger(getClass());
 
 	/**

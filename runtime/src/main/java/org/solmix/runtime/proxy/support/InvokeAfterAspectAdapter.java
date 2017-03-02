@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.solmix.runtime.proxy.Aspect;
 import org.solmix.runtime.proxy.Aspector;
+import org.solmix.runtime.proxy.interceptor.InvokeAfterAspectInterceptor;
+import org.solmix.runtime.proxy.interceptor.MethodInterceptor;
 
 public class InvokeAfterAspectAdapter implements AspectorAdapter, Serializable {
 

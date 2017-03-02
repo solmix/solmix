@@ -1,4 +1,6 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
+
+import org.solmix.runtime.proxy.support.MethodMatcher;
 
 
 public class MethodInterceptorAndMatcher {

@@ -18,7 +18,7 @@
  */
 package org.solmix.runtime.transaction.support;
 
-import org.solmix.runtime.transaction.TransactionService;
+import org.solmix.runtime.transaction.TransactionObject;
 import org.solmix.runtime.transaction.TransactionServiceFactory;
 
 
@@ -31,7 +31,7 @@ import org.solmix.runtime.transaction.TransactionServiceFactory;
 public class DefaultTransactionServiceFactory implements TransactionServiceFactory
 {
     @Override
-    public TransactionService createTransactionService() {
+    public TransactionObject createTransactionService() {
         return null/* new DefaultTransactionService()*/;
     }
 }

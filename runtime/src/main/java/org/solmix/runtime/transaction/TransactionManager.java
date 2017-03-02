@@ -7,9 +7,9 @@ public interface TransactionManager {
 
     void commit() throws TransactionException;
 
-    void bind(Object object, TransactionService transaction);
+    void bind(Object object, TransactionObject transaction);
 
 //    Map<Object, Transaction> getTransactions();
 
-    TransactionService getTransaction(Object object);
+    TransactionObject getTransaction(Object object);
 }

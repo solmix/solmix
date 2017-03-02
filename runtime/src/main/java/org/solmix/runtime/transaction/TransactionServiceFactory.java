@@ -28,5 +28,5 @@ package org.solmix.runtime.transaction;
 public interface TransactionServiceFactory
 {
 
-    TransactionService createTransactionService();
+    TransactionObject createTransactionService();
 }

@@ -26,7 +26,7 @@ package org.solmix.runtime.transaction;
  * @version $Id$ 2015年8月12日
  */
 
-public interface TransactionService
+public interface TransactionObject
 {
 
 	 /**
@@ -47,6 +47,8 @@ public interface TransactionService
     void reset();
     
     boolean isOpen();
+    
     void released();
+    
     void requested();
 }

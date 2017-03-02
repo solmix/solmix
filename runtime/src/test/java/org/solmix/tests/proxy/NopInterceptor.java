@@ -1,6 +1,6 @@
 package org.solmix.tests.proxy;
 
-import org.solmix.runtime.proxy.support.MethodInterceptor;
+import org.solmix.runtime.proxy.interceptor.MethodInterceptor;
 import org.solmix.runtime.proxy.support.MethodInvocation;
 
 public class NopInterceptor implements MethodInterceptor {

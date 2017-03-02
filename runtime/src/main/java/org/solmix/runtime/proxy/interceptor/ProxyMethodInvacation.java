@@ -1,4 +1,6 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
+
+import org.solmix.runtime.proxy.support.MethodInvocation;
 
 public interface ProxyMethodInvacation extends MethodInvocation {
 	Object getProxy();

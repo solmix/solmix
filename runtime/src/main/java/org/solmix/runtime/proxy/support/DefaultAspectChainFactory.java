@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.solmix.runtime.proxy.Aspector;
 import org.solmix.runtime.proxy.Interceptor;
+import org.solmix.runtime.proxy.interceptor.MethodInterceptor;
+import org.solmix.runtime.proxy.interceptor.MethodInterceptorAndMatcher;
 
 
 public class DefaultAspectChainFactory implements AspectChainFactory {

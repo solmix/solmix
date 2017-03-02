@@ -1,4 +1,4 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
+import org.solmix.runtime.proxy.support.AfterAspect;
+import org.solmix.runtime.proxy.support.MethodInvocation;
 
 
 public class ThrowsAspectInterceptor implements MethodInterceptor,AfterAspect {

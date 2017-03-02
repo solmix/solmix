@@ -10,9 +10,9 @@ import static org.junit.Assert.fail;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.proxy.interceptor.DebugInterceptor;
+import org.solmix.runtime.proxy.interceptor.DelegatingIntroductionInterceptor;
 import org.solmix.runtime.proxy.support.DefaultCutpointAspector;
 import org.solmix.runtime.proxy.support.DefaultIntroductionAspector;
-import org.solmix.runtime.proxy.support.DelegatingIntroductionInterceptor;
 import org.solmix.runtime.proxy.support.ProxyUtils;
 import org.solmix.test.bean.ComplexBean;
 import org.solmix.test.bean.IComplexBean;
@@ -258,14 +258,14 @@ public class ProxyFactoryTest {
 		ProxyFactory pf = new ProxyFactory();
 		pf.setTargetClass(ComplexBean.class);
 		Object proxy = pf.getProxy();
-		assertTrue("Proxy is a Javassist proxy", ProxyUtils.isJavassistProxy(proxy));
+		assertTrue("Proxy is a cglib proxy", ProxyUtils.isCglibProxy(proxy));
 		assertTrue(proxy instanceof ComplexBean);
 		assertEquals(ComplexBean.class, ProxyUtils.getTargetClass(proxy));
 
 		ProxyFactory pf2 = new ProxyFactory(proxy);
 		pf2.setProxyTargetClass(true);
 		Object proxy2 = pf2.getProxy();
-		assertTrue("Proxy is a Javassist proxy", ProxyUtils.isJavassistProxy(proxy2));
+		assertTrue("Proxy is a cglib proxy", ProxyUtils.isCglibProxy(proxy2));
 		assertTrue(proxy2 instanceof ComplexBean);
 		assertEquals(ComplexBean.class, ProxyUtils.getTargetClass(proxy2));
 	}

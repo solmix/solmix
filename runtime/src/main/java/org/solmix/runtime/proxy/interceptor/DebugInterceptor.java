@@ -4,6 +4,7 @@ import org.solmix.runtime.proxy.support.MethodInvocation;
 
 public class DebugInterceptor extends SimpleTraceInterceptor {
 
+	private static final long serialVersionUID = 1L;
 	private volatile long count;
 
 

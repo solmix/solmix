@@ -1,6 +1,10 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
 
 import org.solmix.commons.util.Assert;
+import org.solmix.runtime.proxy.support.DynamicIntroductionAspect;
+import org.solmix.runtime.proxy.support.IntroductionAspectSupport;
+import org.solmix.runtime.proxy.support.MethodInvocation;
+import org.solmix.runtime.proxy.support.ProxyUtils;
 
 public class DelegatingIntroductionInterceptor extends IntroductionAspectSupport implements IntroductionInterceptor{
 

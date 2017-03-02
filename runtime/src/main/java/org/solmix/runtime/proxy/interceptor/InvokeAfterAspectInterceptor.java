@@ -1,5 +1,7 @@
-package org.solmix.runtime.proxy.support;
+package org.solmix.runtime.proxy.interceptor;
 
+import org.solmix.runtime.proxy.support.InvokeAfterAspect;
+import org.solmix.runtime.proxy.support.MethodInvocation;
 import org.springframework.util.Assert;
 
 public class InvokeAfterAspectInterceptor implements MethodInterceptor {
