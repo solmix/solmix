@@ -3,13 +3,9 @@ package org.solmix.runtime.transaction;
 
 public interface TransactionManager {
 
-	void rollback() throws TransactionException;
+	void commit(TransactionState status) throws TransactionException;
 
-    void commit() throws TransactionException;
+	void rollback(TransactionState status) throws TransactionException;
 
-    void bind(Object object, TransactionObject transaction);
-
-//    Map<Object, Transaction> getTransactions();
-
-    TransactionObject getTransaction(Object object);
+	TransactionState getTransaction(TransactionInfo status) throws TransactionException;
 }

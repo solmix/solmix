@@ -44,10 +44,6 @@ public class TransactionException extends RuntimeException
         super(include);
     }
 
-    /**
-     * @param string
-     * @param e
-     */
     public TransactionException(String string, Throwable e)
     {
         super(string, e);

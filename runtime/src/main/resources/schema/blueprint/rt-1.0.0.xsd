@@ -13,13 +13,15 @@
             			minOccurs="0">
             		</xsd:element>
             		<xsd:element name="bindings" type="xsd:anyType"
-            			minOccurs="0"></xsd:element>
+            			minOccurs="0">
+            		</xsd:element>
             		<xsd:element name="properties" type="beans:Tmap"
             			minOccurs="0">
             		</xsd:element>
             		<xsd:element name="ref" type="refType" minOccurs="0"
             			maxOccurs="unbounded">
             		</xsd:element>
+            		<xsd:element name="tx" type="txType" minOccurs="0" maxOccurs="1"></xsd:element>
             	</xsd:choice>
             </xsd:sequence>
             
@@ -32,5 +34,10 @@
 	<xsd:complexType name="refType">
 		<xsd:attribute name="container-id" type="xsd:string"></xsd:attribute>
 		<xsd:attribute name="filter" type="xsd:string"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="txType">
+		<xsd:attribute name="manager" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="proxy-target-class" type="xsd:string"></xsd:attribute>
 	</xsd:complexType>
 </xsd:schema>

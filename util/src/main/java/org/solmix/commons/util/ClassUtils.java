@@ -2,12 +2,15 @@ package org.solmix.commons.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.AccessControlException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 
 public abstract class ClassUtils {
 
@@ -212,6 +215,59 @@ public abstract class ClassUtils {
 	public static boolean isFinalizeMethod(Method method) {
 		return (method != null && method.getName().equals("finalize") &&
 				method.getParameterTypes().length == 0);
+	}
+
+	public static boolean isUserLevelMethod(Method method) {
+		Assert.isNotNull(method, "Method must not be null");
+		return (method.isBridge() || (!method.isSynthetic() && !isGroovyObjectMethod(method)));
+	}
+	private static boolean isGroovyObjectMethod(Method method) {
+		return method.getDeclaringClass().getName().equals("groovy.lang.GroovyObject");
+	}
+
+	public static Class<?> getUserClass(Class<?> clazz) {
+		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+			Class<?> superClass = clazz.getSuperclass();
+			if (superClass != null && !Object.class.equals(superClass)) {
+				return superClass;
+			}
+		}
+		return clazz;
+	}
+
+	public static Method getMostSpecificMethod(Method method, Class<?> targetClass) {
+		if (method != null && isOverridable(method, targetClass) &&
+				targetClass != null && !targetClass.equals(method.getDeclaringClass())) {
+			try {
+				if (Modifier.isPublic(method.getModifiers())) {
+					try {
+						return targetClass.getMethod(method.getName(), method.getParameterTypes());
+					}
+					catch (NoSuchMethodException ex) {
+						return method;
+					}
+				}
+				else {
+					Method specificMethod =
+							Reflection.findMethod(targetClass, method.getName(), method.getParameterTypes());
+					return (specificMethod != null ? specificMethod : method);
+				}
+			}
+			catch (AccessControlException ex) {
+				// Security settings are disallowing reflective access; fall back to 'method' below.
+			}
+		}
+		return method;
+	}
+	
+	private static boolean isOverridable(Method method, Class<?> targetClass) {
+		if (Modifier.isPrivate(method.getModifiers())) {
+			return false;
+		}
+		if (Modifier.isPublic(method.getModifiers()) || Modifier.isProtected(method.getModifiers())) {
+			return true;
+		}
+		return getPackageName(method.getDeclaringClass()).equals(getPackageName(targetClass));
 	}
 
 }
