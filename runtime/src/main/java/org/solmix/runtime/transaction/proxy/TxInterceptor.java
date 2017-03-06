@@ -23,7 +23,7 @@ public class TxInterceptor extends TxProxySupport implements MethodInterceptor,S
 
 	public TxInterceptor(TransactionManager ptm, TransactionMetaCreater tas) {
 		setTransactionManager(ptm);
-		setTransactionAttributeSource(tas);
+		setTransactionMetaCreator(tas);
 	}
 
 	@Override

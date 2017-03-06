@@ -2,6 +2,7 @@ package org.solmix.tests.transaction;
 
 import org.solmix.runtime.transaction.annotation.Transaction;
 
+@Transaction
 public class TestManager implements ITestManager {
 
 	@Transaction

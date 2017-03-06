@@ -73,11 +73,11 @@ public class TxProxySupport {
 	}*/
 
 	
-	public void setTransactionAttributeSources(TransactionMetaCreater[] transactionAttributeSources) {
+	public void setTransactionMetaCreators(TransactionMetaCreater[] transactionAttributeSources) {
 		this.transactionMetaCreater = new CompositeTransactionMetaCreater(transactionAttributeSources);
 	}
 
-	public void setTransactionAttributeSource(TransactionMetaCreater transactionAttributeSource) {
+	public void setTransactionMetaCreator(TransactionMetaCreater transactionAttributeSource) {
 		this.transactionMetaCreater = transactionAttributeSource;
 	}
 

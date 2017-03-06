@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassUtils;
 import org.solmix.runtime.proxy.ProxyHandler;
-import org.solmix.runtime.proxy.ProxyInfo;
 import org.solmix.runtime.proxy.ProxyManager;
 
 public class ProxyManagerImpl implements ProxyManager {
@@ -27,11 +26,7 @@ public class ProxyManagerImpl implements ProxyManager {
 	        }
 	}
 
-	@Override
-	public Object proxy(Object instance, ProxyInfo config) {
-		
-		return null;
-	}
+	
 
 	@Override
 	public Object proxy(Object instance, Class<?>[] proxyInterfaces) {
