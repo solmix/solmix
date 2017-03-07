@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.Assert;
 
 public abstract class TxSynchronizers {
 
@@ -54,4 +55,12 @@ public abstract class TxSynchronizers {
 			}
 		}
 	}
+
+	static Object unwrapResourceIfNecessary(Object resource) {
+		Assert.isNotNull(resource, "Resource must not be null");
+		Object resourceRef = resource;
+		
+		return resourceRef;
+	}
+
 }

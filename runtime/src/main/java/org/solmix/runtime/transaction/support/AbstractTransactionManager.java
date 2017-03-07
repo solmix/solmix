@@ -4,16 +4,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.runtime.transaction.NestedTransactionNotSupportedException;
 import org.solmix.runtime.transaction.TransactionException;
 import org.solmix.runtime.transaction.TransactionInfo;
 import org.solmix.runtime.transaction.TransactionIsolation;
 import org.solmix.runtime.transaction.TransactionManager;
 import org.solmix.runtime.transaction.TransactionPolicy;
 import org.solmix.runtime.transaction.TransactionState;
-import org.springframework.transaction.InvalidTimeoutException;
-import org.springframework.transaction.NestedTransactionNotSupportedException;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 public abstract class AbstractTransactionManager implements TransactionManager {
 
@@ -22,6 +19,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	public static final int SYNCHRONIZATION_ON_ACTUAL_TRANSACTION = 1;
 	public static final int SYNCHRONIZATION_NEVER = 2;
 	private int transactionSynchronization = SYNCHRONIZATION_ALWAYS;
+	private int defaultTimeout = TransactionInfo.TIMEOUT_DEFAULT;
 	
 	private boolean nestedTransactionAllowed = false;
 
@@ -81,8 +79,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 						LOG.debug("Releasing transaction savepoint");
 					}
 					status.releaseHeldSavepoint();
-				}
-				else if (status.isNewTransaction()) {
+				}else if (status.isNewTransaction()) {
 					if (status.isDebug()) {
 						LOG.debug("Initiating transaction commit");
 					}
@@ -94,30 +91,26 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 					throw new UnexpectedRollbackException(
 							"Transaction silently rolled back because it has been marked as rollback-only");
 				}
-			}
-			catch (UnexpectedRollbackException ex) {
+			}catch (UnexpectedRollbackException ex) {
 				// can only be caused by doCommit
-				triggerAfterCompletion(status, TransactionSynchronization.STATUS_ROLLED_BACK);
+				triggerAfterCompletion(status, TransactionListener.STATUS_ROLLED_BACK);
 				throw ex;
 			}
 			catch (TransactionException ex) {
 				// can only be caused by doCommit
 				if (isRollbackOnCommitFailure()) {
 					doRollbackOnCommitException(status, ex);
-				}
-				else {
-					triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);
+				}else {
+					triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
 				}
 				throw ex;
-			}
-			catch (RuntimeException ex) {
+			}catch (RuntimeException ex) {
 				if (!beforeCompletionInvoked) {
 					triggerBeforeCompletion(status);
 				}
 				doRollbackOnCommitException(status, ex);
 				throw ex;
-			}
-			catch (Error err) {
+			}catch (Error err) {
 				if (!beforeCompletionInvoked) {
 					triggerBeforeCompletion(status);
 				}
@@ -129,17 +122,21 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			// propagated to callers but the transaction still considered as committed.
 			try {
 				triggerAfterCommit(status);
-			}
-			finally {
-				triggerAfterCompletion(status, TransactionSynchronization.STATUS_COMMITTED);
+			}finally {
+				triggerAfterCompletion(status, TransactionListener.STATUS_COMMITTED);
 			}
 
-		}
-		finally {
+		}finally {
 			cleanupAfterCompletion(status);
 		}
 	}
 	
+	protected int determineTimeout(TransactionInfo definition) {
+		if (definition.getTimeout() != TransactionInfo.TIMEOUT_DEFAULT) {
+			return definition.getTimeout();
+		}
+		return this.defaultTimeout;
+	}
 	private void cleanupAfterCompletion(DefaultTransactionState status) {
 		status.setCompleted();
 		if (status.isNewSynchronization()) {
@@ -176,7 +173,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	private void doResumeSynchronization(List<TransactionListener> suspendedSynchronizations) {
-		TransactionSynchronizationManager.initSynchronization();
+		TxSynchronizer.initSynchronization();
 		for (TransactionListener synchronization : suspendedSynchronizations) {
 			synchronization.resume();
 			TxSynchronizer.registerSynchronization(synchronization);
@@ -219,15 +216,15 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 		catch (RuntimeException rbex) {
 			LOG.error("Commit exception overridden by rollback exception", ex);
-			triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);
+			triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
 			throw rbex;
 		}
 		catch (Error rberr) {
 			LOG.error("Commit exception overridden by rollback exception", ex);
-			triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);
+			triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
 			throw rberr;
 		}
-		triggerAfterCompletion(status, TransactionSynchronization.STATUS_ROLLED_BACK);
+		triggerAfterCompletion(status, TransactionListener.STATUS_ROLLED_BACK);
 	}
 	
 	public final boolean isGlobalRollbackOnParticipationFailure() {
@@ -275,15 +272,15 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 				}
 			} catch (RuntimeException ex) {
 				triggerAfterCompletion(status,
-						TransactionSynchronization.STATUS_UNKNOWN);
+						TransactionListener.STATUS_UNKNOWN);
 				throw ex;
 			} catch (Error err) {
 				triggerAfterCompletion(status,
-						TransactionSynchronization.STATUS_UNKNOWN);
+						TransactionListener.STATUS_UNKNOWN);
 				throw err;
 			}
 			triggerAfterCompletion(status,
-					TransactionSynchronization.STATUS_ROLLED_BACK);
+					TransactionListener.STATUS_ROLLED_BACK);
 		} finally {
 			cleanupAfterCompletion(status);
 		}
@@ -316,7 +313,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	@Override
 	public void rollback(TransactionState status)
-			throws org.springframework.transaction.TransactionException {
+			throws TransactionException {
 		if (status.isCompleted()) {
 			throw new IllegalTransactionStateException(
 					"Transaction is already completed - do not call commit or rollback more than once per transaction");
@@ -377,7 +374,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 
 		if (info.getTimeout() < TransactionInfo.TIMEOUT_DEFAULT) {
-			throw new InvalidTimeoutException("Invalid transaction timeout", info.getTimeout());
+			throw new TransactionException("Invalid transaction timeout"+info.getTimeout());
 		}
 
 		// 不存在事物，但是事物策略需要事物，直接抛错.
@@ -576,7 +573,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 				}
 			}
 			if (!info.isReadOnly()) {
-				if (TransactionSynchronizationManager.isCurrentTransactionReadOnly()) {
+				if (TxSynchronizer.isCurrentTransactionReadOnly()) {
 					throw new IllegalTransactionStateException("Participating transaction with definition [" +
 							info + "] is not marked as read-only but existing transaction is");
 				}
@@ -636,7 +633,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 
 		LOG.debug("Cannot register Spring after-completion synchronization with existing transaction - " +
 				"processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
-		invokeAfterCompletion(synchronizations, TransactionSynchronization.STATUS_UNKNOWN);
+		invokeAfterCompletion(synchronizations, TransactionListener.STATUS_UNKNOWN);
 	}
 	protected final void invokeAfterCompletion(List<TransactionListener> synchronizations, int completionStatus) {
 		TxSynchronizers.invokeAfterCompletion(synchronizations, completionStatus);

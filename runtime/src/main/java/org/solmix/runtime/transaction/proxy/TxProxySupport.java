@@ -4,14 +4,19 @@ import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.solmix.commons.util.DataUtils;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
+import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.transaction.TransactionException;
 import org.solmix.runtime.transaction.TransactionManager;
 import org.solmix.runtime.transaction.TransactionState;
 import org.solmix.runtime.transaction.config.TransactionMeta;
 
 
-public class TxProxySupport {
+public class TxProxySupport implements ContainerAware {
 
+	private Container container;
 	private static final ThreadLocal<TransactionHolder> transactionInfoHolder =
 			new ThreadLocal<TransactionHolder>();
 
@@ -107,13 +112,11 @@ public class TxProxySupport {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
 				retVal = invocation.proceedWithInvocation();
-			}
-			catch (Throwable ex) {
+			}catch (Throwable ex) {
 				// target invocation exception
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
-			}
-			finally {
+			}finally {
 				cleanupTransactionInfo(txInfo);
 			}
 			commitTransactionAfterReturning(txInfo);
@@ -173,17 +176,27 @@ public class TxProxySupport {
 		if (this.transactionManager != null ) {
 			return this.transactionManager;
 		}
-		return null;
-//		String qualifier = txAttr.getQualifier();
-//		if (StringUtils.hasLength(qualifier)) {
-//			return BeanFactoryAnnotationUtils.qualifiedBeanOfType(this.beanFactory, TransactionManager.class, qualifier);
-//		}
-//		else if (this.transactionManagerBeanName != null) {
-//			return this.beanFactory.getBean(this.transactionManagerBeanName, TransactionManager.class);
-//		}
-//		else {
-//			return this.beanFactory.getBean(TransactionManager.class);
-//		}
+		String qualifier = txAttr.getQualifier();
+		if (DataUtils.isNotNullAndEmpty(qualifier)) {
+			container.hasExtensionByName(qualifier);
+			transactionManager= getTransactionManager(qualifier.trim());
+		}
+		else if (this.transactionManagerBeanName != null) {
+			transactionManager= getTransactionManager(transactionManagerBeanName);
+		}
+		else {
+			transactionManager= container.getExtension(TransactionManager.class);
+		}
+		return transactionManager;
+	}
+	
+	TransactionManager getTransactionManager(String name){
+		ConfiguredBeanProvider provider =container.getExtension(ConfiguredBeanProvider.class);
+		if(provider!=null){
+			return provider.getBeanOfType(name, TransactionManager.class);
+		}else{
+			return null;
+		}
 	}
 
 	protected String methodIdentification(Method method, Class<?> targetClass) {
@@ -209,11 +222,11 @@ public class TxProxySupport {
 		return createTransactionIfNecessary(tm, txAttr, methodIdentification(method, targetClass));
 	}
 
-	@SuppressWarnings("serial")
 	protected TransactionHolder createTransactionIfNecessary(
-			TransactionManager tm, TransactionMeta txAttr, final String joinpointIdentification) {
+			TransactionManager tm, TransactionMeta txAttr,
+			final String joinpointIdentification) {
 
-		// If no name specified, apply method identification as transaction name.
+		// 如果没有指明事物名称，使用方法名
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionMeta(txAttr) {
 				@Override
@@ -223,23 +236,23 @@ public class TxProxySupport {
 			};
 		}
 
-		TransactionState status = null;
+		TransactionState state = null;
 		if (txAttr != null) {
 			if (tm != null) {
-				status = tm.getTransaction(txAttr);
-			}
-			else {
+				state = tm.getTransaction(txAttr);
+			} else {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Skipping transactional joinpoint [" + joinpointIdentification +
-							"] because no transaction manager has been configured");
+					logger.debug("Skipping transactional joinpoint ["
+							+ joinpointIdentification
+							+ "] because no transaction manager has been configured");
 				}
 			}
 		}
-		return prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
+		return prepareTransactionHolder(tm, txAttr, joinpointIdentification,state);
 	}
 
-	protected TransactionHolder prepareTransactionInfo(TransactionManager tm,
-			TransactionMeta txAttr, String joinpointIdentification, TransactionState status) {
+	protected TransactionHolder prepareTransactionHolder(TransactionManager tm,
+			TransactionMeta txAttr, String joinpointIdentification, TransactionState state) {
 
 		TransactionHolder txInfo = new TransactionHolder(tm, txAttr, joinpointIdentification);
 		if (txAttr != null) {
@@ -248,12 +261,8 @@ public class TxProxySupport {
 				logger.trace("Getting transaction for [" + txInfo.getJoinpointIdentification() + "]");
 			}
 			// The transaction manager will flag an error if an incompatible tx already exists
-			txInfo.newTransactionState(status);
-		}
-		else {
-			// The TransactionInfo.hasTransaction() method will return
-			// false. We created it only to preserve the integrity of
-			// the ThreadLocal stack maintained in this class.
+			txInfo.newTransactionState(state);
+		}else {
 			if (logger.isTraceEnabled())
 				logger.trace("Don't need to create transaction for [" + joinpointIdentification +
 						"]: This method isn't transactional.");
@@ -387,15 +396,13 @@ public class TxProxySupport {
 		}
 
 		private void bindToThread() {
-			// Expose current TransactionStatus, preserving any existing TransactionStatus
-			// for restoration after this transaction is complete.
+			//先暂存下旧的
 			this.oldTransactionInfo = transactionInfoHolder.get();
 			transactionInfoHolder.set(this);
 		}
 
 		private void restoreThreadLocalStatus() {
-			// Use stack to restore old transaction TransactionInfo.
-			// Will be null if none was set.
+			// 处理完成后恢复旧的设置
 			transactionInfoHolder.set(this.oldTransactionInfo);
 		}
 
@@ -449,6 +456,13 @@ public class TxProxySupport {
 		public String toString() {
 			return getCause().toString();
 		}
+	}
+
+
+	@Override
+	public void setContainer(Container container) {
+		this.container=container;
+		
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassUtils;
+import org.solmix.runtime.Container;
+import org.solmix.runtime.ContainerAware;
 import org.solmix.runtime.proxy.ProxyHandler;
 import org.solmix.runtime.proxy.ProxyManager;
 
@@ -12,9 +14,16 @@ public class ProxyManagerImpl implements ProxyManager {
 
     protected final List<ProxyHandler> handlers = new CopyOnWriteArrayList<ProxyHandler>();
 
+    private final Container container;
+    public ProxyManagerImpl(Container container){
+    	this.container=container;
+    }
 	@Override
 	public void addHandler(ProxyHandler handler) {
 		 if (!handlers.contains(handler)) {
+			 if(handler instanceof ContainerAware){
+				 ((ContainerAware)handler).setContainer(container);
+			 }
 			 handlers.add(0, handler);
 	        }
 	}

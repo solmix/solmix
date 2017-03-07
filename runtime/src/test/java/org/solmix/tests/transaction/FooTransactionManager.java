@@ -6,7 +6,7 @@ import org.solmix.runtime.transaction.TransactionInfo;
 import org.solmix.runtime.transaction.support.AbstractTransactionManager;
 import org.solmix.runtime.transaction.support.DefaultTransactionState;
 
-public class TestTransactionManager extends AbstractTransactionManager {
+public class FooTransactionManager extends AbstractTransactionManager {
 
 	private static final Object TRANSACTION = "transaction";
 
@@ -22,7 +22,7 @@ public class TestTransactionManager extends AbstractTransactionManager {
 
 	protected boolean rollbackOnly = false;
 
-	public TestTransactionManager(boolean existingTransaction,
+	public FooTransactionManager(boolean existingTransaction,
 			boolean canCreateTransaction) {
 		this.existingTransaction = existingTransaction;
 		this.canCreateTransaction = canCreateTransaction;

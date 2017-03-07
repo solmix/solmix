@@ -188,7 +188,7 @@ public class ExtensionContainer implements Container {
         } else {
             locations = new String[] {internal, ext };
         }
-        ProxyManager proxy = new ProxyManagerImpl();
+        ProxyManager proxy = new ProxyManagerImpl(this);
         extensions.put(ProxyManager.class, proxy);
         extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);

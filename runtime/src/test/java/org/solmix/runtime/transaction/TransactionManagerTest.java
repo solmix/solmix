@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import org.solmix.runtime.transaction.support.DefaultTransactionInfo;
 import org.solmix.runtime.transaction.support.DefaultTransactionState;
 import org.solmix.runtime.transaction.support.IllegalTransactionStateException;
-import org.solmix.tests.transaction.TestTransactionManager;
+import org.solmix.tests.transaction.FooTransactionManager;
 
 public class TransactionManagerTest extends TestCase {
 
@@ -13,7 +13,7 @@ public class TransactionManagerTest extends TestCase {
 	 * 测试在不存在事物的情况，下各种事物策略的处理方式。
 	 */
 	public void testNotExsitingTransaction() {
-		TransactionManager tm = new TestTransactionManager(false, true);
+		TransactionManager tm = new FooTransactionManager(false, true);
 		DefaultTransactionState status1 = (DefaultTransactionState)
 				tm.getTransaction(new DefaultTransactionInfo(TransactionPolicy.SUPPORTS));
 		assertTrue("Must not have transaction", status1.getTransaction() == null);
@@ -35,7 +35,7 @@ public class TransactionManagerTest extends TestCase {
 	 * 测试在存在事物的情况下，各种事物策略的处理情况
 	 */
 	public void testExistingTransaction() {
-		TransactionManager tm = new TestTransactionManager(true, true);
+		TransactionManager tm = new FooTransactionManager(true, true);
 		DefaultTransactionState status1 = (DefaultTransactionState)
 				tm.getTransaction(new DefaultTransactionInfo(TransactionPolicy.SUPPORTS));
 		assertTrue("Must have transaction", status1.getTransaction() != null);
@@ -60,7 +60,7 @@ public class TransactionManagerTest extends TestCase {
 	}
 	
 	public void testCommitWithoutExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(false, true);
+		FooTransactionManager tm = new FooTransactionManager(false, true);
 		TransactionState status = tm.getTransaction(null);
 		tm.commit(status);
 		assertTrue("triggered begin", tm.isBegin());
@@ -70,7 +70,7 @@ public class TransactionManagerTest extends TestCase {
 	}
 	
 	public void testRollbackWithoutExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(false, true);
+		FooTransactionManager tm = new FooTransactionManager(false, true);
 		TransactionState status = tm.getTransaction(null);
 		tm.rollback(status);
 		assertTrue("triggered begin", tm.isBegin());
@@ -80,7 +80,7 @@ public class TransactionManagerTest extends TestCase {
 	}
 	
 	public void testRollbackOnlyWithoutExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(false, true);
+		FooTransactionManager tm = new FooTransactionManager(false, true);
 		TransactionState status = tm.getTransaction(null);
 		status.setRollbackOnly();
 		tm.commit(status);
@@ -91,7 +91,7 @@ public class TransactionManagerTest extends TestCase {
 	}
 	
 	public void testCommitWithExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(true, true);
+		FooTransactionManager tm = new FooTransactionManager(true, true);
 		TransactionState status = tm.getTransaction(null);
 		tm.commit(status);
 		assertTrue("no begin", !tm.isBegin());
@@ -102,7 +102,7 @@ public class TransactionManagerTest extends TestCase {
 	
 	/**对于已存在的事物，回滚只是标记为回滚*/
 	public void testRollbackWithExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(true, true);
+		FooTransactionManager tm = new FooTransactionManager(true, true);
 		TransactionState status = tm.getTransaction(null);
 		tm.rollback(status);
 		assertTrue("no begin", !tm.isBegin());
@@ -112,7 +112,7 @@ public class TransactionManagerTest extends TestCase {
 	}
 	
 	public void testRollbackOnlyWithExistingTransaction() {
-		TestTransactionManager tm = new TestTransactionManager(true, true);
+		FooTransactionManager tm = new FooTransactionManager(true, true);
 		TransactionState status = tm.getTransaction(null);
 		status.setRollbackOnly();
 		tm.commit(status);
