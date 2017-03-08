@@ -38,19 +38,19 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 					"Transaction is already completed - do not call commit or rollback more than once per transaction");
 		}
 
-		DefaultTransactionState defStatus = (DefaultTransactionState) state;
-		if (defStatus.isLocalRollbackOnly()) {
-			if (defStatus.isDebug()) {
+		DefaultTransactionState defState = (DefaultTransactionState) state;
+		if (defState.isLocalRollbackOnly()) {
+			if (defState.isDebug()) {
 				LOG.debug("Transactional code has requested rollback");
 			}
-			processRollback(defStatus);
+			processRollback(defState);
 			return;
 		}
-		if (!shouldCommitOnGlobalRollbackOnly() && defStatus.isGlobalRollbackOnly()) {
-			if (defStatus.isDebug()) {
+		if (!shouldCommitOnGlobalRollbackOnly() && defState.isGlobalRollbackOnly()) {
+			if (defState.isDebug()) {
 				LOG.debug("Global transaction is marked as rollback-only but transactional code requested commit");
 			}
-			processRollback(defStatus);
+			processRollback(defState);
 			// Throw UnexpectedRollbackException only at outermost transaction boundary
 			// or if explicitly asked to.
 			if (state.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) {
@@ -59,31 +59,31 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			return;
 		}
 
-		processCommit(defStatus);
+		processCommit(defState);
 	}
 	
-	private void processCommit(DefaultTransactionState status) throws TransactionException {
+	private void processCommit(DefaultTransactionState state) throws TransactionException {
 		try {
 			boolean beforeCompletionInvoked = false;
 			try {
-				prepareForCommit(status);
-				triggerBeforeCommit(status);
-				triggerBeforeCompletion(status);
+				prepareForCommit(state);
+				triggerBeforeCommit(state);
+				triggerBeforeCompletion(state);
 				beforeCompletionInvoked = true;
 				boolean globalRollbackOnly = false;
-				if (status.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) {
-					globalRollbackOnly = status.isGlobalRollbackOnly();
+				if (state.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) {
+					globalRollbackOnly = state.isGlobalRollbackOnly();
 				}
-				if (status.hasSavepoint()) {
-					if (status.isDebug()) {
+				if (state.hasSavepoint()) {
+					if (state.isDebug()) {
 						LOG.debug("Releasing transaction savepoint");
 					}
-					status.releaseHeldSavepoint();
-				}else if (status.isNewTransaction()) {
-					if (status.isDebug()) {
+					state.releaseHeldSavepoint();
+				}else if (state.isNewTransaction()) {
+					if (state.isDebug()) {
 						LOG.debug("Initiating transaction commit");
 					}
-					doCommit(status);
+					doCommit(state);
 				}
 				// Throw UnexpectedRollbackException if we have a global rollback-only
 				// marker but still didn't get a corresponding exception from commit.
@@ -93,41 +93,41 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 				}
 			}catch (UnexpectedRollbackException ex) {
 				// can only be caused by doCommit
-				triggerAfterCompletion(status, TransactionListener.STATUS_ROLLED_BACK);
+				triggerAfterCompletion(state, TransactionListener.STATUS_ROLLED_BACK);
 				throw ex;
 			}
 			catch (TransactionException ex) {
 				// can only be caused by doCommit
 				if (isRollbackOnCommitFailure()) {
-					doRollbackOnCommitException(status, ex);
+					doRollbackOnCommitException(state, ex);
 				}else {
-					triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
+					triggerAfterCompletion(state, TransactionListener.STATUS_UNKNOWN);
 				}
 				throw ex;
 			}catch (RuntimeException ex) {
 				if (!beforeCompletionInvoked) {
-					triggerBeforeCompletion(status);
+					triggerBeforeCompletion(state);
 				}
-				doRollbackOnCommitException(status, ex);
+				doRollbackOnCommitException(state, ex);
 				throw ex;
 			}catch (Error err) {
 				if (!beforeCompletionInvoked) {
-					triggerBeforeCompletion(status);
+					triggerBeforeCompletion(state);
 				}
-				doRollbackOnCommitException(status, err);
+				doRollbackOnCommitException(state, err);
 				throw err;
 			}
 
 			// Trigger afterCommit callbacks, with an exception thrown there
 			// propagated to callers but the transaction still considered as committed.
 			try {
-				triggerAfterCommit(status);
+				triggerAfterCommit(state);
 			}finally {
-				triggerAfterCompletion(status, TransactionListener.STATUS_COMMITTED);
+				triggerAfterCompletion(state, TransactionListener.STATUS_COMMITTED);
 			}
 
 		}finally {
-			cleanupAfterCompletion(status);
+			cleanupAfterCompletion(state);
 		}
 	}
 	
@@ -137,19 +137,20 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 		return this.defaultTimeout;
 	}
-	private void cleanupAfterCompletion(DefaultTransactionState status) {
-		status.setCompleted();
-		if (status.isNewSynchronization()) {
+	/**在完成提交或者回滚完成后做清理操作*/
+	private void cleanupAfterCompletion(DefaultTransactionState state) {
+		state.setCompleted();
+		if (state.isNewSynchronization()) {
 			TxSynchronizer.clear();
 		}
-		if (status.isNewTransaction()) {
-			doCleanupAfterCompletion(status.getTransaction());
+		if (state.isNewTransaction()) {
+			doCleanupAfterCompletion(state.getTransaction());
 		}
-		if (status.getSuspendedResources() != null) {
-			if (status.isDebug()) {
+		if (state.getSuspendedResources() != null) {
+			if (state.isDebug()) {
 				LOG.debug("Resuming suspended transaction after completion of inner transaction");
 			}
-			resume(status.getTransaction(), (SuspendedResourcesHolder) status.getSuspendedResources());
+			resume(state.getTransaction(), (SuspendedResourcesHolder) state.getSuspendedResources());
 		}
 	}
 	
@@ -186,9 +187,9 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 				"Transaction manager [" + getClass().getName() + "] does not support transaction suspension");
 	}
 	
-	private void triggerAfterCommit(DefaultTransactionState status) {
-		if (status.isNewSynchronization()) {
-			if (status.isDebug()) {
+	private void triggerAfterCommit(DefaultTransactionState state) {
+		if (state.isNewSynchronization()) {
+			if (state.isDebug()) {
 				LOG.trace("Triggering afterCommit synchronization");
 			}
 			TxSynchronizers.triggerAfterCommit();
@@ -199,32 +200,32 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		return this.rollbackOnCommitFailure;
 	}
 	
-	private void doRollbackOnCommitException(DefaultTransactionState status, Throwable ex) throws TransactionException {
+	private void doRollbackOnCommitException(DefaultTransactionState state, Throwable ex) throws TransactionException {
 		try {
-			if (status.isNewTransaction()) {
-				if (status.isDebug()) {
+			if (state.isNewTransaction()) {
+				if (state.isDebug()) {
 					LOG.debug("Initiating transaction rollback after commit exception", ex);
 				}
-				doRollback(status);
+				doRollback(state);
 			}
-			else if (status.hasTransaction() && isGlobalRollbackOnParticipationFailure()) {
-				if (status.isDebug()) {
+			else if (state.hasTransaction() && isGlobalRollbackOnParticipationFailure()) {
+				if (state.isDebug()) {
 					LOG.debug("Marking existing transaction as rollback-only after commit exception", ex);
 				}
-				doSetRollbackOnly(status);
+				doSetRollbackOnly(state);
 			}
 		}
 		catch (RuntimeException rbex) {
 			LOG.error("Commit exception overridden by rollback exception", ex);
-			triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
+			triggerAfterCompletion(state, TransactionListener.STATUS_UNKNOWN);
 			throw rbex;
 		}
 		catch (Error rberr) {
 			LOG.error("Commit exception overridden by rollback exception", ex);
-			triggerAfterCompletion(status, TransactionListener.STATUS_UNKNOWN);
+			triggerAfterCompletion(state, TransactionListener.STATUS_UNKNOWN);
 			throw rberr;
 		}
-		triggerAfterCompletion(status, TransactionListener.STATUS_ROLLED_BACK);
+		triggerAfterCompletion(state, TransactionListener.STATUS_ROLLED_BACK);
 	}
 	
 	public final boolean isGlobalRollbackOnParticipationFailure() {
@@ -241,29 +242,29 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		return this.nestedTransactionAllowed;
 	}
 	
-	private void processRollback(DefaultTransactionState status) {
+	private void processRollback(DefaultTransactionState state) {
 		try {
 			try {
-				triggerBeforeCompletion(status);
-				if (status.hasSavepoint()) {
-					if (status.isDebug()) {
+				triggerBeforeCompletion(state);
+				if (state.hasSavepoint()) {
+					if (state.isDebug()) {
 						LOG.debug("Rolling back transaction to savepoint");
 					}
-					status.rollbackToHeldSavepoint();
-				} else if (status.isNewTransaction()) {
-					if (status.isDebug()) {
+					state.rollbackToHeldSavepoint();
+				} else if (state.isNewTransaction()) {
+					if (state.isDebug()) {
 						LOG.debug("Initiating transaction rollback");
 					}
-					doRollback(status);
-				} else if (status.hasTransaction()) {
-					if (status.isLocalRollbackOnly()
+					doRollback(state);
+				} else if (state.hasTransaction()) {
+					if (state.isLocalRollbackOnly()
 							|| isGlobalRollbackOnParticipationFailure()) {
-						if (status.isDebug()) {
+						if (state.isDebug()) {
 							LOG.debug("Participating transaction failed - marking existing transaction as rollback-only");
 						}
-						doSetRollbackOnly(status);
+						doSetRollbackOnly(state);
 					} else {
-						if (status.isDebug()) {
+						if (state.isDebug()) {
 							LOG.debug("Participating transaction failed - letting transaction originator decide on rollback");
 						}
 					}
@@ -271,25 +272,25 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 					LOG.debug("Should roll back transaction but cannot - no transaction available");
 				}
 			} catch (RuntimeException ex) {
-				triggerAfterCompletion(status,
+				triggerAfterCompletion(state,
 						TransactionListener.STATUS_UNKNOWN);
 				throw ex;
 			} catch (Error err) {
-				triggerAfterCompletion(status,
+				triggerAfterCompletion(state,
 						TransactionListener.STATUS_UNKNOWN);
 				throw err;
 			}
-			triggerAfterCompletion(status,
+			triggerAfterCompletion(state,
 					TransactionListener.STATUS_ROLLED_BACK);
 		} finally {
-			cleanupAfterCompletion(status);
+			cleanupAfterCompletion(state);
 		}
 	}
 
 	
-	protected final void triggerBeforeCompletion(DefaultTransactionState status) {
-		if (status.isNewSynchronization()) {
-			if (status.isDebug()) {
+	protected final void triggerBeforeCompletion(DefaultTransactionState state) {
+		if (state.isNewSynchronization()) {
+			if (state.isDebug()) {
 				LOG.trace("Triggering beforeCompletion synchronization");
 			}
 			TxSynchronizers.triggerBeforeCompletion();
@@ -312,15 +313,15 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		return this.failEarlyOnGlobalRollbackOnly;
 	}
 	@Override
-	public void rollback(TransactionState status)
+	public void rollback(TransactionState state)
 			throws TransactionException {
-		if (status.isCompleted()) {
+		if (state.isCompleted()) {
 			throw new IllegalTransactionStateException(
 					"Transaction is already completed - do not call commit or rollback more than once per transaction");
 		}
 
-		DefaultTransactionState defStatus = (DefaultTransactionState) status;
-		processRollback(defStatus);
+		DefaultTransactionState defState = (DefaultTransactionState) state;
+		processRollback(defState);
 	}
 	public final void setTransactionSynchronization(int transactionSynchronization) {
 		this.transactionSynchronization = transactionSynchronization;
@@ -357,8 +358,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 
 	@Override
-	public TransactionState getTransaction(TransactionInfo info)
-			throws TransactionException {
+	public TransactionState getTransaction(TransactionInfo info)throws TransactionException {
 		Object transaction = doGetTransaction();
 
 		boolean debugEnabled = LOG.isDebugEnabled();
@@ -369,7 +369,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 
 		if (isExistingTransaction(transaction)) {
-			// 已经存在事物，则根据事物策略来处理.
+			// 已经存在事务，则根据事务策略来处理.
 			return handleExistingTransaction(info, transaction, debugEnabled);
 		}
 
@@ -377,7 +377,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			throw new TransactionException("Invalid transaction timeout"+info.getTimeout());
 		}
 
-		// 不存在事物，但是事物策略需要事物，直接抛错.
+		// 不存在事务，但是事务策略需要事务，直接抛错.
 		if (info.getTransactionPolicy() == TransactionPolicy.MANDATORY) {
 			throw new IllegalTransactionStateException(
 					"No existing transaction found for transaction marked with policy 'MANDATORY'");
@@ -390,25 +390,22 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			}
 			try {
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
-				DefaultTransactionState status = newTransactionStatus(
+				DefaultTransactionState state = newTransactionState(
 						info, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 				doBegin(transaction, info);
-				prepareSynchronization(status, info);
-				return status;
-			}
-			catch (RuntimeException ex) {
+				prepareSynchronization(state, info);
+				return state;
+			}catch (RuntimeException ex) {
 				resume(null, suspendedResources);
 				throw ex;
-			}
-			catch (Error err) {
+			}catch (Error err) {
 				resume(null, suspendedResources);
 				throw err;
 			}
-		}
-		else {
+		}else {
 			// Create "empty" transaction: no actual transaction, but potentially synchronization.
 			boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
-			return prepareTransactionStatus(info, null, true, newSynchronization, debugEnabled, null);
+			return prepareTransactionState(info, null, true, newSynchronization, debugEnabled, null);
 		}
 	}
 	
@@ -453,19 +450,19 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 	}
 	
-	protected final DefaultTransactionState prepareTransactionStatus(
+	protected final DefaultTransactionState prepareTransactionState(
 			TransactionInfo definition, Object transaction, boolean newTransaction,
 			boolean newSynchronization, boolean debug, Object suspendedResources) {
 
-		DefaultTransactionState status = newTransactionStatus(
+		DefaultTransactionState state = newTransactionState(
 				definition, transaction, newTransaction, newSynchronization, debug, suspendedResources);
-		prepareSynchronization(status, definition);
-		return status;
+		prepareSynchronization(state, definition);
+		return state;
 	}
 	
-	protected void prepareSynchronization(DefaultTransactionState status, TransactionInfo definition) {
-		if (status.isNewSynchronization()) {
-			TxSynchronizer.setActualTransactionActive(status.hasTransaction());
+	protected void prepareSynchronization(DefaultTransactionState state, TransactionInfo definition) {
+		if (state.isNewSynchronization()) {
+			TxSynchronizer.setActualTransactionActive(state.hasTransaction());
 			TxSynchronizer.setCurrentTransactionIsolationLevel(
 					(definition.getTransactionIsolation()!= TransactionIsolation.DEFAULT) ?
 							definition.getTransactionIsolation() : null);
@@ -475,7 +472,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 	}
 	
-	protected DefaultTransactionState newTransactionStatus(
+	protected DefaultTransactionState newTransactionState(
 			TransactionInfo definition, Object transaction, boolean newTransaction,
 			boolean newSynchronization, boolean debug, Object suspendedResources) {
 
@@ -501,7 +498,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			}
 			Object suspendedResources = suspend(transaction);
 			boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
-			return prepareTransactionStatus(
+			return prepareTransactionState(
 					info, null, false, newSynchronization, debugEnabled, suspendedResources);
 		}
 
@@ -513,11 +510,11 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			SuspendedResourcesHolder suspendedResources = suspend(transaction);
 			try {
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
-				DefaultTransactionState status = newTransactionStatus(
+				DefaultTransactionState state = newTransactionState(
 						info, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 				doBegin(transaction, info);
-				prepareSynchronization(status, info);
-				return status;
+				prepareSynchronization(state, info);
+				return state;
 			}
 			catch (RuntimeException beginEx) {
 				resumeAfterBeginException(transaction, suspendedResources, beginEx);
@@ -540,23 +537,23 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			}
 			if (useSavepointForNestedTransaction()) {
 				// Create savepoint within existing Spring-managed transaction,
-				// through the SavepointManager API implemented by TransactionStatus.
+				// through the SavepointManager API implemented by TransactionState.
 				// Usually uses JDBC 3.0 savepoints. Never activates Spring synchronization.
-				DefaultTransactionState status =
-						prepareTransactionStatus(info, transaction, false, false, debugEnabled, null);
-				status.createAndHoldSavepoint();
-				return status;
+				DefaultTransactionState state =
+						prepareTransactionState(info, transaction, false, false, debugEnabled, null);
+				state.createAndHoldSavepoint();
+				return state;
 			}
 			else {
 				// Nested transaction through nested begin and commit/rollback calls.
 				// Usually only for JTA: Spring synchronization might get activated here
 				// in case of a pre-existing JTA transaction.
 				boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
-				DefaultTransactionState status = newTransactionStatus(
+				DefaultTransactionState state = newTransactionState(
 						info, transaction, true, newSynchronization, debugEnabled, null);
 				doBegin(transaction, info);
-				prepareSynchronization(status, info);
-				return status;
+				prepareSynchronization(state, info);
+				return state;
 			}
 		}
 
@@ -580,7 +577,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			}
 		}
 		boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
-		return prepareTransactionStatus(info, transaction, false, newSynchronization, debugEnabled, null);
+		return prepareTransactionState(info, transaction, false, newSynchronization, debugEnabled, null);
 	}
 	
 	private void resumeAfterBeginException(
@@ -600,30 +597,30 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 		}
 	}
 	
-	protected final void triggerBeforeCommit(DefaultTransactionState status) {
-		if (status.isNewSynchronization()) {
-			if (status.isDebug()) {
+	protected final void triggerBeforeCommit(DefaultTransactionState state) {
+		if (state.isNewSynchronization()) {
+			if (state.isDebug()) {
 				LOG.trace("Triggering beforeCommit synchronization");
 			}
-			TxSynchronizers.triggerBeforeCommit(status.isReadOnly());
+			TxSynchronizers.triggerBeforeCommit(state.isReadOnly());
 		}
 	}
-	private void triggerAfterCompletion(DefaultTransactionState status, int completionStatus) {
-		if (status.isNewSynchronization()) {
+	private void triggerAfterCompletion(DefaultTransactionState state, int completionState) {
+		if (state.isNewSynchronization()) {
 			List<TransactionListener> synchronizations = TxSynchronizer.getListeners();
-			if (!status.hasTransaction() || status.isNewTransaction()) {
-				if (status.isDebug()) {
+			if (!state.hasTransaction() || state.isNewTransaction()) {
+				if (state.isDebug()) {
 					LOG.trace("Triggering afterCompletion synchronization");
 				}
 				// No transaction or new transaction for the current scope ->
 				// invoke the afterCompletion callbacks immediately
-				invokeAfterCompletion(synchronizations, completionStatus);
+				invokeAfterCompletion(synchronizations, completionState);
 			}
 			else if (!synchronizations.isEmpty()) {
 				// Existing transaction that we participate in, controlled outside
 				// of the scope of this Spring transaction manager -> try to register
 				// an afterCompletion callback with the existing (JTA) transaction.
-				registerAfterCompletionWithExistingTransaction(status.getTransaction(), synchronizations);
+				registerAfterCompletionWithExistingTransaction(state.getTransaction(), synchronizations);
 			}
 		}
 	}
@@ -632,26 +629,26 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 			Object transaction, List<TransactionListener> synchronizations) throws TransactionException {
 
 		LOG.debug("Cannot register Spring after-completion synchronization with existing transaction - " +
-				"processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
+				"processing Spring after-completion callbacks immediately, with outcome state 'unknown'");
 		invokeAfterCompletion(synchronizations, TransactionListener.STATUS_UNKNOWN);
 	}
-	protected final void invokeAfterCompletion(List<TransactionListener> synchronizations, int completionStatus) {
-		TxSynchronizers.invokeAfterCompletion(synchronizations, completionStatus);
+	protected final void invokeAfterCompletion(List<TransactionListener> synchronizations, int completionState) {
+		TxSynchronizers.invokeAfterCompletion(synchronizations, completionState);
 	}
 	
-	protected void doSetRollbackOnly(DefaultTransactionState status) throws TransactionException {
+	protected void doSetRollbackOnly(DefaultTransactionState state) throws TransactionException {
 		throw new IllegalTransactionStateException(
 				"Participating in existing transactions is not supported - when 'isExistingTransaction' " +
 				"returns true, appropriate 'doSetRollbackOnly' behavior must be provided");
 	}
-	protected void prepareForCommit(DefaultTransactionState status) {
+	protected void prepareForCommit(DefaultTransactionState state) {
 	}
-	protected abstract void doCommit(DefaultTransactionState status) throws TransactionException;
-	protected abstract void doRollback(DefaultTransactionState status) throws TransactionException;
+	protected abstract void doCommit(DefaultTransactionState state) throws TransactionException;
+	protected abstract void doRollback(DefaultTransactionState state) throws TransactionException;
 	protected void doCleanupAfterCompletion(Object transaction) {
 	}
 	/**
-	 * 检测transaction是否为一个已存在的事物
+	 * 检测transaction是否为一个已存在的事务
 	 * @param transaction
 	 * @return
 	 * @throws TransactionException

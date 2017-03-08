@@ -2,8 +2,8 @@ package org.solmix.runtime.transaction.proxy;
 
 import java.lang.reflect.Method;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.DataUtils;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerAware;
@@ -16,24 +16,26 @@ import org.solmix.runtime.transaction.config.TransactionMeta;
 
 public class TxProxySupport implements ContainerAware {
 
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private Container container;
-	private static final ThreadLocal<TransactionHolder> transactionInfoHolder =
-			new ThreadLocal<TransactionHolder>();
+	
+	private static final ThreadLocal<TransactionHolder> transactionInfoHolder = 	new ThreadLocal<TransactionHolder>();
 
 	protected static TransactionHolder currentTransactionHolder() throws TransactionException {
 		return transactionInfoHolder.get();
 	}
 	
-	public static TransactionState currentTransactionStatus() throws TransactionException {
+	public static TransactionState currentTransactionState() throws TransactionException {
 		TransactionHolder info = currentTransactionHolder();
 		if (info == null) {
-			throw new TransactionException("No transaction aspect-managed TransactionStatus in scope");
+			throw new TransactionException("No transaction aspect-managed TransactionState in scope");
 		}
 		return currentTransactionHolder().transactionState;
 	}
 
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	
 
 	private String transactionManagerBeanName;
 
@@ -71,13 +73,6 @@ public class TxProxySupport implements ContainerAware {
 	}
 
 	
-	/*public void setTransactionAttributes(Properties transactionAttributes) {
-		NameMatchTransactionMetaCreator tas = new NameMatchTransactionMetaCreator();
-		tas.setProperties(transactionAttributes);
-		this.transactionMetaCreater = tas;
-	}*/
-
-	
 	public void setTransactionMetaCreators(TransactionMetaCreater[] transactionAttributeSources) {
 		this.transactionMetaCreater = new CompositeTransactionMetaCreater(transactionAttributeSources);
 	}
@@ -96,84 +91,35 @@ public class TxProxySupport implements ContainerAware {
 
 
 	
-	protected Object invokeWithinTransaction(Method method, Class<?> targetClass, final InvocationCallback invocation)
-			throws Throwable {
+	protected Object invokeWithinTransaction(Method method, Class<?> targetClass, final InvocationCallback invocation)throws Throwable {
 
-		// If the transaction attribute is null, the method is non-transactional.
+		// 如果不能生成TransactionMeta，那么认为本次调用不需参与事务.
 		final TransactionMeta txAttr = getTransactionMetaCreater().getTransactionMeta(method, targetClass);
 		final TransactionManager tm = determineTransactionManager(txAttr);
 		final String joinpointIdentification = methodIdentification(method, targetClass);
 
-//		if (txAttr == null /*|| !(tm instanceof CallbackPreferringPlatformTransactionManager)*/) {
-			// Standard transaction demarcation with getTransaction and commit/rollback calls.
-			TransactionHolder txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);
-			Object retVal = null;
-			try {
-				// This is an around advice: Invoke the next interceptor in the chain.
-				// This will normally result in a target object being invoked.
-				retVal = invocation.proceedWithInvocation();
-			}catch (Throwable ex) {
-				// target invocation exception
-				completeTransactionAfterThrowing(txInfo, ex);
-				throw ex;
-			}finally {
-				cleanupTransactionInfo(txInfo);
-			}
-			commitTransactionAfterReturning(txInfo);
-			return retVal;
-//		}
-
-		/*else {
-			// It's a CallbackPreferringPlatformTransactionManager: pass a TransactionCallback in.
-			try {
-				Object result = ((CallbackPreferringPlatformTransactionManager) tm).execute(txAttr,
-						new TransactionCallback<Object>() {
-							@Override
-							public Object doInTransaction(TransactionState status) {
-								TransactionHolder txInfo = prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);
-								try {
-									return invocation.proceedWithInvocation();
-								}
-								catch (Throwable ex) {
-									if (txAttr.rollbackOn(ex)) {
-										// A RuntimeException: will lead to a rollback.
-										if (ex instanceof RuntimeException) {
-											throw (RuntimeException) ex;
-										}
-										else {
-											throw new ThrowableHolderException(ex);
-										}
-									}
-									else {
-										// A normal return value: will lead to a commit.
-										return new ThrowableHolder(ex);
-									}
-								}
-								finally {
-									cleanupTransactionInfo(txInfo);
-								}
-							}
-						});
-
-				// Check result: It might indicate a Throwable to rethrow.
-				if (result instanceof ThrowableHolder) {
-					throw ((ThrowableHolder) result).getThrowable();
-				}
-				else {
-					return result;
-				}
-			}
-			catch (ThrowableHolderException ex) {
-				throw ex.getCause();
-			}
-		}*/
+		TransactionHolder txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);
+		Object retVal = null;
+		try {
+			// This is an around advice: Invoke the next interceptor in the chain.
+			// This will normally result in a target object being invoked.
+			retVal = invocation.proceedWithInvocation();
+		}catch (Throwable ex) {
+			// target invocation exception
+			completeTransactionAfterThrowing(txInfo, ex);
+			throw ex;
+		}finally {
+			cleanupTransactionInfo(txInfo);
+		}
+		commitTransactionAfterReturning(txInfo);
+		return retVal;
 	}
 
 	/**
 	 * Determine the specific transaction manager to use for the given transaction.
 	 */
 	protected TransactionManager determineTransactionManager(TransactionMeta txAttr) {
-		if (this.transactionManager != null ) {
+		if (this.transactionManager != null ||txAttr==null) {
 			return this.transactionManager;
 		}
 		String qualifier = txAttr.getQualifier();
@@ -226,7 +172,7 @@ public class TxProxySupport implements ContainerAware {
 			TransactionManager tm, TransactionMeta txAttr,
 			final String joinpointIdentification) {
 
-		// 如果没有指明事物名称，使用方法名
+		// 如果没有指明事务名称，使用方法名
 		if (txAttr != null && txAttr.getName() == null) {
 			txAttr = new DelegatingTransactionMeta(txAttr) {
 				@Override
@@ -268,9 +214,7 @@ public class TxProxySupport implements ContainerAware {
 						"]: This method isn't transactional.");
 		}
 
-		// We always bind the TransactionInfo to the thread, even if we didn't create
-		// a new transaction here. This guarantees that the TransactionInfo stack
-		// will be managed correctly even if no transaction was created by this aspect.
+		//在不需要创建事务代理时，也将TransactionInfo绑定到线程，以正确的处理调用栈
 		txInfo.bindToThread();
 		return txInfo;
 	}
@@ -290,10 +234,7 @@ public class TxProxySupport implements ContainerAware {
 	}
 
 	/**
-	 * Handle a throwable, completing the transaction.
-	 * We may commit or roll back, depending on the configuration.
-	 * @param txInfo information about the current transaction
-	 * @param ex throwable encountered
+	 * 处理抛出的错误，并完成事务处理
 	 */
 	protected void completeTransactionAfterThrowing(TransactionHolder txInfo, Throwable ex) {
 		if (txInfo != null && txInfo.hasTransaction()) {
@@ -313,10 +254,9 @@ public class TxProxySupport implements ContainerAware {
 					logger.error("Application exception overridden by rollback error", ex);
 					throw err;
 				}
-			}
-			else {
+			}else {
 				// We don't roll back on this exception.
-				// Will still roll back if TransactionStatus.isRollbackOnly() is true.
+				// Will still roll back if TransactionState.isRollbackOnly() is true.
 				try {
 					txInfo.getTransactionManager().commit(txInfo.getTransactionState());
 				}
@@ -339,7 +279,7 @@ public class TxProxySupport implements ContainerAware {
 	 */
 	protected void cleanupTransactionInfo(TransactionHolder txInfo) {
 		if (txInfo != null) {
-			txInfo.restoreThreadLocalStatus();
+			txInfo.restoreThreadLocalState();
 		}
 	}
 	
@@ -401,7 +341,7 @@ public class TxProxySupport implements ContainerAware {
 			transactionInfoHolder.set(this);
 		}
 
-		private void restoreThreadLocalStatus() {
+		private void restoreThreadLocalState() {
 			// 处理完成后恢复旧的设置
 			transactionInfoHolder.set(this.oldTransactionInfo);
 		}

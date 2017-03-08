@@ -2,8 +2,8 @@ package org.solmix.runtime.transaction.proxy;
 
 import java.lang.reflect.Method;
 
+import org.solmix.commons.util.Assert;
 import org.solmix.runtime.transaction.config.TransactionMeta;
-import org.springframework.util.Assert;
 
 public class CompositeTransactionMetaCreater implements TransactionMetaCreater {
 
@@ -18,7 +18,7 @@ public class CompositeTransactionMetaCreater implements TransactionMetaCreater {
 	 * @param transactionAttributeSources the TransactionAttributeSource instances to combine
 	 */
 	public CompositeTransactionMetaCreater(TransactionMetaCreater[] transactionAttributeSources) {
-		Assert.notNull(transactionAttributeSources, "TransactionAttributeSource array must not be null");
+		Assert.isNotNull(transactionAttributeSources, "TransactionAttributeSource array must not be null");
 		this.transactionAttributeSources = transactionAttributeSources;
 	}
 

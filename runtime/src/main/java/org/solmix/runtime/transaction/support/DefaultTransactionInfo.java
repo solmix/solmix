@@ -72,5 +72,27 @@ public class DefaultTransactionInfo implements TransactionInfo, Serializable {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString(){
+		return getTransactionDescription().toString();
+	}
 
+	/**输出事务信息状态*/
+	protected final StringBuilder getTransactionDescription() {
+		StringBuilder result = new StringBuilder();
+		result.append("[TransactionPolicy:");
+		result.append(this.policy);
+		result.append(",TransactionIsolation:");
+		result.append(this.isolation);
+		if (this.timeout != TIMEOUT_DEFAULT) {
+			result.append(',');
+			result.append(",timeout:").append(this.timeout);
+		}
+		if (this.readOnly) {
+			result.append(",readOnly");
+		}
+		result.append("[");
+		return result;
+	}
 }

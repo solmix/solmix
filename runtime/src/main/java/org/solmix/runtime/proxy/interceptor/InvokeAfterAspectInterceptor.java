@@ -1,8 +1,8 @@
 package org.solmix.runtime.proxy.interceptor;
 
+import org.solmix.commons.util.Assert;
 import org.solmix.runtime.proxy.support.InvokeAfterAspect;
 import org.solmix.runtime.proxy.support.MethodInvocation;
-import org.springframework.util.Assert;
 
 public class InvokeAfterAspectInterceptor implements MethodInterceptor {
 
@@ -10,7 +10,7 @@ public class InvokeAfterAspectInterceptor implements MethodInterceptor {
 	private InvokeAfterAspect aspect;
 
 	public InvokeAfterAspectInterceptor(InvokeAfterAspect aspect) {
-		Assert.notNull(aspect, "Aspect must not be null");
+		Assert.isNotNull(aspect, "Aspect must not be null");
 		this.aspect = aspect;
 	}
 

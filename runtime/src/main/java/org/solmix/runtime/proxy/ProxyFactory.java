@@ -1,8 +1,8 @@
 package org.solmix.runtime.proxy;
 
+import org.solmix.commons.util.ClassUtils;
 import org.solmix.runtime.proxy.support.ProxyAspectSupport;
 import org.solmix.runtime.proxy.target.TargetSource;
-import org.springframework.util.ClassUtils;
 
 @SuppressWarnings("serial")
 public class ProxyFactory extends ProxyAspectSupport{

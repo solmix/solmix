@@ -7,9 +7,10 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.solmix.runtime.transaction.TransactionPolicy;
-import org.springframework.transaction.interceptor.TransactionAttribute;
 
 public class RuledTransactionMeta extends DefaultTransactionMeta {
+
+	private static final long serialVersionUID = 6572528417422784367L;
 
 	public static final String PREFIX_ROLLBACK_RULE = "-";
 
@@ -54,7 +55,6 @@ public class RuledTransactionMeta extends DefaultTransactionMeta {
 	 * Winning rule is the shallowest rule (that is, the closest in the
 	 * inheritance hierarchy to the exception). If no rule applies (-1),
 	 * return false.
-	 * @see TransactionAttribute#rollbackOn(java.lang.Throwable)
 	 */
 	@Override
 	public boolean rollbackOn(Throwable ex) {

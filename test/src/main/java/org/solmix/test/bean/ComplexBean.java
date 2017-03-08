@@ -150,10 +150,12 @@ public class ComplexBean implements IComplexBean{
 		}
 	}
 
+	@Override
 	public int getAge() {
 		return age;
 	}
 
+	@Override
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -394,10 +396,6 @@ public class ComplexBean implements IComplexBean{
 		return this;
 	}
 
-	/**
-	 * @see org.springframework.tests.sample.beans.IOther#absquatulate()
-	 */
-	
 	public void absquatulate() {
 	}
 

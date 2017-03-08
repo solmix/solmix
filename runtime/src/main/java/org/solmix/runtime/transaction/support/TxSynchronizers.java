@@ -32,11 +32,11 @@ public abstract class TxSynchronizers {
 	}
 
 	public static void invokeAfterCompletion(
-			List<TransactionListener> synchronizations, int completionStatus) {
+			List<TransactionListener> synchronizations, int completionState) {
 		if (synchronizations != null) {
 			for (TransactionListener synchronization : synchronizations) {
 				try {
-					synchronization.afterCompletion(completionStatus);
+					synchronization.afterCompletion(completionState);
 				} catch (Throwable tsex) {
 					LOG.error("TransactionListener.afterCompletion threw exception",
 							tsex);

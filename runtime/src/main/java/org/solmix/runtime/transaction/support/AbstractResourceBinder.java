@@ -3,7 +3,7 @@ package org.solmix.runtime.transaction.support;
 import java.util.Date;
 
 import org.solmix.runtime.transaction.ResourceBinder;
-import org.springframework.transaction.TransactionTimedOutException;
+import org.solmix.runtime.transaction.TransactionTimedOutException;
 
 public  abstract class AbstractResourceBinder implements ResourceBinder {
 

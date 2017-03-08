@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.ClassUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.runtime.transaction.config.TransactionMeta;
+import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAttributeEditor;
 public class NameMatchTransactionMetaCreator implements
 		TransactionMetaCreater {
 	protected static final Logger logger = LoggerFactory.getLogger(NameMatchTransactionMetaCreator.class);
@@ -96,7 +98,6 @@ public class NameMatchTransactionMetaCreator implements
 	 * @param methodName the method name of the class
 	 * @param mappedName the name in the descriptor
 	 * @return if the names match
-	 * @see org.springframework.util.PatternMatchUtils#simpleMatch(String, String)
 	 */
 	protected boolean isMatch(String methodName, String mappedName) {
 		return simpleMatch(mappedName, methodName);

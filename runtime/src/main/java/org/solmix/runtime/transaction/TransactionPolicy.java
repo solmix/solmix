@@ -4,31 +4,31 @@ package org.solmix.runtime.transaction;
 
 public enum TransactionPolicy {
 	 /**
-     * 如果没有事物就创建一个 
+     * 如果没有事务就创建一个 
      */
 	REQUIRED( "REQUIRED" ) ,
     /**
-     * 需要指定一个事物，没有就抛错
+     * 需要指定一个事务，没有就抛错
      */
 	MANDATORY( "MANDATORY" ) ,
     /**
-     * 如果有事物就在事物中执行，没有就不用事物执行
+     * 如果有事务就在事务中执行，没有就不用事务执行
      */
 	SUPPORTS( "SUPPORTS" ) ,
 	/**
-     * 不支持事物，即使有也不管事物
+     * 不支持事务，即使有也不管事务
      */
 	NOT_SUPPORTED( "NOT_SUPPORTED" ) ,
 	/**
-     * 不支持事物，如果有事物就抛错
+     * 不支持事务，如果有事务就抛错
      */
 	NEVER( "NEVER" ) ,
 	/**
-     * 如果当前有事物了，就嵌入执行
+     * 如果当前有事务了，就嵌入执行
      */
 	EMBED( "EMBED" ) ,
 	 /**
-     * 创建一个新事物并暂停以前的
+     * 创建一个新事务并暂停以前的
      */
 	NEW( "NEW" );
 

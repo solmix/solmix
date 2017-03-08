@@ -10,7 +10,7 @@ import org.solmix.tests.transaction.FooTransactionManager;
 public class TransactionManagerTest extends TestCase {
 
 	/**
-	 * 测试在不存在事物的情况，下各种事物策略的处理方式。
+	 * 测试在不存在事务的情况，下各种事务策略的处理方式。
 	 */
 	public void testNotExsitingTransaction() {
 		TransactionManager tm = new FooTransactionManager(false, true);
@@ -32,7 +32,7 @@ public class TransactionManagerTest extends TestCase {
 		}
 	}
 	/**
-	 * 测试在存在事物的情况下，各种事物策略的处理情况
+	 * 测试在存在事务的情况下，各种事务策略的处理情况
 	 */
 	public void testExistingTransaction() {
 		TransactionManager tm = new FooTransactionManager(true, true);
@@ -100,7 +100,7 @@ public class TransactionManagerTest extends TestCase {
 		assertTrue("no rollbackOnly", !tm.isRollbackOnly());
 	}
 	
-	/**对于已存在的事物，回滚只是标记为回滚*/
+	/**对于已存在的事务，回滚只是标记为回滚*/
 	public void testRollbackWithExistingTransaction() {
 		FooTransactionManager tm = new FooTransactionManager(true, true);
 		TransactionState status = tm.getTransaction(null);

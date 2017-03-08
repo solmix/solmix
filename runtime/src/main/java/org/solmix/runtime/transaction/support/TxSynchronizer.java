@@ -17,8 +17,7 @@ import org.solmix.runtime.transaction.TransactionIsolation;
 public abstract class TxSynchronizer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TxSynchronizer.class);
-	private static final ThreadLocal<Map<Object, Object>> resources =
-			new ThreadLocal<Map<Object, Object>>();
+	private static final ThreadLocal<Map<Object, Object>> resources = new ThreadLocal<Map<Object, Object>>();
 
 	private static final ThreadLocal<Set<TransactionListener>> synchronizations = new ThreadLocal<Set<TransactionListener>>();
 	private static final ThreadLocal<Boolean> actualTransactionActive = new ThreadLocal<Boolean>();
@@ -113,96 +112,96 @@ public abstract class TxSynchronizer {
 		return (currentTransactionReadOnly.get() != null);
 	}
 
-		public static boolean isActualTransactionActive() {
-			return (actualTransactionActive.get() != null);
-		}
+	public static boolean isActualTransactionActive() {
+		return (actualTransactionActive.get() != null);
+	}
 
-		public static Object getResource(Object key) {
-			Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
-			Object value = doGetResource(actualKey);
-			if (value != null && LOG.isTraceEnabled()) {
-				LOG.trace("Retrieved value [" + value + "] for key [" + actualKey + "] bound to thread [" +
-						Thread.currentThread().getName() + "]");
-			}
-			return value;
+	public static Object getResource(Object key) {
+		Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
+		Object value = doGetResource(actualKey);
+		if (value != null && LOG.isTraceEnabled()) {
+			LOG.trace("Retrieved value [" + value + "] for key [" + actualKey + "] bound to thread [" +
+					Thread.currentThread().getName() + "]");
 		}
+		return value;
+	}
 
-		private static Object doGetResource(Object actualKey) {
-			Map<Object, Object> map = resources.get();
-			if (map == null) {
-				return null;
-			}
-			Object value = map.get(actualKey);
-			// Transparently remove ResourceHolder that was marked as void...
-			if (value instanceof ResourceBinder && ((ResourceBinder) value).isVoid()) {
-				map.remove(actualKey);
-				// Remove entire ThreadLocal if empty...
-				if (map.isEmpty()) {
-					resources.remove();
-				}
-				value = null;
-			}
-			return value;
+	private static Object doGetResource(Object actualKey) {
+		Map<Object, Object> map = resources.get();
+		if (map == null) {
+			return null;
 		}
-
-		public static void bindResource(Object key,Object value) {
-			Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
-			Assert.isNotNull(value, "Value must not be null");
-			Map<Object, Object> map = resources.get();
-			// set ThreadLocal Map if none found
-			if (map == null) {
-				map = new HashMap<Object, Object>();
-				resources.set(map);
-			}
-			Object oldValue = map.put(actualKey, value);
-			// Transparently suppress a ResourceHolder that was marked as void...
-			if (oldValue instanceof ResourceBinder && ((ResourceBinder) oldValue).isVoid()) {
-				oldValue = null;
-			}
-			if (oldValue != null) {
-				throw new IllegalStateException("Already value [" + oldValue + "] for key [" +
-						actualKey + "] bound to thread [" + Thread.currentThread().getName() + "]");
-			}
-			if (LOG.isTraceEnabled()) {
-				LOG.trace("Bound value [" + value + "] for key [" + actualKey + "] to thread [" +
-						Thread.currentThread().getName() + "]");
-			}
-			
-		}
-
-		public static Object unbindResource(Object key) throws IllegalStateException {
-			Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
-			Object value = doUnbindResource(actualKey);
-			if (value == null) {
-				throw new IllegalStateException(
-						"No value for key [" + actualKey + "] bound to thread [" + Thread.currentThread().getName() + "]");
-			}
-			return value;
-		}
-		
-		private static Object doUnbindResource(Object actualKey) {
-			Map<Object, Object> map = resources.get();
-			if (map == null) {
-				return null;
-			}
-			Object value = map.remove(actualKey);
+		Object value = map.get(actualKey);
+		// Transparently remove ResourceHolder that was marked as void...
+		if (value instanceof ResourceBinder && ((ResourceBinder) value).isVoid()) {
+			map.remove(actualKey);
 			// Remove entire ThreadLocal if empty...
 			if (map.isEmpty()) {
 				resources.remove();
 			}
-			// Transparently suppress a ResourceHolder that was marked as void...
-			if (value instanceof ResourceBinder && ((ResourceBinder) value).isVoid()) {
-				value = null;
-			}
-			if (value != null && LOG.isTraceEnabled()) {
-				LOG.trace("Removed value [" + value + "] for key [" + actualKey + "] from thread [" +
-						Thread.currentThread().getName() + "]");
-			}
-			return value;
+			value = null;
 		}
-
-		public static Object unbindResourceIfPossible(Object key) {
-		Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
-		return doUnbindResource(actualKey);
+		return value;
 	}
+
+	public static void bindResource(Object key,Object value) {
+		Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
+		Assert.isNotNull(value, "Value must not be null");
+		Map<Object, Object> map = resources.get();
+		// set ThreadLocal Map if none found
+		if (map == null) {
+			map = new HashMap<Object, Object>();
+			resources.set(map);
+		}
+		Object oldValue = map.put(actualKey, value);
+		// Transparently suppress a ResourceHolder that was marked as void...
+		if (oldValue instanceof ResourceBinder && ((ResourceBinder) oldValue).isVoid()) {
+			oldValue = null;
+		}
+		if (oldValue != null) {
+			throw new IllegalStateException("Already value [" + oldValue + "] for key [" +
+					actualKey + "] bound to thread [" + Thread.currentThread().getName() + "]");
+		}
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("Bound value [" + value + "] for key [" + actualKey + "] to thread [" +
+					Thread.currentThread().getName() + "]");
+		}
+		
+	}
+
+	public static Object unbindResource(Object key) throws IllegalStateException {
+		Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
+		Object value = doUnbindResource(actualKey);
+		if (value == null) {
+			throw new IllegalStateException(
+					"No value for key [" + actualKey + "] bound to thread [" + Thread.currentThread().getName() + "]");
+		}
+		return value;
+	}
+		
+	private static Object doUnbindResource(Object actualKey) {
+		Map<Object, Object> map = resources.get();
+		if (map == null) {
+			return null;
+		}
+		Object value = map.remove(actualKey);
+		// Remove entire ThreadLocal if empty...
+		if (map.isEmpty()) {
+			resources.remove();
+		}
+		// Transparently suppress a ResourceHolder that was marked as void...
+		if (value instanceof ResourceBinder && ((ResourceBinder) value).isVoid()) {
+			value = null;
+		}
+		if (value != null && LOG.isTraceEnabled()) {
+			LOG.trace("Removed value [" + value + "] for key [" + actualKey + "] from thread [" +
+					Thread.currentThread().getName() + "]");
+		}
+		return value;
+	}
+
+	public static Object unbindResourceIfPossible(Object key) {
+	Object actualKey = TxSynchronizers.unwrapResourceIfNecessary(key);
+	return doUnbindResource(actualKey);
+}
 }

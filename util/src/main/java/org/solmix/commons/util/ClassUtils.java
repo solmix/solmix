@@ -270,4 +270,9 @@ public abstract class ClassUtils {
 		return getPackageName(method.getDeclaringClass()).equals(getPackageName(targetClass));
 	}
 
+	public static Class<?>[] getAllInterfaces(Object instance) {
+		Assert.isNotNull(instance, "Instance must not be null");
+		return getAllInterfacesForClass(instance.getClass());
+	}
+
 }

@@ -30,7 +30,6 @@ import java.net.URL;
 
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.FileUtils;
-import org.springframework.core.io.FileSystemResource;
 
 
 /**
@@ -131,7 +130,6 @@ public class FileResource extends AbstractInputStreamResource
      * This implementation creates a FileSystemResource, applying the given path relative to the path of the underlying
      * file of this resource descriptor.
      * 
-     * @see org.springframework.util.StringUtils#applyRelativePath(String, String)
      */
     @Override
     public FileResource createRelative(String relativePath) {
@@ -172,7 +170,7 @@ public class FileResource extends AbstractInputStreamResource
      */
     @Override
     public boolean equals(Object obj) {
-        return (obj == this || (obj instanceof FileSystemResource && this.path.equals(((FileResource) obj).path)));
+        return (obj == this || (obj instanceof FileResource && this.path.equals(((FileResource) obj).path)));
     }
 
     /**

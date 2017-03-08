@@ -21,7 +21,7 @@ public class DefaultTransactionState extends AbstractTransactionState {
 
 
 	/**
-	 * Create a new DefaultTransactionStatus instance.
+	 * Create a new DefaultTransactionState instance.
 	 * @param transaction underlying transaction object that can hold
 	 * state for the internal transaction implementation
 	 * @param newTransaction if the transaction is new,
@@ -113,8 +113,7 @@ public class DefaultTransactionState extends AbstractTransactionState {
 	 */
 	@Override
 	public boolean isGlobalRollbackOnly() {
-		return ((this.transaction instanceof SmartTransactionObject) &&
-				((SmartTransactionObject) this.transaction).isRollbackOnly());
+		return false;
 	}
 
 	/**
@@ -123,9 +122,7 @@ public class DefaultTransactionState extends AbstractTransactionState {
 	 */
 	@Override
 	public void flush() {
-		if (this.transaction instanceof SmartTransactionObject) {
-			((SmartTransactionObject) this.transaction).flush();
-		}
+		
 	}
 
 	/**

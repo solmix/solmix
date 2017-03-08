@@ -25,7 +25,7 @@ public abstract class AbstractTransactionState implements TransactionState {
 
 	/**
 	 * Determine the rollback-only flag via checking both the local rollback-only flag
-	 * of this TransactionStatus and the global rollback-only flag of the underlying
+	 * of this TransactionState and the global rollback-only flag of the underlying
 	 * transaction, if any.
 	 * @see #isLocalRollbackOnly()
 	 * @see #isGlobalRollbackOnly()
@@ -36,9 +36,9 @@ public abstract class AbstractTransactionState implements TransactionState {
 	}
 
 	/**
-	 * Determine the rollback-only flag via checking this TransactionStatus.
+	 * Determine the rollback-only flag via checking this TransactionState.
 	 * <p>Will only return "true" if the application called {@code setRollbackOnly}
-	 * on this TransactionStatus object.
+	 * on this TransactionState object.
 	 */
 	public boolean isLocalRollbackOnly() {
 		return this.rollbackOnly;
@@ -79,7 +79,6 @@ public abstract class AbstractTransactionState implements TransactionState {
 
 	/**
 	 * Set a savepoint for this transaction. Useful for PROPAGATION_NESTED.
-	 * @see org.springframework.transaction.TransactionDefinition#PROPAGATION_NESTED
 	 */
 	protected void setSavepoint(Object savepoint) {
 		this.savepoint = savepoint;
@@ -99,7 +98,6 @@ public abstract class AbstractTransactionState implements TransactionState {
 
 	/**
 	 * Create a savepoint and hold it for the transaction.
-	 * @throws org.springframework.transaction.NestedTransactionNotSupportedException
 	 * if the underlying transaction does not support savepoints
 	 */
 	public void createAndHoldSavepoint() throws TransactionException {
@@ -137,7 +135,6 @@ public abstract class AbstractTransactionState implements TransactionState {
 	 * This implementation delegates to a SavepointManager for the
 	 * underlying transaction, if possible.
 	 * @see #getSavepoint()
-	 * @see org.springframework.transaction.SavepointManager
 	 */
 	@Override
 	public Object createSavepoint() throws TransactionException {
@@ -147,9 +144,7 @@ public abstract class AbstractTransactionState implements TransactionState {
 	/**
 	 * This implementation delegates to a SavepointManager for the
 	 * underlying transaction, if possible.
-	 * @throws org.springframework.transaction.NestedTransactionNotSupportedException
 	 * @see #getSavepoint()
-	 * @see org.springframework.transaction.SavepointManager
 	 */
 	@Override
 	public void rollbackToSavepoint(Object savepoint) throws TransactionException {
@@ -160,7 +155,6 @@ public abstract class AbstractTransactionState implements TransactionState {
 	 * This implementation delegates to a SavepointManager for the
 	 * underlying transaction, if possible.
 	 * @see #getSavepoint()
-	 * @see org.springframework.transaction.SavepointManager
 	 */
 	@Override
 	public void releaseSavepoint(Object savepoint) throws TransactionException {
@@ -170,7 +164,6 @@ public abstract class AbstractTransactionState implements TransactionState {
 	/**
 	 * Return a SavepointManager for the underlying transaction, if possible.
 	 * <p>Default implementation always throws a NestedTransactionNotSupportedException.
-	 * @throws org.springframework.transaction.NestedTransactionNotSupportedException
 	 * if the underlying transaction does not support savepoints
 	 */
 	protected SavepointSupport getSavepointSupport() {

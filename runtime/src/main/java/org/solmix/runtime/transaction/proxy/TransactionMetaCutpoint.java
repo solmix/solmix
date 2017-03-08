@@ -2,8 +2,8 @@ package org.solmix.runtime.transaction.proxy;
 
 import java.lang.reflect.Method;
 
+import org.solmix.commons.util.ObjectUtils;
 import org.solmix.runtime.proxy.support.StaticMethodMatcherCutpoint;
-import org.springframework.util.ObjectUtils;
 
 public abstract class TransactionMetaCutpoint extends StaticMethodMatcherCutpoint {
 
