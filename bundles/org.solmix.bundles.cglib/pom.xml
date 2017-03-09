@@ -5,11 +5,10 @@
     <artifactId>bundles</artifactId>
     <version>0.5.0</version>
   </parent>
-  <groupId>org.solmix.bundles.cglib</groupId>
   <artifactId>org.solmix.bundles.cglib</artifactId>
-  <version>3.1</version>
+  <version>${cglib.version}</version>
  <properties>
-    <pkgVersion>3.1</pkgVersion>
+    <pkgVersion>${cglib.version}</pkgVersion>
     <pkgArtifactId>cglib</pkgArtifactId>
     <pkgGroupId>cglib</pkgGroupId>
     <solmix.osgi.export>net.sf.cglib*</solmix.osgi.export>

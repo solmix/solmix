@@ -58,7 +58,7 @@ public class IntegrationTest
 //            vmOption("-Xms1024m"),
 //            // vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"),
 //            provision(mavenBundle("org.ops4j.pax.tinybundles", "tinybundles", "1.0.0"),
-//                mavenBundle("org.solmix.services", "solmix-service-event", "0.6.1-SNAPSHOT"),
+//                mavenBundle("org.solmix.services", "solmix-service-event", "0.7.1-SNAPSHOT"),
 //                mavenBundle("org.apache.sling", "org.apache.sling.commons.log", "2.1.2"),
 //                mavenBundle("org.apache.felix", "org.apache.felix.configadmin", "1.2.8"),
 //                mavenBundle("org.apache.felix", "org.apache.felix.metatype", "1.0.4"),

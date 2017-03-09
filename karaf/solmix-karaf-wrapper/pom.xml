@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.karaf</groupId>
     <artifactId>solmix-karaf</artifactId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
   </parent>
   <artifactId>solmix-karaf-wrapper</artifactId>
   <name>Solmix :: Karaf :: Wrapper</name>

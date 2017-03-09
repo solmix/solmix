@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.solmix.services</groupId>
 		<artifactId>solmix-service-parent</artifactId>
-		<version>0.6.1-SNAPSHOT</version>
+		<version>0.7.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>solmix-service-velocity</artifactId>
 	<dependencies>

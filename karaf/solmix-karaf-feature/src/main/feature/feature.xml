@@ -10,8 +10,11 @@
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-dep-cglib" description="Solmix Runtime support" version="${project.version}">
-		<bundle start-level="35">mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
+	<feature name="solmix-dep-cglib" description="Cglib dependency support" version="${project.version}">
+		<bundle start-level="35">mvn:org.solmix.bundles/org.solmix.bundles.cglib/${cglib.version}</bundle>
+	</feature>
+	<feature name="solmix-dep-javassist" description="Javassist dependency  support" version="${project.version}">
+		<bundle start-level="35">mvn:org.javassist/javassist/${javassist.version}</bundle>
 	</feature>
 	<feature name="solmix-karaf-wrapper" description="Karaf Wrapper"
 		version="4.0.5">

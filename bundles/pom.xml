@@ -3,7 +3,7 @@
   <parent>
     <artifactId>solmix</artifactId>
     <groupId>org.solmix</groupId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>bundles</artifactId>
@@ -41,7 +41,7 @@
             </plugins>
 	</build>
 	<modules>
-		<module>org.solmix.bundles.avro</module>
+		<!-- <module>org.solmix.bundles.avro</module> -->
 		<module>org.solmix.bundles.c3p0</module>
 		<module>org.solmix.bundles.druid</module>
 		<module>org.solmix.bundles.thumbnailator</module>

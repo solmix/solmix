@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.tools</groupId>
     <artifactId>solmix-tools</artifactId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
   </parent>
   <artifactId>osgi-service-plugin</artifactId>
   <dependencies>
