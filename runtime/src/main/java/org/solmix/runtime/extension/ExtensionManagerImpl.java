@@ -241,6 +241,8 @@ public class ExtensionManagerImpl implements ExtensionManager,
             injector.injectAware(obj);
             injector.inject(obj);
             injector.construct(obj);
+            
+            proxy(obj);
            
             if (null != activated) {
                 if (cls == null) {
@@ -252,7 +254,12 @@ public class ExtensionManagerImpl implements ExtensionManager,
     }
 
 
-    /**
+    private void proxy(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
      * {@inheritDoc}
      * 
      * @see org.solmix.runtime.bean.ConfiguredBeanProvider#getBeansOfType(java.lang.Class)

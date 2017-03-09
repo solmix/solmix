@@ -21,7 +21,7 @@
             		<xsd:element name="ref" type="refType" minOccurs="0"
             			maxOccurs="unbounded">
             		</xsd:element>
-            		<xsd:element name="tx" type="txType" minOccurs="0" maxOccurs="1"></xsd:element>
+            		<xsd:element name="tx" type="txType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
             	</xsd:choice>
             </xsd:sequence>
             
@@ -38,6 +38,9 @@
 
 	<xsd:complexType name="txType">
 		<xsd:attribute name="manager" type="xsd:string"></xsd:attribute>
-		<xsd:attribute name="proxy-target-class" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="proxy-target-class" type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="filter" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="expose" type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="optimize" type="xsd:boolean"></xsd:attribute>
 	</xsd:complexType>
 </xsd:schema>

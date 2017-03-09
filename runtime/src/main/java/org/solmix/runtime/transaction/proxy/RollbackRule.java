@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.solmix.commons.util.Assert;
 
 
+@SuppressWarnings("serial")
 public class RollbackRule implements Serializable {
 	private final String exceptionName;
 	public static final RollbackRule ROLLBACK_ON_RUNTIME_EXCEPTIONS =

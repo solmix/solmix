@@ -21,16 +21,26 @@ public class DefaultAspectProxyFactory implements AspectProxyFactory {
 			if (targetClass.isInterface()) {
 				return new JdkAspectProxy(config);
 			}
-			return new CglibAspectProxy(config);
+			return  supportCglib(config);
 		} else {
 			return new JdkAspectProxy(config);
 		}
 	}
+	
+	AspectProxy supportCglib(ProxyAspectSupport config)throws ProxyConfigException{
+		 try {
+			 	Class.forName("net.sf.cglib.proxy.Enhancer");
+			    Class.forName("net.sf.cglib.proxy.MethodInterceptor");
+			    Class.forName("net.sf.cglib.proxy.MethodProxy");
+		} catch (ClassNotFoundException e) {
+			throw new ProxyConfigException("runtime proxy need cglib proxy,check the lib is loaded?");
+		}
+		 return new CglibAspectProxy(config);
+	}
 
 	private boolean hasNoUserSuppliedProxyInterfaces(ProxyAspectSupport config) {
 		Class<?>[] interfaces = config.getProxiedInterfaces();
-		return (interfaces.length == 0 || (interfaces.length == 1 && RuntimeProxy.class
-				.equals(interfaces[0])));
+		return (interfaces.length == 0 || (interfaces.length == 1 && RuntimeProxy.class.equals(interfaces[0])));
 	}
 
 }

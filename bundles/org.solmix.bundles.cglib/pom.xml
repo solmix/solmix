@@ -13,7 +13,7 @@
     <pkgGroupId>cglib</pkgGroupId>
     <solmix.osgi.export>net.sf.cglib*</solmix.osgi.export>
     <solmix.osgi.import.pkg>
-    org.apache.tools.ant;resolution:=optional,
+    org.apache.tools.ant*;resolution:=optional,
     !net.sf.cglib*,
     *
     </solmix.osgi.import.pkg>

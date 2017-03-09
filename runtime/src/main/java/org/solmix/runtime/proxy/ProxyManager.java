@@ -3,10 +3,10 @@ package org.solmix.runtime.proxy;
 
 public interface ProxyManager {
 
-	void addHandler(ProxyHandler handler);
+	void addRule(ProxyRule rule);
 	
-	void removeHandler(ProxyHandler handler);
+	void removeRule(ProxyRule rule);
 	
 	
-	Object proxy(Object instance,Class<?>[] proxyInterfaces);
+	Object proxy(String name,Object instance);
 }

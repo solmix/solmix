@@ -29,6 +29,7 @@ import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.extension.ContainerReference;
 import org.solmix.runtime.extension.ExtensionContainer;
+import org.solmix.runtime.transaction.TxProxyRule;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -155,8 +156,31 @@ public class ContainerDefinitionParser extends AbstractBeanDefinitionParser
         	BeanDefinitionBuilder component = BeanDefinitionBuilder.genericBeanDefinition(ContainerReference.class);
         	parseRefAttributes(e, ctx, component);
         	bean.addPropertyValue("reference", component.getBeanDefinition());
+        } else if ("tx".equals(name)) {
+        	BeanDefinitionBuilder component = BeanDefinitionBuilder.genericBeanDefinition(TxProxyRule.class);
+        	parseAttribute(component,"proxy-target-class","proxyTargetClass",e);
+        	parseAttribute(component,"filter",e);
+        	parseAttribute(component,"optimize",e);
+        	parseAttribute(component,"expose","exposeProxy",e);
+        	String managerId = e.getAttribute("manager");
+        	if(DataUtils.isNotNullAndEmpty(managerId)){
+        		component.addPropertyReference("transactionManager", managerId);
+        	}
+        	bean.addPropertyValue("proxyRule", component.getBeanDefinition());
         }
     }
+    
+    private void parseAttribute(BeanDefinitionBuilder component,String name,String property,Element e){
+    	String value = e.getAttribute(name);
+		if (value != null && value.length() > 0) {
+			component.addPropertyValue(property, value);
+		}
+    }
+    
+    private void parseAttribute(BeanDefinitionBuilder component,String name,Element e){
+    	parseAttribute(component,name,name,e);
+    }
+    
     @Override
 	protected void parseIdAttribute(BeanDefinitionBuilder bean, Element element,
             String name, String val, ParserContext ctx) {

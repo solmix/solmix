@@ -21,6 +21,9 @@ public class FooTransactionManager extends AbstractTransactionManager {
 	protected boolean rollback = false;
 
 	protected boolean rollbackOnly = false;
+	public FooTransactionManager(){
+		this(false,true);
+	}
 
 	public FooTransactionManager(boolean existingTransaction,
 			boolean canCreateTransaction) {

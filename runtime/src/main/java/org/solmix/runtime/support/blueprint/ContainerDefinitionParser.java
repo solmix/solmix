@@ -20,9 +20,12 @@ package org.solmix.runtime.support.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.runtime.extension.ContainerReference;
+import org.solmix.runtime.transaction.TxProxyRule;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -98,7 +101,32 @@ public class ContainerDefinitionParser extends AbstractBPBeanDefinitionParser
     		}
             meta.setRuntimeClass(ContainerReference.class);
             bean.addProperty("reference",  meta);
+        }else if ("tx".equals(name)) {
+        	MutableBeanMetadata rule = createProxyMetadata(ctx,bean,el);
+        	String managerId = el.getAttribute("manager");
+        	if(DataUtils.isNotNullAndEmpty(managerId)){
+            	ComponentMetadata manager=	ctx.getComponentDefinitionRegistry().getComponentDefinition(managerId);
+            	if(manager!=null){
+            		rule.addProperty("transactionManager", manager);
+            	}
+        	}
+        	rule.setRuntimeClass(TxProxyRule.class);
+        	bean.addProperty("proxyRule",  rule);
         }
     }
+    
+    MutableBeanMetadata createProxyMetadata(ParserContext ctx, MutableBeanMetadata bean, Element el){
+    	MutableBeanMetadata rule = ctx.createMetadata(MutableBeanMetadata.class);
+    	String proxyTarget = el.getAttribute("proxy-target-class");
+    	bean.addProperty("proxyTargetClass",   createValue(ctx, proxyTarget));
+    	String filter = el.getAttribute("filter");
+    	bean.addProperty("filter",   createValue(ctx, filter));
+    	String expose = el.getAttribute("expose");
+    	bean.addProperty("exposeProxy",   createValue(ctx, expose));
+    	String optimize = el.getAttribute("optimize");
+    	bean.addProperty("optimize",   createValue(ctx, optimize));
+    	return rule;
+    }
+    
    
 }

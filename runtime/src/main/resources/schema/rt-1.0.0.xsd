@@ -12,13 +12,16 @@ xmlns:beans="http://www.springframework.org/schema/beans"
             		<xsd:element name="listeners" type="xsd:anyType"
             			minOccurs="0">
             		</xsd:element>
-            		<xsd:element name="bindings" type="xsd:anyType" minOccurs="0"></xsd:element>
+            		<xsd:element name="bindings" type="xsd:anyType"
+            			minOccurs="0">
+            		</xsd:element>
             		<xsd:element name="properties" type="beans:mapType"
             			minOccurs="0">
             		</xsd:element>
             		<xsd:element name="ref" type="refType" minOccurs="0"
             			maxOccurs="unbounded">
             		</xsd:element>
+            		<xsd:element name="tx" type="txType"></xsd:element>
             	</xsd:choice>
             </xsd:sequence>
             
@@ -31,5 +34,13 @@ xmlns:beans="http://www.springframework.org/schema/beans"
     <xsd:complexType name="refType">
     	<xsd:attribute name="container-id" type="xsd:string"></xsd:attribute>
     	<xsd:attribute name="filter" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="txType">
+    	<xsd:attribute name="manager" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="proxy-target-class" type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="filter" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="expose" type="xsd:boolean"></xsd:attribute>
+		<xsd:attribute name="optimize" type="xsd:boolean"></xsd:attribute>
     </xsd:complexType>
 </xsd:schema>

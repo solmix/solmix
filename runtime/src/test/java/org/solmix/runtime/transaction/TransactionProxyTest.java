@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.proxy.support.ProxyManagerImpl;
-import org.solmix.runtime.transaction.proxy.TxProxyHandler;
 import org.solmix.tests.transaction.FooManager;
 import org.solmix.tests.transaction.FooTransactionManager;
 import org.solmix.tests.transaction.IFooManager;
@@ -23,9 +22,9 @@ public class TransactionProxyTest extends TestCase {
 		ProxyManagerImpl pm = new ProxyManagerImpl(c);
 		FooTransactionManager ftm = new FooTransactionManager(false, true);
 		c.setExtension(ftm, TransactionManager.class);
-		pm.addHandler(new TxProxyHandler());
+		pm.addRule(new TxProxyRule());
 		FooManager tm = new FooManager();
-		IFooManager ptm=(IFooManager)pm.proxy(tm, null);
+		IFooManager ptm=(IFooManager)pm.proxy(tm.getClass().getName(),tm);
 		assertNotNull(ptm);
 		ptm.update("1", "2");
 	}

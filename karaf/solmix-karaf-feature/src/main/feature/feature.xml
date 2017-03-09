@@ -10,10 +10,10 @@
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-runtime/${project.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.common/solmix-common-util/${project.version}</bundle>
 	</feature>
-	<feature name="solmix-dep-cglib" description="Cglib dependency support" version="${project.version}">
+	<feature name="solmix-lib-cglib" description="Cglib lib support" version="${cglib.version}">
 		<bundle start-level="35">mvn:org.solmix.bundles/org.solmix.bundles.cglib/${cglib.version}</bundle>
 	</feature>
-	<feature name="solmix-dep-javassist" description="Javassist dependency  support" version="${project.version}">
+	<feature name="solmix-lib-javassist" description="Javassist lib  support" version="${javassist.version}">
 		<bundle start-level="35">mvn:org.javassist/javassist/${javassist.version}</bundle>
 	</feature>
 	<feature name="solmix-karaf-wrapper" description="Karaf Wrapper"
@@ -90,9 +90,7 @@
 		<bundle start-level="35">mvn:org.mybatis/mybatis/${mybatis.version}</bundle>
 		<bundle start-level="40">mvn:org.solmix.datax/datax-mybatis/${project.version}</bundle>
 	</feature>
-	<feature name="hola-lib-javassist" description="Hola optional lib javassist" version="3.20.0-GA">
-		<bundle start-level="40">mvn:org.javassist/javassist/3.20.0-GA</bundle>
-	</feature>
+
 	<feature name="hola-common" description="Hola Commons" version="${project.version}">
 		<feature version="${project.version}">solmix-exchange</feature>
 		<bundle start-level="40">mvn:org.solmix.hola/hola-common/${project.version}</bundle>

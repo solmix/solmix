@@ -108,7 +108,7 @@
 			javax.annotation,
 			org.springframework*;resolution:=optional;version="${spring.version}",
 			org.apache.aries*;version="[1.0,2)";resolution:=optional,
-			net.sf.cglib.proxy*;resolution:=optional,
+			net.sf.cglib*;resolution:=optional,
 			com.sun.management;resolution:=optional,
 			javassist*;resolution:=optional,
 			org.jasypt.*;resolution:=optional,

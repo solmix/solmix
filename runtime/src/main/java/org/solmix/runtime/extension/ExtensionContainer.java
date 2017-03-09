@@ -50,6 +50,7 @@ import org.solmix.runtime.Extension;
 import org.solmix.runtime.bean.ConfiguredBeanProvider;
 import org.solmix.runtime.helper.AuthHelper;
 import org.solmix.runtime.proxy.ProxyManager;
+import org.solmix.runtime.proxy.ProxyRule;
 import org.solmix.runtime.proxy.support.ProxyManagerImpl;
 import org.solmix.runtime.resource.ResourceManager;
 import org.solmix.runtime.resource.ResourceResolver;
@@ -59,7 +60,6 @@ import org.solmix.runtime.resource.support.PropertiesResolver;
 import org.solmix.runtime.resource.support.ResourceManagerImpl;
 import org.solmix.runtime.resource.support.ResourceResolverAdaptor;
 import org.solmix.runtime.resource.support.SinglePropertyResolver;
-import org.solmix.runtime.transaction.config.TxInfo;
 
 /**
  * 
@@ -83,7 +83,7 @@ public class ExtensionContainer implements Container {
 
     private List<ContainerReference> references;
     
-    private TxInfo txInfo;
+    private ProxyManager proxyManager;
    
     //JVM shutdown hooker
     static {
@@ -188,8 +188,8 @@ public class ExtensionContainer implements Container {
         } else {
             locations = new String[] {internal, ext };
         }
-        ProxyManager proxy = new ProxyManagerImpl(this);
-        extensions.put(ProxyManager.class, proxy);
+        proxyManager = new ProxyManagerImpl(this);
+        extensions.put(ProxyManager.class, proxyManager);
         extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);
         extensions.put(ExtensionManager.class, extensionManager);
@@ -629,6 +629,15 @@ public class ExtensionContainer implements Container {
     	}
     	references.add(ref);
     }
+    
+    public void setProxyRule(ProxyRule ref){
+    	this.addProxyRule(ref);
+    }
+    
+    public void addProxyRule(ProxyRule ref){
+    	proxyManager.addRule(ref);
+    }
+
 
     public boolean extensioncontainerau() {
         try {
