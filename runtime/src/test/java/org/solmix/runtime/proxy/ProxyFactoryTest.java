@@ -294,10 +294,10 @@ public class ProxyFactoryTest {
 		}
 	}
 	
-	private interface TimeStamped{
+	public interface TimeStamped{
 		 long getTimeStamp();
 	}
-	private interface IOther{
+	public interface IOther{
 		void absquatulate();
 	}
 }

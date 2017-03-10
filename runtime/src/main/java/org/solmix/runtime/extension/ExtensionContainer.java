@@ -177,6 +177,9 @@ public class ExtensionContainer implements Container {
 
         extensionManager = new ExtensionManagerImpl(new String[0],
             extensionClassLoader, extensions, rm, this);
+        //put proxy manager in container
+        proxyManager = new ProxyManagerImpl(this);
+        extensions.put(ProxyManager.class, proxyManager);
         setStatus(ContainerStatus.CREATING);
         String internal = SystemPropertyAction.getProperty(
             ExtensionManager.PROP_EXTENSION_LOCATION,
@@ -188,8 +191,7 @@ public class ExtensionContainer implements Container {
         } else {
             locations = new String[] {internal, ext };
         }
-        proxyManager = new ProxyManagerImpl(this);
-        extensions.put(ProxyManager.class, proxyManager);
+       
         extensionManager.load(locations);
         extensionManager.activateAllByType(ResourceResolver.class);
         extensions.put(ExtensionManager.class, extensionManager);

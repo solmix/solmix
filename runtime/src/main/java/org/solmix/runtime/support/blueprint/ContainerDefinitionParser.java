@@ -117,16 +117,23 @@ public class ContainerDefinitionParser extends AbstractBPBeanDefinitionParser
     
     MutableBeanMetadata createProxyMetadata(ParserContext ctx, MutableBeanMetadata bean, Element el){
     	MutableBeanMetadata rule = ctx.createMetadata(MutableBeanMetadata.class);
-    	String proxyTarget = el.getAttribute("proxy-target-class");
-    	bean.addProperty("proxyTargetClass",   createValue(ctx, proxyTarget));
-    	String filter = el.getAttribute("filter");
-    	bean.addProperty("filter",   createValue(ctx, filter));
-    	String expose = el.getAttribute("expose");
-    	bean.addProperty("exposeProxy",   createValue(ctx, expose));
-    	String optimize = el.getAttribute("optimize");
-    	bean.addProperty("optimize",   createValue(ctx, optimize));
+    	parseAttribute(ctx,rule,"proxy-target-class","proxyTargetClass",el);
+    	parseAttribute(ctx,rule,"filter",el);
+    	parseAttribute(ctx,rule,"optimize",el);
+    	parseAttribute(ctx,rule,"expose","exposeProxy",el);
     	return rule;
     }
     
+    
+    private void parseAttribute(ParserContext ctx,MutableBeanMetadata rule,String name,Element e){
+    	parseAttribute(ctx,rule,name,name,e);
+    }
+    
+    private void parseAttribute(ParserContext ctx,MutableBeanMetadata rule,String name,String property,Element e){
+    	String value = e.getAttribute(name);
+		if (value != null && value.length() > 0) {
+			rule.addProperty(property, createValue(ctx, value));
+		}
+    }
    
 }

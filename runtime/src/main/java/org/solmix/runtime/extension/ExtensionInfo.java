@@ -27,7 +27,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.Assert;
+import org.solmix.commons.util.ClassUtils;
 import org.solmix.runtime.Container;
+import org.solmix.runtime.proxy.ProxyManager;
 
 /**
  * 
@@ -56,6 +59,8 @@ public class ExtensionInfo {
     protected Object args[];
 
     protected volatile Object obj;
+    
+    protected volatile Object proxyObj;
 
     protected boolean optional;
 
@@ -122,6 +127,7 @@ public class ExtensionInfo {
     }
 
     public void setClassname(String i) {
+    	Assert.isNotNull(i,"class name is null");
         setClassname0(i);
     }
 
@@ -184,7 +190,7 @@ public class ExtensionInfo {
      * @return
      */
     public Object getLoadedObject() {
-        return obj;
+        return proxyObj==null?obj:proxyObj;
     }
 
     public void setLoadedObject(Object o){
@@ -203,6 +209,9 @@ public class ExtensionInfo {
     }
 
     protected Class<?> tryClass(String name, ClassLoader cl) {
+    	if(name==null){
+    		return null;
+    	}
         Throwable origEx = null;
         if (classloader != null) {
             try {
@@ -343,6 +352,29 @@ public class ExtensionInfo {
         }
         return obj;
     }
+    /**为了简化，代理只能代理一个实例，不根据不同的代理创建不同的代理类,因为是否需要加载该实例，主要通过class来决定*/
+	public Object proxyIfNecessary(ClassLoader loader, Container container) {
+		if(proxyObj!=null){
+			return proxyObj;
+		}
+		Object obj = getLoadedObject();
+		if (obj == null) {
+			return null;
+		}
+		ProxyManager proxy = container.getExtension(ProxyManager.class);
+		String name = getName();
+		//针对对象的代理，默认代理所有接口的实现，如果没有接口就代理类
+		Class<?>[] inf=ClassUtils.getAllInterfaces(obj);
+		Object proxyed= proxy.proxy(loader,name, obj,inf);
+		//依旧相等，则没创建动态代理类
+		if(proxyed==obj){
+			return obj;
+		}else{
+			this.proxyObj=proxyed;
+			return this.proxyObj;
+		}
+		
+	}
 
     public void setOptional(boolean b) {
         optional = b;

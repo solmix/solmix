@@ -6,5 +6,5 @@ public interface ProxyHandler {
 
 	
 	
-	Object proxy(Object instance,Class<?>[] interfaces);
+	Object proxy(ClassLoader classLoader,Object instance,Class<?>[] interfaces);
 }

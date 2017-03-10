@@ -211,16 +211,13 @@ public class ExtensionManagerImpl implements ExtensionManager,
         }
         return null;
     }
-    /**
-     * @param info
-     */
+    
     final void loadAndRegister(ExtensionInfo info) {
-        if(LOG.isTraceEnabled()){
+    	if(LOG.isTraceEnabled()){
             LOG.trace("Loading and initial Extension: "+info.getName());
         }
         synchronized (info) {
-            Class<?> cls = null;
-            cls = info.getClassObject(loader);
+            Class<?> cls = info.getClassObject(loader);
             if (null != activated && null != cls
                 && null != activated.get(cls)) {
                 return;
@@ -237,28 +234,21 @@ public class ExtensionManagerImpl implements ExtensionManager,
                     configurer.configureBean(obj);
                 }
             }
+            if (cls == null) {
+                cls = obj.getClass();
+            }
             ResourceInjector injector = new ResourceInjector(resourceManager);
             injector.injectAware(obj);
             injector.inject(obj);
             injector.construct(obj);
             
-            proxy(obj);
-           
+            Object target=info.proxyIfNecessary(loader, container);
             if (null != activated) {
-                if (cls == null) {
-                    cls = obj.getClass();
-                }
-                activated.put(cls, obj);
+            	activated.put(cls, target);
             }
         }
     }
-
-
-    private void proxy(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
+   
 	/**
      * {@inheritDoc}
      * 
@@ -378,8 +368,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
             synchronized (info) {
                 Class<?> cls = info.getClassObject(loader);
 
-                if (cls != null
-                    && type.isAssignableFrom(info.getClassObject(loader))) {
+                if (cls != null&& type.isAssignableFrom(cls)) {
                     if (info.getLoadedObject() == null) {
                         loadAndRegister(info);
                     }

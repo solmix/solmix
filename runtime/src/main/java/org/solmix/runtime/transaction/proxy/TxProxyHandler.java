@@ -33,7 +33,7 @@ public class TxProxyHandler implements ProxyHandler, ContainerAware {
 	}
 
 	@Override
-	public Object proxy(Object instance, Class<?>[] interfaces) {
+	public Object proxy(ClassLoader proxyClassLoader,Object instance, Class<?>[] interfaces) {
 		 if(!requireProxy(instance,interfaces)){
 			 return instance;
 		 }
@@ -41,7 +41,11 @@ public class TxProxyHandler implements ProxyHandler, ContainerAware {
 		factory.setContainer(container);
 		factory.setTarget(instance);
 		factory.setOptimize(rule.isOptimize());
+		factory.setProxyClassLoader(proxyClassLoader);
 		factory.setProxyTargetClass(rule.isProxyTargetClass());
+		if(interfaces!=null&&interfaces.length>0){
+			factory.setProxyInterfaces(interfaces);
+		}
 		factory.setExposeProxy(rule.isExposeProxy());
 		return factory.getProxy();
 	}

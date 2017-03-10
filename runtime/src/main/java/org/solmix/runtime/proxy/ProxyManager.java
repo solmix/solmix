@@ -8,5 +8,7 @@ public interface ProxyManager {
 	void removeRule(ProxyRule rule);
 	
 	
-	Object proxy(String name,Object instance);
+	Object proxy(ClassLoader loader,String name,Object instance);
+	
+	Object proxy(ClassLoader loader,String name,Object instance,Class<?>[] interfaces);
 }

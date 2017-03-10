@@ -24,7 +24,7 @@ public class TransactionProxyTest extends TestCase {
 		c.setExtension(ftm, TransactionManager.class);
 		pm.addRule(new TxProxyRule());
 		FooManager tm = new FooManager();
-		IFooManager ptm=(IFooManager)pm.proxy(tm.getClass().getName(),tm);
+		IFooManager ptm=(IFooManager)pm.proxy(c.getExtension(ClassLoader.class),tm.getClass().getName(),tm);
 		assertNotNull(ptm);
 		ptm.update("1", "2");
 	}

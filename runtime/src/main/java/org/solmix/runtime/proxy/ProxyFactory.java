@@ -30,6 +30,7 @@ public class ProxyFactory extends ProxyAspectSupport{
 	}
 	
 	public Object getProxy(ClassLoader classLoader) {
+		
 		return createAspectProxy().getProxy(classLoader);
 	}
 	

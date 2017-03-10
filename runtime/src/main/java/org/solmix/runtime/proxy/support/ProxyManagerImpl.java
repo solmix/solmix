@@ -37,12 +37,17 @@ public class ProxyManagerImpl implements ProxyManager {
 	
 
 	@Override
-	public Object proxy(String name,Object instance) {
+	public Object proxy(ClassLoader classLoader,String name,Object instance) {
+		return proxy(classLoader,name,instance,null);
+	}
+	
+	@Override
+	public Object proxy(ClassLoader classLoader,String name, Object instance, Class<?>[] interfaces) {
 		Assert.isNotNull(instance,"proxy target must be not null");
 		Object proxy=instance;
 		for(ProxyRule handler:rules){
 			if(handler.match(name)){
-				proxy=handler.getProxyHandler().proxy(proxy, null);
+				proxy=handler.getProxyHandler().proxy(classLoader,proxy, interfaces);
 			}
 			
 		}

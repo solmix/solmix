@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassLoaderUtils;
+import org.solmix.runtime.helper.ProxyClassLoader;
 import org.solmix.runtime.proxy.AspectProxy;
 import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.ProxyConfigException;
@@ -46,8 +47,9 @@ public class JdkAspectProxy implements AspectProxy, InvocationHandler,Serializab
 					+ this.config.getTargetSource());
 		}
 		Class<?>[] proxiedInterfaces = ProxyUtils.completeProxiedInterfaces(this.config);
+		ProxyClassLoader loader = ProxyUtils.complexProxyClassLoader(classLoader, this.config.getTargetClass(), proxiedInterfaces);
 		findDefinedEqualsAndHashCodeMethods(proxiedInterfaces);
-		return Proxy.newProxyInstance(classLoader, proxiedInterfaces, this);
+		return Proxy.newProxyInstance(loader, proxiedInterfaces, this);
 	}
 
 	private void findDefinedEqualsAndHashCodeMethods(

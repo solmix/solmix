@@ -17,6 +17,7 @@ import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassUtils;
 import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.Reflection;
+import org.solmix.runtime.helper.ProxyClassLoader;
 import org.solmix.runtime.proxy.Aspected;
 import org.solmix.runtime.proxy.ProxyInvocationException;
 import org.solmix.runtime.proxy.RuntimeProxy;
@@ -27,6 +28,26 @@ import org.solmix.runtime.proxy.target.TargetSource;
 public class ProxyUtils {
 
 	
+	public static ProxyClassLoader complexProxyClassLoader(ClassLoader classLoader,Class<?> targetClass,Class<?>[] interfaces){
+		Class<?>[] all ;
+		if(interfaces==null){
+			all=new Class<?>[]{targetClass};
+		}else{
+			all=new Class<?>[interfaces.length+1];
+			all[0]=targetClass;
+			System.arraycopy(interfaces, 0, all, 1, interfaces.length);
+		}
+		ProxyClassLoader proxyLoader = new ProxyClassLoader(classLoader,all);
+		ClassLoader target = targetClass.getClassLoader();
+		proxyLoader.addLoader(target);
+		if(interfaces!=null&&interfaces.length>0){
+			for(Class<?> inf:interfaces){
+				proxyLoader.addLoader(inf.getClassLoader());
+			}
+		}
+		return proxyLoader;
+		
+	}
 	public static Class<?>[] completeProxiedInterfaces(ProxyAspectSupport advised) {
 		Class<?>[] specifiedInterfaces = advised.getProxiedInterfaces();
 		if (specifiedInterfaces.length == 0) {

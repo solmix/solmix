@@ -4,7 +4,7 @@ org.solmix.runtime.service.SystemTimeService:org.solmix.runtime.service.TimeServ
 java.util.LinkedList:java.util.List:true:false
 org.solmix.runtime.service.InjectTestService::false
 org.solmix.runtime.service.ContainerAwareService::true
-org.solmix.runtime.extension.ContainerListenerImpl:false
+org.solmix.runtime.extension.ContainerListenerImpl::false
 org.solmix.runtime.service.provider1.Provider12:org.solmix.runtime.service.provider1.IProvider1:true:false
 org.solmix.runtime.service.provider1.Provider11:org.solmix.runtime.service.provider1.IProvider1:true:false
 

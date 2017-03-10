@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.ClassUtils;
 import org.solmix.commons.util.ObjectUtils;
+import org.solmix.runtime.helper.ProxyClassLoader;
 import org.solmix.runtime.proxy.Aspect;
 import org.solmix.runtime.proxy.AspectProxy;
 import org.solmix.runtime.proxy.Aspected;
@@ -99,11 +100,12 @@ public class CglibAspectProxy implements AspectProxy {
 
 			validateClassIfNecessary(proxySuperClass);
 			Enhancer enhancer = createEnhancer();
-			if (classLoader != null) {
-				enhancer.setClassLoader(classLoader);
-			}
+			Class<?>[] intefaces= ProxyUtils.completeProxiedInterfaces(this.aspector);
+			ProxyClassLoader loader = ProxyUtils.complexProxyClassLoader(classLoader, proxySuperClass, intefaces);
+			loader.addLoader(Enhancer.class.getClassLoader());
+			enhancer.setClassLoader(loader);
 			enhancer.setSuperclass(proxySuperClass);
-			enhancer.setInterfaces(ProxyUtils.completeProxiedInterfaces(this.aspector));
+			enhancer.setInterfaces(intefaces);
 			enhancer.setStrategy(new UndeclaredThrowableStrategy(UndeclaredThrowableException.class));
 			Callback[] callbacks = adaptorCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];

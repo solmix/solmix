@@ -28,7 +28,8 @@ public class ProxyClassLoader extends ClassLoader {
         if (loader == null) {
             checkSystem = true;
         } else {
-            loaders.add(loader);
+        	if(getParent()!=loader &&!loaders.contains(loader))
+        		loaders.add(loader);
         }
     }
 
@@ -40,6 +41,16 @@ public class ProxyClassLoader extends ClassLoader {
                     return c;
                 }
             }
+        }
+        try {
+			Class<?> clazz=super.findClass(name);
+			if(clazz!=null){
+				return clazz;
+			}
+		} catch (ClassNotFoundException cnfe) {
+            // Try next
+        } catch (NoClassDefFoundError cnfe) {
+            // Try next
         }
         for (ClassLoader loader : loaders) {
             try {

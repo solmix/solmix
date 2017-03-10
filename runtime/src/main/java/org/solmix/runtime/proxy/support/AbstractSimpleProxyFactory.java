@@ -107,8 +107,7 @@ public abstract class AbstractSimpleProxyFactory extends ProxyInfo {
 
 		if (this.proxyInterfaces != null) {
 			proxyFactory.setInterfaces(this.proxyInterfaces);
-		}
-		else if (!isProxyTargetClass()) {
+		}else if (!isProxyTargetClass()) {
 			// Rely on AOP infrastructure to tell us what interfaces to proxy.
 			proxyFactory.setInterfaces(
 					ClassUtils.getAllInterfacesForClass(targetSource.getTargetClass(), this.proxyClassLoader));
