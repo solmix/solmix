@@ -23,9 +23,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.solmix.commons.util.Reflection;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Pager {
-    public static final String DEFAULT_PROCESSOR_CLASSNAME = DefaultPagerProcessor.class.getName();
+    public static final Class<?> DEFAULT_PROCESSOR_CLASSNAME = DefaultPagerProcessor.class;
     private static final Map<String,Pager> PAGER_PROCESSOR_MAP = Collections.synchronizedMap(new HashMap<String,Pager>());
 
     private PagerProcessor processor;
@@ -50,19 +52,14 @@ public class Pager {
         }
     }
 
-    /**
-     * Get a pager based on the PagerProcessor supplied.
-     */
-    public static Pager getPager(String className)
-        throws InstantiationException, IllegalAccessException,
-        ClassNotFoundException {
-        Pager p = PAGER_PROCESSOR_MAP.get(className);
+    public static Pager getPager(Class<?> className)
+        throws Exception {
+        Pager p = PAGER_PROCESSOR_MAP.get(className.getName());
 
         if (p == null) {
-            PagerProcessor processor = (PagerProcessor)
-                                       Class.forName(className).newInstance();
+            PagerProcessor processor =(PagerProcessor)Reflection.newInstance(className) ;
             p = new Pager(processor);
-            PAGER_PROCESSOR_MAP.put(className, p);
+            PAGER_PROCESSOR_MAP.put(className.getName(), p);
         }
         return p;
     }
