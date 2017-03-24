@@ -13,3 +13,4 @@ reports/
 .directory
 atlassian-ide-plugin.xml
 /TempWmicBatchFile.bat
+!src/main/java/org/solmix/runtime/proxy/target
