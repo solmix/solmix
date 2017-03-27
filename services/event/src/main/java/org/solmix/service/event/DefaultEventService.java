@@ -22,6 +22,8 @@ package org.solmix.service.event;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -92,6 +94,7 @@ public class DefaultEventService extends EventServiceAdapter
     /**
      * 初始化并启动服务
      */
+    @PostConstruct
     public void start() {
         configureService();
         startOrUpdateService();
@@ -100,6 +103,7 @@ public class DefaultEventService extends EventServiceAdapter
     /**
      * 关闭服务并回收资源
      */
+    @PreDestroy
     public void shutdown() {
         taskManager = new EventTaskManager() {
 
