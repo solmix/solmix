@@ -221,7 +221,7 @@ public class DefaultEventService extends EventServiceAdapter
         // Cache<String, Filter> event_filter_cache = new LeastRecentlyUsedCacheMap<String, Filter>(getCacheSize());
         // final EventFilter eventFilter = new CachedEventFilter(event_filter_cache);
         // TODO
-        return new DefaultEventTaskManager(container, new EventHandlerBlackListImpl(), topicFilter);
+        return new DefaultEventTaskManager(container, new EventHandlerBlackListImpl(timeout), topicFilter);
     }
 
     /**
@@ -284,10 +284,12 @@ public class DefaultEventService extends EventServiceAdapter
     		throw new IllegalStateException(operation+" is not supported");
     	}
     }
+    @Override
 	public void addEventHandler(String topic, IEventHandler handler) {
 		getDefaultEventTaskManager("addEventHandler").addEventHandler(topic, handler);
 	}
 
+	@Override
 	public void addEventHandler(IEventHandler handler) {
 		getDefaultEventTaskManager("addEventHandler").addEventHandler( handler);
 	}

@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -74,7 +73,8 @@ public class DefaultEventTaskManager implements EventTaskManager
         cachedHandlers = Collections.synchronizedMap(new HashMap<Filter, IEventHandler>());
     }
     
-    public List<EventTask> createEventTasks(IEvent event) {
+    @Override
+	public List<EventTask> createEventTasks(IEvent event) {
         if (!loaded) {
         	synchronized (this) {
         		//container中的配置在加载完成时已经确定
@@ -102,7 +102,12 @@ public class DefaultEventTaskManager implements EventTaskManager
             }
         }
         if(eventHandlerTracker !=null){
-        	
+        	Collection<EventHandlerProxy> handlers=eventHandlerTracker.getHandlers(event);
+        	if(handlers!=null){
+        		for(EventHandlerProxy handler:handlers){
+        			result.add(new DefaultEventTask(this, event, handler));
+        		}
+        	}
         }
         return result;
     }
@@ -149,7 +154,8 @@ public class DefaultEventTaskManager implements EventTaskManager
     /**
      * @param handler
      */
-    public void addToBlackList(IEventHandler handler) {
+    @Override
+	public void addToBlackList(IEventHandler handler) {
         blackList.add(handler);
 
     }

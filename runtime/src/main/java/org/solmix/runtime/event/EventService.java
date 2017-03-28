@@ -30,5 +30,9 @@ public interface EventService
     void postEvent(IEvent event);
 
     void sendEvent(IEvent event);
+
+	void addEventHandler(String topic, IEventHandler handler);
+
+	void addEventHandler(IEventHandler handler);
     
 }
