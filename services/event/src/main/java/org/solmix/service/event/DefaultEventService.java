@@ -37,6 +37,7 @@ import org.solmix.service.event.deliver.AsyncDeliver;
 import org.solmix.service.event.deliver.SyncDeliver;
 import org.solmix.service.event.filter.CachedTopicFilter;
 import org.solmix.service.event.filter.EventHandlerBlackListImpl;
+import org.solmix.service.event.filter.NullEventHandlerBlackList;
 import org.solmix.service.event.util.LeastRecentlyUsedCacheMap;
 
 /**
@@ -69,6 +70,8 @@ public class DefaultEventService extends EventServiceAdapter
     private String[] ignoreTimeout;
 
     private Boolean requireTopic;
+    
+    private boolean blackListEnable;
 
     @Resource
     private Container container;
@@ -218,10 +221,13 @@ public class DefaultEventService extends EventServiceAdapter
     protected EventTaskManager createTaskManager() {
         Cache<String, String> topicCache = new LeastRecentlyUsedCacheMap<String, String>(cacheSize);
         final TopicFilter topicFilter = new CachedTopicFilter(topicCache, requireTopic);
-        // Cache<String, Filter> event_filter_cache = new LeastRecentlyUsedCacheMap<String, Filter>(getCacheSize());
-        // final EventFilter eventFilter = new CachedEventFilter(event_filter_cache);
-        // TODO
-        return new DefaultEventTaskManager(container, new EventHandlerBlackListImpl(timeout), topicFilter);
+        EventHandlerBlackList bl ;
+        if(isBlackListEnable()){
+        	bl=new EventHandlerBlackListImpl(timeout);
+        }else{
+        	bl=new NullEventHandlerBlackList();
+        }
+        return new DefaultEventTaskManager(container, bl, topicFilter);
     }
 
     /**
@@ -312,6 +318,18 @@ public class DefaultEventService extends EventServiceAdapter
 
 	public void setSynThreadPool(DefaultThreadPool synThreadPool) {
 		this.synThreadPool = synThreadPool;
+	}
+
+	/**
+	 * 是否启用黑名单功能，黑名单功能可以将超时的任务加入黑名单，如果可能超时的任务，可以考虑使用异步事项
+	 * @return
+	 */
+	public boolean isBlackListEnable() {
+		return blackListEnable;
+	}
+
+	public void setBlackListEnable(boolean blackListEnable) {
+		this.blackListEnable = blackListEnable;
 	}
 	
 }

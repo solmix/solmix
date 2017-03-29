@@ -19,10 +19,8 @@
 package org.solmix.service.event.filter;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.solmix.runtime.event.IEventHandler;
@@ -58,8 +56,6 @@ public class EventHandlerBlackListImpl implements EventHandlerBlackList
         }
     });
     
-    private final Map<IEventHandler,Long> times= Collections.synchronizedMap(new HashMap<IEventHandler,Long>());
-    
 	private long timeout;
     
     public EventHandlerBlackListImpl(long timeout){
@@ -69,24 +65,12 @@ public class EventHandlerBlackListImpl implements EventHandlerBlackList
     @Override
     public void add(IEventHandler handler) {
         blankList.add(handler);
-        times.put(handler, System.currentTimeMillis());
     }
 
   
     @Override
     public boolean contains(IEventHandler handler) {
         boolean blocked=  blankList.contains(handler);
-        if(blocked){
-        	long mark= times.get(handler);
-        	long current =System.currentTimeMillis();
-        	//过一定时间后重新开启
-        	if((current-mark)>(3*timeout)){
-        		blankList.remove(handler);
-        		times.remove(handler);
-        		return false;
-        	}
-        	
-        }
         return blocked;
         
     }
