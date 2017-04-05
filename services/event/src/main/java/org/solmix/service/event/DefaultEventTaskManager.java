@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -58,7 +60,7 @@ public class DefaultEventTaskManager implements EventTaskManager
 
     private final TopicFilter topicFilter;
     
-    private final Map<Filter, IEventHandler> cachedHandlers;
+    private final Set<EventHandlerHolder> cachedHandlers;
     
     private boolean loaded;
     /**
@@ -70,7 +72,7 @@ public class DefaultEventTaskManager implements EventTaskManager
         this.container=container;
         this.blackList=backlist;
         this.topicFilter=topicFilter;
-        cachedHandlers = Collections.synchronizedMap(new HashMap<Filter, IEventHandler>());
+        cachedHandlers = Collections.synchronizedSet(new HashSet<EventHandlerHolder>());
     }
     
     @Override
@@ -89,9 +91,9 @@ public class DefaultEventTaskManager implements EventTaskManager
         final List<EventTask> result = new ArrayList<EventTask>();
         Hashtable<String,String> topicFilter = new Hashtable<String,String>();
         topicFilter.put(TopicFilter.TOPIC_PROP, event.getTopic());
-        for (Filter filter : cachedHandlers.keySet()) {
-            IEventHandler handler = cachedHandlers.get(filter);
-            if (filter.match(topicFilter)) {
+        for (EventHandlerHolder holder : cachedHandlers) {
+            IEventHandler handler =holder.handler;
+            if (holder.filter.match(topicFilter)) {
                 if (!blackList.contains(handler)) {
                     //XXX No support event filter,maybe support by next version.
                     result.add(new DefaultEventTask(this, event, handler));
@@ -163,7 +165,7 @@ public class DefaultEventTaskManager implements EventTaskManager
 	public void addEventHandler(String topic, IEventHandler handler) {
 		try {
 			Filter filter =createTopicFilter(topic);
-			cachedHandlers.put(filter, handler);
+			cachedHandlers.add(new EventHandlerHolder(filter, handler));
 		} catch (InvalidSyntaxException e) {
 			logger.error("Filter expression syntax error", e);
 		}
@@ -186,12 +188,30 @@ public class DefaultEventTaskManager implements EventTaskManager
 	}
 
 	public void removeEventHandler(String topic) {
-		  for (Filter filter : cachedHandlers.keySet()) {
+		  for (EventHandlerHolder holder : cachedHandlers) {
 	            Hashtable<String,String> topicFilter = new Hashtable<String,String>();
 	            topicFilter.put(TopicFilter.TOPIC_PROP, topic);
-	            if (filter.match(topicFilter)) {
-	               cachedHandlers.remove(filter);
+	            if (holder.filter.match(topicFilter)) {
+	               cachedHandlers.remove(holder);
 	            }
 	        }
+	}
+	private static class EventHandlerHolder{
+		private IEventHandler handler;
+		private Filter filter;
+		EventHandlerHolder(Filter filter,IEventHandler handler){
+			this.filter=filter;
+			this.handler=handler;
+		}
+		@Override
+		public boolean equals(Object other){
+			if(other instanceof EventHandlerHolder){
+				EventHandlerHolder o=(EventHandlerHolder)other;
+				if((o.filter.equals(filter))&&o.handler==handler){
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }
