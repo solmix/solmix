@@ -80,7 +80,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
     protected void unregister(final long bundleId) {
         List<OSGiExtension> list = extensions.remove(bundleId);
         if (list != null) {
-            LOG.info("Removing the extensions for bundle " + bundleId);
+            LOG.debug("Removing the extensions for bundle {}" , bundleId);
             ExtensionRegistry.removeExtensions(list);
         }
     }
@@ -93,8 +93,7 @@ public class ExtensionBundleListener implements SynchronousBundleListener
         for (ExtensionInfo ext : orig) {
             names.add(ext.getName());
         }
-        LOG.info("Adding the extensions from bundle " + bundle.getSymbolicName() 
-                 + " (" + bundle.getBundleId() + ") " + names); 
+        LOG.debug("Adding the extensions from bundle {} ({}) {}" , bundle.getSymbolicName() , bundle.getBundleId() , names); 
         List<OSGiExtension> list = extensions.get(bundle.getBundleId());
         if (list == null) {
             list = new CopyOnWriteArrayList<OSGiExtension>();
