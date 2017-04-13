@@ -159,5 +159,10 @@ public class URLResource extends AbstractFileStreamResource
     public int hashCode() {
           return this.cleanedUrl.hashCode();
     }
+    
+    @Override
+    public String toString(){
+    	return this.cleanedUrl.toString();
+    }
 
 }
