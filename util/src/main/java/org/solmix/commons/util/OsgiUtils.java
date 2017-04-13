@@ -18,6 +18,10 @@
  */
 package org.solmix.commons.util;
 
+import java.net.URL;
+import java.util.Enumeration;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -38,5 +42,34 @@ public final class OsgiUtils
     public static <S> S getService(BundleContext bundleContext,Class<S> clz) {
         ServiceReference<S> ref = bundleContext.getServiceReference(clz);
         return ref == null ? null : bundleContext.getService(ref);
+    }
+    
+    /**
+     * 在bundle外部获取指定bundle的classloader的方法
+     * 1.查找bundle下所有.class文件
+     * 2.根据class文件转化为java类，加载任意的java类
+     * 3.根据java类获取其classloader
+     * @param bundle
+     * @return
+     */
+    public static ClassLoader getBundleClassLoader(Bundle bundle) {
+        Enumeration<URL> classFileEntries = bundle.findEntries("/", "*.class",true);
+        if (classFileEntries == null || !classFileEntries.hasMoreElements()) {
+            throw new RuntimeException(String.format("Bundle[%s]no include java class！",bundle.getSymbolicName()));
+        }
+        URL url = classFileEntries.nextElement();
+        String bundleOneClassName = url.getPath();
+        bundleOneClassName = bundleOneClassName.replace("/", ".").substring(0,
+                bundleOneClassName.lastIndexOf("."));
+        while (bundleOneClassName.startsWith(".")) {
+            bundleOneClassName = bundleOneClassName.substring(1);
+        }
+        Class<?> bundleOneClass = null;
+        try {
+            bundleOneClass = bundle.loadClass(bundleOneClassName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return bundleOneClass.getClassLoader();
     }
 }
