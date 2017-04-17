@@ -81,12 +81,18 @@ public class BpContainer extends ContainerAdaptor
     @Override
     protected void doInitializeInternal() {
         super.doInitializeInternal();
-        ResourceManager rm= getExtension(ResourceManager.class);
-        rm.addResourceResolver(new PathMatchingResourceResolver(new BundleDelegatingClassLoader(bundleContext.getBundle(), BpContainer.class.getClassLoader())));
-        setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
-        setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
-            ConfiguredBeanProvider.class);
-        Set<String> ids =blueprintContainer.getComponentIds();
+        processBeanInBp(true);
+    }
+    
+    private void processBeanInBp(boolean start){
+    	ResourceManager rm= getExtension(ResourceManager.class);
+    	if(start){
+    		rm.addResourceResolver(new PathMatchingResourceResolver(new BundleDelegatingClassLoader(bundleContext.getBundle(), BpContainer.class.getClassLoader())));
+            setExtension(new BlueprintConfigurer(blueprintContainer), BeanConfigurer.class);
+            setExtension(new BlueprintBeanProvider(getExtension(ConfiguredBeanProvider.class), blueprintContainer, bundleContext),
+                ConfiguredBeanProvider.class);
+    	}
+    	Set<String> ids =blueprintContainer.getComponentIds();
         ResourceInjector injector = new ResourceInjector(rm);
         if(ids!=null){
             for(String id:ids){
@@ -116,21 +122,26 @@ public class BpContainer extends ContainerAdaptor
                     if(instance instanceof Container){
                         continue;
                     }
-                    injector.injectAware(instance);
-                    if(injectable(instance,id)){
-                        injector.inject(instance);
-                        injector.construct(instance);
+                    if(start){
+                    	injector.injectAware(instance);
+                        if(injectable(instance,id)){
+                            injector.inject(instance);
+                            injector.construct(instance);
+                        }
+                    }else{
+                    	injector.destroy(instance);
                     }
-                   
                 }
-             
             }
         }
- /*       //used org.solmix.runtime.osgi.BundleContainerListener
-  * Dictionary<String, Object> properties = new Hashtable<String, Object>();
-        properties.put(CONTAINER_PROPERTY_NAME, getId());
-        bundleContext.registerService(Container.class, this, properties);*/
     }
+    @Override
+    public void destroyBeans() {
+        //支持在bp中的注解配置
+    	processBeanInBp(false);
+        super.destroyBeans();
+    }
+    
     
     private boolean injectable(Object bean,String beanId){
         return !"solmix".equals(beanId) && ResourceInjector.processable(bean.getClass(), bean);
