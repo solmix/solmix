@@ -27,6 +27,7 @@ import java.util.Set;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintContainer;
+import org.osgi.service.blueprint.container.NoSuchComponentException;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.solmix.runtime.Container;
@@ -118,7 +119,20 @@ public class BpContainer extends ContainerAdaptor
                             continue;
                         }
                     }
-                    Object instance =  blueprintContainer.getComponentInstance(id);
+                    Object instance=null;
+                    //只处理单例（singleton）的，container是简化的IOC，不支持复杂的结构
+                    if(start &&meta instanceof MutableBeanMetadata){
+                    	MutableBeanMetadata mbean = (MutableBeanMetadata)meta;
+                    	if(BeanMetadata.SCOPE_PROTOTYPE.equals(mbean.getScope())){
+                    		continue;
+                    	}
+                    }
+					try {
+						instance = blueprintContainer.getComponentInstance(id);
+					} catch (NoSuchComponentException e) {
+						//找不到的不处理
+						continue;
+					}
                     if(instance instanceof Container){
                         continue;
                     }
