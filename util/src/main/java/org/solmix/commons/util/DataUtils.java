@@ -790,7 +790,7 @@ public final class DataUtils
         }
         Map<Object,Object> result = new HashMap<Object,Object>();
         for(int i=0;i<objects.length;i=i+2)
-        result.put(i, i+1);
+        result.put(objects[i], objects[i+1]);
         return result;
     }
     /**
