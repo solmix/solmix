@@ -18,6 +18,7 @@
  */
 package org.solmix.commons.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -3636,4 +3637,115 @@ public class ArrayUtils {
 
 		return r;
 	}
+	 public static double[] uniq(double[] values){
+	        ArrayList<Double> arr = new ArrayList<Double>();
+	        double[] res;
+	        double lastVal;
+	        int j;
+
+	        lastVal = 0;
+	        for(int i=0; i<values.length; i++){
+	            if(i == 0 || lastVal != values[i]){
+	                arr.add(new Double(values[i]));
+	                lastVal = values[i];
+	            }
+	        }
+
+	        res = new double[arr.size()];
+	        j = 0;
+	        for(Iterator<Double> i=arr.iterator(); i.hasNext(); ){
+	            Double d = (Double)i.next();
+	            
+	            res[j++] = d.doubleValue();
+	        }
+	        return res;
+	    }
+
+	    /**
+	     * Check to see if a _sorted_ array of values contains all unique values.
+	     */
+	    public static boolean isUniq(String[] values){
+	        for(int i=0; i<values.length - 1; i++){
+	            if(values[i].equals(values[i + 1]))
+	                return false;
+	        }
+	        return true;
+	    }
+
+	
+
+	    /**
+	     * Find the maximum value in an array of double values.
+	     *
+	     * @param values Values to search for to find the max of
+	     * 
+	     * @return The index of the maximum value, or -1 if 'values' was 0 length
+	     */
+	    public static int max(double[] values){
+	        int maxIdx = -1;
+
+	        for(int i=0; i<values.length; i++){
+	            if(maxIdx == -1 || values[i] > values[maxIdx]){
+	                maxIdx = i;
+	            }
+	        }
+
+	        return maxIdx;
+	    }
+
+	    /**
+	     * Find the maximum value in an array of int values.
+	     *
+	     * @param values Values to search for to find the max of
+	     * 
+	     * @return The index of the maximum value, or -1 if 'values' was 0 length
+	     */
+	    public static int max(int[] values){
+	        int maxIdx = -1;
+
+	        for(int i=0; i<values.length; i++){
+	            if(maxIdx == -1 || values[i] > values[maxIdx]){
+	                maxIdx = i;
+	            }
+	        }
+
+	        return maxIdx;
+	    }
+
+	    /**
+	     * Find the minimum value in an array of double values.
+	     *
+	     * @param values Values to search for to find the min of
+	     * 
+	     * @return The index of the minimum value, or -1 if 'values' was 0 length
+	     */
+	    public static int min(double[] values){
+	        int minIdx = -1;
+
+	        for(int i=0; i<values.length; i++){
+	            if(minIdx == -1 || values[i] < values[minIdx]){
+	                minIdx = i;
+	            }
+	        }
+
+	        return minIdx;
+	    }
+
+	    /**
+	     * Get the average of an array of values.
+	     */
+	    public static double average(double[] values){
+	        double sum = 0;
+
+	        if(values.length == 0){
+	            throw new IllegalArgumentException("Array length must be > 0");
+	        }
+
+	        for(int i=0; i<values.length; i++){
+	            sum += values[i];
+	        }
+
+	        return sum / values.length;
+	    }
+
 }
