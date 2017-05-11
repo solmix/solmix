@@ -21,6 +21,9 @@ public class PercentageFormatter extends AbstractFormatter
     }
 
     protected FormattedNumber formatNumber(double rawValue, NumberFormat fmt) {
+        if(Double.compare(rawValue, Double.NaN)==0){
+            return new FormattedNumber("NaN", "%", "");
+        }
         return new FormattedNumber(fmt.format(rawValue * getMultiplier()), "%", "");
     }
 
