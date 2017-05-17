@@ -120,11 +120,11 @@ public class UnitFormat {
 	        return res;
 	    }
 
-	    static BigDecimal getBaseValue(double value, int unitType, int scale){
+	    public static BigDecimal getBaseValue(double value, int unitType, int scale){
 	        return getFormatter(unitType).getBaseValue(value, scale);
 	    }
 
-	    static BigDecimal getScaledValue(BigDecimal baseValue, int unitType, 
+	    public static BigDecimal getScaledValue(BigDecimal baseValue, int unitType, 
 	                                     int scale)
 	    {
 	        return getFormatter(unitType).getScaledValue(baseValue, scale);
@@ -154,7 +154,7 @@ public class UnitFormat {
 	    }
 
 	    public static void main(String[] args) throws Exception {
-	        for(int i=0; i<args.length; i++){
+	        /*for(int i=0; i<args.length; i++){
 	            UnitNumber num = UnitFormat.parse(args[i], 
 	                                               UnitConstants.UNIT_BYTES);
 
@@ -168,6 +168,7 @@ public class UnitFormat {
 	                               num.getScaledValue(UnitConstants.SCALE_KILO));
 	            System.out.println("Scaled to giga = " +
 	                               num.getScaledValue(UnitConstants.SCALE_GIGA));
-	        }
+	        }*/
+	        System.out.print(getBaseValue(1.0,UnitConstants.UNIT_BYTES,UnitConstants.SCALE_KILO));
 	    }
 }
