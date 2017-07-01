@@ -53,7 +53,7 @@ public class SumJavaCode
      * @param f 要查找的目录
      * @throws IOException
      */
-    private void treeFile(File f) throws IOException {
+    public void treeFile(File f) throws IOException {
         File[] childs = f.listFiles();
         // int count = 0;
         // int sum = 0;
