@@ -859,6 +859,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.solmix.services</groupId>
+				<artifactId>solmix-service-mail</artifactId>
+				<version>${solmix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.solmix.services</groupId>
 				<artifactId>solmix-service-fastfds</artifactId>
 				<version>${solmix.version}</version>
 			</dependency>

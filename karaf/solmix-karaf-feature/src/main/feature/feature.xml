@@ -41,6 +41,12 @@
 		<bundle start-level="40">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
 	</feature>
 	
+	<feature name="solmix-service-mail" description="Commons service MailSender"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-runtime</feature>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-mail/${project.version}</bundle>
+	</feature>
+	
 	<feature name="solmix-service-jackson" description="Commons service Jackson"
 		version="${project.version}">
 		<feature version="${project.version}">solmix-runtime</feature>
