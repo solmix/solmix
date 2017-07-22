@@ -17,6 +17,7 @@
   	<!-- <module>fastfds</module> -->
   	<module>freemarker</module>
   	<module>jsp</module>
+  	<module>mail</module>
   </modules>
   <name>Solmix :: Services :: Parent</name>
 </project>
