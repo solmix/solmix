@@ -49,6 +49,7 @@
 		<module>org.solmix.bundles.cglib</module>
 		<module>org.solmix.bundles.cache-api</module>
 		<module>org.solmix.bundles.snmp4j</module>
+		<module>org.solmix.bundles.quartz</module>
 	</modules>
 	<version>0.5.0</version>
 	<groupId>org.solmix.bundles</groupId>
