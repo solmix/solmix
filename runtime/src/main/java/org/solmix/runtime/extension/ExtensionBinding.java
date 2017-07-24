@@ -16,11 +16,13 @@ public abstract class ExtensionBinding {
 	protected abstract void bind();
 
 	protected void bind(Class<?> clazz) {
-		ExtensionInfo ei = new ExtensionInfo(clazz);
-		ei.setDeferred(true);
-		extensionInfos.add(ei);
+		bind(clazz,true);
 	}
-
+	protected void bind(Class<?> clazz, boolean deferred) {
+          ExtensionInfo ei = new ExtensionInfo(clazz);
+          ei.setDeferred(deferred);
+          extensionInfos.add(ei);
+    }
 	protected void bind(Class<?> intf, Class<?> clazz) {
 		bind(intf, clazz, true);
 	}
