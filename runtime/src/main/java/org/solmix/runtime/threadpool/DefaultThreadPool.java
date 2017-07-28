@@ -523,7 +523,7 @@ public class DefaultThreadPool implements ThreadPool {
             };
             final Thread t = new Thread(group, 
                                   wrapped, 
-                                  name + "-thread-" + threadNumber.getAndIncrement(),
+                                  name + "-" + threadNumber.getAndIncrement(),
                                   0);
             AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
                 @Override
