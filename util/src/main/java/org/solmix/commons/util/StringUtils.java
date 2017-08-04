@@ -1098,18 +1098,19 @@ public final class StringUtils
 		return i;
 	}
 	
-	public static String toString(Object[] args) {
-		StringBuilder buf = new StringBuilder();
-		if (args != null && args.length > 0) {
-			for (int i = 0; i < args.length; i++) {
-				Object arg = args[i];
-				buf.append(arg.toString());
-				if (i < args.length ) {
-					buf.append(",");
-				}
-			}
-		}
-		return buf.toString();
-	}
+    public static String toString(Object[] args) {
+        StringBuilder buf = new StringBuilder();
+        if (args != null && args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                if (i > 0) {
+                    buf.append(",");
+                }
+                Object arg = args[i];
+                buf.append(arg.toString());
+
+            }
+        }
+        return buf.toString();
+    }
 
 }
