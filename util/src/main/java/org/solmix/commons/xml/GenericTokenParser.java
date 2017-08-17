@@ -3,9 +3,7 @@ package org.solmix.commons.xml;
 
 public class GenericTokenParser {
 	
-	 public interface TokenHandler{
-	        String handleToken(String content);
-	    }
+	
 	   private final String openToken;
        private final String closeToken;
        private final TokenHandler handler;

@@ -21,7 +21,6 @@ package org.solmix.commons.xml;
 import java.util.Map;
 
 import org.solmix.commons.util.SystemPropertyAction;
-import org.solmix.commons.xml.GenericTokenParser.TokenHandler;
 
 
 /**
@@ -32,16 +31,25 @@ import org.solmix.commons.xml.GenericTokenParser.TokenHandler;
 
 public class VariablesParser
 {
+    public static final String DEFAULT_START_TOKEN="${";
+    public static final String DEFAULT_END_TOKEN="}";
     /**变量映射*/
     public static String parse(String string, Map<String,Object> variables) {
         VariableTokenHandler handler = new VariableTokenHandler(variables);
-        GenericTokenParser parser = new GenericTokenParser("${", "}", handler);
+        return parse(string,handler);
+      }
+    public static String parse(String string, TokenHandler handler) {
+        GenericTokenParser parser = new GenericTokenParser(DEFAULT_START_TOKEN, DEFAULT_END_TOKEN, handler);
+        return parser.parse(string);
+      }
+    public static String parse(String string, TokenHandler handler,String startToken,String endToken) {
+        GenericTokenParser parser = new GenericTokenParser(startToken, endToken, handler);
         return parser.parse(string);
       }
     /**首先在配置中查找,找不到通过System.getProperty*/
     public static String parseWithSystem(String string, Map<String,Object> variables) {
         VariableSystemHandler handler = new VariableSystemHandler(variables);
-        GenericTokenParser parser = new GenericTokenParser("${", "}", handler);
+        GenericTokenParser parser = new GenericTokenParser(DEFAULT_START_TOKEN, DEFAULT_END_TOKEN, handler);
         return parser.parse(string);
       }
 
