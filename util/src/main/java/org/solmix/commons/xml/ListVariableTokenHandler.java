@@ -16,7 +16,7 @@ public class ListVariableTokenHandler implements TokenHandler
     @Override
     public String handleToken(String content) {
         for(Map<String,Object> variable:variables){
-            if (variable.containsKey(content)) {
+            if (variable!=null&&variable.containsKey(content)) {
                 return variable.get(content).toString();
               }
         }
