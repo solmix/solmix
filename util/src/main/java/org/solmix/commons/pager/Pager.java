@@ -167,7 +167,7 @@ public class Pager {
             pagesize = Integer.MAX_VALUE;
         }
 
-        for (i = 0, currentPage = 0; iter.hasNext() && currentPage < pagenum; i++, currentPage += (i % pagesize == 0) ? 1
+        for (i = 0, currentPage = 1; iter.hasNext() && currentPage < pagenum; i++, currentPage += (i % pagesize == 0) ? 1
                                                                                                                      : 0) {
             iter.next();
         }
@@ -256,7 +256,7 @@ public class Pager {
             pagesize = Integer.MAX_VALUE;
         }
 
-        for (i = 0, currentPage = 0; iter.hasNext() && currentPage < pagenum; currentPage += (i != 0 && i % pagesize == 0) ? 1
+        for (i = 0, currentPage = 1; iter.hasNext() && currentPage < pagenum; currentPage += (i != 0 && i % pagesize == 0) ? 1
                                                                                                                           : 0) {
             Object ret = null;
 
