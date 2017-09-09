@@ -15,6 +15,5 @@
   	<module>solmix-karaf-feature</module>
   	<module>solmix-karaf-wrapper</module>
   	<module>karaf-plugin</module>
-    <module>hhh</module>
   </modules>
 </project>
