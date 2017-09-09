@@ -16,19 +16,18 @@ public class CustomBundleUrlStreamHandlerFactory implements URLStreamHandlerFact
 
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {
-        switch (protocol) {
-            case MVN_URI_PREFIX:
-                return new org.ops4j.pax.url.mvn.Handler();
-            case WRAP_URI_PREFIX:
-                return new org.ops4j.pax.url.wrap.Handler();
-            case FEATURE_URI_PREFIX:
-                return new FeatureURLHandler();
-            case SPRING_URI_PREFIX:
-                return new SpringURLHandler();
-            case BLUEPRINT_URI_PREFIX:
-                return new BlueprintURLHandler();
-            default:
-                return null;
+        if(MVN_URI_PREFIX.equals(protocol)){
+            return new org.ops4j.pax.url.mvn.Handler();
+        }else if(WRAP_URI_PREFIX.equals(protocol)){
+            return new org.ops4j.pax.url.wrap.Handler();
+        }else if(FEATURE_URI_PREFIX.equals(protocol)){
+            return new FeatureURLHandler();
+        }else if(SPRING_URI_PREFIX.equals(protocol)){
+            return new SpringURLHandler();
+        }else if(BLUEPRINT_URI_PREFIX.equals(protocol)){
+            return new BlueprintURLHandler();
+        }else{
+            return null;
         }
     }
 

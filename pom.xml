@@ -1518,6 +1518,16 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				<plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+				<version>${apache.karaf.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.solmix.karaf</groupId>
+					<artifactId>karaf-plugin</artifactId>
+					<version>${solmix.version}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
