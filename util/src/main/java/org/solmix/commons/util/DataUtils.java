@@ -39,12 +39,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
@@ -1932,5 +1934,29 @@ public final class DataUtils
             }
         }
         return parameters;
+    }
+    
+    public static DataTypeMap toDataTypeMap(Properties props) {
+        if (props == null) {
+            return null;
+        }
+        DataTypeMap res = new DataTypeMap();
+        for (Object key : props.keySet()) {
+            res.put(key.toString(), props.get(key));
+        }
+        return res;
+    }
+
+    public static DataTypeMap toDataTypeMap(Dictionary<String, ?> props) {
+        if (props == null) {
+            return null;
+        }
+        DataTypeMap res = new DataTypeMap();
+        Enumeration<String> keys = props.keys();
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            res.put(key, props.get(key));
+        }
+        return res;
     }
 }
