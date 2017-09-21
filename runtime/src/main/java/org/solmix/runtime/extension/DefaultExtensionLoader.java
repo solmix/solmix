@@ -126,14 +126,15 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
                                 Extension anno = clazz.getAnnotation(Extension.class);
                                 if (anno != null && anno.value() != null) {
                                     String implemntor = anno.value().trim();
-                                    /*if (cachedExtensions.get(implemntor) != null) {
+                                    if (cachedExtensions.get(implemntor) == null) {
+                                        cachedExtensions.put(implemntor, info);
+                                    }else{
                                         ExtensionInfo older = cachedExtensions.get(implemntor);
                                         throw new IllegalStateException("Class:[" + clazz.getName() + "] with name:[" + implemntor
                                             + "],conflict and class:[" + older.getClassname() + "]");
-                                    } else {*/
-                                    if (cachedExtensions.get(implemntor) == null) {
-                                        cachedExtensions.put(implemntor, info);
                                     }
+                                }else{
+                                    cachedExtensions.put(name, info);
                                 }
                             }
                         } else {

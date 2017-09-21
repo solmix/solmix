@@ -171,7 +171,7 @@ public class ExtensionInfo {
         buf.append(interfaceName);
         buf.append(", interface: ");
         buf.append(interfaceName);
-
+        buf.append(", deferred: ");
         buf.append(deferred ? "true" : "false");
         buf.append(", namespaces: (");
         int n = 0;
