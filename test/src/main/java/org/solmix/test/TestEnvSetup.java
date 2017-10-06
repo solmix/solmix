@@ -4,8 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+
 public class TestEnvSetup {
-	private Params params = createParams();
+    private Params params = createParams();
     private File basedir;
     private File srcdir;
     private File destdir;
@@ -52,7 +58,17 @@ public class TestEnvSetup {
             if (getParams().logbackConfigParam != null) {
                 logConfigFile = findLogbackXml();
             }
-
+                LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+                JoranConfigurator configurator = new JoranConfigurator();
+                configurator.setContext(lc);
+                lc.reset();
+                try {
+                    configurator.doConfigure(logConfigFile);
+                }
+                catch (JoranException e) {
+                    e.printStackTrace(System.err);
+                    System.exit(-1);
+                }
             System.out.println("+-----------------------------------------------------------------------------");
 
         } catch (Exception e) {

@@ -48,15 +48,15 @@ public class Execute
     private File workingDirectory = null;
     private boolean newEnvironment = false;
 
-    private static Vector procEnvironment = null;
+    private static Vector<String> procEnvironment = null;
 
     /**
      * Find the list of environment variables for this process.
      */
-    public static synchronized Vector getProcEnvironment() {
+    public static synchronized Vector<String> getProcEnvironment() {
         if (procEnvironment != null) return procEnvironment;
 
-        procEnvironment = new Vector();
+        procEnvironment = new Vector<String>();
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             Execute exe = new Execute(new PumpStreamHandler(out));
@@ -183,7 +183,7 @@ public class Execute
      *
      * @param commandline the commandline of the subprocess to launch
      */
-    public void setCommandline(String[] commandline) {
+    public void setCommandline(String... commandline) {
         cmdl = commandline;
     }
 
@@ -247,9 +247,11 @@ public class Execute
      *            of the subprocess failed
      */
     public int execute() throws Exception {
-        process =
-            Runtime.getRuntime().exec( getCommandline(), getEnvironment(),
-                                       workingDirectory );
+        if (workingDirectory != null) {
+            process = Runtime.getRuntime().exec(getCommandline(), getEnvironment(), workingDirectory);
+        } else {
+            process = Runtime.getRuntime().exec(getCommandline(), getEnvironment());
+        }
         try {
             streamHandler.setProcessInputStream(process.getOutputStream());
             streamHandler.setProcessOutputStream(process.getInputStream());
@@ -260,28 +262,32 @@ public class Execute
         }
         streamHandler.start();
 
-        if (watchdog != null) watchdog.start(process,
-                                             Thread.currentThread());
+        if (watchdog != null)
+            watchdog.start(process, Thread.currentThread());
 
-        if( log.isTraceEnabled() ) log.trace("Waiting process ");
+        if (log.isTraceEnabled())
+            log.trace("Waiting process ");
         waitFor(process);
 
-        if( log.isTraceEnabled() ) log.trace("End waiting, stop threads ");
-        if (watchdog != null) watchdog.stop();
-        if( log.isTraceEnabled() ) log.trace("Watchdog stopped ");
+        if (log.isTraceEnabled())
+            log.trace("End waiting, stop threads ");
+        if (watchdog != null)
+            watchdog.stop();
+        if (log.isTraceEnabled())
+            log.trace("Watchdog stopped ");
         streamHandler.stop();
-        if( log.isTraceEnabled() ) log.trace("Stream handler stopped ");
+        if (log.isTraceEnabled())
+            log.trace("Stream handler stopped ");
         if (watchdog != null) {
-            Exception ex=watchdog.getException();
-            if( ex!=null )
+            Exception ex = watchdog.getException();
+            if (ex != null)
                 throw ex;
         }
-        int exit= getExitValue();
+        int exit = getExitValue();
 
-        if( log.isDebugEnabled() ) {
-            // ESC-572/HHQ-6050 Irena: to avoid print password in debug messages.
-              log.debug("Done exit="+ exit + getCommandLineString().replaceAll("(-P,? ?)([^ ,]+)", "$1******").replaceAll("(pass[^=]*=)(\\w*)", "$1******"));  
-            //log.debug("Done exit=" + exit + " "  + getCommandLineString());
+        if (log.isDebugEnabled()) {
+            log.debug("Done exit=" + exit
+                + getCommandLineString().replaceAll("(-P,? ?)([^ ,]+)", "$1******").replaceAll("(pass[^=]*=)(\\w*)", "$1******"));
         }
         return exit;
     }
@@ -320,7 +326,7 @@ public class Execute
      * @return the patched environment
      */
     private String[] patchEnvironment() {
-        Vector osEnv = (Vector) getProcEnvironment().clone();
+        Vector<String> osEnv = (Vector) getProcEnvironment().clone();
         for (int i = 0; i < env.length; i++) {
             int pos = env[i].indexOf('=');
             // Get key including "="
@@ -338,18 +344,22 @@ public class Execute
         osEnv.copyInto(result);
         return result;
     }
-
-    public static int execute( Vector envVars, String cmd, File baseDir ) {
-        Vector v=new Vector();
+    public static int execute(  String cmd ) {
+        return execute(null, cmd);
+     }
+    public static int execute( Vector<String> envVars, String cmd ) {
+       return execute(envVars, cmd,null);
+    }
+    public static int execute( Vector<String> envVars, String cmd, File baseDir ) {
+        Vector<String> v=new Vector<String>();
         StringTokenizer st=new StringTokenizer( cmd, " " );
         while( st.hasMoreTokens() ) {
-            v.addElement( st.nextElement() );
+            v.addElement( st.nextToken() );
         }
-
         return execute( envVars, v, baseDir );
     }
     
-    public static int execute( Vector envVars, Vector cmd, File baseDir) {
+    public static int execute( Vector<String> envVars, Vector<String> cmd, File baseDir) {
       return execute( envVars, cmd, baseDir, 10000 /* default time to wait */);
     }
 
@@ -359,7 +369,7 @@ public class Execute
      * @param baseDir the base directory to run from (optional) 
      * @param timeToWait milliseconds to wait for completion
      */
-    public static int execute( Vector envVars, Vector cmd, File baseDir, int timeToWait) {
+    public static int execute( Vector<String> envVars, Vector<String> cmd, File baseDir, int timeToWait) {
         try {
             // We can collect the out or provide in if needed
             ExecuteWatchdog watchdog=new ExecuteWatchdog( timeToWait );

@@ -14,6 +14,9 @@ public class TestUtils {
 	public static final File srcdir = env.getSrcdir();
 	public static final File destdir = env.getDestdir();
 	public static final File javaHome = getJavaHome();
+	public static void load(){
+	    //do nothing ,just load static method and vars;
+	}
 	public static File getJavaHome() {
 	        File javaHome = new File(System.getProperty("java.home"));
 
