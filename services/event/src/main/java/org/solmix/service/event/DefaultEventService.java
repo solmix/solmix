@@ -72,6 +72,8 @@ public class DefaultEventService extends EventServiceAdapter
     private Boolean requireTopic;
     
     private boolean blackListEnable;
+    
+    private Object startLock=new Object();
 
     @Resource
     private Container container;
@@ -99,8 +101,11 @@ public class DefaultEventService extends EventServiceAdapter
      */
     @PostConstruct
     public void start() {
-        configureService();
-        startOrUpdateService();
+        synchronized(startLock){
+            configureService();
+            startOrUpdateService();
+        }
+        
     }
 
     /**
@@ -108,6 +113,7 @@ public class DefaultEventService extends EventServiceAdapter
      */
     @PreDestroy
     public void shutdown() {
+        synchronized(startLock){
         taskManager = new EventTaskManager() {
 
             /**
@@ -131,6 +137,7 @@ public class DefaultEventService extends EventServiceAdapter
 				 throw new IllegalStateException("The EventAdmin is shutdown");
 			}
         };
+        }
     }
 
     public Integer getCacheSize() {
