@@ -150,6 +150,13 @@ public class XMLParser
         this.document = createDocument(new InputSource(inputStream));
         this.namespacePrefix = namespacePrefix;
     }
+    
+    public XMLParser(InputSource inputsource, boolean validation, Map<String, Object> variables, EntityResolver entityResolver,String namespacePrefix)
+    {
+        this(validation, variables, entityResolver);
+        this.document = createDocument(inputsource);
+        this.namespacePrefix = namespacePrefix;
+    }
 
     public XMLParser(Document document, boolean validation, Map<String, Object> variables, EntityResolver entityResolver)
     {
@@ -315,14 +322,17 @@ public class XMLParser
             builder.setEntityResolver(entityResolver);
             builder.setErrorHandler(new ErrorHandler() {
 
+                @Override
                 public void error(SAXParseException exception) throws SAXException {
                     throw exception;
                 }
 
+                @Override
                 public void fatalError(SAXParseException exception) throws SAXException {
                     throw exception;
                 }
 
+                @Override
                 public void warning(SAXParseException exception) throws SAXException {
                 }
             });
@@ -352,18 +362,21 @@ public class XMLParser
               this.ns = ns;
         }
 
+        @Override
         public String getNamespaceURI(String prefix) {
               if (prefix.equals(prefix))
                     return ns;
               return null;
         }
 
+        @Override
         public String getPrefix(String namespaceURI) {
               if (namespaceURI.equals(ns))
                     return prefix;
               return prefix;
         }
 
+        @Override
         public Iterator<String> getPrefixes(String namespaceURI) {
               return Arrays.asList(prefix).iterator();
         }

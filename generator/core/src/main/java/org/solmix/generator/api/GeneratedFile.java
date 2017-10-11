@@ -39,7 +39,7 @@ public abstract class GeneratedFile {
     /**
      * Returns the entire contents of the generated file. Clients
      * can simply save the value returned from this method as the file contents.
-     * Subclasses such as @see org.mybatis.generator.api.GeneratedJavaFile offer
+     * Subclasses such as @see org.solmix.generator.api.GeneratedJavaFile offer
      * more fine grained access to file parts, but still implement this method
      * in the event that the entire contents are desired.
      * 

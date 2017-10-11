@@ -12,6 +12,6 @@
   <name>Generator Tools Parent Pom</name>
   <modules>
   	<module>core</module>
-  	<module>solmix-generator-plugin</module>
+  	<module>plugin</module>
   </modules>
 </project>

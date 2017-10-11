@@ -17,6 +17,7 @@ package org.solmix.generator.ant;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.solmix.generator.internal.NullProgressCallback;
 
 /**
  * This callback logs progress messages with the Ant logger.
@@ -46,7 +47,7 @@ public class AntProgressCallback extends NullProgressCallback {
     }
 
     /* (non-Javadoc)
-     * @see org.mybatis.generator.internal.NullProgressCallback#startTask(java.lang.String)
+     * @see org.solmix.generator.internal.NullProgressCallback#startTask(java.lang.String)
      */
     @Override
     public void startTask(String subTaskName) {

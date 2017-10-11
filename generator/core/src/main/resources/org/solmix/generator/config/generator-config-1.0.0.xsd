@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.solmix.org/schema/generator-datax/v1.0.0" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.solmix.org/schema/generator-datax/v1.0.0">
+
+    <element name="configuration" type="tns:ConfigurationType"></element>
+
+
+    <complexType name="ConfigurationType">
+    	<sequence>
+    		<choice minOccurs="0" maxOccurs="unbounded"><element name="properties" type="tns:propertiesType" minOccurs="0" maxOccurs="1">
+    		</element><element name="domain" type="tns:domainType" minOccurs="1" maxOccurs="unbounded">
+    		</element><element name="classPathEntry" type="tns:classPathEntryType" minOccurs="0" maxOccurs="unbounded">
+    		</element></choice>
+    	</sequence>
+    </complexType>
+
+    <complexType name="propertiesType">
+    	<attribute name="resource" type="string"></attribute>
+    	<attribute name="url" type="string"></attribute>
+    </complexType>
+
+    <complexType name="classPathEntryType">
+    	<attribute name="location" type="string"></attribute>
+    </complexType>
+
+    <complexType name="domainType">
+    	<sequence>
+    		<choice minOccurs="0" maxOccurs="unbounded">
+    			<element name="property" type="tns:commonType"
+    				minOccurs="0" maxOccurs="unbounded">
+    			</element>
+    			<element name="plugin" type="tns:commonType"
+    				minOccurs="0" maxOccurs="unbounded">
+    			</element>
+    			<element name="commentGenerator"
+    				type="tns:commonType">
+    			</element>
+    			<element name="jdbcConnection"
+    				type="tns:jdbcConnectionType">
+    			</element>
+    			<element name="connectionFactory"
+    				type="tns:commonType">
+    			</element>
+    			<element name="javaModelGenerator"
+    				type="tns:javaModelGeneratorType">
+    			</element>
+    			<element name="javaTypeResolver"
+    				type="tns:commonType">
+    			</element>
+    			<element name="javaClientGenerator"
+    				type="tns:javaClientGeneratorType">
+    			</element>
+    			<element name="sqlMapGenerator"
+    				type="tns:sqlMapGeneratorType">
+    			</element>
+    			<element name="dataxGenerator"
+    				type="tns:dataxGeneratorType">
+    			</element>
+    			<element name="sqlGenerator"
+    				type="tns:sqlGeneratorType">
+    			</element>
+    			<element name="table" type="tns:tableType"></element>
+    		</choice>
+    		<element name="NewElement" type="string"></element>
+    	</sequence>
+    	<attribute name="id" type="string"></attribute>
+    	<attribute name="targetRuntime" type="string"></attribute>
+    	<attribute name="introspectedColumnImpl" type="string"></attribute>
+    	<attribute name="modelType" type="string"></attribute>
+    </complexType>
+
+    <complexType name="commonType">
+    	<sequence>
+    		<element name="property" type="tns:propertyType"></element>
+    	</sequence>
+    	<attribute name="type" type="string"></attribute>
+    </complexType>
+    
+
+
+    <complexType name="jdbcConnectionType">
+    	<sequence>
+    		<element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="driverClass" type="string"></attribute>
+    	<attribute name="connectionURL" type="string"></attribute>
+    	<attribute name="userId" type="string"></attribute>
+    	<attribute name="password" type="string"></attribute>
+    </complexType>
+
+    <complexType name="javaModelGeneratorType">
+    	<sequence>
+    		<element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="targetProject" type="string"></attribute>
+    </complexType>
+
+    <complexType name="propertyType">
+    	<attribute name="name" type="string"></attribute>
+    	<attribute name="value" type="string"></attribute>
+    </complexType>
+
+    <complexType name="javaClientGeneratorType">
+    	<sequence>
+    		<element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="type" type="string"></attribute>
+    	<attribute name="targetProject" type="string"></attribute>
+    	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="implementationPackage" type="string"></attribute>
+    </complexType>
+
+    <complexType name="sqlMapGeneratorType">
+    	<sequence>
+    		<element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="targetProject" type="string"></attribute>
+    </complexType>
+
+    <complexType name="dataxGeneratorType">
+    	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="targetProject" type="string"></attribute>
+    </complexType>
+
+    <complexType name="tableType">
+    	<sequence>
+    		<choice minOccurs="0" maxOccurs="unbounded">
+    			<element name="property" type="tns:propertyType"></element>
+    			<element name="column" type="tns:columnType"></element>
+    			<element name="columnRenamingRule"
+    				type="tns:ruleType">
+    			</element>
+    			<element name="columnIgnoreRule"
+    				type="tns:ignoreRuleType">
+    			</element>
+    			<element name="domainObjectRenamingRule"
+    				type="tns:ruleType">
+    			</element>
+    		</choice>
+    	</sequence>
+    	<attribute name="mapperName" type="string"></attribute>
+    	<attribute name="catalog" type="string"></attribute>
+    	<attribute name="schema" type="string"></attribute>
+    	<attribute name="tableName" type="string"></attribute>
+    	<attribute name="domainObjectName" type="string"></attribute>
+    	<attribute name="alias" type="string"></attribute>
+    	<attribute name="enableInsert" type="string"></attribute>
+    	<attribute name="enableSelectByPrimaryKey" type="string"></attribute>
+    	<attribute name="enableUpdateByPrimaryKey" type="string"></attribute>
+    	<attribute name="enableDeleteByPrimaryKey" type="string"></attribute>
+    	<attribute name="escapeWildcards" type="string"></attribute>
+    </complexType>
+
+    <complexType name="sqlGeneratorType">
+    	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="targetProject" type="string"></attribute>
+    </complexType>
+
+    <complexType name="columnType">
+    	<attribute name="property" type="string"></attribute>
+    	<attribute name="javaType" type="string"></attribute>
+    	<attribute name="jdbcType" type="string"></attribute>
+    	<attribute name="typeHandler" type="string"></attribute>
+    	<attribute name="delimitedColumnName" type="string"></attribute>
+    	<attribute name="override" type="boolean"></attribute>
+    	<attribute name="ignore" type="boolean"></attribute>
+    </complexType>
+
+    <complexType name="ruleType">
+    	<attribute name="searchString" type="string"></attribute>
+    	<attribute name="replaceString" type="string"></attribute>
+    </complexType>
+
+    <complexType name="ignoreRuleType">
+    	<attribute name="pattern" type="string"></attribute>
+    </complexType>
+</schema>

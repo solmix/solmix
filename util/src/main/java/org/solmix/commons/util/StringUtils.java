@@ -44,7 +44,9 @@ public final class StringUtils
             return true;
         return false;
     }
-
+    public static boolean stringHasValue(String s) {
+        return s != null && s.length() > 0;
+    }
     /**
      * is empty string.
      * 
