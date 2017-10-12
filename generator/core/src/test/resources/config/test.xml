@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.solmix.org/schema/generator-datax/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.solmix.org/schema/generator-datax/v1.0.0 http://www.solmix.org/schema/generator-datax/v1.0.0 ">
+
+
+	<!--comment -->
+	<domain id="aaa">
+		
+	</domain>
+
+</configuration>
+
+
