@@ -56,7 +56,7 @@ public class FluentBuilderMethodsPlugin extends PluginAdapter {
         fluentMethod.getParameters().addAll(method.getParameters());
          
 
-        context.getCommentGenerator().addGeneralMethodComment(fluentMethod,
+        domain.getCommentGenerator().addGeneralMethodComment(fluentMethod,
                 introspectedTable);
         StringBuilder sb = new StringBuilder()
                 .append("this.") //$NON-NLS-1$

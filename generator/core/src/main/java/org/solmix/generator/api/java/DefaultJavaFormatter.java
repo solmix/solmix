@@ -35,6 +35,6 @@ public class DefaultJavaFormatter implements JavaFormatter {
 
     @Override
     public void setDomain(DomainInfo context) {
-        this.context = context;
+        this.domain=domain;
     }
 }

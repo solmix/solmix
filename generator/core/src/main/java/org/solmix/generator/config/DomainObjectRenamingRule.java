@@ -20,8 +20,8 @@ import static org.solmix.generator.util.Messages.getString;
 
 import java.util.List;
 
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.XmlElement;
 
 
 /**

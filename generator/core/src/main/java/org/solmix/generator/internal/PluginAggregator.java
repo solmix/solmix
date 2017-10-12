@@ -28,8 +28,8 @@ import org.solmix.generator.api.java.Field;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.config.Context;
 
 /**
@@ -56,7 +56,7 @@ public final class PluginAggregator implements Plugin {
     }
 
     @Override
-    public void setContext(Context context) {
+    public void setDomain(DomainInfo domain) {
         throw new UnsupportedOperationException();
     }
 

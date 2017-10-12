@@ -15,8 +15,8 @@
  */
 package org.solmix.generator.plugin;
 
-import static org.solmix.generator.internal.util.JavaBeansUtil.getGetterMethodName;
-import static org.solmix.generator.internal.util.StringUtility.isTrue;
+import static org.solmix.commons.util.DataUtils.asBoolean;
+import static org.solmix.generator.util.JavaBeansUtil.getGetterMethodName;
 
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +24,8 @@ import java.util.Properties;
 
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.IntrospectedTable;
-import org.solmix.generator.api.PluginAdapter;
 import org.solmix.generator.api.OutputUtilities;
+import org.solmix.generator.api.PluginAdapter;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.JavaVisibility;
 import org.solmix.generator.api.java.Method;
@@ -54,7 +54,7 @@ public class EqualsHashCodePlugin extends PluginAdapter {
     @Override
     public void setProperties(Properties properties) {
         super.setProperties(properties);
-        useEqualsHashCodeFromRoot = isTrue(properties.getProperty("useEqualsHashCodeFromRoot"));
+        useEqualsHashCodeFromRoot = asBoolean(properties.getProperty("useEqualsHashCodeFromRoot"));
     }
 
     /**
@@ -135,7 +135,7 @@ public class EqualsHashCodePlugin extends PluginAdapter {
             method.addAnnotation("@Override"); //$NON-NLS-1$
         }
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         method.addBodyLine("if (this == that) {"); //$NON-NLS-1$
@@ -244,7 +244,7 @@ public class EqualsHashCodePlugin extends PluginAdapter {
             method.addAnnotation("@Override"); //$NON-NLS-1$
         }
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         method.addBodyLine("final int prime = 31;"); //$NON-NLS-1$

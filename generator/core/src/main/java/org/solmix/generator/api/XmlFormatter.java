@@ -15,7 +15,7 @@
  */
 package org.solmix.generator.api;
 
-import org.solmix.generator.api.xml.Document;
+import org.solmix.commons.xml.dom.Document;
 import org.solmix.generator.config.DomainInfo;
 
 

@@ -22,7 +22,7 @@ import org.solmix.generator.api.ProgressCallback;
 import org.solmix.generator.config.Context;
 
 public abstract class AbstractGenerator {
-    protected Context context;
+    protected DomainInfo domain;
     protected IntrospectedTable introspectedTable;
     protected List<String> warnings;
     protected ProgressCallback progressCallback;
@@ -31,12 +31,12 @@ public abstract class AbstractGenerator {
         super();
     }
 
-    public Context getContext() {
-        return context;
+    public DomainInfo getDomain() {
+        return domain;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
 
     public IntrospectedTable getIntrospectedTable() {

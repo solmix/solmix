@@ -15,12 +15,6 @@
  */
 package org.solmix.generator.internal.db;
 
-import static org.solmix.generator.internal.util.JavaBeansUtil.getCamelCaseString;
-import static org.solmix.generator.internal.util.JavaBeansUtil.getValidPropertyName;
-import static org.solmix.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.solmix.generator.internal.util.StringUtility.isTrue;
-import static org.solmix.generator.internal.util.StringUtility.stringContainsSQLWildcard;
-import static org.solmix.generator.internal.util.StringUtility.stringContainsSpace;
 import static org.solmix.commons.util.StringUtils.stringHasValue;
 import static org.solmix.generator.util.Messages.getString;
 
@@ -38,20 +32,21 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.solmix.commons.util.DataUtils;
 import org.solmix.generator.api.FullyQualifiedTable;
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.JavaTypeResolver;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.JavaReservedWords;
-import org.solmix.generator.config.ColumnOverride;
-import org.solmix.generator.config.Context;
+import org.solmix.generator.config.DomainInfo;
 import org.solmix.generator.config.GeneratedKey;
 import org.solmix.generator.config.PropertyRegistry;
-import org.solmix.generator.config.TableConfiguration;
+import org.solmix.generator.config.TableInfo;
 import org.solmix.generator.internal.ObjectFactory;
-import org.solmix.generator.logging.Log;
-import org.solmix.generator.logging.LogFactory;
+import org.solmix.generator.util.Utils;
 
 /**
  * @author Jeff Butler
@@ -64,19 +59,19 @@ public class DatabaseIntrospector {
 
     private List<String> warnings;
 
-    private Context context;
+    private DomainInfo domain;
 
-    private Log logger;
+    private Logger logger;
 
-    public DatabaseIntrospector(Context context,
+    public DatabaseIntrospector(DomainInfo domain,
             DatabaseMetaData databaseMetaData,
             JavaTypeResolver javaTypeResolver, List<String> warnings) {
         super();
-        this.context = context;
+        this.domain=domain;
         this.databaseMetaData = databaseMetaData;
         this.javaTypeResolver = javaTypeResolver;
         this.warnings = warnings;
-        logger = LogFactory.getLog(getClass());
+        logger =LoggerFactory.getLogger(getClass());
     }
 
     private void calculatePrimaryKey(FullyQualifiedTable table,
@@ -125,7 +120,7 @@ public class DatabaseIntrospector {
 
     private void reportIntrospectionWarnings(
             IntrospectedTable introspectedTable,
-            TableConfiguration tableConfiguration, FullyQualifiedTable table) {
+            TableInfo tableConfiguration, FullyQualifiedTable table) {
         // make sure that every column listed in column overrides
         // actually exists in the table
         for (ColumnOverride columnOverride : tableConfiguration
@@ -172,7 +167,7 @@ public class DatabaseIntrospector {
      * @throws SQLException
      *             if any errors in introspection
      */
-    public List<IntrospectedTable> introspectTables(TableConfiguration tc)
+    public List<IntrospectedTable> introspectTables(TableInfo tc)
             throws SQLException {
 
         // get the raw columns from the DB
@@ -226,7 +221,7 @@ public class DatabaseIntrospector {
         return introspectedTables;
     }
 
-    private void removeIgnoredColumns(TableConfiguration tc,
+    private void removeIgnoredColumns(TableInfo tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
@@ -248,7 +243,7 @@ public class DatabaseIntrospector {
         }
     }
 
-    private void calculateExtraColumnInformation(TableConfiguration tc,
+    private void calculateExtraColumnInformation(TableInfo tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         StringBuilder sb = new StringBuilder();
         Pattern pattern = null;
@@ -273,7 +268,7 @@ public class DatabaseIntrospector {
                     calculatedColumnName = matcher.replaceAll(replaceString);
                 }
 
-                if (isTrue(tc
+                if (DataUtils.asBoolean(tc
                         .getProperty(PropertyRegistry.TABLE_USE_ACTUAL_COLUMN_NAMES))) {
                     introspectedColumn.setJavaProperty(
                             getValidPropertyName(calculatedColumnName));
@@ -331,7 +326,7 @@ public class DatabaseIntrospector {
                     }
                 }
 
-                if (context.autoDelimitKeywords()
+                if (domain.autoDelimitKeywords()
                         && SqlReservedWords.containsWord(introspectedColumn
                             .getActualColumnName())) {
                     introspectedColumn.setColumnNameDelimited(true);
@@ -344,7 +339,7 @@ public class DatabaseIntrospector {
         }
     }
 
-    private void calculateIdentityColumns(TableConfiguration tc,
+    private void calculateIdentityColumns(TableInfo tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         GeneratedKey gk = tc.getGeneratedKey();
         if (gk == null) {
@@ -376,7 +371,7 @@ public class DatabaseIntrospector {
         }
     }
 
-    private void applyColumnOverrides(TableConfiguration tc,
+    private void applyColumnOverrides(TableInfo tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         for (Map.Entry<ActualTableName, List<IntrospectedColumn>> entry : columns
                 .entrySet()) {
@@ -432,7 +427,7 @@ public class DatabaseIntrospector {
     }
 
     private Map<ActualTableName, List<IntrospectedColumn>> getColumns(
-            TableConfiguration tc) throws SQLException {
+            TableInfo tc) throws SQLException {
         String localCatalog;
         String localSchema;
         String localTableName;
@@ -501,7 +496,7 @@ public class DatabaseIntrospector {
                 new HashMap<ActualTableName, List<IntrospectedColumn>>();
 
         if (logger.isDebugEnabled()) {
-            String fullTableName = composeFullyQualifiedTableName(localCatalog, localSchema,
+            String fullTableName = TableInfo.composeFullyQualifiedTableName(localCatalog, localSchema,
                             localTableName, '.');
             logger.debug(getString("Tracing.1", fullTableName)); //$NON-NLS-1$
         }
@@ -524,7 +519,7 @@ public class DatabaseIntrospector {
 
         while (rs.next()) {
             IntrospectedColumn introspectedColumn = ObjectFactory
-                    .createIntrospectedColumn(context);
+                    .createIntrospectedColumn(domain);
 
             introspectedColumn.setTableAlias(tc.getAlias());
             introspectedColumn.setJdbcType(rs.getInt("DATA_TYPE")); //$NON-NLS-1$
@@ -571,8 +566,8 @@ public class DatabaseIntrospector {
         closeResultSet(rs);
 
         if (answer.size() > 1
-                && !stringContainsSQLWildcard(localSchema)
-                && !stringContainsSQLWildcard(localTableName)) {
+                && !Utils.stringContainsSQLWildcard(localSchema)
+                && !Utils.stringContainsSQLWildcard(localTableName)) {
             // issue a warning if there is more than one table and
             // no wildcards were used
             ActualTableName inputAtn = new ActualTableName(tc.getCatalog(), tc
@@ -595,9 +590,11 @@ public class DatabaseIntrospector {
 
         return answer;
     }
-
+    public static boolean stringContainsSpace(String s) {
+        return s != null && s.indexOf(' ') != -1;
+    }
     private List<IntrospectedTable> calculateIntrospectedTables(
-            TableConfiguration tc,
+            TableInfo tc,
             Map<ActualTableName, List<IntrospectedColumn>> columns) {
         boolean delimitIdentifiers = tc.isDelimitIdentifiers()
                 || stringContainsSpace(tc.getCatalog())
@@ -623,16 +620,16 @@ public class DatabaseIntrospector {
                     atn.getTableName(),
                     tc.getDomainObjectName(),
                     tc.getAlias(),
-                    isTrue(tc.getProperty(PropertyRegistry.TABLE_IGNORE_QUALIFIERS_AT_RUNTIME)),
+                    DataUtils.asBoolean(tc.getProperty(PropertyRegistry.TABLE_IGNORE_QUALIFIERS_AT_RUNTIME)),
                     tc.getProperty(PropertyRegistry.TABLE_RUNTIME_CATALOG),
                     tc.getProperty(PropertyRegistry.TABLE_RUNTIME_SCHEMA),
                     tc.getProperty(PropertyRegistry.TABLE_RUNTIME_TABLE_NAME),
                     delimitIdentifiers,
                     tc.getDomainObjectRenamingRule(),
-                    context);
+                    domain);
 
             IntrospectedTable introspectedTable = ObjectFactory
-                    .createIntrospectedTable(tc, table, context);
+                    .createIntrospectedTable(tc, table, domain);
 
             for (IntrospectedColumn introspectedColumn : entry.getValue()) {
                 introspectedTable.addColumn(introspectedColumn);

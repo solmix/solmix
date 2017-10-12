@@ -18,9 +18,9 @@ package org.solmix.generator.codegen.mybatis.xmlmapper;
 import static org.solmix.generator.util.Messages.getString;
 
 import org.solmix.generator.api.FullyQualifiedTable;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.codegen.AbstractXmlGenerator;
 import org.solmix.generator.codegen.XmlConstants;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.AbstractXmlElementGenerator;

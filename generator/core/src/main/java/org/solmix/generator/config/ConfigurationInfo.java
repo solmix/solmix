@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.solmix.commons.util.StringUtils;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 
 
 public class ConfigurationInfo
@@ -27,14 +30,14 @@ public class ConfigurationInfo
 
         for (String classPathEntry : classPathEntries) {
             if (!StringUtils.isEmail(classPathEntry)) {
-                errors.add("classPathEntry is empty"); //$NON-NLS-1$
+                errors.add("classPathEntry is empty"); 
                 // only need to state this error once
                 break;
             }
         }
 
         if (domains.size() == 0) {
-            errors.add("no <domain>"); //$NON-NLS-1$
+            errors.add("no <domain>"); 
         } else {
             for (DomainInfo context : domains) {
                 context.validate(errors);
@@ -54,7 +57,7 @@ public class ConfigurationInfo
     public List<DomainInfo> getDomains() {
         return domains;
     }
-
+    
     /**
      * Adds the context.
      *
@@ -80,5 +83,24 @@ public class ConfigurationInfo
         }
 
         return null;
+    }
+    
+    public Document toDocument() {
+        Document document = new Document( GeneratorEntityResolver.ID,GeneratorEntityResolver.ID);
+    XmlElement rootElement = new XmlElement("configuration"); 
+    document.setRootElement(rootElement);
+
+    for (String classPathEntry : classPathEntries) {
+        XmlElement cpeElement = new XmlElement("classPathEntry"); 
+        cpeElement.addAttribute(new Attribute("location", classPathEntry)); 
+        rootElement.addElement(cpeElement);
+    }
+
+    for (DomainInfo context : domains) {
+        rootElement.addElement(context.toXmlElement());
+    }
+
+    return document;
+        
     }
 }

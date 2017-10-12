@@ -15,11 +15,10 @@
  */
 package org.solmix.generator.plugin;
 
-import static org.solmix.generator.internal.util.StringUtility.isTrue;
-
 import java.util.List;
 import java.util.Properties;
 
+import org.solmix.commons.util.DataUtils;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.PluginAdapter;
 import org.solmix.generator.api.java.Field;
@@ -35,7 +34,7 @@ public class ToStringPlugin extends PluginAdapter {
     @Override
     public void setProperties(Properties properties) {
         super.setProperties(properties);
-        useToStringFromRoot = isTrue(properties.getProperty("useToStringFromRoot"));
+        useToStringFromRoot = DataUtils.asBoolean(properties.getProperty("useToStringFromRoot"));
     }
 
     @Override
@@ -74,7 +73,7 @@ public class ToStringPlugin extends PluginAdapter {
             method.addAnnotation("@Override"); //$NON-NLS-1$
         }
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         method.addBodyLine("StringBuilder sb = new StringBuilder();"); //$NON-NLS-1$

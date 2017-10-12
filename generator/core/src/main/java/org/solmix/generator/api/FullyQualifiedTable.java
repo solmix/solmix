@@ -20,6 +20,7 @@ import static org.solmix.commons.util.StringUtils.stringHasValue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.solmix.generator.config.DomainInfo;
 import org.solmix.generator.config.DomainObjectRenamingRule;
 
 /**
@@ -93,7 +94,7 @@ public class FullyQualifiedTable {
             boolean ignoreQualifiersAtRuntime, String runtimeCatalog,
             String runtimeSchema, String runtimeTableName,
             boolean delimitIdentifiers, DomainObjectRenamingRule domainObjectRenamingRule,
-            Context context) {
+            DomainInfo context) {
         super();
         this.introspectedCatalog = introspectedCatalog;
         this.introspectedSchema = introspectedSchema;

@@ -22,8 +22,9 @@ import org.solmix.generator.api.java.Field;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.config.DomainInfo;
 
 /**
  * This interface defines methods that will be called at different times during
@@ -78,7 +79,7 @@ public interface Plugin {
      * @param context
      *            the new context
      */
-    void setContext(Context context);
+    void setDomain(DomainInfo domain);
 
     /**
      * Set properties from the plugin configuration.

@@ -19,6 +19,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
+import org.solmix.generator.config.DomainInfo;
 
 /**
  * This class holds information about an introspected column. The class has
@@ -51,7 +52,7 @@ public class IntrospectedColumn {
 
     protected String typeHandler;
 
-    protected Context context;
+    protected DomainInfo domain;
 
     protected boolean isColumnNameDelimited;
 
@@ -146,10 +147,12 @@ public class IntrospectedColumn {
 
     public void setActualColumnName(String actualColumnName) {
         this.actualColumnName = actualColumnName;
-        isColumnNameDelimited = StringUtility
-                .stringContainsSpace(actualColumnName);
+        isColumnNameDelimited = stringContainsSpace(actualColumnName);
     }
-
+    
+    public static boolean stringContainsSpace(String s) {
+        return s != null && s.indexOf(' ') != -1;
+    }
     /**
      * @return Returns the identity.
      */
@@ -267,12 +270,12 @@ public class IntrospectedColumn {
         this.tableAlias = tableAlias;
     }
 
-    public Context getContext() {
-        return context;
+    public DomainInfo getDomain() {
+        return domain;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
 
     public IntrospectedTable getIntrospectedTable() {

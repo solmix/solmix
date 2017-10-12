@@ -19,9 +19,9 @@ import java.util.Iterator;
 
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.OutputUtilities;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.TextElement;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.TextElement;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.codegen.mybatis.ListUtilities;
 import org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities;
 

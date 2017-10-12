@@ -15,6 +15,7 @@
  */
 package org.solmix.generator.api.xml;
 
+import org.solmix.commons.xml.dom.Document;
 import org.solmix.generator.api.XmlFormatter;
 import org.solmix.generator.config.DomainInfo;
 
@@ -26,7 +27,7 @@ import org.solmix.generator.config.DomainInfo;
  *
  */
 public class DefaultXmlFormatter implements XmlFormatter {
-    protected DomainInfo context;
+    protected DomainInfo domain;
 
     @Override
     public String getFormattedContent(Document document) {
@@ -34,7 +35,7 @@ public class DefaultXmlFormatter implements XmlFormatter {
     }
 
     @Override
-    public void setDomain(DomainInfo context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
 }

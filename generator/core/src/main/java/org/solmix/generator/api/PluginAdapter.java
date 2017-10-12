@@ -22,8 +22,9 @@ import org.solmix.generator.api.java.Field;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.config.DomainInfo;
 
 /**
  * This class includes no-operation methods for almost every method in the
@@ -37,21 +38,24 @@ import org.solmix.generator.api.xml.XmlElement;
  * 
  */
 public abstract class PluginAdapter implements Plugin {
-    protected Context context;
+    protected DomainInfo domain;
     protected Properties properties;
 
     public PluginAdapter() {
         properties = new Properties();
     }
 
-    public Context getContext() {
-        return context;
+    public DomainInfo getDomain() {
+        return domain;
     }
+   
 
     @Override
-    public void setContext(Context context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
+    
+ 
 
     public Properties getProperties() {
         return properties;

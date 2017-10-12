@@ -29,9 +29,9 @@ import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.Parameter;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 
 /**
  * This plugin will add selectByExample methods that include rowBounds

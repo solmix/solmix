@@ -15,7 +15,7 @@ public abstract class TypedPropertyHolder extends PropertyHolder {
         super();
     }
 
-    public String getConfigurationType() {
+    public String getType() {
         return type;
     }
 

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
+import org.solmix.generator.config.DomainInfo;
 
 /**
  * This interface describes methods that are required in any Java type resolver.
@@ -47,7 +48,7 @@ public interface JavaTypeResolver {
      * @param context
      *            The current Context
      */
-    void setContext(Context context);
+    void setDomain(DomainInfo domain);
 
     /**
      * The generator will supply a list to this method. The implementation class may add strings to the list that will

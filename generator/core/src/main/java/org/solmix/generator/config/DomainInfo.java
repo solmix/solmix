@@ -1,3 +1,4 @@
+
 package org.solmix.generator.config;
 
 import static org.solmix.commons.util.StringUtils.isEmpty;
@@ -8,20 +9,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.solmix.commons.util.DataUtils;
 import org.solmix.generator.api.CommentGenerator;
+import org.solmix.generator.api.ConnectionFactory;
+import org.solmix.generator.api.GeneratedJavaFile;
+import org.solmix.generator.api.GeneratedXmlFile;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.JavaFormatter;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.generator.api.JavaTypeResolver;
+import org.solmix.generator.api.Plugin;
+import org.solmix.generator.api.ProgressCallback;
+import org.solmix.generator.api.XmlFormatter;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.internal.JdbcConnectionFactory;
 import org.solmix.generator.internal.ObjectFactory;
 import org.solmix.generator.internal.PluginAggregator;
-import org.solmix.generator.internal.XmlFormatter;
-
+import org.solmix.generator.internal.db.DatabaseIntrospector;
 
 public class DomainInfo extends PropertyHolder
 {
+
     private String id;
 
     private JdbcConnectionInfo jdbcConnectionInfo;
@@ -75,6 +85,7 @@ public class DomainInfo extends PropertyHolder
         tableInfos = new ArrayList<TableInfo>();
         pluginInfos = new ArrayList<PluginInfo>();
     }
+
     public void addTableInfo(TableInfo tc) {
         tableInfos.add(tc);
     }
@@ -99,8 +110,7 @@ public class DomainInfo extends PropertyHolder
         return sqlMapGeneratorInfo;
     }
 
-    public void addPluginInfo(
-            PluginInfo pluginInfo) {
+    public void addPluginInfo(PluginInfo pluginInfo) {
         pluginInfos.add(pluginInfo);
     }
 
@@ -108,17 +118,17 @@ public class DomainInfo extends PropertyHolder
      * This method does a simple validate, it makes sure that all required fields have been filled in. It does not do
      * any more complex operations such as validating that database tables exist or validating that named columns exist
      *
-     * @param errors
-     *            the errors
+     * @param errors the errors
      */
     public void validate(List<String> errors) {
         if (isEmpty(id)) {
             errors.add("domain id is empty"); //$NON-NLS-1$
         }
 
-       /* if (jdbcConnectionInfo == null && connectionFactoryInfo == null) {
-            errors.add(getString("ValidationError.10", id)); //$NON-NLS-1$
-        } else*/ 
+        /*
+         * if (jdbcConnectionInfo == null && connectionFactoryInfo == null) { errors.add(getString("ValidationError.10",
+         * id)); //$NON-NLS-1$ } else
+         */
         if (jdbcConnectionInfo != null && connectionFactoryInfo != null) {
             // must not specify both
             errors.add("must not specify both jdbcConnection and connectionFactory");
@@ -176,28 +186,23 @@ public class DomainInfo extends PropertyHolder
         this.id = id;
     }
 
-    public void setJavaClientGeneratorInfo(
-            JavaClientGeneratorInfo javaClientGeneratorInfo) {
+    public void setJavaClientGeneratorInfo(JavaClientGeneratorInfo javaClientGeneratorInfo) {
         this.javaClientGeneratorInfo = javaClientGeneratorInfo;
     }
 
-    public void setJavaModelGeneratorInfo(
-            JavaModelGeneratorInfo javaModelGeneratorInfo) {
+    public void setJavaModelGeneratorInfo(JavaModelGeneratorInfo javaModelGeneratorInfo) {
         this.javaModelGeneratorInfo = javaModelGeneratorInfo;
     }
 
-    public void setJavaTypeResolverInfo(
-            JavaTypeResolverInfo javaTypeResolverInfo) {
+    public void setJavaTypeResolverInfo(JavaTypeResolverInfo javaTypeResolverInfo) {
         this.javaTypeResolverInfo = javaTypeResolverInfo;
     }
 
-    public void setJdbcConnectionInfo(
-            JdbcConnectionInfo jdbcConnectionInfo) {
+    public void setJdbcConnectionInfo(JdbcConnectionInfo jdbcConnectionInfo) {
         this.jdbcConnectionInfo = jdbcConnectionInfo;
     }
 
-    public void setSqlMapGeneratorInfo(
-            SqlMapGeneratorInfo sqlMapGeneratorInfo) {
+    public void setSqlMapGeneratorInfo(SqlMapGeneratorInfo sqlMapGeneratorInfo) {
         this.sqlMapGeneratorInfo = sqlMapGeneratorInfo;
     }
 
@@ -206,30 +211,26 @@ public class DomainInfo extends PropertyHolder
     }
 
     /**
-     * Builds an XmlElement representation of this context. Note that the XML
-     * may not necessarily validate if the context is invalid. Call the
-     * <code>validate</code> method to check validity of this context.
+     * Builds an XmlElement representation of this context. Note that the XML may not necessarily validate if the
+     * context is invalid. Call the <code>validate</code> method to check validity of this context.
      * 
      * @return the XML representation of this context
      */
     public XmlElement toXmlElement() {
-        XmlElement xmlElement = new XmlElement("context"); //$NON-NLS-1$
+        XmlElement xmlElement = new XmlElement("domain"); //$NON-NLS-1$
 
         xmlElement.addAttribute(new Attribute("id", id)); //$NON-NLS-1$
 
         if (defaultModelType != ModelType.CONDITIONAL) {
-            xmlElement.addAttribute(new Attribute(
-                    "defaultModelType", defaultModelType.getModelType())); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("defaultModelType", defaultModelType.getModelType())); //$NON-NLS-1$
         }
 
         if (stringHasValue(introspectedColumnImpl)) {
-            xmlElement.addAttribute(new Attribute(
-                    "introspectedColumnImpl", introspectedColumnImpl)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("introspectedColumnImpl", introspectedColumnImpl)); //$NON-NLS-1$
         }
 
         if (stringHasValue(targetRuntime)) {
-            xmlElement.addAttribute(new Attribute(
-                    "targetRuntime", targetRuntime)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("targetRuntime", targetRuntime)); //$NON-NLS-1$
         }
 
         addPropertyXmlElements(xmlElement);
@@ -255,7 +256,7 @@ public class DomainInfo extends PropertyHolder
         }
 
         if (javaModelGeneratorInfo != null) {
-            xmlElement.addElement(javaModelGeneratorInfo .toXmlElement());
+            xmlElement.addElement(javaModelGeneratorInfo.toXmlElement());
         }
 
         if (sqlMapGeneratorInfo != null) {
@@ -293,8 +294,7 @@ public class DomainInfo extends PropertyHolder
             beginningDelimiter = value;
         } else if (PropertyRegistry.CONTEXT_ENDING_DELIMITER.equals(name)) {
             endingDelimiter = value;
-        } else if (PropertyRegistry.CONTEXT_AUTO_DELIMIT_KEYWORDS.equals(name)
-                && stringHasValue(value)) {
+        } else if (PropertyRegistry.CONTEXT_AUTO_DELIMIT_KEYWORDS.equals(name) && stringHasValue(value)) {
             autoDelimitKeywords = DataUtils.asBooleanObject(value);
         }
     }
@@ -327,8 +327,7 @@ public class DomainInfo extends PropertyHolder
         return commentGeneratorInfo;
     }
 
-    public void setCommentGeneratorInfo(
-            CommentGeneratorInfo commentGeneratorInfo) {
+    public void setCommentGeneratorInfo(CommentGeneratorInfo commentGeneratorInfo) {
         this.commentGeneratorInfo = commentGeneratorInfo;
     }
 
@@ -379,36 +378,23 @@ public class DomainInfo extends PropertyHolder
     }
 
     /**
-     * Introspect tables based on the configuration specified in the
-     * constructor. This method is long running.
+     * Introspect tables based on the configuration specified in the constructor. This method is long running.
      * 
-     * @param callback
-     *            a progress callback if progress information is desired, or
-     *            <code>null</code>
-     * @param warnings
-     *            any warning generated from this method will be added to the
-     *            List. Warnings are always Strings.
-     * @param fullyQualifiedTableNames
-     *            a set of table names to generate. The elements of the set must
-     *            be Strings that exactly match what's specified in the
-     *            configuration. For example, if table name = "foo" and schema =
-     *            "bar", then the fully qualified table name is "foo.bar". If
-     *            the Set is null or empty, then all tables in the configuration
-     *            will be used for code generation.
+     * @param callback a progress callback if progress information is desired, or <code>null</code>
+     * @param warnings any warning generated from this method will be added to the List. Warnings are always Strings.
+     * @param fullyQualifiedTableNames a set of table names to generate. The elements of the set must be Strings that
+     *        exactly match what's specified in the configuration. For example, if table name = "foo" and schema =
+     *        "bar", then the fully qualified table name is "foo.bar". If the Set is null or empty, then all tables in
+     *        the configuration will be used for code generation.
      * 
-     * @throws SQLException
-     *             if some error arises while introspecting the specified
-     *             database tables.
-     * @throws InterruptedException
-     *             if the progress callback reports a cancel
+     * @throws SQLException if some error arises while introspecting the specified database tables.
+     * @throws InterruptedException if the progress callback reports a cancel
      */
-    public void introspectTables(ProgressCallback callback,
-            List<String> warnings, Set<String> fullyQualifiedTableNames)
-            throws SQLException, InterruptedException {
+    public void introspectTables(ProgressCallback callback, List<String> warnings, Set<String> fullyQualifiedTableNames) throws SQLException,
+        InterruptedException {
 
         introspectedTables = new ArrayList<IntrospectedTable>();
-        JavaTypeResolver javaTypeResolver = ObjectFactory
-                .createJavaTypeResolver(this, warnings);
+        JavaTypeResolver javaTypeResolver = ObjectFactory.createJavaTypeResolver(this, warnings);
 
         Connection connection = null;
 
@@ -416,16 +402,12 @@ public class DomainInfo extends PropertyHolder
             callback.startTask(getString("Progress.0")); //$NON-NLS-1$
             connection = getConnection();
 
-            DatabaseIntrospector databaseIntrospector = new DatabaseIntrospector(
-                    this, connection.getMetaData(), javaTypeResolver, warnings);
+            DatabaseIntrospector databaseIntrospector = new DatabaseIntrospector(this, connection.getMetaData(), javaTypeResolver, warnings);
 
             for (TableInfo tc : tableInfos) {
-                String tableName = composeFullyQualifiedTableName(tc.getCatalog(), tc
-                                .getSchema(), tc.getTableName(), '.');
+                String tableName = TableInfo.composeFullyQualifiedTableName(tc.getCatalog(), tc.getSchema(), tc.getTableName(), '.');
 
-                if (fullyQualifiedTableNames != null
-                        && fullyQualifiedTableNames.size() > 0
-                        && !fullyQualifiedTableNames.contains(tableName)) {
+                if (fullyQualifiedTableNames != null && fullyQualifiedTableNames.size() > 0 && !fullyQualifiedTableNames.contains(tableName)) {
                     continue;
                 }
 
@@ -435,8 +417,7 @@ public class DomainInfo extends PropertyHolder
                 }
 
                 callback.startTask(getString("Progress.1", tableName)); //$NON-NLS-1$
-                List<IntrospectedTable> tables = databaseIntrospector
-                        .introspectTables(tc);
+                List<IntrospectedTable> tables = databaseIntrospector.introspectTables(tc);
 
                 if (tables != null) {
                     introspectedTables.addAll(tables);
@@ -461,20 +442,17 @@ public class DomainInfo extends PropertyHolder
         return steps;
     }
 
-    public void generateFiles(ProgressCallback callback,
-            List<GeneratedJavaFile> generatedJavaFiles,
-            List<GeneratedXmlFile> generatedXmlFiles, List<String> warnings)
-            throws InterruptedException {
+    public void generateFiles(ProgressCallback callback, List<GeneratedJavaFile> generatedJavaFiles, List<GeneratedXmlFile> generatedXmlFiles,
+        List<String> warnings) throws InterruptedException {
 
         pluginAggregator = new PluginAggregator();
         for (PluginInfo pluginInfo : pluginInfos) {
-            Plugin plugin = ObjectFactory.createPlugin(this,
-                    pluginInfo);
+            Plugin plugin = ObjectFactory.createPlugin(this, pluginInfo);
             if (plugin.validate(warnings)) {
                 pluginAggregator.addPlugin(plugin);
             } else {
                 warnings.add(getString("Warning.24", //$NON-NLS-1$
-                        pluginInfo.getInfoType(), id));
+                    pluginInfo.getType(), id));
             }
         }
 
@@ -484,22 +462,16 @@ public class DomainInfo extends PropertyHolder
 
                 introspectedTable.initialize();
                 introspectedTable.calculateGenerators(warnings, callback);
-                generatedJavaFiles.addAll(introspectedTable
-                        .getGeneratedJavaFiles());
-                generatedXmlFiles.addAll(introspectedTable
-                        .getGeneratedXmlFiles());
+                generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
+                generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
 
-                generatedJavaFiles.addAll(pluginAggregator
-                        .contextGenerateAdditionalJavaFiles(introspectedTable));
-                generatedXmlFiles.addAll(pluginAggregator
-                        .contextGenerateAdditionalXmlFiles(introspectedTable));
+                generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles(introspectedTable));
+                generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles(introspectedTable));
             }
         }
 
-        generatedJavaFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalJavaFiles());
-        generatedXmlFiles.addAll(pluginAggregator
-                .contextGenerateAdditionalXmlFiles());
+        generatedJavaFiles.addAll(pluginAggregator.contextGenerateAdditionalJavaFiles());
+        generatedXmlFiles.addAll(pluginAggregator.contextGenerateAdditionalXmlFiles());
     }
 
     private Connection getConnection() throws SQLException {
@@ -524,8 +496,7 @@ public class DomainInfo extends PropertyHolder
     }
 
     public boolean autoDelimitKeywords() {
-        return autoDelimitKeywords != null
-                && autoDelimitKeywords.booleanValue();
+        return autoDelimitKeywords != null && autoDelimitKeywords.booleanValue();
     }
 
     public ConnectionFactoryInfo getConnectionFactoryInfo() {

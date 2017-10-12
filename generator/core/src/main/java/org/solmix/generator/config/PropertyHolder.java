@@ -18,8 +18,8 @@ package org.solmix.generator.config;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.XmlElement;
 
 public abstract class PropertyHolder {
     private Properties properties;

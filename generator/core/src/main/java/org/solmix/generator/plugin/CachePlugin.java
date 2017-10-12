@@ -17,12 +17,12 @@ package org.solmix.generator.plugin;
 
 import java.util.List;
 
+import org.solmix.commons.util.StringUtils;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.PluginAdapter;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.XmlElement;
-import org.solmix.generator.internal.util.StringUtility;
 
 /**
  * This plugin adds a cache element to generated sqlMaps.  This plugin
@@ -84,7 +84,7 @@ public class CachePlugin extends PluginAdapter {
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
 
         XmlElement element = new XmlElement("cache"); //$NON-NLS-1$
-        context.getCommentGenerator().addComment(element);
+        domain.getCommentGenerator().addComment(element);
 
         for (CacheProperty cacheProperty : CacheProperty.values()) {
             addAttributeIfExists(element, introspectedTable, cacheProperty);
@@ -97,12 +97,12 @@ public class CachePlugin extends PluginAdapter {
 
     private void addAttributeIfExists(XmlElement element, IntrospectedTable introspectedTable,
             CacheProperty cacheProperty) {
-        String property = introspectedTable.getTableConfigurationProperty(cacheProperty.getPropertyName());
+        String property = introspectedTable.getTableInfoProperty(cacheProperty.getPropertyName());
         if (property == null) {
             property = properties.getProperty(cacheProperty.getPropertyName());
         }
 
-        if (StringUtility.stringHasValue(property)) {
+        if (StringUtils.stringHasValue(property)) {
             element.addAttribute(new Attribute(cacheProperty.getAttributeName(), property));
         }
     }

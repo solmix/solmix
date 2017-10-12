@@ -23,7 +23,7 @@ import org.solmix.generator.api.java.InnerClass;
 import org.solmix.generator.api.java.InnerEnum;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.XmlElement;
 
 /**
  * Implementations of this interface are used to generate comments for the

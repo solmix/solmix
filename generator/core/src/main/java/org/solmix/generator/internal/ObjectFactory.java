@@ -16,14 +16,32 @@
 package org.solmix.generator.internal;
 
 import static org.solmix.commons.util.StringUtils.isEmpty;
+import static org.solmix.commons.util.StringUtils.stringHasValue;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.solmix.generator.api.CommentGenerator;
+import org.solmix.generator.api.ConnectionFactory;
+import org.solmix.generator.api.FullyQualifiedTable;
+import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.JavaFormatter;
+import org.solmix.generator.api.JavaTypeResolver;
+import org.solmix.generator.api.Plugin;
+import org.solmix.generator.api.XmlFormatter;
+import org.solmix.generator.api.java.DefaultJavaFormatter;
+import org.solmix.generator.api.xml.DefaultXmlFormatter;
+import org.solmix.generator.codegen.mybatis.IntrospectedTableMyBatis3Impl;
+import org.solmix.generator.config.CommentGeneratorInfo;
+import org.solmix.generator.config.ConnectionFactoryInfo;
+import org.solmix.generator.config.DomainInfo;
+import org.solmix.generator.config.JavaTypeResolverInfo;
+import org.solmix.generator.config.PluginInfo;
+import org.solmix.generator.config.PropertyRegistry;
+import org.solmix.generator.config.TableInfo;
+import org.solmix.generator.internal.types.JavaTypeResolverDefaultImpl;
 
 /**
  * This class creates the different objects needed by the generator.
@@ -165,14 +183,13 @@ public class ObjectFactory {
         return answer;
     }
 
-    public static JavaTypeResolver createJavaTypeResolver(Context context,
+    public static JavaTypeResolver createJavaTypeResolver(DomainInfo context,
             List<String> warnings) {
-        JavaTypeResolverConfiguration config = context
-                .getJavaTypeResolverConfiguration();
+        JavaTypeResolverInfo config = context.getJavaTypeResolverInfo();
         String type;
 
-        if (config != null && config.getConfigurationType() != null) {
-            type = config.getConfigurationType();
+        if (config != null && config.getType() != null) {
+            type = config.getType();
             if ("DEFAULT".equalsIgnoreCase(type)) { //$NON-NLS-1$
                 type = JavaTypeResolverDefaultImpl.class.getName();
             }
@@ -187,31 +204,30 @@ public class ObjectFactory {
             answer.addConfigurationProperties(config.getProperties());
         }
 
-        answer.setContext(context);
+        answer.setDomain(context);
 
         return answer;
     }
 
-    public static Plugin createPlugin(Context context,
-            PluginConfiguration pluginConfiguration) {
+    public static Plugin createPlugin(DomainInfo context,
+            PluginInfo pluginConfiguration) {
         Plugin plugin = (Plugin) createInternalObject(pluginConfiguration
-                .getConfigurationType());
-        plugin.setContext(context);
+                .getType());
+        plugin.setDomain(context);
         plugin.setProperties(pluginConfiguration.getProperties());
         return plugin;
     }
 
-    public static CommentGenerator createCommentGenerator(Context context) {
+    public static CommentGenerator createCommentGenerator(DomainInfo context) {
 
-        CommentGeneratorConfiguration config = context
-                .getCommentGeneratorConfiguration();
+        CommentGeneratorInfo config = context.getCommentGeneratorInfo();
         CommentGenerator answer;
 
         String type;
-        if (config == null || config.getConfigurationType() == null) {
+        if (config == null || config.getType() == null) {
             type = DefaultCommentGenerator.class.getName();
         } else {
-            type = config.getConfigurationType();
+            type = config.getType();
         }
 
         answer = (CommentGenerator) createInternalObject(type);
@@ -223,17 +239,17 @@ public class ObjectFactory {
         return answer;
     }
 
-    public static ConnectionFactory createConnectionFactory(Context context) {
+    public static ConnectionFactory createConnectionFactory(DomainInfo context) {
 
-        ConnectionFactoryConfiguration config = context
-                .getConnectionFactoryConfiguration();
+        ConnectionFactoryInfo config = context
+                .getConnectionFactoryInfo();
         ConnectionFactory answer;
 
         String type;
-        if (config == null || config.getConfigurationType() == null) {
-            type = JDBCConnectionFactory.class.getName();
+        if (config == null || config.getType() == null) {
+            type = JdbcConnectionFactory.class.getName();
         } else {
-            type = config.getConfigurationType();
+            type = config.getType();
         }
 
         answer = (ConnectionFactory) createInternalObject(type);
@@ -245,7 +261,7 @@ public class ObjectFactory {
         return answer;
     }
 
-    public static JavaFormatter createJavaFormatter(Context context) {
+    public static JavaFormatter createJavaFormatter(DomainInfo context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_JAVA_FORMATTER);
         if (!stringHasValue(type)) {
             type = DefaultJavaFormatter.class.getName();
@@ -253,12 +269,12 @@ public class ObjectFactory {
 
         JavaFormatter answer = (JavaFormatter) createInternalObject(type);
 
-        answer.setContext(context);
+        answer.setDomain(context);
 
         return answer;
     }
 
-    public static XmlFormatter createXmlFormatter(Context context) {
+    public static XmlFormatter createXmlFormatter(DomainInfo context) {
         String type = context.getProperty(PropertyRegistry.CONTEXT_XML_FORMATTER);
         if (!stringHasValue(type)) {
             type = DefaultXmlFormatter.class.getName();
@@ -266,18 +282,18 @@ public class ObjectFactory {
 
         XmlFormatter answer = (XmlFormatter) createInternalObject(type);
 
-        answer.setContext(context);
+        answer.setDomain(context);
 
         return answer;
     }
 
     public static IntrospectedTable createIntrospectedTable(
-            TableConfiguration tableConfiguration, FullyQualifiedTable table,
-            Context context) {
+            TableInfo tableConfiguration, FullyQualifiedTable table,
+            DomainInfo context) {
 
         IntrospectedTable answer = createIntrospectedTableForValidation(context);
         answer.setFullyQualifiedTable(table);
-        answer.setTableConfiguration(tableConfiguration);
+        answer.setTableInfo(tableConfiguration);
 
         return answer;
     }
@@ -291,26 +307,26 @@ public class ObjectFactory {
      *            the context
      * @return the introspected table
      */
-    public static IntrospectedTable createIntrospectedTableForValidation(Context context) {
+    public static IntrospectedTable createIntrospectedTableForValidation(DomainInfo context) {
         String type = context.getTargetRuntime();
         if (isEmpty(type)) {
             type = IntrospectedTableMyBatis3Impl.class.getName();
         } 
 
         IntrospectedTable answer = (IntrospectedTable) createInternalObject(type);
-        answer.setContext(context);
+        answer.setDomain(context);
 
         return answer;
     }
 
-    public static IntrospectedColumn createIntrospectedColumn(Context context) {
+    public static IntrospectedColumn createIntrospectedColumn(DomainInfo context) {
         String type = context.getIntrospectedColumnImpl();
         if (!stringHasValue(type)) {
             type = IntrospectedColumn.class.getName();
         }
 
         IntrospectedColumn answer = (IntrospectedColumn) createInternalObject(type);
-        answer.setContext(context);
+        answer.setDomain(context);
 
         return answer;
     }

@@ -23,7 +23,7 @@ import org.solmix.generator.api.GeneratedXmlFile;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.ProgressCallback;
 import org.solmix.generator.api.java.CompilationUnit;
-import org.solmix.generator.api.xml.Document;
+import org.solmix.commons.xml.dom.Document;
 import org.solmix.generator.codegen.AbstractGenerator;
 import org.solmix.generator.codegen.AbstractJavaClientGenerator;
 import org.solmix.generator.codegen.AbstractJavaGenerator;

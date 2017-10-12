@@ -103,7 +103,7 @@ public class SerializablePlugin extends PluginAdapter {
             field.setStatic(true);
             field.setType(new FullyQualifiedJavaType("long")); //$NON-NLS-1$
             field.setVisibility(JavaVisibility.PRIVATE);
-            context.getCommentGenerator().addFieldComment(field, introspectedTable);
+            domain.getCommentGenerator().addFieldComment(field, introspectedTable);
 
             topLevelClass.addField(field);
         }

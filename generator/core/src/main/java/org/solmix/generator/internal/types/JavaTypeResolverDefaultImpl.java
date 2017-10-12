@@ -40,7 +40,7 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
 
     protected Properties properties;
 
-    protected Context context;
+    protected DomainInfo domain;
 
     protected boolean forceBigDecimals;
 
@@ -210,8 +210,8 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
     }
 
     @Override
-    public void setContext(Context context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
 
     public static class JdbcTypeInformation {

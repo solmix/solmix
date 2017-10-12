@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.solmix.generator.api.ConnectionFactory;
-import org.solmix.generator.config.JDBCConnectionConfiguration;
+import org.solmix.generator.config.JdbcConnectionInfo;
 
 /**
  * This class assumes that classes are cached elsewhere for performance reasons,
@@ -34,7 +34,7 @@ import org.solmix.generator.config.JDBCConnectionConfiguration;
  * 
  * @author Jeff Butler
  */
-public class JDBCConnectionFactory implements ConnectionFactory {
+public class JdbcConnectionFactory implements ConnectionFactory {
 
     private String userId;
     private String password;
@@ -48,7 +48,7 @@ public class JDBCConnectionFactory implements ConnectionFactory {
      * 
      * @param config the configuration
      */
-    public JDBCConnectionFactory(JDBCConnectionConfiguration config) {
+    public JdbcConnectionFactory(JdbcConnectionInfo config) {
         super();
         userId = config.getUserId();
         password = config.getPassword();
@@ -61,7 +61,7 @@ public class JDBCConnectionFactory implements ConnectionFactory {
      * This constructor is called when this connection factory is specified 
      * as the type in a ConnectionFactory configuration element. 
      */
-    public JDBCConnectionFactory() {
+    public JdbcConnectionFactory() {
         super();
     }
 

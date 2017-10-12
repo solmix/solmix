@@ -15,7 +15,7 @@
  */
 package org.solmix.generator.codegen.mybatis.xmlmapper;
 
-import org.solmix.generator.api.xml.XmlElement;
+import org.solmix.commons.xml.dom.XmlElement;
 
 /**
  * 

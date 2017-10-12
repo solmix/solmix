@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.TextElement;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.api.GeneratedXmlFile;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.PluginAdapter;
-import org.solmix.generator.api.xml.Attribute;
-import org.solmix.generator.api.xml.Document;
-import org.solmix.generator.api.xml.TextElement;
-import org.solmix.generator.api.xml.XmlElement;
 import org.solmix.generator.codegen.XmlConstants;
 
 /**
@@ -124,7 +124,7 @@ public class MapperConfigPlugin extends PluginAdapter {
                 .getProperty("fileName", "MapperConfig.xml"), //$NON-NLS-1$ //$NON-NLS-2$
                 properties.getProperty("targetPackage"), //$NON-NLS-1$
                 properties.getProperty("targetProject"), //$NON-NLS-1$
-                false, context.getXmlFormatter());
+                false, domain.getXmlFormatter());
 
         List<GeneratedXmlFile> answer = new ArrayList<GeneratedXmlFile>(1);
         answer.add(gxf);

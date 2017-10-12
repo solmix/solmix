@@ -15,7 +15,6 @@
  */
 package org.solmix.generator.api;
 
-import static org.solmix.generator.internal.util.StringUtility.isTrue;
 import static org.solmix.commons.util.StringUtils.stringHasValue;
 
 import java.util.ArrayList;
@@ -25,15 +24,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.solmix.generator.config.Context;
+import org.solmix.generator.config.DomainInfo;
 import org.solmix.generator.config.GeneratedKey;
-import org.solmix.generator.config.JavaClientGeneratorConfiguration;
-import org.solmix.generator.config.JavaModelGeneratorConfiguration;
+import org.solmix.generator.config.JavaClientGeneratorInfo;
+import org.solmix.generator.config.JavaModelGeneratorInfo;
 import org.solmix.generator.config.ModelType;
 import org.solmix.generator.config.PropertyHolder;
 import org.solmix.generator.config.PropertyRegistry;
-import org.solmix.generator.config.SqlMapGeneratorConfiguration;
-import org.solmix.generator.config.TableConfiguration;
+import org.solmix.generator.config.SqlMapGeneratorInfo;
+import org.solmix.generator.config.TableInfo;
 import org.solmix.generator.internal.rules.ConditionalModelRules;
 import org.solmix.generator.internal.rules.FlatModelRules;
 import org.solmix.generator.internal.rules.HierarchicalModelRules;
@@ -96,11 +95,11 @@ public abstract class IntrospectedTable {
         ATTR_MYBATIS3_SQL_PROVIDER_TYPE
     }
 
-    protected TableConfiguration tableConfiguration;
+    protected TableInfo tableInfo;
 
     protected FullyQualifiedTable fullyQualifiedTable;
 
-    protected Context context;
+    protected DomainInfo domain;
 
     protected Rules rules;
 
@@ -146,15 +145,15 @@ public abstract class IntrospectedTable {
     }
 
     public String getSelectByExampleQueryId() {
-        return tableConfiguration.getSelectByExampleQueryId();
+        return tableInfo.getSelectByExampleQueryId();
     }
 
     public String getSelectByPrimaryKeyQueryId() {
-        return tableConfiguration.getSelectByPrimaryKeyQueryId();
+        return tableInfo.getSelectByPrimaryKeyQueryId();
     }
 
     public GeneratedKey getGeneratedKey() {
-        return tableConfiguration.getGeneratedKey();
+        return tableInfo.getGeneratedKey();
     }
 
     public IntrospectedColumn getColumn(String columnName) {
@@ -341,8 +340,8 @@ public abstract class IntrospectedTable {
         return rules;
     }
 
-    public String getTableConfigurationProperty(String property) {
-        return tableConfiguration.getProperty(property);
+    public String getTableInfoProperty(String property) {
+        return tableInfo.getProperty(property);
     }
 
     public String getPrimaryKeyType() {
@@ -435,16 +434,16 @@ public abstract class IntrospectedTable {
                 || blobColumns.size() > 0;
     }
 
-    public void setTableConfiguration(TableConfiguration tableConfiguration) {
-        this.tableConfiguration = tableConfiguration;
+    public void setTableInfo(TableInfo tableInfo) {
+        this.tableInfo = tableInfo;
     }
 
     public void setFullyQualifiedTable(FullyQualifiedTable fullyQualifiedTable) {
         this.fullyQualifiedTable = fullyQualifiedTable;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setDomain(DomainInfo domain) {
+        this.domain=domain;
     }
 
     public void addColumn(IntrospectedColumn introspectedColumn) {
@@ -503,9 +502,9 @@ public abstract class IntrospectedTable {
         calculateModelAttributes();
         calculateXmlAttributes();
 
-        if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
+        if (tableInfo.getModelType() == ModelType.HIERARCHICAL) {
             rules = new HierarchicalModelRules(this);
-        } else if (tableConfiguration.getModelType() == ModelType.FLAT) {
+        } else if (tableInfo.getModelType() == ModelType.FLAT) {
             rules = new FlatModelRules(this);
         } else {
             rules = new ConditionalModelRules(this);
@@ -765,8 +764,8 @@ public abstract class IntrospectedTable {
     }
 
     protected String calculateJavaClientImplementationPackage() {
-        JavaClientGeneratorConfiguration config = context
-                .getJavaClientGeneratorConfiguration();
+        JavaClientGeneratorInfo config = context
+                .getJavaClientGeneratorInfo();
         if (config == null) {
             return null;
         }
@@ -788,8 +787,8 @@ public abstract class IntrospectedTable {
     }
 
     protected String calculateJavaClientInterfacePackage() {
-        JavaClientGeneratorConfiguration config = context
-                .getJavaClientGeneratorConfiguration();
+        JavaClientGeneratorInfo config = context
+                .getJavaClientGeneratorInfo();
         if (config == null) {
             return null;
         }
@@ -803,7 +802,7 @@ public abstract class IntrospectedTable {
     }
 
     protected void calculateJavaClientAttributes() {
-        if (context.getJavaClientGeneratorConfiguration() == null) {
+        if (domain.getJavaClientGeneratorInfo() == null) {
             return;
         }
 
@@ -824,8 +823,8 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
-            sb.append(tableConfiguration.getMapperName());
+        if (stringHasValue(tableInfo.getMapperName())) {
+            sb.append(tableInfo.getMapperName());
         } else {
             if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
@@ -839,8 +838,8 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getSqlProviderName())) {
-            sb.append(tableConfiguration.getSqlProviderName());
+        if (stringHasValue(tableInfo.getSqlProviderName())) {
+            sb.append(tableInfo.getSqlProviderName());
         } else {
             if (stringHasValue(fullyQualifiedTable.getDomainObjectSubPackage())) {
                 sb.append(fullyQualifiedTable.getDomainObjectSubPackage());
@@ -853,8 +852,8 @@ public abstract class IntrospectedTable {
     }
 
     protected String calculateJavaModelPackage() {
-        JavaModelGeneratorConfiguration config = context
-                .getJavaModelGeneratorConfiguration();
+        JavaModelGeneratorInfo config = domain
+                .getJavaModelGeneratorInfo();
 
         StringBuilder sb = new StringBuilder();
         sb.append(config.getTargetPackage());
@@ -896,15 +895,15 @@ public abstract class IntrospectedTable {
 
     protected String calculateSqlMapPackage() {
         StringBuilder sb = new StringBuilder();
-        SqlMapGeneratorConfiguration config = context
-                .getSqlMapGeneratorConfiguration();
+        SqlMapGeneratorInfo config = domain
+                .getSqlMapGeneratorInfo();
         
         // config can be null if the Java client does not require XML
         if (config != null) {
             sb.append(config.getTargetPackage());
             sb.append(fullyQualifiedTable.getSubPackageForClientOrSqlMap(isSubPackagesEnabled(config)));
-            if (stringHasValue(tableConfiguration.getMapperName())) {
-                String mapperName = tableConfiguration.getMapperName();
+            if (stringHasValue(tableInfo.getMapperName())) {
+                String mapperName = tableInfo.getMapperName();
                 int ind = mapperName.lastIndexOf('.');
                 if (ind != -1) {
                     sb.append('.').append(mapperName.substring(0, ind));
@@ -926,8 +925,8 @@ public abstract class IntrospectedTable {
 
     protected String calculateMyBatis3XmlMapperFileName() {
         StringBuilder sb = new StringBuilder();
-        if (stringHasValue(tableConfiguration.getMapperName())) {
-            String mapperName = tableConfiguration.getMapperName();
+        if (stringHasValue(tableInfo.getMapperName())) {
+            String mapperName = tableInfo.getMapperName();
             int ind = mapperName.lastIndexOf('.');
             if (ind == -1) {
                 sb.append(mapperName);
@@ -950,8 +949,8 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateSqlMapPackage());
         sb.append('.');
-        if (stringHasValue(tableConfiguration.getMapperName())) {
-            sb.append(tableConfiguration.getMapperName());
+        if (stringHasValue(tableInfo.getMapperName())) {
+            sb.append(tableInfo.getMapperName());
         } else {
             sb.append(fullyQualifiedTable.getDomainObjectName());
             sb.append("Mapper"); //$NON-NLS-1$
@@ -1035,8 +1034,8 @@ public abstract class IntrospectedTable {
         this.rules = rules;
     }
 
-    public TableConfiguration getTableConfiguration() {
-        return tableConfiguration;
+    public TableInfo getTableInfo() {
+        return tableInfo;
     }
 
     public void setDAOImplementationType(String daoImplementationType) {
@@ -1158,10 +1157,10 @@ public abstract class IntrospectedTable {
     public boolean isImmutable() {
         Properties properties;
 
-        if (tableConfiguration.getProperties().containsKey(PropertyRegistry.ANY_IMMUTABLE)) {
-            properties = tableConfiguration.getProperties();
+        if (tableInfo.getProperties().containsKey(PropertyRegistry.ANY_IMMUTABLE)) {
+            properties = tableInfo.getProperties();
         } else {
-            properties = context.getJavaModelGeneratorConfiguration().getProperties();
+            properties = context.getJavaModelGeneratorInfo().getProperties();
         }
 
         return isTrue(properties.getProperty(PropertyRegistry.ANY_IMMUTABLE));
@@ -1174,10 +1173,10 @@ public abstract class IntrospectedTable {
 
         Properties properties;
 
-        if (tableConfiguration.getProperties().containsKey(PropertyRegistry.ANY_CONSTRUCTOR_BASED)) {
-            properties = tableConfiguration.getProperties();
+        if (tableInfo.getProperties().containsKey(PropertyRegistry.ANY_CONSTRUCTOR_BASED)) {
+            properties = tableInfo.getProperties();
         } else {
-            properties = context.getJavaModelGeneratorConfiguration().getProperties();
+            properties = domain.getJavaModelGeneratorInfo().getProperties();
         }
 
         return isTrue(properties.getProperty(PropertyRegistry.ANY_CONSTRUCTOR_BASED));
@@ -1192,8 +1191,8 @@ public abstract class IntrospectedTable {
      */
     public abstract boolean requiresXMLGenerator();
 
-    public Context getContext() {
-        return context;
+    public DomainInfo getDomain() {
+        return domain;
     }
 
     public String getRemarks() {
