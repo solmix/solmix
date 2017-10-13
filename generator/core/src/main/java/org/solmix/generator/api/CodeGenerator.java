@@ -219,7 +219,7 @@ public class CodeGenerator
             totalSteps += context.getIntrospectionSteps();
         }
         callback.introspectionStarted(totalSteps);
-
+        //解析出要要生成的table
         for (DomainInfo context : contextsToRun) {
             context.introspectTables(callback, warnings, fullyQualifiedTableNames);
         }

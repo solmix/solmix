@@ -28,6 +28,7 @@ import org.solmix.generator.internal.JdbcConnectionFactory;
 import org.solmix.generator.internal.ObjectFactory;
 import org.solmix.generator.internal.PluginAggregator;
 import org.solmix.generator.internal.db.DatabaseIntrospector;
+import org.solmix.generator.internal.xml.XmlIntrospector;
 
 public class DomainInfo extends PropertyHolder
 {
@@ -427,9 +428,33 @@ public class DomainInfo extends PropertyHolder
             } finally {
                 closeConnection(connection);
             }
-            //否在就直接根据配置文件生成
+            //否则就直接根据配置文件生成
         }else{
-            
+            XmlIntrospector databaseIntrospector = new XmlIntrospector(this, javaTypeResolver, warnings);
+            for (TableInfo tc : tableInfos) {
+                String tableName = TableInfo.composeFullyQualifiedTableName(tc.getCatalog(), tc.getSchema(), tc.getTableName(), '.');
+
+                if (fullyQualifiedTableNames != null && fullyQualifiedTableNames.size() > 0 && !fullyQualifiedTableNames.contains(tableName)) {
+                    continue;
+                }
+
+                if (!tc.areAnyStatementsEnabled()) {
+                    warnings.add(getString("Warning.0", tableName));
+                    continue;
+                }
+
+                callback.startTask(getString("Progress.1", tableName));
+                List<IntrospectedTable> tables = databaseIntrospector.introspectTables(tc);
+
+                if (tables != null) {
+                    introspectedTables.addAll(tables);
+                }
+
+                callback.checkCancel();
+            }
+
+
+            callback.checkCancel();
         }
         
     }
