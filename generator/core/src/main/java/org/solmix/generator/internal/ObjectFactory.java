@@ -123,7 +123,7 @@ public class ObjectFactory {
             answer = clazz.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(
-                    "RuntimeError.6", e); //$NON-NLS-1$
+                    "RuntimeError.6", e); 
         }
 
         return answer;
@@ -176,7 +176,7 @@ public class ObjectFactory {
             answer = clazz.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(
-                    "RuntimeError.6", e); //$NON-NLS-1$
+                    "RuntimeError.6", e); 
 
         }
 
@@ -190,7 +190,7 @@ public class ObjectFactory {
 
         if (config != null && config.getType() != null) {
             type = config.getType();
-            if ("DEFAULT".equalsIgnoreCase(type)) { //$NON-NLS-1$
+            if ("DEFAULT".equalsIgnoreCase(type)) { 
                 type = JavaTypeResolverDefaultImpl.class.getName();
             }
         } else {
@@ -241,8 +241,7 @@ public class ObjectFactory {
 
     public static ConnectionFactory createConnectionFactory(DomainInfo context) {
 
-        ConnectionFactoryInfo config = context
-                .getConnectionFactoryInfo();
+        ConnectionFactoryInfo config = context.getConnectionFactoryInfo();
         ConnectionFactory answer;
 
         String type;

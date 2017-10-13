@@ -54,9 +54,9 @@ public class SqlProviderGenerator extends AbstractJavaGenerator {
 
     @Override
     public List<CompilationUnit> getCompilationUnits() {
-        progressCallback.startTask(getString("Progress.18", //$NON-NLS-1$
+        progressCallback.startTask(getString("Progress.18", 
                 introspectedTable.getFullyQualifiedTable().toString()));
-        CommentGenerator commentGenerator = context.getCommentGenerator();
+        CommentGenerator commentGenerator = domain.getCommentGenerator();
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
                 introspectedTable.getMyBatis3SqlProviderType());
@@ -82,7 +82,7 @@ public class SqlProviderGenerator extends AbstractJavaGenerator {
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         
         if (topLevelClass.getMethods().size() > 0
-                && context.getPlugins().providerGenerated(topLevelClass, introspectedTable)) {
+                && domain.getPlugins().providerGenerated(topLevelClass, introspectedTable)) {
             answer.add(topLevelClass);
         }
 
@@ -203,7 +203,7 @@ public class SqlProviderGenerator extends AbstractJavaGenerator {
     protected void initializeAndExecuteGenerator(
             AbstractJavaProviderMethodGenerator methodGenerator,
             TopLevelClass topLevelClass) {
-        methodGenerator.setContext(context);
+        methodGenerator.setDomain(domain);
         methodGenerator.setIntrospectedTable(introspectedTable);
         methodGenerator.setProgressCallback(progressCallback);
         methodGenerator.setWarnings(warnings);

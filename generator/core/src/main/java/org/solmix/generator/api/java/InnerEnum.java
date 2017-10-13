@@ -164,16 +164,16 @@ public class InnerEnum extends JavaElement {
             sb.append(getVisibility().getValue());
         }
 
-        sb.append("enum "); //$NON-NLS-1$
+        sb.append("enum "); 
         sb.append(getType().getShortName());
 
         if (superInterfaceTypes.size() > 0) {
-            sb.append(" implements "); //$NON-NLS-1$
+            sb.append(" implements "); 
 
             boolean comma = false;
             for (FullyQualifiedJavaType fqjt : superInterfaceTypes) {
                 if (comma) {
-                    sb.append(", "); //$NON-NLS-1$
+                    sb.append(", "); 
                 } else {
                     comma = true;
                 }
@@ -182,7 +182,7 @@ public class InnerEnum extends JavaElement {
             }
         }
 
-        sb.append(" {"); //$NON-NLS-1$
+        sb.append(" {"); 
         indentLevel++;
 
         Iterator<String> strIter = enumConstants.iterator();

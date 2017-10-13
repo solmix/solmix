@@ -8,9 +8,9 @@ public class JavaTypeResolverInfo extends TypedPropertyHolder
 {
 
     public XmlElement toXmlElement() {
-        XmlElement answer = new XmlElement("javaTypeResolver"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("javaTypeResolver"); 
         if (getType() != null) {
-            answer.addAttribute(new Attribute("type", getType())); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("type", getType())); 
         }
 
         addPropertyXmlElements(answer);

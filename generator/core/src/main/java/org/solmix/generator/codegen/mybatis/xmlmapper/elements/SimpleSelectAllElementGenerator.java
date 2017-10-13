@@ -17,13 +17,13 @@ package org.solmix.generator.codegen.mybatis.xmlmapper.elements;
 
 import java.util.Iterator;
 
-import org.solmix.generator.api.IntrospectedColumn;
+import org.solmix.commons.util.StringUtils;
 import org.solmix.commons.xml.dom.Attribute;
 import org.solmix.commons.xml.dom.TextElement;
 import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities;
 import org.solmix.generator.config.PropertyRegistry;
-import org.solmix.generator.internal.util.StringUtility;
 
 /**
  * 
@@ -39,17 +39,17 @@ public class SimpleSelectAllElementGenerator extends
 
     @Override
     public void addElements(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("select"); 
 
         answer.addAttribute(new Attribute(
-                "id", introspectedTable.getSelectAllStatementId())); //$NON-NLS-1$
-        answer.addAttribute(new Attribute("resultMap", //$NON-NLS-1$
+                "id", introspectedTable.getSelectAllStatementId())); 
+        answer.addAttribute(new Attribute("resultMap", 
                 introspectedTable.getBaseResultMapId()));
 
-        context.getCommentGenerator().addComment(answer);
+        domain.getCommentGenerator().addComment(answer);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("select "); //$NON-NLS-1$
+        sb.append("select "); 
         Iterator<IntrospectedColumn> iter = introspectedTable.getAllColumns()
                 .iterator();
         while (iter.hasNext()) {
@@ -57,7 +57,7 @@ public class SimpleSelectAllElementGenerator extends
                     .next()));
 
             if (iter.hasNext()) {
-                sb.append(", "); //$NON-NLS-1$
+                sb.append(", "); 
             }
 
             if (sb.length() > 80) {
@@ -71,21 +71,21 @@ public class SimpleSelectAllElementGenerator extends
         }
 
         sb.setLength(0);
-        sb.append("from "); //$NON-NLS-1$
+        sb.append("from "); 
         sb.append(introspectedTable
                 .getAliasedFullyQualifiedTableNameAtRuntime());
         answer.addElement(new TextElement(sb.toString()));
         
-        String orderByClause = introspectedTable.getTableConfigurationProperty(PropertyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
-        boolean hasOrderBy = StringUtility.stringHasValue(orderByClause);
+        String orderByClause = introspectedTable.getTableInfoProperty(PropertyRegistry.TABLE_SELECT_ALL_ORDER_BY_CLAUSE);
+        boolean hasOrderBy = StringUtils.stringHasValue(orderByClause);
         if (hasOrderBy) {
             sb.setLength(0);
-            sb.append("order by "); //$NON-NLS-1$
+            sb.append("order by "); 
             sb.append(orderByClause);
             answer.addElement(new TextElement(sb.toString()));
         }
 
-        if (context.getPlugins().sqlMapSelectAllElementGenerated(
+        if (domain.getPlugins().sqlMapSelectAllElementGenerated(
                 answer, introspectedTable)) {
             parentElement.addElement(answer);
         }

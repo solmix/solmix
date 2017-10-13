@@ -17,10 +17,10 @@ package org.solmix.generator.codegen.mybatis.xmlmapper;
 
 import static org.solmix.generator.util.Messages.getString;
 
-import org.solmix.generator.api.FullyQualifiedTable;
 import org.solmix.commons.xml.dom.Attribute;
 import org.solmix.commons.xml.dom.Document;
 import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.api.FullyQualifiedTable;
 import org.solmix.generator.codegen.AbstractXmlGenerator;
 import org.solmix.generator.codegen.XmlConstants;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.AbstractXmlElementGenerator;
@@ -44,13 +44,13 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
     protected XmlElement getSqlMapElement() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
-        progressCallback.startTask(getString("Progress.12", table.toString())); //$NON-NLS-1$
-        XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
+        progressCallback.startTask(getString("Progress.12", table.toString())); 
+        XmlElement answer = new XmlElement("mapper"); 
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
-        answer.addAttribute(new Attribute("namespace", //$NON-NLS-1$
+        answer.addAttribute(new Attribute("namespace", 
                 namespace));
 
-        context.getCommentGenerator().addRootComment(answer);
+        domain.getCommentGenerator().addRootComment(answer);
 
         addResultMapElement(answer);
         addDeleteByPrimaryKeyElement(answer);
@@ -107,7 +107,7 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
     protected void initializeAndExecuteGenerator(
             AbstractXmlElementGenerator elementGenerator,
             XmlElement parentElement) {
-        elementGenerator.setContext(context);
+        elementGenerator.setDomain(domain);
         elementGenerator.setIntrospectedTable(introspectedTable);
         elementGenerator.setProgressCallback(progressCallback);
         elementGenerator.setWarnings(warnings);
@@ -121,7 +121,7 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
                 XmlConstants.MYBATIS3_MAPPER_SYSTEM_ID);
         document.setRootElement(getSqlMapElement());
 
-        if (!context.getPlugins().sqlMapDocumentGenerated(document,
+        if (!domain.getPlugins().sqlMapDocumentGenerated(document,
                 introspectedTable)) {
             document = null;
         }

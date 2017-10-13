@@ -53,9 +53,9 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
 
     @Override
     public List<CompilationUnit> getCompilationUnits() {
-        progressCallback.startTask(getString("Progress.17", //$NON-NLS-1$
+        progressCallback.startTask(getString("Progress.17", 
                 introspectedTable.getFullyQualifiedTable().toString()));
-        CommentGenerator commentGenerator = context.getCommentGenerator();
+        CommentGenerator commentGenerator = domain.getCommentGenerator();
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
                 introspectedTable.getMyBatis3JavaMapperType());
@@ -64,9 +64,9 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
         commentGenerator.addJavaFileComment(interfaze);
 
         String rootInterface = introspectedTable
-                .getTableConfigurationProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
+                .getTableInfoProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
         if (!stringHasValue(rootInterface)) {
-            rootInterface = context.getJavaClientGeneratorConfiguration()
+            rootInterface = domain.getJavaClientGeneratorInfo()
                     .getProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
         }
 
@@ -84,7 +84,7 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
         addUpdateByPrimaryKeyMethod(interfaze);
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
-        if (context.getPlugins().clientGenerated(interfaze, null,
+        if (domain.getPlugins().clientGenerated(interfaze, null,
                 introspectedTable)) {
             answer.add(interfaze);
         }
@@ -133,7 +133,7 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
     protected void initializeAndExecuteGenerator(
             AbstractJavaMapperMethodGenerator methodGenerator,
             Interface interfaze) {
-        methodGenerator.setContext(context);
+        methodGenerator.setDomain(domain);
         methodGenerator.setIntrospectedTable(introspectedTable);
         methodGenerator.setProgressCallback(progressCallback);
         methodGenerator.setWarnings(warnings);

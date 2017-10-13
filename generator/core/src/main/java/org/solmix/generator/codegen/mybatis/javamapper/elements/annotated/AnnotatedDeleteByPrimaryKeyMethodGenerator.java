@@ -18,10 +18,10 @@ package org.solmix.generator.codegen.mybatis.javamapper.elements.annotated;
 import static org.solmix.generator.api.OutputUtilities.javaIndent;
 import static org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities.getEscapedColumnName;
 import static org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities.getParameterClause;
-import static org.solmix.generator.internal.util.StringUtility.escapeStringForJava;
 
 import java.util.Iterator;
 
+import org.solmix.commons.util.StringEscapeUtils;
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.Interface;
@@ -42,14 +42,14 @@ public class AnnotatedDeleteByPrimaryKeyMethodGenerator extends
     @Override
     public void addMapperAnnotations(Method method) {
 
-        method.addAnnotation("@Delete({"); //$NON-NLS-1$
+        method.addAnnotation("@Delete({"); 
 
         StringBuilder sb = new StringBuilder();
         javaIndent(sb, 1);
-        sb.append("\"delete from "); //$NON-NLS-1$
-        sb.append(escapeStringForJava(
+        sb.append("\"delete from "); 
+        sb.append(StringEscapeUtils.escapeJava(
                 introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        sb.append("\","); //$NON-NLS-1$
+        sb.append("\","); 
         method.addAnnotation(sb.toString());
 
         boolean and = false;
@@ -58,16 +58,16 @@ public class AnnotatedDeleteByPrimaryKeyMethodGenerator extends
             sb.setLength(0);
             javaIndent(sb, 1);
             if (and) {
-                sb.append("  \"and "); //$NON-NLS-1$
+                sb.append("  \"and "); 
             } else {
-                sb.append("\"where "); //$NON-NLS-1$
+                sb.append("\"where "); 
                 and = true;
             }
 
             IntrospectedColumn introspectedColumn = iter.next();
-            sb.append(escapeStringForJava(
+            sb.append(StringEscapeUtils.escapeJava(
                     getEscapedColumnName(introspectedColumn)));
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(" = "); 
             sb.append(getParameterClause(introspectedColumn));
             sb.append('\"');
             if (iter.hasNext()) {
@@ -77,11 +77,11 @@ public class AnnotatedDeleteByPrimaryKeyMethodGenerator extends
             method.addAnnotation(sb.toString());
         }
 
-        method.addAnnotation("})"); //$NON-NLS-1$
+        method.addAnnotation("})"); 
     }
 
     @Override
     public void addExtraImports(Interface interfaze) {
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Delete")); //$NON-NLS-1$
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Delete")); 
     }
 }

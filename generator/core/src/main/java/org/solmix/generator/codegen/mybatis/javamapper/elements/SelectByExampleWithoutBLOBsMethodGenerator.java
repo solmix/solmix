@@ -59,7 +59,7 @@ public class SelectByExampleWithoutBLOBsMethodGenerator extends
             listType = new FullyQualifiedJavaType(introspectedTable
                     .getPrimaryKeyType());
         } else {
-            throw new RuntimeException(getString("RuntimeError.12")); //$NON-NLS-1$
+            throw new RuntimeException(getString("RuntimeError.12")); 
         }
 
         importedTypes.add(listType);
@@ -67,14 +67,14 @@ public class SelectByExampleWithoutBLOBsMethodGenerator extends
         method.setReturnType(returnType);
 
         method.setName(introspectedTable.getSelectByExampleStatementId());
-        method.addParameter(new Parameter(type, "example")); //$NON-NLS-1$
+        method.addParameter(new Parameter(type, "example")); 
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         addMapperAnnotations(interfaze, method);
         
-        if (context.getPlugins()
+        if (domain.getPlugins()
                 .clientSelectByExampleWithoutBLOBsMethodGenerated(method,
                         interfaze, introspectedTable)) {
             addExtraImports(interfaze);

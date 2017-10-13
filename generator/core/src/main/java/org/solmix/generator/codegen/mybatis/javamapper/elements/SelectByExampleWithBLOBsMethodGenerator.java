@@ -64,14 +64,14 @@ public class SelectByExampleWithBLOBsMethodGenerator extends
         method.setReturnType(returnType);
         method.setName(introspectedTable
                 .getSelectByExampleWithBLOBsStatementId());
-        method.addParameter(new Parameter(type, "example")); //$NON-NLS-1$
+        method.addParameter(new Parameter(type, "example")); 
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         addMapperAnnotations(interfaze, method);
         
-        if (context.getPlugins()
+        if (domain.getPlugins()
                 .clientSelectByExampleWithBLOBsMethodGenerated(method, interfaze,
                         introspectedTable)) {
             addExtraImports(interfaze);

@@ -81,7 +81,7 @@ public class Parameter {
 
         sb.append(' ');
         if (isVarargs) {
-            sb.append("... "); //$NON-NLS-1$
+            sb.append("... "); 
         }
         sb.append(name);
 

@@ -39,22 +39,22 @@ public class JavaClientGeneratorInfo extends TypedPropertyHolder
     }
 
     public XmlElement toXmlElement() {
-        XmlElement answer = new XmlElement("javaClientGenerator"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("javaClientGenerator"); 
         if (getType() != null) {
-            answer.addAttribute(new Attribute("type", getType())); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("type", getType())); 
         }
 
         if (targetPackage != null) {
-            answer.addAttribute(new Attribute("targetPackage", targetPackage)); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("targetPackage", targetPackage)); 
         }
 
         if (targetProject != null) {
-            answer.addAttribute(new Attribute("targetProject", targetProject)); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("targetProject", targetProject)); 
         }
 
         if (implementationPackage != null) {
             answer.addAttribute(new Attribute(
-                    "implementationPackage", targetProject)); //$NON-NLS-1$
+                    "implementationPackage", targetProject)); 
         }
 
         addPropertyXmlElements(answer);
@@ -72,16 +72,16 @@ public class JavaClientGeneratorInfo extends TypedPropertyHolder
 
     public void validate(List<String> errors, String contextId) {
         if (!StringUtils.stringHasValue(targetProject)) {
-            errors.add(Messages.getString("ValidationError.2", contextId)); //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.2", contextId)); 
         }
 
         if (!StringUtils.stringHasValue(targetPackage)) {
-            errors.add(Messages.getString("ValidationError.12", //$NON-NLS-1$
-                    "javaClientGenerator", contextId)); //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.12", 
+                    "javaClientGenerator", contextId)); 
         }
 
         if (!StringUtils.stringHasValue(getType())) {
-            errors.add(Messages.getString("ValidationError.20", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.20", 
                     contextId));
         }
     }

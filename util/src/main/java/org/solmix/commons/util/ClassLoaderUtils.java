@@ -18,9 +18,15 @@
  */
 package org.solmix.commons.util;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -215,4 +221,34 @@ public class ClassLoaderUtils
           }
           return cl;
       }
+    
+    
+    /**
+     * Return  ClassLoader with custom path entry
+     * 
+     * @param entries
+     * @return
+     */
+    public static ClassLoader getCustomClassloader(Collection<String> entries) {
+        List<URL> urls = new ArrayList<URL>();
+        File file;
+
+        if (entries != null) {
+            for (String classPathEntry : entries) {
+                file = new File(classPathEntry);
+                if (!file.exists()) {
+                    throw new RuntimeException("class path is not exist "+classPathEntry);
+                }
+
+                try {
+                    urls.add(file.toURI().toURL());
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException("class path is valid "+classPathEntry); 
+                }
+            }
+        }
+        ClassLoader parent = getDefaultClassLoader();
+        URLClassLoader ucl = new URLClassLoader(urls.toArray(new URL[urls .size()]), parent);
+        return ucl;
+    }
 }

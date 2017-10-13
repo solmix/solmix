@@ -1,3 +1,4 @@
+
 package org.solmix.generator.config;
 
 import static org.solmix.commons.util.StringUtils.stringHasValue;
@@ -14,9 +15,9 @@ import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.xml.dom.Attribute;
 import org.solmix.commons.xml.dom.XmlElement;
 
-
 public class TableInfo extends PropertyHolder
 {
+
     private boolean insertStatementEnabled;
 
     private boolean selectByPrimaryKeyStatementEnabled;
@@ -32,6 +33,7 @@ public class TableInfo extends PropertyHolder
     private boolean countByExampleStatementEnabled;
 
     private boolean updateByExampleStatementEnabled;
+
     private GeneratedKey generatedKey;
 
     private String selectByPrimaryKeyQueryId;
@@ -63,13 +65,15 @@ public class TableInfo extends PropertyHolder
     private boolean isAllColumnDelimitingEnabled;
 
     private String mapperName;
+
     private String sqlProviderName;
 
     private List<IgnoredColumnPattern> ignoredColumnPatterns = new ArrayList<IgnoredColumnPattern>();
 
-    protected Map<String,ColumnInfo> columns = new LinkedHashMap<String, ColumnInfo>();
-    
-    public TableInfo(DomainInfo context) {
+    protected Map<String, ColumnInfo> columns = new LinkedHashMap<String, ColumnInfo>();
+
+    public TableInfo(DomainInfo context)
+    {
         super();
 
         this.modelType = context.getDefaultModelType();
@@ -82,12 +86,12 @@ public class TableInfo extends PropertyHolder
         countByExampleStatementEnabled = true;
         updateByExampleStatementEnabled = true;
     }
+
     public boolean isDeleteByPrimaryKeyStatementEnabled() {
         return deleteByPrimaryKeyStatementEnabled;
     }
 
-    public void setDeleteByPrimaryKeyStatementEnabled(
-            boolean deleteByPrimaryKeyStatementEnabled) {
+    public void setDeleteByPrimaryKeyStatementEnabled(boolean deleteByPrimaryKeyStatementEnabled) {
         this.deleteByPrimaryKeyStatementEnabled = deleteByPrimaryKeyStatementEnabled;
     }
 
@@ -103,8 +107,7 @@ public class TableInfo extends PropertyHolder
         return selectByPrimaryKeyStatementEnabled;
     }
 
-    public void setSelectByPrimaryKeyStatementEnabled(
-            boolean selectByPrimaryKeyStatementEnabled) {
+    public void setSelectByPrimaryKeyStatementEnabled(boolean selectByPrimaryKeyStatementEnabled) {
         this.selectByPrimaryKeyStatementEnabled = selectByPrimaryKeyStatementEnabled;
     }
 
@@ -112,21 +115,18 @@ public class TableInfo extends PropertyHolder
         return updateByPrimaryKeyStatementEnabled;
     }
 
-    public void setUpdateByPrimaryKeyStatementEnabled(
-            boolean updateByPrimaryKeyStatementEnabled) {
+    public void setUpdateByPrimaryKeyStatementEnabled(boolean updateByPrimaryKeyStatementEnabled) {
         this.updateByPrimaryKeyStatementEnabled = updateByPrimaryKeyStatementEnabled;
     }
-    
+
     public boolean isSelectByExampleStatementEnabled() {
         return selectByExampleStatementEnabled;
     }
 
-    public void setSelectByExampleStatementEnabled(
-            boolean selectByExampleStatementEnabled) {
+    public void setSelectByExampleStatementEnabled(boolean selectByExampleStatementEnabled) {
         this.selectByExampleStatementEnabled = selectByExampleStatementEnabled;
     }
 
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -139,9 +139,12 @@ public class TableInfo extends PropertyHolder
 
         TableInfo other = (TableInfo) obj;
 
-        return ObjectUtils.isEquals(this.catalog, other.catalog)
-                &&  ObjectUtils.isEquals(this.schema, other.schema)
-                &&  ObjectUtils.isEquals(this.tableName, other.tableName);
+        return ObjectUtils.isEquals(this.catalog, other.catalog) && ObjectUtils.isEquals(this.schema, other.schema)
+            && ObjectUtils.isEquals(this.tableName, other.tableName);
+    }
+
+    public List<ColumnInfo> getColumns() {
+        return new ArrayList<ColumnInfo>(columns.values());
     }
 
     @Override
@@ -153,7 +156,7 @@ public class TableInfo extends PropertyHolder
 
         return result;
     }
-    
+
     public GeneratedKey getGeneratedKey() {
         return generatedKey;
     }
@@ -178,19 +181,14 @@ public class TableInfo extends PropertyHolder
         return deleteByExampleStatementEnabled;
     }
 
-    public void setDeleteByExampleStatementEnabled(
-            boolean deleteByExampleStatementEnabled) {
+    public void setDeleteByExampleStatementEnabled(boolean deleteByExampleStatementEnabled) {
         this.deleteByExampleStatementEnabled = deleteByExampleStatementEnabled;
     }
 
     public boolean areAnyStatementsEnabled() {
-        return selectByExampleStatementEnabled
-                || selectByPrimaryKeyStatementEnabled || insertStatementEnabled
-                || updateByPrimaryKeyStatementEnabled
-                || deleteByExampleStatementEnabled
-                || deleteByPrimaryKeyStatementEnabled
-                || countByExampleStatementEnabled
-                || updateByExampleStatementEnabled;
+        return selectByExampleStatementEnabled || selectByPrimaryKeyStatementEnabled || insertStatementEnabled || updateByPrimaryKeyStatementEnabled
+            || deleteByExampleStatementEnabled || deleteByPrimaryKeyStatementEnabled || countByExampleStatementEnabled
+            || updateByExampleStatementEnabled;
     }
 
     public void setGeneratedKey(GeneratedKey generatedKey) {
@@ -255,101 +253,87 @@ public class TableInfo extends PropertyHolder
     }
 
     public XmlElement toXmlElement() {
-        XmlElement xmlElement = new XmlElement("table"); //$NON-NLS-1$
-        xmlElement.addAttribute(new Attribute("tableName", tableName)); //$NON-NLS-1$
+        XmlElement xmlElement = new XmlElement("table");
+        xmlElement.addAttribute(new Attribute("tableName", tableName));
 
         if (stringHasValue(catalog)) {
-            xmlElement.addAttribute(new Attribute("catalog", catalog)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("catalog", catalog));
         }
 
         if (stringHasValue(schema)) {
-            xmlElement.addAttribute(new Attribute("schema", schema)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("schema", schema));
         }
 
         if (stringHasValue(alias)) {
-            xmlElement.addAttribute(new Attribute("alias", alias)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("alias", alias));
         }
 
         if (stringHasValue(domainObjectName)) {
-            xmlElement.addAttribute(new Attribute(
-                    "domainObjectName", domainObjectName)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("domainObjectName", domainObjectName));
         }
 
         if (!insertStatementEnabled) {
-            xmlElement.addAttribute(new Attribute("enableInsert", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableInsert", "false")); //$NON-NLS-2$
         }
 
         if (!selectByPrimaryKeyStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableSelectByPrimaryKey", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableSelectByPrimaryKey", "false")); //$NON-NLS-2$
         }
 
         if (!selectByExampleStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableSelectByExample", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableSelectByExample", "false")); //$NON-NLS-2$
         }
 
         if (!updateByPrimaryKeyStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableUpdateByPrimaryKey", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableUpdateByPrimaryKey", "false")); //$NON-NLS-2$
         }
 
         if (!deleteByPrimaryKeyStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableDeleteByPrimaryKey", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableDeleteByPrimaryKey", "false")); //$NON-NLS-2$
         }
 
         if (!deleteByExampleStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableDeleteByExample", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableDeleteByExample", "false")); //$NON-NLS-2$
         }
 
         if (!countByExampleStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableCountByExample", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableCountByExample", "false")); //$NON-NLS-2$
         }
 
         if (!updateByExampleStatementEnabled) {
-            xmlElement.addAttribute(new Attribute(
-                    "enableUpdateByExample", "false")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("enableUpdateByExample", "false")); //$NON-NLS-2$
         }
 
         if (stringHasValue(selectByPrimaryKeyQueryId)) {
-            xmlElement.addAttribute(new Attribute(
-                    "selectByPrimaryKeyQueryId", selectByPrimaryKeyQueryId)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("selectByPrimaryKeyQueryId", selectByPrimaryKeyQueryId));
         }
 
         if (stringHasValue(selectByExampleQueryId)) {
-            xmlElement.addAttribute(new Attribute(
-                    "selectByExampleQueryId", selectByExampleQueryId)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("selectByExampleQueryId", selectByExampleQueryId));
         }
 
         if (configuredModelType != null) {
-            xmlElement.addAttribute(new Attribute(
-                    "modelType", configuredModelType)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("modelType", configuredModelType));
         }
 
         if (wildcardEscapingEnabled) {
-            xmlElement.addAttribute(new Attribute("escapeWildcards", "true")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("escapeWildcards", "true")); //$NON-NLS-2$
         }
 
         if (isAllColumnDelimitingEnabled) {
-            xmlElement.addAttribute(new Attribute("delimitAllColumns", "true")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("delimitAllColumns", "true")); //$NON-NLS-2$
         }
 
         if (delimitIdentifiers) {
-            xmlElement
-                    .addAttribute(new Attribute("delimitIdentifiers", "true")); //$NON-NLS-1$ //$NON-NLS-2$
+            xmlElement.addAttribute(new Attribute("delimitIdentifiers", "true")); //$NON-NLS-2$
         }
 
         if (stringHasValue(mapperName)) {
-            xmlElement.addAttribute(new Attribute(
-                    "mapperName", mapperName)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("mapperName", mapperName));
         }
 
         if (stringHasValue(sqlProviderName)) {
-            xmlElement.addAttribute(new Attribute(
-                    "sqlProviderName", sqlProviderName)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("sqlProviderName", sqlProviderName));
         }
 
         addPropertyXmlElements(xmlElement);
@@ -366,13 +350,12 @@ public class TableInfo extends PropertyHolder
             xmlElement.addElement(columnRenamingRule.toXmlElement());
         }
 
-       
         for (IgnoredColumnPattern ignoredColumnPattern : ignoredColumnPatterns) {
             xmlElement.addElement(ignoredColumnPattern.toXmlElement());
         }
 
-        if(columns.size()>0){
-            for(ColumnInfo ci:columns.values()){
+        if (columns.size() > 0) {
+            for (ColumnInfo ci : columns.values()) {
                 xmlElement.addElement(ci.toXmlElement());
             }
         }
@@ -391,8 +374,7 @@ public class TableInfo extends PropertyHolder
         return countByExampleStatementEnabled;
     }
 
-    public void setCountByExampleStatementEnabled(
-            boolean countByExampleStatementEnabled) {
+    public void setCountByExampleStatementEnabled(boolean countByExampleStatementEnabled) {
         this.countByExampleStatementEnabled = countByExampleStatementEnabled;
     }
 
@@ -400,40 +382,38 @@ public class TableInfo extends PropertyHolder
         return updateByExampleStatementEnabled;
     }
 
-    public void setUpdateByExampleStatementEnabled(
-            boolean updateByExampleStatementEnabled) {
+    public void setUpdateByExampleStatementEnabled(boolean updateByExampleStatementEnabled) {
         this.updateByExampleStatementEnabled = updateByExampleStatementEnabled;
     }
-    public static String composeFullyQualifiedTableName(String catalog,
-        String schema, String tableName, char separator) {
-    StringBuilder sb = new StringBuilder();
 
-    if (stringHasValue(catalog)) {
-        sb.append(catalog);
-        sb.append(separator);
-    }
+    public static String composeFullyQualifiedTableName(String catalog, String schema, String tableName, char separator) {
+        StringBuilder sb = new StringBuilder();
 
-    if (stringHasValue(schema)) {
-        sb.append(schema);
-        sb.append(separator);
-    } else {
-        if (sb.length() > 0) {
+        if (stringHasValue(catalog)) {
+            sb.append(catalog);
             sb.append(separator);
         }
-    }
 
-    sb.append(tableName);
-
-    return sb.toString();
-}
-    public void validate(List<String> errors, int listPosition) {
-        if (!stringHasValue(tableName)) {
-            errors.add(getString(
-                    "ValidationError.6", Integer.toString(listPosition))); //$NON-NLS-1$
+        if (stringHasValue(schema)) {
+            sb.append(schema);
+            sb.append(separator);
+        } else {
+            if (sb.length() > 0) {
+                sb.append(separator);
+            }
         }
 
-        String fqTableName = composeFullyQualifiedTableName(
-                catalog, schema, tableName, '.');
+        sb.append(tableName);
+
+        return sb.toString();
+    }
+
+    public void validate(List<String> errors, int listPosition) {
+        if (!stringHasValue(tableName)) {
+            errors.add(getString("ValidationError.6", Integer.toString(listPosition)));
+        }
+
+        String fqTableName = composeFullyQualifiedTableName(catalog, schema, tableName, '.');
 
         if (generatedKey != null) {
             generatedKey.validate(errors, fqTableName);
@@ -441,15 +421,13 @@ public class TableInfo extends PropertyHolder
 
         // when using column indexes, either both or neither query ids
         // should be set
-        if (DataUtils.asBoolean(getProperty(PropertyRegistry.TABLE_USE_COLUMN_INDEXES))
-                && selectByExampleStatementEnabled
-                && selectByPrimaryKeyStatementEnabled) {
+        if (DataUtils.asBoolean(getProperty(PropertyRegistry.TABLE_USE_COLUMN_INDEXES)) && selectByExampleStatementEnabled
+            && selectByPrimaryKeyStatementEnabled) {
             boolean queryId1Set = stringHasValue(selectByExampleQueryId);
             boolean queryId2Set = stringHasValue(selectByPrimaryKeyQueryId);
 
             if (queryId1Set != queryId2Set) {
-                errors.add(getString("ValidationError.13", //$NON-NLS-1$
-                        fqTableName));
+                errors.add(getString("ValidationError.13", fqTableName));
             }
         }
 
@@ -490,8 +468,7 @@ public class TableInfo extends PropertyHolder
         return isAllColumnDelimitingEnabled;
     }
 
-    public void setAllColumnDelimitingEnabled(
-            boolean isAllColumnDelimitingEnabled) {
+    public void setAllColumnDelimitingEnabled(boolean isAllColumnDelimitingEnabled) {
         this.isAllColumnDelimitingEnabled = isAllColumnDelimitingEnabled;
     }
 
@@ -510,12 +487,23 @@ public class TableInfo extends PropertyHolder
     public void setSqlProviderName(String sqlProviderName) {
         this.sqlProviderName = sqlProviderName;
     }
+
     public void addIgnoredColumnPattern(IgnoredColumnPattern ignoredColumnPattern) {
         ignoredColumnPatterns.add(ignoredColumnPattern);
     }
 
-   public void addColumn(ColumnInfo ci){
-       columns.put(ci.getColumn(), ci);
-   }
+    public void addColumn(ColumnInfo ci) {
+        columns.put(ci.getColumn(), ci);
+    }
+
+    public boolean isColumnIgnored(String column) {
+        ColumnInfo ci = columns.get(column);
+        return ci.isIgnore();
+    }
+
+    public ColumnInfo getColumnOverride(String actualColumnName) {
+        ColumnInfo ci = columns.get(actualColumnName);
+        return (ci!=null&&ci.isIgnore())?ci:null;
+    }
 
 }

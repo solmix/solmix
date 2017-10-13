@@ -17,10 +17,10 @@ package org.solmix.generator.codegen.mybatis.xmlmapper.elements;
 
 import java.util.Iterator;
 
-import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.commons.xml.dom.Attribute;
 import org.solmix.commons.xml.dom.TextElement;
 import org.solmix.commons.xml.dom.XmlElement;
+import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities;
 
 /**
@@ -36,12 +36,12 @@ public class BlobColumnListElementGenerator extends AbstractXmlElementGenerator 
 
     @Override
     public void addElements(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("sql"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("sql"); 
 
-        answer.addAttribute(new Attribute("id", //$NON-NLS-1$
+        answer.addAttribute(new Attribute("id", 
                 introspectedTable.getBlobColumnListId()));
 
-        context.getCommentGenerator().addComment(answer);
+        domain.getCommentGenerator().addComment(answer);
 
         StringBuilder sb = new StringBuilder();
 
@@ -52,7 +52,7 @@ public class BlobColumnListElementGenerator extends AbstractXmlElementGenerator 
                     .next()));
 
             if (iter.hasNext()) {
-                sb.append(", "); //$NON-NLS-1$
+                sb.append(", "); 
             }
 
             if (sb.length() > 80) {
@@ -65,7 +65,7 @@ public class BlobColumnListElementGenerator extends AbstractXmlElementGenerator 
             answer.addElement(new TextElement(sb.toString()));
         }
 
-        if (context.getPlugins().sqlMapBlobColumnListElementGenerated(
+        if (domain.getPlugins().sqlMapBlobColumnListElementGenerated(
                 answer, introspectedTable)) {
             parentElement.addElement(answer);
         }

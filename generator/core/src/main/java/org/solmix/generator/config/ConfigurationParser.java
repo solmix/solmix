@@ -172,107 +172,107 @@ public class ConfigurationParser
     private void parseTable(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
         TableInfo ti = new TableInfo(di);
         di.addTableInfo(ti);
-        String catalog = node.getStringAttribute("catalog"); //$NON-NLS-1$
+        String catalog = node.getStringAttribute("catalog"); 
         if (stringHasValue(catalog)) {
             ti.setCatalog(catalog);
         }
 
-        String schema = node.getStringAttribute("schema"); //$NON-NLS-1$
+        String schema = node.getStringAttribute("schema"); 
         if (stringHasValue(schema)) {
             ti.setSchema(schema);
         }
 
-        String tableName = node.getStringAttribute("tableName"); //$NON-NLS-1$
+        String tableName = node.getStringAttribute("tableName"); 
         if (stringHasValue(tableName)) {
             ti.setTableName(tableName);
         }
 
-        String domainObjectName = node.getStringAttribute("domainObjectName"); //$NON-NLS-1$
+        String domainObjectName = node.getStringAttribute("domainObjectName"); 
         if (stringHasValue(domainObjectName)) {
             ti.setDomainObjectName(domainObjectName);
         }
 
-        String alias = node.getStringAttribute("alias"); //$NON-NLS-1$
+        String alias = node.getStringAttribute("alias"); 
         if (stringHasValue(alias)) {
             ti.setAlias(alias);
         }
 
-        String enableInsert = node.getStringAttribute("enableInsert"); //$NON-NLS-1$
+        String enableInsert = node.getStringAttribute("enableInsert"); 
         if (stringHasValue(enableInsert)) {
             ti.setInsertStatementEnabled(asBoolean(enableInsert));
         }
 
-        String enableSelectByPrimaryKey = node.getStringAttribute("enableSelectByPrimaryKey"); //$NON-NLS-1$
+        String enableSelectByPrimaryKey = node.getStringAttribute("enableSelectByPrimaryKey"); 
         if (stringHasValue(enableSelectByPrimaryKey)) {
             ti.setSelectByPrimaryKeyStatementEnabled(asBoolean(enableSelectByPrimaryKey));
         }
 
-        String enableSelectByExample = node.getStringAttribute("enableSelectByExample"); //$NON-NLS-1$
+        String enableSelectByExample = node.getStringAttribute("enableSelectByExample"); 
         if (stringHasValue(enableSelectByExample)) {
             ti.setSelectByExampleStatementEnabled(asBoolean(enableSelectByExample));
         }
 
-        String enableUpdateByPrimaryKey = node.getStringAttribute("enableUpdateByPrimaryKey"); //$NON-NLS-1$
+        String enableUpdateByPrimaryKey = node.getStringAttribute("enableUpdateByPrimaryKey"); 
         if (stringHasValue(enableUpdateByPrimaryKey)) {
             ti.setUpdateByPrimaryKeyStatementEnabled(asBoolean(enableUpdateByPrimaryKey));
         }
 
-        String enableDeleteByPrimaryKey = node.getStringAttribute("enableDeleteByPrimaryKey"); //$NON-NLS-1$
+        String enableDeleteByPrimaryKey = node.getStringAttribute("enableDeleteByPrimaryKey"); 
         if (stringHasValue(enableDeleteByPrimaryKey)) {
             ti.setDeleteByPrimaryKeyStatementEnabled(asBoolean(enableDeleteByPrimaryKey));
         }
 
-        String enableDeleteByExample = node.getStringAttribute("enableDeleteByExample"); //$NON-NLS-1$
+        String enableDeleteByExample = node.getStringAttribute("enableDeleteByExample"); 
         if (stringHasValue(enableDeleteByExample)) {
             ti.setDeleteByExampleStatementEnabled(asBoolean(enableDeleteByExample));
         }
 
-        String enableCountByExample = node.getStringAttribute("enableCountByExample"); //$NON-NLS-1$
+        String enableCountByExample = node.getStringAttribute("enableCountByExample"); 
         if (stringHasValue(enableCountByExample)) {
             ti.setCountByExampleStatementEnabled(asBoolean(enableCountByExample));
         }
 
-        String enableUpdateByExample = node.getStringAttribute("enableUpdateByExample"); //$NON-NLS-1$
+        String enableUpdateByExample = node.getStringAttribute("enableUpdateByExample"); 
         if (stringHasValue(enableUpdateByExample)) {
             ti.setUpdateByExampleStatementEnabled(asBoolean(enableUpdateByExample));
         }
 
-        String selectByPrimaryKeyQueryId = node.getStringAttribute("selectByPrimaryKeyQueryId"); //$NON-NLS-1$
+        String selectByPrimaryKeyQueryId = node.getStringAttribute("selectByPrimaryKeyQueryId"); 
         if (stringHasValue(selectByPrimaryKeyQueryId)) {
             ti.setSelectByPrimaryKeyQueryId(selectByPrimaryKeyQueryId);
         }
 
-        String selectByExampleQueryId = node.getStringAttribute("selectByExampleQueryId"); //$NON-NLS-1$
+        String selectByExampleQueryId = node.getStringAttribute("selectByExampleQueryId"); 
         if (stringHasValue(selectByExampleQueryId)) {
             ti.setSelectByExampleQueryId(selectByExampleQueryId);
         }
 
-        String modelType = node.getStringAttribute("modelType"); //$NON-NLS-1$
+        String modelType = node.getStringAttribute("modelType"); 
         if (stringHasValue(modelType)) {
             ti.setConfiguredModelType(modelType);
         }
 
-        String escapeWildcards = node.getStringAttribute("escapeWildcards"); //$NON-NLS-1$
+        String escapeWildcards = node.getStringAttribute("escapeWildcards"); 
         if (stringHasValue(escapeWildcards)) {
             ti.setWildcardEscapingEnabled(asBoolean(escapeWildcards));
         }
 
-        String delimitIdentifiers = node.getStringAttribute("delimitIdentifiers"); //$NON-NLS-1$
+        String delimitIdentifiers = node.getStringAttribute("delimitIdentifiers"); 
         if (stringHasValue(delimitIdentifiers)) {
             ti.setDelimitIdentifiers(asBoolean(delimitIdentifiers));
         }
 
-        String delimitAllColumns = node.getStringAttribute("delimitAllColumns"); //$NON-NLS-1$
+        String delimitAllColumns = node.getStringAttribute("delimitAllColumns"); 
         if (stringHasValue(delimitAllColumns)) {
             ti.setAllColumnDelimitingEnabled(asBoolean(delimitAllColumns));
         }
 
-        String mapperName = node.getStringAttribute("mapperName"); //$NON-NLS-1$
+        String mapperName = node.getStringAttribute("mapperName"); 
         if (stringHasValue(mapperName)) {
             ti.setMapperName(mapperName);
         }
 
-        String sqlProviderName = node.getStringAttribute("sqlProviderName"); //$NON-NLS-1$
+        String sqlProviderName = node.getStringAttribute("sqlProviderName"); 
         if (stringHasValue(sqlProviderName)) {
             ti.setSqlProviderName(sqlProviderName);
         }
@@ -298,35 +298,35 @@ public class ConfigurationParser
 
     private void parseColumn(TableInfo ti, ConfigParserContext ctx, XMLNode node) {
         ColumnInfo co = new ColumnInfo();
-        String column = node.getStringAttribute("column"); //$NON-NLS-1$
+        String column = node.getStringAttribute("column"); 
 
         co.setColumn(column);
-        String property = node.getStringAttribute("property"); //$NON-NLS-1$
+        String property = node.getStringAttribute("property"); 
         if (stringHasValue(property)) {
             co.setProperty(property);
         }
 
-        String javaType = node.getStringAttribute("javaType"); //$NON-NLS-1$
+        String javaType = node.getStringAttribute("javaType"); 
         if (stringHasValue(javaType)) {
             co.setJavaType(javaType);
         }
 
-        String jdbcType = node.getStringAttribute("jdbcType"); //$NON-NLS-1$
+        String jdbcType = node.getStringAttribute("jdbcType"); 
         if (stringHasValue(jdbcType)) {
             co.setJdbcType(jdbcType);
         }
 
-        String typeHandler = node.getStringAttribute("typeHandler"); //$NON-NLS-1$
+        String typeHandler = node.getStringAttribute("typeHandler"); 
         if (stringHasValue(typeHandler)) {
             co.setTypeHandler(typeHandler);
         }
 
-        String delimitedColumnName = node.getStringAttribute("delimitedColumnName"); //$NON-NLS-1$
+        String delimitedColumnName = node.getStringAttribute("delimitedColumnName"); 
         if (stringHasValue(delimitedColumnName)) {
             co.setColumnNameDelimited(asBoolean(delimitedColumnName));
         }
 
-        String isGeneratedAlways = node.getStringAttribute("isGeneratedAlways"); //$NON-NLS-1$
+        String isGeneratedAlways = node.getStringAttribute("isGeneratedAlways"); 
         if (stringHasValue(isGeneratedAlways)) {
             co.setGeneratedAlways(Boolean.parseBoolean(isGeneratedAlways));
         }
@@ -344,15 +344,15 @@ public class ConfigurationParser
     }
 
     private void parseColumnIgnoreRule(TableInfo ti, ConfigParserContext ctx, XMLNode node) {
-        String pattern = node.getStringAttribute("pattern"); //$NON-NLS-1$
+        String pattern = node.getStringAttribute("pattern"); 
 
         IgnoredColumnPattern icPattern = new IgnoredColumnPattern(pattern);
         ti.addIgnoredColumnPattern(icPattern);
     }
 
     private void parseDomainObjectRenamingRule(TableInfo ti, ConfigParserContext ctx, XMLNode node) {
-        String searchString = node.getStringAttribute("searchString"); //$NON-NLS-1$
-        String replaceString = node.getStringAttribute("replaceString"); //$NON-NLS-1$
+        String searchString = node.getStringAttribute("searchString"); 
+        String replaceString = node.getStringAttribute("replaceString"); 
 
         DomainObjectRenamingRule dorr = new DomainObjectRenamingRule();
 
@@ -367,8 +367,8 @@ public class ConfigurationParser
     }
 
     private void parseColumnRenamingRule(TableInfo ti, ConfigParserContext ctx, XMLNode node) {
-        String searchString = node.getStringAttribute("searchString"); //$NON-NLS-1$
-        String replaceString = node.getStringAttribute("replaceString"); //$NON-NLS-1$
+        String searchString = node.getStringAttribute("searchString"); 
+        String replaceString = node.getStringAttribute("replaceString"); 
 
         ColumnRenamingRule crr = new ColumnRenamingRule();
 
@@ -383,10 +383,10 @@ public class ConfigurationParser
     }
 
     private void parseGeneratedKey(TableInfo ti, ConfigParserContext ctx, XMLNode node) {
-        String column = node.getStringAttribute("column"); //$NON-NLS-1$
-        boolean identity = node.getBooleanAttribute("identity"); //$NON-NLS-1$
-        String sqlStatement = node.getStringAttribute("sqlStatement"); //$NON-NLS-1$
-        String type = node.getStringAttribute("type"); //$NON-NLS-1$
+        String column = node.getStringAttribute("column"); 
+        boolean identity = node.getBooleanAttribute("identity"); 
+        String sqlStatement = node.getStringAttribute("sqlStatement"); 
+        String type = node.getStringAttribute("type"); 
 
         GeneratedKey gk = new GeneratedKey(column, sqlStatement, identity, type);
 
@@ -401,9 +401,9 @@ public class ConfigurationParser
         if (StringUtils.stringHasValue(type)) {
             jcgi.setType(type);
         }
-        String targetPackage = node.getStringAttribute("targetPackage"); //$NON-NLS-1$
-        String targetProject = node.getStringAttribute("targetProject"); //$NON-NLS-1$
-        String implementationPackage = node.getStringAttribute("implementationPackage"); //$NON-NLS-1$
+        String targetPackage = node.getStringAttribute("targetPackage"); 
+        String targetProject = node.getStringAttribute("targetProject"); 
+        String implementationPackage = node.getStringAttribute("implementationPackage"); 
 
         jcgi.setTargetPackage(targetPackage);
         jcgi.setTargetProject(targetProject);
@@ -414,8 +414,8 @@ public class ConfigurationParser
     private void parseSqlMapGenerator(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
         SqlMapGeneratorInfo smgi = new SqlMapGeneratorInfo();
         di.setSqlMapGeneratorInfo(smgi);
-        String targetPackage = node.getStringAttribute("targetPackage"); //$NON-NLS-1$
-        String targetProject = node.getStringAttribute("targetProject"); //$NON-NLS-1$
+        String targetPackage = node.getStringAttribute("targetPackage"); 
+        String targetProject = node.getStringAttribute("targetProject"); 
 
         smgi.setTargetPackage(targetPackage);
         smgi.setTargetProject(targetProject);
@@ -435,8 +435,8 @@ public class ConfigurationParser
     private void parseJavaModelGenerator(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
         JavaModelGeneratorInfo jgi = new JavaModelGeneratorInfo();
         di.setJavaModelGeneratorInfo(jgi);
-        String targetPackage = node.getStringAttribute("targetPackage"); //$NON-NLS-1$
-        String targetProject = node.getStringAttribute("targetProject"); //$NON-NLS-1$
+        String targetPackage = node.getStringAttribute("targetPackage"); 
+        String targetProject = node.getStringAttribute("targetProject"); 
 
         jgi.setTargetPackage(targetPackage);
         jgi.setTargetProject(targetProject);
@@ -457,18 +457,18 @@ public class ConfigurationParser
     private void parseJdbcConnection(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
         JdbcConnectionInfo jci = new JdbcConnectionInfo();
         di.setJdbcConnectionInfo(jci);
-        String driverClass = node.getStringAttribute("driverClass"); //$NON-NLS-1$
-        String connectionURL = node.getStringAttribute("connectionURL"); //$NON-NLS-1$
+        String driverClass = node.getStringAttribute("driverClass"); 
+        String connectionURL = node.getStringAttribute("connectionURL"); 
 
         jci.setDriverClass(driverClass);
         jci.setConnectionURL(connectionURL);
 
-        String userId = node.getStringAttribute("userId"); //$NON-NLS-1$
+        String userId = node.getStringAttribute("userId"); 
         if (StringUtils.stringHasValue(userId)) {
             jci.setUserId(userId);
         }
 
-        String password = node.getStringAttribute("password"); //$NON-NLS-1$
+        String password = node.getStringAttribute("password"); 
         if (StringUtils.stringHasValue(password)) {
             jci.setPassword(password);
         }

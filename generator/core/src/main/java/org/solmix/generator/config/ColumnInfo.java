@@ -157,36 +157,36 @@ public class ColumnInfo extends PropertyHolder
 
     public void validate(List<String> errors, String tableName) {
         if (!StringUtils.stringHasValue(column)) {
-            errors.add(Messages.getString("ValidationError.22", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.22", 
                     tableName));
         }
     }
 
     public XmlElement toXmlElement() {
-        XmlElement xmlElement = new XmlElement("columnOverride"); //$NON-NLS-1$
-        xmlElement.addAttribute(new Attribute("column", column)); //$NON-NLS-1$
+        XmlElement xmlElement = new XmlElement("columnOverride"); 
+        xmlElement.addAttribute(new Attribute("column", column)); 
         if (stringHasValue(property)) {
-            xmlElement.addAttribute(new Attribute("property", property)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("property", property)); 
         }
         if (stringHasValue(title)) {
-            xmlElement.addAttribute(new Attribute("title", title)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("title", title)); 
         }
 
         if (stringHasValue(javaType)) {
-            xmlElement.addAttribute(new Attribute("javaType", javaType)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("javaType", javaType)); 
         }
 
         if (stringHasValue(jdbcType)) {
-            xmlElement.addAttribute(new Attribute("jdbcType", jdbcType)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("jdbcType", jdbcType)); 
         }
 
         if (stringHasValue(typeHandler)) {
-            xmlElement.addAttribute(new Attribute("typeHandler", typeHandler)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("typeHandler", typeHandler)); 
         }
 
         if (stringHasValue(configuredDelimitedColumnName)) {
             xmlElement.addAttribute(new Attribute(
-                    "delimitedColumnName", configuredDelimitedColumnName)); //$NON-NLS-1$
+                    "delimitedColumnName", configuredDelimitedColumnName)); 
         }
 
         addPropertyXmlElements(xmlElement);

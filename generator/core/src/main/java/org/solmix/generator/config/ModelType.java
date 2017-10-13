@@ -17,9 +17,9 @@ package org.solmix.generator.config;
 
 
 public enum ModelType {
-    HIERARCHICAL("hierarchical"), //$NON-NLS-1$
-    FLAT("flat"), //$NON-NLS-1$
-    CONDITIONAL("conditional"); //$NON-NLS-1$
+    HIERARCHICAL("hierarchical"), 
+    FLAT("flat"), 
+    CONDITIONAL("conditional"); 
 
     private final String modelType;
 
@@ -42,7 +42,7 @@ public enum ModelType {
         } else if (CONDITIONAL.getModelType().equalsIgnoreCase(type)) {
             return CONDITIONAL;
         } else {
-            throw new RuntimeException("illegal model type"); //$NON-NLS-1$
+            throw new RuntimeException("illegal model type"); 
         }
     }
 }

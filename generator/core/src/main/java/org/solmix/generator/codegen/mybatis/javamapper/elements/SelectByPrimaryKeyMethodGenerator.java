@@ -58,7 +58,7 @@ public class SelectByPrimaryKeyMethodGenerator extends
             FullyQualifiedJavaType type = new FullyQualifiedJavaType(
                     introspectedTable.getPrimaryKeyType());
             importedTypes.add(type);
-            method.addParameter(new Parameter(type, "key")); //$NON-NLS-1$
+            method.addParameter(new Parameter(type, "key")); 
         } else {
             // no primary key class - fields are in the base class
             // if more than one PK field, then we need to annotate the
@@ -69,7 +69,7 @@ public class SelectByPrimaryKeyMethodGenerator extends
             boolean annotate = introspectedColumns.size() > 1;
             if (annotate) {
                 importedTypes.add(new FullyQualifiedJavaType(
-                        "org.apache.ibatis.annotations.Param")); //$NON-NLS-1$
+                        "org.apache.ibatis.annotations.Param")); 
             }
             StringBuilder sb = new StringBuilder();
             for (IntrospectedColumn introspectedColumn : introspectedColumns) {
@@ -80,9 +80,9 @@ public class SelectByPrimaryKeyMethodGenerator extends
                         .getJavaProperty());
                 if (annotate) {
                     sb.setLength(0);
-                    sb.append("@Param(\""); //$NON-NLS-1$
+                    sb.append("@Param(\""); 
                     sb.append(introspectedColumn.getJavaProperty());
-                    sb.append("\")"); //$NON-NLS-1$
+                    sb.append("\")"); 
                     parameter.addAnnotation(sb.toString());
                 }
                 method.addParameter(parameter);
@@ -91,10 +91,10 @@ public class SelectByPrimaryKeyMethodGenerator extends
 
         addMapperAnnotations(interfaze, method);
 
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
-        if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(
+        if (domain.getPlugins().clientSelectByPrimaryKeyMethodGenerated(
                 method, interfaze, introspectedTable)) {
             addExtraImports(interfaze);
             interfaze.addImportedTypes(importedTypes);

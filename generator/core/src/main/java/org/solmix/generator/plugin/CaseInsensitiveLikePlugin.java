@@ -56,7 +56,7 @@ public class CaseInsensitiveLikePlugin extends PluginAdapter {
         InnerClass criteria = null;
         // first, find the Criteria inner class
         for (InnerClass innerClass : topLevelClass.getInnerClasses()) {
-            if ("GeneratedCriteria".equals(innerClass.getType().getShortName())) { //$NON-NLS-1$
+            if ("GeneratedCriteria".equals(innerClass.getType().getShortName())) { 
                 criteria = innerClass;
                 break;
             }
@@ -77,25 +77,25 @@ public class CaseInsensitiveLikePlugin extends PluginAdapter {
             Method method = new Method();
             method.setVisibility(JavaVisibility.PUBLIC);
             method.addParameter(new Parameter(introspectedColumn
-                    .getFullyQualifiedJavaType(), "value")); //$NON-NLS-1$
+                    .getFullyQualifiedJavaType(), "value")); 
 
             StringBuilder sb = new StringBuilder();
             sb.append(introspectedColumn.getJavaProperty());
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-            sb.insert(0, "and"); //$NON-NLS-1$
-            sb.append("LikeInsensitive"); //$NON-NLS-1$
+            sb.insert(0, "and"); 
+            sb.append("LikeInsensitive"); 
             method.setName(sb.toString());
             method.setReturnType(FullyQualifiedJavaType.getCriteriaInstance());
 
             sb.setLength(0);
-            sb.append("addCriterion(\"upper("); //$NON-NLS-1$
+            sb.append("addCriterion(\"upper("); 
 //            sb.append(Ibatis2FormattingUtilities
 //                    .getAliasedActualColumnName(introspectedColumn));
-            sb.append(") like\", value.toUpperCase(), \""); //$NON-NLS-1$
+            sb.append(") like\", value.toUpperCase(), \""); 
             sb.append(introspectedColumn.getJavaProperty());
-            sb.append("\");"); //$NON-NLS-1$
+            sb.append("\");"); 
             method.addBodyLine(sb.toString());
-            method.addBodyLine("return (Criteria) this;"); //$NON-NLS-1$
+            method.addBodyLine("return (Criteria) this;"); 
 
             criteria.addMethod(method);
         }

@@ -20,8 +20,11 @@ import static org.solmix.commons.util.StringUtils.stringHasValue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.solmix.commons.util.HashUtils;
+import org.solmix.commons.util.ObjectUtils;
 import org.solmix.generator.config.DomainInfo;
 import org.solmix.generator.config.DomainObjectRenamingRule;
+import org.solmix.generator.util.JavaBeansUtil;
 
 /**
  * The Class FullyQualifiedTable.
@@ -122,9 +125,9 @@ public class FullyQualifiedTable {
         }
 
         beginningDelimiter = delimitIdentifiers ? context
-                .getBeginningDelimiter() : ""; //$NON-NLS-1$
+                .getBeginningDelimiter() : ""; 
         endingDelimiter = delimitIdentifiers ? context.getEndingDelimiter()
-                : ""; //$NON-NLS-1$
+                : ""; 
     }
 
     /**
@@ -247,9 +250,9 @@ public class FullyQualifiedTable {
 
         String finalDomainObjectName;
         if (stringHasValue(runtimeTableName)) {
-            finalDomainObjectName =  getCamelCaseString(runtimeTableName, true);
+            finalDomainObjectName =  JavaBeansUtil.getCamelCaseString(runtimeTableName, true);
         } else {
-            finalDomainObjectName =  getCamelCaseString(introspectedTableName, true);
+            finalDomainObjectName =  JavaBeansUtil.getCamelCaseString(introspectedTableName, true);
         }
 
         if (domainObjectRenamingRule != null) {
@@ -277,11 +280,11 @@ public class FullyQualifiedTable {
 
         FullyQualifiedTable other = (FullyQualifiedTable) obj;
 
-        return areEqual(this.introspectedTableName,
+        return ObjectUtils.isEquals(this.introspectedTableName,
                 other.introspectedTableName)
-                && areEqual(this.introspectedCatalog,
+                &&  ObjectUtils.isEquals(this.introspectedCatalog,
                         other.introspectedCatalog)
-                && areEqual(this.introspectedSchema,
+                &&  ObjectUtils.isEquals(this.introspectedSchema,
                         other.introspectedSchema);
     }
 
@@ -290,10 +293,10 @@ public class FullyQualifiedTable {
      */
     @Override
     public int hashCode() {
-        int result = SEED;
-        result = hash(result, introspectedTableName);
-        result = hash(result, introspectedCatalog);
-        result = hash(result, introspectedSchema);
+        int result = HashUtils.SEED;
+        result = HashUtils.hash(result, introspectedTableName);
+        result = HashUtils.hash(result, introspectedCatalog);
+        result = HashUtils.hash(result, introspectedSchema);
 
         return result;
     }
@@ -396,4 +399,27 @@ public class FullyQualifiedTable {
     public String getDomainObjectSubPackage() {
         return domainObjectSubPackage;
     }
+    public static String composeFullyQualifiedTableName(String catalog,
+        String schema, String tableName, char separator) {
+    StringBuilder sb = new StringBuilder();
+
+    if (stringHasValue(catalog)) {
+        sb.append(catalog);
+        sb.append(separator);
+    }
+
+    if (stringHasValue(schema)) {
+        sb.append(schema);
+        sb.append(separator);
+    } else {
+        if (sb.length() > 0) {
+            sb.append(separator);
+        }
+    }
+
+    sb.append(tableName);
+
+    return sb.toString();
+}
+
 }

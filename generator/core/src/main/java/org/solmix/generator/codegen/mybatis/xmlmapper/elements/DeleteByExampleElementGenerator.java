@@ -34,24 +34,24 @@ public class DeleteByExampleElementGenerator extends
 
     @Override
     public void addElements(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("delete"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("delete"); 
 
         String fqjt = introspectedTable.getExampleType();
 
         answer.addAttribute(new Attribute(
-                "id", introspectedTable.getDeleteByExampleStatementId())); //$NON-NLS-1$
-        answer.addAttribute(new Attribute("parameterType", fqjt)); //$NON-NLS-1$
+                "id", introspectedTable.getDeleteByExampleStatementId())); 
+        answer.addAttribute(new Attribute("parameterType", fqjt)); 
 
-        context.getCommentGenerator().addComment(answer);
+        domain.getCommentGenerator().addComment(answer);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("delete from "); //$NON-NLS-1$
+        sb.append("delete from "); 
         sb.append(introspectedTable
                 .getAliasedFullyQualifiedTableNameAtRuntime());
         answer.addElement(new TextElement(sb.toString()));
         answer.addElement(getExampleIncludeElement());
 
-        if (context.getPlugins().sqlMapDeleteByExampleElementGenerated(
+        if (domain.getPlugins().sqlMapDeleteByExampleElementGenerated(
                 answer, introspectedTable)) {
             parentElement.addElement(answer);
         }

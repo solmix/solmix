@@ -17,6 +17,7 @@ package org.solmix.generator.codegen.mybatis.javamapper;
 
 import java.util.List;
 
+import org.solmix.commons.util.StringUtils;
 import org.solmix.generator.api.java.CompilationUnit;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.codegen.AbstractXmlGenerator;
@@ -36,7 +37,6 @@ import org.solmix.generator.codegen.mybatis.javamapper.elements.annotated.Annota
 import org.solmix.generator.codegen.mybatis.javamapper.elements.annotated.AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator;
 import org.solmix.generator.codegen.mybatis.javamapper.elements.annotated.AnnotatedUpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
 import org.solmix.generator.config.PropertyRegistry;
-import org.solmix.generator.internal.util.StringUtility;
 
 public class AnnotatedClientGenerator extends JavaMapperGenerator {
 
@@ -166,13 +166,13 @@ public class AnnotatedClientGenerator extends JavaMapperGenerator {
     public List<CompilationUnit> getExtraCompilationUnits() {
         boolean useLegacyBuilder = false;
 
-        String prop = context.getJavaClientGeneratorConfiguration()
+        String prop = domain.getJavaClientGeneratorInfo()
                 .getProperty(PropertyRegistry.CLIENT_USE_LEGACY_BUILDER);
-        if (StringUtility.stringHasValue(prop)) {
+        if (StringUtils.stringHasValue(prop)) {
             useLegacyBuilder = Boolean.valueOf(prop);
         }
         SqlProviderGenerator sqlProviderGenerator = new SqlProviderGenerator(useLegacyBuilder);
-        sqlProviderGenerator.setContext(context);
+        sqlProviderGenerator.setDomain(domain);
         sqlProviderGenerator.setIntrospectedTable(introspectedTable);
         sqlProviderGenerator.setProgressCallback(progressCallback);
         sqlProviderGenerator.setWarnings(warnings);

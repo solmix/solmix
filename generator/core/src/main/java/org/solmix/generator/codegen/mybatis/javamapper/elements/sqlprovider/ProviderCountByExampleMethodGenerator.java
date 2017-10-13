@@ -15,11 +15,10 @@
  */
 package org.solmix.generator.codegen.mybatis.javamapper.elements.sqlprovider;
 
-import static org.solmix.generator.internal.util.StringUtility.escapeStringForJava;
-
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.solmix.commons.util.StringEscapeUtils;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.JavaVisibility;
 import org.solmix.generator.api.java.Method;
@@ -43,10 +42,10 @@ public class ProviderCountByExampleMethodGenerator extends AbstractJavaProviderM
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
 
         if (useLegacyBuilder) {
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.BEGIN"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.FROM"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SQL"); //$NON-NLS-1$
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.BEGIN"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.FROM"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SQL"); 
         } else {
             importedTypes.add(NEW_BUILDER_IMPORT);
         }
@@ -58,27 +57,27 @@ public class ProviderCountByExampleMethodGenerator extends AbstractJavaProviderM
                 introspectedTable.getCountByExampleStatementId());
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getStringInstance());
-        method.addParameter(new Parameter(fqjt, "example")); //$NON-NLS-1$
+        method.addParameter(new Parameter(fqjt, "example")); 
         
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
 
         if (useLegacyBuilder) {
-            method.addBodyLine("BEGIN();"); //$NON-NLS-1$
-            method.addBodyLine("SELECT(\"count(*)\");"); //$NON-NLS-1$
-            method.addBodyLine(String.format("FROM(\"%s\");", //$NON-NLS-1$
-                    escapeStringForJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
-            method.addBodyLine("applyWhere(example, false);"); //$NON-NLS-1$
-            method.addBodyLine("return SQL();"); //$NON-NLS-1$
+            method.addBodyLine("BEGIN();"); 
+            method.addBodyLine("SELECT(\"count(*)\");"); 
+            method.addBodyLine(String.format("FROM(\"%s\");", 
+                StringEscapeUtils.escapeJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
+            method.addBodyLine("applyWhere(example, false);"); 
+            method.addBodyLine("return SQL();"); 
         } else {
-            method.addBodyLine("SQL sql = new SQL();"); //$NON-NLS-1$
-            method.addBodyLine(String.format("sql.SELECT(\"count(*)\").FROM(\"%s\");", //$NON-NLS-1$
-                    escapeStringForJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
-            method.addBodyLine("applyWhere(sql, example, false);"); //$NON-NLS-1$
-            method.addBodyLine("return sql.toString();"); //$NON-NLS-1$
+            method.addBodyLine("SQL sql = new SQL();"); 
+            method.addBodyLine(String.format("sql.SELECT(\"count(*)\").FROM(\"%s\");", 
+                StringEscapeUtils.escapeJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
+            method.addBodyLine("applyWhere(sql, example, false);"); 
+            method.addBodyLine("return sql.toString();"); 
         }
         
-        if (context.getPlugins().providerCountByExampleMethodGenerated(method, topLevelClass,
+        if (domain.getPlugins().providerCountByExampleMethodGenerated(method, topLevelClass,
                 introspectedTable)) {
             topLevelClass.addStaticImports(staticImports);
             topLevelClass.addImportedTypes(importedTypes);

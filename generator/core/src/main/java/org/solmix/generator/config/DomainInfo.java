@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.solmix.commons.util.DataUtils;
+import org.solmix.commons.xml.dom.Attribute;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.api.CommentGenerator;
 import org.solmix.generator.api.ConnectionFactory;
 import org.solmix.generator.api.GeneratedJavaFile;
@@ -22,8 +24,6 @@ import org.solmix.generator.api.JavaTypeResolver;
 import org.solmix.generator.api.Plugin;
 import org.solmix.generator.api.ProgressCallback;
 import org.solmix.generator.api.XmlFormatter;
-import org.solmix.commons.xml.dom.Attribute;
-import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.internal.JdbcConnectionFactory;
 import org.solmix.generator.internal.ObjectFactory;
 import org.solmix.generator.internal.PluginAggregator;
@@ -50,9 +50,9 @@ public class DomainInfo extends PropertyHolder
 
     private ModelType defaultModelType;
 
-    private String beginningDelimiter = "\""; //$NON-NLS-1$
+    private String beginningDelimiter = "\"";
 
-    private String endingDelimiter = "\""; //$NON-NLS-1$
+    private String endingDelimiter = "\"";
 
     private CommentGeneratorInfo commentGeneratorInfo;
 
@@ -122,24 +122,24 @@ public class DomainInfo extends PropertyHolder
      */
     public void validate(List<String> errors) {
         if (isEmpty(id)) {
-            errors.add("domain id is empty"); //$NON-NLS-1$
+            errors.add("domain id is empty");
         }
 
         /*
          * if (jdbcConnectionInfo == null && connectionFactoryInfo == null) { errors.add(getString("ValidationError.10",
-         * id)); //$NON-NLS-1$ } else
+         * id)); } else
          */
         if (jdbcConnectionInfo != null && connectionFactoryInfo != null) {
             // must not specify both
             errors.add("must not specify both jdbcConnection and connectionFactory");
         } else if (jdbcConnectionInfo != null) {
             jdbcConnectionInfo.validate(errors);
-        } else {
+        } else if (connectionFactoryInfo != null) {
             connectionFactoryInfo.validate(errors);
         }
 
         if (javaModelGeneratorInfo == null) {
-            errors.add("javaModelGenerator  is null"); //$NON-NLS-1$
+            errors.add("javaModelGenerator  is null");
         } else {
             javaModelGeneratorInfo.validate(errors, id);
         }
@@ -152,19 +152,19 @@ public class DomainInfo extends PropertyHolder
         try {
             it = ObjectFactory.createIntrospectedTableForValidation(this);
         } catch (Exception e) {
-            errors.add(getString("ValidationError.25", id)); //$NON-NLS-1$
+            errors.add(getString("ValidationError.25", id));
         }
 
         if (it != null && it.requiresXMLGenerator()) {
             if (sqlMapGeneratorInfo == null) {
-                errors.add(getString("ValidationError.9", id)); //$NON-NLS-1$
+                errors.add(getString("ValidationError.9", id));
             } else {
                 sqlMapGeneratorInfo.validate(errors, id);
             }
         }
 
         if (tableInfos.size() == 0) {
-            errors.add("<table> is empty"); //$NON-NLS-1$
+            errors.add("<table> is empty");
         } else {
             for (int i = 0; i < tableInfos.size(); i++) {
                 TableInfo tc = tableInfos.get(i);
@@ -217,20 +217,20 @@ public class DomainInfo extends PropertyHolder
      * @return the XML representation of this context
      */
     public XmlElement toXmlElement() {
-        XmlElement xmlElement = new XmlElement("domain"); //$NON-NLS-1$
+        XmlElement xmlElement = new XmlElement("domain");
 
-        xmlElement.addAttribute(new Attribute("id", id)); //$NON-NLS-1$
+        xmlElement.addAttribute(new Attribute("id", id));
 
         if (defaultModelType != ModelType.CONDITIONAL) {
-            xmlElement.addAttribute(new Attribute("defaultModelType", defaultModelType.getModelType())); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("defaultModelType", defaultModelType.getModelType()));
         }
 
         if (stringHasValue(introspectedColumnImpl)) {
-            xmlElement.addAttribute(new Attribute("introspectedColumnImpl", introspectedColumnImpl)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("introspectedColumnImpl", introspectedColumnImpl));
         }
 
         if (stringHasValue(targetRuntime)) {
-            xmlElement.addAttribute(new Attribute("targetRuntime", targetRuntime)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("targetRuntime", targetRuntime));
         }
 
         addPropertyXmlElements(xmlElement);
@@ -396,38 +396,42 @@ public class DomainInfo extends PropertyHolder
         introspectedTables = new ArrayList<IntrospectedTable>();
         JavaTypeResolver javaTypeResolver = ObjectFactory.createJavaTypeResolver(this, warnings);
 
-        Connection connection = null;
+        Connection connection = getConnection();
+        //配置了数据库链接，需要对比数据库中配置
+        if(connection!=null){
+            try {
+                callback.startTask(getString("Progress.0"));
+                DatabaseIntrospector databaseIntrospector = new DatabaseIntrospector(this, connection.getMetaData(), javaTypeResolver, warnings);
 
-        try {
-            callback.startTask(getString("Progress.0")); //$NON-NLS-1$
-            connection = getConnection();
+                for (TableInfo tc : tableInfos) {
+                    String tableName = TableInfo.composeFullyQualifiedTableName(tc.getCatalog(), tc.getSchema(), tc.getTableName(), '.');
 
-            DatabaseIntrospector databaseIntrospector = new DatabaseIntrospector(this, connection.getMetaData(), javaTypeResolver, warnings);
+                    if (fullyQualifiedTableNames != null && fullyQualifiedTableNames.size() > 0 && !fullyQualifiedTableNames.contains(tableName)) {
+                        continue;
+                    }
 
-            for (TableInfo tc : tableInfos) {
-                String tableName = TableInfo.composeFullyQualifiedTableName(tc.getCatalog(), tc.getSchema(), tc.getTableName(), '.');
+                    if (!tc.areAnyStatementsEnabled()) {
+                        warnings.add(getString("Warning.0", tableName));
+                        continue;
+                    }
 
-                if (fullyQualifiedTableNames != null && fullyQualifiedTableNames.size() > 0 && !fullyQualifiedTableNames.contains(tableName)) {
-                    continue;
+                    callback.startTask(getString("Progress.1", tableName));
+                    List<IntrospectedTable> tables = databaseIntrospector.introspectTables(tc);
+
+                    if (tables != null) {
+                        introspectedTables.addAll(tables);
+                    }
+
+                    callback.checkCancel();
                 }
-
-                if (!tc.areAnyStatementsEnabled()) {
-                    warnings.add(getString("Warning.0", tableName)); //$NON-NLS-1$
-                    continue;
-                }
-
-                callback.startTask(getString("Progress.1", tableName)); //$NON-NLS-1$
-                List<IntrospectedTable> tables = databaseIntrospector.introspectTables(tc);
-
-                if (tables != null) {
-                    introspectedTables.addAll(tables);
-                }
-
-                callback.checkCancel();
+            } finally {
+                closeConnection(connection);
             }
-        } finally {
-            closeConnection(connection);
+            //否在就直接根据配置文件生成
+        }else{
+            
         }
+        
     }
 
     public int getGenerationSteps() {
@@ -451,8 +455,7 @@ public class DomainInfo extends PropertyHolder
             if (plugin.validate(warnings)) {
                 pluginAggregator.addPlugin(plugin);
             } else {
-                warnings.add(getString("Warning.24", //$NON-NLS-1$
-                    pluginInfo.getType(), id));
+                warnings.add(getString("Warning.24", pluginInfo.getType(), id));
             }
         }
 
@@ -475,14 +478,17 @@ public class DomainInfo extends PropertyHolder
     }
 
     private Connection getConnection() throws SQLException {
-        ConnectionFactory connectionFactory;
+        ConnectionFactory connectionFactory = null;
         if (jdbcConnectionInfo != null) {
             connectionFactory = new JdbcConnectionFactory(jdbcConnectionInfo);
-        } else {
+        } else if (connectionFactoryInfo != null) {
             connectionFactory = ObjectFactory.createConnectionFactory(this);
         }
+        if (connectionFactory != null)
 
-        return connectionFactory.getConnection();
+            return connectionFactory.getConnection();
+        else
+            return null;
     }
 
     private void closeConnection(Connection connection) {

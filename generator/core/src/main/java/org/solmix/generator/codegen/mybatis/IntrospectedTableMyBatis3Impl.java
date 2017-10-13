@@ -18,12 +18,12 @@ package org.solmix.generator.codegen.mybatis;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.solmix.commons.xml.dom.Document;
 import org.solmix.generator.api.GeneratedJavaFile;
 import org.solmix.generator.api.GeneratedXmlFile;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.ProgressCallback;
 import org.solmix.generator.api.java.CompilationUnit;
-import org.solmix.commons.xml.dom.Document;
 import org.solmix.generator.codegen.AbstractGenerator;
 import org.solmix.generator.codegen.AbstractJavaClientGenerator;
 import org.solmix.generator.codegen.AbstractJavaGenerator;
@@ -71,7 +71,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             List<String> warnings,
             ProgressCallback progressCallback) {
         if (javaClientGenerator == null) {
-            if (context.getSqlMapGeneratorConfiguration() != null) {
+            if (domain.getSqlMapGeneratorInfo() != null) {
                 xmlMapperGenerator = new XMLMapperGenerator();
             }
         } else {
@@ -100,21 +100,21 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     }
 
     protected AbstractJavaClientGenerator createJavaClientGenerator() {
-        if (context.getJavaClientGeneratorConfiguration() == null) {
+        if (domain.getJavaClientGeneratorInfo() == null) {
             return null;
         }
         
-        String type = context.getJavaClientGeneratorConfiguration()
-                .getConfigurationType();
+        String type = domain.getJavaClientGeneratorInfo()
+                .getType();
 
         AbstractJavaClientGenerator javaGenerator;
-        if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        if ("XMLMAPPER".equalsIgnoreCase(type)) { 
             javaGenerator = new JavaMapperGenerator();
-        } else if ("MIXEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        } else if ("MIXEDMAPPER".equalsIgnoreCase(type)) { 
             javaGenerator = new MixedClientGenerator();
-        } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        } else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { 
             javaGenerator = new AnnotatedClientGenerator();
-        } else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+        } else if ("MAPPER".equalsIgnoreCase(type)) { 
             javaGenerator = new JavaMapperGenerator();
         } else {
             javaGenerator = (AbstractJavaClientGenerator) ObjectFactory
@@ -162,7 +162,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             return;
         }
 
-        abstractGenerator.setContext(context);
+        abstractGenerator.setDomain(domain);
         abstractGenerator.setIntrospectedTable(this);
         abstractGenerator.setProgressCallback(progressCallback);
         abstractGenerator.setWarnings(warnings);
@@ -177,10 +177,10 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                     .getCompilationUnits();
             for (CompilationUnit compilationUnit : compilationUnits) {
                 GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
-                        context.getJavaModelGeneratorConfiguration()
+                        domain.getJavaModelGeneratorInfo()
                                 .getTargetProject(),
-                                context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
-                                context.getJavaFormatter());
+                                domain.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                                domain.getJavaFormatter());
                 answer.add(gjf);
             }
         }
@@ -190,10 +190,10 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                     .getCompilationUnits();
             for (CompilationUnit compilationUnit : compilationUnits) {
                 GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
-                        context.getJavaClientGeneratorConfiguration()
+                        domain.getJavaClientGeneratorInfo()
                                 .getTargetProject(),
-                                context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
-                                context.getJavaFormatter());
+                                domain.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                                domain.getJavaFormatter());
                 answer.add(gjf);
             }
         }
@@ -209,9 +209,9 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             Document document = xmlMapperGenerator.getDocument();
             GeneratedXmlFile gxf = new GeneratedXmlFile(document,
                     getMyBatis3XmlMapperFileName(), getMyBatis3XmlMapperPackage(),
-                    context.getSqlMapGeneratorConfiguration().getTargetProject(),
-                    true, context.getXmlFormatter());
-            if (context.getPlugins().sqlMapGenerated(gxf, this)) {
+                    domain.getSqlMapGeneratorInfo().getTargetProject(),
+                    true, domain.getXmlFormatter());
+            if (domain.getPlugins().sqlMapGenerated(gxf, this)) {
                 answer.add(gxf);
             }
         }

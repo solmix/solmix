@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.ProgressCallback;
-import org.solmix.generator.config.Context;
+import org.solmix.generator.config.DomainInfo;
 
 public abstract class AbstractGenerator {
     protected DomainInfo domain;

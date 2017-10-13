@@ -52,7 +52,7 @@ public class JavaDomUtils {
         boolean comma = false;
         for (FullyQualifiedJavaType ft : fqjt.getTypeArguments()) {
             if (comma) {
-                sb.append(", "); //$NON-NLS-1$
+                sb.append(", "); 
             } else {
                 comma = true;
             }

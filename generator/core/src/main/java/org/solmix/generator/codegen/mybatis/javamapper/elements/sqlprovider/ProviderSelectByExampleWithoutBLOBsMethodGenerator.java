@@ -16,12 +16,12 @@
 package org.solmix.generator.codegen.mybatis.javamapper.elements.sqlprovider;
 
 import static org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities.getSelectListPhrase;
-import static org.solmix.generator.internal.util.StringUtility.escapeStringForJava;
 
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.solmix.commons.util.StringEscapeUtils;
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.JavaVisibility;
@@ -46,12 +46,12 @@ public class ProviderSelectByExampleWithoutBLOBsMethodGenerator extends Abstract
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
 
         if (useLegacyBuilder) {
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.BEGIN"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT_DISTINCT"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.FROM"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY"); //$NON-NLS-1$
-            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SQL"); //$NON-NLS-1$
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.BEGIN"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SELECT_DISTINCT"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.FROM"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY"); 
+            staticImports.add("org.apache.ibatis.jdbc.SqlBuilder.SQL"); 
         } else {
             importedTypes.add(NEW_BUILDER_IMPORT);
         }
@@ -62,57 +62,57 @@ public class ProviderSelectByExampleWithoutBLOBsMethodGenerator extends Abstract
         Method method = new Method(getMethodName());
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(FullyQualifiedJavaType.getStringInstance());
-        method.addParameter(new Parameter(fqjt, "example")); //$NON-NLS-1$
+        method.addParameter(new Parameter(fqjt, "example")); 
         
-        context.getCommentGenerator().addGeneralMethodComment(method,
+        domain.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);
         
         if (useLegacyBuilder) {
-            method.addBodyLine("BEGIN();"); //$NON-NLS-1$
+            method.addBodyLine("BEGIN();"); 
         } else {
-            method.addBodyLine("SQL sql = new SQL();"); //$NON-NLS-1$
+            method.addBodyLine("SQL sql = new SQL();"); 
         }
 
         boolean distinctCheck = true;
         for (IntrospectedColumn introspectedColumn : getColumns()) {
             if (distinctCheck) {
-                method.addBodyLine("if (example != null && example.isDistinct()) {"); //$NON-NLS-1$
-                method.addBodyLine(String.format("%sSELECT_DISTINCT(\"%s\");", //$NON-NLS-1$
+                method.addBodyLine("if (example != null && example.isDistinct()) {"); 
+                method.addBodyLine(String.format("%sSELECT_DISTINCT(\"%s\");", 
                         builderPrefix,
-                        escapeStringForJava(getSelectListPhrase(introspectedColumn))));
-                method.addBodyLine("} else {"); //$NON-NLS-1$
-                method.addBodyLine(String.format("%sSELECT(\"%s\");", //$NON-NLS-1$
+                        StringEscapeUtils.escapeJava(getSelectListPhrase(introspectedColumn))));
+                method.addBodyLine("} else {"); 
+                method.addBodyLine(String.format("%sSELECT(\"%s\");", 
                         builderPrefix,
-                        escapeStringForJava(getSelectListPhrase(introspectedColumn))));
-                method.addBodyLine("}"); //$NON-NLS-1$
+                        StringEscapeUtils.escapeJava(getSelectListPhrase(introspectedColumn))));
+                method.addBodyLine("}"); 
             } else {
-                method.addBodyLine(String.format("%sSELECT(\"%s\");", //$NON-NLS-1$
+                method.addBodyLine(String.format("%sSELECT(\"%s\");", 
                         builderPrefix,
-                        escapeStringForJava(getSelectListPhrase(introspectedColumn))));
+                        StringEscapeUtils.escapeJava(getSelectListPhrase(introspectedColumn))));
             }
 
             distinctCheck = false;
         }
 
-        method.addBodyLine(String.format("%sFROM(\"%s\");", //$NON-NLS-1$
+        method.addBodyLine(String.format("%sFROM(\"%s\");", 
                 builderPrefix,
-                escapeStringForJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
+                StringEscapeUtils.escapeJava(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime())));
         if (useLegacyBuilder) {
-            method.addBodyLine("applyWhere(example, false);"); //$NON-NLS-1$
+            method.addBodyLine("applyWhere(example, false);"); 
         } else {
-            method.addBodyLine("applyWhere(sql, example, false);"); //$NON-NLS-1$
+            method.addBodyLine("applyWhere(sql, example, false);"); 
         }
 
-        method.addBodyLine(""); //$NON-NLS-1$
-        method.addBodyLine("if (example != null && example.getOrderByClause() != null) {"); //$NON-NLS-1$
-        method.addBodyLine(String.format("%sORDER_BY(example.getOrderByClause());", builderPrefix)); //$NON-NLS-1$
-        method.addBodyLine("}"); //$NON-NLS-1$
+        method.addBodyLine(""); 
+        method.addBodyLine("if (example != null && example.getOrderByClause() != null) {"); 
+        method.addBodyLine(String.format("%sORDER_BY(example.getOrderByClause());", builderPrefix)); 
+        method.addBodyLine("}"); 
 
-        method.addBodyLine(""); //$NON-NLS-1$
+        method.addBodyLine(""); 
         if (useLegacyBuilder) {
-            method.addBodyLine("return SQL();"); //$NON-NLS-1$
+            method.addBodyLine("return SQL();"); 
         } else {
-            method.addBodyLine("return sql.toString();"); //$NON-NLS-1$
+            method.addBodyLine("return sql.toString();"); 
         }
 
         if (callPlugins(method, topLevelClass)) {
@@ -131,7 +131,7 @@ public class ProviderSelectByExampleWithoutBLOBsMethodGenerator extends Abstract
     }
 
     public boolean callPlugins(Method method, TopLevelClass topLevelClass) {
-        return context.getPlugins().providerSelectByExampleWithoutBLOBsMethodGenerated(method, topLevelClass,
+        return domain.getPlugins().providerSelectByExampleWithoutBLOBsMethodGenerated(method, topLevelClass,
                 introspectedTable);
     }
 }

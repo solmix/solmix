@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.solmix.commons.xml.dom.Document;
+import org.solmix.commons.xml.dom.XmlElement;
 import org.solmix.generator.api.GeneratedJavaFile;
 import org.solmix.generator.api.GeneratedXmlFile;
 import org.solmix.generator.api.IntrospectedColumn;
@@ -28,9 +30,7 @@ import org.solmix.generator.api.java.Field;
 import org.solmix.generator.api.java.Interface;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
-import org.solmix.commons.xml.dom.Document;
-import org.solmix.commons.xml.dom.XmlElement;
-import org.solmix.generator.config.Context;
+import org.solmix.generator.config.DomainInfo;
 
 /**
  * This class is for internal use only. It contains a list of plugins for the

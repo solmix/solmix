@@ -26,7 +26,7 @@ import org.solmix.generator.config.DomainInfo;
  *
  */
 public class DefaultJavaFormatter implements JavaFormatter {
-    protected DomainInfo context;
+    protected DomainInfo domain;
 
     @Override
     public String getFormattedContent(CompilationUnit compilationUnit) {
@@ -34,7 +34,7 @@ public class DefaultJavaFormatter implements JavaFormatter {
     }
 
     @Override
-    public void setDomain(DomainInfo context) {
+    public void setDomain(DomainInfo domain) {
         this.domain=domain;
     }
 }

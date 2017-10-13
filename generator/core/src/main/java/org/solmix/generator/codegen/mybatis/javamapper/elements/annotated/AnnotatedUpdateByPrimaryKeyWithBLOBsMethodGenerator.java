@@ -18,10 +18,10 @@ package org.solmix.generator.codegen.mybatis.javamapper.elements.annotated;
 import static org.solmix.generator.api.OutputUtilities.javaIndent;
 import static org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities.getEscapedColumnName;
 import static org.solmix.generator.codegen.mybatis.MyBatis3FormattingUtilities.getParameterClause;
-import static org.solmix.generator.internal.util.StringUtility.escapeStringForJava;
 
 import java.util.Iterator;
 
+import org.solmix.commons.util.StringEscapeUtils;
 import org.solmix.generator.api.IntrospectedColumn;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
 import org.solmix.generator.api.java.Interface;
@@ -42,19 +42,19 @@ public class AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator extends UpdateB
     @Override
     public void addMapperAnnotations(Method method) {
 
-        method.addAnnotation("@Update({"); //$NON-NLS-1$
+        method.addAnnotation("@Update({"); 
 
         StringBuilder sb = new StringBuilder();
         javaIndent(sb, 1);
-        sb.append("\"update "); //$NON-NLS-1$
-        sb.append(escapeStringForJava(introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        sb.append("\","); //$NON-NLS-1$
+        sb.append("\"update "); 
+        sb.append(StringEscapeUtils.escapeJava(introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        sb.append("\","); 
         method.addAnnotation(sb.toString());
 
         // set up for first column
         sb.setLength(0);
         javaIndent(sb, 1);
-        sb.append("\"set "); //$NON-NLS-1$
+        sb.append("\"set "); 
 
         Iterator<IntrospectedColumn> iter =
                 ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns())
@@ -62,22 +62,22 @@ public class AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator extends UpdateB
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
 
-            sb.append(escapeStringForJava(getEscapedColumnName(introspectedColumn)));
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(StringEscapeUtils.escapeJava(getEscapedColumnName(introspectedColumn)));
+            sb.append(" = "); 
             sb.append(getParameterClause(introspectedColumn));
 
             if (iter.hasNext()) {
                 sb.append(',');
             }
 
-            sb.append("\","); //$NON-NLS-1$
+            sb.append("\","); 
             method.addAnnotation(sb.toString());
 
             // set up for the next column
             if (iter.hasNext()) {
                 sb.setLength(0);
                 javaIndent(sb, 1);
-                sb.append("  \""); //$NON-NLS-1$
+                sb.append("  \""); 
             }
         }
 
@@ -87,15 +87,15 @@ public class AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator extends UpdateB
             sb.setLength(0);
             javaIndent(sb, 1);
             if (and) {
-                sb.append("  \"and "); //$NON-NLS-1$
+                sb.append("  \"and "); 
             } else {
-                sb.append("\"where "); //$NON-NLS-1$
+                sb.append("\"where "); 
                 and = true;
             }
 
             IntrospectedColumn introspectedColumn = iter.next();
-            sb.append(escapeStringForJava(getEscapedColumnName(introspectedColumn)));
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(StringEscapeUtils.escapeJava(getEscapedColumnName(introspectedColumn)));
+            sb.append(" = "); 
             sb.append(getParameterClause(introspectedColumn));
             sb.append('\"');
             if (iter.hasNext()) {
@@ -104,11 +104,11 @@ public class AnnotatedUpdateByPrimaryKeyWithBLOBsMethodGenerator extends UpdateB
             method.addAnnotation(sb.toString());
         }
 
-        method.addAnnotation("})"); //$NON-NLS-1$
+        method.addAnnotation("})"); 
     }
 
     @Override
     public void addExtraImports(Interface interfaze) {
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Update")); //$NON-NLS-1$
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Update")); 
     }
 }

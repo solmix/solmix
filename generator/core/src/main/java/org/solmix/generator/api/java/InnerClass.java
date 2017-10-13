@@ -231,45 +231,45 @@ public class InnerClass extends JavaElement {
         sb.append(getVisibility().getValue());
 
         if (isAbstract()) {
-            sb.append("abstract "); //$NON-NLS-1$
+            sb.append("abstract "); 
         }
 
         if (isStatic()) {
-            sb.append("static "); //$NON-NLS-1$
+            sb.append("static "); 
         }
 
         if (isFinal()) {
-            sb.append("final "); //$NON-NLS-1$
+            sb.append("final "); 
         }
 
-        sb.append("class "); //$NON-NLS-1$
+        sb.append("class "); 
         sb.append(getType().getShortName());
 
         if (!this.getTypeParameters().isEmpty()) {
             boolean comma = false;
-            sb.append("<"); //$NON-NLS-1$
+            sb.append("<"); 
             for (TypeParameter typeParameter : typeParameters) {
                 if (comma) {
-                    sb.append(", "); //$NON-NLS-1$
+                    sb.append(", "); 
                 }
                 sb.append(typeParameter.getFormattedContent(compilationUnit));
                 comma = true;
             }
-            sb.append("> "); //$NON-NLS-1$
+            sb.append("> "); 
         }
 
         if (superClass != null) {
-            sb.append(" extends "); //$NON-NLS-1$
+            sb.append(" extends "); 
             sb.append(JavaDomUtils.calculateTypeName(compilationUnit, superClass));
         }
 
         if (superInterfaceTypes.size() > 0) {
-            sb.append(" implements "); //$NON-NLS-1$
+            sb.append(" implements "); 
 
             boolean comma = false;
             for (FullyQualifiedJavaType fqjt : superInterfaceTypes) {
                 if (comma) {
-                    sb.append(", "); //$NON-NLS-1$
+                    sb.append(", "); 
                 } else {
                     comma = true;
                 }
@@ -278,7 +278,7 @@ public class InnerClass extends JavaElement {
             }
         }
 
-        sb.append(" {"); //$NON-NLS-1$
+        sb.append(" {"); 
         indentLevel++;
 
         Iterator<Field> fldIter = fields.iterator();

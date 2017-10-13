@@ -59,7 +59,7 @@ public class XmlFileMergerJaxp {
         public InputSource resolveEntity(String publicId, String systemId)
                 throws SAXException, IOException {
 
-            StringReader sr = new StringReader(""); //$NON-NLS-1$
+            StringReader sr = new StringReader(""); 
 
             return new InputSource(sr);
         }
@@ -77,16 +77,16 @@ public class XmlFileMergerJaxp {
 
         try {
             return getMergedSource(new InputSource(new StringReader(generatedXmlFile.getFormattedContent())),
-                new InputSource(new InputStreamReader(new FileInputStream(existingFile), "UTF-8")), //$NON-NLS-1$
+                new InputSource(new InputStreamReader(new FileInputStream(existingFile), "UTF-8")), 
                 existingFile.getName());
         } catch (IOException e) {
-            throw new ShellException(getString("Warning.13", //$NON-NLS-1$
+            throw new ShellException(getString("Warning.13", 
                     existingFile.getName()), e);
         } catch (SAXException e) {
-            throw new ShellException(getString("Warning.13", //$NON-NLS-1$
+            throw new ShellException(getString("Warning.13", 
                     existingFile.getName()), e);
         } catch (ParserConfigurationException e) {
-            throw new ShellException(getString("Warning.13", //$NON-NLS-1$
+            throw new ShellException(getString("Warning.13", 
                     existingFile.getName()), e);
         }
     }
@@ -108,7 +108,7 @@ public class XmlFileMergerJaxp {
         DocumentType existingDocType = existingDocument.getDoctype();
 
         if (!newDocType.getName().equals(existingDocType.getName())) {
-            throw new ShellException(getString("Warning.12", //$NON-NLS-1$
+            throw new ShellException(getString("Warning.12", 
                     existingFileName));
         }
 
@@ -189,15 +189,15 @@ public class XmlFileMergerJaxp {
 
         if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            String id = element.getAttribute("id"); //$NON-NLS-1$
-            if (id != null) {
+            String id = element.getAttribute("id"); 
+          /*  if (id != null) {
                 for (String prefix : MergeConstants.OLD_XML_ELEMENT_PREFIXES) {
                     if (id.startsWith(prefix)) {
                         rc = true;
                         break;
                     }
                 }
-            }
+            }*/
 
             if (rc == false) {
                 // check for new node format - if the first non-whitespace node
@@ -213,12 +213,12 @@ public class XmlFileMergerJaxp {
                     } else if (childNode.getNodeType() == Node.COMMENT_NODE) {
                         Comment comment = (Comment) childNode;
                         String commentData = comment.getData();
-                        for (String tag : MergeConstants.OLD_ELEMENT_TAGS) {
+                        /*for (String tag : MergeConstants.OLD_ELEMENT_TAGS) {
                             if (commentData.contains(tag)) {
                                 rc = true;
                                 break;
                             }
-                        }
+                        }*/
                     } else {
                         break;
                     }

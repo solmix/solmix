@@ -15,13 +15,13 @@
  */
 package org.solmix.generator.internal.rules;
 
+import org.solmix.commons.util.DataUtils;
 import org.solmix.generator.api.IntrospectedTable;
 import org.solmix.generator.api.IntrospectedTable.TargetRuntime;
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
-import org.solmix.generator.codegen.mybatis3.ListUtilities;
+import org.solmix.generator.codegen.mybatis.ListUtilities;
 import org.solmix.generator.config.PropertyRegistry;
-import org.solmix.generator.config.TableConfiguration;
-import org.solmix.generator.internal.util.StringUtility;
+import org.solmix.generator.config.TableInfo;
 
 /**
  * This class centralizes all the rules related to code generation - including
@@ -32,7 +32,7 @@ import org.solmix.generator.internal.util.StringUtility;
  */
 public abstract class BaseRules implements Rules {
 
-    protected TableConfiguration tableConfiguration;
+    protected TableInfo tableConfiguration;
 
     protected IntrospectedTable introspectedTable;
 
@@ -41,9 +41,9 @@ public abstract class BaseRules implements Rules {
     public BaseRules(IntrospectedTable introspectedTable) {
         super();
         this.introspectedTable = introspectedTable;
-        this.tableConfiguration = introspectedTable.getTableConfiguration();
+        this.tableConfiguration = introspectedTable.getTableInfo();
         String modelOnly = tableConfiguration.getProperty(PropertyRegistry.TABLE_MODEL_ONLY);
-        isModelOnly = StringUtility.isTrue(modelOnly);
+        isModelOnly = DataUtils.asBoolean(modelOnly);
     }
 
     /**
@@ -374,8 +374,8 @@ public abstract class BaseRules implements Rules {
      */
     @Override
     public boolean generateExampleClass() {
-        if (introspectedTable.getContext().getSqlMapGeneratorConfiguration() == null
-                && introspectedTable.getContext().getJavaClientGeneratorConfiguration() == null) {
+        if (introspectedTable.getDomain().getSqlMapGeneratorInfo() == null
+                && introspectedTable.getDomain().getJavaClientGeneratorInfo() == null) {
             // this is a model only context - don't generate the example class
             return false;
         }

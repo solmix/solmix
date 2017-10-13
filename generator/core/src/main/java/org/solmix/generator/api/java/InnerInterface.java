@@ -95,23 +95,23 @@ public class InnerInterface extends JavaElement {
         sb.append(getVisibility().getValue());
 
         if (isStatic()) {
-            sb.append("static "); //$NON-NLS-1$
+            sb.append("static "); 
         }
 
         if (isFinal()) {
-            sb.append("final "); //$NON-NLS-1$
+            sb.append("final "); 
         }
 
-        sb.append("interface "); //$NON-NLS-1$
+        sb.append("interface "); 
         sb.append(getType().getShortName());
 
         if (getSuperInterfaceTypes().size() > 0) {
-            sb.append(" extends "); //$NON-NLS-1$
+            sb.append(" extends "); 
 
             boolean comma = false;
             for (FullyQualifiedJavaType fqjt : getSuperInterfaceTypes()) {
                 if (comma) {
-                    sb.append(", "); //$NON-NLS-1$
+                    sb.append(", "); 
                 } else {
                     comma = true;
                 }
@@ -120,7 +120,7 @@ public class InnerInterface extends JavaElement {
             }
         }
 
-        sb.append(" {"); //$NON-NLS-1$
+        sb.append(" {"); 
         indentLevel++;
 
         Iterator<Field> fldIter = fields.iterator();

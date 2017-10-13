@@ -15,7 +15,7 @@
  */
 package org.solmix.generator.internal.db;
 
-import static org.solmix.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
+import org.solmix.commons.util.StringUtils;
 
 /**
  * This class holds the actual catalog, schema, and table name returned from the
@@ -69,4 +69,26 @@ public class ActualTableName {
     public String toString() {
         return fullName;
     }
+    public static String composeFullyQualifiedTableName(String catalog,
+        String schema, String tableName, char separator) {
+    StringBuilder sb = new StringBuilder();
+
+    if (StringUtils.stringHasValue(catalog)) {
+        sb.append(catalog);
+        sb.append(separator);
+    }
+
+    if (StringUtils.stringHasValue(schema)) {
+        sb.append(schema);
+        sb.append(separator);
+    } else {
+        if (sb.length() > 0) {
+            sb.append(separator);
+        }
+    }
+
+    sb.append(tableName);
+
+    return sb.toString();
+}
 }

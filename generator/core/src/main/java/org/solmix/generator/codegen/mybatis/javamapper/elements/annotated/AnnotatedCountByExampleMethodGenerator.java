@@ -34,11 +34,11 @@ public class AnnotatedCountByExampleMethodGenerator extends CountByExampleMethod
     public void addMapperAnnotations(Method method) {
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(introspectedTable.getMyBatis3SqlProviderType());
         StringBuilder sb = new StringBuilder();
-        sb.append("@SelectProvider(type="); //$NON-NLS-1$
+        sb.append("@SelectProvider(type="); 
         sb.append(fqjt.getShortName());
-        sb.append(".class, method=\""); //$NON-NLS-1$
+        sb.append(".class, method=\""); 
         sb.append(introspectedTable.getCountByExampleStatementId());
-        sb.append("\")"); //$NON-NLS-1$
+        sb.append("\")"); 
 
         method.addAnnotation(sb.toString());
     }
@@ -46,6 +46,6 @@ public class AnnotatedCountByExampleMethodGenerator extends CountByExampleMethod
     @Override
     public void addExtraImports(Interface interfaze) {
         interfaze.addImportedType(
-                new FullyQualifiedJavaType("org.apache.ibatis.annotations.SelectProvider")); //$NON-NLS-1$
+                new FullyQualifiedJavaType("org.apache.ibatis.annotations.SelectProvider")); 
     }
 }

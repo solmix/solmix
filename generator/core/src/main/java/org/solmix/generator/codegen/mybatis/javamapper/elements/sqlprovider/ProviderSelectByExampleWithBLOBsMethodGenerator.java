@@ -45,7 +45,7 @@ public class ProviderSelectByExampleWithBLOBsMethodGenerator extends
 
     @Override
     public boolean callPlugins(Method method, TopLevelClass topLevelClass) {
-        return context.getPlugins().providerSelectByExampleWithBLOBsMethodGenerated(method, topLevelClass,
+        return domain.getPlugins().providerSelectByExampleWithBLOBsMethodGenerated(method, topLevelClass,
                 introspectedTable);
     }
 }

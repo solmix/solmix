@@ -17,6 +17,7 @@ package org.solmix.generator.codegen.mybatis;
 
 import static org.solmix.commons.util.StringUtils.stringHasValue;
 
+import org.solmix.commons.util.StringEscapeUtils;
 import org.solmix.generator.api.IntrospectedColumn;
 
 /**
@@ -58,13 +59,13 @@ public class MyBatis3FormattingUtilities {
             IntrospectedColumn introspectedColumn, String prefix) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("#{"); //$NON-NLS-1$
+        sb.append("#{"); 
         sb.append(introspectedColumn.getJavaProperty(prefix));
-        sb.append(",jdbcType="); //$NON-NLS-1$
+        sb.append(",jdbcType="); 
         sb.append(introspectedColumn.getJdbcTypeName());
 
         if (stringHasValue(introspectedColumn.getTypeHandler())) {
-            sb.append(",typeHandler="); //$NON-NLS-1$
+            sb.append(",typeHandler="); 
             sb.append(introspectedColumn.getTypeHandler());
         }
 
@@ -87,9 +88,9 @@ public class MyBatis3FormattingUtilities {
             StringBuilder sb = new StringBuilder();
 
             sb.append(getAliasedEscapedColumnName(introspectedColumn));
-            sb.append(" as "); //$NON-NLS-1$
+            sb.append(" as "); 
             if (introspectedColumn.isColumnNameDelimited()) {
-                sb.append(introspectedColumn.getContext()
+                sb.append(introspectedColumn.getDomain()
                         .getBeginningDelimiter());
             }
             sb.append(introspectedColumn.getTableAlias());
@@ -97,7 +98,7 @@ public class MyBatis3FormattingUtilities {
             sb.append(escapeStringForMyBatis3(introspectedColumn
                     .getActualColumnName()));
             if (introspectedColumn.isColumnNameDelimited()) {
-                sb.append(introspectedColumn.getContext().getEndingDelimiter());
+                sb.append(introspectedColumn.getDomain().getEndingDelimiter());
             }
             return sb.toString();
         } else {
@@ -119,9 +120,9 @@ public class MyBatis3FormattingUtilities {
                 .getActualColumnName()));
 
         if (introspectedColumn.isColumnNameDelimited()) {
-            sb.insert(0, introspectedColumn.getContext()
+            sb.insert(0, introspectedColumn.getDomain()
                     .getBeginningDelimiter());
-            sb.append(introspectedColumn.getContext().getEndingDelimiter());
+            sb.append(introspectedColumn.getDomain().getEndingDelimiter());
         }
 
         return sb.toString();
@@ -169,15 +170,13 @@ public class MyBatis3FormattingUtilities {
         }
 
         if (introspectedColumn.isColumnNameDelimited()) {
-            sb.append(escapeStringForJava(introspectedColumn
-                    .getContext().getBeginningDelimiter()));
+            sb.append(StringEscapeUtils.escapeJava(introspectedColumn.getDomain().getBeginningDelimiter()));
         }
 
         sb.append(introspectedColumn.getActualColumnName());
 
         if (introspectedColumn.isColumnNameDelimited()) {
-            sb.append(escapeStringForJava(introspectedColumn
-                    .getContext().getEndingDelimiter()));
+            sb.append(StringEscapeUtils.escapeJava(introspectedColumn.getDomain().getEndingDelimiter()));
         }
 
         return sb.toString();

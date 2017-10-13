@@ -24,18 +24,19 @@ import org.solmix.generator.api.java.JavaVisibility;
 import org.solmix.generator.api.java.Method;
 import org.solmix.generator.api.java.TopLevelClass;
 import org.solmix.generator.config.PropertyRegistry;
+import org.solmix.generator.util.JavaBeansUtil;
 
 public abstract class AbstractJavaGenerator extends AbstractGenerator {
     public abstract List<CompilationUnit> getCompilationUnits();
 
     public static Method getGetter(Field field) {
         Method method = new Method();
-        method.setName(getGetterMethodName(field.getName(), field
+        method.setName(JavaBeansUtil.getGetterMethodName(field.getName(), field
                 .getType()));
         method.setReturnType(field.getType());
         method.setVisibility(JavaVisibility.PUBLIC);
         StringBuilder sb = new StringBuilder();
-        sb.append("return "); //$NON-NLS-1$
+        sb.append("return "); 
         sb.append(field.getName());
         sb.append(';');
         method.addBodyLine(sb.toString());
@@ -44,10 +45,10 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
 
     public String getRootClass() {
         String rootClass = introspectedTable
-                .getTableConfigurationProperty(PropertyRegistry.ANY_ROOT_CLASS);
+                .getTableInfoProperty(PropertyRegistry.ANY_ROOT_CLASS);
         if (rootClass == null) {
-            Properties properties = context
-                    .getJavaModelGeneratorConfiguration().getProperties();
+            Properties properties = domain
+                    .getJavaModelGeneratorInfo().getProperties();
             rootClass = properties.getProperty(PropertyRegistry.ANY_ROOT_CLASS);
         }
 
@@ -59,8 +60,8 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setConstructor(true);
         method.setName(topLevelClass.getType().getShortName());
-        method.addBodyLine("super();"); //$NON-NLS-1$
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
+        method.addBodyLine("super();"); 
+        domain.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
         topLevelClass.addMethod(method);
     }
 }

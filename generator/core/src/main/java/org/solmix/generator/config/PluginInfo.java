@@ -14,16 +14,16 @@ public class PluginInfo extends TypedPropertyHolder
 
     public void validate(List<String> errors, String id) {
         if (StringUtils.stringHasValue(getType())) {
-            errors.add(Messages.getString("ValidationError.17", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.17", 
                 id));
         }
 
     }
 
     public Element toXmlElement() {
-        XmlElement answer = new XmlElement("plugin"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("plugin"); 
         if (getType() != null) {
-            answer.addAttribute(new Attribute("type", getType())); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("type", getType())); 
         }
 
         addPropertyXmlElements(answer);

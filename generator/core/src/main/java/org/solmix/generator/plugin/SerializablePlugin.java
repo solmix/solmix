@@ -47,8 +47,8 @@ public class SerializablePlugin extends PluginAdapter {
 
     public SerializablePlugin() {
         super();
-        serializable = new FullyQualifiedJavaType("java.io.Serializable"); //$NON-NLS-1$
-        gwtSerializable = new FullyQualifiedJavaType("com.google.gwt.user.client.rpc.IsSerializable"); //$NON-NLS-1$
+        serializable = new FullyQualifiedJavaType("java.io.Serializable"); 
+        gwtSerializable = new FullyQualifiedJavaType("com.google.gwt.user.client.rpc.IsSerializable"); 
     }
 
     @Override
@@ -60,8 +60,8 @@ public class SerializablePlugin extends PluginAdapter {
     @Override
     public void setProperties(Properties properties) {
         super.setProperties(properties);
-        addGWTInterface = Boolean.valueOf(properties.getProperty("addGWTInterface")); //$NON-NLS-1$
-        suppressJavaInterface = Boolean.valueOf(properties.getProperty("suppressJavaInterface")); //$NON-NLS-1$
+        addGWTInterface = Boolean.valueOf(properties.getProperty("addGWTInterface")); 
+        suppressJavaInterface = Boolean.valueOf(properties.getProperty("suppressJavaInterface")); 
     }
 
     @Override
@@ -98,10 +98,10 @@ public class SerializablePlugin extends PluginAdapter {
 
             Field field = new Field();
             field.setFinal(true);
-            field.setInitializationString("1L"); //$NON-NLS-1$
-            field.setName("serialVersionUID"); //$NON-NLS-1$
+            field.setInitializationString("1L"); 
+            field.setName("serialVersionUID"); 
             field.setStatic(true);
-            field.setType(new FullyQualifiedJavaType("long")); //$NON-NLS-1$
+            field.setType(new FullyQualifiedJavaType("long")); 
             field.setVisibility(JavaVisibility.PRIVATE);
             domain.getCommentGenerator().addFieldComment(field, introspectedTable);
 

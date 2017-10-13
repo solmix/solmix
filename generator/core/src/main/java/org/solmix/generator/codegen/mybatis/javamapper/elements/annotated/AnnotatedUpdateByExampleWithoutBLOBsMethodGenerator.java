@@ -34,17 +34,17 @@ public class AnnotatedUpdateByExampleWithoutBLOBsMethodGenerator extends UpdateB
     public void addMapperAnnotations(Method method) {
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(introspectedTable.getMyBatis3SqlProviderType());
         StringBuilder sb = new StringBuilder();
-        sb.append("@UpdateProvider(type="); //$NON-NLS-1$
+        sb.append("@UpdateProvider(type="); 
         sb.append(fqjt.getShortName());
-        sb.append(".class, method=\""); //$NON-NLS-1$
+        sb.append(".class, method=\""); 
         sb.append(introspectedTable.getUpdateByExampleStatementId());
-        sb.append("\")"); //$NON-NLS-1$
+        sb.append("\")"); 
 
         method.addAnnotation(sb.toString());
     }
 
     @Override
     public void addExtraImports(Interface interfaze) {
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.UpdateProvider")); //$NON-NLS-1$
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.ibatis.annotations.UpdateProvider")); 
     }
 }

@@ -27,7 +27,7 @@ public abstract class TypedPropertyHolder extends PropertyHolder {
      *            the type specified in the configuration
      */
     public void setType(String configurationType) {
-        if (!"DEFAULT".equalsIgnoreCase(configurationType)) { //$NON-NLS-1$
+        if (!"DEFAULT".equalsIgnoreCase(configurationType)) { 
             this.type = configurationType;
         }
     }

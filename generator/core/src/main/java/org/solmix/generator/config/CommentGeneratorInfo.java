@@ -9,9 +9,9 @@ public class CommentGeneratorInfo extends TypedPropertyHolder
 {
 
     public Element toXmlElement() {
-        XmlElement answer = new XmlElement("commentGenerator"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("commentGenerator"); 
         if (getType() != null) {
-            answer.addAttribute(new Attribute("type", getType())); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("type", getType())); 
         }
 
         addPropertyXmlElements(answer);
