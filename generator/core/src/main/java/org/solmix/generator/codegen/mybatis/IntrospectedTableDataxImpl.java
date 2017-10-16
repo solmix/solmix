@@ -85,6 +85,13 @@ public class IntrospectedTableDataxImpl extends IntrospectedTableMyBatis3Impl
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("DAO"); 
         setDAOInterfaceType(sb.toString());
+        
+        
+        sb.setLength(0);
+        sb.append(calculateDataServicePackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        setDataServiceType(sb.toString());
     }
     
     @Override

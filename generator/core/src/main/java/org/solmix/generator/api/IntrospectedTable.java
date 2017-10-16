@@ -57,6 +57,7 @@ public abstract class IntrospectedTable {
 
     protected enum InternalAttribute {
         ATTR_DAO_IMPLEMENTATION_TYPE,
+        ATTR_DATA_SERVICE_TYPE,
         ATTR_DAO_INTERFACE_TYPE,
         ATTR_PRIMARY_KEY_TYPE,
         ATTR_BASE_RECORD_TYPE,
@@ -430,7 +431,10 @@ public abstract class IntrospectedTable {
         return internalAttributes
                 .get(InternalAttribute.ATTR_DAO_INTERFACE_TYPE);
     }
-
+    public String getDataServiceType() {
+        return internalAttributes
+                .get(InternalAttribute.ATTR_DATA_SERVICE_TYPE);
+    }
     public boolean hasAnyColumns() {
         return primaryKeyColumns.size() > 0 || baseColumns.size() > 0
                 || blobColumns.size() > 0;
@@ -1050,7 +1054,10 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_DAO_INTERFACE_TYPE,
                 daoInterfaceType);
     }
-
+    public void setDataServiceType(String daoInterfaceType) {
+        internalAttributes.put(InternalAttribute.ATTR_DATA_SERVICE_TYPE,
+                daoInterfaceType);
+    }
     public void setPrimaryKeyType(String primaryKeyType) {
         internalAttributes.put(InternalAttribute.ATTR_PRIMARY_KEY_TYPE,
                 primaryKeyType);

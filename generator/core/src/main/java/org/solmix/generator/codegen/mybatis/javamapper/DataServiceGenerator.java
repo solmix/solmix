@@ -35,6 +35,8 @@ public class DataServiceGenerator extends AbstractJavaGenerator
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getDAOInterfaceType());
         Interface interfaze = new Interface(type);
         interfaze.setVisibility(JavaVisibility.PUBLIC);
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.solmix.datax.annotation.DataService"));
+        interfaze.addAnnotation("@DataService(\""+introspectedTable.getDataServiceType()+"\")");
         commentGenerator.addJavaFileComment(interfaze);
 
         String rootInterface = introspectedTable.getTableInfoProperty(PropertyRegistry.ANY_ROOT_INTERFACE);
