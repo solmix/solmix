@@ -110,7 +110,7 @@ public class IntrospectedTableDataxImpl extends IntrospectedTableMyBatis3Impl
         setUpdateByExampleSelectiveStatementId("updateByExampleSelective"); 
         setUpdateByExampleWithBLOBsStatementId("updateByExampleWithBLOBs"); 
         setUpdateByPrimaryKeyStatementId("updateByPrimaryKey"); 
-        setUpdateByPrimaryKeySelectiveStatementId("updateByPrimaryKeySelective"); 
+        setUpdateByPrimaryKeySelectiveStatementId("updateByPrimaryKey"); 
         setUpdateByPrimaryKeyWithBLOBsStatementId("updateByPrimaryKeyWithBLOBs"); 
         setBaseResultMapId("BaseResultMap"); 
         setResultMapWithBLOBsId("ResultMapWithBLOBs"); 

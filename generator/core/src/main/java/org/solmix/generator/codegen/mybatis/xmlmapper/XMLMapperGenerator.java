@@ -38,6 +38,7 @@ import org.solmix.generator.codegen.mybatis.xmlmapper.elements.ResultMapWithoutB
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.SelectByExampleWithBLOBsElementGenerator;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.SelectByExampleWithoutBLOBsElementGenerator;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.SelectByPrimaryKeyElementGenerator;
+import org.solmix.generator.codegen.mybatis.xmlmapper.elements.SimpleSelectAllElementGenerator;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.UpdateByExampleSelectiveElementGenerator;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.UpdateByExampleWithBLOBsElementGenerator;
 import org.solmix.generator.codegen.mybatis.xmlmapper.elements.UpdateByExampleWithoutBLOBsElementGenerator;
@@ -75,6 +76,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         addSelectByExampleWithBLOBsElement(answer);
         addSelectByExampleWithoutBLOBsElement(answer);
         addSelectByPrimaryKeyElement(answer);
+        addSelectAllElement(answer);
         addDeleteByPrimaryKeyElement(answer);
         addDeleteByExampleElement(answer);
         addInsertElement(answer);
@@ -150,7 +152,10 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }
-
+    protected void addSelectAllElement(XmlElement parentElement) {
+            AbstractXmlElementGenerator elementGenerator = new SimpleSelectAllElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
     protected void addSelectByPrimaryKeyElement(XmlElement parentElement) {
         if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
             AbstractXmlElementGenerator elementGenerator = new SelectByPrimaryKeyElementGenerator();

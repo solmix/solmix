@@ -17,7 +17,11 @@ import org.solmix.generator.codegen.mybatis.javamapper.elements.AbstractJavaMapp
 import org.solmix.generator.codegen.mybatis.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
 import org.solmix.generator.codegen.mybatis.javamapper.elements.InsertMethodGenerator;
 import org.solmix.generator.codegen.mybatis.javamapper.elements.InsertSelectiveMethodGenerator;
+import org.solmix.generator.codegen.mybatis.javamapper.elements.SelectAllMethodGenerator;
 import org.solmix.generator.codegen.mybatis.javamapper.elements.SelectByPrimaryKeyMethodGenerator;
+import org.solmix.generator.codegen.mybatis.javamapper.elements.UpdateByPrimaryKeySelectiveMethodGenerator;
+import org.solmix.generator.codegen.mybatis.javamapper.elements.UpdateByPrimaryKeyWithBLOBsMethodGenerator;
+import org.solmix.generator.codegen.mybatis.javamapper.elements.UpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
 import org.solmix.generator.config.PropertyRegistry;
 
 public class DataServiceGenerator extends AbstractJavaGenerator
@@ -48,6 +52,10 @@ public class DataServiceGenerator extends AbstractJavaGenerator
         addInsertSelectiveMethod(interfaze);
         addDeleteByPrimaryKeyMethod(interfaze);
         addSelectByPrimaryKeyMethod(interfaze);
+        addSelectAllMethod(interfaze);
+        addUpdateByPrimaryKeySelectiveMethod(interfaze);
+        addUpdateByPrimaryKeyWithBLOBsMethod(interfaze);
+        addUpdateByPrimaryKeyWithoutBLOBsMethod(interfaze);
         // addCountByExampleMethod(interfaze);
         // addDeleteByExampleMethod(interfaze);
         // addDeleteByPrimaryKeyMethod(interfaze);
@@ -76,7 +84,31 @@ public class DataServiceGenerator extends AbstractJavaGenerator
         return answer;
 
     }
-    
+    protected void addSelectAllMethod(Interface interfaze) {
+        AbstractJavaMapperMethodGenerator methodGenerator = new SelectAllMethodGenerator();
+        initializeAndExecuteGenerator(methodGenerator, interfaze);
+    }
+
+    protected void addUpdateByPrimaryKeyWithBLOBsMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateUpdateByPrimaryKeyWithBLOBs()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeyWithBLOBsMethodGenerator();
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
+
+    protected void addUpdateByPrimaryKeyWithoutBLOBsMethod(Interface interfaze) {
+        if (introspectedTable.getRules()
+                .generateUpdateByPrimaryKeyWithoutBLOBs()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator();
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
+    protected void addUpdateByPrimaryKeySelectiveMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateUpdateByPrimaryKeySelective()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeySelectiveMethodGenerator();
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
     protected void addSelectByPrimaryKeyMethod(Interface interfaze) {
         if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
             AbstractJavaMapperMethodGenerator methodGenerator = new SelectByPrimaryKeyMethodGenerator(true);

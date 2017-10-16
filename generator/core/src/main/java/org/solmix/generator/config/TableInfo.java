@@ -81,9 +81,10 @@ public class TableInfo extends PropertyHolder
         this.modelType = context.getDefaultModelType();
         insertStatementEnabled = true;
         selectByPrimaryKeyStatementEnabled = true;
-        selectByExampleStatementEnabled = false;
+        
         updateByPrimaryKeyStatementEnabled = true;
         deleteByPrimaryKeyStatementEnabled = true;
+        selectByExampleStatementEnabled = false;
         deleteByExampleStatementEnabled = false;
         countByExampleStatementEnabled = false;
         updateByExampleStatementEnabled = false;
