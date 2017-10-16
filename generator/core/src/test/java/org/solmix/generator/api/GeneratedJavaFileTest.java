@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.solmix.generator.config.ConfigurationInfo;
@@ -43,7 +44,7 @@ public class GeneratedJavaFileTest
             e.printStackTrace();
         }
         List<GeneratedJavaFile> javaFiles=cg.getGeneratedJavaFiles();
-        
+        Assert.assertNotNull(javaFiles);
         
     }
 

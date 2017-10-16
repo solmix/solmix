@@ -364,6 +364,8 @@ public class DomainInfo extends PropertyHolder
 
     private List<IntrospectedTable> introspectedTables;
 
+    private DataxGeneratorInfo dataxGeneratorInfo;
+
     public int getIntrospectionSteps() {
         int steps = 0;
 
@@ -537,5 +539,16 @@ public class DomainInfo extends PropertyHolder
     public void setConnectionFactoryInfo(ConnectionFactoryInfo connectionFactoryInfo) {
         this.connectionFactoryInfo = connectionFactoryInfo;
     }
+
+    public void setDataxGeneratorInfo(DataxGeneratorInfo smgi) {
+        this.dataxGeneratorInfo=smgi;
+        
+    }
+
+    
+    public DataxGeneratorInfo getDataxGeneratorInfo() {
+        return dataxGeneratorInfo;
+    }
+    
 
 }

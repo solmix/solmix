@@ -163,10 +163,24 @@ public class ConfigurationParser
                 parseSqlMapGenerator(di, ctx, cnode);
             } else if ("javaClientGenerator".equals(name)) {
                 parseJavaClientGenerator(di, ctx, cnode);
+            } else if ("dataxGenerator".equals(name)) {
+                parsedataxGenerator(di, ctx, cnode);
             } else if ("table".equals(name)) {
                 parseTable(di, ctx, cnode);
             }
         }
+    }
+
+    private void parsedataxGenerator(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
+        DataxGeneratorInfo smgi = new DataxGeneratorInfo();
+        di.setDataxGeneratorInfo(smgi);
+        String targetPackage = node.getStringAttribute("targetPackage"); 
+        String targetProject = node.getStringAttribute("targetProject"); 
+
+        smgi.setTargetPackage(targetPackage);
+        smgi.setTargetProject(targetProject);
+        parseProperties(smgi, ctx, node.evalNodes("property"));
+        
     }
 
     private void parseTable(DomainInfo di, ConfigParserContext ctx, XMLNode node) {
@@ -180,6 +194,11 @@ public class ConfigurationParser
         String schema = node.getStringAttribute("schema"); 
         if (stringHasValue(schema)) {
             ti.setSchema(schema);
+        }
+        
+        String remark = node.getStringAttribute("remark"); 
+        if (stringHasValue(remark)) {
+            ti.setRemark(remark);
         }
 
         String tableName = node.getStringAttribute("tableName"); 
@@ -196,6 +215,7 @@ public class ConfigurationParser
         if (stringHasValue(alias)) {
             ti.setAlias(alias);
         }
+        
 
         String enableInsert = node.getStringAttribute("enableInsert"); 
         if (stringHasValue(enableInsert)) {
@@ -320,6 +340,8 @@ public class ConfigurationParser
         if (stringHasValue(typeHandler)) {
             co.setTypeHandler(typeHandler);
         }
+        
+        co.setColumnSize(node.getIntAttribute("columnSize",0));
 
         String delimitedColumnName = node.getStringAttribute("delimitedColumnName"); 
         if (stringHasValue(delimitedColumnName)) {
@@ -330,11 +352,13 @@ public class ConfigurationParser
         if (stringHasValue(isGeneratedAlways)) {
             co.setGeneratedAlways(Boolean.parseBoolean(isGeneratedAlways));
         }
-        co.setOverride(node.getBooleanAttribute("override"));
-        co.setIgnore(node.getBooleanAttribute("ignore"));
-        co.setPrimaryKey(node.getBooleanAttribute("primaryKey"));
-        co.setTitle(node.getStringAttribute("title"));
-
+        co.setOverride(node.getBooleanAttribute("override",false));
+        co.setIgnore(node.getBooleanAttribute("ignore",false));
+        co.setPrimaryKey(node.getBooleanAttribute("primaryKey",false));
+        co.setRemark(node.getStringAttribute("remark"));
+        co.setDefaultValue(node.getStringAttribute("defaultValue"));
+        co.setScale(node.getIntAttribute("scale", 0));
+        co.setNativeType(node.getStringAttribute("nativeType"));
         XMLNode desc = node.evalNode("desc");
         if (desc != null) {
             co.setDesc(desc.getStringBody().trim());

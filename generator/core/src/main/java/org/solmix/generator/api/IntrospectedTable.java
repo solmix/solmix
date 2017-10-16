@@ -51,7 +51,8 @@ public abstract class IntrospectedTable {
 
     public enum TargetRuntime {
         IBATIS2, 
-        MYBATIS3
+        MYBATIS3,
+        DATAX
     }
 
     protected enum InternalAttribute {
@@ -499,6 +500,7 @@ public abstract class IntrospectedTable {
     }
 
     public void initialize() {
+        
         calculateJavaClientAttributes();
         calculateModelAttributes();
         calculateXmlAttributes();
@@ -801,7 +803,7 @@ public abstract class IntrospectedTable {
 
         return sb.toString();
     }
-
+    
     protected void calculateJavaClientAttributes() {
         if (domain.getJavaClientGeneratorInfo() == null) {
             return;

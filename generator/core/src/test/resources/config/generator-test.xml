@@ -6,10 +6,26 @@
 
 	<!--comment -->
 	<domain id="AUTH">
+		<plugin type="org.solmix.generator.plugin.EqualsHashCodePlugin" />
+		<plugin type="org.solmix.generator.plugin.ToStringPlugin" />
 		<javaModelGenerator targetPackage="com.foo.auth"
 			targetProject="target/generated-sources/datax">
 		</javaModelGenerator>
-		<table tableName="AUTH_SUBJECT"></table>
+		<sqlMapGenerator targetPackage="com.foo.auth"
+			targetProject="target/generated-sources/datax">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- <javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.foo.auth.client" targetProject="target/generated-sources/datax">
+		</javaClientGenerator> -->
+		<dataxGenerator targetPackage="com.foo.auth.client" targetProject="target/generated-sources/datax"/>
+		<table tableName="AUTH_SUBJECT" remark="用户"
+			enableDeleteByPrimaryKey="true" enableSelectByPrimaryKey="true">
+			<column column="ID" nativeType="BIGINT" remark="主键"
+				primaryKey="true">
+			</column>
+			<column column="NAME" nativeType="VARCHAR"></column>
+		</table>
 
 	</domain>
 

@@ -17,9 +17,11 @@ public class ColumnInfo extends PropertyHolder
     
     private String property;
 
-    private String title;
+    private String remark;
 
     private String jdbcType;
+    
+    private String nativeType;
 
     /** The java type. */
     private String javaType;
@@ -44,8 +46,14 @@ public class ColumnInfo extends PropertyHolder
     private boolean ignore;
 
     private boolean primaryKey;
+    private boolean nullable=true;
 
     private String desc;
+    private String defaultValue;
+    
+    private Integer columnSize=0;
+
+    private int scale;
 
     
     public String getColumn() {
@@ -67,12 +75,12 @@ public class ColumnInfo extends PropertyHolder
         this.property = property;
     }
 
-    public String getTitle() {
-        return title;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setRemark(String title) {
+        this.remark = title;
     }
 
     public String getJdbcType() {
@@ -168,8 +176,8 @@ public class ColumnInfo extends PropertyHolder
         if (stringHasValue(property)) {
             xmlElement.addAttribute(new Attribute("property", property)); 
         }
-        if (stringHasValue(title)) {
-            xmlElement.addAttribute(new Attribute("title", title)); 
+        if (stringHasValue(remark)) {
+            xmlElement.addAttribute(new Attribute("remark", remark)); 
         }
 
         if (stringHasValue(javaType)) {
@@ -182,6 +190,21 @@ public class ColumnInfo extends PropertyHolder
 
         if (stringHasValue(typeHandler)) {
             xmlElement.addAttribute(new Attribute("typeHandler", typeHandler)); 
+        }
+        if (stringHasValue(nativeType)) {
+            xmlElement.addAttribute(new Attribute("nativeType", nativeType)); 
+        }
+        if (stringHasValue(defaultValue)) {
+            xmlElement.addAttribute(new Attribute("defaultValue", defaultValue)); 
+        }
+        if (nullable) {
+            xmlElement.addAttribute(new Attribute("nullable", "true")); 
+        }
+        if (columnSize!=0) {
+            xmlElement.addAttribute(new Attribute("columnSize", String.valueOf(columnSize))); 
+        }
+        if (scale!=0) {
+            xmlElement.addAttribute(new Attribute("scale", String.valueOf(scale))); 
         }
 
         if (stringHasValue(configuredDelimitedColumnName)) {
@@ -197,4 +220,63 @@ public class ColumnInfo extends PropertyHolder
 
         return xmlElement;
     }
+
+
+    
+    public Integer getColumnSize() {
+        return columnSize;
+    }
+
+
+    
+    public void setColumnSize(Integer columnSize) {
+        this.columnSize = columnSize;
+    }
+
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+
+    
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
+    }
+
+
+    
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+
+    
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    
+    public String getNativeType() {
+        return nativeType;
+    }
+
+    
+    public void setNativeType(String nativeSqlType) {
+        this.nativeType = nativeSqlType;
+    }
+
+
+    public int getScale() {
+        return scale;
+    }
+
+
+    
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
+
+    
 }

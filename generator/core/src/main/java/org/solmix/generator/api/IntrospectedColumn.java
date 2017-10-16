@@ -19,6 +19,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.solmix.generator.api.java.FullyQualifiedJavaType;
+import org.solmix.generator.config.ColumnInfo;
 import org.solmix.generator.config.DomainInfo;
 
 /**
@@ -33,6 +34,8 @@ public class IntrospectedColumn {
     protected int jdbcType;
 
     protected String jdbcTypeName;
+    
+    protected String nativeSqlType;
 
     protected boolean nullable;
 
@@ -79,6 +82,8 @@ public class IntrospectedColumn {
      * True if there is a column override that defines this column as GENERATED ALWAYS.
      */
     protected boolean isGeneratedAlways;
+
+    private ColumnInfo columnInfo;
 
     /**
      * Constructs a Column definition. This object holds all the information
@@ -341,4 +346,25 @@ public class IntrospectedColumn {
     public void setGeneratedAlways(boolean isGeneratedAlways) {
         this.isGeneratedAlways = isGeneratedAlways;
     }
+
+    
+    public String getNativeSqlType() {
+        return nativeSqlType;
+    }
+
+    
+    public void setNativeSqlType(String nativeSqlType) {
+        this.nativeSqlType = nativeSqlType;
+    }
+
+    public void setColumnInfo(ColumnInfo c) {
+       this.columnInfo=c;
+        
+    }
+
+    
+    public ColumnInfo getColumnInfo() {
+        return columnInfo;
+    }
+    
 }

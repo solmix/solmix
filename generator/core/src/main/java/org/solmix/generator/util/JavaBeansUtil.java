@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package org.solmix.generator.util;
 
 import java.util.Locale;
@@ -33,24 +34,23 @@ import org.solmix.generator.config.TableInfo;
 /**
  * @author Jeff Butler
  */
-public class JavaBeansUtil {
+public class JavaBeansUtil
+{
 
-    private JavaBeansUtil() {
+    private JavaBeansUtil()
+    {
         super();
     }
 
     /**
-     * Computes a getter method name.  Warning - does not check to see that the property is a valid
-     * property.  Call getValidPropertyName first.
+     * Computes a getter method name. Warning - does not check to see that the property is a valid property. Call
+     * getValidPropertyName first.
      * 
-     * @param property
-     *            the property
-     * @param fullyQualifiedJavaType
-     *            the fully qualified java type
+     * @param property the property
+     * @param fullyQualifiedJavaType the fully qualified java type
      * @return the getter method name
      */
-    public static String getGetterMethodName(String property,
-            FullyQualifiedJavaType fullyQualifiedJavaType) {
+    public static String getGetterMethodName(String property, FullyQualifiedJavaType fullyQualifiedJavaType) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(property);
@@ -60,22 +60,20 @@ public class JavaBeansUtil {
             }
         }
 
-        if (fullyQualifiedJavaType.equals(FullyQualifiedJavaType
-                .getBooleanPrimitiveInstance())) {
-            sb.insert(0, "is"); 
+        if (fullyQualifiedJavaType.equals(FullyQualifiedJavaType.getBooleanPrimitiveInstance())) {
+            sb.insert(0, "is");
         } else {
-            sb.insert(0, "get"); 
+            sb.insert(0, "get");
         }
 
         return sb.toString();
     }
 
     /**
-     * Computes a setter method name.  Warning - does not check to see that the property is a valid
-     * property.  Call getValidPropertyName first.
+     * Computes a setter method name. Warning - does not check to see that the property is a valid property. Call
+     * getValidPropertyName first.
      *
-     * @param property
-     *            the property
+     * @param property the property
      * @return the setter method name
      */
     public static String getSetterMethodName(String property) {
@@ -88,13 +86,12 @@ public class JavaBeansUtil {
             }
         }
 
-        sb.insert(0, "set"); 
+        sb.insert(0, "set");
 
         return sb.toString();
     }
 
-    public static String getCamelCaseString(String inputString,
-            boolean firstCharacterUppercase) {
+    public static String getCamelCaseString(String inputString, boolean firstCharacterUppercase) {
         StringBuilder sb = new StringBuilder();
 
         boolean nextUpperCase = false;
@@ -102,27 +99,27 @@ public class JavaBeansUtil {
             char c = inputString.charAt(i);
 
             switch (c) {
-            case '_':
-            case '-':
-            case '@':
-            case '$':
-            case '#':
-            case ' ':
-            case '/':
-            case '&':
-                if (sb.length() > 0) {
-                    nextUpperCase = true;
-                }
-                break;
+                case '_':
+                case '-':
+                case '@':
+                case '$':
+                case '#':
+                case ' ':
+                case '/':
+                case '&':
+                    if (sb.length() > 0) {
+                        nextUpperCase = true;
+                    }
+                    break;
 
-            default:
-                if (nextUpperCase) {
-                    sb.append(Character.toUpperCase(c));
-                    nextUpperCase = false;
-                } else {
-                    sb.append(Character.toLowerCase(c));
-                }
-                break;
+                default:
+                    if (nextUpperCase) {
+                        sb.append(Character.toUpperCase(c));
+                        nextUpperCase = false;
+                    } else {
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    break;
             }
         }
 
@@ -136,29 +133,30 @@ public class JavaBeansUtil {
     /**
      * This method ensures that the specified input string is a valid Java property name.
      * 
-     * <p>The rules are as follows:
+     * <p>
+     * The rules are as follows:
      * 
      * <ol>
-     *   <li>If the first character is lower case, then OK</li>
-     *   <li>If the first two characters are upper case, then OK</li>
-     *   <li>If the first character is upper case, and the second character is lower case, then the first character should be made
-     *       lower case</li>
+     * <li>If the first character is lower case, then OK</li>
+     * <li>If the first two characters are upper case, then OK</li>
+     * <li>If the first character is upper case, and the second character is lower case, then the first character should
+     * be made lower case</li>
      * </ol>
      * 
-     * <p>For example:
+     * <p>
+     * For example:
      * 
      * <ul>
-     *   <li>eMail &gt; eMail</li>
-     *   <li>firstName &gt; firstName</li>
-     *   <li>URL &gt; URL</li>
-     *   <li>XAxis &gt; XAxis</li>
-     *   <li>a &gt; a</li>
-     *   <li>B &gt; b</li>
-     *   <li>Yaxis &gt; yaxis</li>
+     * <li>eMail &gt; eMail</li>
+     * <li>firstName &gt; firstName</li>
+     * <li>URL &gt; URL</li>
+     * <li>XAxis &gt; XAxis</li>
+     * <li>a &gt; a</li>
+     * <li>B &gt; b</li>
+     * <li>Yaxis &gt; yaxis</li>
      * </ul>
      *
-     * @param inputString
-     *            the input string
+     * @param inputString the input string
      * @return the valid property name
      */
     public static String getValidPropertyName(String inputString) {
@@ -169,10 +167,8 @@ public class JavaBeansUtil {
         } else if (inputString.length() < 2) {
             answer = inputString.toLowerCase(Locale.US);
         } else {
-            if (Character.isUpperCase(inputString.charAt(0))
-                    && !Character.isUpperCase(inputString.charAt(1))) {
-                answer = inputString.substring(0, 1).toLowerCase(Locale.US)
-                        + inputString.substring(1);
+            if (Character.isUpperCase(inputString.charAt(0)) && !Character.isUpperCase(inputString.charAt(1))) {
+                answer = inputString.substring(0, 1).toLowerCase(Locale.US) + inputString.substring(1);
             } else {
                 answer = inputString;
             }
@@ -181,22 +177,18 @@ public class JavaBeansUtil {
         return answer;
     }
 
-    public static Method getJavaBeansGetter(IntrospectedColumn introspectedColumn,
-            DomainInfo context,
-            IntrospectedTable introspectedTable) {
-        FullyQualifiedJavaType fqjt = introspectedColumn
-                .getFullyQualifiedJavaType();
+    public static Method getJavaBeansGetter(IntrospectedColumn introspectedColumn, DomainInfo context, IntrospectedTable introspectedTable) {
+        FullyQualifiedJavaType fqjt = introspectedColumn.getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
 
         Method method = new Method();
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(fqjt);
         method.setName(getGetterMethodName(property, fqjt));
-        context.getCommentGenerator().addGetterComment(method,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addGetterComment(method, introspectedTable, introspectedColumn);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("return "); 
+        sb.append("return ");
         sb.append(property);
         sb.append(';');
         method.addBodyLine(sb.toString());
@@ -204,51 +196,43 @@ public class JavaBeansUtil {
         return method;
     }
 
-    public static Field getJavaBeansField(IntrospectedColumn introspectedColumn,
-        DomainInfo context,
-            IntrospectedTable introspectedTable) {
-        FullyQualifiedJavaType fqjt = introspectedColumn
-                .getFullyQualifiedJavaType();
+    public static Field getJavaBeansField(IntrospectedColumn introspectedColumn, DomainInfo context, IntrospectedTable introspectedTable) {
+        FullyQualifiedJavaType fqjt = introspectedColumn.getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
 
         Field field = new Field();
         field.setVisibility(JavaVisibility.PRIVATE);
         field.setType(fqjt);
         field.setName(property);
-        context.getCommentGenerator().addFieldComment(field,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addFieldComment(field, introspectedTable, introspectedColumn);
 
         return field;
     }
 
-    public static Method getJavaBeansSetter(IntrospectedColumn introspectedColumn,
-        DomainInfo context,
-            IntrospectedTable introspectedTable) {
-        FullyQualifiedJavaType fqjt = introspectedColumn
-                .getFullyQualifiedJavaType();
+    public static Method getJavaBeansSetter(IntrospectedColumn introspectedColumn, DomainInfo context, IntrospectedTable introspectedTable) {
+        FullyQualifiedJavaType fqjt = introspectedColumn.getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
 
         Method method = new Method();
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setName(getSetterMethodName(property));
         method.addParameter(new Parameter(fqjt, property));
-        context.getCommentGenerator().addSetterComment(method,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addSetterComment(method, introspectedTable, introspectedColumn);
 
         StringBuilder sb = new StringBuilder();
         if (introspectedColumn.isStringColumn() && isTrimStringsEnabled(introspectedColumn)) {
-            sb.append("this."); 
+            sb.append("this.");
             sb.append(property);
-            sb.append(" = "); 
+            sb.append(" = ");
             sb.append(property);
-            sb.append(" == null ? null : "); 
+            sb.append(" == null ? null : ");
             sb.append(property);
-            sb.append(".trim();"); 
+            sb.append(".trim();");
             method.addBodyLine(sb.toString());
         } else {
-            sb.append("this."); 
+            sb.append("this.");
             sb.append(property);
-            sb.append(" = "); 
+            sb.append(" = ");
             sb.append(property);
             sb.append(';');
             method.addBodyLine(sb.toString());
@@ -258,10 +242,8 @@ public class JavaBeansUtil {
     }
 
     private static boolean isTrimStringsEnabled(DomainInfo context) {
-        Properties properties = context
-                .getJavaModelGeneratorInfo().getProperties();
-        boolean rc = DataUtils.asBoolean(properties
-                .getProperty(PropertyRegistry.MODEL_GENERATOR_TRIM_STRINGS));
+        Properties properties = context.getJavaModelGeneratorInfo().getProperties();
+        boolean rc = DataUtils.asBoolean(properties.getProperty(PropertyRegistry.MODEL_GENERATOR_TRIM_STRINGS));
         return rc;
     }
 

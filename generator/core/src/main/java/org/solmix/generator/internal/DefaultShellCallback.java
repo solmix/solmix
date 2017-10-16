@@ -58,7 +58,9 @@ public class DefaultShellCallback implements ShellCallback {
         // if it does not already exist
 
         File project = new File(targetProject);
-        if (!project.isDirectory()) {
+        if(!project.exists()){
+            project.mkdir();
+        }else if (!project.isDirectory()) {
             throw new ShellException(getString("Warning.9", 
                     targetProject));
         }

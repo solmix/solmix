@@ -67,6 +67,8 @@ public class TableInfo extends PropertyHolder
     private String mapperName;
 
     private String sqlProviderName;
+    
+    private String remark;
 
     private List<IgnoredColumnPattern> ignoredColumnPatterns = new ArrayList<IgnoredColumnPattern>();
 
@@ -79,12 +81,12 @@ public class TableInfo extends PropertyHolder
         this.modelType = context.getDefaultModelType();
         insertStatementEnabled = true;
         selectByPrimaryKeyStatementEnabled = true;
-        selectByExampleStatementEnabled = true;
+        selectByExampleStatementEnabled = false;
         updateByPrimaryKeyStatementEnabled = true;
         deleteByPrimaryKeyStatementEnabled = true;
-        deleteByExampleStatementEnabled = true;
-        countByExampleStatementEnabled = true;
-        updateByExampleStatementEnabled = true;
+        deleteByExampleStatementEnabled = false;
+        countByExampleStatementEnabled = false;
+        updateByExampleStatementEnabled = false;
     }
 
     public boolean isDeleteByPrimaryKeyStatementEnabled() {
@@ -258,6 +260,9 @@ public class TableInfo extends PropertyHolder
 
         if (stringHasValue(catalog)) {
             xmlElement.addAttribute(new Attribute("catalog", catalog));
+        }
+        if(stringHasValue(remark)){
+            xmlElement.addAttribute(new Attribute("remark", remark));
         }
 
         if (stringHasValue(schema)) {
@@ -504,6 +509,16 @@ public class TableInfo extends PropertyHolder
     public ColumnInfo getColumnOverride(String actualColumnName) {
         ColumnInfo ci = columns.get(actualColumnName);
         return (ci!=null&&ci.isIgnore())?ci:null;
+    }
+
+    
+    public String getRemark() {
+        return remark;
+    }
+
+    
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

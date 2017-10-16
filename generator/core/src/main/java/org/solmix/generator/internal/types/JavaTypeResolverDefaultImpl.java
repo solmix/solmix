@@ -28,11 +28,13 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
 
     protected Map<Integer, JdbcTypeInformation> typeMap;
 
+    protected Map<String, Integer> jdbcMap;
+    
     public JavaTypeResolverDefaultImpl() {
         super();
         properties = new Properties();
         typeMap = new HashMap<Integer, JdbcTypeInformation>();
-
+        jdbcMap = new HashMap<String, Integer>();
         typeMap.put(Types.ARRAY, new JdbcTypeInformation("ARRAY", 
                 new FullyQualifiedJavaType(Object.class.getName())));
         typeMap.put(Types.BIGINT, new JdbcTypeInformation("BIGINT", 
@@ -102,6 +104,11 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
                 new FullyQualifiedJavaType("byte[]"))); 
         typeMap.put(Types.VARCHAR, new JdbcTypeInformation("VARCHAR", 
                 new FullyQualifiedJavaType(String.class.getName())));
+        for(Integer type:typeMap.keySet()){
+            JdbcTypeInformation  jti = typeMap.get(type);
+            jdbcMap.put(jti.getJdbcTypeName(), type);
+        }
+        
     }
 
     @Override
@@ -123,6 +130,7 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
 
         return answer;
     }
+   
     
     protected FullyQualifiedJavaType overrideDefaultType(IntrospectedColumn column, FullyQualifiedJavaType defaultType) {
         FullyQualifiedJavaType answer = defaultType;
@@ -184,6 +192,11 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
     }
 
     @Override
+    public Integer calculateJdbcType(String jdbcTypeName) {
+        return jdbcMap.get(jdbcTypeName);
+        
+    }
+    @Override
     public void setWarnings(List<String> warnings) {
         this.warnings = warnings;
     }
@@ -212,4 +225,6 @@ public class JavaTypeResolverDefaultImpl implements JavaTypeResolver {
             return fullyQualifiedJavaType;
         }
     }
+
+   
 }

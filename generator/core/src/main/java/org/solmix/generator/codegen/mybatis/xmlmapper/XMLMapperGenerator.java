@@ -62,8 +62,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
                 "Progress.12", table.toString())); 
         XmlElement answer = new XmlElement("mapper"); 
         String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
-        answer.addAttribute(new Attribute("namespace", 
-                namespace));
+        answer.addAttribute(new Attribute("namespace", namespace));
 
         domain.getCommentGenerator().addRootComment(answer);
 

@@ -69,7 +69,7 @@
 
     <complexType name="commonType">
     	<sequence>
-    		<element name="property" type="tns:propertyType"></element>
+    		<element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"></element>
     	</sequence>
     	<attribute name="type" type="string"></attribute>
     </complexType>
@@ -119,6 +119,7 @@
 
     <complexType name="dataxGeneratorType">
     	<attribute name="targetPackage" type="string"></attribute>
+    	<attribute name="xmlPackage" type="string"></attribute>
     	<attribute name="targetProject" type="string"></attribute>
     </complexType>
 
@@ -142,6 +143,7 @@
     	<attribute name="catalog" type="string"></attribute>
     	<attribute name="schema" type="string"></attribute>
     	<attribute name="tableName" type="string"></attribute>
+    	<attribute name="remark" type="string"></attribute>
     	<attribute name="domainObjectName" type="string"></attribute>
     	<attribute name="alias" type="string"></attribute>
     	<attribute name="enableInsert" type="string"></attribute>
@@ -158,19 +160,25 @@
 
     <complexType name="columnType">
     	<sequence>
-    		<element name="desc" type="string"></element>
+    		<element name="desc" type="string" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
     	</sequence>
     	<attribute name="column" type="string"></attribute>
     	<attribute name="property" type="string"></attribute>
-    	<attribute name="title" type="string"></attribute>
+    	<attribute name="remark" type="string"></attribute>
     	<attribute name="javaType" type="string"></attribute>
     	<attribute name="jdbcType" type="string"></attribute>
+    	<attribute name="columnSize" type="int"></attribute>
+    	<attribute name="scale" type="int"></attribute>
+    	<attribute name="defaultValue" type="string"></attribute>
     	<attribute name="nativeType" type="string"></attribute>
     	<attribute name="typeHandler" type="string"></attribute>
     	<attribute name="delimitedColumnName" type="string"></attribute>
     	<attribute name="override" type="boolean"></attribute>
     	<attribute name="ignore" type="boolean"></attribute>
     	<attribute name="primaryKey" type="boolean"></attribute>
+    	<attribute name="nullable" type="boolean"></attribute>
     </complexType>
 
     <complexType name="ruleType">

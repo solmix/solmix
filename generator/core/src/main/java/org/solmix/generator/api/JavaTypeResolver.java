@@ -84,4 +84,6 @@ public interface JavaTypeResolver {
      *         warning unless the column is ignored or otherwise overridden
      */
     String calculateJdbcTypeName(IntrospectedColumn introspectedColumn);
+
+    Integer calculateJdbcType(String jdbcTypeName);
 }

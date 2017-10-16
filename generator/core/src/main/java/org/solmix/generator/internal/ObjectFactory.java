@@ -33,6 +33,7 @@ import org.solmix.generator.api.Plugin;
 import org.solmix.generator.api.XmlFormatter;
 import org.solmix.generator.api.java.DefaultJavaFormatter;
 import org.solmix.generator.api.xml.DefaultXmlFormatter;
+import org.solmix.generator.codegen.mybatis.IntrospectedTableDataxImpl;
 import org.solmix.generator.codegen.mybatis.IntrospectedTableMyBatis3Impl;
 import org.solmix.generator.config.CommentGeneratorInfo;
 import org.solmix.generator.config.ConnectionFactoryInfo;
@@ -309,8 +310,13 @@ public class ObjectFactory {
     public static IntrospectedTable createIntrospectedTableForValidation(DomainInfo context) {
         String type = context.getTargetRuntime();
         if (isEmpty(type)) {
-            type = IntrospectedTableMyBatis3Impl.class.getName();
+            type = IntrospectedTableDataxImpl.class.getName();
         } 
+        if("mybatis".equalsIgnoreCase(type)){
+            type = IntrospectedTableMyBatis3Impl.class.getName();
+        }else  if("datax".equalsIgnoreCase(type)){
+            type = IntrospectedTableDataxImpl.class.getName();
+        }
 
         IntrospectedTable answer = (IntrospectedTable) createInternalObject(type);
         answer.setDomain(context);
