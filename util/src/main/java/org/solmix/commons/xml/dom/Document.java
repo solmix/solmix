@@ -1,6 +1,8 @@
 
 package org.solmix.commons.xml.dom;
 
+import java.util.List;
+
 import org.solmix.commons.util.DOMUtils;
 
 /**
@@ -124,8 +126,13 @@ public class Document
             sb.append(publicId).append(" ").append(systemId);
             sb.append("\">"); 
             DOMUtils.newLine(sb);
-            sb.append(rootElement.getElements().get(0).getFormattedContent(0));
-            DOMUtils.newLine(sb);
+            List<Element> elements = rootElement.getElements();
+            if(elements!=null){
+                for(Element element:elements){
+                    sb.append(element.getFormattedContent(0));
+                    DOMUtils.newLine(sb);
+                }
+            }
             sb.append("</").append(rootElement.getName()).append(">");
                 
         }
