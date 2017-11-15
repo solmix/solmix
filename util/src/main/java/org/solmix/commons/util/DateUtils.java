@@ -480,6 +480,7 @@ public final class DateUtils
     }
     
     public static void main(String args[]) throws ParseException {
+        long _$=System.currentTimeMillis();
         String r = format("2017/02");
         System.out.println(r);
         r = format("2017年03月01日");
@@ -488,7 +489,7 @@ public final class DateUtils
         System.out.println(r);
         r = format("2017-03-01");
         System.out.println(r);
-        
+        System.out.println(System.currentTimeMillis()-_$);
         
         System.out.println(DateUtils.getFirstDayofMouth("201105", "yyyyMM", "yyyyMMdd"));
         Calendar c = Calendar.getInstance();
