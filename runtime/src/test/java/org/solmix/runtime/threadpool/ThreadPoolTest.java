@@ -173,7 +173,7 @@ public class ThreadPoolTest extends Assert {
             }
         }
     }
-    
+  
     @Test
     public void testDeadLockEnqueueLoads() {
         threadpool = new DefaultThreadPool(100, 2, 1, 1,

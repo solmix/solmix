@@ -25,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -243,7 +244,7 @@ public final class DateUtils
         String dur;
         int weekday, month, useIdx, offset;
 
-        exp = (String[])StringUtils.split(str, " ");
+        exp = StringUtils.split(str, " ");
         if(exp.length < 1){
             throw new ParseException("No time found to parse", 0);
         }
@@ -451,8 +452,44 @@ public final class DateUtils
         else
             return -1;
     }
+  //在这里新添你要的格式，注意大小写，大写MM时月，小写mm是分
+    public static String[] PARTTERS ={"yyyy/MM","yyyy/MM/dd HH:mm:ss","yyyy-MM-dd","yyyy-MM-dd HH:mm:ss","yyyy年MM月dd日","MM/dd/yy"};
+    static Pattern[] rules = new Pattern[PARTTERS.length];
+    static SimpleDateFormat[] FORMATS = new SimpleDateFormat[PARTTERS.length];
+    static SimpleDateFormat OUT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    static{
+        for(int i=0;i<PARTTERS.length;i++){
+            rules[i]=Pattern.compile("^"+PARTTERS[i].toLowerCase()
+                .replace("yyyy", "\\d{4}")
+                .replace("yy", "\\d{2}")
+                .replace("mm", "\\d{2}")
+                .replace("dd", "\\d{2}")
+                .replace("hh", "\\d{2}")
+                .replace("ss", "\\d{2}")+"$");
+            FORMATS[i]=new SimpleDateFormat(PARTTERS[i]);
+        }
+    }
+    public static String format(String input) throws ParseException{
+        for(int i=0;i<rules.length;i++){
+            if(rules[i].matcher(input).matches()){
+                Date date =FORMATS[i].parse(input);
+                return OUT_FORMAT.format(date);
+            }
+        }
+        return input;
+    }
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ParseException {
+        String r = format("2017/02");
+        System.out.println(r);
+        r = format("2017年03月01日");
+        System.out.println(r);
+        r = format("03/01/17");
+        System.out.println(r);
+        r = format("2017-03-01");
+        System.out.println(r);
+        
+        
         System.out.println(DateUtils.getFirstDayofMouth("201105", "yyyyMM", "yyyyMMdd"));
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
@@ -460,10 +497,6 @@ public final class DateUtils
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(DateUtils.getCurrentDateStr("yyyy-MM-dd HH:mm:ss"));
         System.out.println(new Date());
-        try {
-            System.out.println(sdf.parse(textDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+       
     }
 }

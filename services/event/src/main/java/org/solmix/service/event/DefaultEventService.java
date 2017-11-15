@@ -70,22 +70,26 @@ public class DefaultEventService extends EventServiceAdapter
     private String[] ignoreTimeout;
 
     private Boolean requireTopic;
-    
+
     private boolean blackListEnable;
+
+    private Object startLock = new Object();
     
-    private Object startLock=new Object();
+    private volatile boolean runnning=false;
 
     @Resource
     private Container container;
 
     @Override
     public void postEvent(IEvent event) {
+        checkRunning();
         List<EventTask> tasks = taskManager.createEventTasks(event);
         handleEvent(tasks, asyncDeliver);
     }
 
     @Override
     public void sendEvent(IEvent event) {
+        checkRunning();
         List<EventTask> tasks = taskManager.createEventTasks(event);
         handleEvent(tasks, syncDeliver);
     }
@@ -101,11 +105,12 @@ public class DefaultEventService extends EventServiceAdapter
      */
     @PostConstruct
     public void start() {
-        synchronized(startLock){
+        synchronized (startLock) {
             configureService();
             startOrUpdateService();
+            runnning=true;
         }
-        
+
     }
 
     /**
@@ -113,30 +118,20 @@ public class DefaultEventService extends EventServiceAdapter
      */
     @PreDestroy
     public void shutdown() {
-        synchronized(startLock){
-        taskManager = new EventTaskManager() {
-
-            /**
-             * This is a null object and this method will throw an IllegalStateException due to the bundle being
-             * stopped.
-             * 
-             * @param event An event that is not used.
-             * 
-             * @return This method does not return normally
-             * 
-             * @throws IllegalStateException - This is a null object and this method will always throw an
-             *         IllegalStateException
-             */
-            @Override
-            public List<EventTask> createEventTasks(final IEvent event) {
-                throw new IllegalStateException("The EventService is shutdown");
+        synchronized (startLock) {
+            runnning=false;
+            if(this.synThreadPool!=null){
+                this.synThreadPool.shutdown(true);
             }
-
-			@Override
-			public void addToBlackList(IEventHandler handler) {
-				 throw new IllegalStateException("The EventAdmin is shutdown");
-			}
-        };
+            if(this.asyThreadPool!=null){
+                this.asyThreadPool.shutdown(true);
+            }
+        }
+    }
+    
+    private void checkRunning(){
+        if(!runnning){
+            throw new IllegalStateException("EventService is going to shutdown ,refuse event");
         }
     }
 
@@ -228,11 +223,11 @@ public class DefaultEventService extends EventServiceAdapter
     protected EventTaskManager createTaskManager() {
         Cache<String, String> topicCache = new LeastRecentlyUsedCacheMap<String, String>(cacheSize);
         final TopicFilter topicFilter = new CachedTopicFilter(topicCache, requireTopic);
-        EventHandlerBlackList bl ;
-        if(isBlackListEnable()){
-        	bl=new EventHandlerBlackListImpl(timeout);
-        }else{
-        	bl=new NullEventHandlerBlackList();
+        EventHandlerBlackList bl;
+        if (isBlackListEnable()) {
+            bl = new EventHandlerBlackListImpl(timeout);
+        } else {
+            bl = new NullEventHandlerBlackList();
         }
         return new DefaultEventTaskManager(container, bl, topicFilter);
     }
@@ -290,53 +285,55 @@ public class DefaultEventService extends EventServiceAdapter
         this.container = container;
     }
 
-    private DefaultEventTaskManager getDefaultEventTaskManager(String operation){
-    	if(this.taskManager instanceof DefaultEventTaskManager){
-    		return (DefaultEventTaskManager)this.taskManager;
-    	}else{
-    		throw new IllegalStateException(operation+" is not supported");
-    	}
+    private DefaultEventTaskManager getDefaultEventTaskManager(String operation) {
+        if (this.taskManager instanceof DefaultEventTaskManager) {
+            return (DefaultEventTaskManager) this.taskManager;
+        } else {
+            throw new IllegalStateException(operation + " is not supported");
+        }
     }
+
     @Override
-	public void addEventHandler(String topic, IEventHandler handler) {
-		getDefaultEventTaskManager("addEventHandler").addEventHandler(topic, handler);
-	}
+    public void addEventHandler(String topic, IEventHandler handler) {
+        getDefaultEventTaskManager("addEventHandler").addEventHandler(topic, handler);
+    }
 
-	@Override
-	public void addEventHandler(IEventHandler handler) {
-		getDefaultEventTaskManager("addEventHandler").addEventHandler( handler);
-	}
+    @Override
+    public void addEventHandler(IEventHandler handler) {
+        getDefaultEventTaskManager("addEventHandler").addEventHandler(handler);
+    }
 
-	public void removeEventHandler(String topic) {
-		getDefaultEventTaskManager("removeEventHandler").removeEventHandler(topic);
-	}
+    public void removeEventHandler(String topic) {
+        getDefaultEventTaskManager("removeEventHandler").removeEventHandler(topic);
+    }
 
-	public DefaultThreadPool getAsyThreadPool() {
-		return asyThreadPool;
-	}
+    public DefaultThreadPool getAsyThreadPool() {
+        return asyThreadPool;
+    }
 
-	public void setAsyThreadPool(DefaultThreadPool asyThreadPool) {
-		this.asyThreadPool = asyThreadPool;
-	}
+    public void setAsyThreadPool(DefaultThreadPool asyThreadPool) {
+        this.asyThreadPool = asyThreadPool;
+    }
 
-	public DefaultThreadPool getSynThreadPool() {
-		return synThreadPool;
-	}
+    public DefaultThreadPool getSynThreadPool() {
+        return synThreadPool;
+    }
 
-	public void setSynThreadPool(DefaultThreadPool synThreadPool) {
-		this.synThreadPool = synThreadPool;
-	}
+    public void setSynThreadPool(DefaultThreadPool synThreadPool) {
+        this.synThreadPool = synThreadPool;
+    }
 
-	/**
-	 * 是否启用黑名单功能，黑名单功能可以将超时的任务加入黑名单，如果可能超时的任务，可以考虑使用异步事项
-	 * @return
-	 */
-	public boolean isBlackListEnable() {
-		return blackListEnable;
-	}
+    /**
+     * 是否启用黑名单功能，黑名单功能可以将超时的任务加入黑名单，如果可能超时的任务，可以考虑使用异步事项
+     * 
+     * @return
+     */
+    public boolean isBlackListEnable() {
+        return blackListEnable;
+    }
 
-	public void setBlackListEnable(boolean blackListEnable) {
-		this.blackListEnable = blackListEnable;
-	}
-	
+    public void setBlackListEnable(boolean blackListEnable) {
+        this.blackListEnable = blackListEnable;
+    }
+
 }
