@@ -25,7 +25,9 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerFactory;
 import org.solmix.runtime.service.ContainerAwareService;
 import org.solmix.runtime.service.ContainerRefTestService;
+import org.solmix.runtime.service.DateTimeService;
 import org.solmix.runtime.service.InjectTestService;
+import org.solmix.runtime.service.SystemTimeService;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -138,11 +140,12 @@ public class ContainerApplicationContextTest {
         try {
             String file = "/org/solmix/runtime/support/spring/resource.xml";
             @SuppressWarnings("resource")
-            ContainerApplicationContext overload = new ContainerApplicationContext(
-                file, true);
+            ContainerApplicationContext overload = new ContainerApplicationContext(file, true);
             InjectTestService c = (InjectTestService) overload.getBean("timeservice");
             Assert.assertNotNull(c.getAdapterManager());
             Assert.assertNotNull(c.getContainer());
+            Assert.assertTrue(c.getTimeService().getClass()==SystemTimeService.class);
+            Assert.assertTrue(c.getTimeService2().getClass()==DateTimeService.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

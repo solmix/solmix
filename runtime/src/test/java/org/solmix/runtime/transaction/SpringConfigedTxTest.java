@@ -19,9 +19,6 @@ public class SpringConfigedTxTest extends TestCase {
         	ProxyManager pm=	c.getExtension(ProxyManager.class);
         	assertNotNull(pm);
         	ContainerFactory.getContainers();
-        	
-        	
-        	
         }finally{
         	if(c!=null)
         		c.close();

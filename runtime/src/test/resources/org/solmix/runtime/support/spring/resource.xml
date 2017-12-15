@@ -13,4 +13,6 @@
 		<constructor-arg ref="solmix"></constructor-arg>
 	</bean>
 	<bean class="org.solmix.runtime.service.ContainerAwareService"></bean>
+	<bean id="sscd31d" class="org.solmix.runtime.service.SystemTimeService"/>
+	<bean id="sscd31d22" class="org.solmix.runtime.service.DateTimeService"/>
 </beans>

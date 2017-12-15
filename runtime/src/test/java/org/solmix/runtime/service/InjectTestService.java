@@ -36,7 +36,10 @@ public class InjectTestService
 {
     @Resource
     private AdapterManager adm;
+    @Resource(name="sscd31d")
     private TimeService timeService;
+    @Resource(name="sscd31d22")
+    private TimeService timeService2;
     private  Container c;
     public  InjectTestService(Container c){
         this.c=c;
@@ -75,6 +78,15 @@ public class InjectTestService
     @Resource
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    
+    public TimeService getTimeService2() {
+        return timeService2;
+    }
+    
+    public void setTimeService2(TimeService timeService2) {
+        this.timeService2 = timeService2;
     }
     
 }
