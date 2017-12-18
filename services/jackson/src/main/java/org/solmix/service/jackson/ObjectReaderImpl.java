@@ -66,7 +66,7 @@ public class ObjectReaderImpl<T> implements ObjectReader<T>
 
     @Override
     public Object read(T input, ArgumentInfo ai) {
-        Object content_type= ai.getProperty(Message.CONTENT_TYPE);
+        Object content_type=ai.getProperty(Message.CONTENT_TYPE);
         if(content_type!=null&&content_type.equals("xml")){
             try {
                 if(input instanceof InputStream){
@@ -96,11 +96,11 @@ public class ObjectReaderImpl<T> implements ObjectReader<T>
                 }else if(input instanceof Reader){
                     return objectMapper.readValue((Reader)input, ai.getTypeClass());
                 }else if(input instanceof String){
-                    return xmlMapper.readValue((String)input, ai.getTypeClass());
+                    return objectMapper.readValue((String)input, ai.getTypeClass());
                 }else if(input instanceof URL){
-                    return xmlMapper.readValue((URL)input, ai.getTypeClass());
+                    return objectMapper.readValue((URL)input, ai.getTypeClass());
                 }else if(input instanceof File){
-                    return xmlMapper.readValue((File)input, ai.getTypeClass());
+                    return objectMapper.readValue((File)input, ai.getTypeClass());
                 }else{
                     throw new DataProcessorException("Unkonw source:"+input.getClass().getName());
                 }

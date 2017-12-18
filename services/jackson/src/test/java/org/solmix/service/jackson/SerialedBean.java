@@ -35,7 +35,7 @@ public class SerialedBean {
 	public void setIgnore(InternalBean ignore) {
 		this.ignore = ignore;
 	}
-	@JsonIgnore
+	@Custom("code")
 	public String getName() {
 		return n;
 	}

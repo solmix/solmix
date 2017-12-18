@@ -54,6 +54,9 @@ public class JacksonDataProcessor implements DataProcessor
     private boolean omitNullValues = true;
     public boolean prettyPrint ;
     List<JsonSerializer> jsonSerializers;
+    
+    private SimpleModule jsonModule;
+    private JacksonXmlModule xmlModule;
     /**
      * {@inheritDoc}
      * 
@@ -68,19 +71,21 @@ public class JacksonDataProcessor implements DataProcessor
     private void initializeXmlMapper() {
         xmlMapper= new XmlMapper();
         if(prettyPrint){
-            objectMapper.writerWithDefaultPrettyPrinter();
+            xmlMapper.writerWithDefaultPrettyPrinter();
         }
-        JacksonXmlModule module = new JacksonXmlModule();
+        if(xmlModule==null){
+            xmlModule = new JacksonXmlModule();
+        }
         if(jsonSerializers!=null){
             for(JsonSerializer<?> serializer:jsonSerializers){
-                module.addSerializer(serializer);
+                xmlModule.addSerializer(serializer);
             }
         }
-        objectMapper.registerModule(module);
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        objectMapper.enable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
-        objectMapper.enable(Feature.AUTO_CLOSE_TARGET);
+        xmlMapper.registerModule(xmlModule);
+        xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        xmlMapper.enable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        xmlMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+        xmlMapper.enable(Feature.AUTO_CLOSE_TARGET);
     }
 
     
@@ -89,17 +94,20 @@ public class JacksonDataProcessor implements DataProcessor
         if(prettyPrint){
             objectMapper.writerWithDefaultPrettyPrinter();
         }
-        SimpleModule module = new SimpleModule("SolmixJS", new Version(0, 6, 1, "alpha","org.solmix.service","solmix-service-jackson"));
+       if(jsonModule==null){
+           jsonModule = new SimpleModule("SolmixJS", new Version(0, 6, 1, "alpha","org.solmix.service","solmix-service-jackson"));
+       }
         if(jsonSerializers!=null){
             for(JsonSerializer<?> serializer:jsonSerializers){
-                module.addSerializer(serializer);
+                jsonModule.addSerializer(serializer);
             }
         }
-        objectMapper.registerModule(module);
+        objectMapper.registerModule(jsonModule);
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.enable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         objectMapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
         objectMapper.enable(Feature.AUTO_CLOSE_TARGET);
+     
     }
 
     @SuppressWarnings("unchecked")
@@ -187,5 +195,26 @@ public class JacksonDataProcessor implements DataProcessor
     public void setJsonSerializers(List<JsonSerializer> jsonSerializers) {
         this.jsonSerializers = jsonSerializers;
     }
+
     
+    public SimpleModule getJsonModule() {
+        return jsonModule;
+    }
+
+    
+    public void setJsonModule(SimpleModule jsonModule) {
+        this.jsonModule = jsonModule;
+    }
+
+    
+    public JacksonXmlModule getXmlModule() {
+        return xmlModule;
+    }
+
+    
+    public void setXmlModule(JacksonXmlModule xmlModule) {
+        this.xmlModule = xmlModule;
+    }
+
+
 }

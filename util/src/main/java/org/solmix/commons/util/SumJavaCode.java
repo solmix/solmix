@@ -34,7 +34,7 @@ public class SumJavaCode
         SumJavaCode sjc = new SumJavaCode();
         // File f = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "src");
         // File f = new File("M:\\workspace\\platform\\core\\trunk\\solmix-web\\solmix-app\\src");
-        File f = new File("D:\\o\\generator-master\\core\\mybatis-generator-core\\src\\main\\java\\org\\mybatis\\generator");
+        File f = new File("/home/solmix/o/example");
         System.out.println(f.getName());
         sjc.treeFile(f);
         System.out.println("文件数目:"+sjc.getFileCount()+" 总代码行数:"+(sjc.getWhiteLines()+sjc.getNormalLines()+sjc.getCommentLines()));
