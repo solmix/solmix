@@ -13,8 +13,10 @@ public class CustomJsonSerializer extends JsonSerializer<Object>
 
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        
-        gen.writeString("xxxxx");;
+        gen.writeString("xxxxx");
+        gen.getOutputContext().getCurrentName();
+        gen.writeFieldName("cccc");
+        gen.writeString("sddf");
     }
 
 }

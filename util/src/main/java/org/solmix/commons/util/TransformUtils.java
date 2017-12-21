@@ -49,14 +49,14 @@ public class TransformUtils
     public static interface Transformer
     {
 
-        public abstract Object transform(Object obj) throws Exception;
+        public abstract Object transform(Object obj) throws TransformException;
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(TransformUtils.class.getName());
 
     @SuppressWarnings("unchecked")
     public static <T> T transformType(Class<T> targetType, Object value)
-        throws Exception {
+        throws TransformException {
         if (targetType == null)
             return null;
         if (value == null)
@@ -72,8 +72,8 @@ public class TransformUtils
             return (T) transformEnum(value, targetType);
         if ((value instanceof Map) && !targetType.isPrimitive()
             && !targetType.isInterface() && !targetType.isArray()) {
-            Object instance = targetType.newInstance();
             try {
+                Object instance = targetType.newInstance();
                 DataUtils.setProperties((Map) value, instance);
                 return (T) instance;
             } catch (Exception ee) {
@@ -86,16 +86,26 @@ public class TransformUtils
         }
         if (!targetType.isPrimitive() && !targetType.isEnum()) {
             Class<?> types[] = { value.getClass() };
-            Constructor<?> constructor = targetType.getConstructor(types);
-            Object arguments[] = { value };
-            return (T) constructor.newInstance(arguments);
+            
+            try {
+                Constructor<?>  constructor = targetType.getConstructor(types);
+                if(constructor!=null){
+                    Object arguments[] = { value };
+                    return (T) constructor.newInstance(arguments);
+                }
+            } catch (NoSuchMethodException e) {
+               //IGNORE continue use other 
+            } catch (Exception e) {
+                throw new TransformException("Can't used constructor to instance class "+targetType.getName(),e);
+            }
+            
         }
         if (!targetType.isPrimitive()
             && (targetType.isInterface() || Modifier.isAbstract(targetType.getModifiers())))
             LOG.warn((new StringBuilder()).append(
                 "Impossible to convert to target type ").append(
                 targetType.getName()).append(" - it is not a concrete class").toString());
-        throw new IllegalArgumentException(
+        throw new TransformException(
             (new StringBuilder()).append("Can't convert value of type ").append(
                 value.getClass().getName()).append(" to target type ").append(
                 targetType.getName()).toString());
@@ -483,7 +493,7 @@ public class TransformUtils
         Transformer stringTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 return input==null?null: input.toString();
             }
 
@@ -492,7 +502,7 @@ public class TransformUtils
         Transformer boolTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 return Boolean.valueOf(input.toString());
             }
 
@@ -502,7 +512,7 @@ public class TransformUtils
         Transformer charTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Character('\0');
@@ -516,7 +526,7 @@ public class TransformUtils
         Transformer byteTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Byte((byte) 0);
@@ -530,7 +540,7 @@ public class TransformUtils
         Transformer shortTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Short((short) 0);
@@ -544,7 +554,7 @@ public class TransformUtils
         Transformer intTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString().trim();
                 if ("".equals(value))
                     return new Integer(0);
@@ -558,7 +568,7 @@ public class TransformUtils
         Transformer longTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Long(0L);
@@ -572,7 +582,7 @@ public class TransformUtils
         Transformer floatTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Float(0.0F);
@@ -586,7 +596,7 @@ public class TransformUtils
         Transformer doubleTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new Double(0.0D);
@@ -600,7 +610,7 @@ public class TransformUtils
         Transformer bigDecimalTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return new BigDecimal(0);
@@ -613,7 +623,7 @@ public class TransformUtils
         Transformer bigIntegerTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 String value = input.toString();
                 if ("".equals(value))
                     return BigInteger.ZERO;
@@ -626,7 +636,7 @@ public class TransformUtils
         Transformer javaSqlDateTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 if (input instanceof java.util.Date) {
                     Calendar c = Calendar.getInstance();
                     c.setTime((java.util.Date) input);
@@ -636,7 +646,7 @@ public class TransformUtils
                     c.set(14, 0);
                     return new Date(c.getTime().getTime());
                 } else {
-                    throw new Exception(
+                    throw new TransformException(
                         (new StringBuilder()).append("Can't covert type: ").append(
                             input.getClass().getName()).append(
                             " to java.sql.Date").toString());
@@ -648,14 +658,14 @@ public class TransformUtils
         Transformer javaSqlTimeTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 if (input instanceof java.util.Date) {
                     Calendar c = Calendar.getInstance();
                     c.setTime((java.util.Date) input);
                     c.set(1970, 0, 1);
                     return new Time(c.getTime().getTime());
                 } else {
-                    throw new Exception(
+                    throw new TransformException(
                         (new StringBuilder()).append("Can't covert type: ").append(
                             input.getClass().getName()).append(
                             " to java.sql.Time").toString());
@@ -667,11 +677,11 @@ public class TransformUtils
         Transformer javaSqlTimestampTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 if (input instanceof java.util.Date)
                     return new Timestamp(((java.util.Date) input).getTime());
                 else
-                    throw new Exception((new StringBuilder()).append(
+                    throw new TransformException((new StringBuilder()).append(
                         "Can't covert type: ").append(
                         input.getClass().getName()).append(
                         " to java.sql.Timestamp").toString());
@@ -683,7 +693,7 @@ public class TransformUtils
         Transformer mapTransform = new Transformer() {
 
             @Override
-            public Object transform(Object input) throws Exception {
+            public Object transform(Object input) throws TransformException {
                 if(input==null){
                     return null;
                 }
@@ -696,10 +706,14 @@ public class TransformUtils
                         && !targetType.isArray()
                         && !targetType.isAnnotation()
                         && !targetType.isEnum()){
-                  return  DataUtils.getProperties(input, true);
+                  try {
+                    return  DataUtils.getProperties(input, true);
+                } catch (Exception e) {
+                   throw new TransformException("get map property from object"+input.getClass(),e);
+                }
                 }else {
                     
-                    throw new Exception((new StringBuilder()).append(
+                    throw new TransformException((new StringBuilder()).append(
                         "Can't covert type: ").append(
                         input.getClass().getName()).append(
                         " to java.util.Map").toString());
