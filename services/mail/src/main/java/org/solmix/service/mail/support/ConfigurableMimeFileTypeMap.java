@@ -6,7 +6,6 @@ import java.io.InputStream;
 
 import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
-import javax.mail.Quota.Resource;
 
 import org.solmix.runtime.resource.InputStreamResource;
 import org.solmix.runtime.resource.support.ClassLoaderResource;
@@ -15,7 +14,7 @@ import org.solmix.runtime.resource.support.ClassLoaderResource;
 public class ConfigurableMimeFileTypeMap extends FileTypeMap
 {
 
-    private InputStreamResource mappingLocation = new ClassLoaderResource("mime.types", getClass().getClassLoader());
+    private InputStreamResource mappingLocation = new ClassLoaderResource("org/solmix/service/mail/support/mime.types", ConfigurableMimeFileTypeMap.class.getClassLoader());
 
     /**
      * Used to configure additional mappings.

@@ -16,6 +16,11 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.4</version>
 		</dependency>
+  	<dependency>
+  		<groupId>org.solmix.test</groupId>
+  		<artifactId>solmix-test</artifactId>
+  		<scope>test</scope>
+  	</dependency>
   </dependencies>
   <build>
 		<plugins>
