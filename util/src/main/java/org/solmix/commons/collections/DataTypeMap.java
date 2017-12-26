@@ -23,6 +23,8 @@ import static org.solmix.commons.util.DataUtils.commaSeparatedStringToList;
 import static org.solmix.commons.util.DataUtils.getSubtreePrefixed;
 import static org.solmix.commons.util.DataUtils.listToArray;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -272,11 +274,23 @@ public class DataTypeMap implements Map<String, Object> {
         return getChar(key, (Character) null);
     }
 
+    /**
+     * Get date from map,the raw value may be Data or Long
+     * @param key
+     * @return
+     */
     public Date getDate(String key) {
-        return getDate(key, null);
+        return getDate(key,null, null);
     }
 
-    public Date getDate(String key, Date defaultValue) {
+    public Date getDate(String key,String parttern) {
+        
+        return getDate(key, null,parttern);
+    }
+    public Date getDate(String key, Date defaultValue){
+        return getDate(key,defaultValue,null);
+    }
+    public Date getDate(String key, Date defaultValue,String pattern) {
         Object value = get(key);
         if (value == null)
             return defaultValue;
@@ -284,6 +298,13 @@ public class DataTypeMap implements Map<String, Object> {
             return (Date) value;
         else if(value instanceof Long){
             return new Date((Long)value);
+        }else if(pattern!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            try {
+                return sdf.parse(value.toString());
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e);
+            }
         }else{
             return null;
         }
