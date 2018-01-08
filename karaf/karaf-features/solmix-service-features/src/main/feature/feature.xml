@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="solmix-service-features-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
+	 <repository>mvn:org.solmix.karaf.features/solmix-common-features/${project.version}/xml/features</repository>
+	<feature name="solmix-service-template" description="Commons service template"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-common-runtime</feature>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-template/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-service-event" description="Commons service Event"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-common-runtime</feature>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-event/${project.version}</bundle>
+	</feature>
+	
+	<feature name="solmix-service-mail" description="Commons service MailSender"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-common-runtime</feature>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-mail/${project.version}</bundle>
+	</feature>
+	
+	<feature name="solmix-service-jackson" description="Commons service Jackson"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-common-runtime</feature>
+		<bundle start-level="35">mvn:org.codehaus.woodstox/stax2-api/3.1.4</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-annotations/2.6.0</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
+		<bundle start-level="35">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-jackson/${project.version}</bundle>
+	</feature>
+	
+	<feature name="solmix-service-velocity" description="Commons service velocity"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-service-template</feature>
+		<bundle start-level="35">mvn:commons-lang/commons-lang/${commons-lang.version}</bundle>
+		<bundle start-level="35">mvn:org.apache.velocity/velocity/${velocity.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-velocity/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-service-freemarker" description="Commons service freemarker"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-service-template</feature>
+		<bundle start-level="35">mvn:org.freemarker/freemarker/${freemarker.version}</bundle>
+		<bundle start-level="40">mvn:org.solmix.services/solmix-service-freemarker/${project.version}</bundle>
+	</feature>
+	<feature name="solmix-service-all" description="Commons service all"
+		version="${project.version}">
+		<feature version="${project.version}">solmix-service-template</feature>
+		<feature version="${project.version}">solmix-service-event</feature>
+		<feature version="${project.version}">solmix-service-velocity</feature>
+		<feature version="${project.version}">solmix-service-freemarker</feature>
+	</feature>
+	
+</features>

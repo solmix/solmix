@@ -15,5 +15,8 @@
   	<module>solmix-karaf-feature</module>
   	<module>solmix-karaf-wrapper</module>
   	<module>karaf-plugin</module>
+  	<module>karaf-branding</module>
+  	<module>single-feature-parent</module>
+  	<module>karaf-features</module>
   </modules>
 </project>

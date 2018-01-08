@@ -111,7 +111,7 @@
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
-		<apache.karaf.version>4.0.5</apache.karaf.version>
+		<apache.karaf.version>4.0.10</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
@@ -1519,10 +1519,23 @@
 					</configuration>
 				</plugin>
 				<plugin>
-				<groupId>org.apache.karaf.tooling</groupId>
-				<artifactId>karaf-maven-plugin</artifactId>
-				<version>${apache.karaf.version}</version>
+					<groupId>org.apache.karaf.tooling</groupId>
+					<artifactId>karaf-maven-plugin</artifactId>
+					<version>${apache.karaf.version}</version>
 				</plugin>
+				<plugin>
+			          <groupId>org.apache.servicemix.tooling</groupId>
+			          <artifactId>depends-maven-plugin</artifactId>
+			          <version>1.4.0</version>
+			          <executions>
+			            <execution>
+			              <id>generate-depends-file</id>
+			              <goals>
+			                <goal>generate-depends-file</goal>
+			              </goals>
+			            </execution>
+			          </executions>
+		        </plugin>
 				<plugin>
 					<groupId>org.solmix.karaf</groupId>
 					<artifactId>karaf-plugin</artifactId>
