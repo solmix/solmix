@@ -92,7 +92,7 @@
 		<maven.version>3.5.0</maven.version>
 		<mina.version>2.0.3</mina.version>
 		<osgi.version>5.0.0</osgi.version>
-		<osgi.core.version>5.0.0</osgi.core.version>
+		<osgi.core.version>6.0.0</osgi.core.version>
 		<pax.exam.version>4.1.0</pax.exam.version>
 		<pax.logging.version>1.7.0</pax.logging.version>
 		<pax.runner.version>1.5.0</pax.runner.version>
@@ -111,7 +111,7 @@
 		<bundles.oro.version>2.0.8_4</bundles.oro.version>
 		<org.apache.servicemix.bundles.commons-vfs>1.0_4</org.apache.servicemix.bundles.commons-vfs>
 		<org.apache.servicemix.bundles.commons-codec>1.3_5</org.apache.servicemix.bundles.commons-codec>
-		<apache.karaf.version>4.0.10</apache.karaf.version>
+		<apache.karaf.version>4.1.4</apache.karaf.version>
 		<org.apache.servicemix.bundles.dom4j>1.6.1_3</org.apache.servicemix.bundles.dom4j>
 		<org.apache.servicemix.bundles.jdom>1.1_3</org.apache.servicemix.bundles.jdom>
 		<commons-jxpath.version>1.3</commons-jxpath.version>
@@ -1268,7 +1268,7 @@
                             <ruleset>pmd-ruleset.xml</ruleset>
                         </rulesets>
                         <sourceEncoding>UTF-8</sourceEncoding>
-                        <targetJdk>1.7</targetJdk>
+                        <targetJdk>1.8</targetJdk>
                         <linkXRef>false</linkXRef>
                         <includeTests>true</includeTests>
                         <verbose>true</verbose>
@@ -1363,10 +1363,10 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.5.1</version>
 					 <configuration>
-				          <compilerVersion>1.7</compilerVersion>
+				          <compilerVersion>1.8</compilerVersion>
 				          <fork>true</fork>
-				          <source>1.7</source>
-				          <target>1.7</target>
+				          <source>1.8</source>
+				          <target>1.8</target>
 				          <debug>true</debug>
 				          <encoding>${project.build.sourceEncoding}</encoding>
 				          <optimize>true</optimize>

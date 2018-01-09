@@ -231,6 +231,12 @@ public class FeatureUtil
         LOG.trace("readFeature({}) returns {} without resolving first", artifact, result.getName());
         return result;
     }
+    public static Features readFeature(final File file) throws FileNotFoundException {
+        FileInputStream stream = new FileInputStream(file);
+        Features result = JaxbUtil.unmarshal(file.toURI().toString(), stream, false);
+        LOG.trace("readFeature({}) returns {} without resolving first", file, result.getName());
+        return result;
+    }
 
     /**
      * Unmarshal the features matching the given artifact coordinates.

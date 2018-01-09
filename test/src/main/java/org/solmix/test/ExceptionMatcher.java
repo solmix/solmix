@@ -12,6 +12,7 @@ import java.util.Set;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.core.StringContains;
 
 
 /**
@@ -47,13 +48,13 @@ public class ExceptionMatcher<T extends Throwable> extends BaseMatcher<T> {
 
         // message exception matcher
         if (snippets != null && snippets.length > 0) {
-            LinkedList<Matcher<?>> matchers = new LinkedList<Matcher<?>>();
+            LinkedList<Matcher<?>> matchers = new LinkedList<>();
 
             for (String snippet : snippets) {
                 matchers.add(containsString(snippet));
             }
-
-            messageMatcher = allOf(matchers.toArray(new Matcher[]{}));
+            Matcher<String>[] array = new  StringContains[matchers.size()];
+            messageMatcher = allOf(matchers.toArray(array));
         } else {
             messageMatcher = null;
         }
