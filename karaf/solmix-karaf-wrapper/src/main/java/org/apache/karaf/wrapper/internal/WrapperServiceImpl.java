@@ -16,17 +16,22 @@
  */
 package org.apache.karaf.wrapper.internal;
 
-import org.apache.karaf.wrapper.WrapperService;
-import org.fusesource.jansi.Ansi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+
+import org.apache.karaf.wrapper.WrapperService;
+import org.fusesource.jansi.Ansi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of the wrapper service.
@@ -35,10 +40,12 @@ public class WrapperServiceImpl implements WrapperService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(WrapperServiceImpl.class);
 
+    @Override
     public void install() throws Exception {
         install("karaf", "karaf", "", "AUTO_START");
     }
 
+    @Override
     public File[] install(String name, 
                           String displayName, 
                           String description, 
@@ -67,7 +74,7 @@ public class WrapperServiceImpl implements WrapperService {
         props.put("${displayName}", displayName);
         props.put("${description}", description);
         props.put("${startType}", startType);
-        props.put("${libPath}", "wrapper.java.library.path.1=%KARAF_HOME%/lib/wrapper/ \n wrapper.java.library.path.2=%KARAF_HOME%/lib/jni/  \n");
+        props.put("${libPath}", "wrapper.java.library.path.1=%KARAF_HOME%/lib/wrapper/ \nwrapper.java.library.path.2=%KARAF_HOME%/lib/jni/  \n");
 
         String os = System.getProperty("os.name", "Unknown");
         File serviceFile;
