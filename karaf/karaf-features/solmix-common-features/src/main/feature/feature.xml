@@ -2,8 +2,7 @@
 <features name="solmix-common-features-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
-	<feature name="solmix-common-runtime" description="Solmix Runtime support"
-		version="${project.version}">
+	<feature name="solmix-common-runtime" description="Solmix Runtime support" version="${project.version}">
 		<bundle start-level="35">mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
 		<bundle start-level="35">mvn:commons-io/commons-io/${commons-io.version}</bundle>
 		<bundle start-level="35">mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
@@ -16,8 +15,8 @@
 	<feature name="solmix-lib-javassist" description="Javassist lib  support" version="${javassist.version}">
 		<bundle start-level="35">mvn:org.javassist/javassist/${javassist.version}</bundle>
 	</feature>
-	<feature name="solmix-karaf-wrapper" description="Karaf Wrapper" version="4.0.5">
-		<bundle start-level="60">mvn:org.solmix.karaf/solmix-karaf-wrapper/4.0.5-SNAPSHOT</bundle>
+	<feature name="solmix-karaf-wrapper" description="Karaf Wrapper" version="${apache.karaf.version}">
+		<bundle start-level="60">mvn:org.solmix.karaf/solmix-karaf-wrapper/${apache.karaf.version}-SNAPSHOT</bundle>
 	</feature>
 	<feature name="solmix-tools" description="Solmix Tools" version="${project.version}">
 		<feature version="${project.version}">solmix-common-runtime</feature>

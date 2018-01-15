@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.karaf.features.internal.model.Bundle;
+import org.apache.karaf.features.internal.model.Conditional;
 import org.apache.karaf.features.internal.model.ConfigFile;
 import org.apache.karaf.features.internal.model.Feature;
 import org.apache.karaf.features.internal.model.Features;
@@ -126,6 +127,18 @@ public class FeatureUtil
         }
         if (feature.getConfigfile() != null) {
             result.addAll(configFilesToCoords(feature.getConfigfile()));
+        }
+        List<Conditional> conditionals=  feature.getConditional();
+        if(conditionals!=null){
+            for(Conditional con:conditionals){
+                
+                if (con.getBundle() != null) {
+                    result.addAll(bundlesToCoords(con.getBundle()));
+                }
+                if (con.getConfigfile() != null) {
+                    result.addAll(configFilesToCoords(con.getConfigfile()));
+                }
+            }
         }
         LOG.trace("featureToCoords({}) returns {}", feature.getName(), result);
         return result;
