@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.management.JMException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +33,16 @@ import org.solmix.runtime.Container;
 import org.solmix.runtime.event.EventServiceAdapter;
 import org.solmix.runtime.event.IEvent;
 import org.solmix.runtime.event.IEventHandler;
+import org.solmix.runtime.management.ComponentManager;
 import org.solmix.runtime.threadpool.DefaultThreadPool;
+import org.solmix.runtime.threadpool.ThreadPool;
+import org.solmix.runtime.threadpool.ThreadPoolManager;
 import org.solmix.service.event.deliver.AsyncDeliver;
 import org.solmix.service.event.deliver.SyncDeliver;
 import org.solmix.service.event.filter.CachedTopicFilter;
 import org.solmix.service.event.filter.EventHandlerBlackListImpl;
 import org.solmix.service.event.filter.NullEventHandlerBlackList;
+import org.solmix.service.event.management.EventServiceMBean;
 import org.solmix.service.event.util.LeastRecentlyUsedCacheMap;
 
 /**
@@ -51,9 +56,9 @@ public class DefaultEventService extends EventServiceAdapter
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultEventService.class);
 
-    private volatile DefaultThreadPool asyThreadPool;
+    private volatile ThreadPool asyThreadPool;
 
-    private volatile DefaultThreadPool synThreadPool;
+    private volatile ThreadPool synThreadPool;
 
     private volatile SyncDeliver syncDeliver;
 
@@ -109,6 +114,15 @@ public class DefaultEventService extends EventServiceAdapter
             configureService();
             startOrUpdateService();
             runnning=true;
+            ComponentManager cm  = container.getExtension(ComponentManager.class);
+            if(cm!=null){
+                EventServiceMBean mbean = new EventServiceMBean(this);
+                try {
+                    cm.register(mbean);
+                } catch (JMException e) {
+                    logger.warn(e.getMessage(),e);
+                }
+            }
         }
 
     }
@@ -120,6 +134,15 @@ public class DefaultEventService extends EventServiceAdapter
     public void shutdown() {
         synchronized (startLock) {
             runnning=false;
+            ComponentManager cm  = container.getExtension(ComponentManager.class);
+            if(cm!=null){
+                EventServiceMBean mbean = new EventServiceMBean(this);
+                try {
+                    cm.unregister(mbean);
+                } catch (JMException e) {
+                    logger.warn(e.getMessage(),e);
+                }
+            }
             if(this.synThreadPool!=null){
                 this.synThreadPool.shutdown(true);
             }
@@ -197,15 +220,17 @@ public class DefaultEventService extends EventServiceAdapter
 
     protected void startOrUpdateService() {
         if (synThreadPool == null) {
-            synThreadPool = new DefaultThreadPool(1024, 0, threadPoolSize, 5, 2 * 60 * 1000l, "SYN-EVENT");
+            ThreadPoolManager manager= container.getExtension(ThreadPoolManager.class);
+            synThreadPool =manager.createPool( "SYN-EVENT", 0, threadPoolSize, 5, 1024, 2 * 60 * 1000l);
         } else {
-            synThreadPool.setMaxThreads(threadPoolSize);
+            ((DefaultThreadPool)synThreadPool).setMaxThreads(threadPoolSize);
         }
         final int asyncThreadPoolSize = threadPoolSize > 5 ? threadPoolSize / 2 : 2;
         if (asyThreadPool == null) {
-            asyThreadPool = new DefaultThreadPool(1024, 0, asyncThreadPoolSize, 5, 2 * 60 * 1000l, "ASY-EVENT");
+            ThreadPoolManager manager= container.getExtension(ThreadPoolManager.class);
+            asyThreadPool = manager.createPool( "ASY-EVENT", 0, threadPoolSize, 5, 1024, 2 * 60 * 1000l);
         } else {
-            asyThreadPool.setMaxThreads(asyncThreadPoolSize);
+            ((DefaultThreadPool)synThreadPool).setMaxThreads(asyncThreadPoolSize);
         }
         taskManager = createTaskManager();
         if (syncDeliver == null) {
@@ -307,7 +332,7 @@ public class DefaultEventService extends EventServiceAdapter
         getDefaultEventTaskManager("removeEventHandler").removeEventHandler(topic);
     }
 
-    public DefaultThreadPool getAsyThreadPool() {
+    public ThreadPool getAsyThreadPool() {
         return asyThreadPool;
     }
 
@@ -315,7 +340,7 @@ public class DefaultEventService extends EventServiceAdapter
         this.asyThreadPool = asyThreadPool;
     }
 
-    public DefaultThreadPool getSynThreadPool() {
+    public ThreadPool getSynThreadPool() {
         return synThreadPool;
     }
 

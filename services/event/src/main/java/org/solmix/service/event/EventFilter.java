@@ -35,7 +35,7 @@ import org.osgi.framework.ServiceReference;
 public interface EventFilter
 {
 
-    Filter TRUE_FILTER = new Filter() {
+        Filter TRUE_FILTER = new Filter() {
 
         /**
          * This is a null object that always returns <tt>true</tt>.
@@ -43,6 +43,7 @@ public interface EventFilter
          * @param reference An unused service reference
          * @return <tt>true</tt>
          */
+        @Override
         public boolean match(final ServiceReference <?> reference) {
             return true;
         }
@@ -53,6 +54,7 @@ public interface EventFilter
          * @param dictionary An unused dictionary
          * @return <tt>true</tt>
          */
+        @Override
         public boolean match(final Dictionary<String, ?> dictionary) {
             return true;
         }
@@ -63,6 +65,7 @@ public interface EventFilter
          * @param dictionary An unused dictionary.
          * @return <tt>true</tt>
          */
+        @Override
         public boolean matchCase(final Dictionary <String,?>dictionary) {
             return true;
         }
@@ -73,6 +76,7 @@ public interface EventFilter
          * @param dictionary An unused dictionary.
          * @return <tt>true</tt>
          */
+        @Override
         public boolean matches(Map<String, ?> map) {
             return true;
         }

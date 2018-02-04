@@ -16,6 +16,7 @@
  * http://www.gnu.org/licenses/ 
  * or see the FSF site: http://www.fsf.org. 
  */
+
 package org.solmix.service.event;
 
 import java.util.List;
@@ -23,17 +24,17 @@ import java.util.List;
 import org.solmix.runtime.event.IEvent;
 import org.solmix.runtime.event.IEventHandler;
 
-
 /**
  * 
  * @author solmix.f@gmail.com
- * @version $Id$  2015年7月14日
+ * @version $Id$ 2015年7月14日
  */
 
 public interface EventTaskManager
 {
+
     List<EventTask> createEventTasks(IEvent event);
 
-	void addToBlackList(IEventHandler handler);
+    void addToBlackList(IEventHandler handler);
 
 }

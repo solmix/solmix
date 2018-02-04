@@ -12,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.runtime.event.IEvent;
 import org.solmix.runtime.event.IEventHandler;
-import org.solmix.service.event.EventHandlerTracker.HandlerContext;
 
 public class EventHandlerProxy implements IEventHandler {
-		private static final Logger LOG = LoggerFactory.getLogger(EventHandlerProxy.class);
+	    private static final Logger LOG = LoggerFactory.getLogger(EventHandlerProxy.class);
 
 	    /** The service reference for the event handler. */
 	    private final ServiceReference<IEventHandler> reference;
@@ -324,7 +323,8 @@ public class EventHandlerProxy implements IEventHandler {
 	    /**
 	     * Send the event.
 	     */
-	    public void handle(final IEvent event)
+	    @Override
+        public void handle(final IEvent event)
 	    {
 	        final IEventHandler handlerService = this.obtain();
 	        if (handlerService == null)
