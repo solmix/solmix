@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.solmix.commons.util.Assert;
 import org.solmix.commons.util.Base64Utils;
+import org.solmix.commons.util.ObjectUtils;
 import org.solmix.commons.util.RSAUtils;
 import org.solmix.commons.util.StringUtils;
 import org.solmix.commons.util.SystemPropertyAction;
@@ -263,7 +264,7 @@ public class ExtensionContainer implements Container {
         obj = extensions.get(beanType);
         if (obj != null) {
             return beanType.cast(obj);
-        } else	if(references!=null){
+        } else if(references!=null){
     		for(ContainerReference ref:references){
     			if(ref.match(beanType)){
     				Container refc = ref.getRef();
@@ -695,5 +696,20 @@ public class ExtensionContainer implements Container {
         }
         return sb.toString();
     }
+    
+    public String[] getMissingBeans(){
+        if(missingBeans!=null){
+            String[] string=new String[missingBeans.size()];
+            int i=0;
+            for(Class<?> missing:missingBeans){
+                string[i]=missing.toString();
+                i++;
+            }
+            return string;
+        }else{
+            return ObjectUtils.EMPTY_STRING_ARRAY;
+        }
+    }
+    
     
 }

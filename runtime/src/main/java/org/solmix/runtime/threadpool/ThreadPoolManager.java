@@ -20,6 +20,7 @@
 package org.solmix.runtime.threadpool;
 
 /**
+ * Manage the thread pool in container
  * 
  * @author solmix.f@gmail.com
  * @version $Id$ 2014年12月18日
@@ -29,9 +30,49 @@ public interface ThreadPoolManager {
 
     public static final String DEFAULT = "default";
     
+    /**
+     * Get the default Thread Pool ,is not exist create it.
+     * 
+     * @return Thread Pool
+     */
     ThreadPool getDefaultThreadPool();
 
+    /**
+     * Get Thread pool by name,is not exist return null.
+     * 
+     * @param name thread name
+     * @return
+     */
     ThreadPool getThreadPool(String name);
+    
+    /**
+     * Create a new thread pool  and managed by this manager
+     * @param name thread pool name
+     * @return
+     */
+    ThreadPool createPool(String name);
+    
+    /**
+     * Create a new thread pool  and managed by this manager
+     * 
+     * @param name thread pool name
+     * @param initialThreads initial threads in pool
+     * @param maxThreads max threads
+     * @param minThreads min threads
+     * @param maxQueueSize max queue size
+     * @param dequeueTimeout 
+     * @return
+     */
+    ThreadPool createPool(String name,int initialThreads,int maxThreads,int minThreads,int maxQueueSize,long dequeueTimeout);
+ 
+    /**
+     * Create a new thread pool  and managed by this manager
+     * @param name thread pool name
+     * @param coreThreads main threads,equals initialThreads and minThreads,50% of maxThreads
+     * @param maxQueueSize
+     * @return
+     */
+    ThreadPool createPool(String name,int coreThreads,int maxQueueSize);
 
     void addThreadPool(String name, ThreadPool executor);
 

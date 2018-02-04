@@ -35,7 +35,7 @@ import org.solmix.runtime.management.annotation.ManagedResource;
  * @author solmix.f@gmail.com
  * @version $Id$  2014年11月20日
  */
-@ManagedResource(componentName = "Endpoint", description = "Responsible for managing server instances.")
+@ManagedResource(componentName = "Endpoint", description = "Responsible for managing server endpoint.")
 public class ManagedEndpoint implements ManagedComponent,
     ServerLifeCycleListener {
 
@@ -116,10 +116,8 @@ public class ManagedEndpoint implements ManagedComponent,
         String id = container.getId();
         StringBuilder buffer = new StringBuilder();
         buffer.append(ManagementConstants.DEFAULT_DOMAIN_NAME).append(':');
+        buffer.append(ManagementConstants.TYPE_PROP).append('=').append("ServiceEndpoint,");
         buffer.append(ManagementConstants.CONTAINER_ID_PROP).append('=').append(id).append(',');
-        buffer.append(ManagementConstants.TYPE_PROP).append('=').append("Exchange.Service.Endpoint,");
-       
-
         String serviceName = (String)endpoint.get(SERVICE_NAME);
         if (StringUtils.isEmpty(serviceName)) {
             serviceName = endpoint.getService().getServiceName().toIdentityString();

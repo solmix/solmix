@@ -17,7 +17,7 @@ public class ThreadPoolMBean implements ManagedComponent
 
     private ThreadPoolManager manager;
     private DefaultThreadPool pool;
-    private static final String TYPE_VALUE = "ThreadPool";
+    private static final String TYPE_VALUE = "ThreadPoolManager";
     public ThreadPoolMBean(DefaultThreadPool threadpool,ThreadPoolManager pmanager){
         manager=pmanager;
         pool=threadpool;
@@ -84,18 +84,17 @@ public class ThreadPoolMBean implements ManagedComponent
     public ObjectName getObjectName() throws JMException {
         StringBuilder buffer = new StringBuilder();
         buffer.append(ManagementConstants.DEFAULT_DOMAIN_NAME).append(':');
+        buffer.append(ManagementConstants.TYPE_PROP).append('=').append(TYPE_VALUE).append(',');
+
         if (!pool.isShared()) {
             String busId = Container.DEFAULT_CONTAINER_ID;
             if (manager instanceof DefaultThreadPoolManager) {
                 busId = ((DefaultThreadPoolManager)manager).getContainer().getId();
             }
             buffer.append(ManagementConstants.CONTAINER_ID_PROP).append('=').append(busId).append(',');
-            buffer.append(ThreadPoolManagerMBean.TYPE_VALUE).append('=');
-            buffer.append(ThreadPoolManagerMBean.NAME_VALUE).append(',');
         } else {
             buffer.append(ManagementConstants.CONTAINER_ID_PROP).append("=Shared,");
         }
-        buffer.append(ManagementConstants.TYPE_PROP).append('=').append(TYPE_VALUE).append(',');
         buffer.append(ManagementConstants.NAME_PROP).append('=').append(pool.getName()).append(',');
         buffer.append(ManagementConstants.INSTANCE_ID_PROP).append('=').append(pool.hashCode());
         return new ObjectName(buffer.toString());

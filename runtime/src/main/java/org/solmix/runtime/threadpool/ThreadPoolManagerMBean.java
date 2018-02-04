@@ -15,9 +15,9 @@ import org.solmix.runtime.management.annotation.ManagedResource;
 public class ThreadPoolManagerMBean implements ManagedComponent
 {
 
-    static final String NAME_VALUE = "Container.ThreadPoolManager";
+    static final String NAME_VALUE = "DefaultManager";
 
-    static final String TYPE_VALUE = "Runtime.ThreadPoolManager";
+    static final String TYPE_VALUE = "ThreadPoolManager";
 
     private ThreadPoolManager manager;
 
@@ -39,10 +39,10 @@ public class ThreadPoolManagerMBean implements ManagedComponent
         StringBuilder buffer = new StringBuilder();
 
         buffer.append(ManagementConstants.DEFAULT_DOMAIN_NAME).append(':');
-        buffer.append(ManagementConstants.CONTAINER_ID_PROP).append('=').append(container.getId()).append(',');
-        buffer.append("ThreadPoolManager=").append(NAME_VALUE);
-        buffer.append(',').append(ManagementConstants.TYPE_PROP).append('=').append(TYPE_VALUE).append(',');
-        buffer.append(ManagementConstants.INSTANCE_ID_PROP).append('=').append(manager.hashCode());
+        buffer.append(ManagementConstants.TYPE_PROP)        .append('=').append(TYPE_VALUE)           .append(',');
+        buffer.append(ManagementConstants.CONTAINER_ID_PROP).append('=').append(container.getId())    .append(',');
+        buffer.append(ManagementConstants.NAME_PROP)        .append('=').append(NAME_VALUE)           .append(',');
+        buffer.append(ManagementConstants.INSTANCE_ID_PROP) .append('=').append(manager.hashCode());
         return new ObjectName(buffer.toString());
     }
 }
