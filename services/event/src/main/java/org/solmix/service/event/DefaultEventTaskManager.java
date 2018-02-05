@@ -21,11 +21,9 @@ package org.solmix.service.event;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
@@ -214,4 +212,18 @@ public class DefaultEventTaskManager implements EventTaskManager
 			return false;
 		}
 	}
+    @Override
+    public Set<IEventHandler> getBlackListHandlers() {
+        return blackList.getBlankListHandlers();
+    }
+    
+    public Set<String> getEventHandlerString() {
+        Set<String> handlers =new HashSet<String>();
+        for(EventHandlerHolder holder:cachedHandlers){
+            StringBuilder sb  = new StringBuilder();
+            sb.append(holder.filter.toString()).append("=").append(holder.getClass().getName());
+            handlers.add(sb.toString());
+        }
+        return handlers;
+    }
 }

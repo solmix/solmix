@@ -36,6 +36,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
@@ -231,7 +232,7 @@ public class ExcelExportService extends AbstractExportService
             style = workbook.createCellStyle();
             if (backgroundColor != null) {
                 style.setFillForegroundColor(getClosestColor(backgroundColor));
-                style.setFillPattern((short) 1);
+                style.setFillPattern(FillPatternType.BIG_SPOTS);
             }
             if (color != null)
                 style.setFont(font);
@@ -289,8 +290,6 @@ public class ExcelExportService extends AbstractExportService
                         font.setColor(getClosestColor(color));
                     if (fontFamily != null)
                         font.setFontName(mapFontFamily(fontFamily));
-                    if (fontWeight != null)
-                        font.setBoldweight(mapFontWeight(fontWeight));
                     if (fontSize != null)
                         font.setFontHeightInPoints(mapFontSize(fontSize));
                     if (fontStyle != null)

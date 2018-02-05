@@ -75,6 +75,11 @@ public class EventHandlerBlackListImpl implements EventHandlerBlackList
         
     }
 
+    @Override
+    public Set<IEventHandler> getBlankListHandlers() {
+        return blankList;
+    }
+
   
    
 }

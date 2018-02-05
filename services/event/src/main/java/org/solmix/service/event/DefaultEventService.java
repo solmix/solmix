@@ -21,6 +21,7 @@ package org.solmix.service.event;
 
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -81,6 +82,12 @@ public class DefaultEventService extends EventServiceAdapter
     private Object startLock = new Object();
     
     private volatile boolean runnning=false;
+    
+    private final AtomicLong postCount=new AtomicLong();
+    
+    private final AtomicLong sendCount=new AtomicLong();
+    
+    private final AtomicLong handleCount=new AtomicLong();
 
     @Resource
     private Container container;
@@ -88,6 +95,7 @@ public class DefaultEventService extends EventServiceAdapter
     @Override
     public void postEvent(IEvent event) {
         checkRunning();
+        postCount.incrementAndGet();
         List<EventTask> tasks = taskManager.createEventTasks(event);
         handleEvent(tasks, asyncDeliver);
     }
@@ -95,14 +103,16 @@ public class DefaultEventService extends EventServiceAdapter
     @Override
     public void sendEvent(IEvent event) {
         checkRunning();
+        sendCount.incrementAndGet();
         List<EventTask> tasks = taskManager.createEventTasks(event);
         handleEvent(tasks, syncDeliver);
     }
 
     protected void handleEvent(List<EventTask> tasks, final EventDeliver deliver) {
-        if (tasks != null && tasks.size() > 0)
+        if (tasks != null && tasks.size() > 0){
+            handleCount.addAndGet(tasks.size());
             deliver.execute(tasks);
-
+        }
     }
 
     /**
@@ -338,6 +348,7 @@ public class DefaultEventService extends EventServiceAdapter
 
     public void setAsyThreadPool(DefaultThreadPool asyThreadPool) {
         this.asyThreadPool = asyThreadPool;
+        this.startOrUpdateService();
     }
 
     public ThreadPool getSynThreadPool() {
@@ -346,6 +357,7 @@ public class DefaultEventService extends EventServiceAdapter
 
     public void setSynThreadPool(DefaultThreadPool synThreadPool) {
         this.synThreadPool = synThreadPool;
+        this.startOrUpdateService();
     }
 
     /**
@@ -359,6 +371,26 @@ public class DefaultEventService extends EventServiceAdapter
 
     public void setBlackListEnable(boolean blackListEnable) {
         this.blackListEnable = blackListEnable;
+    }
+    
+    public long getPostCount(){
+        return postCount.get();
+    }
+    
+    public long getSendCount(){
+        return sendCount.get();
+    }
+
+    public long getHandleCount(){
+        return handleCount.get();
+    }
+    
+    public long getTimeoutCount(){
+        return syncDeliver.getTimeoutCount();
+    }
+    
+    public EventTaskManager getTaskManager() {
+        return taskManager;
     }
 
 }

@@ -1,5 +1,8 @@
 package org.solmix.service.event.filter;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.solmix.runtime.event.IEventHandler;
 import org.solmix.service.event.EventHandlerBlackList;
 
@@ -19,5 +22,10 @@ public class NullEventHandlerBlackList implements EventHandlerBlackList {
 	public boolean contains(IEventHandler handler) {
 		return false;
 	}
+
+    @Override
+    public Set<IEventHandler> getBlankListHandlers() {
+        return Collections.emptySet();
+    }
 
 }

@@ -227,7 +227,7 @@ public class DefaultThreadPoolManager implements ThreadPoolManager {
 
     @Override
     public ThreadPool createPool(String name, int initialThreads, int maxThreads, int minThreads, int maxQueueSize, long dequeueTimeout) {
-        ThreadPool pool  = new DefaultThreadPool(initialThreads,maxThreads,minThreads,maxQueueSize,dequeueTimeout,name);
+        ThreadPool pool  = new DefaultThreadPool(maxQueueSize,initialThreads,maxThreads,minThreads,dequeueTimeout,name);
         addThreadPool(name, pool);
         return getThreadPool(name);
     }

@@ -18,6 +18,8 @@
  */
 package org.solmix.service.event;
 
+import java.util.Set;
+
 import org.solmix.runtime.event.IEventHandler;
 
 
@@ -45,4 +47,6 @@ public interface EventHandlerBlackList
      * @return <tt>true</tt> in case that the service reference has been blacklisted, <tt>false</tt> otherwise.
      */
     public boolean contains(final IEventHandler handler);
+    
+    public Set<IEventHandler> getBlankListHandlers();
 }

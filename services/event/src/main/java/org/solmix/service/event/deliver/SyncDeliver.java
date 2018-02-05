@@ -23,6 +23,7 @@ import java.lang.management.ThreadMXBean;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.solmix.runtime.threadpool.ThreadPool;
 import org.solmix.service.event.EventDeliver;
@@ -45,6 +46,8 @@ public class SyncDeliver implements EventDeliver
 
     /** The matchers for ignore timeout handling. */
     private Matcher[] ignoreTimeoutMatcher;
+    
+    private final AtomicLong timeoutCount=new AtomicLong();
 
     public SyncDeliver(final ThreadPool threadPool, int timeout, String[] ignoreTimeout)
     {
@@ -99,6 +102,7 @@ public class SyncDeliver implements EventDeliver
                 final long startTime = getTimeInMillis();
                 task.execute();
                 if (getTimeInMillis() - startTime > timeout) {
+                    timeoutCount.incrementAndGet();
                     task.blackListHandler();
                 }
             } else {
@@ -129,6 +133,7 @@ public class SyncDeliver implements EventDeliver
                 try {
                     timerBarrier.waitAttemptForRendezvous(timeout);
                 } catch (final TimeoutException ie) {
+                    timeoutCount.incrementAndGet();
                     // if we timed out, we have to blacklist the handler
                     task.blackListHandler();
                 }
@@ -162,7 +167,10 @@ public class SyncDeliver implements EventDeliver
         }
         return false;
     }
-
+    
+    public long getTimeoutCount(){
+        return this.timeoutCount.get();
+    }
     /**
      * The matcher interface for checking if timeout handling is disabled for the handler. Matching is based on the
      * class name of the event handler.
