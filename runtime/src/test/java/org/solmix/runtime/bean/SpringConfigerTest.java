@@ -22,8 +22,7 @@ package org.solmix.runtime.bean;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.bean.ConfiguredBean.TTestBean;
 import org.solmix.runtime.support.spring.ContainerApplicationContext;

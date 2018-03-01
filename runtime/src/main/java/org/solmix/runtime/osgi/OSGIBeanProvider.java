@@ -72,7 +72,7 @@ public class OSGIBeanProvider implements ConfiguredBeanProvider
                     if (type == ClassLoader.class && checkCompatibleProvider) {
                         continue;
                     }
-                    list.add(type.cast(context.getService(r)));
+                    list.add((T)(context.getService(r)));
                 }
             }
         } catch (Exception ex) {
