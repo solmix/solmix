@@ -19,8 +19,8 @@
 
 package org.solmix.runtime.extension;
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.Container;
 import org.solmix.runtime.ContainerEvent;

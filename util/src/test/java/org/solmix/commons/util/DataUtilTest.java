@@ -29,7 +29,7 @@ import org.solmix.commons.util.bean.Bean1;
 import org.solmix.commons.util.bean.Bean11;
 import org.solmix.commons.util.bean.Bean2;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * 

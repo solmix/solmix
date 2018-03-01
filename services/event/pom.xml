@@ -63,6 +63,14 @@
         </dependency> -->
 	</dependencies>
 	<build>
+	 <resources>    
+        <resource>    
+            <directory>src/test/resource</directory>    
+            <includes>    
+                <include>*</include>    
+            </includes>    
+        </resource>  
+        </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>

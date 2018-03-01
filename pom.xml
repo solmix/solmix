@@ -47,7 +47,7 @@
 		<module>exchange</module>
 		<module>services</module>
 		<module>karaf</module>
-		<!-- <module>test</module> -->
+		<module>test</module> 
 	</modules>
 	<properties>
 		<freemarker.version>2.3.23</freemarker.version>

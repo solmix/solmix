@@ -30,11 +30,11 @@ import java.security.UnrecoverableEntryException;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.commons.util.SecurityUtils;
 import org.solmix.commons.util.TokenUtils;
 
-import junit.framework.Assert;
 
 
 /**

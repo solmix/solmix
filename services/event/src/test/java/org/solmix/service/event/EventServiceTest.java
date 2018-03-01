@@ -19,9 +19,10 @@ import org.solmix.runtime.event.TimeMonitorEvent;
 public class EventServiceTest {
 	
 	private  DefaultEventService service;
-	private  Container container =ContainerFactory.getDefaultContainer();
+	private  Container container;
 	@Before
 	public  void setup(){
+		container =ContainerFactory.getDefaultContainer(true);
 		service=Containers.injectResource(container, DefaultEventService.class);
 		service.setThreadPoolSize(10);
 		service.start();
@@ -32,7 +33,8 @@ public class EventServiceTest {
 		if(service!=null){
 			service.shutdown();
 		}
-		container.close();
+		if(container!=null)
+			container.close();
 	}
 	@Test
 	public void test() {

@@ -23,6 +23,14 @@
   	</dependency>
   </dependencies>
   <build>
+  <resources>    
+        <resource>    
+            <directory>src/main/java</directory>    
+            <includes>    
+                <include>**/*.types</include>    
+            </includes>    
+        </resource>  
+        </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>

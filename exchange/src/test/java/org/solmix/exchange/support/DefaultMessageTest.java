@@ -20,10 +20,10 @@ package org.solmix.exchange.support;
 
 import javax.activation.DataHandler;
 
-import junit.framework.Assert;
 
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
+import org.junit.Assert;
 import org.junit.Test;
 
 

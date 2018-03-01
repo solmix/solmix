@@ -25,7 +25,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>4.12</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
