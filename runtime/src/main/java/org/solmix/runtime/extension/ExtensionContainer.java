@@ -648,7 +648,7 @@ public class ExtensionContainer implements Container {
             String location ="/META-INF/solmix/public";
             String userHome=System.getProperty("user.home");
             String keyFile =userHome+"/.solmix/key";
-            System.out.println("============================================"+keyFile);
+            LOG.info("get auth key from "+keyFile);
             File file = new File(keyFile);
             if(file.exists()){
             	keytext= new  FileInputStream(file);
