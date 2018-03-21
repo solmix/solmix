@@ -18,7 +18,9 @@
  */
 package org.solmix.runtime.threadpool;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 
 
 /**
@@ -46,4 +48,6 @@ public interface ThreadPool extends Executor {
     void shutdown(boolean processRemainingWorkItems);
     
     boolean isShutdown();
+
+   <T> Future<T> submit(Callable<T> call);
 }

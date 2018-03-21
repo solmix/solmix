@@ -30,8 +30,10 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
@@ -151,17 +153,16 @@ public class DefaultThreadPool implements ThreadPool {
         this.name = name;
         this.changeListenerList = new ArrayList<PropertyChangeListener>();
     }
-
     @Override
-    public void execute(final Runnable command) {
+    public <T> Future<T> submit(Callable<T> call){
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        Runnable r = new Runnable() {
+        Callable<T> r = new Callable<T>() {
 
             @Override
-            public void run() {
+            public T call() throws Exception {
                 ClassLoaderHolder orig = ClassLoaderUtils.setThreadContextClassloader(loader);
                 try {
-                    command.run();
+                   return  call.call();
                 } finally {
                     if (orig != null) {
                         orig.reset();
@@ -170,7 +171,12 @@ public class DefaultThreadPool implements ThreadPool {
             }
         };
         ThreadPoolExecutor ex = getExecutor();
-        ex.execute(r);
+        Future<T> future= ex.submit(r);
+        checkAndExtendThreadPool(ex);
+        return future;
+    }
+    
+    private void checkAndExtendThreadPool(ThreadPoolExecutor ex) {
         /**
          * 在JDK中当线程队列满了后,线程池才增加线程,这里当线程不够时立即增加线程,增加线程到最大值后加入队列.
          */
@@ -197,6 +203,28 @@ public class DefaultThreadPool implements ThreadPool {
                 addThreadLock.unlock();
             }
         }
+    }
+
+    @Override
+    public void execute(final Runnable command) {
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Runnable r = new Runnable() {
+
+            @Override
+            public void run() {
+                ClassLoaderHolder orig = ClassLoaderUtils.setThreadContextClassloader(loader);
+                try {
+                    command.run();
+                } finally {
+                    if (orig != null) {
+                        orig.reset();
+                    }
+                }
+            }
+        };
+        ThreadPoolExecutor ex = getExecutor();
+        ex.execute(r);
+        checkAndExtendThreadPool(ex);
     }
     
     /**
