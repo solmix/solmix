@@ -24,12 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.commons.util.bean.Bean1;
 import org.solmix.commons.util.bean.Bean11;
 import org.solmix.commons.util.bean.Bean2;
-
-import org.junit.Assert;
 
 /**
  * 
@@ -92,7 +91,7 @@ public class DataUtilTest
             str3 = TransformUtils.transformType(Boolean.class, b);
             Assert.assertEquals(Boolean.TRUE, str3);
             Integer i = 4;
-            Object d = TransformUtils.transformValue(i, Double.class);
+            Object d = TransformUtils.transform(i, Double.class);
 
         } catch (Exception e) {
             e.printStackTrace();
