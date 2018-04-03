@@ -4,6 +4,7 @@ package org.solmix.commons.util;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -54,6 +55,14 @@ public class TransformUtilsTest
             }
         });
       Assert.assertEquals(1, tlist.size());
+      Collection<Long> tlist2=  TransformUtils.forEach(Collections.emptyList(), new Transformer<Object, Long>() {
+
+          @Override
+          public Long transform(Object obj) throws TransformException {
+              return TransformUtils.transform(obj, Long.class);
+          }
+      });
+      Assert.assertTrue(tlist2 instanceof List);
         
     }
 

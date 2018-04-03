@@ -29,6 +29,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -162,6 +163,14 @@ public class TransformUtils
     public static <IN, OUT> Collection<OUT> forEach(  Collection<IN> ins,Transformer<IN, OUT> transformer){
         if(ins==null){
             return null;
+        }
+        if(ins.isEmpty()){
+            if(ins instanceof List){
+                return Collections.emptyList();
+            }else if(ins instanceof Set){
+                return Collections.emptySet();
+            }
+            
         }
         if(transformer==null){
             return null;
