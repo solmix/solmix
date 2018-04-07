@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -1114,5 +1115,107 @@ public final class StringUtils
         }
         return buf.toString();
     }
+    
+    public static String listToString(List list) {
+		return listToString(list, ",");
+	}
+    
+    public static String listToString(List list, String delim) {
+		if (list == null) {
+			return "NULL";
+		}
+		Iterator i = list.iterator();
+		return iteratorToString(i, delim, null);
+	}
+
+    public static String iteratorToString(Iterator i, String delim,
+			String quoteChar) { 
+		Object elt = null;
+		StringBuffer rstr = new StringBuffer();
+		String s;
+
+		while (i.hasNext()) {
+			if (rstr.length() > 0) {
+				rstr.append(delim);
+			}
+			elt = i.next();
+			if (elt == null) {
+				rstr.append("NULL");
+			}
+			else {
+				s = elt.toString();
+				if (quoteChar != null) {
+					rstr.append(quoteChar).append(s).append(quoteChar);
+				}
+				else {
+					rstr.append(s);
+				}
+			}
+		}
+
+		return rstr.toString();
+	}
+    /**
+	 * Print out an array as a String
+	 */
+	public static String arrayToString(int[] array) {
+		if (array == null) {
+			return "null";
+		}
+		String rstr = "";
+		for (int i=0; i<array.length; i++) {
+			if (i > 0) {
+				rstr += ",";
+			}
+			rstr += array[i];
+		}
+		return rstr;
+	}
+	
+	/**
+	 * Print out an array as a String
+	 */
+	public static String arrayToString(Object[] array) {
+		return arrayToString(array, ',');
+	}
+
+	/**
+	 * Print out an array as a String.
+	 * 
+	 * XXX: Isn't this the same as ArrayUtil.toString()? 
+	 */
+	public static String arrayToString(boolean[] array) {
+		if (array == null) {
+			return "null";
+		}
+		String rstr = "";
+		char delim = ',';
+		for (int i=0; i<array.length; i++) {
+			if (i > 0) {
+				rstr += delim;
+			}
+			rstr += array[i];
+		}
+		return rstr;
+	}
+
+	/**
+	 * Print out an array as a String
+	 * @param array The array to print out
+	 * @param delim The delimiter to use between elements.
+	 */
+	public static String arrayToString(Object[] array, char delim) {
+		if (array == null) {
+			return "null";
+		}
+		String rstr = "";
+		for (int i=0; i<array.length; i++) {
+			if (i>0) {
+				rstr += delim;
+			}
+			rstr += array[i];
+		}
+		return rstr;
+	}
 
 }
