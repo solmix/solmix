@@ -232,6 +232,9 @@ public class NetUtils {
                             while (addresses.hasMoreElements()) {
                                 try {
                                     InetAddress address = addresses.nextElement();
+                                    if(address.isLoopbackAddress()) {
+                                    	continue;
+                                    }
                                     if (isValidAddress(address)) {
                                         return address;
                                     }
