@@ -38,7 +38,10 @@ public class JexlTest
     JexlExpressionFactory jf = new JexlExpressionFactory();
 
     @Test
-    public void testexp() throws ExpressionParseException {
+    public void test1() {
+    	
+    }
+    public  void testexp() throws ExpressionParseException, InterruptedException {
         MappedContext mc = new MappedContext();
         mc.put("host", "127.0.0.1");
         mc.put("name", "1");
@@ -46,8 +49,7 @@ public class JexlTest
         Object s = start.evaluate(mc);
         assertTrue(s.equals("b"));
     }
-    @Test
-    public void test() throws ExpressionParseException {
+    public void test() throws ExpressionParseException, InterruptedException {
         MappedContext mc = new MappedContext();
         mc.put("a", 566);
         mc.put("name", "Dx6");
@@ -62,6 +64,7 @@ public class JexlTest
         assertTrue(expre("date>='2015-08-11'", mc));
         assertTrue(expre("date>'2015-08-1' && date<'2015-08-30'", mc));
         assertTrue(expre("a==566?name.substring(1)=='x6':name.substring(2)=='6'", mc));
+        Thread.sleep(1000);
     }
 
     private boolean expre(String str, MappedContext mc) throws ExpressionParseException {

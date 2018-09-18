@@ -34,7 +34,7 @@ public class ExtConfigerTest extends AbstractExtSupport
     @Test
     public void test(){
         BeanConfigurer configer=  container.getExtension(BeanConfigurer.class);
-        Assert.assertNull(configer);
+        Assert.assertNotNull(configer);
     }
 
 }
