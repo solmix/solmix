@@ -10,9 +10,18 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.servicemix.bundles</groupId>
-			<artifactId>org.apache.servicemix.bundles.poi</artifactId>
-			<version>3.17_1</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.solmix.common</groupId>
@@ -34,14 +43,14 @@
 		</dependency>
 	</dependencies>
 	<build>
-	 <resources>    
+	<!--  <resources>    
         <resource>    
             <directory>src/test/resource</directory>    
             <includes>    
                 <include>*</include>    
             </includes>    
         </resource>  
-        </resources>
+        </resources> -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
@@ -64,7 +73,7 @@
 	<properties>
 		<solmix.osgi.export.pkg>org.solmix.service.export*</solmix.osgi.export.pkg>
 		<solmix.osgi.import.pkg>
-			org.apache.poi*;resolution:=optional;version="[3.5,4)",*
+			org.apache.poi*;resolution:=optional;version="[4.0,5)",*
 		</solmix.osgi.import.pkg>
 		<solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
 	</properties>

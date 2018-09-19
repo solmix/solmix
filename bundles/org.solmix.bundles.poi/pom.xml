@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.solmix.bundles</groupId>
+    <artifactId>bundles</artifactId>
+    <version>0.5.0</version>
+  </parent>
+  <artifactId>org.solmix.bundles.poi</artifactId>
+  <version>4.0.0</version>
+<properties>
+    <pkgVersion>4.0.0</pkgVersion>
+    <pkgArtifactId>poi</pkgArtifactId>
+    <solmix.osgi.export>org.apache.poi*</solmix.osgi.export>
+    <pkgGroupId>org.apache.poi</pkgGroupId>
+    <solmix.osgi.import.pkg>
+    org.apache.commons.math3*;resolution:=optional,*
+    </solmix.osgi.import.pkg>
+    
+    <solmix.osgi.private.pkg></solmix.osgi.private.pkg>
+    <solmix.osgi.failok>true</solmix.osgi.failok>
+    <solmix.category>apache</solmix.category>
+    <solmix.osgi.dynamic.import>*</solmix.osgi.dynamic.import>
+  </properties> 
+   <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>${pkgGroupId}:${pkgArtifactId}</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>${pkgGroupId}:${pkgArtifactId}</artifact>
+                  <excludes>
+                    <exclude>**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+   <name>Solmix :: Bundles :: Apache POI</name>
+   <packaging>bundle</packaging>
+   <dependencies>
+   	<dependency>
+  <groupId>org.apache.poi</groupId>
+  <artifactId>poi</artifactId>
+  <version>4.0.0</version>
+</dependency>
+   </dependencies>
+</project>

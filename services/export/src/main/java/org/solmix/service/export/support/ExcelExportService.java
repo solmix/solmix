@@ -34,6 +34,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -42,7 +43,7 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+//import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.solmix.service.export.ExportException;
 
 /**
@@ -96,7 +97,7 @@ public class ExcelExportService extends AbstractExportService
         Map<String,String> headerStyleElements = new HashMap<String,String>();
         headerStyleElements.put("backgroundColor", "#5bb4e0");
         for (String header : headers) {
-            Cell cell = row.createCell(cellIndex, 1);
+            Cell cell = row.createCell(cellIndex, CellType.STRING);
             cell.setCellValue(header);
             if (header.indexOf("$style") != -1) {
                 cell.setCellStyle(getCellStyle(headerStyleElements, false));
@@ -134,14 +135,14 @@ public class ExcelExportService extends AbstractExportService
                         if (styleElements != null && styleElements.get("rawValue") != null)
                             cellValue = styleElements.get("rawValue");
                         if (cellValue instanceof Number) {
-                            cell = row.createCell(cellIndex, 0);
+                            cell = row.createCell(cellIndex, CellType.NUMERIC);
                             cell.setCellValue(((Number) cellValue).doubleValue());
                         } else if (cellValue instanceof Date) {
-                            cell = row.createCell(cellIndex, 0);
+                            cell = row.createCell(cellIndex, CellType.STRING);
                             Double excelDateValue = Double.valueOf(DateUtil.getExcelDate((Date) cellValue));
                             cell.setCellValue(excelDateValue.doubleValue());
                         } else {
-                            cell = row.createCell(cellIndex, 1);
+                            cell = row.createCell(cellIndex, CellType.STRING);
                             cell.setCellValue(cellValue != null ? cellValue.toString() : null);
                         }
                         if (styleElements != null)
@@ -180,7 +181,7 @@ public class ExcelExportService extends AbstractExportService
             styledString = new HSSFRichTextString(stringValue);
         else{
             try {
-                styledString = new XSSFRichTextString(stringValue);
+                styledString = new HSSFRichTextString(stringValue);
             } catch (NoClassDefFoundError e) {
                 throw new ExportException("Trouble loading Apache POI OOXML classes "
                     + "- are the poi-ooxml and poi-ooxml-schemas .jar files deployed?  "

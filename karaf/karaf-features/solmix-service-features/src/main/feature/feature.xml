@@ -22,7 +22,9 @@
 	
 	<feature name="solmix-service-export" description="Commons service Export" version="${project.version}">
 		<feature version="${project.version}">solmix-common-runtime</feature>
-		<bundle start-level="40">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.poi/3.17_1</bundle>
+		<bundle start-level="40">mvn:commons-codec/commons-codec/1.11</bundle>
+		<bundle start-level="40">mvn:org.apache.commons/commons-collections4/4.2</bundle>
+		<bundle start-level="40">mvn:org.solmix.bundles/org.solmix.bundles.poi/4.0.0</bundle>
 		<bundle start-level="40">mvn:org.solmix.services/solmix-service-export/${project.version}</bundle>
 	</feature>
 	
