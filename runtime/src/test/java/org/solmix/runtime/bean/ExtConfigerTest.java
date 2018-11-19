@@ -21,6 +21,7 @@ package org.solmix.runtime.bean;
 import org.junit.Assert;
 import org.junit.Test;
 import org.solmix.runtime.AbstractExtSupport;
+import org.solmix.runtime.extension.ExtensionContainer;
 
 
 /**
@@ -34,7 +35,8 @@ public class ExtConfigerTest extends AbstractExtSupport
     @Test
     public void test(){
         BeanConfigurer configer=  container.getExtension(BeanConfigurer.class);
-        Assert.assertNotNull(configer);
+        if(! (container instanceof ExtensionContainer))
+        	Assert.assertNotNull(configer);
     }
 
 }
