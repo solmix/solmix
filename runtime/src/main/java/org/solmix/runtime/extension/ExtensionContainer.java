@@ -135,7 +135,7 @@ public class ExtensionContainer implements Container {
 
     public ExtensionContainer(Map<Class<?>, Object> beans,
         Map<String, Object> properties, ClassLoader extensionClassLoader) {
-        Assert.assertNotNull(AuthHelper.au(this));
+//        Assert.assertNotNull(AuthHelper.au(this));
         if (beans == null) {
             extensions = new ConcurrentHashMap<Class<?>, Object>(16, 0.75f, 4);
         } else {

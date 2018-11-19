@@ -138,7 +138,7 @@ public final class Bytes
         return res;
     }
 
-    public static String byteToHexString(byte... src) {
+    public static String bytesToHexString(byte... src) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (src == null || src.length <= 0) {
             return null;
@@ -203,7 +203,7 @@ public final class Bytes
             bf.rewind();
             byte[] target= new byte[bf.limit()];
             bf.get(target);
-            sb.append(byteToHexString(target));
+            sb.append(bytesToHexString(target));
         }
         return sb.toString();
     }
@@ -305,7 +305,7 @@ public final class Bytes
 
     public static byte[] hexStringToByte(String hex) {
         // return hex.getBytes();
-        hex=hex.replace(" ","");
+        hex=hex.toUpperCase().replace(" ","");
         int len = (hex.length() / 2);
         byte[] result = new byte[len];
         char[] achar = hex.toCharArray();
@@ -339,7 +339,7 @@ public final class Bytes
     }
 
     public static final String objectToHexString(Serializable s) throws IOException {
-        return byteToHexString(objectToBytes(s));
+        return bytesToHexString(objectToBytes(s));
     }
 
     public static final Object hexStringToObject(String hex) throws IOException, ClassNotFoundException {
@@ -398,4 +398,7 @@ public final class Bytes
       System.arraycopy(src, 0, dest, 0, Math.min(src.length, length));
       return dest;
     }
+    
+  
+
 }
