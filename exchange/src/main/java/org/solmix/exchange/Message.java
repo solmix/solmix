@@ -98,7 +98,9 @@ public interface Message extends StringTypeMap {
     String REQUEST_URL = Message.class.getName() + ".REQUEST_URL";
 
     String ACCEPT_CONTENT_TYPE =  "Accept";
-
+    
+    String ACCEPT_LANGUAGE =  "Accept-Language";
+    
     String BASE_PATH = "basePath";;
 
     String ERROR_MESSAGE = Message.class.getName() + ".ERROR_MESSAGE";
