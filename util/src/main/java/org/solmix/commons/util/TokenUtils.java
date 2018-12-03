@@ -41,7 +41,7 @@ public class TokenUtils
         return token;
     }
 
-    public static String generateRandomToken(){
+    public static String generateTimeToken(){
         Random r;
         long rand1, rand2;
 
@@ -55,6 +55,12 @@ public class TokenUtils
         rand2 = r.nextLong();
         return System.currentTimeMillis() + "-" +
             Math.abs(rand1) + "-" + Math.abs(rand2);
+    }
+    
+    public static String generateRandomToken(){
+    	
+    	return getUUID();
+    	
     }
 
 }
