@@ -172,4 +172,5 @@
 	      </build>
 	    </profile>
   	</profiles>
+	 <name>Solmix :: Karaf :: Plugin</name>
 </project>

@@ -54,4 +54,5 @@
             <scope>test</scope>
         </dependency> -->
 	</dependencies>
+	<name>Solmix :: Common :: Test</name>
 </project>
