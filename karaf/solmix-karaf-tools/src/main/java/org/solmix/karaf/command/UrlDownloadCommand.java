@@ -31,18 +31,20 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
  */
 @Command(scope = "download", name = "mvn", description = "downlaod mvn resource ")
 @Service
-public class UrlDownloadCommand extends AbstractDownloadCommand implements Action
-{
+public class UrlDownloadCommand extends AbstractDownloadCommand implements Action {
 
-    @Argument(index = 0, name = "url", description = "resource URL.", required = true, multiValued = false)
-    String url;
+	@Argument(index = 0, name = "url", description = "resource URL.", required = true, multiValued = false)
+	String url;
 
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    @Override
-    public Object execute() throws Exception {
-        String fileName = getDownLoadedFile(url);
-        downLoadFile(url, fileName);
-        return null;
-    }
+	@Override
+	public Object execute() throws Exception {
+		String fileName = getDownLoadedFile(url);
+		downLoadFile(url, fileName);
+		return null;
+	}
 
 }
