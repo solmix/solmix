@@ -210,7 +210,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         if (resource != null) {
             injectField(field, resource);
         } else {
-            LOG.info("Resolve resource failed, resource name: {}", name);
+            LOG.warn("Resolve resource failed, resource name: {}", name);
         }
     }
 
@@ -231,7 +231,7 @@ public class ResourceInjector extends AbstractAnnotationVisitor {
         if (resource != null) {
             invokeSetter(method, resource);
         } else {
-            LOG.trace("Resolve resource failed, resource name:{},type:{} ", new Object[] {resourceName,clz });
+            LOG.warn("Resolve resource failed, resource name:{},type:{} ", new Object[] {resourceName,clz });
         }
     }
 
