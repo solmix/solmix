@@ -130,8 +130,12 @@ public class DefaultExtensionLoader<T> implements ExtensionLoader<T> {
                                         cachedExtensions.put(implemntor, info);
                                     }else{
                                         ExtensionInfo older = cachedExtensions.get(implemntor);
-                                        throw new IllegalStateException("Class:[" + clazz.getName() + "] with name:[" + implemntor
-                                            + "],conflict and class:[" + older.getClassname() + "]");
+                                        if(older.getLoadedObject()==null) {
+                                        	throw new IllegalStateException("Class:[" + clazz.getName() + "] with name:[" + implemntor
+                                                    + "],conflict and class:[" + older.getClassname() + "]");
+                                        }else {
+                                        	//先前设置的已经加载了，因为spring或者blueprint都会先于默认的extensions配置，可以覆盖默认的加载
+                                        }
                                     }
                                 }else{
                                     cachedExtensions.put(name, info);
