@@ -85,9 +85,32 @@ public class ExtensionManagerImpl implements ExtensionManager,
                 all.put(ext.getKey(), ext.getValue());
             }
         }
+        loadActivatedInfos();
     }
     
-    public void addLocalExtensionInfo(ExtensionInfo info){
+    private void loadActivatedInfos() {
+		if(this.activated==null||this.activated.isEmpty()) {
+			return;
+		}
+		for(Class<?> clz:this.activated.keySet()) {
+			ExtensionInfo ei = new ExtensionInfo();
+			
+			Object instance = this.activated.get(clz);
+			if(instance==null) {
+				ei.setClassname(clz.getName());
+				ei.setDeferred(true);
+			}else {
+				ei.setInterfaceName(clz.getName());
+				ei.setClassname(instance.getClass().getName());
+				ei.setLoadedObject(instance);
+				ei.setDeferred(false);
+				ei.setOptional(false);
+			}
+			all.put(ei.getName(), ei);
+		}
+	}
+
+	public void addLocalExtensionInfo(ExtensionInfo info){
     	all.put(info.getName(), info);
     }
     
