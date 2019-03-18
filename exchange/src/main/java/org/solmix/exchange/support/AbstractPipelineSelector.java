@@ -120,8 +120,10 @@ public abstract class AbstractPipelineSelector implements PipelineSelector, Clos
         if (pl != null && pl.getAddress() != null) {
             replaceEndpointAddressIfNeeded(msg, pl.getAddress(), pl);
         }
-        pl.setProtocol(endpoint.getProtocol());
-        msg.put(Pipeline.class, pl);
+        if(pl!=null) {
+	        pl.setProtocol(endpoint.getProtocol());
+	        msg.put(Pipeline.class, pl);
+        }
         return pl;
     }
 

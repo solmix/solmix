@@ -167,13 +167,13 @@ public class TypeDetector<T> {
             Method m =null;
             try {
                  m = bean.getClass().getMethod("getSupportTypes",new Class[0]);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {/**ignore*/}
             if (m != null) {
                 
                 Collection<String> types=null;
                 try {
                     types = (Collection<String>) m.invoke(bean);
-                } catch (Exception e) {}
+                } catch (Exception e) {/**ignore*/}
                 if(types!=null){
                     for (String s : types) {
                         if (!map.containsKey(s)) {

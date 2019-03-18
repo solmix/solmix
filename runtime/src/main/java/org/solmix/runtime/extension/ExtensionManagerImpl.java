@@ -430,7 +430,7 @@ public class ExtensionManagerImpl implements ExtensionManager,
         for (String s : names) {
             for (ExtensionInfo info : all.values()) {
                 if (s.equals(info.getName())) {
-                    all.remove(info);
+                    all.remove(info.getName());
                 }
             }
         }

@@ -263,7 +263,7 @@ public class UnChangeDictionary<K, V> extends Dictionary<K, V> implements
 
     @Override
     public String toString() {
-          return values.toString();
+          return values!=null?values.toString():null;
     }
 
     private static class ArrayEnumeration<E> implements Enumeration<E> {

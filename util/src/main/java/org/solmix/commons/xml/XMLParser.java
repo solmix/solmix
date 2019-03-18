@@ -364,7 +364,7 @@ public class XMLParser
 
         @Override
         public String getNamespaceURI(String prefix) {
-              if (prefix.equals(prefix))
+              if (this.prefix.equals(prefix))
                     return ns;
               return null;
         }

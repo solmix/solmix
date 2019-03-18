@@ -62,7 +62,6 @@ public class KeystoreManagerTest extends ExContainerSupport
         assertTrue(entry != null);
 
         byte[] pk = ((PrivateKeyEntry) entry).getPrivateKey().getEncoded();
-        new String(pk);
         ByteBuffer encryptionKey = Charset.forName("US-ASCII").encode(ByteBuffer.wrap(pk).toString());
         String key = encryptionKey.toString();
         assertEquals("java.nio.HeapByteBuffer[pos=0 lim=48 cap=48]", key);

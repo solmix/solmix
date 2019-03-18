@@ -20,6 +20,7 @@
 package org.solmix.exchange.support;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.solmix.exchange.Processor;
 import org.solmix.exchange.Protocol;
 import org.solmix.exchange.Transporter;
@@ -34,98 +35,97 @@ import org.solmix.runtime.Container;
 
 public abstract class AbstractTransporter implements Transporter {
 
-    protected Processor processor;
-    
-    protected Protocol protocol;
+	protected Processor processor;
 
-    protected String address;
-    
-    protected EndpointInfo endpointInfo;
-    
-    protected Container container;
-    
-    public AbstractTransporter(String address, EndpointInfo endpointInfo,
-        Container container) {
-        this.address = address;
-        this.endpointInfo = endpointInfo;
-        this.container = container;
-    }
-    @Override
-    public Processor getProcessor() {
-        return processor;
-    }
-    
-    @Override
-    public String getAddress() {
-        return address;
-    }
+	protected Protocol protocol;
 
-    @Override
-    public void setProcessor(Processor processor) {
-        if (this.processor != processor) {
-            Processor old = this.processor;
-            if (processor != null) {
-                this.processor = processor;
-                if (getLogger().isTraceEnabled()) {
-                    getLogger().trace("Register message Processor: " + processor);
-                }
-                if (old == null) {
-                    try {
-                        activate(processor);
-                    } catch (RuntimeException ex) {
-                        deactivate(processor);
-                        this.processor = null;
-                        throw ex;
-                    }
-                } else {
-                    if (old != null) {
-                        getLogger().trace(
-                            "unregistering incoming observer: " + old);
-                        deactivate(old);
-                    }
-                    this.processor = processor;
-                }
-            }
-        }
-    }
-    
-    @Override
-    public Protocol getProtocol() {
-        return protocol;
-    }
-    
-    @Override
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
-    }
-    
-    protected abstract Logger getLogger();
-    
-    
-    protected void activate(Processor p) {
+	protected String address;
 
-    }
+	protected EndpointInfo endpointInfo;
 
-    protected void deactivate(Processor p) {
+	protected Container container;
 
-    }
-    protected abstract class AbstractBackPipeline extends AbstractPipeline {
+	public AbstractTransporter(String address, EndpointInfo endpointInfo, Container container) {
+		this.address = address;
+		this.endpointInfo = endpointInfo;
+		this.container = container;
+	}
 
-        public AbstractBackPipeline() {
-            super("");
-        }
+	@Override
+	public Processor getProcessor() {
+		return processor;
+	}
 
-        /**
-         *nothing todo.
-         */
-        @Override
-        public void setProcessor(Processor processor) {
-            
-        }
-        
-        @Override
-        protected Logger getLogger() {
-            return AbstractBackPipeline.this.getLogger();
-        }
-    }
+	@Override
+	public String getAddress() {
+		return address;
+	}
+
+	@Override
+	public void setProcessor(Processor processor) {
+		if (this.processor != processor) {
+			Processor old = this.processor;
+			if (processor != null) {
+				this.processor = processor;
+				if (getLogger().isTraceEnabled()) {
+					getLogger().trace("Register message Processor: " + processor);
+				}
+				if (old == null) {
+					try {
+						activate(processor);
+					} catch (RuntimeException ex) {
+						deactivate(processor);
+						this.processor = null;
+						throw ex;
+					}
+				} else {
+					if (old != null) {
+						getLogger().trace("unregistering incoming observer: " + old);
+						deactivate(old);
+					}
+					this.processor = processor;
+				}
+			}
+		}
+	}
+
+	@Override
+	public Protocol getProtocol() {
+		return protocol;
+	}
+
+	@Override
+	public void setProtocol(Protocol protocol) {
+		this.protocol = protocol;
+	}
+
+	protected abstract Logger getLogger();
+
+	protected void activate(Processor p) {
+
+	}
+
+	protected void deactivate(Processor p) {
+
+	}
+
+	protected abstract class AbstractBackPipeline extends AbstractPipeline {
+
+		public AbstractBackPipeline() {
+			super("");
+		}
+
+		/**
+		 * nothing todo.
+		 */
+		@Override
+		public void setProcessor(Processor processor) {
+
+		}
+
+		@Override
+		protected Logger getLogger() {
+			return LoggerFactory.getLogger(AbstractBackPipeline.class);
+		}
+	}
 }

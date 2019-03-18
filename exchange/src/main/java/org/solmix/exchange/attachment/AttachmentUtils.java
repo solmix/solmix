@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -46,7 +47,7 @@ import org.solmix.runtime.io.CachedOutputStream;
 public final class AttachmentUtils
 {
 
-    private static final Random BOUND_RANDOM = new Random();
+    private static final SecureRandom BOUND_RANDOM = new SecureRandom();
     private AttachmentUtils()
     {
 

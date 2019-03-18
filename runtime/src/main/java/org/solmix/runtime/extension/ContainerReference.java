@@ -43,7 +43,7 @@ public class ContainerReference {
 	}
 
 	public <T> boolean match(Class<T> type) {
-		if(filters==null&&filters.length==0){
+		if(filters==null||filters.length==0){
 			return true;
 		}
 		for (String f : filters) {

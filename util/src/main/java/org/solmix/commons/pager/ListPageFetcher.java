@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.solmix.commons.util.ObjectUtils;
+
 /**
  * A PageFetcher which works with a pre-fetched list as the data backing the
  * fetcher.
@@ -48,18 +50,7 @@ public class ListPageFetcher<T> extends PageFetcher<T> {
 		return res;
 	}
 
-	private class DescSorter implements Comparator {
 
-		@Override
-		public int compare(Object o1, Object o2) {
-			return -((Comparable) o1).compareTo(o2);
-		}
-
-		@Override
-		public boolean equals(Object other) {
-			return false;
-		}
-	}
 
 
 

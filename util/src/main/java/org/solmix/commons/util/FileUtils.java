@@ -518,7 +518,7 @@ public class FileUtils
         byte[] b = new byte[1024 * 2];
         /** 获取zip格式的文件 **/
         File[] zipFiles = new ExtensionFileFilter("zip").getFiles(srcDir);
-        if (zipFiles != null && !"".equals(zipFiles)) {
+        if (zipFiles != null && zipFiles.length>0) {
             for (int i = 0; i < zipFiles.length; i++) {
                 File file = zipFiles[i];
                 /** 解压的输入流 * */
@@ -961,7 +961,7 @@ class ExtensionFileFilter implements FileFilter
     }
 
     public File[] getFiles(String srcDir) throws IOException {
-        return (File[]) FileUtils.listFiles(srcDir).toArray();
+        return  FileUtils.listFiles(srcDir).toArray(new File[0]);
     }
 
     @Override

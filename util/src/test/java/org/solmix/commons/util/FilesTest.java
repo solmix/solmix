@@ -21,6 +21,8 @@ package org.solmix.commons.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,5 +43,12 @@ public class FilesTest extends Assert{
 			String s = FileUtils.getFileSize(f);
 			assertNotNull(s);
 		}
+	}
+	
+	@Test
+	public void getFiles() throws IOException {
+		List<String> a = new ArrayList<String>();
+		a.add("aaa");
+		System.out.println(StringUtils.arrayToString(a.toArray(new String[0])));
 	}
 }

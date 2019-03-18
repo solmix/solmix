@@ -191,11 +191,7 @@ public class ServletUtils {
         }
         if (alwaysCompressMimeType(mimeType))
             return true;
-        
-        for (String compressableMimeType : compressableMimeTypes) {
-            if (mimeTypeLC.indexOf(compressableMimeType.toLowerCase()) != -1)
-                return true;
-        }
+       
         return false;
     }
     

@@ -81,9 +81,9 @@ public class MonitorServiceImpl implements MonitorService, Configurable {
         int totalThread = parentThread.activeCount();
 
         double cpuRatio = 0;
-        if (osName.toLowerCase().startsWith("windows")) {
+//        if (osName.toLowerCase().startsWith("windows")) {
 //            cpuRatio = this.getCpuRatioForWindows();
-        }
+//        }
 
         MonitorInfo infoBean = new MonitorInfo();
         infoBean.setFreeMemory(freeMemory);

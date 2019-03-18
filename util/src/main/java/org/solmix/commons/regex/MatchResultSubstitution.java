@@ -43,7 +43,7 @@ public class MatchResultSubstitution extends Substitution {
     /** 设置新匹配。 */
     public void setMatchResult(MatchResult result) {
         if (results.length != 1) {
-            new IllegalArgumentException("expected " + this.results.length + " MatchResults");
+            throw new  IllegalArgumentException("expected " + this.results.length + " MatchResults");
         }
 
         results[0] = result;

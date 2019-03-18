@@ -128,7 +128,7 @@ public final class Bytes
         str=str.trim();
        
         while(str.indexOf("  ")!=-1){
-            str.replace("  ", " ");
+        	str=str.replace("  ", " ");
         }
         String[] bs=str.split(" ");
         byte[] res = new byte[bs.length];

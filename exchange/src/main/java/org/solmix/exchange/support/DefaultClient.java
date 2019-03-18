@@ -574,7 +574,7 @@ public class DefaultClient extends InterceptorProviderSupport implements Client 
         return getPipelineSelector(null);
     }
 
-    protected PipelineSelector getPipelineSelector(PipelineSelector override) {
+    protected synchronized PipelineSelector getPipelineSelector(PipelineSelector override) {
         if (pipelineSelector == null) {
             setPipelineSelector(override);
         }
