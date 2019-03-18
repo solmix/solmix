@@ -36,6 +36,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.solmix.commons.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -364,9 +365,8 @@ public class XMLParser
 
         @Override
         public String getNamespaceURI(String prefix) {
-              if (this.prefix.equals(prefix))
-                    return ns;
-              return null;
+//              if (ObjectUtils.isEquals(this.prefix, prefix))  return ns;
+              return ns;
         }
 
         @Override
