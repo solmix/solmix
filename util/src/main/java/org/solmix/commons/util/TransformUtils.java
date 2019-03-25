@@ -270,8 +270,7 @@ public class TransformUtils {
 				}
 				if (java.lang.String.class.isAssignableFrom(valueClass)) {
 					String s = value.toString();
-					if ("t".equalsIgnoreCase(s) || "y".equalsIgnoreCase(s) || "true".equalsIgnoreCase(s)
-							|| "false".equalsIgnoreCase(s))
+					if ("t".equalsIgnoreCase(s) || "y".equalsIgnoreCase(s) || "true".equalsIgnoreCase(s))
 						return Boolean.TRUE;
 					else
 						return Boolean.FALSE;

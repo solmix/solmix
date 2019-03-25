@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.solmix.commons.util.StringUtils;
+
 /**
  * Provides a base datatype decorator that enables additional functionality to
  * be added to a Map via decoration.
@@ -88,6 +90,23 @@ public class DataTypeMap implements Map<String, Object> {
      */
     public String getString(String key) {
         return getString(key, null);
+    }
+    
+    /**
+     * string trim to null
+     * @param key
+     * @return
+     */
+    public String trimToNull(String key) {
+    	String str= getString(key, null);
+    	 if (str == null) {
+             return null;
+         }
+         String result = str.trim();
+         if (result == null || result.length() == 0) {
+             return null;
+         }
+         return result;
     }
 
     /**
