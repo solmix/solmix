@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.solmix</groupId>
 	<artifactId>solmix</artifactId>
-	<version>0.7.1-SNAPSHOT</version>
+	<version>0.7.1</version>
 	<packaging>pom</packaging>
 	<name>Solmix  Project Pom</name>
 	<licenses>
@@ -13,8 +12,8 @@
 		</license>
 	</licenses>
 	<organization>
-		<name></name>
-		<url></url>
+		<name />
+		<url />
 	</organization>
 	<developers>
 		<developer>
@@ -27,7 +26,8 @@
 		<url>https://github.org/solmix/solmix</url>
 		<connection>scm:git:https://github.com/solmix/solmix.git</connection>
 		<developerConnection>scm:git:https://github.com/solmix/solmix.git</developerConnection>
-	</scm>
+	  <tag>0.7.1</tag>
+  </scm>
 	<url>https://github.com/solmix/solmix</url>
 	<description>solmix framework </description>
     <distributionManagement> 
@@ -132,7 +132,7 @@
 		<slf4j.version>1.7.18</slf4j.version>
 		<mockito-core.version>1.9.0</mockito-core.version>
 		<solmix.bundle.category>solmix</solmix.bundle.category>
-		<solmix.version>0.7.1-SNAPSHOT</solmix.version>
+		<solmix.version>0.7.1</solmix.version>
 		<wmix.version>0.7.1-SNAPSHOT</wmix.version>
 		<datax.version>0.7.1-SNAPSHOT</datax.version>
 		<hola.version>0.7.1-SNAPSHOT</hola.version>

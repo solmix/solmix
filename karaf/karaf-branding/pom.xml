@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.karaf</groupId>
     <artifactId>solmix-karaf</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
   </parent>
   <artifactId>karaf-branding</artifactId>
   <packaging>bundle</packaging>
