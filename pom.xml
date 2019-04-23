@@ -1156,23 +1156,7 @@
 		</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<!-- <dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-	</dependencies> -->
+
 	<build>
 		<defaultGoal>install</defaultGoal>
 		<pluginManagement>
@@ -1653,91 +1637,7 @@
                 </plugins>
             </build>
         </profile>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.apache.resources</groupId>
-								<artifactId>apache-source-release-assembly-descriptor</artifactId>
-								<version>1.0.4</version>
-							</dependency>
-						</dependencies>
-						<executions>
-							<execution>
-								<id>source-release-assembly</id>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-									<descriptorRefs>
-										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
-									</descriptorRefs>
-									<tarLongFileFormat>gnu</tarLongFileFormat>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- We want to sign the artifact, the POM, and all attached artifacts -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<configuration>
-							<passphrase>${gpg.passphrase}</passphrase>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- We want to deploy the artifact to a staging location for perusal -->
-					<plugin>
-						<inherited>true</inherited>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<configuration>
-							<updateReleaseInfo>true</updateReleaseInfo>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<configuration>
-							<encoding>${project.build.sourceEncoding}</encoding>
-						</configuration>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<!-- END SNIPPET: release-profile -->
+		
 	</profiles>
 
 <!-- 	<parent>
