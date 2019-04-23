@@ -1541,8 +1541,6 @@
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<executions>
-					<!-- ~ This workaround prevents Maven from executing the 'generate-sources' 
-						phase twice. ~ See http://jira.codehaus.org/browse/MSOURCES-13 ~ and http://blog.peterlynch.ca/2010/05/maven-how-to-prevent-generate-sources.html -->
 					<execution>
 						<id>attach-sources</id>
 						<phase>invalid</phase>
