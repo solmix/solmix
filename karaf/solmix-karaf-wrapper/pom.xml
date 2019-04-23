@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.karaf</groupId>
     <artifactId>solmix-karaf</artifactId>
-    <version>0.7.1</version>
+    <version>0.7.1-SNAPSHOT</version>
   </parent>
   <artifactId>solmix-karaf-wrapper</artifactId>
   <name>Solmix :: Karaf :: Wrapper</name>
@@ -40,7 +40,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-  <version>0.7.1</version>
+  <version>${apache.karaf.version}-SNAPSHOT</version>
   <packaging>bundle</packaging>
 	<build>
         <resources>
