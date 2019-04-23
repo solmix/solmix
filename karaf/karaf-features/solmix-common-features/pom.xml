@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.karaf.features</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
     <relativePath>../../single-feature-parent/pom.xml</relativePath>
   </parent>
   <artifactId>solmix-common-features</artifactId>

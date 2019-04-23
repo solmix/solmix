@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.solmix.services</groupId>
     <artifactId>solmix-service-parent</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
   </parent>
   <artifactId>solmix-service-freemarker</artifactId>
   <dependencies>
